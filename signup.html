@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>إنشاء حساب - Iraq Green</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f4f7f3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 430px;
+      background: white;
+      border-radius: 28px;
+      padding: 35px 25px;
+      text-align: center;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+    }
+
+    .logo {
+      font-size: 60px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 28px;
+      color: #1d6b35;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 16px;
+      margin-bottom: 28px;
+    }
+
+    .input {
+      width: 100%;
+      height: 55px;
+      border: 1px solid #ddd;
+      border-radius: 16px;
+      padding: 0 18px;
+      font-size: 17px;
+      margin-bottom: 14px;
+      outline: none;
+      direction: rtl;
+    }
+
+    .input:focus {
+      border-color: #2f8f46;
+    }
+
+    .signup-btn {
+      width: 100%;
+      height: 55px;
+      border: none;
+      border-radius: 16px;
+      background: #2f8f46;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    .signup-btn:disabled {
+      opacity: 0.6;
+    }
+
+    .message {
+      display: none;
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .success {
+      display: block;
+      background: #e8f7ec;
+      color: #176b2e;
+    }
+
+    .error {
+      display: block;
+      background: #fdeaea;
+      color: #a51d1d;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 22px;
+      color: #2f8f46;
+      text-decoration: none;
+      font-size: 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="logo">🌳</div>
+
+    <h1>إنشاء حساب</h1>
+
+    <div class="subtitle">
+      أنشئ حسابك في منصة العراق الأخضر
+    </div>
+
+    <input
+      id="email"
+      class="input"
+      type="email"
+      placeholder="البريد الإلكتروني"
+      autocomplete="email"
+    >
+
+    <input
+      id="password"
+      class="input"
+      type="password"
+      placeholder="كلمة المرور"
+      autocomplete="new-password"
+    >
+
+    <input
+      id="confirmPassword"
+      class="input"
+      type="password"
+      placeholder="تأكيد كلمة المرور"
+      autocomplete="new-password"
+    >
+
+    <button id="signupBtn" class="signup-btn">
+      إنشاء الحساب
+    </button>
+
+    <div id="message" class="message"></div>
+
+    <a class="back" href="index.html">
+      العودة إلى تسجيل الدخول
+    </a>
+
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://ldvxctpngkidvatkisae.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_iKh2hmOMdDYt9MmGmCX3jA_Hs-MovbK";
+
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput =
+      document.getElementById("confirmPassword");
+
+    const signupBtn = document.getElementById("signupBtn");
+    const message = document.getElementById("message");
+
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = "message " + type;
+    }
+
+    signupBtn.addEventListener("click", async () => {
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const confirmPassword = confirmPasswordInput.value;
+
+      message.className = "message";
+      message.textContent = "";
+
+      if (!email || !password || !confirmPassword) {
+        showMessage("رجاءً املأ جميع الحقول.", "error");
+        return;
+      }
+
+      if (password.length < 6) {
+        showMessage(
+          "كلمة المرور يجب أن تكون 6 أحرف أو أرقام على الأقل.",
+          "error"
+        );
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showMessage(
+          "كلمتا المرور غير متطابقتين.",
+          "error"
+        );
+        return;
+      }
+
+      signupBtn.disabled = true;
+      signupBtn.textContent = "جاري إنشاء الحساب...";
+
+      try {
+
+        const { data, error } =
+          await supabaseClient.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+              emailRedirectTo:
+                window.location.origin + "/index.html"
+            }
+          });
+
+        if (error) {
+          showMessage(error.message, "error");
+          return;
+        }
+
+        if (data.user) {
+          showMessage(
+            "تم إنشاء الحساب بنجاح. إذا كان تأكيد البريد الإلكتروني مفعّلاً، افتح بريدك الإلكتروني واضغط رابط التأكيد.",
+            "success"
+          );
+        }
+
+      } catch (error) {
+
+        showMessage(
+          "حدث خطأ غير متوقع. حاول مرة أخرى.",
+          "error"
+        );
+
+      } finally {
+
+        signupBtn.disabled = false;
+        signupBtn.textContent = "إنشاء الحساب";
+
+      }
+
+    });
+  </script>
+
+</body>
+</html>
