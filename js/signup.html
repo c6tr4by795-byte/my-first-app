@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>إنشاء حساب - Iraq Green</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f4f7f3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 430px;
+      background: white;
+      border-radius: 28px;
+      padding: 30px 25px;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 55px;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0;
+      color: #1d6b35;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #777;
+      margin: 10px 0 25px;
+    }
+
+    .input {
+      width: 100%;
+      height: 52px;
+      border: 1px solid #ddd;
+      border-radius: 15px;
+      padding: 0 16px;
+      font-size: 16px;
+      margin-bottom: 13px;
+      outline: none;
+    }
+
+    .input:focus {
+      border-color: #2f8f46;
+    }
+
+    .signup-btn {
+      width: 100%;
+      height: 54px;
+      border: none;
+      border-radius: 15px;
+      background: #2f8f46;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #2f8f46;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .message {
+      text-align: center;
+      min-height: 22px;
+      margin-top: 16px;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="logo">🌳</div>
+
+    <h1>إنشاء حساب</h1>
+
+    <div class="subtitle">
+      أنشئ حسابك في منصة العراق الأخضر
+    </div>
+
+    <input
+      id="fullName"
+      class="input"
+      type="text"
+      placeholder="الاسم الكامل"
+      autocomplete="name"
+    >
+
+    <input
+      id="username"
+      class="input"
+      type="text"
+      placeholder="اسم المستخدم"
+      autocomplete="username"
+    >
+
+    <input
+      id="email"
+      class="input"
+      type="email"
+      placeholder="البريد الإلكتروني"
+      autocomplete="email"
+    >
+
+    <input
+      id="phone"
+      class="input"
+      type="tel"
+      placeholder="رقم الهاتف"
+      autocomplete="tel"
+    >
+
+    <input
+      id="password"
+      class="input"
+      type="password"
+      placeholder="كلمة المرور"
+      autocomplete="new-password"
+    >
+
+    <input
+      id="confirmPassword"
+      class="input"
+      type="password"
+      placeholder="تأكيد كلمة المرور"
+      autocomplete="new-password"
+    >
+
+    <button id="signupBtn" class="signup-btn">
+      إنشاء الحساب
+    </button>
+
+    <a class="back" href="index.html">
+      لدي حساب بالفعل — تسجيل الدخول
+    </a>
+
+    <div id="message" class="message"></div>
+
+  </div>
+
+  <script type="module">
+
+    import { supabase } from "./js/supabase.js";
+
+    const fullName = document.getElementById("fullName");
+    const username = document.getElementById("username");
+    const email = document.getElementById("email");
+    const phone = document.getElementById("phone");
+    const password = document.getElementById("password");
+    const confirmPassword = document.getElementById("confirmPassword");
+    const signupBtn = document.getElementById("signupBtn");
+    const message = document.getElementById("message");
+
+    function showMessage(text) {
+      message.textContent = text;
+    }
+
+    signupBtn.addEventListener("click", async () => {
+
+      const nameValue = fullName.value.trim();
+      const usernameValue = username.value.trim();
+      const emailValue = email.value.trim();
+      const phoneValue = phone.value.trim();
+      const passwordValue = password.value;
+      const confirmValue = confirmPassword.value;
+
+      if (
+        !nameValue ||
+        !usernameValue ||
+        !emailValue ||
+        !phoneValue ||
+        !passwordValue ||
+        !confirmValue
+      ) {
+        showMessage("يرجى ملء جميع الحقول.");
+        return;
+      }
+
+      if (passwordValue.length < 6) {
+        showMessage("كلمة المرور يجب أن تكون 6 أحرف أو أكثر.");
+        return;
+      }
+
+      if (passwordValue !== confirmValue) {
+        showMessage("كلمتا المرور غير متطابقتين.");
+        return;
+      }
+
+      signupBtn.disabled = true;
+      signupBtn.textContent = "جاري إنشاء الحساب...";
+      showMessage("");
+
+      try {
+
+        const { data, error } = await supabase.auth.signUp({
+          email: emailValue,
+          password: passwordValue,
+          options: {
+            data: {
+              full_name: nameValue,
+              username: usernameValue,
+              phone: phoneValue
+            }
+          }
+        });
+
+        if (error) {
+          showMessage("تعذر إنشاء الحساب: " + error.message);
+          return;
+        }
+
+        if (data.session) {
+          showMessage("تم إنشاء الحساب بنجاح.");
+
+          setTimeout(() => {
+            window.location.href = "profile.html";
+          }, 1000);
+
+        } else {
+          showMessage(
+            "تم إنشاء الحساب. تفقد بريدك الإلكتروني لتأكيد الحساب."
+          );
+        }
+
+      } catch (error) {
+
+        showMessage("حدث خطأ غير متوقع. حاول مرة أخرى.");
+
+      } finally {
+
+        signupBtn.disabled = false;
+        signupBtn.textContent = "إنشاء الحساب";
+
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>
