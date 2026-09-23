@@ -65,28 +65,26 @@
       border-color: #2f8f46;
     }
 
-    .login-btn {
+    button {
       width: 100%;
       height: 55px;
-      border: none;
       border-radius: 16px;
+      font-size: 17px;
+      cursor: pointer;
+    }
+
+    .login-btn {
+      border: none;
       background: #2f8f46;
       color: white;
-      font-size: 18px;
       font-weight: bold;
-      cursor: pointer;
       margin-top: 5px;
     }
 
     .google-btn {
-      width: 100%;
-      height: 55px;
       border: 1px solid #ddd;
-      border-radius: 16px;
       background: white;
       color: #333;
-      font-size: 17px;
-      cursor: pointer;
       margin-top: 12px;
     }
 
@@ -99,6 +97,18 @@
       color: #2f8f46;
       text-decoration: none;
       margin: 0 5px;
+      cursor: pointer;
+    }
+
+    .message {
+      margin-top: 18px;
+      min-height: 22px;
+      font-size: 15px;
+      color: #555;
+    }
+
+    .hidden {
+      display: none;
     }
 
     @media (max-width: 480px) {
@@ -126,32 +136,179 @@
     </div>
 
     <input
+      id="email"
       class="input"
       type="email"
       placeholder="البريد الإلكتروني"
+      autocomplete="email"
     >
 
     <input
+      id="password"
       class="input"
       type="password"
       placeholder="كلمة المرور"
+      autocomplete="current-password"
     >
 
-    <button class="login-btn">
+    <button id="loginBtn" class="login-btn">
       تسجيل الدخول
     </button>
 
-    <button class="google-btn">
+    <button id="googleBtn" class="google-btn">
       تسجيل بواسطة Google
     </button>
 
     <div class="links">
-      <a href="#">نسيت كلمة المرور؟</a>
+      <a id="forgotBtn">نسيت كلمة المرور؟</a>
       <span>·</span>
-      <a href="#">إنشاء حساب جديد</a>
+      <a id="signupBtn">إنشاء حساب جديد</a>
     </div>
 
+    <div id="message" class="message"></div>
+
   </div>
+
+  <script type="module">
+
+    import { createClient } from
+      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    const SUPABASE_URL =
+      "https://ldvxctpngkidvatkisae.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_iKh2hmOMdDYt9MmGmCX3jA_Hs-MovbK";
+
+    const supabase = createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+
+    const loginBtn = document.getElementById("loginBtn");
+    const googleBtn = document.getElementById("googleBtn");
+    const signupBtn = document.getElementById("signupBtn");
+    const forgotBtn = document.getElementById("forgotBtn");
+    const message = document.getElementById("message");
+
+    function showMessage(text) {
+      message.textContent = text;
+    }
+
+    loginBtn.addEventListener("click", async () => {
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      if (!email || !password) {
+        showMessage("اكتب البريد الإلكتروني وكلمة المرور.");
+        return;
+      }
+
+      loginBtn.disabled = true;
+      showMessage("جاري تسجيل الدخول...");
+
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      loginBtn.disabled = false;
+
+      if (error) {
+        showMessage("فشل تسجيل الدخول: " + error.message);
+        return;
+      }
+
+      showMessage("تم تسجيل الدخول بنجاح.");
+
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 700);
+    });
+
+    signupBtn.addEventListener("click", async () => {
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      if (!email || !password) {
+        showMessage("اكتب البريد الإلكتروني وكلمة المرور أولاً.");
+        return;
+      }
+
+      if (password.length < 6) {
+        showMessage("كلمة المرور لازم تكون 6 أحرف أو أكثر.");
+        return;
+      }
+
+      signupBtn.style.pointerEvents = "none";
+      showMessage("جاري إنشاء الحساب...");
+
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password
+      });
+
+      signupBtn.style.pointerEvents = "auto";
+
+      if (error) {
+        showMessage("فشل إنشاء الحساب: " + error.message);
+        return;
+      }
+
+      if (data.session) {
+        showMessage("تم إنشاء الحساب وتسجيل الدخول.");
+      } else {
+        showMessage("تم إنشاء الحساب. تفقد بريدك الإلكتروني لتأكيد الحساب.");
+      }
+    });
+
+    forgotBtn.addEventListener("click", async () => {
+
+      const email = emailInput.value.trim();
+
+      if (!email) {
+        showMessage("اكتب بريدك الإلكتروني أولاً.");
+        return;
+      }
+
+      showMessage("جاري إرسال رابط استعادة كلمة المرور...");
+
+      const { error } =
+        await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin
+        });
+
+      if (error) {
+        showMessage("حدث خطأ: " + error.message);
+        return;
+      }
+
+      showMessage("تم إرسال رابط استعادة كلمة المرور إلى بريدك.");
+    });
+
+    googleBtn.addEventListener("click", async () => {
+
+      showMessage("جاري فتح تسجيل الدخول بواسطة Google...");
+
+      const { error } =
+        await supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: window.location.origin
+          }
+        });
+
+      if (error) {
+        showMessage("تعذر تسجيل الدخول بواسطة Google: " + error.message);
+      }
+    });
+
+  </script>
 
 </body>
 </html>
