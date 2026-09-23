@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>الرئيسية - Iraq Green</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f4f7f3;
+    }
+
+    header {
+      background: white;
+      padding: 18px 20px;
+      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      color: #1d6b35;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .logout {
+      border: none;
+      background: #fdeaea;
+      color: #a51d1d;
+      padding: 10px 15px;
+      border-radius: 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    main {
+      width: 100%;
+      max-width: 700px;
+      margin: auto;
+      padding: 30px 20px;
+    }
+
+    .welcome {
+      background: white;
+      border-radius: 25px;
+      padding: 30px 22px;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    }
+
+    .logo {
+      font-size: 65px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      color: #1d6b35;
+      font-size: 28px;
+    }
+
+    .email {
+      margin-top: 12px;
+      color: #777;
+      font-size: 15px;
+      word-break: break-word;
+    }
+
+    .status {
+      margin-top: 25px;
+      padding: 15px;
+      background: #e8f7ec;
+      color: #176b2e;
+      border-radius: 15px;
+      line-height: 1.7;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 50px 20px;
+      color: #666;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="loading" class="loading">
+    جاري التحقق من الحساب...
+  </div>
+
+  <div id="app" style="display:none;">
+
+    <header>
+
+      <div class="brand">
+        IRAQ GREEN
+      </div>
+
+      <button id="logoutBtn" class="logout">
+        تسجيل الخروج
+      </button>
+
+    </header>
+
+    <main>
+
+      <div class="welcome">
+
+        <div class="logo">
+          🌳
+        </div>
+
+        <h1>
+          أهلاً بك في العراق الأخضر
+        </h1>
+
+        <div id="userEmail" class="email"></div>
+
+        <div class="status">
+          تم تسجيل الدخول إلى حسابك بنجاح.
+          <br>
+          هذه الصفحة محمية ولا يمكن فتحها بدون تسجيل دخول.
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+
+  <script>
+
+    const SUPABASE_URL =
+      "https://ldvxctpngkidvatkisae.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_iKh2hmOMdDYt9MmGmCX3jA_Hs-MovbK";
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+    const loading =
+      document.getElementById("loading");
+
+    const app =
+      document.getElementById("app");
+
+    const userEmail =
+      document.getElementById("userEmail");
+
+    const logoutBtn =
+      document.getElementById("logoutBtn");
+
+
+    async function checkUser() {
+
+      const {
+        data: { user }
+      } = await supabaseClient.auth.getUser();
+
+
+      if (!user) {
+
+        window.location.href =
+          "index.html";
+
+        return;
+      }
+
+
+      userEmail.textContent =
+        user.email || "";
+
+
+      loading.style.display =
+        "none";
+
+      app.style.display =
+        "block";
+
+    }
+
+
+    logoutBtn.addEventListener(
+      "click",
+      async () => {
+
+        logoutBtn.disabled = true;
+
+        const { error } =
+          await supabaseClient.auth.signOut();
+
+
+        if (!error) {
+
+          window.location.href =
+            "index.html";
+
+        } else {
+
+          logoutBtn.disabled = false;
+
+        }
+
+      }
+    );
+
+
+    checkUser();
+
+  </script>
+
+</body>
+</html>
