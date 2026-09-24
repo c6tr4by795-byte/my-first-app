@@ -3,203 +3,391 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>العراق الأخضر</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap"
+    rel="stylesheet"
+  >
 
   <style>
     * {
       box-sizing: border-box;
-      font-family: Arial, sans-serif;
     }
 
     body {
       margin: 0;
       min-height: 100vh;
-      background: #eef8f0;
+      font-family: "Cairo", sans-serif;
+      background: linear-gradient(145deg, #f7f2e8, #ffffff);
       display: flex;
-      justify-content: center;
       align-items: center;
-      padding: 20px;
+      justify-content: center;
+      overflow: hidden;
     }
 
-    .card {
-      width: 100%;
-      max-width: 420px;
-      background: white;
-      padding: 30px 22px;
-      border-radius: 24px;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+    .login-box {
+      width: min(90%, 420px);
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 35px 25px;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.10);
       text-align: center;
     }
 
     .logo {
-      font-size: 55px;
-      margin-bottom: 10px;
+      width: 82px;
+      height: 82px;
+      margin: 0 auto 18px;
+      border-radius: 24px;
+      background: #32b8c4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 34px;
+      font-weight: 800;
+      animation: floatLogo 3s ease-in-out infinite;
     }
 
     h1 {
-      margin: 0;
-      color: #16833b;
+      margin: 0 0 8px;
+      color: #222;
       font-size: 28px;
+      font-weight: 800;
     }
 
-    p {
+    .subtitle {
       color: #777;
-      margin-bottom: 25px;
+      margin-bottom: 28px;
     }
 
     input {
       width: 100%;
       padding: 15px;
-      margin-bottom: 12px;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      font-size: 16px;
+      margin-bottom: 14px;
+      border: 1px solid #e5e5e5;
+      border-radius: 15px;
+      font-family: inherit;
+      font-size: 15px;
       outline: none;
+    }
+
+    input:focus {
+      border-color: #32b8c4;
     }
 
     button {
       width: 100%;
-      padding: 15px;
       border: 0;
-      border-radius: 12px;
+      border-radius: 15px;
+      padding: 15px;
+      font-family: inherit;
       font-size: 16px;
+      font-weight: 700;
       cursor: pointer;
-      margin-top: 5px;
-    }
-
-    .login {
-      background: #16833b;
+      background: #e91d4f;
       color: white;
+      transition: transform 0.2s ease;
     }
 
-    .google {
-      background: white;
-      color: #333;
-      border: 1px solid #ddd;
+    button:active {
+      transform: scale(0.97);
     }
 
     .links {
-      margin-top: 20px;
-      font-size: 14px;
+      margin-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
     }
 
-    a {
-      color: #16833b;
+    .links a {
+      color: #32b8c4;
       text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
     }
 
     #message {
       margin-top: 15px;
       font-size: 14px;
-      color: #d33;
+      color: #e91d4f;
+    }
+
+    /* شاشة الترحيب المتحركة */
+
+    .welcome-screen {
+      position: fixed;
+      inset: 0;
+      background: #ffffff;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 9999;
+    }
+
+    .welcome-screen.show {
+      display: flex;
+      animation: screenIn 0.45s ease forwards;
+    }
+
+    .welcome-logo {
+      width: 105px;
+      height: 105px;
+      border-radius: 30px;
+      background: #32b8c4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 42px;
+      font-weight: 800;
+
+      animation:
+        logoEnter 0.8s cubic-bezier(.17,.67,.3,1.3),
+        logoFloat 2.5s ease-in-out 0.8s infinite;
+    }
+
+    .welcome-title {
+      margin-top: 25px;
+      font-size: 30px;
+      font-weight: 800;
+      color: #222;
+      opacity: 0;
+      animation: textEnter 0.7s ease 0.45s forwards;
+    }
+
+    .welcome-text {
+      margin-top: 5px;
+      color: #777;
+      font-size: 15px;
+      opacity: 0;
+      animation: textEnter 0.7s ease 0.65s forwards;
+    }
+
+    .loader {
+      width: 45px;
+      height: 4px;
+      margin-top: 25px;
+      border-radius: 20px;
+      background: #e91d4f;
+      animation: loader 1.2s ease-in-out infinite;
+    }
+
+    @keyframes screenIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes logoEnter {
+      0% {
+        opacity: 0;
+        transform: scale(0.3) rotate(-15deg);
+      }
+
+      70% {
+        opacity: 1;
+        transform: scale(1.08) rotate(3deg);
+      }
+
+      100% {
+        transform: scale(1) rotate(0);
+      }
+    }
+
+    @keyframes logoFloat {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    @keyframes textEnter {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes loader {
+      0%, 100% {
+        transform: scaleX(0.5);
+        opacity: 0.5;
+      }
+
+      50% {
+        transform: scaleX(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes floatLogo {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-5px);
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="card">
+  <div class="login-box" id="loginBox">
 
-    <div class="logo">🌳</div>
+    <div class="logo">ع</div>
 
     <h1>العراق الأخضر</h1>
 
-    <p>منصة العراق الأخضر</p>
-
-    <input
-      type="email"
-      id="email"
-      placeholder="البريد الإلكتروني"
-      autocomplete="email"
-    >
-
-    <input
-      type="password"
-      id="password"
-      placeholder="كلمة المرور"
-      autocomplete="current-password"
-    >
-
-    <button class="login" id="loginBtn">
-      تسجيل الدخول
-    </button>
-
-    <button class="google" id="googleBtn">
-      تسجيل بواسطة Google
-    </button>
-
-    <div class="links">
-      <a href="forgot.html">نسيت كلمة المرور؟</a>
-      <span> · </span>
-      <a href="signup.html">إنشاء حساب جديد</a>
+    <div class="subtitle">
+      تسجيل الدخول إلى حسابك
     </div>
 
+    <form id="loginForm">
+
+      <input
+        id="email"
+        type="email"
+        placeholder="البريد الإلكتروني"
+        required
+      >
+
+      <input
+        id="password"
+        type="password"
+        placeholder="كلمة المرور"
+        required
+      >
+
+      <button type="submit">
+        تسجيل الدخول
+      </button>
+
+    </form>
+
     <div id="message"></div>
+
+    <div class="links">
+      <a href="signup.html">إنشاء حساب</a>
+      <a href="forgot.html">نسيت كلمة المرور؟</a>
+    </div>
+
+  </div>
+
+  <!-- شاشة ما بعد تسجيل الدخول -->
+
+  <div class="welcome-screen" id="welcomeScreen">
+
+    <div class="welcome-logo">
+      ع
+    </div>
+
+    <div class="welcome-title">
+      مرحباً بك
+    </div>
+
+    <div class="welcome-text">
+      العراق الأخضر
+    </div>
+
+    <div class="loader"></div>
 
   </div>
 
   <script type="module">
 
     import {
-      auth,
-      googleProvider
-    } from "./js/firebase.js";
-
-    import {
-      signInWithEmailAndPassword,
-      signInWithRedirect
+      signInWithEmailAndPassword
     } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-    const email = document.getElementById("email");
-    const password = document.getElementById("password");
-    const loginBtn = document.getElementById("loginBtn");
-    const googleBtn = document.getElementById("googleBtn");
-    const message = document.getElementById("message");
+    import {
+      auth
+    } from "./js/firebase.js";
 
-    loginBtn.addEventListener("click", async () => {
+    const loginForm =
+      document.getElementById("loginForm");
 
-      message.textContent = "";
+    const message =
+      document.getElementById("message");
 
-      if (!email.value || !password.value) {
-        message.textContent = "أدخل البريد الإلكتروني وكلمة المرور.";
-        return;
+    const loginBox =
+      document.getElementById("loginBox");
+
+    const welcomeScreen =
+      document.getElementById("welcomeScreen");
+
+    loginForm.addEventListener(
+      "submit",
+      async (event) => {
+
+        event.preventDefault();
+
+        message.textContent = "";
+
+        const email =
+          document
+            .getElementById("email")
+            .value
+            .trim();
+
+        const password =
+          document
+            .getElementById("password")
+            .value;
+
+        try {
+
+          await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+          /*
+            تسجيل الدخول نجح.
+            نخفي صفحة الدخول ونظهر الحركة.
+          */
+
+          loginBox.style.display = "none";
+
+          welcomeScreen.classList.add("show");
+
+          /*
+            بعد انتهاء الحركة ننتقل للرئيسية.
+          */
+
+          setTimeout(() => {
+            window.location.href = "home.html";
+          }, 2300);
+
+        } catch (error) {
+
+          console.error(error);
+
+          message.textContent =
+            "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
+
+        }
+
       }
-
-      try {
-
-        await signInWithEmailAndPassword(
-          auth,
-          email.value.trim(),
-          password.value
-        );
-
-        window.location.href = "home.html";
-
-      } catch (error) {
-
-        message.textContent = "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
-
-        console.error(error);
-
-      }
-
-    });
-
-    googleBtn.addEventListener("click", async () => {
-
-      try {
-
-        await signInWithRedirect(auth, googleProvider);
-
-      } catch (error) {
-
-        message.textContent = "حدث خطأ أثناء تسجيل الدخول بواسطة Google.";
-
-        console.error(error);
-
-      }
-
-    });
+    );
 
   </script>
 
