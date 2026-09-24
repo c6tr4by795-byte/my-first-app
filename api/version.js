@@ -1,22 +1,29 @@
 const fs = require("fs");
 const path = require("path");
 
+function readPackage(name) {
+  const filePath = path.join(
+    process.cwd(),
+    "node_modules",
+    name,
+    "package.json"
+  );
+
+  return JSON.parse(
+    fs.readFileSync(filePath, "utf8")
+  );
+}
+
 module.exports = (req, res) => {
   try {
-    const filePath = path.join(
-      process.cwd(),
-      "node_modules",
-      "firebase-admin",
-      "package.json"
-    );
-
-    const packageJson = JSON.parse(
-      fs.readFileSync(filePath, "utf8")
-    );
+    const firebaseAdmin = readPackage("firebase-admin");
+    const jwksRsa = readPackage("jwks-rsa");
+    const jose = readPackage("jose");
 
     res.status(200).json({
-      firebaseAdmin: packageJson.version,
-      jwksRsa: packageJson.dependencies?.["jwks-rsa"] || null
+      firebaseAdmin: firebaseAdmin.version,
+      jwksRsa: jwksRsa.version,
+      jose: jose.version
     });
 
   } catch (error) {
