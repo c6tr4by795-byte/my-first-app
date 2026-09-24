@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="format-detection" content="telephone=no,email=no,address=no">
 
-  <title>نسيت كلمة المرور - العراق الأخضر</title>
+  <title>استعادة الحساب - العراق الأخضر</title>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
@@ -63,18 +63,13 @@
 
     .back {
       display: inline-block;
-
       background: #32b8c4;
       color: #111;
-
       text-decoration: none;
-
       padding: 8px 15px;
       border-radius: 13px;
-
       font-size: 13px;
       font-weight: 800;
-
       box-shadow: 0 4px 0 rgba(0,0,0,0.16);
     }
 
@@ -106,18 +101,13 @@
       background: #fffaf7;
       border-radius: 30px;
       padding: 28px 22px;
-
-      box-shadow:
-        0 12px 30px rgba(80,0,20,0.14);
+      box-shadow: 0 12px 30px rgba(80,0,20,0.14);
     }
 
     .description {
       margin: 0 0 22px;
-
       color: #666;
-
       text-align: center;
-
       font-size: 15px;
       line-height: 1.8;
       font-weight: 600;
@@ -125,31 +115,21 @@
 
     .label {
       display: block;
-
       color: #17853e;
-
       font-size: 17px;
       font-weight: 800;
-
       margin-bottom: 8px;
     }
 
     input {
       width: 100%;
-
       border: 2px solid #eee;
-
       background: #f7f7f5;
-
       border-radius: 16px;
-
       padding: 15px 16px;
-
       margin-bottom: 17px;
-
       font-family: Arial, sans-serif;
       font-size: 17px;
-
       outline: none;
     }
 
@@ -159,23 +139,15 @@
 
     .send {
       width: 100%;
-
       border: none;
-
       background: #32b8c4;
       color: #111;
-
       border-radius: 17px;
-
       padding: 15px;
-
       font-family: "Cairo", Arial, sans-serif;
-
       font-size: 18px;
       font-weight: 900;
-
       cursor: pointer;
-
       box-shadow: 0 5px 0 rgba(0,0,0,0.16);
     }
 
@@ -191,29 +163,20 @@
 
     .login {
       display: block;
-
       text-align: center;
-
       margin-top: 20px;
-
       color: #17853e;
-
       font-size: 15px;
       font-weight: 800;
-
       text-decoration: none;
     }
 
     #message {
       margin-top: 17px;
-
       text-align: center;
-
       color: #d71945;
-
       font-size: 14px;
       font-weight: 800;
-
       line-height: 1.7;
     }
 
@@ -240,11 +203,11 @@
         <div class="tree">🌳</div>
 
         <h1>
-          نسيت كلمة المرور؟
+          استعادة الحساب
         </h1>
 
         <p class="subtitle">
-          لا تشيل هم
+          استرجع حسابك بسهولة
         </p>
 
       </section>
@@ -253,7 +216,7 @@
 
         <p class="description">
           أدخل البريد الإلكتروني المرتبط بحسابك،
-          وسنرسل لك رابطاً لإعادة تعيين كلمة المرور.
+          وسنرسل لك رمز تحقق مكوّن من 6 أرقام.
         </p>
 
         <label class="label">
@@ -270,7 +233,7 @@
         <button
           class="send"
           id="sendBtn">
-          إرسال رابط التغيير
+          إرسال رمز التحقق
         </button>
 
         <div id="message"></div>
@@ -287,14 +250,7 @@
 
   </div>
 
-  <script type="module">
-
-    import { auth } from "./js/firebase.js";
-
-    import {
-      sendPasswordResetEmail
-    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
+  <script>
 
     const email =
       document.getElementById("email");
@@ -309,7 +265,7 @@
     sendBtn.addEventListener("click", async () => {
 
       const emailValue =
-        email.value.trim();
+        email.value.trim().toLowerCase();
 
       message.textContent = "";
       message.id = "message";
@@ -324,16 +280,60 @@
       }
 
 
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
+
+        message.textContent =
+          "البريد الإلكتروني غير صحيح.";
+
+        return;
+      }
+
+
       sendBtn.disabled = true;
 
       sendBtn.textContent =
-        "جاري الإرسال...";
+        "جاري إرسال الرمز...";
 
 
       try {
 
-        await sendPasswordResetEmail(
-          auth,
+        const response =
+          await fetch("/api/send-otp", {
+
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+              email: emailValue
+            })
+
+          });
+
+
+        const data =
+          await response.json();
+
+
+        if (!response.ok || !data.success) {
+
+          message.textContent =
+            data.message ||
+            "تعذر إرسال رمز التحقق.";
+
+          sendBtn.disabled = false;
+
+          sendBtn.textContent =
+            "إرسال رمز التحقق";
+
+          return;
+        }
+
+
+        sessionStorage.setItem(
+          "resetEmail",
           emailValue
         );
 
@@ -341,35 +341,32 @@
         message.id = "success";
 
         message.textContent =
-          "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.";
+          "تم إرسال رمز التحقق إلى بريدك الإلكتروني.";
 
 
         sendBtn.textContent =
           "تم الإرسال";
 
 
+        setTimeout(() => {
+
+          window.location.href =
+            "reset.html";
+
+        }, 1200);
+
+
       } catch (error) {
 
         console.error(error);
 
-
-        if (error.code === "auth/invalid-email") {
-
-          message.textContent =
-            "البريد الإلكتروني غير صحيح.";
-
-        } else {
-
-          message.textContent =
-            "تعذر إرسال الرابط. تأكد من البريد الإلكتروني وحاول مرة أخرى.";
-
-        }
-
+        message.textContent =
+          "تعذر الاتصال بالخادم. حاول مرة أخرى.";
 
         sendBtn.disabled = false;
 
         sendBtn.textContent =
-          "إرسال رابط التغيير";
+          "إرسال رمز التحقق";
 
       }
 
