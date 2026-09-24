@@ -3,80 +3,129 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="format-detection"
+    content="telephone=no,email=no,address=no">
 
   <title>العراق الأخضر</title>
 
   <style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+
     * {
       box-sizing: border-box;
     }
 
+    html,
     body {
       margin: 0;
-      min-height: 100vh;
-      background: #d63651;
+      padding: 0;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: "Cairo", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255,255,255,0.10) 0 90px, transparent 91px),
+        radial-gradient(circle at 100% 90%, rgba(255,255,255,0.08) 0 150px, transparent 151px),
+        #e91d4f;
+
       color: white;
-      font-family: Arial, Tahoma, sans-serif;
     }
 
     .page {
       min-height: 100vh;
-      padding: 22px 18px 40px;
       position: relative;
       overflow: hidden;
+      padding: 22px 18px 45px;
     }
 
-    /* زخارف خفيفة بالخلفية */
-    .shape {
+    /* زخارف الخلفية */
+
+    .circle-one {
       position: absolute;
-      width: 180px;
-      height: 180px;
+      width: 210px;
+      height: 210px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.035);
-      pointer-events: none;
-    }
-
-    .shape.one {
-      top: -70px;
-      left: -60px;
-    }
-
-    .shape.two {
-      bottom: 80px;
+      background: rgba(255,255,255,0.045);
+      top: -100px;
       right: -80px;
-      width: 220px;
-      height: 220px;
+    }
+
+    .circle-two {
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      bottom: -120px;
+      left: -110px;
+    }
+
+    .star {
+      position: absolute;
+      color: rgba(255,255,255,0.85);
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .star.one {
+      top: 170px;
+      left: 30px;
+    }
+
+    .star.two {
+      top: 390px;
+      right: 24px;
+      font-size: 25px;
+    }
+
+    .star.three {
+      bottom: 220px;
+      left: 45px;
+      font-size: 27px;
     }
 
     /* زر تسجيل الخروج */
+
     .logout {
       position: absolute;
-      top: 18px;
+      top: 22px;
       left: 18px;
 
-      width: 48px;
-      height: 48px;
-
-      border: 0;
-      border-radius: 14px;
-
-      background: #54b4c2;
+      border: none;
+      background: #32b8c4;
       color: #111;
 
-      font-size: 21px;
-      font-weight: bold;
+      padding: 9px 16px;
+
+      border-radius: 13px;
+
+      font-family: "Cairo", Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+
+      box-shadow:
+        0 4px 0 rgba(0,0,0,0.18),
+        0 8px 18px rgba(0,0,0,0.08);
 
       cursor: pointer;
-      z-index: 5;
 
-      box-shadow: 0 4px 0 rgba(0,0,0,0.18);
+      z-index: 10;
     }
 
     .logout:active {
       transform: translateY(2px);
       box-shadow: 0 2px 0 rgba(0,0,0,0.18);
     }
+
+    /* المحتوى */
 
     .content {
       position: relative;
@@ -86,127 +135,159 @@
       max-width: 520px;
 
       margin: 0 auto;
-      padding-top: 55px;
+      padding-top: 65px;
     }
 
-    .welcome {
+    /* الترحيب */
+
+    .hero {
       text-align: center;
-      margin-bottom: 34px;
+      margin-bottom: 35px;
     }
 
     .tree {
-      font-size: 68px;
+      font-size: 62px;
       line-height: 1;
       margin-bottom: 18px;
+
+      filter: drop-shadow(0 5px 5px rgba(0,0,0,0.12));
     }
 
     .title {
       margin: 0;
 
-      font-size: clamp(36px, 9vw, 58px);
-      line-height: 1.15;
+      color: white;
+
+      font-size: clamp(39px, 10vw, 62px);
+      line-height: 1.2;
 
       font-weight: 900;
-      color: white;
+
+      letter-spacing: -1px;
+
+      text-shadow:
+        0 3px 0 rgba(0,0,0,0.06);
     }
 
     .subtitle {
-      margin: 16px 0 0;
-
-      font-size: 23px;
-      font-weight: bold;
+      margin: 12px 0 0;
 
       color: white;
+
+      font-size: 22px;
+      font-weight: 700;
     }
 
     /* بطاقة الحساب */
-    .account {
-      background: rgba(255,255,255,0.97);
-      color: #111;
 
-      border-radius: 28px;
+    .card {
+      background: #fffaf7;
 
-      padding: 25px 24px;
+      color: #222;
 
-      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+      border-radius: 30px;
 
-      text-align: right;
+      padding: 27px 24px;
+
+      margin-bottom: 20px;
+
+      box-shadow:
+        0 12px 30px rgba(80,0,20,0.14);
     }
 
-    .account-title {
+    .card-label {
       margin: 0 0 18px;
 
-      color: #16833b;
+      color: #17853e;
 
-      font-size: 28px;
+      font-size: 27px;
       font-weight: 900;
     }
 
-    /* الإيميل نص فقط */
+    /* الإيميل */
+
     .email {
-      margin: 0;
+      text-align: center;
+
+      color: #4d4d4d;
+
+      font-family: Arial, sans-serif;
 
       font-size: 19px;
-      font-weight: bold;
-
-      color: #555;
+      font-weight: 700;
 
       direction: ltr;
-      text-align: center;
 
-      user-select: text;
-      -webkit-user-select: text;
+      /* يمنع تحديده كرابط */
+      pointer-events: none;
 
-      word-break: break-word;
+      user-select: none;
+      -webkit-user-select: none;
+
+      text-decoration: none;
     }
 
-    .email::selection {
-      background: #54b4c2;
-      color: white;
-    }
+    /* البطاقة الثانية */
 
-    /* مساحة مستقبلية */
-    .welcome-box {
-      margin-top: 24px;
+    .welcome-card {
+      background: #fffaf7;
 
-      background: rgba(255,255,255,0.97);
-      color: #111;
+      color: #222;
 
-      border-radius: 28px;
+      border-radius: 30px;
 
-      padding: 28px 22px;
+      padding: 30px 22px;
 
       text-align: center;
 
-      box-shadow: 0 10px 25px rgba(0,0,0,0.10);
+      box-shadow:
+        0 12px 30px rgba(80,0,20,0.12);
     }
 
-    .welcome-box h2 {
+    .welcome-title {
       margin: 0;
 
-      color: #16833b;
+      color: #17853e;
 
-      font-size: 25px;
+      font-size: clamp(25px, 6vw, 34px);
+
       font-weight: 900;
+
+      line-height: 1.45;
     }
 
-    .welcome-box p {
+    .welcome-text {
       margin: 12px 0 0;
 
       color: #777;
 
-      font-size: 16px;
+      font-size: 17px;
+
+      font-weight: 600;
+    }
+
+    /* شريط صغير تركوازي */
+
+    .accent {
+      width: 70px;
+      height: 7px;
+
+      background: #32b8c4;
+
+      border-radius: 20px;
+
+      margin: 22px auto 0;
     }
 
     #message {
-      margin-top: 12px;
-
       text-align: center;
+
+      margin-top: 15px;
 
       color: white;
 
       font-size: 14px;
-      font-weight: bold;
+      font-weight: 700;
     }
 
     @media (max-width: 420px) {
@@ -217,25 +298,36 @@
       }
 
       .content {
-        padding-top: 50px;
+        padding-top: 62px;
+      }
+
+      .logout {
+        top: 18px;
+        left: 14px;
+
+        padding: 8px 13px;
+
+        font-size: 12px;
       }
 
       .tree {
-        font-size: 58px;
+        font-size: 55px;
       }
 
       .subtitle {
-        font-size: 20px;
+        font-size: 19px;
       }
 
-      .account {
-        padding: 22px 18px;
+      .card,
+      .welcome-card {
+        border-radius: 26px;
       }
 
       .email {
         font-size: 17px;
       }
     }
+
   </style>
 </head>
 
@@ -243,21 +335,23 @@
 
   <div class="page">
 
-    <div class="shape one"></div>
-    <div class="shape two"></div>
+    <div class="circle-one"></div>
+    <div class="circle-two"></div>
+
+    <div class="star one">✦</div>
+    <div class="star two">✦</div>
+    <div class="star three">✦</div>
 
     <!-- تسجيل الخروج -->
     <button
       class="logout"
-      id="logoutBtn"
-      aria-label="تسجيل الخروج"
-      title="تسجيل الخروج">
-      ↪
+      id="logoutBtn">
+      تسجيل الخروج
     </button>
 
     <main class="content">
 
-      <section class="welcome">
+      <section class="hero">
 
         <div class="tree">🌳</div>
 
@@ -271,29 +365,33 @@
 
       </section>
 
-      <section class="account">
 
-        <h2 class="account-title">
+      <section class="card">
+
+        <h2 class="card-label">
           حسابك
         </h2>
 
-        <p
+        <div
           class="email"
           id="userEmail">
           جاري تحميل الحساب...
-        </p>
+        </div>
 
       </section>
 
-      <section class="welcome-box">
 
-        <h2>
+      <section class="welcome-card">
+
+        <h2 class="welcome-title">
           مرحباً بك في العراق الأخضر
         </h2>
 
-        <p>
+        <p class="welcome-text">
           حسابك مسجل بنجاح
         </p>
+
+        <div class="accent"></div>
 
       </section>
 
@@ -302,6 +400,7 @@
     </main>
 
   </div>
+
 
   <script type="module">
 
@@ -312,9 +411,16 @@
       signOut
     } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-    const userEmail = document.getElementById("userEmail");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const message = document.getElementById("message");
+
+    const userEmail =
+      document.getElementById("userEmail");
+
+    const logoutBtn =
+      document.getElementById("logoutBtn");
+
+    const message =
+      document.getElementById("message");
+
 
     onAuthStateChanged(auth, (user) => {
 
@@ -330,6 +436,7 @@
       }
 
     });
+
 
     logoutBtn.addEventListener("click", async () => {
 
