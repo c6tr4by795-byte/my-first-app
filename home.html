@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,121 +10,296 @@
   <style>
     * {
       box-sizing: border-box;
-      font-family: Arial, sans-serif;
     }
 
     body {
       margin: 0;
       min-height: 100vh;
-      background: #eef8f0;
-      padding: 20px;
+      background: #d63651;
+      color: white;
+      font-family: Arial, Tahoma, sans-serif;
     }
 
-    .container {
+    .page {
+      min-height: 100vh;
+      padding: 22px 18px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* زخارف خفيفة بالخلفية */
+    .shape {
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.035);
+      pointer-events: none;
+    }
+
+    .shape.one {
+      top: -70px;
+      left: -60px;
+    }
+
+    .shape.two {
+      bottom: 80px;
+      right: -80px;
+      width: 220px;
+      height: 220px;
+    }
+
+    /* زر تسجيل الخروج */
+    .logout {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+
+      width: 48px;
+      height: 48px;
+
+      border: 0;
+      border-radius: 14px;
+
+      background: #54b4c2;
+      color: #111;
+
+      font-size: 21px;
+      font-weight: bold;
+
+      cursor: pointer;
+      z-index: 5;
+
+      box-shadow: 0 4px 0 rgba(0,0,0,0.18);
+    }
+
+    .logout:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.18);
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+
       width: 100%;
-      max-width: 500px;
+      max-width: 520px;
+
       margin: 0 auto;
-    }
-
-    .header {
-      background: white;
-      border-radius: 22px;
-      padding: 22px;
-      text-align: center;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.06);
-      margin-bottom: 18px;
-    }
-
-    .logo {
-      font-size: 45px;
-    }
-
-    h1 {
-      margin: 8px 0;
-      color: #16833b;
-      font-size: 26px;
+      padding-top: 55px;
     }
 
     .welcome {
-      color: #777;
-      font-size: 15px;
+      text-align: center;
+      margin-bottom: 34px;
     }
 
-    .box {
-      background: white;
-      border-radius: 22px;
-      padding: 22px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+    .tree {
+      font-size: 68px;
+      line-height: 1;
       margin-bottom: 18px;
     }
 
-    .box h2 {
-      margin-top: 0;
-      color: #16833b;
-      font-size: 20px;
+    .title {
+      margin: 0;
+
+      font-size: clamp(36px, 9vw, 58px);
+      line-height: 1.15;
+
+      font-weight: 900;
+      color: white;
     }
 
+    .subtitle {
+      margin: 16px 0 0;
+
+      font-size: 23px;
+      font-weight: bold;
+
+      color: white;
+    }
+
+    /* بطاقة الحساب */
+    .account {
+      background: rgba(255,255,255,0.97);
+      color: #111;
+
+      border-radius: 28px;
+
+      padding: 25px 24px;
+
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+
+      text-align: right;
+    }
+
+    .account-title {
+      margin: 0 0 18px;
+
+      color: #16833b;
+
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    /* الإيميل نص فقط */
     .email {
-      background: #f4f7f5;
-      padding: 14px;
-      border-radius: 12px;
+      margin: 0;
+
+      font-size: 19px;
+      font-weight: bold;
+
       color: #555;
+
+      direction: ltr;
+      text-align: center;
+
+      user-select: text;
+      -webkit-user-select: text;
+
       word-break: break-word;
     }
 
-    button {
-      width: 100%;
-      padding: 15px;
-      border: 0;
-      border-radius: 12px;
-      background: #16833b;
+    .email::selection {
+      background: #54b4c2;
       color: white;
+    }
+
+    /* مساحة مستقبلية */
+    .welcome-box {
+      margin-top: 24px;
+
+      background: rgba(255,255,255,0.97);
+      color: #111;
+
+      border-radius: 28px;
+
+      padding: 28px 22px;
+
+      text-align: center;
+
+      box-shadow: 0 10px 25px rgba(0,0,0,0.10);
+    }
+
+    .welcome-box h2 {
+      margin: 0;
+
+      color: #16833b;
+
+      font-size: 25px;
+      font-weight: 900;
+    }
+
+    .welcome-box p {
+      margin: 12px 0 0;
+
+      color: #777;
+
       font-size: 16px;
-      cursor: pointer;
     }
 
     #message {
-      text-align: center;
       margin-top: 12px;
-      color: #16833b;
+
+      text-align: center;
+
+      color: white;
+
       font-size: 14px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 420px) {
+
+      .page {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .content {
+        padding-top: 50px;
+      }
+
+      .tree {
+        font-size: 58px;
+      }
+
+      .subtitle {
+        font-size: 20px;
+      }
+
+      .account {
+        padding: 22px 18px;
+      }
+
+      .email {
+        font-size: 17px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="container">
+  <div class="page">
 
-    <div class="header">
-      <div class="logo">🌳</div>
+    <div class="shape one"></div>
+    <div class="shape two"></div>
 
-      <h1>العراق الأخضر</h1>
+    <!-- تسجيل الخروج -->
+    <button
+      class="logout"
+      id="logoutBtn"
+      aria-label="تسجيل الخروج"
+      title="تسجيل الخروج">
+      ↪
+    </button>
 
-      <div class="welcome">
-        أهلاً وسهلاً بك
-      </div>
-    </div>
+    <main class="content">
 
-    <div class="box">
+      <section class="welcome">
 
-      <h2>حسابك</h2>
+        <div class="tree">🌳</div>
 
-      <div class="email" id="userEmail">
-        جاري تحميل الحساب...
-      </div>
+        <h1 class="title">
+          العراق الأخضر
+        </h1>
 
-    </div>
+        <p class="subtitle">
+          أهلاً وسهلاً بك
+        </p>
 
-    <div class="box">
+      </section>
 
-      <button id="logoutBtn">
-        تسجيل الخروج
-      </button>
+      <section class="account">
+
+        <h2 class="account-title">
+          حسابك
+        </h2>
+
+        <p
+          class="email"
+          id="userEmail">
+          جاري تحميل الحساب...
+        </p>
+
+      </section>
+
+      <section class="welcome-box">
+
+        <h2>
+          مرحباً بك في العراق الأخضر
+        </h2>
+
+        <p>
+          حسابك مسجل بنجاح
+        </p>
+
+      </section>
 
       <div id="message"></div>
 
-    </div>
+    </main>
 
   </div>
 
@@ -144,7 +320,8 @@
 
       if (user) {
 
-        userEmail.textContent = user.email || "حساب Google";
+        userEmail.textContent =
+          user.email || "حساب Google";
 
       } else {
 
@@ -164,7 +341,8 @@
 
       } catch (error) {
 
-        message.textContent = "حدث خطأ أثناء تسجيل الخروج.";
+        message.textContent =
+          "حدث خطأ أثناء تسجيل الخروج.";
 
         console.error(error);
 
@@ -175,4 +353,5 @@
   </script>
 
 </body>
+
 </html>
