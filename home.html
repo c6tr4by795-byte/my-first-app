@@ -4,227 +4,173 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>الرئيسية - Iraq Green</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <title>العراق الأخضر</title>
 
   <style>
     * {
       box-sizing: border-box;
+      font-family: Arial, sans-serif;
     }
 
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: Arial, sans-serif;
-      background: #f4f7f3;
+      background: #eef8f0;
+      padding: 20px;
     }
 
-    header {
-      background: white;
-      padding: 18px 20px;
-      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .brand {
-      color: #1d6b35;
-      font-size: 22px;
-      font-weight: bold;
-    }
-
-    .logout {
-      border: none;
-      background: #fdeaea;
-      color: #a51d1d;
-      padding: 10px 15px;
-      border-radius: 12px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    main {
+    .container {
       width: 100%;
-      max-width: 700px;
-      margin: auto;
-      padding: 30px 20px;
+      max-width: 500px;
+      margin: 0 auto;
     }
 
-    .welcome {
+    .header {
       background: white;
-      border-radius: 25px;
-      padding: 30px 22px;
+      border-radius: 22px;
+      padding: 22px;
       text-align: center;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+      margin-bottom: 18px;
     }
 
     .logo {
-      font-size: 65px;
-      margin-bottom: 10px;
+      font-size: 45px;
     }
 
     h1 {
-      margin: 0;
-      color: #1d6b35;
-      font-size: 28px;
+      margin: 8px 0;
+      color: #16833b;
+      font-size: 26px;
+    }
+
+    .welcome {
+      color: #777;
+      font-size: 15px;
+    }
+
+    .box {
+      background: white;
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+      margin-bottom: 18px;
+    }
+
+    .box h2 {
+      margin-top: 0;
+      color: #16833b;
+      font-size: 20px;
     }
 
     .email {
-      margin-top: 12px;
-      color: #777;
-      font-size: 15px;
+      background: #f4f7f5;
+      padding: 14px;
+      border-radius: 12px;
+      color: #555;
       word-break: break-word;
     }
 
-    .status {
-      margin-top: 25px;
+    button {
+      width: 100%;
       padding: 15px;
-      background: #e8f7ec;
-      color: #176b2e;
-      border-radius: 15px;
-      line-height: 1.7;
+      border: 0;
+      border-radius: 12px;
+      background: #16833b;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
     }
 
-    .loading {
+    #message {
       text-align: center;
-      padding: 50px 20px;
-      color: #666;
+      margin-top: 12px;
+      color: #16833b;
+      font-size: 14px;
     }
   </style>
 </head>
 
 <body>
 
-  <div id="loading" class="loading">
-    جاري التحقق من الحساب...
-  </div>
+  <div class="container">
 
-  <div id="app" style="display:none;">
+    <div class="header">
+      <div class="logo">🌳</div>
 
-    <header>
+      <h1>العراق الأخضر</h1>
 
-      <div class="brand">
-        IRAQ GREEN
+      <div class="welcome">
+        أهلاً وسهلاً بك
+      </div>
+    </div>
+
+    <div class="box">
+
+      <h2>حسابك</h2>
+
+      <div class="email" id="userEmail">
+        جاري تحميل الحساب...
       </div>
 
-      <button id="logoutBtn" class="logout">
+    </div>
+
+    <div class="box">
+
+      <button id="logoutBtn">
         تسجيل الخروج
       </button>
 
-    </header>
+      <div id="message"></div>
 
-    <main>
-
-      <div class="welcome">
-
-        <div class="logo">
-          🌳
-        </div>
-
-        <h1>
-          أهلاً بك في العراق الأخضر
-        </h1>
-
-        <div id="userEmail" class="email"></div>
-
-        <div class="status">
-          تم تسجيل الدخول إلى حسابك بنجاح.
-          <br>
-          هذه الصفحة محمية ولا يمكن فتحها بدون تسجيل دخول.
-        </div>
-
-      </div>
-
-    </main>
+    </div>
 
   </div>
 
+  <script type="module">
 
-  <script>
+    import { auth } from "./js/firebase.js";
 
-    const SUPABASE_URL =
-      "https://ldvxctpngkidvatkisae.supabase.co";
+    import {
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-    const SUPABASE_KEY =
-      "sb_publishable_iKh2hmOMdDYt9MmGmCX3jA_Hs-MovbK";
+    const userEmail = document.getElementById("userEmail");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const message = document.getElementById("message");
 
-    const supabaseClient =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-      );
+    onAuthStateChanged(auth, (user) => {
 
+      if (user) {
 
-    const loading =
-      document.getElementById("loading");
+        userEmail.textContent = user.email || "حساب Google";
 
-    const app =
-      document.getElementById("app");
+      } else {
 
-    const userEmail =
-      document.getElementById("userEmail");
-
-    const logoutBtn =
-      document.getElementById("logoutBtn");
-
-
-    async function checkUser() {
-
-      const {
-        data: { user }
-      } = await supabaseClient.auth.getUser();
-
-
-      if (!user) {
-
-        window.location.href =
-          "index.html";
-
-        return;
-      }
-
-
-      userEmail.textContent =
-        user.email || "";
-
-
-      loading.style.display =
-        "none";
-
-      app.style.display =
-        "block";
-
-    }
-
-
-    logoutBtn.addEventListener(
-      "click",
-      async () => {
-
-        logoutBtn.disabled = true;
-
-        const { error } =
-          await supabaseClient.auth.signOut();
-
-
-        if (!error) {
-
-          window.location.href =
-            "index.html";
-
-        } else {
-
-          logoutBtn.disabled = false;
-
-        }
+        window.location.href = "index.html";
 
       }
-    );
 
+    });
 
-    checkUser();
+    logoutBtn.addEventListener("click", async () => {
+
+      try {
+
+        await signOut(auth);
+
+        window.location.href = "index.html";
+
+      } catch (error) {
+
+        message.textContent = "حدث خطأ أثناء تسجيل الخروج.";
+
+        console.error(error);
+
+      }
+
+    });
 
   </script>
 
