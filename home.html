@@ -32,8 +32,16 @@
     body {
       font-family: "Cairo", Arial, sans-serif;
       background:
-        radial-gradient(circle at 10% 10%, rgba(255,255,255,0.10) 0 90px, transparent 91px),
-        radial-gradient(circle at 100% 90%, rgba(255,255,255,0.08) 0 150px, transparent 151px),
+        radial-gradient(
+          circle at 10% 10%,
+          rgba(255,255,255,0.10) 0 90px,
+          transparent 91px
+        ),
+        radial-gradient(
+          circle at 100% 90%,
+          rgba(255,255,255,0.08) 0 150px,
+          transparent 151px
+        ),
         #e91d4f;
 
       color: white;
@@ -43,7 +51,7 @@
       min-height: 100vh;
       position: relative;
       overflow: hidden;
-      padding: 22px 18px 45px;
+      padding: 22px 18px 55px;
     }
 
     /* زخارف الخلفية */
@@ -73,6 +81,7 @@
       color: rgba(255,255,255,0.85);
       font-size: 34px;
       line-height: 1;
+      animation: starFloat 4s ease-in-out infinite;
     }
 
     .star.one {
@@ -84,12 +93,14 @@
       top: 390px;
       right: 24px;
       font-size: 25px;
+      animation-delay: 1s;
     }
 
     .star.three {
       bottom: 220px;
       left: 45px;
       font-size: 27px;
+      animation-delay: 2s;
     }
 
     /* زر تسجيل الخروج */
@@ -150,7 +161,11 @@
       line-height: 1;
       margin-bottom: 18px;
 
-      filter: drop-shadow(0 5px 5px rgba(0,0,0,0.12));
+      filter: drop-shadow(
+        0 5px 5px rgba(0,0,0,0.12)
+      );
+
+      animation: treeFloat 3.5s ease-in-out infinite;
     }
 
     .title {
@@ -218,7 +233,6 @@
 
       direction: ltr;
 
-      /* يمنع تحديده كرابط */
       pointer-events: none;
 
       user-select: none;
@@ -242,6 +256,8 @@
 
       box-shadow:
         0 12px 30px rgba(80,0,20,0.12);
+
+      margin-bottom: 24px;
     }
 
     .welcome-title {
@@ -279,6 +295,331 @@
       margin: 22px auto 0;
     }
 
+    /* =========================================
+       الإعلان المتحرك
+       ========================================= */
+
+    .ad-section {
+      position: relative;
+
+      width: 100%;
+      min-height: 310px;
+
+      margin: 0 auto 25px;
+
+      overflow: hidden;
+
+      border-radius: 34px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #f31652 0%,
+          #e91d4f 42%,
+          #c91547 100%
+        );
+
+      box-shadow:
+        0 20px 45px rgba(80,0,25,0.25),
+        inset 0 1px 0 rgba(255,255,255,0.25);
+
+      isolation: isolate;
+    }
+
+    /* الوهج */
+
+    .ad-glow {
+      position: absolute;
+
+      border-radius: 50%;
+
+      filter: blur(3px);
+
+      pointer-events: none;
+
+      z-index: 0;
+    }
+
+    .ad-glow.one {
+      width: 240px;
+      height: 240px;
+
+      top: -130px;
+      right: -70px;
+
+      background:
+        rgba(255,255,255,0.13);
+
+      animation:
+        glowMoveOne 6s ease-in-out infinite;
+    }
+
+    .ad-glow.two {
+      width: 210px;
+      height: 210px;
+
+      bottom: -130px;
+      left: -70px;
+
+      background:
+        rgba(50,184,196,0.28);
+
+      animation:
+        glowMoveTwo 7s ease-in-out infinite;
+    }
+
+    /* دوائر زخرفية */
+
+    .ad-ring {
+      position: absolute;
+
+      border: 1px solid
+        rgba(255,255,255,0.17);
+
+      border-radius: 50%;
+
+      pointer-events: none;
+
+      z-index: 1;
+    }
+
+    .ad-ring.one {
+      width: 310px;
+      height: 310px;
+
+      right: -170px;
+      bottom: -205px;
+
+      animation:
+        ringRotate 12s linear infinite;
+    }
+
+    .ad-ring.two {
+      width: 230px;
+      height: 230px;
+
+      left: -130px;
+      top: -160px;
+
+      animation:
+        ringRotate 9s linear infinite reverse;
+    }
+
+    /* نقاط مضيئة */
+
+    .ad-dot {
+      position: absolute;
+
+      width: 7px;
+      height: 7px;
+
+      border-radius: 50%;
+
+      background: white;
+
+      opacity: .7;
+
+      box-shadow:
+        0 0 15px rgba(255,255,255,.8);
+
+      z-index: 2;
+
+      animation:
+        dotPulse 2s ease-in-out infinite;
+    }
+
+    .ad-dot.one {
+      top: 60px;
+      right: 48px;
+    }
+
+    .ad-dot.two {
+      top: 125px;
+      left: 45px;
+
+      width: 5px;
+      height: 5px;
+
+      animation-delay: .6s;
+    }
+
+    .ad-dot.three {
+      bottom: 58px;
+      right: 75px;
+
+      width: 6px;
+      height: 6px;
+
+      animation-delay: 1.1s;
+    }
+
+    /* محتوى الإعلان */
+
+    .ad-content {
+      position: relative;
+
+      z-index: 5;
+
+      min-height: 310px;
+
+      padding: 25px 22px 27px;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      text-align: center;
+
+      animation:
+        adContentIn 1s ease both;
+    }
+
+    /* شارة */
+
+    .ad-badge {
+      display: inline-flex;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 7px 15px;
+
+      border-radius: 50px;
+
+      background: rgba(50,184,196,0.96);
+
+      color: #071b1e;
+
+      font-size: 12px;
+
+      font-weight: 900;
+
+      box-shadow:
+        0 8px 22px rgba(0,0,0,.14);
+
+      animation:
+        badgeFloat 3s ease-in-out infinite;
+    }
+
+    /* الأيقونة */
+
+    .ad-icon {
+      width: 76px;
+      height: 76px;
+
+      margin: 14px 0 9px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 25px;
+
+      background:
+        rgba(255,255,255,.17);
+
+      border:
+        1px solid rgba(255,255,255,.22);
+
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+
+      font-size: 38px;
+
+      box-shadow:
+        0 12px 30px rgba(0,0,0,.14),
+        inset 0 1px 0
+        rgba(255,255,255,.3);
+
+      animation:
+        iconFloat 2.8s ease-in-out infinite;
+    }
+
+    .ad-title {
+      margin: 0;
+
+      color: white;
+
+      font-size:
+        clamp(27px, 7vw, 38px);
+
+      font-weight: 900;
+
+      line-height: 1.25;
+
+      text-shadow:
+        0 4px 15px rgba(0,0,0,.13);
+
+      animation:
+        titlePulse 3s ease-in-out infinite;
+    }
+
+    .ad-text {
+      margin: 8px 0 0;
+
+      max-width: 360px;
+
+      color:
+        rgba(255,255,255,.9);
+
+      font-size: 15px;
+
+      font-weight: 600;
+
+      line-height: 1.8;
+    }
+
+    /* الخط السفلي */
+
+    .ad-line {
+      width: 65px;
+      height: 5px;
+
+      margin-top: 16px;
+
+      border-radius: 20px;
+
+      background: #32b8c4;
+
+      box-shadow:
+        0 0 18px rgba(50,184,196,.7);
+
+      animation:
+        linePulse 2.4s ease-in-out infinite;
+    }
+
+    /* تأثير لمعان يمر داخل الإعلان */
+
+    .ad-shine {
+      position: absolute;
+
+      width: 80px;
+      height: 430px;
+
+      top: -60px;
+      left: -130px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(255,255,255,.20),
+          transparent
+        );
+
+      transform: rotate(20deg);
+
+      z-index: 4;
+
+      pointer-events: none;
+
+      animation:
+        shineMove 5s ease-in-out infinite;
+    }
+
+    /* الرسالة */
+
     #message {
       text-align: center;
 
@@ -289,6 +630,196 @@
       font-size: 14px;
       font-weight: 700;
     }
+
+    /* =========================================
+       الحركات
+       ========================================= */
+
+    @keyframes treeFloat {
+
+      0%,
+      100% {
+        transform:
+          translateY(0)
+          rotate(0deg);
+      }
+
+      50% {
+        transform:
+          translateY(-7px)
+          rotate(1deg);
+      }
+    }
+
+    @keyframes starFloat {
+
+      0%,
+      100% {
+        transform:
+          translateY(0)
+          rotate(0deg)
+          scale(1);
+      }
+
+      50% {
+        transform:
+          translateY(-8px)
+          rotate(15deg)
+          scale(1.08);
+      }
+    }
+
+    @keyframes glowMoveOne {
+
+      0%,
+      100% {
+        transform:
+          translate(0,0)
+          scale(1);
+      }
+
+      50% {
+        transform:
+          translate(-25px,20px)
+          scale(1.15);
+      }
+    }
+
+    @keyframes glowMoveTwo {
+
+      0%,
+      100% {
+        transform:
+          translate(0,0)
+          scale(1);
+      }
+
+      50% {
+        transform:
+          translate(25px,-15px)
+          scale(1.12);
+      }
+    }
+
+    @keyframes ringRotate {
+
+      from {
+        transform:
+          rotate(0deg);
+      }
+
+      to {
+        transform:
+          rotate(360deg);
+      }
+    }
+
+    @keyframes dotPulse {
+
+      0%,
+      100% {
+        transform:
+          scale(.7);
+
+        opacity: .45;
+      }
+
+      50% {
+        transform:
+          scale(1.4);
+
+        opacity: 1;
+      }
+    }
+
+    @keyframes adContentIn {
+
+      from {
+        opacity: 0;
+        transform:
+          translateY(15px)
+          scale(.97);
+      }
+
+      to {
+        opacity: 1;
+        transform:
+          translateY(0)
+          scale(1);
+      }
+    }
+
+    @keyframes badgeFloat {
+
+      0%,
+      100% {
+        transform:
+          translateY(0);
+      }
+
+      50% {
+        transform:
+          translateY(-4px);
+      }
+    }
+
+    @keyframes iconFloat {
+
+      0%,
+      100% {
+        transform:
+          translateY(0)
+          rotate(0deg);
+      }
+
+      50% {
+        transform:
+          translateY(-7px)
+          rotate(3deg);
+      }
+    }
+
+    @keyframes titlePulse {
+
+      0%,
+      100% {
+        transform:
+          scale(1);
+      }
+
+      50% {
+        transform:
+          scale(1.025);
+      }
+    }
+
+    @keyframes linePulse {
+
+      0%,
+      100% {
+        width: 55px;
+        opacity: .7;
+      }
+
+      50% {
+        width: 90px;
+        opacity: 1;
+      }
+    }
+
+    @keyframes shineMove {
+
+      0% {
+        left: -150px;
+      }
+
+      45%,
+      100% {
+        left: 650px;
+      }
+    }
+
+    /* الهاتف */
 
     @media (max-width: 420px) {
 
@@ -326,6 +857,31 @@
       .email {
         font-size: 17px;
       }
+
+      .ad-section {
+        min-height: 285px;
+        border-radius: 29px;
+      }
+
+      .ad-content {
+        min-height: 285px;
+        padding: 22px 18px;
+      }
+
+      .ad-icon {
+        width: 68px;
+        height: 68px;
+        font-size: 34px;
+        border-radius: 22px;
+      }
+
+      .ad-title {
+        font-size: 28px;
+      }
+
+      .ad-text {
+        font-size: 14px;
+      }
     }
 
   </style>
@@ -351,6 +907,8 @@
 
     <main class="content">
 
+      <!-- الترحيب -->
+
       <section class="hero">
 
         <div class="tree">🌳</div>
@@ -365,6 +923,8 @@
 
       </section>
 
+
+      <!-- بطاقة الحساب -->
 
       <section class="card">
 
@@ -381,6 +941,8 @@
       </section>
 
 
+      <!-- بطاقة الترحيب -->
+
       <section class="welcome-card">
 
         <h2 class="welcome-title">
@@ -394,6 +956,49 @@
         <div class="accent"></div>
 
       </section>
+
+
+      <!-- الإعلان المتحرك -->
+
+      <section class="ad-section">
+
+        <div class="ad-glow one"></div>
+        <div class="ad-glow two"></div>
+
+        <div class="ad-ring one"></div>
+        <div class="ad-ring two"></div>
+
+        <div class="ad-dot one"></div>
+        <div class="ad-dot two"></div>
+        <div class="ad-dot three"></div>
+
+        <div class="ad-shine"></div>
+
+        <div class="ad-content">
+
+          <div class="ad-badge">
+            إعلان مميز
+          </div>
+
+          <div class="ad-icon">
+            🎁
+          </div>
+
+          <h2 class="ad-title">
+            عروض حصرية
+          </h2>
+
+          <p class="ad-text">
+            اكتشف العروض والخصومات المميزة
+            داخل العراق الأخضر
+          </p>
+
+          <div class="ad-line"></div>
+
+        </div>
+
+      </section>
+
 
       <div id="message"></div>
 
