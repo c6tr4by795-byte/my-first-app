@@ -213,23 +213,27 @@
 
       <div class="field">
         <label for="email">البريد الإلكتروني</label>
+
         <input
           id="email"
           type="email"
           autocomplete="email"
           dir="ltr"
         >
+
         <div id="emailError" class="error"></div>
       </div>
 
       <div class="field">
         <label for="password">كلمة المرور</label>
+
         <input
           id="password"
           type="password"
           autocomplete="current-password"
           dir="ltr"
         >
+
         <div id="passwordError" class="error"></div>
       </div>
 
@@ -269,31 +273,121 @@
     );
 
     const form = document.getElementById("loginForm");
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
 
-    const emailError = document.getElementById("emailError");
-    const passwordError = document.getElementById("passwordError");
+    const emailInput =
+      document.getElementById("email");
 
-    const loginBtn = document.getElementById("loginBtn");
-    const success = document.getElementById("success");
+    const passwordInput =
+      document.getElementById("password");
+
+    const emailError =
+      document.getElementById("emailError");
+
+    const passwordError =
+      document.getElementById("passwordError");
+
+    const loginBtn =
+      document.getElementById("loginBtn");
+
+    const success =
+      document.getElementById("success");
+
 
     function showError(element, message) {
       element.textContent = message;
       element.style.display = "block";
     }
 
+
     function hideError(element) {
       element.textContent = "";
       element.style.display = "none";
     }
 
+
     function clearErrors() {
       hideError(emailError);
       hideError(passwordError);
-      success.style.display = "none";
+
       success.textContent = "";
+      success.style.display = "none";
     }
+
+
+    function getArabicLoginError(error) {
+
+      const message =
+        String(error?.message || "").toLowerCase();
+
+      const code =
+        String(error?.code || "").toLowerCase();
+
+      const status =
+        Number(error?.status || 0);
+
+
+      console.error("SUPABASE LOGIN ERROR:", {
+        message: error?.message,
+        code: error?.code,
+        status: error?.status,
+        name: error?.name
+      });
+
+
+      if (
+        message.includes("invalid login credentials") ||
+        message.includes("invalid credentials") ||
+        code.includes("invalid_credentials") ||
+        status === 400
+      ) {
+        return {
+          type: "password",
+          message: "البريد الإلكتروني أو كلمة المرور غير صحيحة"
+        };
+      }
+
+
+      if (
+        message.includes("email not confirmed") ||
+        code.includes("email_not_confirmed")
+      ) {
+        return {
+          type: "email",
+          message: "هذا البريد الإلكتروني غير مؤكد"
+        };
+      }
+
+
+      if (
+        message.includes("too many requests") ||
+        message.includes("rate limit") ||
+        status === 429
+      ) {
+        return {
+          type: "email",
+          message: "محاولات تسجيل الدخول كثيرة. انتظر قليلاً وحاول مرة أخرى."
+        };
+      }
+
+
+      if (
+        message.includes("network") ||
+        message.includes("fetch") ||
+        message.includes("failed to fetch")
+      ) {
+        return {
+          type: "email",
+          message: "تعذر الاتصال بالخادم. تأكد من الإنترنت وحاول مرة أخرى."
+        };
+      }
+
+
+      return {
+        type: "email",
+        message: "تعذر تسجيل الدخول. حاول مرة أخرى."
+      };
+    }
+
 
     form.addEventListener("submit", async (event) => {
 
@@ -301,93 +395,118 @@
 
       clearErrors();
 
-      const email = emailInput.value.trim();
-      const password = passwordInput.value;
+      const email =
+        emailInput.value.trim();
+
+      const password =
+        passwordInput.value;
+
 
       let valid = true;
 
+
       if (!email) {
+
         showError(
           emailError,
           "يرجى إدخال البريد الإلكتروني"
         );
+
         valid = false;
       }
 
+
       if (!password) {
+
         showError(
           passwordError,
           "يرجى إدخال كلمة المرور"
         );
+
         valid = false;
       }
 
-      if (!valid) return;
+
+      if (!valid) {
+        return;
+      }
+
 
       loginBtn.disabled = true;
-      loginBtn.textContent = "جاري تسجيل الدخول...";
+
+      loginBtn.textContent =
+        "جاري تسجيل الدخول...";
+
 
       try {
 
-        const { data, error } =
-          await supabase.auth.signInWithPassword({
-            email,
-            password
-          });
+        const {
+          data,
+          error
+        } = await supabase.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
+
 
         if (error) {
           throw error;
         }
 
+
+        if (!data || !data.user) {
+          throw new Error("NO_USER");
+        }
+
+
         if (!data.session) {
           throw new Error("NO_SESSION");
         }
 
-        success.textContent = "تم تسجيل الدخول بنجاح";
-        success.style.display = "block";
+
+        success.textContent =
+          "تم تسجيل الدخول بنجاح";
+
+        success.style.display =
+          "block";
+
 
         setTimeout(() => {
-          window.location.href = "home.html";
+
+          window.location.href =
+            "home.html";
+
         }, 500);
+
 
       } catch (error) {
 
-        console.error("LOGIN ERROR:", error);
+        const result =
+          getArabicLoginError(error);
 
-        const message =
-          String(error?.message || "").toLowerCase();
 
-        if (
-          message.includes("invalid login credentials") ||
-          message.includes("invalid credentials")
-        ) {
+        if (result.type === "password") {
 
           showError(
-            emailError,
-            "البريد الإلكتروني أو كلمة المرور غير صحيحة"
-          );
-
-        } else if (
-          message.includes("email not confirmed")
-        ) {
-
-          showError(
-            emailError,
-            "تعذر تسجيل الدخول بهذا البريد الإلكتروني"
+            passwordError,
+            result.message
           );
 
         } else {
 
           showError(
             emailError,
-            "تعذر تسجيل الدخول. حاول مرة أخرى."
+            result.message
           );
         }
+
 
       } finally {
 
         loginBtn.disabled = false;
-        loginBtn.textContent = "تسجيل الدخول";
+
+        loginBtn.textContent =
+          "تسجيل الدخول";
 
       }
 
