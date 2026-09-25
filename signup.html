@@ -62,8 +62,6 @@
       margin: 0 auto;
     }
 
-    /* BRAND */
-
     .brand {
       text-align: center;
       margin: 8px 0 25px;
@@ -95,8 +93,6 @@
       direction: ltr;
     }
 
-    /* TITLE */
-
     .heading {
       margin-bottom: 19px;
 
@@ -118,8 +114,6 @@
       color: var(--muted);
       font-weight: 500;
     }
-
-    /* CARD */
 
     .card {
       padding: 22px 20px 21px;
@@ -210,8 +204,6 @@
       padding-left: 58px;
     }
 
-    /* PASSWORD BUTTON */
-
     .toggle-password {
       position: absolute;
       left: 11px;
@@ -232,8 +224,6 @@
       cursor: pointer;
     }
 
-    /* ERRORS */
-
     .field-error {
       display: none;
 
@@ -249,8 +239,6 @@
     .field-error.show {
       display: block;
     }
-
-    /* PASSWORD REQUIREMENTS */
 
     .password-rules {
       display: none;
@@ -281,8 +269,6 @@
     .password-rule::before {
       content: "• ";
     }
-
-    /* BUTTON */
 
     .signup-btn {
       width: 100%;
@@ -323,8 +309,6 @@
       cursor: not-allowed;
     }
 
-    /* MESSAGE */
-
     .message {
       margin-top: 9px;
 
@@ -339,8 +323,6 @@
     .message.success {
       color: var(--primary-dark);
     }
-
-    /* LOGIN */
 
     .login-link {
       display: block;
@@ -430,8 +412,6 @@
 
     <section class="card">
 
-      <!-- الاسم -->
-
       <div class="field-group">
 
         <label
@@ -455,8 +435,6 @@
 
       </div>
 
-
-      <!-- الهاتف -->
 
       <div class="field-group">
 
@@ -483,8 +461,6 @@
       </div>
 
 
-      <!-- البريد -->
-
       <div class="field-group">
 
         <label
@@ -508,8 +484,6 @@
 
       </div>
 
-
-      <!-- كلمة المرور -->
 
       <div class="field-group">
 
@@ -575,8 +549,6 @@
 
       </div>
 
-
-      <!-- التأكيد -->
 
       <div class="field-group">
 
@@ -888,11 +860,6 @@
         passwordStatus(value);
 
 
-      /*
-        فقط الشروط غير المكتملة تظهر.
-        الشرط الذي يتحقق يختفي مباشرة.
-      */
-
       ruleLength.classList.toggle(
         "show",
         !result.length
@@ -1116,6 +1083,11 @@
         message.textContent = "";
         message.classList.remove("success");
 
+        clearError(
+          email,
+          errors.email
+        );
+
 
         try {
 
@@ -1150,21 +1122,87 @@
             });
 
 
+          /*
+           * Supabase قد يرجع مستخدم بدون identities
+           * عندما يكون البريد مستخدم مسبقاً.
+           *
+           * لذلك نعتبره بريد مستخدم مسبقاً
+           * ونظهر رسالة واضحة للمستخدم.
+           */
+
+          if (
+            data?.user &&
+            Array.isArray(data.user.identities) &&
+            data.user.identities.length === 0
+          ) {
+
+            error(
+              email,
+              errors.email,
+              "هذا البريد الإلكتروني مستخدم مسبقاً، جرّب بريد إلكتروني آخر أو سجّل الدخول."
+            );
+
+            return;
+          }
+
+
+          /*
+           * معالجة أخطاء البريد المكرر
+           * إذا رجعها Supabase بشكل صريح.
+           */
+
           if (signupError) {
 
             console.error(
               signupError
             );
 
+            const errorCode =
+              signupError.code || "";
+
+            const errorMessage =
+              String(
+                signupError.message || ""
+              ).toLowerCase();
+
+
+            const emailAlreadyUsed =
+              errorCode === "email_exists" ||
+              errorCode === "user_already_exists" ||
+              errorMessage.includes(
+                "user already registered"
+              ) ||
+              errorMessage.includes(
+                "email already registered"
+              ) ||
+              errorMessage.includes(
+                "email_exists"
+              ) ||
+              errorMessage.includes(
+                "already exists"
+              );
+
+
+            if (emailAlreadyUsed) {
+
+              error(
+                email,
+                errors.email,
+                "هذا البريد الإلكتروني مستخدم مسبقاً، جرّب بريد إلكتروني آخر أو سجّل الدخول."
+              );
+
+              return;
+            }
+
+
             message.textContent =
-              "تعذر إنشاء الحساب: " +
-              signupError.message;
+              "تعذر إنشاء الحساب. حاول مرة أخرى.";
 
             return;
           }
 
 
-          if (!data.user) {
+          if (!data?.user) {
 
             message.textContent =
               "تعذر إنشاء الحساب. حاول مرة أخرى.";
