@@ -384,10 +384,6 @@
 
   <main class="page">
 
-    <!-- =========================
-         BRAND
-    ========================== -->
-
     <header class="brand">
 
       <div class="brand-main">
@@ -400,10 +396,6 @@
 
     </header>
 
-
-    <!-- =========================
-         HEADING
-    ========================== -->
 
     <section class="heading">
 
@@ -418,13 +410,7 @@
     </section>
 
 
-    <!-- =========================
-         LOGIN CARD
-    ========================== -->
-
     <section class="card">
-
-      <!-- EMAIL -->
 
       <div class="field-group">
 
@@ -448,13 +434,10 @@
         <div
           id="emailError"
           class="field-error"
-        >
-        </div>
+        ></div>
 
       </div>
 
-
-      <!-- PASSWORD -->
 
       <div class="field-group">
 
@@ -488,13 +471,10 @@
         <div
           id="passwordError"
           class="field-error"
-        >
-        </div>
+        ></div>
 
       </div>
 
-
-      <!-- FORGOT PASSWORD -->
 
       <a
         href="forgot.html"
@@ -503,8 +483,6 @@
         نسيت كلمة المرور؟
       </a>
 
-
-      <!-- LOGIN BUTTON -->
 
       <button
         id="loginBtn"
@@ -515,18 +493,13 @@
       </button>
 
 
-      <!-- MESSAGE -->
-
       <div
         id="message"
         class="message"
-      >
-      </div>
+      ></div>
 
     </section>
 
-
-    <!-- SIGNUP -->
 
     <a
       href="signup.html"
@@ -543,10 +516,6 @@
   </main>
 
 
-  <!-- =========================
-       SUPABASE LOGIN
-  ========================== -->
-
   <script type="module">
 
     import { supabase } from "./js/supabase.js";
@@ -554,7 +523,7 @@
 
     /* =========================
        العناصر
-    ========================= */
+    ========================== */
 
     const email =
       document.getElementById("email");
@@ -580,7 +549,7 @@
 
     /* =========================
        أدوات الأخطاء
-    ========================= */
+    ========================== */
 
     function clearErrors() {
 
@@ -656,10 +625,8 @@
 
       let valid = true;
 
-
       const emailValue =
         email.value.trim();
-
 
       const passwordValue =
         password.value;
@@ -705,7 +672,7 @@
 
 
     /* =========================
-       تنظيف رسالة الخطأ
+       رسالة عامة
     ========================== */
 
     function showMessage(
@@ -724,69 +691,149 @@
 
 
     /* =========================
-       تشخيص خطأ Supabase
+       ترجمة أخطاء Supabase
     ========================== */
 
     function getArabicLoginError(error) {
 
       /*
-       * مهم جداً:
-       * هنا نطبع الخطأ الحقيقي بالكامل
-       * حتى نعرف السبب الفعلي للمشكلة.
+       * الخطأ الحقيقي يظهر في Console
+       * للمطور فقط، وليس للمستخدم.
        */
 
       console.error(
-        "================================"
+        "SUPABASE LOGIN ERROR:",
+        {
+          message: error?.message,
+          code: error?.code,
+          status: error?.status,
+          name: error?.name
+        }
       );
 
-      console.error(
-        "SUPABASE LOGIN ERROR"
-      );
-
-      console.error(
-        "message:",
-        error?.message
-      );
-
-      console.error(
-        "code:",
-        error?.code
-      );
-
-      console.error(
-        "status:",
-        error?.status
-      );
-
-      console.error(
-        "name:",
-        error?.name
-      );
-
-      console.error(
-        "full error:",
-        error
-      );
-
-      console.error(
-        "================================"
-      );
-
-
-      /*
-       * لا نخفي الخطأ الحقيقي.
-       */
 
       const realMessage =
-        error?.message ||
-        "سبب غير معروف";
+        String(
+          error?.message || ""
+        ).toLowerCase();
 
+
+      const errorCode =
+        String(
+          error?.code || ""
+        ).toLowerCase();
+
+
+      const status =
+        Number(
+          error?.status || 0
+        );
+
+
+      /* =========================
+         بيانات الدخول غير صحيحة
+      ========================== */
+
+      if (
+        realMessage.includes(
+          "invalid login credentials"
+        ) ||
+        realMessage.includes(
+          "invalid credentials"
+        ) ||
+        errorCode.includes(
+          "invalid_credentials"
+        ) ||
+        status === 400
+      ) {
+
+        return {
+          type: "login",
+          message:
+            "البريد الإلكتروني أو كلمة المرور غير صحيحة"
+        };
+
+      }
+
+
+      /* =========================
+         البريد غير مؤكد
+      ========================== */
+
+      if (
+        realMessage.includes(
+          "email not confirmed"
+        ) ||
+        errorCode.includes(
+          "email_not_confirmed"
+        )
+      ) {
+
+        return {
+          type: "email",
+          message:
+            "هذا البريد الإلكتروني غير مؤكد"
+        };
+
+      }
+
+
+      /* =========================
+         محاولات كثيرة
+      ========================== */
+
+      if (
+        realMessage.includes(
+          "too many requests"
+        ) ||
+        realMessage.includes(
+          "rate limit"
+        ) ||
+        status === 429
+      ) {
+
+        return {
+          type: "email",
+          message:
+            "محاولات تسجيل الدخول كثيرة. انتظر قليلاً وحاول مرة أخرى."
+        };
+
+      }
+
+
+      /* =========================
+         مشكلة اتصال
+      ========================== */
+
+      if (
+        realMessage.includes(
+          "network"
+        ) ||
+        realMessage.includes(
+          "fetch"
+        ) ||
+        realMessage.includes(
+          "failed to fetch"
+        )
+      ) {
+
+        return {
+          type: "email",
+          message:
+            "تعذر الاتصال بالخادم. تأكد من الإنترنت وحاول مرة أخرى."
+        };
+
+      }
+
+
+      /* =========================
+         خطأ عام
+      ========================== */
 
       return {
         type: "email",
         message:
-          "خطأ الدخول الحقيقي: " +
-          realMessage
+          "تعذر تسجيل الدخول. حاول مرة أخرى."
       };
 
     }
@@ -803,9 +850,7 @@
       clearErrors();
 
 
-      /* =========================
-         فحص الحقول
-      ========================== */
+      /* التحقق المحلي */
 
       if (!validateForm()) {
 
@@ -814,9 +859,7 @@
       }
 
 
-      /* =========================
-         تعطيل الزر
-      ========================== */
+      /* تعطيل الزر */
 
       loginBtn.disabled = true;
 
@@ -840,14 +883,9 @@
           "LOGIN START"
         );
 
-        console.log(
-          "Email:",
-          emailValue
-        );
-
 
         /* =========================
-           تسجيل الدخول عبر Supabase
+           Supabase Login
         ========================== */
 
         const {
@@ -866,7 +904,7 @@
 
 
         /* =========================
-           إذا حدث خطأ
+           خطأ تسجيل الدخول
         ========================== */
 
         if (error) {
@@ -888,12 +926,6 @@
         /* =========================
            التحقق من المستخدم
         ========================== */
-
-        console.log(
-          "LOGIN DATA:",
-          data
-        );
-
 
         if (!data?.user) {
 
@@ -922,16 +954,11 @@
 
 
         /* =========================
-           نجاح
+           نجاح تسجيل الدخول
         ========================== */
 
         console.log(
           "LOGIN SUCCESS"
-        );
-
-        console.log(
-          "USER ID:",
-          data.user.id
         );
 
 
@@ -942,7 +969,7 @@
 
 
         /* =========================
-           الانتقال
+           الانتقال إلى Home
         ========================== */
 
         setTimeout(
@@ -959,43 +986,18 @@
 
       } catch (err) {
 
-        /*
-         * أي خطأ غير متوقع
-         */
-
         console.error(
-          "================================"
-        );
-
-        console.error(
-          "UNEXPECTED LOGIN ERROR"
-        );
-
-        console.error(
+          "UNEXPECTED LOGIN ERROR:",
           err
         );
 
-        console.error(
-          "message:",
-          err?.message
-        );
 
-        console.error(
-          "stack:",
-          err?.stack
-        );
-
-        console.error(
-          "================================"
-        );
-
+        /*
+         * لا نعرض تفاصيل تقنية للمستخدم.
+         */
 
         showMessage(
-          "حدث خطأ غير متوقع: " +
-          (
-            err?.message ||
-            "سبب غير معروف"
-          )
+          "حدث خطأ غير متوقع. حاول مرة أخرى."
         );
 
       } finally {
@@ -1048,7 +1050,7 @@
 
 
     /* =========================
-       تنظيف الأخطاء أثناء الكتابة
+       تنظيف خطأ البريد
     ========================== */
 
     email.addEventListener(
@@ -1068,6 +1070,10 @@
       }
     );
 
+
+    /* =========================
+       تنظيف خطأ كلمة المرور
+    ========================== */
 
     password.addEventListener(
       "input",
