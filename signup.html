@@ -727,6 +727,13 @@
         fullName.value.trim();
 
       if (!value) {
+
+        error(
+          fullName,
+          errors.fullName,
+          "يرجى إدخال الاسم الكامل"
+        );
+
         return false;
       }
 
@@ -757,6 +764,13 @@
         phone.value.trim();
 
       if (!value) {
+
+        error(
+          phone,
+          errors.phone,
+          "يرجى إدخال رقم الهاتف"
+        );
+
         return false;
       }
 
@@ -787,6 +801,13 @@
         email.value.trim();
 
       if (!value) {
+
+        error(
+          email,
+          errors.email,
+          "يرجى إدخال البريد الإلكتروني"
+        );
+
         return false;
       }
 
@@ -844,9 +865,10 @@
           rule.classList.remove("show");
         });
 
-        clearError(
+        error(
           password,
-          errors.password
+          errors.password,
+          "يرجى إدخال كلمة المرور"
         );
 
         return false;
@@ -890,7 +912,13 @@
 
       if (!complete) {
 
+        password.classList.add("invalid");
         password.classList.remove("valid");
+
+        errors.password.textContent =
+          "كلمة المرور لا تستوفي الشروط المطلوبة";
+
+        errors.password.classList.add("show");
 
         return false;
       }
@@ -917,6 +945,24 @@
         confirmPassword.value;
 
       if (!value) {
+
+        error(
+          confirmPassword,
+          errors.confirm,
+          "يرجى تأكيد كلمة المرور"
+        );
+
+        return false;
+      }
+
+      if (!password.value) {
+
+        error(
+          confirmPassword,
+          errors.confirm,
+          "يرجى إدخال كلمة المرور أولاً"
+        );
+
         return false;
       }
 
@@ -939,6 +985,32 @@
       );
 
       return true;
+
+    }
+
+
+    function showPhoneUsedError() {
+
+      error(
+        phone,
+        errors.phone,
+        "رقم الهاتف مستخدم مسبقاً"
+      );
+
+      phone.focus();
+
+    }
+
+
+    function showEmailUsedError() {
+
+      error(
+        email,
+        errors.email,
+        "هذا البريد الإلكتروني مستخدم مسبقاً، جرّب بريد إلكتروني آخر أو سجّل الدخول."
+      );
+
+      email.focus();
 
     }
 
@@ -987,6 +1059,11 @@
 
         if (phone.value) {
           checkPhone();
+        } else {
+          clearError(
+            phone,
+            errors.phone
+          );
         }
 
       }
@@ -999,6 +1076,11 @@
 
         if (fullName.value) {
           checkName();
+        } else {
+          clearError(
+            fullName,
+            errors.fullName
+          );
         }
 
       }
@@ -1011,6 +1093,11 @@
 
         if (email.value) {
           checkEmail();
+        } else {
+          clearError(
+            email,
+            errors.email
+          );
         }
 
       }
@@ -1025,6 +1112,11 @@
 
         if (confirmPassword.value) {
           checkConfirm();
+        } else {
+          clearError(
+            confirmPassword,
+            errors.confirm
+          );
         }
 
       }
@@ -1037,6 +1129,11 @@
 
         if (confirmPassword.value) {
           checkConfirm();
+        } else {
+          clearError(
+            confirmPassword,
+            errors.confirm
+          );
         }
 
       }
@@ -1083,11 +1180,6 @@
         message.textContent = "";
         message.classList.remove("success");
 
-        clearError(
-          email,
-          errors.email
-        );
-
 
         try {
 
@@ -1123,11 +1215,7 @@
 
 
           /*
-           * Supabase قد يرجع مستخدم بدون identities
-           * عندما يكون البريد مستخدم مسبقاً.
-           *
-           * لذلك نعتبره بريد مستخدم مسبقاً
-           * ونظهر رسالة واضحة للمستخدم.
+           * البريد مستخدم مسبقاً
            */
 
           if (
@@ -1136,35 +1224,72 @@
             data.user.identities.length === 0
           ) {
 
-            error(
-              email,
-              errors.email,
-              "هذا البريد الإلكتروني مستخدم مسبقاً، جرّب بريد إلكتروني آخر أو سجّل الدخول."
-            );
+            showEmailUsedError();
 
             return;
           }
 
 
           /*
-           * معالجة أخطاء البريد المكرر
-           * إذا رجعها Supabase بشكل صريح.
+           * معالجة أخطاء Supabase
            */
 
           if (signupError) {
 
             console.error(
+              "Signup error:",
               signupError
             );
 
+
             const errorCode =
-              signupError.code || "";
+              String(
+                signupError.code || ""
+              ).toLowerCase();
+
 
             const errorMessage =
               String(
                 signupError.message || ""
               ).toLowerCase();
 
+
+            /*
+             * رقم الهاتف مكرر
+             */
+
+            const phoneAlreadyUsed =
+              errorMessage.includes(
+                "profiles_phone_key"
+              ) ||
+              errorMessage.includes(
+                "phone already exists"
+              ) ||
+              errorMessage.includes(
+                "duplicate key"
+              ) &&
+              errorMessage.includes(
+                "phone"
+              ) ||
+              errorMessage.includes(
+                "phone"
+              ) &&
+              errorMessage.includes(
+                "unique"
+              );
+
+
+            if (phoneAlreadyUsed) {
+
+              showPhoneUsedError();
+
+              return;
+            }
+
+
+            /*
+             * البريد الإلكتروني مكرر
+             */
 
             const emailAlreadyUsed =
               errorCode === "email_exists" ||
@@ -1185,15 +1310,15 @@
 
             if (emailAlreadyUsed) {
 
-              error(
-                email,
-                errors.email,
-                "هذا البريد الإلكتروني مستخدم مسبقاً، جرّب بريد إلكتروني آخر أو سجّل الدخول."
-              );
+              showEmailUsedError();
 
               return;
             }
 
+
+            /*
+             * أي خطأ آخر
+             */
 
             message.textContent =
               "تعذر إنشاء الحساب. حاول مرة أخرى.";
@@ -1210,6 +1335,10 @@
             return;
           }
 
+
+          /*
+           * الحساب تم إنشاؤه
+           */
 
           if (data.session) {
 
@@ -1252,7 +1381,10 @@
 
         } catch (err) {
 
-          console.error(err);
+          console.error(
+            "Unexpected signup error:",
+            err
+          );
 
           message.textContent =
             "حدث خطأ غير متوقع. حاول مرة أخرى.";
