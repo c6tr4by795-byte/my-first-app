@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="format-detection" content="telephone=no,email=no,address=no">
 
-  <title>إنشاء حساب | MZAD PHONE</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <title>إنشاء حساب - MZAD PHONE</title>
 
   <link
     href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
@@ -15,172 +14,373 @@
   >
 
   <style>
+    :root {
+      --primary: #2495a0;
+      --primary-dark: #197984;
+      --dark: #172124;
+      --muted: #7d898c;
+      --border: #e1e7e8;
+      --surface: #f7f9f9;
+      --error: #c9684e;
+    }
+
     * {
       box-sizing: border-box;
     }
 
+    html,
     body {
       margin: 0;
+      min-height: 100%;
+    }
+
+    body {
       min-height: 100vh;
-      background: #fafcfc;
-      color: #172124;
+      padding: 22px 17px 28px;
       font-family: "Cairo", sans-serif;
+      color: var(--dark);
+
+      background:
+        radial-gradient(
+          circle at 100% 0%,
+          rgba(36, 149, 160, 0.08),
+          transparent 28%
+        ),
+        linear-gradient(
+          145deg,
+          #f8fbfb,
+          #ffffff 55%,
+          #f6f9f9
+        );
+
+      overflow-x: hidden;
     }
 
     .page {
       width: 100%;
-      max-width: 430px;
-      margin: auto;
-      padding: 34px 22px 28px;
+      max-width: 400px;
+      margin: 0 auto;
     }
 
     .brand {
       text-align: center;
-      margin-bottom: 27px;
+      margin: 8px 0 25px;
+
+      opacity: 0;
+      transform: translateY(-10px);
+      animation: enter 0.6s ease forwards;
     }
 
     .brand-main {
-      font-size: 38px;
+      font-family: Arial, sans-serif;
+      font-size: 40px;
       line-height: 1;
-      font-weight: 800;
-      letter-spacing: -1.5px;
+      font-weight: 900;
+      letter-spacing: -2px;
     }
 
     .brand-main span {
-      color: #2495a0;
+      color: var(--primary);
     }
 
     .brand-sub {
-      margin-top: 4px;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 4px;
-      color: #7d898c;
-    }
-
-    .title {
-      font-size: 25px;
+      margin-top: 5px;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
       font-weight: 800;
-      text-align: center;
+      letter-spacing: 5px;
+      color: var(--muted);
+      direction: ltr;
+    }
+
+    .heading {
+      margin-bottom: 19px;
+
+      opacity: 0;
+      transform: translateY(10px);
+      animation: enter 0.6s ease 0.08s forwards;
+    }
+
+    .heading h1 {
       margin: 0;
+      font-size: 27px;
+      line-height: 1.35;
+      font-weight: 800;
     }
 
-    .subtitle {
-      text-align: center;
-      color: #7d898c;
+    .heading p {
+      margin: 5px 0 0;
       font-size: 13px;
-      margin: 6px 0 24px;
+      color: var(--muted);
+      font-weight: 500;
     }
 
-    .field {
+    .card {
+      padding: 22px 20px 21px;
+      background: rgba(255, 255, 255, 0.97);
+      border: 1px solid #e5eaeb;
+      border-radius: 27px;
+
+      box-shadow:
+        0 16px 42px rgba(23, 33, 36, 0.065),
+        0 2px 8px rgba(23, 33, 36, 0.025);
+
+      opacity: 0;
+      transform: translateY(12px);
+      animation: enter 0.65s ease 0.16s forwards;
+    }
+
+    .field-group {
       margin-bottom: 13px;
     }
 
-    label {
+    .field-group:last-of-type {
+      margin-bottom: 15px;
+    }
+
+    .field-label {
       display: block;
-      font-size: 13px;
+      margin: 0 0 6px;
+      padding-right: 2px;
+
+      font-size: 12.5px;
       font-weight: 700;
-      margin-bottom: 6px;
+      color: #465356;
     }
 
-    input {
+    .input-wrap {
+      position: relative;
+    }
+
+    .input {
       width: 100%;
-      height: 49px;
-      border: 1px solid #e1e7e8;
-      border-radius: 13px;
-      background: #fff;
-      padding: 0 14px;
+      height: 54px;
+
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+
+      background: var(--surface);
+      color: var(--dark);
+
+      padding: 0 15px;
+
+      font-family: "Cairo", sans-serif;
+      font-size: 15px;
+
       outline: none;
-      font-family: inherit;
-      font-size: 14px;
-      color: #172124;
-      transition: 0.2s;
+
+      transition:
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        background 0.18s ease;
     }
 
-    input:focus {
-      border-color: #2495a0;
-      box-shadow: 0 0 0 3px rgba(36, 149, 160, 0.09);
+    .input:focus {
+      background: #fff;
+      border-color: var(--primary);
+
+      box-shadow:
+        0 0 0 3px rgba(36, 149, 160, 0.08);
     }
 
-    input.error {
-      border-color: #c9684e;
+    .input.invalid {
+      border-color: var(--error);
+
+      box-shadow:
+        0 0 0 3px rgba(201, 104, 78, 0.06);
     }
 
-    .error-text {
-      color: #c9684e;
+    .input.valid {
+      border-color: var(--primary);
+    }
+
+    .phone-input,
+    .email-input {
+      direction: ltr;
+      text-align: right;
+    }
+
+    .password-input {
+      padding-left: 58px;
+    }
+
+    .toggle-password {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+
+      transform: translateY(-50%);
+
+      border: 0;
+      background: transparent;
+
+      padding: 6px;
+
+      color: #8b9699;
+      font-family: "Cairo", sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+
+      cursor: pointer;
+    }
+
+    .field-error {
+      display: none;
+
+      margin-top: 5px;
+      padding-right: 3px;
+
+      color: var(--error);
       font-size: 11px;
       font-weight: 600;
-      margin-top: 5px;
       line-height: 1.5;
+    }
+
+    .field-error.show {
+      display: block;
     }
 
     .password-rules {
       display: none;
-      margin-top: 7px;
-      padding: 8px 11px;
-      border-radius: 10px;
-      background: #f5f8f8;
+
+      margin-top: 5px;
+      padding: 0 3px;
+
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .password-rules.show {
+      display: flex;
     }
 
     .password-rule {
-      font-size: 10px;
-      color: #c9684e;
-      margin: 2px 0;
+      display: none;
+
+      font-size: 10.5px;
+      color: #9aa4a6;
+      white-space: nowrap;
     }
 
-    button {
+    .password-rule.show {
+      display: inline;
+    }
+
+    .password-rule::before {
+      content: "• ";
+    }
+
+    .signup-btn {
       width: 100%;
-      height: 51px;
+      height: 57px;
+
+      margin-top: 2px;
+
       border: 0;
-      border-radius: 14px;
-      background: #2495a0;
-      color: white;
-      font-family: inherit;
-      font-size: 15px;
+      border-radius: 17px;
+
+      background: var(--primary);
+      color: #fff;
+
+      font-family: "Cairo", sans-serif;
+      font-size: 15.5px;
       font-weight: 800;
+
       cursor: pointer;
-      margin-top: 5px;
-      transition: 0.2s;
+
+      box-shadow:
+        0 9px 20px rgba(36, 149, 160, 0.18);
+
+      transition:
+        transform 0.18s ease,
+        background 0.18s ease;
     }
 
-    button:active {
+    .signup-btn:active {
       transform: scale(0.985);
     }
 
-    button:disabled {
+    .signup-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .signup-btn:disabled {
       opacity: 0.65;
       cursor: not-allowed;
     }
 
-    .form-error {
-      color: #c9684e;
-      font-size: 12px;
-      font-weight: 700;
-      text-align: center;
+    .message {
       margin-top: 9px;
+
+      text-align: center;
+
+      font-size: 11.5px;
+      font-weight: 600;
+
+      color: var(--error);
       line-height: 1.6;
-      min-height: 0;
     }
 
-    .success {
-      display: none;
-      text-align: center;
-      color: #2495a0;
-      font-size: 12px;
-      margin-top: 12px;
+    .message.success {
+      color: var(--primary-dark);
     }
 
     .login-link {
-      text-align: center;
+      display: block;
+
       margin-top: 17px;
-      font-size: 12px;
-      color: #7d898c;
+
+      text-align: center;
+
+      color: var(--primary-dark);
+      text-decoration: none;
+
+      font-size: 13.5px;
+      font-weight: 700;
+
+      opacity: 0;
+      animation: enter 0.6s ease 0.28s forwards;
     }
 
-    .login-link a {
-      color: #2495a0;
-      text-decoration: none;
-      font-weight: 800;
+    .note {
+      margin-top: 12px;
+
+      text-align: center;
+
+      color: #a0a9ab;
+      font-size: 10.5px;
+      line-height: 1.7;
+    }
+
+    @keyframes enter {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 360px) {
+      body {
+        padding-left: 13px;
+        padding-right: 13px;
+      }
+
+      .card {
+        padding: 20px 17px;
+      }
+
+      .input {
+        height: 52px;
+      }
+
+      .signup-btn {
+        height: 55px;
+      }
     }
   </style>
 </head>
@@ -189,124 +389,228 @@
 
   <main class="page">
 
-    <div class="brand">
-      <div class="brand-main">MZ<span>AD</span></div>
-      <div class="brand-sub">PHONE</div>
-    </div>
+    <header class="brand">
+      <div class="brand-main">
+        MZ<span>AD</span>
+      </div>
 
-    <h1 class="title">إنشاء حساب</h1>
+      <div class="brand-sub">
+        PHONE
+      </div>
+    </header>
 
-    <p class="subtitle">
-      أنشئ حسابك وابدأ باستخدام مزاد فون
-    </p>
 
-    <form id="signupForm" novalidate>
+    <section class="heading">
 
-      <!-- الاسم -->
-      <div class="field">
-        <label for="fullName">الاسم الكامل</label>
+      <h1>إنشاء حساب</h1>
+
+      <p>
+        أنشئ حسابك وابدأ بيع وشراء الأجهزة
+      </p>
+
+    </section>
+
+
+    <section class="card">
+
+      <div class="field-group">
+
+        <label
+          class="field-label"
+          for="fullName">
+          الاسم الكامل
+        </label>
 
         <input
           id="fullName"
+          class="input"
           type="text"
           autocomplete="name"
+          maxlength="60"
         >
 
-        <div id="nameError" class="error-text"></div>
+        <div
+          id="fullNameError"
+          class="field-error">
+        </div>
+
       </div>
 
-      <!-- الهاتف -->
-      <div class="field">
-        <label for="phone">رقم الهاتف</label>
+
+      <div class="field-group">
+
+        <label
+          class="field-label"
+          for="phone">
+          رقم الهاتف
+        </label>
 
         <input
           id="phone"
+          class="input phone-input"
           type="tel"
+          autocomplete="tel"
           inputmode="numeric"
           maxlength="11"
-          autocomplete="tel"
         >
 
-        <div id="phoneError" class="error-text"></div>
+        <div
+          id="phoneError"
+          class="field-error">
+        </div>
+
       </div>
 
-      <!-- البريد -->
-      <div class="field">
-        <label for="email">البريد الإلكتروني</label>
+
+      <div class="field-group">
+
+        <label
+          class="field-label"
+          for="email">
+          البريد الإلكتروني
+        </label>
 
         <input
           id="email"
+          class="input email-input"
           type="email"
           autocomplete="email"
+          maxlength="120"
         >
 
-        <div id="emailError" class="error-text"></div>
+        <div
+          id="emailError"
+          class="field-error">
+        </div>
+
       </div>
 
-      <!-- كلمة المرور -->
-      <div class="field">
-        <label for="password">كلمة المرور</label>
 
-        <input
-          id="password"
-          type="password"
-          autocomplete="new-password"
-        >
+      <div class="field-group">
 
-        <div id="passwordRules" class="password-rules">
+        <label
+          class="field-label"
+          for="password">
+          كلمة المرور
+        </label>
 
-          <div id="ruleLength" class="password-rule">
-            يجب أن تحتوي على 6 أحرف أو أكثر
-          </div>
+        <div class="input-wrap">
 
-          <div id="ruleUpper" class="password-rule">
-            يجب أن تحتوي على حرف كبير
-          </div>
+          <input
+            id="password"
+            class="input password-input"
+            type="password"
+            autocomplete="new-password"
+            maxlength="72"
+          >
 
-          <div id="ruleLower" class="password-rule">
-            يجب أن تحتوي على حرف صغير
-          </div>
-
-          <div id="ruleNumber" class="password-rule">
-            يجب أن تحتوي على رقم
-          </div>
+          <button
+            type="button"
+            class="toggle-password"
+            data-target="password">
+            إظهار
+          </button>
 
         </div>
 
-        <div id="passwordError" class="error-text"></div>
+        <div
+          id="passwordRules"
+          class="password-rules">
+
+          <span
+            id="ruleLength"
+            class="password-rule">
+            6 أحرف أو أكثر
+          </span>
+
+          <span
+            id="ruleUpper"
+            class="password-rule">
+            حرف كبير
+          </span>
+
+          <span
+            id="ruleLower"
+            class="password-rule">
+            حرف صغير
+          </span>
+
+          <span
+            id="ruleNumber"
+            class="password-rule">
+            رقم
+          </span>
+
+        </div>
+
+        <div
+          id="passwordError"
+          class="field-error">
+        </div>
+
       </div>
 
-      <!-- تأكيد كلمة المرور -->
-      <div class="field">
-        <label for="confirmPassword">تأكيد كلمة المرور</label>
 
-        <input
-          id="confirmPassword"
-          type="password"
-          autocomplete="new-password"
-        >
+      <div class="field-group">
 
-        <div id="confirmError" class="error-text"></div>
+        <label
+          class="field-label"
+          for="confirmPassword">
+          تأكيد كلمة المرور
+        </label>
+
+        <div class="input-wrap">
+
+          <input
+            id="confirmPassword"
+            class="input password-input"
+            type="password"
+            autocomplete="new-password"
+            maxlength="72"
+          >
+
+          <button
+            type="button"
+            class="toggle-password"
+            data-target="confirmPassword">
+            إظهار
+          </button>
+
+        </div>
+
+        <div
+          id="confirmPasswordError"
+          class="field-error">
+        </div>
+
       </div>
 
-      <!-- إنشاء الحساب -->
-      <button id="signupButton" type="submit">
+
+      <button
+        id="signupBtn"
+        class="signup-btn"
+        type="button">
         إنشاء الحساب
       </button>
 
-      <!-- الخطأ العام تحت الزر -->
-      <div id="formError" class="form-error"></div>
 
-      <!-- نجاح -->
-      <div id="successMessage" class="success">
-        تم إنشاء الحساب بنجاح
+      <div
+        id="message"
+        class="message">
       </div>
 
-    </form>
+    </section>
 
-    <div class="login-link">
-      لديك حساب بالفعل؟
-      <a href="index.html">تسجيل الدخول</a>
+
+    <a
+      href="index.html"
+      class="login-link">
+      لدي حساب بالفعل — تسجيل الدخول
+    </a>
+
+
+    <div class="note">
+      بيانات الحساب تُحفظ ضمن حسابك وتستخدم لإدارة إعلاناتك ومزاداتك.
     </div>
 
   </main>
@@ -315,20 +619,6 @@
   <script type="module">
 
     import { supabase } from "./js/supabase.js";
-
-
-    /* =========================
-       العناصر
-    ========================= */
-
-    const form =
-      document.getElementById("signupForm");
-
-    const button =
-      document.getElementById("signupButton");
-
-    const formError =
-      document.getElementById("formError");
 
 
     const fullName =
@@ -346,68 +636,93 @@
     const confirmPassword =
       document.getElementById("confirmPassword");
 
+    const signupBtn =
+      document.getElementById("signupBtn");
 
-    const nameError =
-      document.getElementById("nameError");
+    const message =
+      document.getElementById("message");
 
-    const phoneError =
-      document.getElementById("phoneError");
 
-    const emailError =
-      document.getElementById("emailError");
+    const errors = {
 
-    const passwordError =
-      document.getElementById("passwordError");
+      fullName:
+        document.getElementById("fullNameError"),
 
-    const confirmError =
-      document.getElementById("confirmError");
+      phone:
+        document.getElementById("phoneError"),
+
+      email:
+        document.getElementById("emailError"),
+
+      password:
+        document.getElementById("passwordError"),
+
+      confirm:
+        document.getElementById(
+          "confirmPasswordError"
+        )
+
+    };
 
 
     const passwordRules =
-      document.getElementById("passwordRules");
+      document.getElementById(
+        "passwordRules"
+      );
+
 
     const ruleLength =
-      document.getElementById("ruleLength");
+      document.getElementById(
+        "ruleLength"
+      );
 
     const ruleUpper =
-      document.getElementById("ruleUpper");
+      document.getElementById(
+        "ruleUpper"
+      );
 
     const ruleLower =
-      document.getElementById("ruleLower");
+      document.getElementById(
+        "ruleLower"
+      );
 
     const ruleNumber =
-      document.getElementById("ruleNumber");
+      document.getElementById(
+        "ruleNumber"
+      );
 
 
-    /* =========================
-       الأخطاء
-    ========================= */
+    function error(input, box, text) {
 
-    function clearError(input, errorElement) {
+      input.classList.add("invalid");
+      input.classList.remove("valid");
 
-      input.classList.remove("error");
-
-      errorElement.textContent = "";
-
-    }
-
-
-    function setError(
-      input,
-      errorElement,
-      message
-    ) {
-
-      input.classList.add("error");
-
-      errorElement.textContent = message;
+      box.textContent = text;
+      box.classList.add("show");
 
     }
 
 
-    /* =========================
-       الاسم
-    ========================= */
+    function clearError(input, box) {
+
+      input.classList.remove("invalid");
+
+      box.textContent = "";
+      box.classList.remove("show");
+
+    }
+
+
+    function valid(input, box) {
+
+      input.classList.remove("invalid");
+      input.classList.add("valid");
+
+      box.textContent = "";
+      box.classList.remove("show");
+
+    }
+
 
     function checkName() {
 
@@ -417,29 +732,39 @@
 
       if (!value) {
 
-        setError(
+        error(
           fullName,
-          nameError,
+          errors.fullName,
           "يرجى إدخال الاسم الكامل"
         );
 
         return false;
+
       }
 
 
-      clearError(
+      if (value.length < 2) {
+
+        error(
+          fullName,
+          errors.fullName,
+          "يرجى إدخال اسم صحيح"
+        );
+
+        return false;
+
+      }
+
+
+      valid(
         fullName,
-        nameError
+        errors.fullName
       );
 
       return true;
 
     }
 
-
-    /* =========================
-       الهاتف
-    ========================= */
 
     function checkPhone() {
 
@@ -449,41 +774,39 @@
 
       if (!value) {
 
-        setError(
+        error(
           phone,
-          phoneError,
+          errors.phone,
           "يرجى إدخال رقم الهاتف"
         );
 
         return false;
+
       }
 
 
       if (!/^07\d{9}$/.test(value)) {
 
-        setError(
+        error(
           phone,
-          phoneError,
+          errors.phone,
           "يرجى إدخال رقم هاتف صحيح"
         );
 
         return false;
+
       }
 
 
-      clearError(
+      valid(
         phone,
-        phoneError
+        errors.phone
       );
 
       return true;
 
     }
 
-
-    /* =========================
-       البريد
-    ========================= */
 
     function checkEmail() {
 
@@ -493,35 +816,36 @@
 
       if (!value) {
 
-        setError(
+        error(
           email,
-          emailError,
+          errors.email,
           "يرجى إدخال البريد الإلكتروني"
         );
 
         return false;
+
       }
 
 
-      const validEmail =
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      if (
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+          .test(value)
+      ) {
 
-
-      if (!validEmail) {
-
-        setError(
+        error(
           email,
-          emailError,
+          errors.email,
           "يرجى إدخال بريد إلكتروني صحيح"
         );
 
         return false;
+
       }
 
 
-      clearError(
+      valid(
         email,
-        emailError
+        errors.email
       );
 
       return true;
@@ -529,9 +853,26 @@
     }
 
 
-    /* =========================
-       كلمة المرور
-    ========================= */
+    function passwordStatus(value) {
+
+      return {
+
+        length:
+          value.length >= 6,
+
+        upper:
+          /[A-Z]/.test(value),
+
+        lower:
+          /[a-z]/.test(value),
+
+        number:
+          /\d/.test(value)
+
+      };
+
+    }
+
 
     function updatePassword() {
 
@@ -541,117 +882,123 @@
 
       if (!value) {
 
-        passwordRules.style.display =
-          "none";
-
-        password.classList.remove(
-          "error"
+        passwordRules.classList.remove(
+          "show"
         );
 
-        passwordError.textContent =
-          "";
+        [
+          ruleLength,
+          ruleUpper,
+          ruleLower,
+          ruleNumber
+        ].forEach(rule => {
+
+          rule.classList.remove(
+            "show"
+          );
+
+        });
+
+
+        error(
+          password,
+          errors.password,
+          "يرجى إدخال كلمة المرور"
+        );
 
         return false;
+
       }
 
 
-      passwordRules.style.display =
-        "block";
+      passwordRules.classList.add(
+        "show"
+      );
 
 
-      const lengthOK =
-        value.length >= 6;
-
-      const upperOK =
-        /[A-Z]/.test(value);
-
-      const lowerOK =
-        /[a-z]/.test(value);
-
-      const numberOK =
-        /\d/.test(value);
+      const result =
+        passwordStatus(value);
 
 
-      ruleLength.style.display =
-        lengthOK ? "none" : "block";
+      ruleLength.classList.toggle(
+        "show",
+        !result.length
+      );
 
-      ruleUpper.style.display =
-        upperOK ? "none" : "block";
+      ruleUpper.classList.toggle(
+        "show",
+        !result.upper
+      );
 
-      ruleLower.style.display =
-        lowerOK ? "none" : "block";
+      ruleLower.classList.toggle(
+        "show",
+        !result.lower
+      );
 
-      ruleNumber.style.display =
-        numberOK ? "none" : "block";
-
-
-      const valid =
-        lengthOK &&
-        upperOK &&
-        lowerOK &&
-        numberOK;
+      ruleNumber.classList.toggle(
+        "show",
+        !result.number
+      );
 
 
-      if (valid) {
+      const complete =
+        result.length &&
+        result.upper &&
+        result.lower &&
+        result.number;
 
-        passwordRules.style.display =
-          "none";
 
-        clearError(
-          password,
-          passwordError
-        );
-
-      } else {
+      if (!complete) {
 
         password.classList.add(
-          "error"
+          "invalid"
         );
 
-      }
+        password.classList.remove(
+          "valid"
+        );
 
-
-      /*
-        إذا كلمة المرور مكتوبة،
-        نخلي التأكيد يتحدث أيضًا.
-      */
-
-      if (
-        confirmPassword.value
-      ) {
-
-        checkConfirm();
+        return false;
 
       }
 
 
-      return valid;
+      password.classList.remove(
+        "invalid"
+      );
+
+      password.classList.add(
+        "valid"
+      );
+
+
+      passwordRules.classList.remove(
+        "show"
+      );
+
+
+      clearError(
+        password,
+        errors.password
+      );
+
+
+      return true;
 
     }
 
-
-    /* =========================
-       تأكيد كلمة المرور
-    ========================= */
 
     function checkConfirm() {
 
       const value =
         confirmPassword.value;
 
-      const original =
-        password.value;
-
-
-      /*
-        فارغ
-      */
 
       if (!value) {
 
-        setError(
+        error(
           confirmPassword,
-          confirmError,
+          errors.confirm,
           "يرجى تأكيد كلمة المرور"
         );
 
@@ -660,15 +1007,13 @@
       }
 
 
-      /*
-        غير متطابق
-      */
+      if (
+        value !== password.value
+      ) {
 
-      if (value !== original) {
-
-        setError(
+        error(
           confirmPassword,
-          confirmError,
+          errors.confirm,
           "كلمتا المرور غير متطابقتين"
         );
 
@@ -677,13 +1022,9 @@
       }
 
 
-      /*
-        صحيح
-      */
-
-      clearError(
+      valid(
         confirmPassword,
-        confirmError
+        errors.confirm
       );
 
       return true;
@@ -691,35 +1032,43 @@
     }
 
 
-    /* =========================
-       أخطاء الحساب
-    ========================= */
+    document
+      .querySelectorAll(".toggle-password")
+      .forEach(button => {
 
-    function showEmailUsedError() {
+        button.addEventListener(
+          "click",
+          () => {
 
-      setError(
-        email,
-        emailError,
-        "هذا البريد الإلكتروني مستخدم مسبقاً، جرّب بريد إلكتروني آخر أو سجّل الدخول."
-      );
-
-    }
-
-
-    function showPhoneUsedError() {
-
-      setError(
-        phone,
-        phoneError,
-        "رقم الهاتف مستخدم مسبقاً"
-      );
-
-    }
+            const input =
+              document.getElementById(
+                button.dataset.target
+              );
 
 
-    /* =========================
-       الهاتف
-    ========================= */
+            if (
+              input.type === "password"
+            ) {
+
+              input.type = "text";
+
+              button.textContent =
+                "إخفاء";
+
+            } else {
+
+              input.type = "password";
+
+              button.textContent =
+                "إظهار";
+
+            }
+
+          }
+        );
+
+      });
+
 
     phone.addEventListener(
       "input",
@@ -730,30 +1079,16 @@
             .replace(/\D/g, "")
             .slice(0, 11);
 
-        clearError(
-          phone,
-          phoneError
-        );
 
-      }
-    );
+        if (phone.value) {
 
+          checkPhone();
 
-    /* =========================
-       الاسم
-    ========================= */
-
-    fullName.addEventListener(
-      "input",
-      () => {
-
-        if (
-          fullName.value.trim()
-        ) {
+        } else {
 
           clearError(
-            fullName,
-            nameError
+            phone,
+            errors.phone
           );
 
         }
@@ -762,26 +1097,47 @@
     );
 
 
-    /* =========================
-       البريد
-    ========================= */
-
-    email.addEventListener(
+    fullName.addEventListener(
       "input",
       () => {
 
-        clearError(
-          email,
-          emailError
-        );
+        if (fullName.value) {
+
+          checkName();
+
+        } else {
+
+          clearError(
+            fullName,
+            errors.fullName
+          );
+
+        }
 
       }
     );
 
 
-    /* =========================
-       كلمة المرور
-    ========================= */
+    email.addEventListener(
+      "input",
+      () => {
+
+        if (email.value) {
+
+          checkEmail();
+
+        } else {
+
+          clearError(
+            email,
+            errors.email
+          );
+
+        }
+
+      }
+    );
+
 
     password.addEventListener(
       "input",
@@ -789,22 +1145,17 @@
 
         updatePassword();
 
-        /*
-          إذا التأكيد فارغ،
-          ما نظهر الخطأ أثناء الكتابة.
-          يظهر عند الضغط على إنشاء الحساب.
-        */
 
-        if (
-          !confirmPassword.value
-        ) {
+        if (confirmPassword.value) {
 
-          confirmPassword.classList.remove(
-            "error"
+          checkConfirm();
+
+        } else {
+
+          clearError(
+            confirmPassword,
+            errors.confirm
           );
-
-          confirmError.textContent =
-            "";
 
         }
 
@@ -812,112 +1163,74 @@
     );
 
 
-    /* =========================
-       تأكيد كلمة المرور
-    ========================= */
-
     confirmPassword.addEventListener(
       "input",
       () => {
 
-        checkConfirm();
+        if (confirmPassword.value) {
+
+          checkConfirm();
+
+        } else {
+
+          clearError(
+            confirmPassword,
+            errors.confirm
+          );
+
+        }
 
       }
     );
 
 
-    /* =========================
-       إنشاء الحساب
-    ========================= */
-
-    form.addEventListener(
-      "submit",
-      async (event) => {
-
-        event.preventDefault();
+    signupBtn.addEventListener(
+      "click",
+      async () => {
 
 
-        /*
-          نمسح الخطأ العام
-        */
+        message.textContent = "";
 
-        formError.textContent =
-          "";
+        message.classList.remove(
+          "success"
+        );
 
 
-        /*
-          نفحص كل الحقول
-        */
-
-        const validName =
+        const nameOK =
           checkName();
 
-        const validPhone =
+        const phoneOK =
           checkPhone();
 
-        const validEmail =
+        const emailOK =
           checkEmail();
 
-        const validPassword =
+        const passwordOK =
           updatePassword();
 
-        const validConfirm =
+        const confirmOK =
           checkConfirm();
 
 
-        /*
-          إذا أكو أي خطأ
-        */
-
         if (
-          !validName ||
-          !validPhone ||
-          !validEmail ||
-          !validPassword ||
-          !validConfirm
+          !nameOK ||
+          !phoneOK ||
+          !emailOK ||
+          !passwordOK ||
+          !confirmOK
         ) {
 
-          formError.textContent =
+          message.textContent =
             "يرجى إكمال الحقول المطلوبة وتصحيح الأخطاء أعلاه.";
-
-          /*
-            نروح لأول حقل بيه خطأ
-          */
-
-          if (!validName) {
-
-            fullName.focus();
-
-          } else if (!validPhone) {
-
-            phone.focus();
-
-          } else if (!validEmail) {
-
-            email.focus();
-
-          } else if (!validPassword) {
-
-            password.focus();
-
-          } else if (!validConfirm) {
-
-            confirmPassword.focus();
-
-          }
 
           return;
 
         }
 
 
-        /* =========================
-           إرسال إلى Supabase
-        ========================= */
+        signupBtn.disabled = true;
 
-        button.disabled = true;
-
-        button.textContent =
+        signupBtn.textContent =
           "جاري إنشاء الحساب...";
 
 
@@ -930,7 +1243,9 @@
             await supabase.auth.signUp({
 
               email:
-                email.value.trim(),
+                email.value
+                  .trim()
+                  .toLowerCase(),
 
               password:
                 password.value,
@@ -952,122 +1267,9 @@
             });
 
 
-          /* =========================
-             خطأ التسجيل
-          ========================= */
-
-          if (signupError) {
-
-            const message =
-              String(
-                signupError.message || ""
-              ).toLowerCase();
-
-
-            const code =
-              String(
-                signupError.code || ""
-              ).toLowerCase();
-
-
-            const emailAlreadyExists =
-              code.includes(
-                "email_exists"
-              ) ||
-
-              code.includes(
-                "user_already_exists"
-              ) ||
-
-              message.includes(
-                "user already registered"
-              ) ||
-
-              message.includes(
-                "email already registered"
-              ) ||
-
-              message.includes(
-                "email_exists"
-              ) ||
-
-              message.includes(
-                "already exists"
-              );
-
-
-            const phoneAlreadyExists =
-              message.includes(
-                "profiles_phone_key"
-              ) ||
-
-              message.includes(
-                "phone already exists"
-              ) ||
-
-              (
-                message.includes(
-                  "duplicate key"
-                ) &&
-                message.includes(
-                  "phone"
-                )
-              ) ||
-
-              (
-                message.includes(
-                  "unique"
-                ) &&
-                message.includes(
-                  "phone"
-                )
-              );
-
-
-            if (
-              phoneAlreadyExists
-            ) {
-
-              showPhoneUsedError();
-
-              formError.textContent =
-                "لا يمكن إنشاء الحساب لأن رقم الهاتف مستخدم مسبقاً.";
-
-            }
-
-            else if (
-              emailAlreadyExists
-            ) {
-
-              showEmailUsedError();
-
-              formError.textContent =
-                "لا يمكن إنشاء الحساب لأن البريد الإلكتروني مستخدم مسبقاً.";
-
-            }
-
-            else {
-
-              formError.textContent =
-                "حدث خطأ أثناء إنشاء الحساب. حاول مرة أخرى.";
-
-            }
-
-
-            button.disabled =
-              false;
-
-            button.textContent =
-              "إنشاء الحساب";
-
-            return;
-
-          }
-
-
-          /* =========================
-             بريد مستخدم مسبقاً
-          ========================= */
+          /*
+           * البريد مستخدم مسبقاً
+           */
 
           if (
             data?.user &&
@@ -1077,93 +1279,271 @@
             data.user.identities.length === 0
           ) {
 
-            showEmailUsedError();
+            error(
+              email,
+              errors.email,
+              "هذا البريد الإلكتروني مستخدم مسبقاً، جرّب بريد إلكتروني آخر أو سجّل الدخول."
+            );
 
-            formError.textContent =
-              "لا يمكن إنشاء الحساب لأن البريد الإلكتروني مستخدم مسبقاً.";
-
-            button.disabled =
-              false;
-
-            button.textContent =
-              "إنشاء الحساب";
+            message.textContent =
+              "تعذر إنشاء الحساب لأن البريد الإلكتروني مستخدم مسبقاً.";
 
             return;
 
           }
 
 
-          /* =========================
-             نجاح
-          ========================= */
+          /*
+           * Supabase رجع خطأ
+           */
 
-          document
-            .getElementById(
-              "successMessage"
-            )
-            .style.display =
-            "block";
+          if (signupError) {
 
-
-          formError.textContent =
-            "";
+            console.error(
+              "Supabase signup error:",
+              signupError
+            );
 
 
-          setTimeout(
-            () => {
+            const errorCode =
+              String(
+                signupError.code || ""
+              ).toLowerCase();
 
-              window.location.href =
-                "index.html";
 
-            },
-            900
+            const errorMessage =
+              String(
+                signupError.message || ""
+              ).toLowerCase();
+
+
+            /*
+             * البريد مستخدم
+             */
+
+            const emailAlreadyUsed =
+
+              errorCode.includes(
+                "email_exists"
+              ) ||
+
+              errorCode.includes(
+                "user_already_exists"
+              ) ||
+
+              errorMessage.includes(
+                "user already registered"
+              ) ||
+
+              errorMessage.includes(
+                "email already registered"
+              ) ||
+
+              errorMessage.includes(
+                "email_exists"
+              ) ||
+
+              (
+                errorMessage.includes(
+                  "already exists"
+                ) &&
+                !errorMessage.includes(
+                  "phone"
+                )
+              );
+
+
+            /*
+             * الهاتف مستخدم
+             */
+
+            const phoneAlreadyUsed =
+
+              errorMessage.includes(
+                "phone"
+              ) &&
+
+              (
+                errorMessage.includes(
+                  "duplicate"
+                ) ||
+
+                errorMessage.includes(
+                  "unique"
+                ) ||
+
+                errorMessage.includes(
+                  "already exists"
+                ) ||
+
+                errorMessage.includes(
+                  "already registered"
+                )
+              );
+
+
+            if (phoneAlreadyUsed) {
+
+              error(
+                phone,
+                errors.phone,
+                "رقم الهاتف مستخدم مسبقاً"
+              );
+
+              message.textContent =
+                "تعذر إنشاء الحساب لأن رقم الهاتف مستخدم مسبقاً.";
+
+              return;
+
+            }
+
+
+            if (emailAlreadyUsed) {
+
+              error(
+                email,
+                errors.email,
+                "هذا البريد الإلكتروني مستخدم مسبقاً، جرّب بريد إلكتروني آخر أو سجّل الدخول."
+              );
+
+              message.textContent =
+                "تعذر إنشاء الحساب لأن البريد الإلكتروني مستخدم مسبقاً.";
+
+              return;
+
+            }
+
+
+            /*
+             * خطأ آخر من Supabase
+             */
+
+            message.textContent =
+              "تعذر إنشاء الحساب. حاول مرة أخرى.";
+
+            return;
+
+          }
+
+
+          /*
+           * ماكو مستخدم رجع
+           */
+
+          if (!data?.user) {
+
+            message.textContent =
+              "تعذر إنشاء الحساب. حاول مرة أخرى.";
+
+            return;
+
+          }
+
+
+          /*
+           * نجاح
+           */
+
+          if (data.session) {
+
+            message.textContent =
+              "تم إنشاء حسابك بنجاح.";
+
+            message.classList.add(
+              "success"
+            );
+
+
+            setTimeout(() => {
+
+              window.location.replace(
+                "index.html"
+              );
+
+            }, 1000);
+
+
+          } else {
+
+            message.textContent =
+              "تم إنشاء الحساب. تحقق من بريدك الإلكتروني.";
+
+            message.classList.add(
+              "success"
+            );
+
+
+            setTimeout(() => {
+
+              window.location.replace(
+                "index.html"
+              );
+
+            }, 1800);
+
+          }
+
+
+        } catch (err) {
+
+          console.error(
+            "Unexpected signup error:",
+            err
           );
 
 
-        }
+          /*
+           * نحاول معرفة إذا الخطأ متعلق
+           * برقم الهاتف
+           */
 
-        catch (error) {
-
-          const message =
+          const errorMessage =
             String(
-              error?.message || ""
+              err?.message || ""
             ).toLowerCase();
 
 
           if (
-            message.includes("phone") &&
+            errorMessage.includes(
+              "phone"
+            ) &&
             (
-              message.includes(
+              errorMessage.includes(
                 "duplicate"
               ) ||
-              message.includes(
+
+              errorMessage.includes(
                 "unique"
               ) ||
-              message.includes(
+
+              errorMessage.includes(
                 "exists"
               )
             )
           ) {
 
-            showPhoneUsedError();
+            error(
+              phone,
+              errors.phone,
+              "رقم الهاتف مستخدم مسبقاً"
+            );
 
-            formError.textContent =
-              "لا يمكن إنشاء الحساب لأن رقم الهاتف مستخدم مسبقاً.";
+            message.textContent =
+              "تعذر إنشاء الحساب لأن رقم الهاتف مستخدم مسبقاً.";
+
+          } else {
+
+            message.textContent =
+              "حدث خطأ غير متوقع أثناء إنشاء الحساب. حاول مرة أخرى.";
 
           }
 
-          else {
+        } finally {
 
-            formError.textContent =
-              "حدث خطأ أثناء إنشاء الحساب. حاول مرة أخرى.";
-
-          }
-
-
-          button.disabled =
+          signupBtn.disabled =
             false;
 
-          button.textContent =
+          signupBtn.textContent =
             "إنشاء الحساب";
 
         }
@@ -1174,4 +1554,5 @@
   </script>
 
 </body>
+
 </html>
