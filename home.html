@@ -1,45 +1,40 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
 
   <title>MZAD PHONE</title>
 
   <style>
-    :root {
-      --primary: #2495a0;
-      --primary-dark: #176f78;
-      --primary-soft: #eaf7f8;
-
-      --text: #172124;
-      --muted: #7b878a;
-
-      --bg: #f7f9f9;
-      --white: #ffffff;
-
-      --border: #e5eaeb;
-      --shadow: 0 8px 24px rgba(20, 43, 47, 0.07);
-
-      --radius-xl: 24px;
-      --radius-lg: 19px;
-      --radius-md: 15px;
-    }
 
     * {
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
     }
 
-    html {
-      scroll-behavior: smooth;
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
     }
 
     body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
+      background:
+        linear-gradient(
+          180deg,
+          #1598a3 0%,
+          #46b9c0 38%,
+          #dff1f2 72%,
+          #ffffff 100%
+        );
+
       font-family:
         -apple-system,
         BlinkMacSystemFont,
@@ -48,273 +43,411 @@
         Tahoma,
         Arial,
         sans-serif;
+
+      color: #20282a;
       overflow-x: hidden;
     }
 
     button,
     input {
-      font: inherit;
+      font-family: inherit;
     }
 
     button {
       border: 0;
-      cursor: pointer;
+      outline: 0;
     }
+
+
+    /* =========================================
+       APP
+    ========================================= */
 
     .app {
-      width: 100%;
-      max-width: 520px;
+      width: min(100%, 650px);
       min-height: 100vh;
       margin: 0 auto;
-      padding-bottom: 105px;
+      background: #ffffff;
+      position: relative;
+      overflow: hidden;
     }
 
-    /* =========================
+
+    /* =========================================
        HEADER
-    ========================== */
+       نفس فكرة الصورة:
+       لون كامل + عناصر فوق + بحث + عبارة
+    ========================================= */
 
-    .header {
-      background: var(--white);
-      padding: 18px 18px 14px;
-      border-bottom: 1px solid rgba(229, 234, 235, 0.65);
+    .hero {
+      height: 390px;
+
+      background:
+        radial-gradient(
+          circle at 15% 10%,
+          rgba(255,255,255,.12),
+          transparent 25%
+        ),
+        radial-gradient(
+          circle at 85% 20%,
+          rgba(255,255,255,.10),
+          transparent 28%
+        ),
+        linear-gradient(
+          145deg,
+          #087d88,
+          #18a2ad 55%,
+          #38b4bc
+        );
+
+      position: relative;
+      overflow: hidden;
+
+      padding:
+        calc(env(safe-area-inset-top) + 20px)
+        22px
+        0;
     }
 
-    .top-row {
+
+    /* زخارف خفيفة بدل رسومات المطعم */
+
+    .hero-decoration {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .10;
+    }
+
+    .hero-decoration::before {
+      content: "";
+      position: absolute;
+
+      width: 170px;
+      height: 170px;
+
+      border: 2px solid white;
+      border-radius: 42px;
+
+      right: -60px;
+      top: 40px;
+
+      transform: rotate(25deg);
+    }
+
+    .hero-decoration::after {
+      content: "";
+      position: absolute;
+
+      width: 110px;
+      height: 110px;
+
+      border: 2px solid white;
+      border-radius: 50%;
+
+      left: -45px;
+      top: 85px;
+    }
+
+
+    /* =========================================
+       TOP BAR
+    ========================================= */
+
+    .topbar {
+      position: relative;
+      z-index: 2;
+
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+
+      height: 55px;
     }
 
+
     .brand {
+      color: #ffffff;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      line-height: 1;
-      user-select: none;
+      line-height: .85;
     }
 
     .brand-main {
-      font-size: 25px;
-      font-weight: 900;
-      letter-spacing: -1.2px;
-      color: var(--text);
+      font-size: 28px;
+      font-weight: 950;
+      letter-spacing: -1.5px;
     }
 
     .brand-sub {
-      margin-top: 4px;
       font-size: 9px;
       font-weight: 800;
-      letter-spacing: 3px;
-      color: var(--primary);
+      letter-spacing: 4px;
+      margin-top: 6px;
+      opacity: .88;
     }
+
 
     .location {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      color: var(--text);
-      font-size: 12px;
-      font-weight: 700;
-      margin-right: auto;
-      margin-left: 10px;
-    }
-
-    .location-icon {
-      width: 30px;
-      height: 30px;
-      border-radius: 10px;
-      background: var(--primary-soft);
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
-
-    .header-btn {
-      width: 38px;
-      height: 38px;
-      border-radius: 13px;
-      background: #f5f7f7;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      transition: transform .18s ease, background .18s ease;
-    }
-
-    .header-btn:active {
-      transform: scale(.92);
-    }
-
-    .notification-dot {
       position: absolute;
-      top: 8px;
-      right: 8px;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--primary);
-      border: 1.5px solid white;
-    }
+      right: 50%;
+      transform: translateX(50%);
 
-    /* =========================
-       SEARCH
-    ========================== */
-
-    .search-wrap {
-      margin-top: 15px;
-    }
-
-    .search {
-      height: 45px;
-      width: 100%;
-      background: #f5f7f7;
-      border: 1px solid #edf0f0;
-      border-radius: 14px;
+      color: white;
 
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
 
-      padding: 0 14px;
-      transition: .2s ease;
-    }
-
-    .search:focus-within {
-      border-color: rgba(36,149,160,.35);
-      background: white;
-      box-shadow: 0 5px 18px rgba(36,149,160,.08);
-    }
-
-    .search svg {
-      flex: 0 0 auto;
-      color: var(--muted);
-    }
-
-    .search input {
-      width: 100%;
-      border: 0;
-      outline: 0;
-      background: transparent;
-      color: var(--text);
-      font-size: 13px;
-    }
-
-    .search input::placeholder {
-      color: #9aa5a7;
-    }
-
-    /* =========================
-       MAIN
-    ========================== */
-
-    main {
-      padding: 18px;
-    }
-
-    .section {
-      margin-bottom: 22px;
-    }
-
-    .section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .section-title {
-      font-size: 16px;
-      font-weight: 850;
-      letter-spacing: -.3px;
-    }
-
-    .section-link {
-      color: var(--primary);
-      font-size: 11px;
-      font-weight: 750;
-      background: transparent;
-      padding: 5px 0;
-    }
-
-    /* =========================
-       CATEGORIES
-    ========================== */
-
-    .categories {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      scrollbar-width: none;
-      padding: 1px 1px 3px;
-    }
-
-    .categories::-webkit-scrollbar {
-      display: none;
-    }
-
-    .category {
-      flex: 0 0 67px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      background: transparent;
-    }
-
-    .category-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 17px;
-      background: var(--white);
-      border: 1px solid var(--border);
-      box-shadow: 0 5px 15px rgba(20,43,47,.045);
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      color: var(--text);
-      transition: .2s ease;
-    }
-
-    .category:active .category-icon {
-      transform: scale(.93);
-      background: var(--primary-soft);
-      color: var(--primary);
-    }
-
-    .category-name {
-      font-size: 10px;
-      color: #657174;
+      font-size: 15px;
       font-weight: 700;
+
       white-space: nowrap;
     }
 
-    /* =========================
-       AUCTION
-    ========================== */
+    .location svg {
+      opacity: .95;
+    }
 
-    .auction-slider {
+
+    .header-icons {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .header-icon {
+      width: 42px;
+      height: 42px;
+
+      border-radius: 50%;
+
+      background: rgba(255,255,255,.96);
+
+      color: #1b858e;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      position: relative;
+
+      box-shadow:
+        0 5px 15px rgba(0,0,0,.08);
+    }
+
+
+    .notification {
+      position: absolute;
+
+      top: -2px;
+      right: -2px;
+
+      min-width: 19px;
+      height: 19px;
+
+      padding: 0 5px;
+
+      background: #ffffff;
+      color: #178b95;
+
+      border-radius: 50%;
+
+      font-size: 9px;
+      font-weight: 900;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border: 2px solid #1496a0;
+    }
+
+
+    /* =========================================
+       SEARCH
+    ========================================= */
+
+    .search-box {
+      position: relative;
+      z-index: 3;
+
+      margin-top: 27px;
+
+      width: 100%;
+      height: 61px;
+
+      background: #ffffff;
+
+      border-radius: 31px;
+
+      display: flex;
+      align-items: center;
+
+      padding: 0 22px;
+
+      box-shadow:
+        0 8px 25px rgba(0,0,0,.08);
+    }
+
+    .search-box svg {
+      flex-shrink: 0;
+      color: #8a9698;
+    }
+
+    .search-box input {
+      width: 100%;
+
+      border: 0;
+      outline: 0;
+
+      background: transparent;
+
+      margin-right: 13px;
+
+      font-size: 15px;
+      font-weight: 650;
+
+      color: #273033;
+
+      text-align: right;
+    }
+
+    .search-box input::placeholder {
+      color: #7e898b;
+    }
+
+
+    /* =========================================
+       HERO TEXT
+    ========================================= */
+
+    .hero-message {
+      position: relative;
+      z-index: 2;
+
+      margin-top: 38px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+
+      color: white;
+    }
+
+    .hero-message-line {
+      width: 35px;
+      height: 2px;
+
+      background: rgba(255,255,255,.65);
+
+      border-radius: 10px;
+    }
+
+    .hero-message strong {
+      font-size: 24px;
+      font-weight: 950;
+
+      letter-spacing: -.5px;
+
+      text-shadow:
+        0 2px 5px rgba(0,0,0,.08);
+    }
+
+
+    /* =========================================
+       CURVED TRANSITION
+       نفس انحناءة نهاية الهيدر
+    ========================================= */
+
+    .hero-wave {
+      position: absolute;
+
+      bottom: -1px;
+      left: -5%;
+
+      width: 110%;
+      height: 55px;
+
+      background: white;
+
+      border-radius:
+        50% 50% 0 0 /
+        35% 35% 0 0;
+    }
+
+
+    /* =========================================
+       CONTENT
+    ========================================= */
+
+    .content {
+      background: white;
+
+      padding:
+        0
+        22px
+        105px;
+    }
+
+
+    /* =========================================
+       MAIN AUCTION SLIDER
+    ========================================= */
+
+    .auction-section {
+      margin-top: -3px;
+    }
+
+    .section-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      margin-bottom: 13px;
+    }
+
+    .section-title {
+      margin: 0;
+
+      font-size: 19px;
+      font-weight: 900;
+
+      color: #20282a;
+    }
+
+    .section-link {
+      background: transparent;
+
+      color: #178d97;
+
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+
+    .auction-window {
       overflow: hidden;
-      margin: 0 -1px;
+
+      margin-right: -22px;
+      margin-left: -22px;
     }
 
     .auction-track {
       display: flex;
+
       gap: 12px;
+
       overflow-x: auto;
-      scroll-snap-type: x mandatory;
+
       scrollbar-width: none;
-      padding: 2px 1px 5px;
+
+      scroll-snap-type: x mandatory;
+
+      padding:
+        0 22px 4px;
+
       direction: rtl;
     }
 
@@ -322,1168 +455,1519 @@
       display: none;
     }
 
+
+    /* البطاقة العريضة */
+
     .auction-card {
-      direction: rtl;
-      flex: 0 0 calc(100vw - 48px);
-      max-width: 350px;
-      min-height: 158px;
+      flex: 0 0 calc(100vw - 52px);
 
-      scroll-snap-align: start;
+      max-width: 560px;
 
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 21px;
-      box-shadow: var(--shadow);
+      height: 210px;
 
-      display: flex;
+      scroll-snap-align: center;
+
+      border-radius: 23px;
+
       overflow: hidden;
+
       position: relative;
+
+      background:
+        linear-gradient(
+          135deg,
+          #0b818b,
+          #18a4ae
+        );
+
+      box-shadow:
+        0 10px 28px rgba(10,105,113,.18);
     }
 
-    .auction-visual {
-      width: 43%;
-      min-width: 43%;
-      background:
-        radial-gradient(circle at 35% 35%, rgba(255,255,255,.95), transparent 34%),
-        linear-gradient(145deg, #edf7f8, #dceff1);
 
+    .auction-card::before {
+      content: "";
+
+      position: absolute;
+
+      width: 210px;
+      height: 210px;
+
+      border-radius: 50%;
+
+      background: rgba(255,255,255,.09);
+
+      right: -65px;
+      bottom: -105px;
+    }
+
+
+    .auction-card-content {
       position: relative;
+      z-index: 2;
+
+      height: 100%;
+
       display: flex;
       align-items: center;
-      justify-content: center;
-      overflow: hidden;
+
+      padding: 18px;
     }
 
-    .auction-visual::after {
-      content: "";
-      position: absolute;
-      width: 125px;
-      height: 125px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.42);
-      left: -52px;
-      bottom: -60px;
-    }
 
-    .device-placeholder {
-      width: 59px;
-      height: 110px;
-      border-radius: 15px;
-      background: #20282a;
-      border: 3px solid #313b3d;
-      box-shadow:
-        0 13px 24px rgba(24,38,40,.2),
-        inset 0 0 0 2px rgba(255,255,255,.06);
-
-      position: relative;
-      transform: rotate(-7deg);
-      z-index: 2;
-    }
-
-    .device-placeholder::before {
-      content: "";
-      position: absolute;
-      top: 5px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 27px;
-      height: 6px;
-      border-radius: 8px;
-      background: #111719;
-    }
-
-    .device-placeholder::after {
-      content: "";
-      position: absolute;
-      inset: 9px 4px;
-      border-radius: 10px;
-      background:
-        radial-gradient(circle at 70% 30%, rgba(255,255,255,.15), transparent 25%),
-        linear-gradient(145deg, #293739, #101617);
-    }
-
-    .auction-content {
+    .auction-info {
       flex: 1;
-      padding: 15px 14px 13px;
-      display: flex;
-      flex-direction: column;
+
+      color: white;
+
       min-width: 0;
     }
 
-    .auction-badge {
-      align-self: flex-start;
-      background: var(--primary-soft);
-      color: var(--primary-dark);
-      border-radius: 8px;
-      padding: 5px 8px;
+
+    .live-badge {
+      display: inline-flex;
+
+      align-items: center;
+      gap: 6px;
+
+      background: rgba(255,255,255,.18);
+
+      border:
+        1px solid
+        rgba(255,255,255,.25);
+
+      border-radius: 20px;
+
+      padding: 6px 10px;
+
       font-size: 9px;
-      font-weight: 850;
-      white-space: nowrap;
+      font-weight: 900;
     }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+
+      border-radius: 50%;
+
+      background: #ffffff;
+
+      box-shadow:
+        0 0 0 4px rgba(255,255,255,.12);
+    }
+
 
     .auction-title {
-      margin-top: 9px;
-      font-size: 15px;
-      font-weight: 850;
-      color: var(--text);
+      margin-top: 12px;
+
+      font-size: 22px;
+      font-weight: 950;
+
+      line-height: 1.1;
     }
 
-    .auction-subtitle {
-      margin-top: 4px;
-      font-size: 10px;
-      color: var(--muted);
+    .auction-description {
+      margin-top: 6px;
+
+      font-size: 11px;
+
+      color: rgba(255,255,255,.82);
+
       line-height: 1.5;
     }
 
-    .auction-bottom {
-      margin-top: auto;
+
+    .auction-details {
       display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 8px;
+      align-items: center;
+
+      gap: 18px;
+
+      margin-top: 15px;
     }
 
-    .auction-price-label {
-      font-size: 9px;
-      color: var(--muted);
-      margin-bottom: 2px;
+
+    .auction-price small,
+    .auction-time small {
+      display: block;
+
+      font-size: 8px;
+
+      color: rgba(255,255,255,.72);
+
+      margin-bottom: 3px;
     }
 
-    .auction-price {
-      font-size: 15px;
+    .auction-price strong,
+    .auction-time strong {
+      display: block;
+
+      font-size: 13px;
+
       font-weight: 900;
-      color: var(--text);
     }
 
-    .auction-price span {
-      font-size: 9px;
-      font-weight: 700;
-      color: var(--muted);
-    }
 
-    .auction-btn {
-      height: 31px;
-      padding: 0 11px;
-      border-radius: 10px;
-      background: var(--text);
-      color: white;
+    .auction-button {
+      margin-top: 13px;
+
+      height: 33px;
+
+      padding: 0 14px;
+
+      background: white;
+
+      color: #167e87;
+
+      border-radius: 11px;
+
       font-size: 10px;
-      font-weight: 800;
-      transition: .18s ease;
-      white-space: nowrap;
+
+      font-weight: 900;
     }
 
-    .auction-btn:active {
-      transform: scale(.94);
-      background: var(--primary-dark);
-    }
 
-    .auction-empty .auction-visual {
-      background: linear-gradient(145deg, #eef7f7, #e4eeee);
-    }
+    /* =========================================
+       PHONE VISUAL
+    ========================================= */
 
-    .empty-symbol {
-      width: 58px;
-      height: 58px;
-      border-radius: 19px;
-      background: rgba(255,255,255,.8);
-      color: var(--primary);
+    .auction-phone-area {
+      width: 42%;
+
+      height: 100%;
+
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 8px 18px rgba(36,149,160,.08);
-      z-index: 2;
+
+      position: relative;
     }
 
-    .dots {
+    .phone-glow {
+      position: absolute;
+
+      width: 145px;
+      height: 145px;
+
+      border-radius: 50%;
+
+      background: rgba(255,255,255,.13);
+    }
+
+    .phone {
+      width: 76px;
+      height: 145px;
+
+      border-radius: 19px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #30383a,
+          #111719
+        );
+
+      border:
+        3px solid
+        rgba(255,255,255,.32);
+
+      box-shadow:
+        0 18px 30px rgba(0,0,0,.22);
+
+      position: relative;
+
+      transform: rotate(7deg);
+    }
+
+    .phone::before {
+      content: "";
+
+      position: absolute;
+
+      width: 31px;
+      height: 7px;
+
+      background: #0c1112;
+
+      border-radius: 8px;
+
+      top: 7px;
+
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      z-index: 3;
+    }
+
+    .phone::after {
+      content: "";
+
+      position: absolute;
+
+      inset: 13px 5px 6px;
+
+      border-radius: 13px;
+
+      background:
+        radial-gradient(
+          circle at 70% 30%,
+          rgba(255,255,255,.13),
+          transparent 28%
+        ),
+        linear-gradient(
+          145deg,
+          #35484a,
+          #101719
+        );
+    }
+
+
+    /* =========================================
+       DOTS
+    ========================================= */
+
+    .slider-dots {
       display: flex;
+
       justify-content: center;
-      gap: 5px;
-      margin-top: 8px;
+
+      align-items: center;
+
+      gap: 6px;
+
+      margin-top: 13px;
     }
 
-    .dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 20px;
-      background: #d2dada;
+    .slider-dot {
+      width: 8px;
+      height: 8px;
+
+      border-radius: 50%;
+
+      background: #d9e0e1;
+
       transition: .25s ease;
     }
 
-    .dot.active {
-      width: 17px;
-      background: var(--primary);
+    .slider-dot.active {
+      width: 22px;
+
+      border-radius: 10px;
+
+      background: #15939d;
     }
 
-    /* =========================
-       THREE ACTIONS
-    ========================== */
 
-    .quick-grid {
+    /* =========================================
+       THREE CARDS
+    ========================================= */
+
+    .actions-section {
+      margin-top: 29px;
+    }
+
+    .actions-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 9px;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 10px;
     }
 
-    .quick-card {
-      min-height: 91px;
-      border-radius: 17px;
-      background: var(--white);
-      border: 1px solid var(--border);
-      padding: 11px 7px;
+
+    .action-card {
+      min-height: 108px;
+
+      border-radius: 19px;
+
+      background: #ffffff;
+
+      border: 1px solid #edf0f0;
+
+      box-shadow:
+        0 7px 20px rgba(28,46,49,.055);
 
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
 
-      box-shadow: 0 5px 17px rgba(20,43,47,.04);
+      flex-direction: column;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 10px;
+
+      color: #263033;
+
       transition: .18s ease;
     }
 
-    .quick-card:active {
+    .action-card:active {
       transform: scale(.96);
     }
 
-    .quick-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
-      background: #f1f7f7;
-      color: var(--primary);
+
+    .action-icon {
+      width: 45px;
+      height: 45px;
+
+      border-radius: 15px;
+
+      background: #eaf7f8;
+
+      color: #168d97;
+
       display: flex;
+
       align-items: center;
       justify-content: center;
     }
 
-    .quick-label {
+
+    .action-title {
       font-size: 10px;
-      font-weight: 800;
-      color: #526063;
-    }
-
-    /* =========================
-       LISTINGS
-    ========================== */
-
-    .listing-row {
-      display: flex;
-      gap: 11px;
-      overflow-x: auto;
-      scrollbar-width: none;
-      padding-bottom: 3px;
-    }
-
-    .listing-row::-webkit-scrollbar {
-      display: none;
-    }
-
-    .listing-card {
-      flex: 0 0 151px;
-      min-height: 186px;
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 5px 17px rgba(20,43,47,.045);
-    }
-
-    .listing-image {
-      height: 112px;
-      background: #eef2f2;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .listing-device {
-      width: 43px;
-      height: 80px;
-      border-radius: 12px;
-      background: #222a2c;
-      transform: rotate(-5deg);
-      box-shadow: 0 10px 18px rgba(0,0,0,.15);
-    }
-
-    .listing-info {
-      padding: 9px 10px 10px;
-    }
-
-    .listing-title {
-      font-size: 11px;
       font-weight: 850;
     }
 
-    .listing-meta {
-      margin-top: 5px;
-      font-size: 9px;
-      color: var(--muted);
+
+    /* =========================================
+       LATEST
+    ========================================= */
+
+    .latest-section {
+      margin-top: 29px;
     }
 
-    .listing-placeholder {
-      flex: 0 0 100%;
-      min-height: 112px;
-      border-radius: 15px;
-      background: var(--white);
-      border: 1px dashed #cfd9da;
+    .empty-box {
+      min-height: 125px;
+
+      border:
+        1px dashed
+        #d5dfe0;
+
+      border-radius: 20px;
 
       display: flex;
+
       flex-direction: column;
+
       align-items: center;
       justify-content: center;
+
       text-align: center;
+
       padding: 20px;
-      color: var(--muted);
+
+      color: #849093;
     }
 
-    .listing-placeholder strong {
-      margin-top: 9px;
-      color: var(--text);
+    .empty-icon {
+      width: 40px;
+      height: 40px;
+
+      border-radius: 13px;
+
+      background: #eef7f7;
+
+      color: #168d97;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .empty-box strong {
+      margin-top: 8px;
+
       font-size: 12px;
+
+      color: #313b3d;
     }
 
-    .listing-placeholder span {
+    .empty-box span {
       margin-top: 4px;
+
       font-size: 9px;
     }
 
-    /* =========================
+
+    /* =========================================
        BOTTOM NAV
-    ========================== */
-
-    .bottom-wrap {
-      position: fixed;
-      bottom: 13px;
-      left: 0;
-      right: 0;
-      z-index: 50;
-
-      display: flex;
-      justify-content: center;
-      pointer-events: none;
-    }
+       نفس فكرة الصورة: 3 عناصر فقط
+    ========================================= */
 
     .bottom-nav {
-      pointer-events: auto;
+      position: fixed;
 
-      width: calc(100% - 28px);
-      max-width: 470px;
-      height: 73px;
+      z-index: 100;
 
-      background: rgba(255,255,255,.96);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      bottom: 0;
+      left: 50%;
 
-      border: 1px solid rgba(225,231,232,.95);
-      border-radius: 23px;
+      transform: translateX(-50%);
 
-      box-shadow:
-        0 12px 35px rgba(20,43,47,.12);
+      width: min(100%, 650px);
+
+      height:
+        calc(83px + env(safe-area-inset-bottom));
+
+      padding:
+        8px
+        35px
+        env(safe-area-inset-bottom);
+
+      background: rgba(255,255,255,.98);
+
+      border-top:
+        1px solid
+        #e9eeee;
 
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      align-items: center;
-      padding: 5px 7px;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      align-items: start;
+
+      box-shadow:
+        0 -5px 22px rgba(25,45,48,.06);
     }
+
 
     .nav-item {
-      height: 62px;
+      height: 65px;
+
       background: transparent;
+
+      color: #777f81;
+
       display: flex;
+
       flex-direction: column;
+
       align-items: center;
+
       justify-content: center;
+
       gap: 4px;
-      color: #899396;
-      position: relative;
+
+      transition: .2s ease;
     }
 
+
     .nav-icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 11px;
+      width: 37px;
+      height: 37px;
+
+      border-radius: 50%;
 
       display: flex;
+
       align-items: center;
       justify-content: center;
 
       transition: .2s ease;
     }
 
+
     .nav-label {
-      font-size: 8.5px;
-      font-weight: 750;
-      white-space: nowrap;
+      font-size: 10px;
+
+      font-weight: 800;
     }
 
+
     .nav-item.active {
-      color: var(--primary-dark);
+      color: #15919b;
     }
 
     .nav-item.active .nav-icon {
-      background: var(--primary-soft);
-      color: var(--primary);
+      background: #e8f6f7;
+      color: #15919b;
     }
 
-    .nav-add .nav-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 13px;
-      background: var(--text);
-      color: white;
-      box-shadow: 0 7px 16px rgba(23,33,36,.16);
-    }
-
-    .nav-add .nav-label {
-      color: var(--text);
-    }
 
     .nav-item:active .nav-icon {
       transform: scale(.88);
     }
 
-    /* =========================
-       ANIMATIONS
-    ========================== */
 
-    @keyframes pageIn {
-      from {
-        opacity: 0;
-        transform: translateY(7px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+    /* =========================================
+       RESPONSIVE
+    ========================================= */
 
-    .header,
-    main {
-      animation: pageIn .45s ease both;
-    }
+    @media (max-width: 390px) {
 
-    .category {
-      animation: pageIn .35s ease both;
-    }
-
-    .auction-card {
-      animation: pageIn .45s ease both;
-    }
-
-    /* =========================
-       SMALL PHONES
-    ========================== */
-
-    @media (max-width: 360px) {
-      .header {
-        padding-left: 14px;
-        padding-right: 14px;
+      .hero {
+        height: 370px;
       }
 
-      main {
-        padding-left: 14px;
-        padding-right: 14px;
+      .hero-message strong {
+        font-size: 21px;
       }
 
       .auction-card {
-        flex-basis: calc(100vw - 38px);
+        height: 195px;
       }
 
-      .brand-main {
-        font-size: 22px;
+      .auction-title {
+        font-size: 19px;
       }
 
-      .location {
-        display: none;
+      .phone {
+        width: 67px;
+        height: 130px;
       }
 
-      .quick-card {
-        min-height: 86px;
+      .actions-grid {
+        gap: 7px;
       }
+
+      .action-card {
+        min-height: 100px;
+      }
+
     }
+
+
+    @media (min-width: 651px) {
+
+      body {
+        padding: 0 20px;
+      }
+
+      .app {
+        box-shadow:
+          0 0 50px rgba(0,0,0,.08);
+      }
+
+    }
+
   </style>
 </head>
 
+
 <body>
+
 
 <div class="app">
 
-  <!-- =========================
+
+  <!-- =========================================
        HEADER
-  ========================== -->
+  ========================================== -->
 
-  <header class="header">
+  <header class="hero">
 
-    <div class="top-row">
+    <div class="hero-decoration"></div>
+
+
+    <div class="topbar">
+
+
+      <!-- الشعار -->
 
       <div class="brand">
         <div class="brand-main">MZAD</div>
         <div class="brand-sub">PHONE</div>
       </div>
 
+
+      <!-- الموقع -->
+
       <div class="location">
-        <div class="location-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path d="M20 10.2C20 15.2 12 21 12 21S4 15.2 4 10.2C4 6.2 7.6 3 12 3s8 3.2 8 7.2Z"
-                  stroke="currentColor" stroke-width="1.8"/>
-            <circle cx="12" cy="10" r="2.5"
-                    stroke="currentColor" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <span>النجف</span>
-      </div>
 
-      <div class="header-actions">
+        <svg
+          width="19"
+          height="19"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M20 10.3C20 15.3 12 21 12 21S4 15.3 4 10.3C4 6.2 7.6 3 12 3s8 3.2 8 7.3Z"
+            stroke="currentColor"
+            stroke-width="1.8"
+          />
 
-        <button class="header-btn" aria-label="الإشعارات">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M18 9.5C18 6.2 15.8 4 12 4S6 6.2 6 9.5c0 6-2.5 6.5-2.5 7.5h17c0-1-2.5-1.5-2.5-7.5Z"
-                  stroke="currentColor" stroke-width="1.7"
-                  stroke-linejoin="round"/>
-            <path d="M10 20h4"
-                  stroke="currentColor" stroke-width="1.7"
-                  stroke-linecap="round"/>
-          </svg>
-          <span class="notification-dot"></span>
-        </button>
-
-        <button class="header-btn" aria-label="الحساب">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="8" r="3.2"
-                    stroke="currentColor" stroke-width="1.7"/>
-            <path d="M5.5 20c.7-3.4 2.9-5.2 6.5-5.2s5.8 1.8 6.5 5.2"
-                  stroke="currentColor" stroke-width="1.7"
-                  stroke-linecap="round"/>
-          </svg>
-        </button>
-
-      </div>
-
-    </div>
-
-    <div class="search-wrap">
-
-      <label class="search">
-
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-          <circle cx="11" cy="11" r="6.5"
-                  stroke="currentColor" stroke-width="1.8"/>
-          <path d="m16 16 4 4"
-                stroke="currentColor" stroke-width="1.8"
-                stroke-linecap="round"/>
+          <circle
+            cx="12"
+            cy="10"
+            r="2.6"
+            stroke="currentColor"
+            stroke-width="1.8"
+          />
         </svg>
 
-        <input
-          type="search"
-          placeholder="ابحث عن جهاز، موديل أو سعة"
-          autocomplete="off"
-        />
+        <span>النجف</span>
 
-      </label>
+      </div>
+
+
+      <!-- الاشعارات والحساب -->
+
+      <div class="header-icons">
+
+
+        <button class="header-icon">
+
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M18 9.5C18 6.2 15.8 4 12 4S6 6.2 6 9.5c0 6-2.5 6.5-2.5 7.5h17c0-1-2.5-1.5-2.5-7.5Z"
+              stroke="currentColor"
+              stroke-width="1.7"
+            />
+
+            <path
+              d="M10 20h4"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+            />
+          </svg>
+
+          <span class="notification">3</span>
+
+        </button>
+
+
+        <button class="header-icon">
+
+          <svg
+            width="21"
+            height="21"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <circle
+              cx="12"
+              cy="8"
+              r="3.2"
+              stroke="currentColor"
+              stroke-width="1.8"
+            />
+
+            <path
+              d="M5 20c.7-3.4 3-5.2 7-5.2s6.3 1.8 7 5.2"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
+          </svg>
+
+        </button>
+
+      </div>
 
     </div>
+
+
+    <!-- البحث -->
+
+    <label class="search-box">
+
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+      >
+        <circle
+          cx="10.8"
+          cy="10.8"
+          r="6.5"
+          stroke="currentColor"
+          stroke-width="1.8"
+        />
+
+        <path
+          d="m16 16 4 4"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+        />
+      </svg>
+
+
+      <input
+        type="search"
+        placeholder="ابحث عن جهاز أو موديل أو مزاد"
+      >
+
+    </label>
+
+
+    <!-- العبارة -->
+
+    <div class="hero-message">
+
+      <span class="hero-message-line"></span>
+
+      <strong>زايد . اربح . استلم</strong>
+
+      <span class="hero-message-line"></span>
+
+    </div>
+
+
+    <div class="hero-wave"></div>
 
   </header>
 
 
-  <!-- =========================
-       MAIN
-  ========================== -->
 
-  <main>
+  <!-- =========================================
+       CONTENT
+  ========================================== -->
 
-    <!-- CATEGORIES -->
+  <main class="content">
 
-    <section class="section">
 
-      <div class="section-head">
-        <h2 class="section-title">تصفح الأجهزة</h2>
-        <button class="section-link">الكل</button>
-      </div>
+    <!-- =====================================
+         AUCTION
+    ====================================== -->
 
-      <div class="categories">
+    <section class="auction-section">
 
-        <button class="category">
-          <span class="category-icon">
-            <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
-              <rect x="6.5" y="2.8" width="11" height="18.4" rx="2.2"
-                    stroke="currentColor" stroke-width="1.7"/>
-              <path d="M10 18.2h4"
-                    stroke="currentColor" stroke-width="1.7"
-                    stroke-linecap="round"/>
-            </svg>
-          </span>
-          <span class="category-name">آيفون</span>
-        </button>
 
-        <button class="category">
-          <span class="category-icon">
-            <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
-              <rect x="6.5" y="2.8" width="11" height="18.4" rx="2.2"
-                    stroke="currentColor" stroke-width="1.7"/>
-              <path d="M10 5.5h4"
-                    stroke="currentColor" stroke-width="1.7"
-                    stroke-linecap="round"/>
-              <circle cx="12" cy="18.1" r=".8" fill="currentColor"/>
-            </svg>
-          </span>
-          <span class="category-name">سامسونگ</span>
-        </button>
+      <div class="section-title-row">
 
-        <button class="category">
-          <span class="category-icon">
-            <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
-              <rect x="7" y="3" width="10" height="18" rx="2"
-                    stroke="currentColor" stroke-width="1.7"/>
-              <path d="M9.5 6.5h5"
-                    stroke="currentColor" stroke-width="1.7"
-                    stroke-linecap="round"/>
-            </svg>
-          </span>
-          <span class="category-name">شاومي</span>
-        </button>
+        <h2 class="section-title">
+          المزادات
+        </h2>
 
-        <button class="category">
-          <span class="category-icon">
-            <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
-              <rect x="6.7" y="3" width="10.6" height="18" rx="2.2"
-                    stroke="currentColor" stroke-width="1.7"/>
-              <circle cx="12" cy="17.8" r=".9" fill="currentColor"/>
-            </svg>
-          </span>
-          <span class="category-name">جوجل</span>
-        </button>
-
-        <button class="category">
-          <span class="category-icon">
-            <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
-              <path d="M8 5h8"
-                    stroke="currentColor" stroke-width="1.7"
-                    stroke-linecap="round"/>
-              <path d="M7 19h10"
-                    stroke="currentColor" stroke-width="1.7"
-                    stroke-linecap="round"/>
-              <rect x="5" y="3" width="14" height="18" rx="3"
-                    stroke="currentColor" stroke-width="1.7"/>
-            </svg>
-          </span>
-          <span class="category-name">أخرى</span>
+        <button class="section-link">
+          عرض الكل
         </button>
 
       </div>
 
-    </section>
+
+      <div class="auction-window">
+
+        <div
+          class="auction-track"
+          id="auctionTrack"
+        >
 
 
-    <!-- AUCTIONS -->
+          <!-- CARD 1 -->
 
-    <section class="section">
+          <article class="auction-card">
 
-      <div class="section-head">
-        <h2 class="section-title">المزادات</h2>
-        <button class="section-link">عرض الكل</button>
-      </div>
+            <div class="auction-card-content">
 
-      <div class="auction-slider">
 
-        <div class="auction-track" id="auctionTrack">
+              <div class="auction-info">
 
-          <!-- تصميم فارغ مؤقت إلى أن نربط المزادات الحقيقية -->
 
-          <article class="auction-card auction-empty">
+                <span class="live-badge">
 
-            <div class="auction-visual">
+                  <span class="live-dot"></span>
 
-              <div class="empty-symbol">
+                  مزاد مباشر
 
-                <svg width="27" height="27" viewBox="0 0 24 24" fill="none">
-                  <path d="M7 3h10"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"/>
-                  <path d="M7 21h10"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"/>
-                  <path d="M8 4c0 3 2 4.2 4 5 2-.8 4-2 4-5"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"/>
-                  <path d="M8 20c0-3 2-4.2 4-5 2 .8 4 2 4 5"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"/>
-                  <path d="M9 12h6"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"/>
-                </svg>
+                </span>
 
-              </div>
 
-            </div>
-
-            <div class="auction-content">
-
-              <span class="auction-badge">مزاد قريباً</span>
-
-              <div class="auction-title">
-                المزاد القادم
-              </div>
-
-              <div class="auction-subtitle">
-                سيظهر هنا الجهاز الفعلي عند توفر مزاد حقيقي.
-              </div>
-
-              <div class="auction-bottom">
-
-                <div>
-                  <div class="auction-price-label">
-                    الحالة
-                  </div>
-                  <div class="auction-price">
-                    قريباً
-                  </div>
+                <div class="auction-title">
+                  مزاد الأجهزة
                 </div>
 
-                <button class="auction-btn">
-                  التفاصيل
+
+                <div class="auction-description">
+                  تابع المزاد وقدم سعرك قبل انتهاء الوقت
+                </div>
+
+
+                <div class="auction-details">
+
+
+                  <div class="auction-price">
+
+                    <small>
+                      أعلى مزايدة
+                    </small>
+
+                    <strong>
+                      قريباً
+                    </strong>
+
+                  </div>
+
+
+                  <div class="auction-time">
+
+                    <small>
+                      ينتهي خلال
+                    </small>
+
+                    <strong>
+                      --:--
+                    </strong>
+
+                  </div>
+
+
+                </div>
+
+
+                <button class="auction-button">
+                  دخول المزاد
                 </button>
 
               </div>
+
+
+
+              <div class="auction-phone-area">
+
+                <div class="phone-glow"></div>
+
+                <div class="phone"></div>
+
+              </div>
+
 
             </div>
 
           </article>
 
 
-          <article class="auction-card auction-empty">
 
-            <div class="auction-visual">
+          <!-- CARD 2 -->
 
-              <div class="empty-symbol">
+          <article
+            class="auction-card"
+            style="
+              background:
+              linear-gradient(
+                135deg,
+                #172d31,
+                #27575d
+              );
+            "
+          >
 
-                <svg width="27" height="27" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 3v18"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"/>
-                  <path d="M7 7h10"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"/>
-                  <path d="M7 17h10"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"/>
-                  <path d="M8.5 7c0 2 1.2 3 3.5 3s3.5 1 3.5 3-1.2 3-3.5 3-3.5-1-3.5-3"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                        stroke-linecap="round"/>
-                </svg>
+            <div class="auction-card-content">
 
-              </div>
 
-            </div>
+              <div class="auction-info">
 
-            <div class="auction-content">
+                <span class="live-badge">
+                  المزاد القادم
+                </span>
 
-              <span class="auction-badge">مزاد قريباً</span>
 
-              <div class="auction-title">
-                أجهزة جديدة
-              </div>
-
-              <div class="auction-subtitle">
-                عندما يضاف مزاد حقيقي ستظهر معلومات الجهاز والسعر هنا.
-              </div>
-
-              <div class="auction-bottom">
-
-                <div>
-                  <div class="auction-price-label">
-                    الحالة
-                  </div>
-                  <div class="auction-price">
-                    قريباً
-                  </div>
+                <div class="auction-title">
+                  أجهزة جديدة
                 </div>
 
-                <button class="auction-btn">
+
+                <div class="auction-description">
+                  الأجهزة الحقيقية ستظهر هنا عند توفر المزاد
+                </div>
+
+
+                <div class="auction-details">
+
+                  <div class="auction-price">
+
+                    <small>
+                      الحالة
+                    </small>
+
+                    <strong>
+                      قريباً
+                    </strong>
+
+                  </div>
+
+                </div>
+
+
+                <button class="auction-button">
                   التفاصيل
                 </button>
 
               </div>
 
+
+              <div class="auction-phone-area">
+
+                <div class="phone-glow"></div>
+
+                <div
+                  class="phone"
+                  style="
+                    background:
+                    linear-gradient(
+                      145deg,
+                      #d8dddd,
+                      #737d7f
+                    );
+                  "
+                ></div>
+
+              </div>
+
+
             </div>
 
           </article>
+
 
         </div>
 
       </div>
 
-      <div class="dots" id="auctionDots">
-        <span class="dot active"></span>
-        <span class="dot"></span>
+
+      <!-- DOTS -->
+
+      <div
+        class="slider-dots"
+        id="sliderDots"
+      >
+
+        <span class="slider-dot active"></span>
+
+        <span class="slider-dot"></span>
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================
+         THREE ACTIONS
+    ====================================== -->
+
+    <section class="actions-section">
+
+
+      <div class="section-title-row">
+
+        <h2 class="section-title">
+          ماذا تريد أن تفعل؟
+        </h2>
+
+      </div>
+
+
+      <div class="actions-grid">
+
+
+        <!-- مزاد -->
+
+        <button class="action-card">
+
+          <span class="action-icon">
+
+            <svg
+              width="23"
+              height="23"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M8 4v16M16 4v16"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+
+              <path
+                d="M5 7h14M5 17h14"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+
+            </svg>
+
+          </span>
+
+          <span class="action-title">
+            المزادات
+          </span>
+
+        </button>
+
+
+        <!-- بيع -->
+
+        <button class="action-card">
+
+          <span class="action-icon">
+
+            <svg
+              width="23"
+              height="23"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+
+              <rect
+                x="5"
+                y="4"
+                width="14"
+                height="17"
+                rx="2.5"
+                stroke="currentColor"
+                stroke-width="1.7"
+              />
+
+              <path
+                d="M9 8h6"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+              />
+
+              <path
+                d="M12 11v5M9.5 13.5h5"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+              />
+
+            </svg>
+
+          </span>
+
+          <span class="action-title">
+            بع جهازك
+          </span>
+
+        </button>
+
+
+        <!-- طلبات -->
+
+        <button class="action-card">
+
+          <span class="action-icon">
+
+            <svg
+              width="23"
+              height="23"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+
+              <path
+                d="M6 4h12v16H6z"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linejoin="round"
+              />
+
+              <path
+                d="M9 8h6M9 12h6M9 16h4"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+              />
+
+            </svg>
+
+          </span>
+
+          <span class="action-title">
+            طلباتي
+          </span>
+
+        </button>
+
+
       </div>
 
     </section>
 
 
-    <!-- QUICK ACTIONS -->
 
-    <section class="section">
+    <!-- =====================================
+         LATEST
+    ====================================== -->
 
-      <div class="section-head">
-        <h2 class="section-title">ماذا تريد أن تفعل؟</h2>
-      </div>
-
-      <div class="quick-grid">
-
-        <button class="quick-card">
-
-          <span class="quick-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M12 3v18"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    stroke-linecap="round"/>
-              <path d="M6 7h12"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    stroke-linecap="round"/>
-              <path d="M6 17h12"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    stroke-linecap="round"/>
-            </svg>
-          </span>
-
-          <span class="quick-label">أدخل مزاد</span>
-
-        </button>
+    <section class="latest-section">
 
 
-        <button class="quick-card">
+      <div class="section-title-row">
 
-          <span class="quick-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M4 12h16"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    stroke-linecap="round"/>
-              <path d="M12 4v16"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    stroke-linecap="round"/>
-              <rect x="4" y="4" width="16" height="16" rx="3"
-                    stroke="currentColor"
-                    stroke-width="1.5"/>
-            </svg>
-          </span>
+        <h2 class="section-title">
+          الأجهزة المعروضة
+        </h2>
 
-          <span class="quick-label">بع جهازك</span>
-
-        </button>
-
-
-        <button class="quick-card">
-
-          <span class="quick-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M20 11.5a8 8 0 0 1-8 8H7l-3 2v-5a8 8 0 1 1 16-5Z"
-                    stroke="currentColor"
-                    stroke-width="1.7"
-                    stroke-linejoin="round"/>
-              <path d="M8 11.5h8"
-                    stroke="currentColor"
-                    stroke-width="1.7"
-                    stroke-linecap="round"/>
-            </svg>
-          </span>
-
-          <span class="quick-label">طلب مساعدة</span>
-
+        <button class="section-link">
+          عرض الكل
         </button>
 
       </div>
 
-    </section>
+
+      <div class="empty-box">
 
 
-    <!-- LISTINGS -->
+        <div class="empty-icon">
 
-    <section class="section">
+          <svg
+            width="21"
+            height="21"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
 
-      <div class="section-head">
-        <h2 class="section-title">أجهزة معروضة</h2>
-        <button class="section-link">عرض الكل</button>
-      </div>
+            <rect
+              x="7"
+              y="3"
+              width="10"
+              height="18"
+              rx="2"
+              stroke="currentColor"
+              stroke-width="1.7"
+            />
 
-      <div class="listing-row">
+            <path
+              d="M10 18h4"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+            />
 
-        <div class="listing-placeholder">
-
-          <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
-            <rect x="7" y="3" width="10" height="18" rx="2"
-                  stroke="currentColor" stroke-width="1.6"/>
-            <path d="M10 18h4"
-                  stroke="currentColor" stroke-width="1.6"
-                  stroke-linecap="round"/>
           </svg>
 
-          <strong>لا توجد أجهزة معروضة حالياً</strong>
-
-          <span>
-            ستظهر الأجهزة الحقيقية هنا عند نشرها.
-          </span>
-
         </div>
+
+
+        <strong>
+          لا توجد أجهزة معروضة حالياً
+        </strong>
+
+
+        <span>
+          الأجهزة الحقيقية ستظهر هنا عند نشرها
+        </span>
+
 
       </div>
 
     </section>
+
 
   </main>
 
-</div>
 
 
-<!-- =========================
-     BOTTOM NAV
-========================== -->
-
-<div class="bottom-wrap">
+  <!-- =========================================
+       BOTTOM NAV
+  ========================================== -->
 
   <nav class="bottom-nav">
+
+
+    <!-- الحساب -->
+
+    <button class="nav-item">
+
+      <span class="nav-icon">
+
+        <svg
+          width="21"
+          height="21"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+
+          <circle
+            cx="12"
+            cy="8"
+            r="3.2"
+            stroke="currentColor"
+            stroke-width="1.8"
+          />
+
+          <path
+            d="M5 20c.7-3.4 3-5.2 7-5.2s6.3 1.8 7 5.2"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+          />
+
+        </svg>
+
+      </span>
+
+
+      <span class="nav-label">
+        حسابك
+      </span>
+
+    </button>
+
+
+
+    <!-- الطلبات -->
+
+    <button class="nav-item">
+
+      <span class="nav-icon">
+
+        <svg
+          width="21"
+          height="21"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+
+          <rect
+            x="6"
+            y="4"
+            width="12"
+            height="16"
+            rx="2"
+            stroke="currentColor"
+            stroke-width="1.8"
+          />
+
+          <path
+            d="M9 8h6M9 12h6M9 16h3"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+          />
+
+        </svg>
+
+      </span>
+
+
+      <span class="nav-label">
+        طلباتك
+      </span>
+
+    </button>
+
+
+
+    <!-- الرئيسية -->
 
     <button class="nav-item active">
 
       <span class="nav-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-          <path d="m4 10 8-6 8 6v9a1.8 1.8 0 0 1-1.8 1.8H5.8A1.8 1.8 0 0 1 4 19v-9Z"
-                stroke="currentColor"
-                stroke-width="1.7"
-                stroke-linejoin="round"/>
-          <path d="M9.5 20.5v-6h5v6"
-                stroke="currentColor"
-                stroke-width="1.7"
-                stroke-linejoin="round"/>
+
+        <svg
+          width="21"
+          height="21"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+
+          <path
+            d="m4 10 8-6 8 6v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-9Z"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linejoin="round"
+          />
+
+          <path
+            d="M9.5 21v-6h5v6"
+            stroke="currentColor"
+            stroke-width="1.8"
+          />
+
         </svg>
+
       </span>
 
-      <span class="nav-label">الرئيسية</span>
+
+      <span class="nav-label">
+        الرئيسية
+      </span>
 
     </button>
 
-
-    <button class="nav-item">
-
-      <span class="nav-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-          <path d="M20 12a8 8 0 1 1-2.3-5.7"
-                stroke="currentColor"
-                stroke-width="1.7"
-                stroke-linecap="round"/>
-          <path d="M20 5v5h-5"
-                stroke="currentColor"
-                stroke-width="1.7"
-                stroke-linecap="round"
-                stroke-linejoin="round"/>
-        </svg>
-      </span>
-
-      <span class="nav-label">المزادات</span>
-
-    </button>
-
-
-    <button class="nav-item nav-add">
-
-      <span class="nav-icon">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
-          <path d="M12 5v14"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"/>
-          <path d="M5 12h14"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"/>
-        </svg>
-      </span>
-
-      <span class="nav-label">بيع جهاز</span>
-
-    </button>
-
-
-    <button class="nav-item">
-
-      <span class="nav-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-          <path d="M6 4h12v16H6z"
-                stroke="currentColor"
-                stroke-width="1.7"
-                stroke-linejoin="round"/>
-          <path d="M9 8h6M9 12h6M9 16h4"
-                stroke="currentColor"
-                stroke-width="1.7"
-                stroke-linecap="round"/>
-        </svg>
-      </span>
-
-      <span class="nav-label">طلباتي</span>
-
-    </button>
-
-
-    <button class="nav-item">
-
-      <span class="nav-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="8" r="3"
-                  stroke="currentColor"
-                  stroke-width="1.7"/>
-          <path d="M5.5 20c.7-3.4 2.9-5.2 6.5-5.2s5.8 1.8 6.5 5.2"
-                stroke="currentColor"
-                stroke-width="1.7"
-                stroke-linecap="round"/>
-        </svg>
-      </span>
-
-      <span class="nav-label">حسابي</span>
-
-    </button>
 
   </nav>
+
 
 </div>
 
 
-<script type="module">
 
-  /*
-    الصفحة حالياً مصممة بدون بيانات وهمية.
-    لاحقاً نربط:
-    - المزادات
-    - الأجهزة
-    - اسم المستخدم
-    - الإشعارات
-    مباشرة من Supabase.
-  */
+<script>
 
-  const auctionTrack = document.getElementById("auctionTrack");
-  const dots = [...document.querySelectorAll(".dot")];
+  /* =========================================
+     AUCTION AUTO SLIDER
+     كل 3 ثواني
+  ========================================== */
 
-  let currentSlide = 0;
-  let autoSlide;
+  const track =
+    document.getElementById("auctionTrack");
 
-  function updateDots() {
-    const cards = [...auctionTrack.querySelectorAll(".auction-card")];
+  const dots =
+    document.querySelectorAll(".slider-dot");
 
-    if (!cards.length) return;
+  let current =
+    0;
 
-    const scrollLeft = Math.abs(auctionTrack.scrollLeft);
-
-    let closest = 0;
-    let smallest = Infinity;
-
-    cards.forEach((card, index) => {
-      const distance = Math.abs(card.offsetLeft - scrollLeft);
-
-      if (distance < smallest) {
-        smallest = distance;
-        closest = index;
-      }
-    });
-
-    currentSlide = closest;
-
-    dots.forEach((dot, index) => {
-      dot.classList.toggle("active", index === currentSlide);
-    });
-  }
+  let timer;
 
 
   function goToSlide(index) {
 
-    const cards = [...auctionTrack.querySelectorAll(".auction-card")];
+    const cards =
+      track.querySelectorAll(".auction-card");
 
     if (!cards.length) return;
+
 
     if (index >= cards.length) {
       index = 0;
     }
 
-    const card = cards[index];
 
-    auctionTrack.scrollTo({
-      left: card.offsetLeft,
+    current = index;
+
+
+    const card =
+      cards[index];
+
+
+    track.scrollTo({
+      left: card.offsetLeft - 22,
       behavior: "smooth"
     });
 
-    currentSlide = index;
 
-    dots.forEach((dot, i) => {
-      dot.classList.toggle("active", i === index);
-    });
+    dots.forEach(
+      (dot, i) => {
+
+        dot.classList.toggle(
+          "active",
+          i === current
+        );
+
+      }
+    );
+
   }
 
 
-  function startAutoSlide() {
+  function startSlider() {
 
-    clearInterval(autoSlide);
+    clearInterval(timer);
 
-    autoSlide = setInterval(() => {
-      const cards = auctionTrack.querySelectorAll(".auction-card");
 
-      if (cards.length <= 1) return;
+    timer =
+      setInterval(
+        () => {
 
-      goToSlide(currentSlide + 1);
+          goToSlide(
+            current + 1
+          );
 
-    }, 3000);
+        },
+        3000
+      );
+
   }
 
 
-  auctionTrack.addEventListener("scroll", () => {
-    updateDots();
-  }, { passive: true });
+  track.addEventListener(
+    "scroll",
+    () => {
+
+      const cards =
+        [...track.querySelectorAll(".auction-card")];
+
+      if (!cards.length) return;
 
 
-  auctionTrack.addEventListener("touchstart", () => {
-    clearInterval(autoSlide);
-  }, { passive: true });
+      const scroll =
+        Math.abs(track.scrollLeft);
 
 
-  auctionTrack.addEventListener("touchend", () => {
-    startAutoSlide();
-  }, { passive: true });
+      let nearest = 0;
+      let distance = Infinity;
 
 
-  startAutoSlide();
+      cards.forEach(
+        (card, index) => {
+
+          const d =
+            Math.abs(
+              card.offsetLeft - scroll
+            );
 
 
-  /* منع سلوك الضغط الطويل على بعض العناصر */
+          if (d < distance) {
 
-  document.querySelectorAll("button").forEach(button => {
+            distance = d;
+            nearest = index;
 
-    button.addEventListener("click", () => {
+          }
 
-      button.style.transform = "scale(.97)";
+        }
+      );
 
-      setTimeout(() => {
-        button.style.transform = "";
-      }, 110);
 
-    });
+      current = nearest;
 
-  });
+
+      dots.forEach(
+        (dot, i) => {
+
+          dot.classList.toggle(
+            "active",
+            i === current
+          );
+
+        }
+      );
+
+    },
+    {
+      passive: true
+    }
+  );
+
+
+  track.addEventListener(
+    "touchstart",
+    () => {
+      clearInterval(timer);
+    },
+    {
+      passive: true
+    }
+  );
+
+
+  track.addEventListener(
+    "touchend",
+    () => {
+      startSlider();
+    },
+    {
+      passive: true
+    }
+  );
+
+
+  startSlider();
+
 
 </script>
+
 
 </body>
 </html>
