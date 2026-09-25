@@ -22,27 +22,16 @@
   -webkit-tap-highlight-color:transparent;
 }
 
-html{
-  width:100%;
-  min-height:100%;
-  background:#eaf5f6;
-}
-
+html,
 body{
   margin:0;
   padding:0;
-
   width:100%;
-  min-height:100vh;
+  min-height:100%;
+}
 
-  background:
-    linear-gradient(
-      180deg,
-      #eaf7f8 0%,
-      #f8fbfb 48%,
-      #ffffff 100%
-    );
-
+body{
+  background:#edf7f8;
   color:#20282a;
 
   font-family:
@@ -60,26 +49,23 @@ body{
 
 button,
 input{
-  font-family:inherit;
+  font:inherit;
 }
 
 button{
   border:0;
   outline:0;
-}
-
-button:active{
-  transform:scale(.97);
+  cursor:pointer;
 }
 
 
 /* =========================================================
-   APP CONTAINER
+   APP
 ========================================================= */
 
 .app{
   width:100%;
-  max-width:650px;
+  max-width:680px;
   min-height:100vh;
 
   margin:0 auto;
@@ -100,89 +86,69 @@ button:active{
 
   position:relative;
 
-  height:267px;
+  height:
+    clamp(255px,68vw,290px);
 
   overflow:hidden;
 
   padding:
-    calc(env(safe-area-inset-top) + 8px)
-    clamp(15px,4.8vw,24px)
+    calc(env(safe-area-inset-top) + 10px)
+    clamp(16px,5vw,26px)
     0;
 
   background:
-    radial-gradient(
-      circle at 12% 12%,
-      rgba(255,255,255,.13),
-      transparent 24%
-    ),
-    radial-gradient(
-      circle at 94% 24%,
-      rgba(255,255,255,.10),
-      transparent 27%
-    ),
     linear-gradient(
       145deg,
-      #087d88 0%,
-      #1599a3 55%,
-      #2eafb7 100%
+      #087f89 0%,
+      #1299a3 55%,
+      #2aabb3 100%
     );
 }
 
 
-/* زخارف خفيفة */
+/* زخارف */
 
-.hero-decoration{
-  position:absolute;
-  inset:0;
-
-  opacity:.085;
-
-  pointer-events:none;
-}
-
-.hero-decoration::before{
+.hero::before{
 
   content:"";
 
   position:absolute;
 
-  width:155px;
-  height:155px;
+  width:190px;
+  height:190px;
 
-  right:-62px;
-  top:-35px;
+  right:-85px;
+  top:15px;
 
   border:
     2px solid
-    #fff;
+    rgba(255,255,255,.10);
 
-  border-radius:40px;
-
-  transform:rotate(24deg);
+  border-radius:50%;
 }
 
-.hero-decoration::after{
+.hero::after{
 
   content:"";
 
   position:absolute;
 
-  width:105px;
-  height:105px;
+  width:140px;
+  height:140px;
 
-  left:-50px;
-  top:40px;
+  left:-80px;
+  top:95px;
 
   border:
     2px solid
-    #fff;
+    rgba(255,255,255,.09);
 
   border-radius:50%;
 }
 
 
 /* =========================================================
-   TOP BAR
+   TOP
 ========================================================= */
 
 .topbar{
@@ -190,11 +156,11 @@ button:active{
   position:relative;
   z-index:5;
 
-  height:40px;
-
   display:flex;
   align-items:center;
   justify-content:space-between;
+
+  height:44px;
 }
 
 
@@ -211,68 +177,70 @@ button:active{
 .brand-main{
 
   font-size:
-    clamp(22px,6vw,28px);
+    clamp(25px,7vw,31px);
 
   font-weight:950;
 
-  letter-spacing:-1.5px;
+  letter-spacing:-1.8px;
 }
 
 .brand-sub{
 
-  margin-top:5px;
+  margin-top:6px;
 
   font-size:8px;
 
-  font-weight:850;
+  font-weight:900;
 
-  letter-spacing:3.5px;
+  letter-spacing:4px;
 
-  opacity:.88;
+  text-align:center;
+
+  opacity:.9;
 }
 
 
 .header-icons{
 
   display:flex;
-
   align-items:center;
 
-  gap:7px;
+  gap:8px;
 }
 
 .header-icon{
 
-  width:36px;
-  height:36px;
+  width:
+    clamp(37px,10vw,42px);
 
-  padding:0;
-
-  border-radius:50%;
+  height:
+    clamp(37px,10vw,42px);
 
   display:flex;
   align-items:center;
   justify-content:center;
 
-  color:#138d97;
+  position:relative;
+
+  border-radius:50%;
 
   background:#fff;
 
-  box-shadow:
-    0 5px 14px rgba(0,0,0,.08);
+  color:#128d98;
 
-  position:relative;
+  box-shadow:
+    0 6px 17px rgba(0,0,0,.08);
 }
 
 .notification{
 
   position:absolute;
 
-  top:-2px;
+  top:-3px;
   right:-2px;
 
-  min-width:17px;
-  height:17px;
+  min-width:18px;
+  height:18px;
 
   padding:0 4px;
 
@@ -282,13 +250,11 @@ button:active{
 
   border-radius:50%;
 
-  background:#138d97;
+  background:#128d98;
 
   color:#fff;
 
-  border:
-    2px solid
-    #fff;
+  border:2px solid #fff;
 
   font-size:8px;
   font-weight:900;
@@ -297,7 +263,6 @@ button:active{
 
 /* =========================================================
    SEARCH
-   أصغر + أعلى
 ========================================================= */
 
 .search-box{
@@ -308,29 +273,24 @@ button:active{
   width:100%;
 
   height:
-    clamp(45px,11vw,50px);
+    clamp(43px,11vw,49px);
 
   margin-top:
-    clamp(10px,2.8vw,14px);
+    clamp(9px,2.5vw,13px);
+
+  display:flex;
+  align-items:center;
 
   padding:
     0
     clamp(14px,4vw,18px);
-
-  display:flex;
-  align-items:center;
 
   border-radius:26px;
 
   background:#fff;
 
   box-shadow:
-    0 7px 20px rgba(0,0,0,.075);
-}
-
-.search-box svg{
-  flex-shrink:0;
-  color:#879294;
+    0 8px 22px rgba(0,0,0,.08);
 }
 
 .search-box input{
@@ -346,24 +306,23 @@ button:active{
 
   background:transparent;
 
+  color:#293335;
+
   text-align:right;
 
-  color:#273033;
-
   font-size:
-    clamp(12px,3.2vw,14px);
+    clamp(12px,3.4vw,14px);
 
-  font-weight:650;
+  font-weight:700;
 }
 
 .search-box input::placeholder{
-  color:#7d898b;
+  color:#899496;
 }
 
 
 /* =========================================================
    LOCATION
-   مو داخل منطقة البحث
 ========================================================= */
 
 .location-row{
@@ -371,39 +330,39 @@ button:active{
   position:relative;
   z-index:5;
 
-  margin-top:10px;
-
-  height:29px;
-
   display:flex;
   align-items:center;
 
-  color:rgba(255,255,255,.94);
+  margin-top:12px;
 
-  font-size:10px;
+  color:#fff;
 
-  font-weight:750;
+  font-size:
+    clamp(10px,3vw,12px);
+
+  font-weight:850;
 }
 
 .location-icon{
 
-  width:25px;
-  height:25px;
+  width:30px;
+  height:30px;
 
-  margin-left:6px;
-
-  border-radius:8px;
+  margin-left:7px;
 
   display:flex;
   align-items:center;
   justify-content:center;
 
-  background:rgba(255,255,255,.14);
+  border-radius:10px;
+
+  background:
+    rgba(255,255,255,.13);
 }
 
 
 /* =========================================================
-   HEADER CURVE
+   WAVE
 ========================================================= */
 
 .hero-wave{
@@ -413,10 +372,10 @@ button:active{
   z-index:4;
 
   left:-5%;
-  bottom:-2px;
+  bottom:-1px;
 
   width:110%;
-  height:36px;
+  height:37px;
 
   background:#fff;
 
@@ -438,8 +397,12 @@ button:active{
 
   padding:
     0
-    clamp(15px,4.8vw,24px)
-    105px;
+    clamp(16px,5vw,26px)
+
+    calc(
+      125px +
+      env(safe-area-inset-bottom)
+    );
 }
 
 
@@ -447,9 +410,7 @@ button:active{
    SECTION HEADER
 ========================================================= */
 
-.section-title-row{
-
-  width:100%;
+.section-head{
 
   display:flex;
   align-items:center;
@@ -458,33 +419,50 @@ button:active{
   margin-bottom:11px;
 }
 
-.section-title{
+.section-head-main{
+
+  display:flex;
+  flex-direction:column;
+
+  gap:3px;
+}
+
+.section-head h2{
 
   margin:0;
 
   color:#20282a;
 
   font-size:
-    clamp(16px,4.7vw,20px);
-
-  line-height:1.1;
+    clamp(19px,5.5vw,23px);
 
   font-weight:950;
 
-  letter-spacing:-.3px;
+  letter-spacing:-.4px;
 }
 
-.section-link{
+.section-head p{
+
+  margin:0;
+
+  color:#8b9799;
+
+  font-size:9px;
+
+  font-weight:650;
+}
+
+.section-more{
 
   padding:5px 0;
 
   background:transparent;
 
-  color:#168d97;
+  color:#128d98;
 
   font-size:10px;
 
-  font-weight:850;
+  font-weight:900;
 }
 
 
@@ -493,15 +471,15 @@ button:active{
 ========================================================= */
 
 .auction-section{
-
-  margin-top:-1px;
+  margin-top:-2px;
 }
 
-.auction-window{
+.auction-track-wrap{
 
-  width:calc(100% + 30px);
+  width:
+    calc(100% + 32px);
 
-  margin-right:-15px;
+  margin-right:-16px;
 
   overflow:hidden;
 }
@@ -510,24 +488,18 @@ button:active{
 
   display:flex;
 
-  flex-direction:row;
-
   gap:11px;
-
-  width:100%;
 
   overflow-x:auto;
 
   padding:
     0
-    15px
-    4px;
+    16px
+    5px;
 
   scrollbar-width:none;
 
   scroll-snap-type:x mandatory;
-
-  direction:rtl;
 }
 
 .auction-track::-webkit-scrollbar{
@@ -535,22 +507,17 @@ button:active{
 }
 
 
-/* =========================================================
-   AUCTION CARD
-   نحافظ على الشكل اللي ضبط
-========================================================= */
-
 .auction-card{
 
   flex:
     0 0
     min(
-      86vw,
-      570px
+      87vw,
+      585px
     );
 
   height:
-    clamp(198px,52vw,220px);
+    clamp(198px,53vw,225px);
 
   position:relative;
 
@@ -559,39 +526,39 @@ button:active{
   scroll-snap-align:center;
 
   border-radius:
-    clamp(20px,5.5vw,25px);
+    clamp(20px,5vw,25px);
 
   background:
     linear-gradient(
       135deg,
       #087f89,
-      #19a5af
+      #24a9b2
     );
 
   box-shadow:
-    0 11px 30px rgba(10,105,113,.18);
+    0 10px 28px rgba(10,105,113,.17);
 }
 
-.auction-card::before{
+.auction-card::after{
 
   content:"";
 
   position:absolute;
 
-  width:230px;
-  height:230px;
+  width:220px;
+  height:220px;
 
-  right:-75px;
-  bottom:-120px;
+  left:-75px;
+  bottom:-130px;
 
   border-radius:50%;
 
   background:
-    rgba(255,255,255,.09);
+    rgba(255,255,255,.08);
 }
 
 
-.auction-card-content{
+.auction-inner{
 
   width:100%;
   height:100%;
@@ -603,36 +570,35 @@ button:active{
   align-items:center;
 
   padding:
-    clamp(14px,4vw,20px);
+    clamp(15px,4vw,21px);
 }
 
 
 .auction-info{
 
   flex:1;
-
   min-width:0;
 
   color:#fff;
 }
 
-.live-badge{
+.live{
 
   display:inline-flex;
   align-items:center;
   gap:6px;
 
   padding:
-    5px 9px;
+    6px 10px;
 
   border:
     1px solid
-    rgba(255,255,255,.26);
+    rgba(255,255,255,.25);
 
   border-radius:20px;
 
   background:
-    rgba(255,255,255,.16);
+    rgba(255,255,255,.14);
 
   font-size:8px;
   font-weight:900;
@@ -654,55 +620,52 @@ button:active{
   margin-top:9px;
 
   font-size:
-    clamp(20px,6vw,25px);
-
-  line-height:1.05;
+    clamp(22px,6.5vw,28px);
 
   font-weight:950;
+
+  line-height:1;
 }
 
-.auction-description{
+.auction-text{
 
-  margin-top:6px;
+  max-width:230px;
 
-  max-width:210px;
+  margin-top:7px;
 
   color:
-    rgba(255,255,255,.82);
+    rgba(255,255,255,.84);
 
   font-size:9px;
 
   line-height:1.55;
 }
 
-.auction-details{
+.auction-stats{
 
   display:flex;
-  align-items:center;
 
   gap:
-    clamp(14px,5vw,22px);
+    clamp(16px,5vw,24px);
 
   margin-top:10px;
 }
 
-.auction-price small,
-.auction-time small{
+.stat small{
 
   display:block;
 
-  margin-bottom:2px;
-
   color:
-    rgba(255,255,255,.68);
+    rgba(255,255,255,.65);
 
   font-size:7px;
 }
 
-.auction-price strong,
-.auction-time strong{
+.stat strong{
 
   display:block;
+
+  margin-top:2px;
 
   font-size:12px;
 
@@ -715,35 +678,34 @@ button:active{
 
   margin-top:9px;
 
-  padding:
-    0 13px;
+  padding:0 14px;
 
   border-radius:10px;
 
   background:#fff;
 
-  color:#167f88;
+  color:#147f89;
 
   font-size:9px;
 
-  font-weight:900;
+  font-weight:950;
 }
 
 
 /* =========================================================
-   PHONE INSIDE AUCTION
+   PHONE
 ========================================================= */
 
-.auction-phone-area{
+.phone-area{
 
-  width:41%;
+  width:40%;
   height:100%;
-
-  position:relative;
 
   display:flex;
   align-items:center;
   justify-content:center;
+
+  position:relative;
 }
 
 .phone-glow{
@@ -759,36 +721,36 @@ button:active{
   border-radius:50%;
 
   background:
-    rgba(255,255,255,.12);
+    rgba(255,255,255,.11);
 }
 
 .phone{
 
   width:
-    clamp(68px,19vw,83px);
+    clamp(69px,19vw,86px);
 
   height:
-    clamp(132px,36vw,156px);
+    clamp(132px,36vw,160px);
 
   position:relative;
 
-  border-radius:20px;
+  border-radius:21px;
 
   transform:rotate(7deg);
 
   background:
     linear-gradient(
       145deg,
-      #323b3d,
-      #101617
+      #3c4749,
+      #111819
     );
 
   border:
     3px solid
-    rgba(255,255,255,.35);
+    rgba(255,255,255,.38);
 
   box-shadow:
-    0 18px 31px rgba(0,0,0,.22);
+    0 18px 30px rgba(0,0,0,.22);
 }
 
 .phone::before{
@@ -802,14 +764,14 @@ button:active{
   top:7px;
   left:50%;
 
-  width:32px;
+  width:33px;
   height:7px;
 
   transform:translateX(-50%);
 
   border-radius:8px;
 
-  background:#0b1011;
+  background:#091011;
 }
 
 .phone::after{
@@ -820,12 +782,12 @@ button:active{
 
   inset:13px 5px 6px;
 
-  border-radius:14px;
+  border-radius:15px;
 
   background:
     linear-gradient(
       145deg,
-      #3c5052,
+      #3c5153,
       #11191a
     );
 }
@@ -835,7 +797,7 @@ button:active{
    DOTS
 ========================================================= */
 
-.slider-dots{
+.dots{
 
   display:flex;
   justify-content:center;
@@ -846,120 +808,130 @@ button:active{
   margin-top:9px;
 }
 
-.slider-dot{
+.dot{
 
-  width:6px;
-  height:6px;
+  width:7px;
+  height:7px;
 
   border-radius:50%;
 
-  background:#d9e0e1;
-
-  transition:.25s ease;
+  background:#dce3e4;
 }
 
-.slider-dot.active{
+.dot.active{
 
-  width:19px;
+  width:20px;
 
   border-radius:10px;
 
-  background:#15939d;
+  background:#128f99;
 }
 
 
 /* =========================================================
    DEVICES
-   مباشرة بعد المزايدة
+   مهم: كبير + ظاهر بالكامل
 ========================================================= */
 
 .devices-section{
 
-  margin-top:21px;
+  margin-top:22px;
+
+  position:relative;
 }
 
-
-/* هيدر الأجهزة */
 
 .devices-header{
 
   display:flex;
-  align-items:center;
+
+  align-items:flex-end;
   justify-content:space-between;
 
-  margin-bottom:10px;
+  margin-bottom:12px;
 }
 
-.devices-heading{
+.devices-title{
 
   display:flex;
   flex-direction:column;
+
   gap:3px;
 }
 
-.devices-heading strong{
+.devices-title h2{
 
-  color:#20282a;
+  margin:0;
 
   font-size:
-    clamp(16px,4.7vw,20px);
+    clamp(20px,5.7vw,24px);
+
+  line-height:1;
 
   font-weight:950;
 }
 
-.devices-heading span{
+.devices-title span{
 
   color:#8a9698;
 
   font-size:9px;
 
-  font-weight:600;
+  font-weight:650;
 }
 
 .devices-all{
 
-  color:#168d97;
-
   background:transparent;
 
+  color:#128d98;
+
   font-size:10px;
-  font-weight:850;
+
+  font-weight:900;
 }
 
 
-/* الأجهزة أفقياً */
+/* =========================================================
+   DEVICE RAIL
+========================================================= */
 
-.devices-scroll{
+.device-rail{
 
   display:flex;
 
-  gap:9px;
+  gap:
+    clamp(9px,2.7vw,13px);
+
+  width:100%;
 
   overflow-x:auto;
 
+  padding:
+    3px
+    2px
+    7px;
+
   scrollbar-width:none;
 
-  padding:
-    2px
-    1px
-    5px;
-
-  direction:rtl;
+  scroll-snap-type:x proximity;
 }
 
-.devices-scroll::-webkit-scrollbar{
+.device-rail::-webkit-scrollbar{
   display:none;
 }
 
 
-.device-item{
+/* الكرت أكبر */
+
+.device-card{
 
   flex:
     0 0
-    clamp(66px,17vw,78px);
+    clamp(88px,22vw,108px);
 
   height:
-    clamp(82px,21vw,92px);
+    clamp(112px,28vw,132px);
 
   display:flex;
 
@@ -968,50 +940,63 @@ button:active{
   align-items:center;
   justify-content:center;
 
-  gap:7px;
+  gap:10px;
+
+  scroll-snap-align:start;
 
   border:
     1px solid
-    #edf1f1;
+    #e5eded;
 
-  border-radius:17px;
+  border-radius:
+    clamp(18px,5vw,22px);
 
   background:#fff;
 
   box-shadow:
-    0 5px 15px rgba(26,46,48,.045);
+    0 7px 20px rgba(24,51,54,.07);
 
-  color:#273134;
+  color:#263235;
 }
 
-.device-item:active{
-  transform:scale(.95);
+.device-card:active{
+  transform:scale(.96);
 }
 
-.device-icon{
+
+/* الأيقونة أكبر */
+
+.device-symbol{
 
   width:
-    clamp(37px,10vw,44px);
+    clamp(49px,13vw,58px);
 
   height:
-    clamp(37px,10vw,44px);
+    clamp(49px,13vw,58px);
 
   display:flex;
   align-items:center;
   justify-content:center;
 
-  border-radius:13px;
+  border-radius:
+    clamp(15px,4vw,18px);
 
-  background:#f0f7f7;
+  background:#edf7f7;
 
-  color:#168d97;
+  color:#128f99;
 }
+
+
+/* اسم الجهاز */
 
 .device-name{
 
-  font-size:9px;
+  font-size:
+    clamp(9px,2.7vw,11px);
 
-  font-weight:850;
+  font-weight:900;
+
+  color:#303a3d;
 }
 
 
@@ -1021,47 +1006,8 @@ button:active{
 
 .actions-section{
 
-  margin-top:24px;
+  margin-top:27px;
 }
-
-
-/* هيدر */
-
-.actions-header{
-
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-
-  margin-bottom:10px;
-}
-
-.actions-header-text{
-
-  display:flex;
-  flex-direction:column;
-
-  gap:3px;
-}
-
-.actions-header-text strong{
-
-  font-size:
-    clamp(16px,4.7vw,20px);
-
-  font-weight:950;
-}
-
-.actions-header-text span{
-
-  color:#8a9698;
-
-  font-size:9px;
-  font-weight:600;
-}
-
-
-/* أربع بطاقات */
 
 .actions-grid{
 
@@ -1071,15 +1017,13 @@ button:active{
     repeat(4,minmax(0,1fr));
 
   gap:
-    clamp(7px,2vw,11px);
+    clamp(7px,2.4vw,11px);
 }
 
-.action-card{
-
-  min-width:0;
+.action{
 
   height:
-    clamp(92px,25vw,105px);
+    clamp(96px,25vw,112px);
 
   display:flex;
 
@@ -1092,30 +1036,88 @@ button:active{
 
   border:
     1px solid
-    #edf0f0;
+    #e9eeee;
 
   border-radius:
-    clamp(15px,4vw,19px);
+    clamp(17px,4.5vw,21px);
 
   background:#fff;
 
   box-shadow:
-    0 7px 20px rgba(28,46,49,.055);
+    0 6px 19px rgba(24,51,54,.055);
 
-  color:#273134;
-
-  padding:7px 3px;
+  color:#263235;
 }
 
 .action-icon{
 
   width:
-    clamp(37px,10vw,43px);
+    clamp(40px,10.5vw,46px);
 
   height:
-    clamp(37px,10vw,43px);
+    clamp(40px,10.5vw,46px);
 
-  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:14px;
+
+  background:#edf7f7;
+
+  color:#128f99;
+}
+
+.action span:last-child{
+
+  max-width:100%;
+
+  overflow:hidden;
+
+  white-space:nowrap;
+
+  text-overflow:ellipsis;
+
+  font-size:
+    clamp(8px,2.5vw,10px);
+
+  font-weight:900;
+}
+
+
+/* =========================================================
+   LISTINGS
+========================================================= */
+
+.latest-section{
+
+  margin-top:28px;
+}
+
+.empty{
+
+  min-height:115px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+
+  border:
+    1px dashed
+    #d8e3e4;
+
+  border-radius:20px;
+
+  text-align:center;
+}
+
+.empty-icon{
+
+  width:40px;
+  height:40px;
 
   display:flex;
   align-items:center;
@@ -1123,129 +1125,25 @@ button:active{
 
   border-radius:13px;
 
-  background:#eaf7f8;
+  background:#edf7f7;
 
-  color:#168d97;
+  color:#128f99;
 }
 
-.action-title{
-
-  max-width:100%;
-
-  overflow:hidden;
-
-  white-space:nowrap;
-  text-overflow:ellipsis;
-
-  font-size:
-    clamp(8px,2.4vw,10px);
-
-  font-weight:850;
-}
-
-
-/* =========================================================
-   LISTINGS HEADER
-========================================================= */
-
-.latest-section{
-
-  margin-top:27px;
-}
-
-.latest-header{
-
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-
-  margin-bottom:10px;
-}
-
-.latest-heading{
-
-  display:flex;
-  flex-direction:column;
-
-  gap:3px;
-}
-
-.latest-heading strong{
-
-  font-size:
-    clamp(16px,4.7vw,20px);
-
-  font-weight:950;
-}
-
-.latest-heading span{
-
-  color:#8a9698;
-
-  font-size:9px;
-}
-
-
-/* =========================================================
-   EMPTY STATE
-========================================================= */
-
-.empty-box{
-
-  min-height:112px;
-
-  border:
-    1px dashed
-    #d6e0e1;
-
-  border-radius:20px;
-
-  display:flex;
-
-  flex-direction:column;
-
-  align-items:center;
-  justify-content:center;
-
-  text-align:center;
-
-  padding:17px;
-
-  color:#879294;
-}
-
-.empty-icon{
-
-  width:38px;
-  height:38px;
-
-  border-radius:12px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  background:#eef7f7;
-
-  color:#168d97;
-}
-
-.empty-box strong{
+.empty strong{
 
   margin-top:7px;
 
-  color:#354042;
-
   font-size:11px;
 
-  font-weight:850;
+  font-weight:900;
 }
 
-.empty-box span{
+.empty span{
 
   margin-top:3px;
 
-  color:#8c989a;
+  color:#8d999b;
 
   font-size:8px;
 }
@@ -1253,7 +1151,15 @@ button:active{
 
 /* =========================================================
    BOTTOM NAV
+   منفصل ومرتب وما يغطي الأجهزة
 ========================================================= */
+
+.bottom-space{
+  height:15px;
+}
+
+
+/* البار */
 
 .bottom-nav{
 
@@ -1267,42 +1173,42 @@ button:active{
   transform:translateX(-50%);
 
   width:
-    min(100%,650px);
+    min(100%,680px);
 
-  height:
+  padding:
+    8px
+    clamp(22px,8vw,48px)
     calc(
-      76px +
+      8px +
       env(safe-area-inset-bottom)
     );
 
-  padding:
-    5px
-    clamp(20px,8vw,45px)
-    env(safe-area-inset-bottom);
+  background:
+    rgba(255,255,255,.98);
+
+  border-top:
+    1px solid
+    #e7eeee;
+
+  box-shadow:
+    0 -7px 24px rgba(22,44,47,.08);
 
   display:grid;
 
   grid-template-columns:
     repeat(3,1fr);
 
-  align-items:start;
-
-  background:
-    rgba(255,255,255,.97);
-
-  border-top:
-    1px solid
-    #e9eeee;
-
-  box-shadow:
-    0 -5px 22px rgba(25,45,48,.06);
+  gap:5px;
 }
+
+
+/* عنصر الناف */
 
 .nav-item{
 
-  height:61px;
+  min-width:0;
 
-  padding:0;
+  height:62px;
 
   display:flex;
 
@@ -1311,84 +1217,87 @@ button:active{
   align-items:center;
   justify-content:center;
 
-  gap:3px;
+  gap:4px;
 
   background:transparent;
 
-  color:#7c8587;
+  color:#7d888a;
+
+  border-radius:18px;
 }
 
 .nav-icon{
 
-  width:36px;
-  height:36px;
-
-  border-radius:50%;
+  width:38px;
+  height:38px;
 
   display:flex;
   align-items:center;
   justify-content:center;
+
+  border-radius:50%;
+
+  color:#788486;
+
+  transition:.2s ease;
 }
 
 .nav-label{
 
   font-size:9px;
 
-  font-weight:850;
+  font-weight:900;
 }
+
+
+/* active */
 
 .nav-item.active{
 
-  color:#168d97;
+  color:#128d98;
 }
 
 .nav-item.active .nav-icon{
 
-  background:#e8f6f7;
+  background:#e6f5f6;
 
-  color:#168d97;
+  color:#128d98;
 }
 
 
 /* =========================================================
-   VERY SMALL PHONES
+   SMALL SCREEN
 ========================================================= */
 
 @media(max-width:360px){
 
   .hero{
-    height:255px;
+    height:248px;
   }
 
-  .auction-card{
-    flex-basis:88vw;
+  .device-card{
+    flex-basis:84px;
+    height:108px;
   }
 
-  .auction-description{
-    max-width:170px;
-  }
-
-  .auction-details{
-    gap:11px;
-  }
-
-  .device-item{
-    flex-basis:63px;
+  .device-symbol{
+    width:46px;
+    height:46px;
   }
 
   .actions-grid{
     gap:5px;
   }
 
-  .action-card{
-    border-radius:14px;
+  .action{
+    border-radius:15px;
   }
 
 }
 
 
 /* =========================================================
-   TABLET / LARGE PHONES
+   LARGE SCREEN
 ========================================================= */
 
 @media(min-width:600px){
@@ -1398,36 +1307,24 @@ button:active{
   }
 
   .content{
-    padding-left:24px;
-    padding-right:24px;
+    padding-left:26px;
+    padding-right:26px;
   }
 
   .auction-track{
-    padding-left:24px;
-    padding-right:24px;
-  }
-
-  .auction-card{
-    flex-basis:540px;
+    padding-left:26px;
+    padding-right:26px;
   }
 
 }
 
 
 /* =========================================================
-   SAFE AREA
+   SVG
 ========================================================= */
 
-@supports(padding:max(0px)){
-
-  .content{
-    padding-bottom:
-      max(
-        105px,
-        calc(90px + env(safe-area-inset-bottom))
-      );
-  }
-
+svg{
+  display:block;
 }
 
 </style>
@@ -1444,9 +1341,6 @@ button:active{
 ========================================================= -->
 
 <header class="hero">
-
-  <div class="hero-decoration"></div>
-
 
   <div class="topbar">
 
@@ -1465,9 +1359,11 @@ button:active{
 
     <div class="header-icons">
 
+      <!-- notification -->
+
       <button class="header-icon">
 
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
 
           <path
             d="M18 9.5C18 6.2 15.8 4 12 4S6 6.2 6 9.5c0 6-2.5 6.5-2.5 7.5h17c0-1-2.5-1.5-2.5-7.5Z"
@@ -1484,14 +1380,18 @@ button:active{
 
         </svg>
 
-        <span class="notification">3</span>
+        <span class="notification">
+          3
+        </span>
 
       </button>
 
 
+      <!-- account -->
+
       <button class="header-icon">
 
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
 
           <circle
             cx="12"
@@ -1521,7 +1421,13 @@ button:active{
 
   <label class="search-box">
 
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      color="#899496"
+    >
 
       <circle
         cx="10.8"
@@ -1555,7 +1461,7 @@ button:active{
 
     <span class="location-icon">
 
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
 
         <path
           d="M20 10.3C20 15.3 12 21 12 21S4 15.3 4 10.3C4 6.2 7.6 3 12 3s8 3.2 8 7.3Z"
@@ -1594,25 +1500,33 @@ button:active{
 
 
 <!-- ========================================================
-     AUCTION
+     AUCTIONS
 ========================================================= -->
 
 <section class="auction-section">
 
-  <div class="section-title-row">
+  <div class="section-head">
 
-    <h2 class="section-title">
-      المزادات
-    </h2>
+    <div class="section-head-main">
 
-    <button class="section-link">
+      <h2>
+        المزادات
+      </h2>
+
+      <p>
+        أجهزة تدخل عليها وتزايد عليها مباشرة
+      </p>
+
+    </div>
+
+    <button class="section-more">
       عرض الكل
     </button>
 
   </div>
 
 
-  <div class="auction-window">
+  <div class="auction-track-wrap">
 
     <div
       class="auction-track"
@@ -1622,12 +1536,12 @@ button:active{
 
       <article class="auction-card">
 
-        <div class="auction-card-content">
+        <div class="auction-inner">
 
 
           <div class="auction-info">
 
-            <span class="live-badge">
+            <span class="live">
 
               <span class="live-dot"></span>
 
@@ -1641,14 +1555,14 @@ button:active{
             </div>
 
 
-            <div class="auction-description">
+            <div class="auction-text">
               تابع المزاد وقدم سعرك قبل انتهاء الوقت
             </div>
 
 
-            <div class="auction-details">
+            <div class="auction-stats">
 
-              <div class="auction-price">
+              <div class="stat">
 
                 <small>
                   أعلى مزايدة
@@ -1661,7 +1575,7 @@ button:active{
               </div>
 
 
-              <div class="auction-time">
+              <div class="stat">
 
                 <small>
                   ينتهي خلال
@@ -1683,7 +1597,7 @@ button:active{
           </div>
 
 
-          <div class="auction-phone-area">
+          <div class="phone-area">
 
             <div class="phone-glow"></div>
 
@@ -1704,18 +1618,18 @@ button:active{
           background:
           linear-gradient(
             135deg,
-            #172d31,
-            #285a60
+            #183338,
+            #2c666c
           );
         "
       >
 
-        <div class="auction-card-content">
+        <div class="auction-inner">
 
 
           <div class="auction-info">
 
-            <span class="live-badge">
+            <span class="live">
               المزاد القادم
             </span>
 
@@ -1725,14 +1639,14 @@ button:active{
             </div>
 
 
-            <div class="auction-description">
-              الأجهزة الحقيقية ستظهر هنا عند توفر المزاد
+            <div class="auction-text">
+              تظهر الأجهزة الفعلية هنا عند بدء المزاد
             </div>
 
 
-            <div class="auction-details">
+            <div class="auction-stats">
 
-              <div class="auction-price">
+              <div class="stat">
 
                 <small>
                   الحالة
@@ -1754,7 +1668,7 @@ button:active{
           </div>
 
 
-          <div class="auction-phone-area">
+          <div class="phone-area">
 
             <div class="phone-glow"></div>
 
@@ -1764,8 +1678,8 @@ button:active{
                 background:
                 linear-gradient(
                   145deg,
-                  #d8dddd,
-                  #737d7f
+                  #d9dede,
+                  #737e80
                 );
               "
             ></div>
@@ -1783,11 +1697,10 @@ button:active{
   </div>
 
 
-  <div class="slider-dots">
+  <div class="dots">
 
-    <span class="slider-dot active"></span>
-
-    <span class="slider-dot"></span>
+    <span class="dot active"></span>
+    <span class="dot"></span>
 
   </div>
 
@@ -1804,11 +1717,11 @@ button:active{
 
   <div class="devices-header">
 
-    <div class="devices-heading">
+    <div class="devices-title">
 
-      <strong>
+      <h2>
         تصفح الأجهزة
-      </strong>
+      </h2>
 
       <span>
         اختر نوع الجهاز الذي تبحث عنه
@@ -1824,16 +1737,16 @@ button:active{
   </div>
 
 
-  <div class="devices-scroll">
+  <div class="device-rail">
 
 
-    <!-- IPHONE -->
+    <!-- iPhone -->
 
-    <button class="device-item">
+    <button class="device-card">
 
-      <span class="device-icon">
+      <span class="device-symbol">
 
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <svg width="27" height="27" viewBox="0 0 24 24" fill="none">
 
           <rect
             x="7"
@@ -1863,13 +1776,13 @@ button:active{
     </button>
 
 
-    <!-- SAMSUNG -->
+    <!-- Samsung -->
 
-    <button class="device-item">
+    <button class="device-card">
 
-      <span class="device-icon">
+      <span class="device-symbol">
 
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <svg width="27" height="27" viewBox="0 0 24 24" fill="none">
 
           <rect
             x="5"
@@ -1882,14 +1795,7 @@ button:active{
           />
 
           <path
-            d="M9 8h6"
-            stroke="currentColor"
-            stroke-width="1.7"
-            stroke-linecap="round"
-          />
-
-          <path
-            d="M9 12h6M9 16h4"
+            d="M9 8h6M9 12h6M9 16h4"
             stroke="currentColor"
             stroke-width="1.7"
             stroke-linecap="round"
@@ -1906,13 +1812,13 @@ button:active{
     </button>
 
 
-    <!-- ANDROID -->
+    <!-- Android -->
 
-    <button class="device-item">
+    <button class="device-card">
 
-      <span class="device-icon">
+      <span class="device-symbol">
 
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
 
           <path
             d="M7 10h10v8a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-8Z"
@@ -1927,8 +1833,19 @@ button:active{
             stroke-linecap="round"
           />
 
-          <circle cx="10" cy="13" r=".8" fill="currentColor"/>
-          <circle cx="14" cy="13" r=".8" fill="currentColor"/>
+          <circle
+            cx="10"
+            cy="13"
+            r=".8"
+            fill="currentColor"
+          />
+
+          <circle
+            cx="14"
+            cy="13"
+            r=".8"
+            fill="currentColor"
+          />
 
         </svg>
 
@@ -1941,13 +1858,13 @@ button:active{
     </button>
 
 
-    <!-- XIAOMI -->
+    <!-- Xiaomi -->
 
-    <button class="device-item">
+    <button class="device-card">
 
-      <span class="device-icon">
+      <span class="device-symbol">
 
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <svg width="27" height="27" viewBox="0 0 24 24" fill="none">
 
           <rect
             x="4"
@@ -1985,13 +1902,13 @@ button:active{
     </button>
 
 
-    <!-- GOOGLE -->
+    <!-- Google -->
 
-    <button class="device-item">
+    <button class="device-card">
 
-      <span class="device-icon">
+      <span class="device-symbol">
 
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <svg width="27" height="27" viewBox="0 0 24 24" fill="none">
 
           <rect
             x="6"
@@ -2028,23 +1945,22 @@ button:active{
 
 
 <!-- ========================================================
-     FOUR ACTIONS
+     FOUR QUICK ACTIONS
 ========================================================= -->
 
 <section class="actions-section">
 
+  <div class="section-head">
 
-  <div class="actions-header">
+    <div class="section-head-main">
 
-    <div class="actions-header-text">
-
-      <strong>
+      <h2>
         الوصول السريع
-      </strong>
+      </h2>
 
-      <span>
+      <p>
         كل ما تحتاجه بمكان واحد
-      </span>
+      </p>
 
     </div>
 
@@ -2054,13 +1970,11 @@ button:active{
   <div class="actions-grid">
 
 
-    <!-- SELL -->
-
-    <button class="action-card">
+    <button class="action">
 
       <span class="action-icon">
 
-        <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
 
           <rect
             x="5"
@@ -2083,20 +1997,19 @@ button:active{
 
       </span>
 
-      <span class="action-title">
+      <span>
         بع جهازك
       </span>
 
     </button>
 
 
-    <!-- AUCTIONS -->
 
-    <button class="action-card">
+    <button class="action">
 
       <span class="action-icon">
 
-        <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
 
           <path
             d="M6 19 18 7"
@@ -2116,20 +2029,19 @@ button:active{
 
       </span>
 
-      <span class="action-title">
+      <span>
         مزاداتي
       </span>
 
     </button>
 
 
-    <!-- FAVORITES -->
 
-    <button class="action-card">
+    <button class="action">
 
       <span class="action-icon">
 
-        <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
 
           <path
             d="M20 8.5c0 5-8 10-8 10s-8-5-8-10A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 8 2.5Z"
@@ -2142,20 +2054,19 @@ button:active{
 
       </span>
 
-      <span class="action-title">
+      <span>
         المفضلة
       </span>
 
     </button>
 
 
-    <!-- ORDERS -->
 
-    <button class="action-card">
+    <button class="action">
 
       <span class="action-icon">
 
-        <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
 
           <rect
             x="6"
@@ -2178,7 +2089,7 @@ button:active{
 
       </span>
 
-      <span class="action-title">
+      <span>
         طلباتي
       </span>
 
@@ -2197,34 +2108,32 @@ button:active{
 
 <section class="latest-section">
 
+  <div class="section-head">
 
-  <div class="latest-header">
+    <div class="section-head-main">
 
-    <div class="latest-heading">
-
-      <strong>
+      <h2>
         الأجهزة المعروضة
-      </strong>
+      </h2>
 
-      <span>
+      <p>
         أحدث الأجهزة المضافة
-      </span>
+      </p>
 
     </div>
 
-
-    <button class="section-link">
+    <button class="section-more">
       عرض الكل
     </button>
 
   </div>
 
 
-  <div class="empty-box">
+  <div class="empty">
 
     <div class="empty-icon">
 
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
 
         <rect
           x="7"
@@ -2247,11 +2156,9 @@ button:active{
 
     </div>
 
-
     <strong>
       لا توجد أجهزة معروضة حالياً
     </strong>
-
 
     <span>
       الأجهزة الحقيقية ستظهر هنا عند نشرها
@@ -2261,6 +2168,8 @@ button:active{
 
 </section>
 
+
+<div class="bottom-space"></div>
 
 </main>
 
@@ -2273,11 +2182,13 @@ button:active{
 <nav class="bottom-nav">
 
 
+  <!-- حسابك -->
+
   <button class="nav-item">
 
     <span class="nav-icon">
 
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
 
         <circle
           cx="12"
@@ -2306,11 +2217,13 @@ button:active{
 
 
 
+  <!-- طلباتك -->
+
   <button class="nav-item">
 
     <span class="nav-icon">
 
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
 
         <rect
           x="6"
@@ -2341,11 +2254,13 @@ button:active{
 
 
 
+  <!-- الرئيسية -->
+
   <button class="nav-item active">
 
     <span class="nav-icon">
 
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
 
         <path
           d="m4 10 8-6 8 6v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-9Z"
@@ -2373,7 +2288,6 @@ button:active{
 
 </nav>
 
-
 </div>
 
 
@@ -2381,28 +2295,29 @@ button:active{
 <script>
 
 /* =========================================================
-   AUCTION SLIDER
+   AUCTION AUTO SLIDER
 ========================================================= */
 
 const track =
   document.getElementById("auctionTrack");
 
 const dots =
-  document.querySelectorAll(".slider-dot");
+  document.querySelectorAll(".dot");
 
-let currentSlide = 0;
+let current =
+  0;
 
-let sliderTimer;
+let timer;
 
 
-function updateDots(index){
+function updateDots(){
 
   dots.forEach(
-    (dot,i)=>{
+    (dot,index)=>{
 
       dot.classList.toggle(
         "active",
-        i === index
+        index === current
       );
 
     }
@@ -2411,7 +2326,7 @@ function updateDots(index){
 }
 
 
-function goToSlide(index){
+function slideTo(index){
 
   const cards =
     track.querySelectorAll(".auction-card");
@@ -2424,7 +2339,7 @@ function goToSlide(index){
     index = 0;
   }
 
-  currentSlide = index;
+  current = index;
 
   const card =
     cards[index];
@@ -2441,22 +2356,19 @@ function goToSlide(index){
 
   });
 
-  updateDots(currentSlide);
+  updateDots();
+
 }
 
 
 function startSlider(){
 
-  clearInterval(sliderTimer);
+  clearInterval(timer);
 
-  sliderTimer =
+  timer =
     setInterval(
       ()=>{
-
-        goToSlide(
-          currentSlide + 1
-        );
-
+        slideTo(current + 1);
       },
       3000
     );
@@ -2465,72 +2377,11 @@ function startSlider(){
 
 
 track.addEventListener(
-  "scroll",
-  ()=>{
-
-    const cards =
-      [...track.querySelectorAll(".auction-card")];
-
-    if(!cards.length){
-      return;
-    }
-
-    const currentScroll =
-      Math.abs(track.scrollLeft);
-
-    let nearest = 0;
-
-    let nearestDistance =
-      Infinity;
-
-
-    cards.forEach(
-      (card,index)=>{
-
-        const distance =
-          Math.abs(
-            Math.abs(card.offsetLeft) -
-            currentScroll
-          );
-
-        if(distance < nearestDistance){
-
-          nearestDistance =
-            distance;
-
-          nearest =
-            index;
-
-        }
-
-      }
-    );
-
-
-    currentSlide =
-      nearest;
-
-    updateDots(
-      currentSlide
-    );
-
-  },
-  {
-    passive:true
-  }
-);
-
-
-track.addEventListener(
   "touchstart",
   ()=>{
-    clearInterval(
-      sliderTimer
-    );
+    clearInterval(timer);
   },
-  {
-    passive:true
-  }
+  {passive:true}
 );
 
 
@@ -2539,9 +2390,52 @@ track.addEventListener(
   ()=>{
     startSlider();
   },
-  {
-    passive:true
-  }
+  {passive:true}
+);
+
+
+track.addEventListener(
+  "scroll",
+  ()=>{
+    
+    const cards =
+      [...track.querySelectorAll(".auction-card")];
+
+    if(!cards.length){
+      return;
+    }
+
+    const position =
+      Math.abs(track.scrollLeft);
+
+    let closest = 0;
+    let distance = Infinity;
+
+    cards.forEach(
+      (card,index)=>{
+
+        const d =
+          Math.abs(
+            Math.abs(card.offsetLeft) -
+            position
+          );
+
+        if(d < distance){
+
+          distance = d;
+          closest = index;
+
+        }
+
+      }
+    );
+
+    current = closest;
+
+    updateDots();
+
+  },
+  {passive:true}
 );
 
 
