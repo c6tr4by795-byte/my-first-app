@@ -1,1443 +1,1113 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
-  >
-
-  <title>MZAD PHONE</title>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f7f8fa" />
+  <title>MZAD PHONE — الرئيسية</title>
   <style>
-    :root {
-      --primary: #238f98;
-      --primary-dark: #176f77;
-      --primary-soft: #eaf6f7;
-
-      --ink: #172124;
-      --text: #252d2f;
-      --muted: #7b8587;
-      --muted-light: #a7afb1;
-
-      --white: #ffffff;
-      --surface: #f7f9f9;
-      --line: #e5eaeb;
-
-      --radius-xl: 26px;
-      --radius-lg: 21px;
-      --radius-md: 16px;
-      --radius-sm: 13px;
-
-      --shadow-soft:
-        0 10px 35px rgba(22, 38, 40, 0.07);
-
-      --shadow-card:
-        0 7px 25px rgba(22, 38, 40, 0.06);
-
-      --nav-height: 76px;
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    :root{
+      --bg:#f7f8fa;
+      --surface:#ffffff;
+      --surface-2:#eef3f7;
+      --ink:#17202a;
+      --muted:#667085;
+      --muted-2:#98a2b3;
+      --line:#e6e9ed;
+      --primary:#176b87;
+      --primary-dark:#125a73;
+      --primary-soft:#e8f3f6;
+      --purple:#6246D9;
+      --purple-soft:#E5E0FF;
+      --teal-deep:#17202a;
+      --success:#159a72;
+      --danger:#bf6d5c;
+      --shadow:0 14px 34px rgba(24,44,49,.08);
+      --shadow-soft:0 8px 22px rgba(24,44,49,.06);
+      --radius-xl:26px;
+      --radius-lg:21px;
+      --radius-md:17px;
+      --radius-sm:13px;
+      --safe-bottom:env(safe-area-inset-bottom,0px);
     }
 
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+
+    body{
+      margin:0;
+      min-height:100vh;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
     }
 
-    html {
-      scroll-behavior: smooth;
-      background: var(--white);
+    button,input{font:inherit}
+    button{border:0;background:none;color:inherit;cursor:pointer}
+    a{text-decoration:none;color:inherit}
+
+    .page{
+      width:min(100%,520px);
+      margin:0 auto;
+      padding:0 14px calc(102px + var(--safe-bottom));
     }
 
-    body {
-      margin: 0;
-      padding: 0;
-      background: var(--white);
-      color: var(--text);
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "SF Pro Text",
-        "Segoe UI",
-        Tahoma,
-        Arial,
-        sans-serif;
-      overflow-x: hidden;
+    /* ---------- header ---------- */
+
+    header{
+      margin-inline:-14px;
+      padding:0 14px 14px;
+      background:linear-gradient(145deg,#ffffff 0%,#f5f2ff 45%,#e6e1ff 100%);
+      border-radius:0 0 24px 24px;
+      border-bottom:1px solid #e6e9ed;
+      box-shadow:0 10px 26px rgba(23,32,42,.06);
     }
 
-    button,
-    input {
-      font: inherit;
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 2px 9px;
     }
 
-    button {
-      border: 0;
-      background: none;
-      cursor: pointer;
+    .topbar-side{
+      display:flex;
+      align-items:center;
+      gap:8px;
     }
 
-    /* =========================
-       APP
-    ========================= */
-
-    .app {
-      width: 100%;
-      max-width: 620px;
-      margin: 0 auto;
-      min-height: 100vh;
-      background: var(--white);
-      position: relative;
+    .location-box{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:7px 5px;
+      min-width:0;
     }
 
-    .page {
-      padding-bottom: calc(
-        var(--nav-height) +
-        var(--safe-bottom) +
-        35px
-      );
+    .location-copy{min-width:0}
+
+    .location-label{
+      display:block;
+      color:#8a96a3;
+      font-size:9px;
+      line-height:1.2;
+      margin-bottom:1px;
     }
 
-    /* =========================
-       TOP HEADER
-    ========================= */
-
-    .top-header {
-      padding:
-        max(12px, env(safe-area-inset-top))
-        18px
-        0;
-
-      background: var(--white);
+    .location-name{
+      display:flex;
+      align-items:center;
+      gap:4px;
+      font-size:13px;
+      font-weight:850;
+      color:#17202a;
+      line-height:1.2;
+      white-space:nowrap;
     }
 
-    .header-row {
-      min-height: 48px;
-
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      gap: 12px;
+    .icon-btn{
+      width:39px;
+      height:34px;
+      display:grid;
+      place-items:center;
+      border:1px solid #e6e9ed;
+      border-radius:12px;
+      background:#fff;
+      color:#176b87;
+      box-shadow:0 7px 18px rgba(23,32,42,.045);
+      transition:transform .2s ease,box-shadow .2s ease;
+      flex:0 0 auto;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      text-decoration: none;
-      color: var(--ink);
-      direction: ltr;
-      flex-shrink: 0;
+    .icon-btn:active{
+      transform:scale(.95);
+      box-shadow:none;
     }
 
-    .brand-main {
-      font-size: 29px;
-      line-height: 0.9;
-      font-weight: 900;
-      letter-spacing: -1.5px;
+    .brand-mini{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      line-height:.9;
+      padding-inline:2px;
     }
 
-    .brand-sub {
-      font-size: 9px;
-      font-weight: 800;
-      letter-spacing: 4px;
-      margin-top: 19px;
-      margin-left: -53px;
-      color: var(--primary);
+    .brand-mini strong{
+      font-size:16px;
+      letter-spacing:-.03em;
+      color:#17202a;
     }
 
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .brand-mini span{
+      font-size:7px;
+      font-weight:800;
+      letter-spacing:.15em;
+      color:#8a96a3;
+      margin-top:3px;
+      margin-inline-start:1px;
     }
 
-    .icon-button {
-      width: 43px;
-      height: 43px;
-
-      border: 1px solid var(--line);
-      border-radius: 50%;
-
-      display: grid;
-      place-items: center;
-
-      background: var(--white);
-
-      color: var(--ink);
-
-      transition:
-        transform 0.2s ease,
-        background 0.2s ease,
-        border-color 0.2s ease;
+    .search-wrap{
+      position:relative;
+      margin-top:1px;
     }
 
-    .icon-button:active {
-      transform: scale(0.94);
-      background: var(--primary-soft);
-      border-color: transparent;
-    }
-
-    .icon-button svg {
-      width: 21px;
-      height: 21px;
-      stroke: currentColor;
-    }
-
-    .notification {
-      position: relative;
-    }
-
-    .notification-badge {
-      position: absolute;
-
-      top: -3px;
-      right: -2px;
-
-      min-width: 17px;
-      height: 17px;
-
-      padding: 0 4px;
-
-      display: grid;
-      place-items: center;
-
-      border-radius: 99px;
-
-      background: var(--primary);
-      color: white;
-
-      font-size: 9px;
-      font-weight: 800;
-
-      border: 2px solid white;
-    }
-
-    /* =========================
-       SEARCH
-    ========================= */
-
-    .search-wrap {
-      padding: 12px 18px 0;
-    }
-
-    .search-box {
-      height: 47px;
-
-      display: flex;
-      align-items: center;
-
-      gap: 10px;
-
-      padding: 0 15px;
-
-      border-radius: 15px;
-
-      background: #f5f7f7;
-
-      border: 1px solid #edf0f0;
-
-      transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-    }
-
-    .search-box:focus-within {
-      border-color: rgba(35, 143, 152, 0.35);
-
+    .search{
+      width:100%;
+      height:45px;
+      border:1px solid var(--line);
+      border-radius:15px;
+      background:var(--surface);
+      padding:0 44px 0 42px;
+      outline:none;
+      color:var(--ink);
       box-shadow:
-        0 0 0 4px rgba(35, 143, 152, 0.07);
+        0 8px 22px rgba(18,57,62,.09),
+        0 5px 20px rgba(109,92,231,.13);
+      transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease;
     }
 
-    .search-icon {
-      width: 20px;
-      height: 20px;
+    .search::placeholder{color:#9ba6aa}
 
-      flex-shrink: 0;
-
-      color: var(--muted);
+    .search:focus{
+      border-color:#acdfe2;
+      box-shadow:0 12px 28px rgba(33,152,164,.10);
     }
 
-    .search-input {
-      width: 100%;
-
-      border: 0;
-      outline: 0;
-
-      background: transparent;
-
-      color: var(--text);
-
-      font-size: 14px;
-      font-weight: 600;
-
-      text-align: right;
+    .search-icon{
+      position:absolute;
+      inset-inline-end:14px;
+      top:50%;
+      transform:translateY(-50%);
+      width:21px;
+      height:21px;
+      color:var(--ink);
+      pointer-events:none;
     }
 
-    .search-input::placeholder {
-      color: #929b9d;
+    .search-clear{
+      position:absolute;
+      inset-inline-start:10px;
+      top:50%;
+      transform:translateY(-50%) scale(.92);
+      opacity:0;
+      pointer-events:none;
+      width:33px;
+      height:33px;
+      border-radius:11px;
+      background:var(--surface-2);
+      transition:.2s ease;
     }
 
-    /* =========================
-       LOCATION
-    ========================= */
-
-    .location-row {
-      padding: 12px 19px 0;
-
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      color: var(--muted);
+    .search-wrap.has-value .search-clear{
+      opacity:1;
+      pointer-events:auto;
     }
 
-    .location {
-      display: flex;
-      align-items: center;
-      gap: 6px;
+    /* ---------- generic sections ---------- */
 
-      font-size: 12px;
-      font-weight: 700;
+    .section{margin-top:20px}
+
+    .section-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:11px;
+      padding:0 2px;
     }
 
-    .location svg {
-      width: 17px;
-      height: 17px;
-
-      color: var(--primary);
-      stroke: currentColor;
+    .section-title{
+      margin:0;
+      font-size:19px;
+      letter-spacing:-.03em;
+      font-weight:900;
     }
 
-    .change-location {
-      color: var(--primary);
-
-      font-size: 11px;
-      font-weight: 800;
+    .section-link{
+      font-size:11px;
+      color:var(--primary-dark);
+      font-weight:800;
     }
 
-    /* =========================
-       SECTION HEADER
-    ========================= */
+    /* ---------- categories ---------- */
 
-    .section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      padding: 21px 18px 10px;
+    .horizontal{
+      display:flex;
+      gap:10px;
+      overflow-x:auto;
+      padding:2px 2px 4px;
+      scrollbar-width:none;
+      scroll-snap-type:x proximity;
     }
 
-    .section-title {
-      margin: 0;
+    .horizontal::-webkit-scrollbar{display:none}
 
-      font-size: 19px;
-      font-weight: 850;
-
-      color: var(--ink);
-      letter-spacing: -0.4px;
+    .category{
+      width:64px;
+      flex:0 0 64px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:5px;
+      scroll-snap-align:start;
+      transition:transform .2s ease;
     }
 
-    .section-action {
-      color: var(--primary);
+    .category:active{transform:scale(.96)}
 
-      font-size: 12px;
-      font-weight: 800;
+    .category-icon{
+      width:52px;
+      height:52px;
+      display:grid;
+      place-items:center;
+      border-radius:15px;
+      background:linear-gradient(145deg,#ffffff 0%,#f4f1ff 100%);
+      border:1px solid #ddd8f8;
+      box-shadow:0 8px 18px rgba(98,70,217,.09);
+      color:#29393e;
+      position:relative;
+      overflow:hidden;
     }
 
-    /* =========================
-       AUCTION CAROUSEL
-    ========================= */
-
-    .auction-area {
-      overflow: hidden;
+    .category-icon::before{
+      content:"";
+      position:absolute;
+      width:7px;
+      height:7px;
+      border-radius:50%;
+      top:6px;
+      right:7px;
+      background:rgba(98,70,217,.10);
     }
 
-    .auction-track {
-      display: flex;
-
-      direction: rtl;
-
-      gap: 12px;
-
-      overflow-x: auto;
-
-      padding:
-        4px
-        18px
-        5px;
-
-      scroll-snap-type: x mandatory;
-
-      scrollbar-width: none;
-
-      touch-action: pan-x;
+    .category-icon::after{
+      content:"";
+      position:absolute;
+      width:6px;
+      height:6px;
+      border-radius:2px;
+      bottom:6px;
+      left:7px;
+      background:rgba(23,107,135,.10);
     }
 
-    .auction-track::-webkit-scrollbar {
-      display: none;
+    .category.active .category-icon{
+      border-color:#8977e9;
+      background:linear-gradient(145deg,#f7f5ff 0%,#e8e3ff 100%);
+      box-shadow:0 10px 22px rgba(98,70,217,.20);
+      color:var(--primary-dark);
     }
 
-    .auction-card {
-      position: relative;
+    .category-name{
+      font-size:10px;
+      font-weight:800;
+      color:#354449;
+      white-space:nowrap;
+    }
 
-      flex: 0 0 min(
-        89vw,
-        530px
-      );
+    .category.active .category-name{
+      color:var(--primary-dark);
+    }
 
-      min-height: 166px;
+    .category-icon svg{
+      width:25px;
+      height:25px;
+      position:relative;
+      z-index:2;
+    }
 
-      scroll-snap-align: center;
+    .samsung-logo{
+      font-size:9px;
+      font-weight:950;
+      letter-spacing:-.03em;
+      white-space:nowrap;
+      transform:scaleX(.92);
+      position:relative;
+      z-index:2;
+    }
 
-      border-radius: 25px;
+    /* ---------- auction hero ---------- */
 
-      overflow: hidden;
+    .auction-shell{
+      position:relative;
+    }
 
+    .auction-track{
+      display:flex;
+      gap:12px;
+      overflow-x:auto;
+      padding:1px 2px 5px;
+      scroll-snap-type:x mandatory;
+      scrollbar-width:none;
+      scroll-behavior:smooth;
+      overscroll-behavior-inline:contain;
+    }
+
+    .auction-track::-webkit-scrollbar{display:none}
+
+    .auction-card{
+      flex:0 0 calc(100% - 34px);
+      height:188px;
+      min-height:188px;
+      border-radius:22px;
+      overflow:hidden;
+      position:relative;
+      scroll-snap-align:start;
+      background:linear-gradient(145deg,#243b80 0%,#4d43a8 55%,#7c3aed 100%);
+      box-shadow:0 16px 34px rgba(76,67,168,.18);
+      color:#fff;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      isolation:isolate;
+      transform:scale(.985);
+      opacity:.86;
+      transition:
+        transform .35s ease,
+        opacity .35s ease,
+        box-shadow .35s ease;
+    }
+
+    .auction-card.is-current{
+      transform:scale(1);
+      opacity:1;
+      box-shadow:0 16px 34px rgba(24,76,81,.19);
+    }
+
+    .auction-card::before,
+    .auction-card::after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      background:rgba(255,255,255,.06);
+      z-index:-1;
+    }
+
+    .auction-card::before{
+      width:240px;
+      height:240px;
+      inset-inline-start:-88px;
+      top:-104px;
+    }
+
+    .auction-card::after{
+      width:220px;
+      height:220px;
+      inset-inline-end:-92px;
+      bottom:-118px;
+    }
+
+    .auction-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:11px 13px 0;
+    }
+
+    .auction-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      min-height:26px;
+      padding:0 9px;
+      border-radius:999px;
+      background:rgba(255,255,255,.13);
+      border:1px solid rgba(255,255,255,.16);
+      font-size:10px;
+      font-weight:900;
+      backdrop-filter:blur(8px);
+    }
+
+    .auction-state{
+      font-size:10px;
+      font-weight:800;
+      color:rgba(255,255,255,.73);
+    }
+
+    .auction-copy{
+      padding:0 13px 11px;
+    }
+
+    .auction-kicker{
+      margin:0 0 4px;
+      font-size:11px;
+      font-weight:700;
+      color:rgba(255,255,255,.73);
+    }
+
+    .auction-title{
+      margin:0;
+      font-size:18px;
+      line-height:1.12;
+      letter-spacing:-.035em;
+      font-weight:950;
+      max-width:260px;
+    }
+
+    .auction-desc{
+      margin:5px 0 0;
+      font-size:10px;
+      line-height:1.7;
+      color:rgba(255,255,255,.79);
+      max-width:270px;
+    }
+
+    .auction-bottom{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:8px;
+    }
+
+    .auction-note{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      font-size:11px;
+      font-weight:800;
+      color:rgba(255,255,255,.88);
+    }
+
+    .auction-cta{
+      height:39px;
+      padding:0 12px;
+      border-radius:13px;
+      background:#fff;
+      color:#243b80;
+      font-size:11px;
+      font-weight:900;
+      box-shadow:0 8px 20px rgba(0,0,0,.11);
+      transition:transform .2s ease;
+      white-space:nowrap;
+    }
+
+    .auction-cta:active{transform:scale(.97)}
+
+    .auction-dots{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:6px;
+      margin-top:8px;
+    }
+
+    .dot{
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:#ccd8d8;
+      transition:all .2s ease;
+    }
+
+    .dot.active{
+      width:19px;
+      border-radius:999px;
+      background:var(--purple);
+    }
+
+    /* ---------- action cards ---------- */
+
+    .action-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:9px;
+    }
+
+    .action-card{
+      min-height:92px;
+      border:1px solid var(--line);
+      border-radius:17px;
+      background:#fff;
+      padding:12px 10px;
+      box-shadow:var(--shadow-soft);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap:9px;
+      transition:transform .2s ease,box-shadow .2s ease;
+    }
+
+    .action-card:active{
+      transform:translateY(1px) scale(.985);
+      box-shadow:none;
+    }
+
+    .action-icon{
+      width:31px;
+      height:31px;
+      border-radius:10px;
+      display:grid;
+      place-items:center;
+      color:var(--primary-dark);
+      background:var(--primary-soft);
+    }
+
+    .action-card:nth-child(2) .action-icon{
+      color:var(--purple);
+      background:var(--purple-soft);
+    }
+
+    .action-card:nth-child(3) .action-icon{
+      color:#946100;
+      background:#fff4dc;
+    }
+
+    .action-title{
+      font-size:11px;
+      font-weight:900;
+      line-height:1.3;
+    }
+
+    .action-copy{
+      font-size:9px;
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    /* ---------- devices ---------- */
+
+    .devices-track{
+      display:flex;
+      gap:11px;
+      overflow-x:auto;
+      padding:2px 2px 5px;
+      scrollbar-width:none;
+      scroll-snap-type:x proximity;
+    }
+
+    .devices-track::-webkit-scrollbar{display:none}
+
+    .device-card{
+      flex:0 0 178px;
+      border-radius:19px;
+      background:#fff;
+      border:1px solid var(--line);
+      overflow:hidden;
+      box-shadow:var(--shadow-soft);
+      scroll-snap-align:start;
+    }
+
+    .device-image{
+      height:132px;
       background:
-        linear-gradient(
-          135deg,
-          #f4fbfb 0%,
-          #eaf6f7 55%,
-          #dceff1 100%
-        );
-
-      border: 1px solid #dfeff0;
-
-      box-shadow: var(--shadow-soft);
+        radial-gradient(circle at 50% 35%,rgba(98,70,217,.13),transparent 32%),
+        linear-gradient(145deg,#f8f8fb 0%,#eeeefa 100%);
+      display:grid;
+      place-items:center;
+      color:#8a93a0;
+      font-size:9px;
+      text-align:center;
+      padding:12px;
     }
 
-    .auction-card::after {
-      content: "";
-
-      position: absolute;
-
-      width: 190px;
-      height: 190px;
-
-      left: -75px;
-      bottom: -110px;
-
-      border-radius: 50%;
-
-      background: rgba(35, 143, 152, 0.08);
+    .device-body{
+      padding:10px 11px 12px;
     }
 
-    .auction-content {
-      position: relative;
-      z-index: 2;
-
-      height: 100%;
-
-      min-height: 166px;
-
-      display: flex;
-      align-items: center;
-
-      padding: 17px 18px;
-
-      gap: 15px;
+    .device-title{
+      margin:0;
+      font-size:13px;
+      font-weight:900;
+      line-height:1.35;
     }
 
-    .auction-info {
-      flex: 1;
-      min-width: 0;
-
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-
-      text-align: right;
+    .device-meta{
+      margin-top:4px;
+      font-size:9px;
+      color:var(--muted);
     }
 
-    .auction-label {
-      display: inline-flex;
-      align-items: center;
-
-      height: 25px;
-
-      padding: 0 9px;
-
-      border-radius: 99px;
-
-      background: rgba(35, 143, 152, 0.11);
-
-      color: var(--primary-dark);
-
-      font-size: 10px;
-      font-weight: 850;
+    .device-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:6px;
+      margin-top:10px;
     }
 
-    .auction-title {
-      margin: 9px 0 0;
-
-      color: var(--ink);
-
-      font-size: 20px;
-      line-height: 1.15;
-      font-weight: 900;
-
-      letter-spacing: -0.5px;
+    .device-price{
+      font-size:12px;
+      font-weight:950;
+      color:var(--primary-dark);
     }
 
-    .auction-meta {
-      margin-top: 5px;
-
-      color: var(--muted);
-
-      font-size: 11px;
-      font-weight: 650;
+    .device-type{
+      font-size:8px;
+      font-weight:800;
+      color:var(--purple);
+      background:var(--purple-soft);
+      padding:5px 7px;
+      border-radius:8px;
     }
 
-    .auction-price-row {
-      display: flex;
-      align-items: baseline;
-      gap: 5px;
+    /* ---------- trust ---------- */
 
-      margin-top: 12px;
+    .trust-card{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:7px;
+      border:1px solid var(--line);
+      border-radius:19px;
+      background:#fff;
+      padding:11px 7px;
+      box-shadow:var(--shadow-soft);
     }
 
-    .auction-price {
-      color: var(--primary-dark);
-
-      font-size: 19px;
-      font-weight: 950;
+    .trust-item{
+      min-width:0;
+      text-align:center;
     }
 
-    .auction-currency {
-      color: var(--muted);
-
-      font-size: 9px;
-      font-weight: 700;
+    .trust-icon{
+      width:32px;
+      height:32px;
+      border-radius:10px;
+      margin:0 auto 6px;
+      display:grid;
+      place-items:center;
+      color:var(--primary-dark);
+      background:var(--primary-soft);
     }
 
-    .auction-button {
-      margin-top: 11px;
-
-      height: 34px;
-
-      padding: 0 14px;
-
-      border-radius: 11px;
-
-      background: var(--ink);
-      color: white;
-
-      font-size: 11px;
-      font-weight: 850;
-
-      transition:
-        transform 0.2s ease,
-        background 0.2s ease;
+    .trust-title{
+      font-size:9px;
+      font-weight:900;
     }
 
-    .auction-button:active {
-      transform: scale(0.95);
-      background: var(--primary-dark);
+    .trust-copy{
+      margin-top:2px;
+      font-size:7px;
+      line-height:1.5;
+      color:var(--muted);
     }
 
-    /* =========================
-       DEVICE VISUAL
-    ========================= */
+    /* ---------- reveal animation ---------- */
 
-    .device-stage {
-      width: 125px;
-      height: 138px;
-
-      flex-shrink: 0;
-
-      position: relative;
-
-      display: grid;
-      place-items: center;
+    .reveal{
+      opacity:0;
+      transform:translateY(12px);
+      animation:reveal .55s ease forwards;
     }
 
-    .device-glow {
-      position: absolute;
+    .d1{animation-delay:.05s}
+    .d2{animation-delay:.10s}
+    .d3{animation-delay:.15s}
+    .d4{animation-delay:.20s}
+    .d5{animation-delay:.25s}
 
-      width: 110px;
-      height: 110px;
-
-      border-radius: 50%;
-
-      background:
-        radial-gradient(
-          circle,
-          rgba(255,255,255,0.9),
-          rgba(255,255,255,0)
-        );
+    @keyframes reveal{
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
     }
 
-    .phone {
-      position: relative;
+    /* ---------- bottom nav ---------- */
 
-      width: 68px;
-      height: 122px;
+    .bottom-wrap{
+      position:fixed;
+      z-index:50;
+      left:0;
+      right:0;
+      bottom:0;
+      padding:8px 12px calc(8px + var(--safe-bottom));
+      pointer-events:none;
+    }
 
-      border-radius: 15px;
-
-      background:
-        linear-gradient(
-          145deg,
-          #31393b,
-          #111719
-        );
-
-      border: 2px solid #657174;
-
+    .bottom-nav{
+      width:min(100%,520px);
+      margin:0 auto;
+      min-height:68px;
+      padding:6px 8px;
+      border:1px solid rgba(230,233,237,.95);
+      border-radius:21px;
+      background:rgba(255,255,255,.94);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
       box-shadow:
-        0 15px 24px rgba(15, 29, 31, 0.18);
-
-      transform: rotate(-8deg);
-
-      overflow: hidden;
+        0 16px 38px rgba(23,32,42,.12),
+        0 4px 12px rgba(98,70,217,.06);
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      align-items:center;
+      pointer-events:auto;
     }
 
-    .phone::before {
-      content: "";
-
-      position: absolute;
-
-      top: 6px;
-      left: 50%;
-
-      transform: translateX(-50%);
-
-      width: 25px;
-      height: 6px;
-
-      border-radius: 99px;
-
-      background: #111719;
-
-      z-index: 3;
+    .nav-item{
+      min-width:0;
+      min-height:55px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:3px;
+      color:#98a2b3;
+      border-radius:15px;
+      transition:color .2s ease,background .2s ease,transform .2s ease;
     }
 
-    .phone-screen {
-      position: absolute;
-
-      inset: 3px;
-
-      border-radius: 12px;
-
-      background:
-        linear-gradient(
-          160deg,
-          #dff4f5,
-          #9ccfd3 40%,
-          #367e84 100%
-        );
+    .nav-item:active{
+      transform:scale(.95);
     }
 
-    .camera-module {
-      position: absolute;
-
-      top: 10px;
-      left: 8px;
-
-      width: 26px;
-      height: 32px;
-
-      border-radius: 8px;
-
-      background: #171c1d;
-
-      z-index: 5;
+    .nav-item.active{
+      color:var(--purple);
+      background:linear-gradient(145deg,#fff 0%,#f2efff 100%);
     }
 
-    .camera-module span {
-      position: absolute;
-
-      width: 8px;
-      height: 8px;
-
-      border-radius: 50%;
-
-      background: #556164;
-
-      border: 1px solid #90999b;
+    .nav-icon{
+      width:21px;
+      height:21px;
     }
 
-    .camera-module span:nth-child(1) {
-      top: 5px;
-      left: 5px;
+    .nav-label{
+      font-size:8px;
+      font-weight:850;
+      white-space:nowrap;
     }
 
-    .camera-module span:nth-child(2) {
-      top: 5px;
-      right: 5px;
+    /* ---------- toast ---------- */
+
+    .toast{
+      position:fixed;
+      z-index:100;
+      left:50%;
+      bottom:calc(91px + var(--safe-bottom));
+      transform:translate(-50%,12px);
+      opacity:0;
+      pointer-events:none;
+      min-width:190px;
+      max-width:calc(100vw - 40px);
+      padding:11px 14px;
+      border-radius:13px;
+      background:#17202a;
+      color:#fff;
+      font-size:11px;
+      font-weight:800;
+      text-align:center;
+      box-shadow:0 12px 30px rgba(23,32,42,.18);
+      transition:.25s ease;
     }
 
-    .camera-module span:nth-child(3) {
-      bottom: 5px;
-      left: 9px;
+    .toast.show{
+      opacity:1;
+      transform:translate(-50%,0);
     }
 
-    .auction-arrow {
-      position: absolute;
-
-      left: 13px;
-      top: 12px;
-
-      width: 29px;
-      height: 29px;
-
-      border-radius: 50%;
-
-      display: grid;
-      place-items: center;
-
-      background: rgba(255,255,255,0.72);
-
-      color: var(--primary-dark);
-
-      z-index: 5;
-    }
-
-    .auction-arrow svg {
-      width: 15px;
-      height: 15px;
-    }
-
-    /* =========================
-       DOTS
-    ========================= */
-
-    .carousel-dots {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      gap: 5px;
-
-      padding-top: 8px;
-    }
-
-    .dot {
-      width: 5px;
-      height: 5px;
-
-      border-radius: 50%;
-
-      background: #ccd5d6;
-
-      transition:
-        width 0.25s ease,
-        background 0.25s ease;
-    }
-
-    .dot.active {
-      width: 17px;
-
-      border-radius: 99px;
-
-      background: var(--primary);
-    }
-
-    /* =========================
-       DEVICES
-    ========================= */
-
-    .devices-section {
-      margin-top: 4px;
-    }
-
-    .devices-scroll {
-      display: flex;
-
-      gap: 10px;
-
-      overflow-x: auto;
-
-      padding:
-        2px
-        18px
-        8px;
-
-      scrollbar-width: none;
-    }
-
-    .devices-scroll::-webkit-scrollbar {
-      display: none;
-    }
-
-    .device-category {
-      flex: 0 0 75px;
-
-      text-align: center;
-    }
-
-    .device-icon-box {
-      width: 70px;
-      height: 70px;
-
-      margin: 0 auto;
-
-      border-radius: 19px;
-
-      background: #fafbfb;
-
-      border: 1px solid var(--line);
-
-      display: grid;
-      place-items: center;
-
-      box-shadow:
-        0 5px 17px rgba(23, 33, 36, 0.045);
-
-      transition:
-        transform 0.2s ease,
-        border-color 0.2s ease,
-        background 0.2s ease;
-    }
-
-    .device-category:active .device-icon-box {
-      transform: scale(0.94);
-      background: var(--primary-soft);
-      border-color: rgba(35, 143, 152, 0.25);
-    }
-
-    .device-icon-box svg {
-      width: 32px;
-      height: 32px;
-
-      color: var(--ink);
-
-      stroke: currentColor;
-    }
-
-    .device-name {
-      display: block;
-
-      margin-top: 7px;
-
-      color: #4f595b;
-
-      font-size: 11px;
-      font-weight: 800;
-    }
-
-    /* =========================
-       QUICK ACTIONS
-    ========================= */
-
-    .quick-section {
-      margin-top: 4px;
-    }
-
-    .quick-grid {
-      display: grid;
-
-      grid-template-columns:
-        repeat(4, minmax(0, 1fr));
-
-      gap: 9px;
-
-      padding: 0 18px;
-    }
-
-    .quick-card {
-      min-height: 84px;
-
-      padding: 10px 6px;
-
-      border: 1px solid var(--line);
-
-      border-radius: 18px;
-
-      background: white;
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
-      gap: 7px;
-
-      box-shadow:
-        0 6px 18px rgba(23, 33, 36, 0.04);
-
-      transition:
-        transform 0.2s ease,
-        background 0.2s ease;
-    }
-
-    .quick-card:active {
-      transform: scale(0.96);
-      background: var(--primary-soft);
-    }
-
-    .quick-icon {
-      width: 36px;
-      height: 36px;
-
-      border-radius: 12px;
-
-      display: grid;
-      place-items: center;
-
-      background: var(--primary-soft);
-
-      color: var(--primary-dark);
-    }
-
-    .quick-icon svg {
-      width: 19px;
-      height: 19px;
-
-      stroke: currentColor;
-    }
-
-    .quick-label {
-      color: #4d5759;
-
-      font-size: 9px;
-      font-weight: 850;
-
-      white-space: nowrap;
-    }
-
-    /* =========================
-       UPCOMING / EMPTY
-    ========================= */
-
-    .upcoming {
-      margin: 8px 18px 0;
-
-      padding: 18px;
-
-      border-radius: 21px;
-
-      background: #f7f9f9;
-
-      border: 1px solid #edf1f1;
-
-      display: flex;
-      align-items: center;
-
-      gap: 14px;
-    }
-
-    .upcoming-icon {
-      width: 48px;
-      height: 48px;
-
-      flex-shrink: 0;
-
-      border-radius: 15px;
-
-      display: grid;
-      place-items: center;
-
-      background: var(--white);
-
-      color: var(--primary);
-
-      box-shadow: 0 5px 15px rgba(23, 33, 36, 0.04);
-    }
-
-    .upcoming-icon svg {
-      width: 23px;
-      height: 23px;
-    }
-
-    .upcoming-text {
-      min-width: 0;
-    }
-
-    .upcoming-title {
-      margin: 0;
-
-      font-size: 14px;
-      font-weight: 900;
-
-      color: var(--ink);
-    }
-
-    .upcoming-sub {
-      margin: 4px 0 0;
-
-      font-size: 10px;
-      line-height: 1.5;
-
-      color: var(--muted);
-    }
-
-    /* =========================
-       BOTTOM NAV
-    ========================= */
-
-    .bottom-nav-wrap {
-      position: fixed;
-
-      z-index: 100;
-
-      left: 50%;
-
-      bottom:
-        max(10px, env(safe-area-inset-bottom));
-
-      transform: translateX(-50%);
-
-      width: min(
-        calc(100% - 28px),
-        430px
-      );
-
-      pointer-events: none;
-    }
-
-    .bottom-nav {
-      pointer-events: auto;
-
-      height: 69px;
-
-      padding:
-        7px
-        9px;
-
-      display: grid;
-
-      grid-template-columns:
-        repeat(4, 1fr);
-
-      align-items: center;
-
-      background: rgba(255,255,255,0.86);
-
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-
-      border:
-        1px solid rgba(226, 232, 233, 0.92);
-
-      border-radius: 23px;
-
-      box-shadow:
-        0 12px 38px rgba(18, 31, 33, 0.12);
-    }
-
-    .nav-item {
-      height: 56px;
-
-      display: flex;
-      flex-direction: column;
-
-      align-items: center;
-      justify-content: center;
-
-      gap: 4px;
-
-      border-radius: 17px;
-
-      color: #8a9395;
-
-      transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        transform 0.2s ease;
-    }
-
-    .nav-item:active {
-      transform: scale(0.94);
-    }
-
-    .nav-item.active {
-      color: var(--primary-dark);
-    }
-
-    .nav-icon {
-      width: 31px;
-      height: 31px;
-
-      border-radius: 11px;
-
-      display: grid;
-      place-items: center;
-
-      transition:
-        background 0.2s ease,
-        transform 0.2s ease;
-    }
-
-    .nav-item.active .nav-icon {
-      background: var(--primary-soft);
-    }
-
-    .nav-icon svg {
-      width: 20px;
-      height: 20px;
-
-      stroke: currentColor;
-    }
-
-    .nav-label {
-      font-size: 9px;
-      font-weight: 850;
-    }
-
-    /* =========================
-       TABLET / BIG SCREENS
-    ========================= */
-
-    @media (min-width: 621px) {
-
-      body {
-        background: #eef2f2;
+    /* ---------- responsive ---------- */
+
+    @media (min-width:600px){
+      .page{
+        padding-inline:20px;
       }
 
-      .app {
-        min-height: 100vh;
-
-        box-shadow:
-          0 0 70px rgba(20, 35, 37, 0.08);
+      header{
+        margin-inline:-20px;
+        padding-inline:20px;
       }
 
-      .auction-card {
-        flex-basis: 530px;
-      }
-
-      .bottom-nav-wrap {
-        width: 430px;
+      .auction-card{
+        flex-basis:390px;
       }
     }
 
-    /* =========================
-       SMALL PHONES
-    ========================= */
-
-    @media (max-width: 360px) {
-
-      .brand-main {
-        font-size: 26px;
+    @media (max-width:360px){
+      .page{
+        padding-inline:11px;
       }
 
-      .brand-sub {
-        font-size: 8px;
-        letter-spacing: 3px;
-        margin-left: -48px;
+      header{
+        margin-inline:-11px;
+        padding-inline:11px;
       }
 
-      .header-actions {
-        gap: 5px;
+      .category{
+        width:60px;
+        flex-basis:60px;
       }
 
-      .icon-button {
-        width: 39px;
-        height: 39px;
+      .category-icon{
+        width:49px;
+        height:49px;
       }
 
-      .auction-card {
-        min-height: 155px;
+      .auction-card{
+        flex-basis:calc(100% - 25px);
       }
 
-      .auction-content {
-        min-height: 155px;
-        padding: 14px;
+      .action-grid{
+        gap:7px;
       }
 
-      .device-stage {
-        width: 106px;
-        height: 130px;
-      }
-
-      .phone {
-        transform: scale(0.9) rotate(-8deg);
-      }
-
-      .auction-title {
-        font-size: 18px;
-      }
-
-      .device-icon-box {
-        width: 64px;
-        height: 64px;
-      }
-
-      .device-category {
-        flex-basis: 69px;
-      }
-
-      .quick-grid {
-        gap: 6px;
-      }
-
-      .quick-card {
-        min-height: 79px;
-      }
-
-      .quick-label {
-        font-size: 8px;
+      .action-card{
+        padding:10px 8px;
       }
     }
 
-    /* =========================
-       MOTION
-    ========================= */
+    @media (prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
 
-    @keyframes softAppear {
-      from {
-        opacity: 0;
-        transform: translateY(7px);
+      *,
+      *::before,
+      *::after{
+        animation-duration:.01ms !important;
+        animation-iteration-count:1 !important;
+        transition-duration:.01ms !important;
+        scroll-behavior:auto !important;
       }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .top-header,
-    .search-wrap,
-    .location-row,
-    .auction-area,
-    .devices-section,
-    .quick-section,
-    .upcoming {
-      animation: softAppear 0.45s ease both;
-    }
-
-    .search-wrap {
-      animation-delay: 0.05s;
-    }
-
-    .location-row {
-      animation-delay: 0.08s;
-    }
-
-    .auction-area {
-      animation-delay: 0.12s;
-    }
-
-    .devices-section {
-      animation-delay: 0.17s;
-    }
-
-    .quick-section {
-      animation-delay: 0.21s;
-    }
-
-    .upcoming {
-      animation-delay: 0.25s;
     }
   </style>
 </head>
 
 <body>
 
-  <main class="app">
+  <main class="page">
 
-    <div class="page">
+    <header>
 
-      <!-- =========================
-           HEADER
-      ========================== -->
+      <div class="topbar">
 
-      <header class="top-header">
+        <div class="topbar-side">
 
-        <div class="header-row">
+          <button class="icon-btn" id="notificationBtn" type="button" aria-label="الإشعارات">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.8"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+              <path d="M10 21h4"/>
+            </svg>
+          </button>
 
-          <a class="brand" href="#">
-            <span class="brand-main">MZAD</span>
-            <span class="brand-sub">PHONE</span>
-          </a>
+          <div class="location-box">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none"
+                 stroke="#6246D9" stroke-width="1.8"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
+              <circle cx="12" cy="10" r="2.5"/>
+            </svg>
 
-          <div class="header-actions">
-
-            <button
-              class="icon-button notification"
-              aria-label="الإشعارات"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
-                <path d="M10 21h4"/>
-              </svg>
-
-              <span class="notification-badge">3</span>
-            </button>
-
-            <button
-              class="icon-button"
-              aria-label="الحساب"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <circle cx="12" cy="8" r="3.2"/>
-                <path d="M5 20c.8-3.4 3.1-5.2 7-5.2s6.2 1.8 7 5.2"/>
-              </svg>
-            </button>
-
+            <div class="location-copy">
+              <span class="location-label">موقعك</span>
+              <span class="location-name">
+                النجف
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </span>
+            </div>
           </div>
 
         </div>
 
-      </header>
-
-      <!-- =========================
-           SEARCH
-      ========================== -->
-
-      <section class="search-wrap">
-
-        <label class="search-box">
-
-          <svg
-            class="search-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.9"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="11" cy="11" r="7"/>
-            <path d="m20 20-4-4"/>
-          </svg>
-
-          <input
-            class="search-input"
-            type="search"
-            placeholder="ابحث عن جهاز أو موديل أو مزاد"
-            autocomplete="off"
-          >
-
-        </label>
-
-      </section>
-
-      <!-- =========================
-           LOCATION
-      ========================== -->
-
-      <div class="location-row">
-
-        <div class="location">
-
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
-            <circle cx="12" cy="10" r="2.5"/>
-          </svg>
-
-          <span>النجف</span>
-
+        <div class="brand-mini">
+          <strong>MZAD</strong>
+          <span>PHONE</span>
         </div>
 
-        <button class="change-location">
-          تغيير الموقع
+      </div>
+
+      <div class="search-wrap" id="searchWrap">
+
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.8"
+             stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="m20 20-4-4"/>
+        </svg>
+
+        <input
+          id="searchInput"
+          class="search"
+          type="search"
+          autocomplete="off"
+          placeholder="ابحث عن جهاز أو موديل..."
+          aria-label="البحث"
+        />
+
+        <button class="search-clear" id="searchClear" type="button" aria-label="مسح البحث">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2"
+               stroke-linecap="round">
+            <path d="m7 7 10 10M17 7 7 17"/>
+          </svg>
         </button>
 
       </div>
 
+    </header>
 
-      <!-- =========================
-           AUCTION
-      ========================== -->
+    <!-- التصنيفات -->
 
-      <section class="auction-area">
+    <section class="section reveal d1">
 
-        <div class="section-head">
+      <div class="section-head">
+        <h2 class="section-title">تصفح الأجهزة</h2>
+        <button class="section-link" type="button" id="viewAuctionsBtn">
+          عرض الكل
+        </button>
+      </div>
 
-          <h2 class="section-title">
-            المزاد الآن
-          </h2>
+      <div class="horizontal">
 
-          <button class="section-action">
-            مشاهدة الكل
-          </button>
+        <button class="category active" type="button" data-category="all">
 
-        </div>
+          <span class="category-icon">
+            <svg viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.7"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="4" width="6" height="6" rx="1"/>
+              <rect x="14" y="4" width="6" height="6" rx="1"/>
+              <rect x="4" y="14" width="6" height="6" rx="1"/>
+              <rect x="14" y="14" width="6" height="6" rx="1"/>
+            </svg>
+          </span>
 
-        <div
-          class="auction-track"
-          id="auctionTrack"
-        >
+          <span class="category-name">الكل</span>
+        </button>
 
-          <!-- CARD 1 -->
+        <button class="category" type="button" data-category="iphone">
 
-          <article class="auction-card">
+          <span class="category-icon">
+            <svg viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.7"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <rect x="7" y="2.5" width="10" height="19" rx="2.3"/>
+              <path d="M10.5 5h3"/>
+              <path d="M11 18.5h2"/>
+            </svg>
+          </span>
 
-            <div class="auction-content">
+          <span class="category-name">iPhone</span>
+        </button>
 
-              <div class="auction-info">
+        <button class="category" type="button" data-category="samsung">
 
-                <span class="auction-label">
-                  مزاد مباشر
-                </span>
+          <span class="category-icon">
+            <span class="samsung-logo">SAMSUNG</span>
+          </span>
 
-                <h3 class="auction-title">
-                  iPhone 15 Pro
-                </h3>
+          <span class="category-name">Samsung</span>
+        </button>
 
-                <span class="auction-meta">
-                  256GB · Natural Titanium
-                </span>
+        <button class="category" type="button" data-category="xiaomi">
 
-                <div class="auction-price-row">
+          <span class="category-icon">
+            <svg viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.7"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="5" width="16" height="14" rx="2"/>
+              <path d="M8 9v6M8 9h4a2 2 0 0 1 2 2v4"/>
+              <path d="M17 9v6"/>
+            </svg>
+          </span>
 
-                  <strong class="auction-price">
-                    850,000
-                  </strong>
+          <span class="category-name">Xiaomi</span>
+        </button>
 
-                  <span class="auction-currency">
-                    د.ع
-                  </span>
+        <button class="category" type="button" data-category="google">
 
-                </div>
+          <span class="category-icon">
+            <svg viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.7"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 12a8 8 0 1 1-2.3-5.7"/>
+              <path d="M20 5v6h-6"/>
+            </svg>
+          </span>
 
-                <button class="auction-button">
-                  دخول المزاد
-                </button>
+          <span class="category-name">Google</span>
+        </button>
 
-              </div>
+        <button class="category" type="button" data-category="other">
 
-              <div class="device-stage">
+          <span class="category-icon">
+            <svg viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.7"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <rect x="6" y="3" width="12" height="18" rx="2"/>
+              <path d="M9 6h6"/>
+              <path d="M10.5 18h3"/>
+            </svg>
+          </span>
 
-                <div class="device-glow"></div>
+          <span class="category-name">أخرى</span>
+        </button>
 
-                <div class="phone">
+      </div>
 
-                  <div class="phone-screen"></div>
+    </section>
 
-                  <div class="camera-module">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
+    <!-- المزاد -->
 
-                </div>
+    <section class="section reveal d2">
 
-                <div class="auction-arrow">
+      <div class="section-head">
+        <h2 class="section-title">المزاد القادم</h2>
+        <button class="section-link" type="button" id="auctionSectionLink">
+          كل المزادات
+        </button>
+      </div>
 
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="m9 18 6-6-6-6"/>
+      <div class="auction-shell">
+
+        <div class="auction-track" id="auctionTrack">
+
+          <article class="auction-card is-current">
+
+            <div class="auction-top">
+
+              <span class="auction-badge">
+                <svg width="13" height="13" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round"
+                     stroke-linejoin="round">
+                  <path d="m7 11 7.5-7.5 3 3L10 14"/>
+                  <path d="m5 13 6 6"/>
+                  <path d="M4 20h16"/>
+                </svg>
+                مزاد
+              </span>
+
+              <span class="auction-state">قريباً</span>
+
+            </div>
+
+            <div class="auction-copy">
+
+              <p class="auction-kicker">مزاد أجهزة مستعملة</p>
+
+              <h3 class="auction-title">
+                أجهزة حقيقية من بائعين حقيقيين
+              </h3>
+
+              <p class="auction-desc">
+                يجري تجهيز الأجهزة للمزاد. عند توفر المزاد ستظهر الصور والمواصفات والسعر الحالي هنا.
+              </p>
+
+              <div class="auction-bottom">
+
+                <div class="auction-note">
+                  <svg width="14" height="14" viewBox="0 0 24 24"
+                       fill="none" stroke="currentColor"
+                       stroke-width="1.8"
+                       stroke-linecap="round"
+                       stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M12 7v5l3 2"/>
                   </svg>
-
+                  المزاد القادم قريباً
                 </div>
+
+                <button class="auction-cta" type="button">
+                  التفاصيل
+                </button>
 
               </div>
 
@@ -1445,74 +1115,55 @@
 
           </article>
 
-
-          <!-- CARD 2 -->
-
           <article class="auction-card">
 
-            <div class="auction-content">
+            <div class="auction-top">
 
-              <div class="auction-info">
+              <span class="auction-badge">
+                <svg width="13" height="13" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round"
+                     stroke-linejoin="round">
+                  <path d="M12 3v18"/>
+                  <path d="M17 7H9.5a3 3 0 0 0 0 6h5a3 3 0 0 1 0 6H7"/>
+                </svg>
+                أجهزة
+              </span>
 
-                <span class="auction-label">
-                  يبدأ قريباً
-                </span>
+              <span class="auction-state">قريباً</span>
 
-                <h3 class="auction-title">
-                  Galaxy S24 Ultra
-                </h3>
+            </div>
 
-                <span class="auction-meta">
-                  256GB · Titanium Gray
-                </span>
+            <div class="auction-copy">
 
-                <div class="auction-price-row">
+              <p class="auction-kicker">مزاد جديد</p>
 
-                  <strong class="auction-price">
-                    720,000
-                  </strong>
+              <h3 class="auction-title">
+                تابع الأجهزة قبل بداية المزاد
+              </h3>
 
-                  <span class="auction-currency">
-                    د.ع
-                  </span>
+              <p class="auction-desc">
+                ستظهر هنا الأجهزة الفعلية، صورها، مواصفاتها وسعر المزايدة الحالي.
+              </p>
 
+              <div class="auction-bottom">
+
+                <div class="auction-note">
+                  <svg width="14" height="14" viewBox="0 0 24 24"
+                       fill="none" stroke="currentColor"
+                       stroke-width="1.8"
+                       stroke-linecap="round"
+                       stroke-linejoin="round">
+                    <path d="M4 6h16"/>
+                    <path d="M7 12h10"/>
+                    <path d="M10 18h4"/>
+                  </svg>
+                  بيانات حقيقية فقط
                 </div>
 
-                <button class="auction-button">
-                  مشاهدة التفاصيل
+                <button class="auction-cta" type="button">
+                  قريباً
                 </button>
-
-              </div>
-
-              <div class="device-stage">
-
-                <div class="device-glow"></div>
-
-                <div
-                  class="phone"
-                  style="transform:rotate(8deg);"
-                >
-
-                  <div
-                    class="phone-screen"
-                    style="
-                      background:
-                      linear-gradient(
-                        145deg,
-                        #d7e0e1,
-                        #89999c 45%,
-                        #354144
-                      );
-                    "
-                  ></div>
-
-                  <div class="camera-module">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-
-                </div>
 
               </div>
 
@@ -1522,625 +1173,797 @@
 
         </div>
 
-        <div class="carousel-dots">
-
+        <div class="auction-dots" aria-label="صفحات المزاد">
           <span class="dot active"></span>
           <span class="dot"></span>
-
         </div>
 
-      </section>
+      </div>
 
+    </section>
 
-      <!-- =========================
-           DEVICES
-      ========================== -->
+    <!-- الإجراءات -->
 
-      <section class="devices-section">
+    <section class="section reveal d3">
 
-        <div class="section-head">
+      <div class="section-head">
+        <h2 class="section-title">شنو تريد تسوي؟</h2>
+      </div>
 
-          <h2 class="section-title">
-            تصفح الأجهزة
-          </h2>
+      <div class="action-grid">
 
-          <button class="section-action">
-            الكل
-          </button>
+        <button class="action-card" type="button" data-go="auctions.html">
 
-        </div>
-
-        <div class="devices-scroll">
-
-          <button class="device-category">
-
-            <span class="device-icon-box">
-
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke-width="1.7"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <rect x="7" y="2.5" width="10" height="19" rx="2"/>
-                <path d="M10 5h4"/>
-                <path d="M11 18.5h2"/>
-              </svg>
-
-            </span>
-
-            <span class="device-name">
-              iPhone
-            </span>
-
-          </button>
-
-
-          <button class="device-category">
-
-            <span class="device-icon-box">
-
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke-width="1.7"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <rect x="6" y="2" width="12" height="20" rx="3"/>
-                <path d="M9 5h6"/>
-                <circle cx="12" cy="18" r="1"/>
-              </svg>
-
-            </span>
-
-            <span class="device-name">
-              Samsung
-            </span>
-
-          </button>
-
-
-          <button class="device-category">
-
-            <span class="device-icon-box">
-
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke-width="1.7"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <rect x="5" y="4" width="14" height="16" rx="3"/>
-                <path d="M9 7h6"/>
-                <path d="M9 17h6"/>
-              </svg>
-
-            </span>
-
-            <span class="device-name">
-              Xiaomi
-            </span>
-
-          </button>
-
-
-          <button class="device-category">
-
-            <span class="device-icon-box">
-
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke-width="1.7"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <rect x="6" y="3" width="12" height="18" rx="2.5"/>
-                <circle cx="12" cy="17.5" r="1"/>
-              </svg>
-
-            </span>
-
-            <span class="device-name">
-              Google
-            </span>
-
-          </button>
-
-
-          <button class="device-category">
-
-            <span class="device-icon-box">
-
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke-width="1.7"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <rect x="5" y="3" width="14" height="18" rx="3"/>
-                <path d="M8 8h8"/>
-                <path d="M8 12h8"/>
-              </svg>
-
-            </span>
-
-            <span class="device-name">
-              Android
-            </span>
-
-          </button>
-
-        </div>
-
-      </section>
-
-
-      <!-- =========================
-           QUICK ACTIONS
-      ========================== -->
-
-      <section class="quick-section">
-
-        <div class="section-head">
-
-          <h2 class="section-title">
-            شنو تريد تسوي؟
-          </h2>
-
-        </div>
-
-        <div class="quick-grid">
-
-          <button class="quick-card">
-
-            <span class="quick-icon">
-
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M12 3v18"/>
-                <path d="M5 10l7-7 7 7"/>
-              </svg>
-
-            </span>
-
-            <span class="quick-label">
-              شارك جهاز
-            </span>
-
-          </button>
-
-
-          <button class="quick-card">
-
-            <span class="quick-icon">
-
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M4 6h16"/>
-                <path d="M7 6v14h10V6"/>
-                <path d="M9 3h6"/>
-                <path d="M9 10h6"/>
-                <path d="M9 14h4"/>
-              </svg>
-
-            </span>
-
-            <span class="quick-label">
-              بيع مباشر
-            </span>
-
-          </button>
-
-
-          <button class="quick-card">
-
-            <span class="quick-icon">
-
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z"/>
-                <path d="M12 7v5l3 2"/>
-              </svg>
-
-            </span>
-
-            <span class="quick-label">
-              المزادات
-            </span>
-
-          </button>
-
-
-          <button class="quick-card">
-
-            <span class="quick-icon">
-
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M6 3h12v18H6z"/>
-                <path d="M9 7h6"/>
-                <path d="M9 11h6"/>
-                <path d="M9 15h4"/>
-              </svg>
-
-            </span>
-
-            <span class="quick-label">
-              طلباتك
-            </span>
-
-          </button>
-
-        </div>
-
-      </section>
-
-
-      <!-- =========================
-           UPCOMING
-      ========================== -->
-
-      <section class="upcoming">
-
-        <div class="upcoming-icon">
-
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.7"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="12" cy="12" r="9"/>
-            <path d="M12 7v5l3 2"/>
-          </svg>
-
-        </div>
-
-        <div class="upcoming-text">
-
-          <h3 class="upcoming-title">
-            المزاد القادم قريباً
-          </h3>
-
-          <p class="upcoming-sub">
-            راح تظهر هنا الأجهزة الجديدة فور نشرها
-            للمزاد داخل المنصة.
-          </p>
-
-        </div>
-
-      </section>
-
-    </div>
-
-
-    <!-- =========================
-         BOTTOM NAV
-    ========================== -->
-
-    <div class="bottom-nav-wrap">
-
-      <nav class="bottom-nav">
-
-        <button class="nav-item active">
-
-          <span class="nav-icon">
-
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="m3 10 9-7 9 7"/>
-              <path d="M5 9v11h14V9"/>
-              <path d="M9 20v-6h6v6"/>
+          <span class="action-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="1.8"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+              <path d="m7 11 7.5-7.5 3 3L10 14"/>
+              <path d="m5 13 6 6"/>
+              <path d="M4 20h16"/>
             </svg>
-
           </span>
 
-          <span class="nav-label">
-            الرئيسية
+          <span>
+            <span class="action-title">المزادات</span>
+            <span class="action-copy">شوف الأجهزة المعروضة</span>
           </span>
 
         </button>
 
+        <button class="action-card" type="button" data-go="auctions.html">
 
-        <button class="nav-item">
-
-          <span class="nav-icon">
-
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="12" cy="12" r="9"/>
-              <path d="M12 7v5l3 2"/>
+          <span class="action-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="1.8"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+              <path d="M4 7h16"/>
+              <path d="M7 4v3"/>
+              <path d="M17 4v3"/>
+              <rect x="4" y="7" width="16" height="13" rx="2"/>
+              <path d="M8 12h8"/>
+              <path d="M8 16h5"/>
             </svg>
-
           </span>
 
-          <span class="nav-label">
-            المزادات
+          <span>
+            <span class="action-title">بيع مباشر</span>
+            <span class="action-copy">أجهزة بسعر ثابت</span>
           </span>
 
         </button>
 
+        <button class="action-card" type="button" data-go="sell.html">
 
-        <button class="nav-item">
-
-          <span class="nav-icon">
-
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M5 7h14"/>
-              <path d="M5 12h14"/>
-              <path d="M5 17h10"/>
-              <circle cx="18" cy="17" r="2"/>
+          <span class="action-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="1.8"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+              <rect x="6" y="3" width="12" height="18" rx="2"/>
+              <path d="M9 6h6"/>
+              <path d="M10 17h4"/>
             </svg>
-
           </span>
 
-          <span class="nav-label">
-            طلباتك
+          <span>
+            <span class="action-title">بيع جهاز</span>
+            <span class="action-copy">أضف جهازك بسهولة</span>
           </span>
 
         </button>
 
+      </div>
 
-        <button class="nav-item">
+    </section>
 
-          <span class="nav-icon">
+    <!-- الأجهزة -->
 
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="12" cy="8" r="3"/>
-              <path d="M5 20c.8-3.4 3.1-5.2 7-5.2s6.2 1.8 7 5.2"/>
-            </svg>
+    <section class="section reveal d4">
 
-          </span>
+      <div class="section-head">
 
-          <span class="nav-label">
-            حسابي
-          </span>
+        <h2 class="section-title">أحدث الأجهزة</h2>
 
+        <button class="section-link" type="button">
+          عرض الكل
         </button>
 
-      </nav>
+      </div>
 
-    </div>
+      <div class="devices-track">
+
+        <article class="device-card">
+
+          <div class="device-image">
+            <span>سيظهر الجهاز الحقيقي هنا</span>
+          </div>
+
+          <div class="device-body">
+
+            <h3 class="device-title">
+              لا توجد أجهزة منشورة
+            </h3>
+
+            <div class="device-meta">
+              بانتظار أول إعلان فعلي
+            </div>
+
+            <div class="device-row">
+              <span class="device-price">—</span>
+              <span class="device-type">بيع مباشر</span>
+            </div>
+
+          </div>
+
+        </article>
+
+        <article class="device-card">
+
+          <div class="device-image">
+            <span>سيظهر الجهاز الحقيقي هنا</span>
+          </div>
+
+          <div class="device-body">
+
+            <h3 class="device-title">
+              لا توجد أجهزة منشورة
+            </h3>
+
+            <div class="device-meta">
+              البيانات من قاعدة البيانات
+            </div>
+
+            <div class="device-row">
+              <span class="device-price">—</span>
+              <span class="device-type">مزاد</span>
+            </div>
+
+          </div>
+
+        </article>
+
+        <article class="device-card">
+
+          <div class="device-image">
+            <span>سيظهر الجهاز الحقيقي هنا</span>
+          </div>
+
+          <div class="device-body">
+
+            <h3 class="device-title">
+              جاهز لبيانات حقيقية
+            </h3>
+
+            <div class="device-meta">
+              صور ومواصفات فعلية
+            </div>
+
+            <div class="device-row">
+              <span class="device-price">—</span>
+              <span class="device-type">قريباً</span>
+            </div>
+
+          </div>
+
+        </article>
+
+      </div>
+
+    </section>
+
+    <!-- الثقة -->
+
+    <section class="section reveal d5">
+
+      <div class="trust-card">
+
+        <div class="trust-item">
+
+          <div class="trust-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="1.8"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+              <path d="M12 3 5 6v5c0 4.5 3 7.8 7 10 4-2.2 7-5.5 7-10V6l-7-3Z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+
+          <div class="trust-title">
+            بيانات واضحة
+          </div>
+
+          <div class="trust-copy">
+            مواصفات الجهاز منظمة
+          </div>
+
+        </div>
+
+        <div class="trust-item">
+
+          <div class="trust-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="1.8"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+              <path d="M12 3v18M17 7H9.5a3 3 0 0 0 0 6h5a3 3 0 0 1 0 6H7"/>
+            </svg>
+          </div>
+
+          <div class="trust-title">
+            سعر واضح
+          </div>
+
+          <div class="trust-copy">
+            مزاد أو بيع مباشر
+          </div>
+
+        </div>
+
+        <div class="trust-item">
+
+          <div class="trust-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="1.8"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+              <circle cx="12" cy="7" r="4"/>
+              <path d="M5.5 21a6.5 6.5 0 0 1 13 0"/>
+            </svg>
+          </div>
+
+          <div class="trust-title">
+            بائع معروف
+          </div>
+
+          <div class="trust-copy">
+            تقييم محفوظ للحساب
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
 
   </main>
 
+  <!-- bottom navigation -->
 
-  <script>
+  <div class="bottom-wrap">
 
-    /* ==========================================
-       AUCTION CAROUSEL
-    ========================================== */
+    <nav class="bottom-nav" aria-label="التنقل الرئيسي">
 
-    const track =
+      <button
+        class="nav-item active"
+        type="button"
+        data-go="home.html"
+        aria-label="الرئيسية">
+
+        <svg class="nav-icon" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor"
+             stroke-width="1.8"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+          <path d="m4 10 8-6 8 6v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-9Z"/>
+        </svg>
+
+        <span class="nav-label">الرئيسية</span>
+
+      </button>
+
+      <button
+        class="nav-item"
+        type="button"
+        data-go="auctions.html"
+        aria-label="المزادات">
+
+        <svg class="nav-icon" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor"
+             stroke-width="1.8"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+          <path d="m7 11 7.5-7.5 3 3L10 14"/>
+          <path d="m5 13 6 6"/>
+          <path d="M4 20h16"/>
+          <path d="M14.5 7.5 17 10"/>
+        </svg>
+
+        <span class="nav-label">المزادات</span>
+
+      </button>
+
+      <button
+        class="nav-item"
+        type="button"
+        data-go="sell.html"
+        aria-label="إضافة جهاز">
+
+        <span
+          class="action-icon"
+          style="
+            width:42px;
+            height:42px;
+            border-radius:13px;
+            background:linear-gradient(145deg,#176b87 0%,#257f98 100%);
+            color:#fff;
+            box-shadow:
+              0 8px 16px rgba(23,107,135,.20),
+              0 4px 12px rgba(139,124,246,.10);
+          ">
+
+          <svg width="22" height="22" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+
+        </span>
+
+        <span class="nav-label">إضافة</span>
+
+      </button>
+
+      <button
+        class="nav-item"
+        type="button"
+        data-go="favorites.html"
+        aria-label="المفضلة">
+
+        <svg class="nav-icon" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor"
+             stroke-width="1.8"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+          <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
+        </svg>
+
+        <span class="nav-label">المفضلة</span>
+
+      </button>
+
+      <button
+        class="nav-item"
+        type="button"
+        data-go="profile.html"
+        aria-label="حسابي">
+
+        <svg class="nav-icon" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor"
+             stroke-width="1.8"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+          <circle cx="12" cy="8" r="3.5"/>
+          <path d="M5 21a7 7 0 0 1 14 0"/>
+        </svg>
+
+        <span class="nav-label">حسابي</span>
+
+      </button>
+
+    </nav>
+
+  </div>
+
+  <div
+    class="toast"
+    id="toast"
+    role="status"
+    aria-live="polite">
+  </div>
+
+  <script type="module">
+
+    import { supabase } from "./js/supabase.js";
+
+    const toast =
+      document.getElementById("toast");
+
+    const searchInput =
+      document.getElementById("searchInput");
+
+    const searchWrap =
+      document.getElementById("searchWrap");
+
+    const searchClear =
+      document.getElementById("searchClear");
+
+    const locationBtn =
+      document.getElementById("locationBtn");
+
+    const notificationBtn =
+      document.getElementById("notificationBtn");
+
+    const viewAuctionsBtn =
+      document.getElementById("viewAuctionsBtn");
+
+    const auctionSectionLink =
+      document.getElementById("auctionSectionLink");
+
+    const categories =
+      [...document.querySelectorAll(".category")];
+
+    const auctionTrack =
       document.getElementById("auctionTrack");
 
     const dots =
-      document.querySelectorAll(".dot");
+      [...document.querySelectorAll(".dot")];
 
-    let currentSlide = 0;
+    let toastTimer;
 
-    function getCardWidth() {
+    function showToast(message){
 
-      const card =
-        track.querySelector(".auction-card");
+      toast.textContent = message;
 
-      if (!card) return 0;
+      toast.classList.add("show");
 
-      const gap = 12;
+      clearTimeout(toastTimer);
 
-      return card.offsetWidth + gap;
-    }
-
-    function updateDots(index) {
-
-      dots.forEach((dot, i) => {
-
-        dot.classList.toggle(
-          "active",
-          i === index
+      toastTimer =
+        setTimeout(
+          () => toast.classList.remove("show"),
+          2200
         );
-
-      });
-
     }
 
-    function goToSlide(index) {
-
-      const width = getCardWidth();
-
-      if (!width) return;
-
-      currentSlide = index;
-
-      track.scrollTo({
-        left:
-          index === 0
-            ? 0
-            : width * index,
-        behavior: "smooth"
-      });
-
-      updateDots(index);
+    function go(url){
+      window.location.href = url;
     }
 
-    let autoSlide =
-      setInterval(() => {
+    async function checkSession(){
 
-        currentSlide++;
+      const {
+        data,
+        error
+      } = await supabase.auth.getSession();
 
-        if (currentSlide >= dots.length) {
-          currentSlide = 0;
-        }
+      if(error || !data.session){
 
-        goToSlide(currentSlide);
+        window.location.replace("index.html");
 
-      }, 3000);
+        return;
+      }
+    }
 
+    function bindNavigation(){
 
-    track.addEventListener(
-      "touchstart",
-      () => {
-        clearInterval(autoSlide);
-      },
-      { passive: true }
-    );
+      document
+        .querySelectorAll("[data-go]")
+        .forEach((el) => {
 
-
-    track.addEventListener(
-      "touchend",
-      () => {
-
-        autoSlide =
-          setInterval(() => {
-
-            currentSlide++;
-
-            if (currentSlide >= dots.length) {
-              currentSlide = 0;
-            }
-
-            goToSlide(currentSlide);
-
-          }, 3000);
-
-      },
-      { passive: true }
-    );
-
-
-    track.addEventListener(
-      "scroll",
-      () => {
-
-        const width = getCardWidth();
-
-        if (!width) return;
-
-        const index =
-          Math.round(track.scrollLeft / width);
-
-        const safeIndex =
-          Math.max(
-            0,
-            Math.min(index, dots.length - 1)
+          el.addEventListener(
+            "click",
+            () => go(el.dataset.go)
           );
 
-        currentSlide = safeIndex;
+        });
+    }
 
-        updateDots(safeIndex);
+    function bindSearch(){
 
-      },
-      { passive: true }
-    );
+      function sync(){
 
-
-    /* ==========================================
-       BOTTOM NAV ACTIVE STATE
-    ========================================== */
-
-    const navItems =
-      document.querySelectorAll(".nav-item");
-
-    navItems.forEach(item => {
-
-      item.addEventListener("click", () => {
-
-        navItems.forEach(nav =>
-          nav.classList.remove("active")
+        searchWrap.classList.toggle(
+          "has-value",
+          searchInput.value.trim().length > 0
         );
 
-        item.classList.add("active");
+      }
 
-      });
+      searchInput.addEventListener(
+        "input",
+        sync
+      );
 
-    });
+      searchClear.addEventListener(
+        "click",
+        () => {
 
+          searchInput.value = "";
 
-    /* ==========================================
-       DEVICE / QUICK BUTTON FEEDBACK
-    ========================================== */
+          sync();
 
-    document
-      .querySelectorAll(
-        ".device-category, .quick-card, .auction-button"
-      )
-      .forEach(button => {
+          searchInput.focus();
+
+        }
+      );
+
+      searchInput.addEventListener(
+        "keydown",
+        (event) => {
+
+          if(event.key !== "Enter") return;
+
+          const query =
+            searchInput.value.trim();
+
+          if(!query){
+
+            showToast(
+              "اكتب اسم الجهاز أولاً"
+            );
+
+            return;
+          }
+
+          sessionStorage.setItem(
+            "mzad_search_query",
+            query
+          );
+
+          go("auctions.html");
+
+        }
+      );
+
+    }
+
+    function bindCategories(){
+
+      categories.forEach((button) => {
 
         button.addEventListener(
           "click",
           () => {
 
-            button.animate(
-              [
-                {
-                  transform: "scale(1)"
-                },
-                {
-                  transform: "scale(.96)"
-                },
-                {
-                  transform: "scale(1)"
-                }
-              ],
-              {
-                duration: 180,
-                easing: "ease-out"
-              }
+            categories.forEach(
+              (item) =>
+                item.classList.remove("active")
+            );
+
+            button.classList.add("active");
+
+            const label =
+              button
+                .querySelector(".category-name")
+                ?.textContent
+                ?.trim()
+              || "التصنيف";
+
+            showToast(
+              `تم اختيار ${label}`
             );
 
           }
         );
 
       });
+
+    }
+
+    function bindAuctionCarousel(){
+
+      const cards =
+        [...auctionTrack.querySelectorAll(".auction-card")];
+
+      let current = 0;
+
+      let timer = null;
+
+      let touchStarted = false;
+
+      function setCurrent(
+        index,
+        smooth = true
+      ){
+
+        if(!cards.length) return;
+
+        current =
+          (index + cards.length)
+          % cards.length;
+
+        const card =
+          cards[current];
+
+        auctionTrack.scrollTo({
+
+          left:
+            Math.max(
+              0,
+              card.offsetLeft - 2
+            ),
+
+          behavior:
+            smooth
+              ? "smooth"
+              : "auto"
+
+        });
+
+        cards.forEach(
+          (item, i) =>
+            item.classList.toggle(
+              "is-current",
+              i === current
+            )
+        );
+
+        dots.forEach(
+          (dot, i) =>
+            dot.classList.toggle(
+              "active",
+              i === current
+            )
+        );
+
+      }
+
+      function startAuto(){
+
+        clearInterval(timer);
+
+        timer =
+          setInterval(
+            () =>
+              setCurrent(
+                current + 1
+              ),
+            3000
+          );
+
+      }
+
+      auctionTrack.addEventListener(
+        "scroll",
+        () => {
+
+          const center =
+            auctionTrack.scrollLeft
+            + auctionTrack.clientWidth * .33;
+
+          let nearest = 0;
+
+          let distance = Infinity;
+
+          cards.forEach(
+            (card, i) => {
+
+              const cardCenter =
+                card.offsetLeft
+                + card.offsetWidth * .33;
+
+              const d =
+                Math.abs(
+                  cardCenter - center
+                );
+
+              if(d < distance){
+
+                distance = d;
+
+                nearest = i;
+
+              }
+
+            }
+          );
+
+          current = nearest;
+
+          cards.forEach(
+            (item, i) =>
+              item.classList.toggle(
+                "is-current",
+                i === current
+              )
+          );
+
+          dots.forEach(
+            (dot, i) =>
+              dot.classList.toggle(
+                "active",
+                i === current
+              )
+          );
+
+        },
+        {passive:true}
+      );
+
+      auctionTrack.addEventListener(
+        "pointerdown",
+        () => {
+
+          touchStarted = true;
+
+          clearInterval(timer);
+
+        },
+        {passive:true}
+      );
+
+      [
+        "pointerup",
+        "pointercancel",
+        "mouseleave"
+      ].forEach(
+        (eventName) => {
+
+          auctionTrack.addEventListener(
+            eventName,
+            () => {
+
+              if(
+                !touchStarted
+                && eventName !== "mouseleave"
+              ) return;
+
+              touchStarted = false;
+
+              startAuto();
+
+            },
+            {passive:true}
+          );
+
+        }
+      );
+
+      dots.forEach(
+        (dot, i) => {
+
+          dot.addEventListener(
+            "click",
+            () => {
+
+              clearInterval(timer);
+
+              setCurrent(i);
+
+              startAuto();
+
+            }
+          );
+
+        }
+      );
+
+      setCurrent(0,false);
+
+      startAuto();
+
+    }
+
+    notificationBtn.addEventListener(
+      "click",
+      () =>
+        showToast(
+          "لا توجد إشعارات جديدة"
+        )
+    );
+
+    auctionSectionLink.addEventListener(
+      "click",
+      () =>
+        go("auctions.html")
+    );
+
+    viewAuctionsBtn.addEventListener(
+      "click",
+      () =>
+        go("auctions.html")
+    );
+
+    await checkSession();
+
+    bindNavigation();
+
+    bindSearch();
+
+    bindCategories();
+
+    bindAuctionCarousel();
 
   </script>
 
