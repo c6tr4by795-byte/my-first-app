@@ -15,14 +15,13 @@
 
   <style>
     :root {
-      --primary: #1f8f9b;
-      --primary-dark: #16727c;
+      --primary: #2495a0;
+      --primary-dark: #197984;
       --dark: #172124;
-      --muted: #788488;
-      --border: #e5eaeb;
+      --muted: #7d898c;
+      --border: #e1e7e8;
       --surface: #f7f9f9;
-      --white: #ffffff;
-      --error: #c75f42;
+      --error: #c9684e;
     }
 
     * {
@@ -37,48 +36,49 @@
 
     body {
       min-height: 100vh;
+      padding: 22px 17px 28px;
       font-family: "Cairo", sans-serif;
+      color: var(--dark);
+
       background:
         radial-gradient(
-          circle at 90% 0%,
-          rgba(31, 143, 155, 0.09),
-          transparent 30%
+          circle at 100% 0%,
+          rgba(36, 149, 160, 0.08),
+          transparent 28%
         ),
         linear-gradient(
           145deg,
-          #f8fbfb 0%,
-          #ffffff 52%,
-          #f5f8f8 100%
+          #f8fbfb,
+          #ffffff 55%,
+          #f6f9f9
         );
-      color: var(--dark);
-      display: flex;
-      justify-content: center;
-      padding: 28px 18px 40px;
+
       overflow-x: hidden;
     }
 
     .page {
       width: 100%;
-      max-width: 414px;
-      position: relative;
+      max-width: 400px;
+      margin: 0 auto;
     }
+
+    /* BRAND */
 
     .brand {
       text-align: center;
-      padding-top: 18px;
-      margin-bottom: 30px;
+      margin: 8px 0 25px;
+
       opacity: 0;
-      transform: translateY(-14px);
-      animation: brandIn 0.7s ease forwards;
+      transform: translateY(-10px);
+      animation: enter 0.6s ease forwards;
     }
 
     .brand-main {
       font-family: Arial, sans-serif;
-      font-size: 42px;
-      line-height: 0.95;
+      font-size: 40px;
+      line-height: 1;
       font-weight: 900;
       letter-spacing: -2px;
-      color: var(--dark);
     }
 
     .brand-main span {
@@ -86,61 +86,72 @@
     }
 
     .brand-sub {
-      margin-top: 7px;
+      margin-top: 5px;
       font-family: Arial, sans-serif;
-      font-size: 12px;
-      letter-spacing: 5px;
+      font-size: 11px;
       font-weight: 800;
+      letter-spacing: 5px;
       color: var(--muted);
       direction: ltr;
     }
 
+    /* TITLE */
+
     .heading {
-      margin-bottom: 24px;
+      margin-bottom: 19px;
+
       opacity: 0;
-      transform: translateY(15px);
-      animation: contentIn 0.7s ease 0.12s forwards;
+      transform: translateY(10px);
+      animation: enter 0.6s ease 0.08s forwards;
     }
 
     .heading h1 {
       margin: 0;
-      font-size: 29px;
+      font-size: 27px;
       line-height: 1.35;
       font-weight: 800;
-      color: var(--dark);
     }
 
     .heading p {
-      margin: 7px 0 0;
+      margin: 5px 0 0;
+      font-size: 13px;
       color: var(--muted);
-      font-size: 14px;
       font-weight: 500;
     }
 
+    /* CARD */
+
     .card {
-      background: rgba(255, 255, 255, 0.96);
-      border: 1px solid rgba(229, 234, 235, 0.9);
-      border-radius: 30px;
-      padding: 25px 21px 23px;
+      padding: 22px 20px 21px;
+      background: rgba(255, 255, 255, 0.97);
+      border: 1px solid #e5eaeb;
+      border-radius: 27px;
+
       box-shadow:
-        0 18px 50px rgba(23, 33, 36, 0.07),
-        0 3px 10px rgba(23, 33, 36, 0.03);
+        0 16px 42px rgba(23, 33, 36, 0.065),
+        0 2px 8px rgba(23, 33, 36, 0.025);
+
       opacity: 0;
-      transform: translateY(18px);
-      animation: contentIn 0.75s ease 0.25s forwards;
+      transform: translateY(12px);
+      animation: enter 0.65s ease 0.16s forwards;
     }
 
     .field-group {
+      margin-bottom: 13px;
+    }
+
+    .field-group:last-of-type {
       margin-bottom: 15px;
     }
 
     .field-label {
       display: block;
-      margin: 0 0 7px;
-      padding-right: 3px;
-      font-size: 13px;
+      margin: 0 0 6px;
+      padding-right: 2px;
+
+      font-size: 12.5px;
       font-weight: 700;
-      color: #445154;
+      color: #465356;
     }
 
     .input-wrap {
@@ -149,30 +160,40 @@
 
     .input {
       width: 100%;
-      height: 57px;
+      height: 54px;
+
       border: 1.5px solid var(--border);
-      border-radius: 17px;
+      border-radius: 16px;
+
       background: var(--surface);
       color: var(--dark);
-      padding: 0 16px;
+
+      padding: 0 15px;
+
       font-family: "Cairo", sans-serif;
       font-size: 15px;
+
       outline: none;
+
       transition:
-        border-color 0.2s ease,
-        background 0.2s ease,
-        box-shadow 0.2s ease;
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        background 0.18s ease;
     }
 
     .input:focus {
-      background: #ffffff;
+      background: #fff;
       border-color: var(--primary);
-      box-shadow: 0 0 0 4px rgba(31, 143, 155, 0.09);
+
+      box-shadow:
+        0 0 0 3px rgba(36, 149, 160, 0.08);
     }
 
     .input.invalid {
       border-color: var(--error);
-      box-shadow: 0 0 0 4px rgba(199, 95, 66, 0.07);
+
+      box-shadow:
+        0 0 0 3px rgba(201, 104, 78, 0.06);
     }
 
     .input.valid {
@@ -186,246 +207,202 @@
     }
 
     .password-input {
-      padding-left: 52px;
+      padding-left: 58px;
     }
+
+    /* PASSWORD BUTTON */
 
     .toggle-password {
       position: absolute;
-      left: 13px;
+      left: 11px;
       top: 50%;
+
       transform: translateY(-50%);
+
       border: 0;
       background: transparent;
-      color: #8a9699;
+
+      padding: 6px;
+
+      color: #8b9699;
       font-family: "Cairo", sans-serif;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
+
       cursor: pointer;
-      padding: 7px;
     }
 
-    .toggle-password:active {
-      transform: translateY(-50%) scale(0.94);
-    }
+    /* ERRORS */
 
     .field-error {
-      min-height: 0;
-      margin-top: 6px;
-      padding: 0 3px;
+      display: none;
+
+      margin-top: 5px;
+      padding-right: 3px;
+
       color: var(--error);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
-      line-height: 1.6;
-      opacity: 0;
-      transform: translateY(-3px);
-      transition:
-        opacity 0.18s ease,
-        transform 0.18s ease;
+      line-height: 1.5;
     }
 
     .field-error.show {
-      opacity: 1;
-      transform: translateY(0);
+      display: block;
     }
 
+    /* PASSWORD REQUIREMENTS */
+
     .password-rules {
-      margin-top: 7px;
+      display: none;
+
+      margin-top: 5px;
       padding: 0 3px;
+
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .password-rules.show {
       display: flex;
-      flex-direction: column;
-      gap: 3px;
     }
 
     .password-rule {
-      font-size: 11px;
+      display: none;
+
+      font-size: 10.5px;
       color: #9aa4a6;
-      transition: color 0.18s ease;
+      white-space: nowrap;
     }
 
-    .password-rule.ok {
-      color: var(--primary-dark);
+    .password-rule.show {
+      display: inline;
     }
+
+    .password-rule::before {
+      content: "• ";
+    }
+
+    /* BUTTON */
 
     .signup-btn {
       width: 100%;
-      height: 59px;
-      margin-top: 8px;
-      border: 0;
-      border-radius: 18px;
-      background: var(--primary);
-      color: #ffffff;
-      font-family: "Cairo", sans-serif;
-      font-size: 16px;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow:
-        0 10px 22px rgba(31, 143, 155, 0.20);
-      transition:
-        transform 0.2s ease,
-        background 0.2s ease,
-        box-shadow 0.2s ease;
-    }
+      height: 57px;
 
-    .signup-btn:hover {
-      background: var(--primary-dark);
+      margin-top: 2px;
+
+      border: 0;
+      border-radius: 17px;
+
+      background: var(--primary);
+      color: #fff;
+
+      font-family: "Cairo", sans-serif;
+      font-size: 15.5px;
+      font-weight: 800;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 9px 20px rgba(36, 149, 160, 0.18);
+
+      transition:
+        transform 0.18s ease,
+        background 0.18s ease;
     }
 
     .signup-btn:active {
       transform: scale(0.985);
     }
 
+    .signup-btn:hover {
+      background: var(--primary-dark);
+    }
+
     .signup-btn:disabled {
       opacity: 0.65;
       cursor: not-allowed;
-      transform: none;
     }
 
+    /* MESSAGE */
+
     .message {
-      min-height: 0;
-      margin-top: 12px;
+      margin-top: 9px;
+
       text-align: center;
-      color: var(--error);
-      font-size: 13px;
+
+      font-size: 11.5px;
       font-weight: 600;
-      line-height: 1.7;
+
+      color: var(--error);
     }
 
     .message.success {
       color: var(--primary-dark);
     }
 
+    /* LOGIN */
+
     .login-link {
       display: block;
-      margin-top: 20px;
+
+      margin-top: 17px;
+
       text-align: center;
+
       color: var(--primary-dark);
       text-decoration: none;
-      font-size: 14px;
+
+      font-size: 13.5px;
       font-weight: 700;
+
       opacity: 0;
-      animation: contentIn 0.7s ease 0.4s forwards;
+      animation: enter 0.6s ease 0.28s forwards;
     }
 
     .note {
-      margin-top: 16px;
+      margin-top: 12px;
+
       text-align: center;
-      color: #9aa4a6;
-      font-size: 11px;
-      line-height: 1.8;
+
+      color: #a0a9ab;
+      font-size: 10.5px;
+      line-height: 1.7;
     }
 
-    .orb {
-      position: fixed;
-      width: 190px;
-      height: 190px;
-      border-radius: 50%;
-      background: rgba(31, 143, 155, 0.035);
-      top: -85px;
-      left: -85px;
-      pointer-events: none;
-      animation: orbFloat 7s ease-in-out infinite;
-    }
-
-    .orb-two {
-      position: fixed;
-      width: 130px;
-      height: 130px;
-      border-radius: 50%;
-      background: rgba(31, 143, 155, 0.025);
-      bottom: -55px;
-      right: -45px;
-      pointer-events: none;
-      animation: orbFloatTwo 8s ease-in-out infinite;
-    }
-
-    @keyframes brandIn {
+    @keyframes enter {
       from {
         opacity: 0;
-        transform: translateY(-14px);
+        transform: translateY(10px);
       }
 
       to {
         opacity: 1;
         transform: translateY(0);
-      }
-    }
-
-    @keyframes contentIn {
-      from {
-        opacity: 0;
-        transform: translateY(15px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes orbFloat {
-      0%, 100% {
-        transform: translate(0, 0);
-      }
-
-      50% {
-        transform: translate(12px, 15px);
-      }
-    }
-
-    @keyframes orbFloatTwo {
-      0%, 100% {
-        transform: translate(0, 0);
-      }
-
-      50% {
-        transform: translate(-10px, -12px);
       }
     }
 
     @media (max-width: 360px) {
       body {
-        padding-left: 14px;
-        padding-right: 14px;
+        padding-left: 13px;
+        padding-right: 13px;
       }
 
       .card {
-        padding: 22px 17px 20px;
-        border-radius: 26px;
-      }
-
-      .brand-main {
-        font-size: 38px;
-      }
-
-      .heading h1 {
-        font-size: 26px;
+        padding: 20px 17px;
       }
 
       .input {
-        height: 54px;
+        height: 52px;
       }
 
       .signup-btn {
-        height: 56px;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
+        height: 55px;
       }
     }
   </style>
 </head>
 
 <body>
-
-  <div class="orb"></div>
-  <div class="orb-two"></div>
 
   <main class="page">
 
@@ -561,31 +538,33 @@
 
         </div>
 
-        <div class="password-rules">
+        <div
+          id="passwordRules"
+          class="password-rules">
 
-          <div
+          <span
             id="ruleLength"
             class="password-rule">
             6 أحرف أو أكثر
-          </div>
+          </span>
 
-          <div
+          <span
             id="ruleUpper"
             class="password-rule">
-            حرف إنجليزي كبير
-          </div>
+            حرف كبير
+          </span>
 
-          <div
+          <span
             id="ruleLower"
             class="password-rule">
-            حرف إنجليزي صغير
-          </div>
+            حرف صغير
+          </span>
 
-          <div
+          <span
             id="ruleNumber"
             class="password-rule">
             رقم
-          </div>
+          </span>
 
         </div>
 
@@ -597,7 +576,7 @@
       </div>
 
 
-      <!-- تأكيد كلمة المرور -->
+      <!-- التأكيد -->
 
       <div class="field-group">
 
@@ -692,7 +671,6 @@
 
 
     const errors = {
-
       fullName:
         document.getElementById("fullNameError"),
 
@@ -705,85 +683,93 @@
       password:
         document.getElementById("passwordError"),
 
-      confirmPassword:
-        document.getElementById("confirmPasswordError")
-
+      confirm:
+        document.getElementById(
+          "confirmPasswordError"
+        )
     };
 
 
-    const rules = {
-
-      length:
-        document.getElementById("ruleLength"),
-
-      upper:
-        document.getElementById("ruleUpper"),
-
-      lower:
-        document.getElementById("ruleLower"),
-
-      number:
-        document.getElementById("ruleNumber")
-
-    };
+    const passwordRules =
+      document.getElementById(
+        "passwordRules"
+      );
 
 
-    function setError(input, element, text) {
+    const ruleLength =
+      document.getElementById(
+        "ruleLength"
+      );
+
+    const ruleUpper =
+      document.getElementById(
+        "ruleUpper"
+      );
+
+    const ruleLower =
+      document.getElementById(
+        "ruleLower"
+      );
+
+    const ruleNumber =
+      document.getElementById(
+        "ruleNumber"
+      );
+
+
+    function error(input, box, text) {
 
       input.classList.add("invalid");
       input.classList.remove("valid");
 
-      element.textContent = text;
-      element.classList.add("show");
+      box.textContent = text;
+      box.classList.add("show");
 
     }
 
 
-    function clearError(input, element) {
+    function clearError(input, box) {
 
       input.classList.remove("invalid");
 
-      element.textContent = "";
-      element.classList.remove("show");
+      box.textContent = "";
+      box.classList.remove("show");
 
     }
 
 
-    function setValid(input, element) {
+    function valid(input, box) {
 
       input.classList.remove("invalid");
       input.classList.add("valid");
 
-      element.textContent = "";
-      element.classList.remove("show");
+      box.textContent = "";
+      box.classList.remove("show");
 
     }
 
 
-    function checkFullName() {
+    function checkName() {
 
       const value =
         fullName.value.trim();
 
       if (!value) {
-
         return false;
-
       }
 
       if (value.length < 2) {
 
-        setError(
+        error(
           fullName,
           errors.fullName,
           "يرجى إدخال اسم صحيح"
         );
 
         return false;
-
       }
 
-      setValid(
+      valid(
         fullName,
         errors.fullName
       );
@@ -799,24 +785,21 @@
         phone.value.trim();
 
       if (!value) {
-
         return false;
-
       }
 
       if (!/^07\d{9}$/.test(value)) {
 
-        setError(
+        error(
           phone,
           errors.phone,
           "يرجى إدخال رقم هاتف صحيح"
         );
 
         return false;
-
       }
 
-      setValid(
+      valid(
         phone,
         errors.phone
       );
@@ -832,28 +815,24 @@
         email.value.trim();
 
       if (!value) {
-
         return false;
-
       }
 
-      const valid =
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-          .test(value);
+      if (
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+          .test(value)
+      ) {
 
-      if (!valid) {
-
-        setError(
+        error(
           email,
           errors.email,
           "يرجى إدخال بريد إلكتروني صحيح"
         );
 
         return false;
-
       }
 
-      setValid(
+      valid(
         email,
         errors.email
       );
@@ -863,58 +842,35 @@
     }
 
 
-    function getPasswordRules(value) {
+    function passwordStatus(value) {
 
       return {
-
-        length:
-          value.length >= 6,
-
-        upper:
-          /[A-Z]/.test(value),
-
-        lower:
-          /[a-z]/.test(value),
-
-        number:
-          /\d/.test(value)
-
+        length: value.length >= 6,
+        upper: /[A-Z]/.test(value),
+        lower: /[a-z]/.test(value),
+        number: /\d/.test(value)
       };
 
     }
 
 
-    function updatePasswordRules() {
+    function updatePassword() {
 
       const value =
         password.value;
 
-      const result =
-        getPasswordRules(value);
-
-
-      rules.length.classList.toggle(
-        "ok",
-        result.length
-      );
-
-      rules.upper.classList.toggle(
-        "ok",
-        result.upper
-      );
-
-      rules.lower.classList.toggle(
-        "ok",
-        result.lower
-      );
-
-      rules.number.classList.toggle(
-        "ok",
-        result.number
-      );
-
-
       if (!value) {
+
+        passwordRules.classList.remove("show");
+
+        [
+          ruleLength,
+          ruleUpper,
+          ruleLower,
+          ruleNumber
+        ].forEach(rule => {
+          rule.classList.remove("show");
+        });
 
         clearError(
           password,
@@ -922,31 +878,63 @@
         );
 
         return false;
-
       }
 
 
-      const valid =
+      passwordRules.classList.add("show");
+
+
+      const result =
+        passwordStatus(value);
+
+
+      /*
+        فقط الشروط غير المكتملة تظهر.
+        الشرط الذي يتحقق يختفي مباشرة.
+      */
+
+      ruleLength.classList.toggle(
+        "show",
+        !result.length
+      );
+
+      ruleUpper.classList.toggle(
+        "show",
+        !result.upper
+      );
+
+      ruleLower.classList.toggle(
+        "show",
+        !result.lower
+      );
+
+      ruleNumber.classList.toggle(
+        "show",
+        !result.number
+      );
+
+
+      const complete =
         result.length &&
         result.upper &&
         result.lower &&
         result.number;
 
 
-      if (!valid) {
+      if (!complete) {
 
-        setError(
-          password,
-          errors.password,
-          "كلمة المرور لا تستوفي الشروط"
-        );
+        password.classList.remove("valid");
 
         return false;
-
       }
 
 
-      setValid(
+      password.classList.remove("invalid");
+      password.classList.add("valid");
+
+      passwordRules.classList.remove("show");
+
+      clearError(
         password,
         errors.password
       );
@@ -956,34 +944,31 @@
     }
 
 
-    function checkConfirmPassword() {
+    function checkConfirm() {
 
       const value =
         confirmPassword.value;
 
       if (!value) {
-
         return false;
-
       }
 
       if (
         value !== password.value
       ) {
 
-        setError(
+        error(
           confirmPassword,
-          errors.confirmPassword,
+          errors.confirm,
           "كلمتا المرور غير متطابقتين"
         );
 
         return false;
-
       }
 
-      setValid(
+      valid(
         confirmPassword,
-        errors.confirmPassword
+        errors.confirm
       );
 
       return true;
@@ -999,21 +984,21 @@
           "click",
           () => {
 
-            const target =
+            const input =
               document.getElementById(
                 button.dataset.target
               );
 
             if (
-              target.type === "password"
+              input.type === "password"
             ) {
 
-              target.type = "text";
+              input.type = "text";
               button.textContent = "إخفاء";
 
             } else {
 
-              target.type = "password";
+              input.type = "password";
               button.textContent = "إظهار";
 
             }
@@ -1046,7 +1031,7 @@
       () => {
 
         if (fullName.value) {
-          checkFullName();
+          checkName();
         }
 
       }
@@ -1069,10 +1054,10 @@
       "input",
       () => {
 
-        updatePasswordRules();
+        updatePassword();
 
         if (confirmPassword.value) {
-          checkConfirmPassword();
+          checkConfirm();
         }
 
       }
@@ -1084,7 +1069,7 @@
       () => {
 
         if (confirmPassword.value) {
-          checkConfirmPassword();
+          checkConfirm();
         }
 
       }
@@ -1096,7 +1081,7 @@
       async () => {
 
         const nameOK =
-          checkFullName();
+          checkName();
 
         const phoneOK =
           checkPhone();
@@ -1105,10 +1090,10 @@
           checkEmail();
 
         const passwordOK =
-          updatePasswordRules();
+          updatePassword();
 
         const confirmOK =
-          checkConfirmPassword();
+          checkConfirm();
 
 
         if (
@@ -1120,7 +1105,6 @@
         ) {
 
           return;
-
         }
 
 
@@ -1137,47 +1121,46 @@
 
           const {
             data,
-            error
-          } = await supabase.auth.signUp({
+            error: signupError
+          } =
+            await supabase.auth.signUp({
 
-            email:
-              email.value
-                .trim()
-                .toLowerCase(),
+              email:
+                email.value
+                  .trim()
+                  .toLowerCase(),
 
-            password:
-              password.value,
+              password:
+                password.value,
 
-            options: {
+              options: {
 
-              data: {
+                data: {
 
-                full_name:
-                  fullName.value.trim(),
+                  full_name:
+                    fullName.value.trim(),
 
-                phone:
-                  phone.value.trim()
+                  phone:
+                    phone.value.trim()
+
+                }
 
               }
 
-            }
-
-          });
+            });
 
 
-          if (error) {
+          if (signupError) {
 
             console.error(
-              "Signup error:",
-              error
+              signupError
             );
 
             message.textContent =
               "تعذر إنشاء الحساب: " +
-              error.message;
+              signupError.message;
 
             return;
-
           }
 
 
@@ -1187,7 +1170,6 @@
               "تعذر إنشاء الحساب. حاول مرة أخرى.";
 
             return;
-
           }
 
 
@@ -1208,7 +1190,6 @@
               );
 
             }, 1000);
-
 
           } else {
 
@@ -1231,16 +1212,12 @@
           }
 
 
-        } catch (error) {
+        } catch (err) {
 
-          console.error(
-            "Unexpected signup error:",
-            error
-          );
+          console.error(err);
 
           message.textContent =
             "حدث خطأ غير متوقع. حاول مرة أخرى.";
-
 
         } finally {
 
