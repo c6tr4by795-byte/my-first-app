@@ -1,87 +1,59 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  />
-
-  <meta name="theme-color" content="#0F858C" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta
-    name="apple-mobile-web-app-status-bar-style"
-    content="black-translucent"
-  />
+    content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
+  >
 
   <title>MZAD PHONE</title>
 
   <style>
-    /* =========================================================
-       MZAD PHONE
-       HOME UI
-       ========================================================= */
-
     :root {
-      --primary: #0f858c;
-      --primary-dark: #096970;
-      --primary-deep: #07555b;
-      --primary-soft: #e9f7f8;
+      --primary: #238f98;
+      --primary-dark: #176f77;
+      --primary-soft: #eaf6f7;
 
-      --accent: #d35b70;
-      --accent-soft: #fff0f3;
-
-      --ink: #172326;
-      --ink-2: #354346;
-      --muted: #788689;
-      --muted-2: #9ca8aa;
+      --ink: #172124;
+      --text: #252d2f;
+      --muted: #7b8587;
+      --muted-light: #a7afb1;
 
       --white: #ffffff;
       --surface: #f7f9f9;
-      --surface-2: #f1f4f4;
+      --line: #e5eaeb;
 
-      --line: #e4eaea;
+      --radius-xl: 26px;
+      --radius-lg: 21px;
+      --radius-md: 16px;
+      --radius-sm: 13px;
 
-      --shadow-sm:
-        0 5px 18px rgba(18, 42, 44, 0.07);
+      --shadow-soft:
+        0 10px 35px rgba(22, 38, 40, 0.07);
 
-      --shadow-md:
-        0 14px 38px rgba(18, 42, 44, 0.10);
+      --shadow-card:
+        0 7px 25px rgba(22, 38, 40, 0.06);
 
-      --shadow-lg:
-        0 22px 60px rgba(18, 42, 44, 0.14);
-
-      --radius-sm: 14px;
-      --radius-md: 20px;
-      --radius-lg: 28px;
-      --radius-xl: 34px;
-
-      --nav-height: 82px;
+      --nav-height: 76px;
       --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
     html {
       scroll-behavior: smooth;
-      background: var(--surface);
+      background: var(--white);
     }
 
     body {
-      min-height: 100vh;
-      background:
-        linear-gradient(
-          180deg,
-          #ffffff 0%,
-          #ffffff 23%,
-          #f7f9f9 50%,
-          #f7f9f9 100%
-        );
-      color: var(--ink);
+      margin: 0;
+      padding: 0;
+      background: var(--white);
+      color: var(--text);
       font-family:
         -apple-system,
         BlinkMacSystemFont,
@@ -91,9 +63,6 @@
         Tahoma,
         Arial,
         sans-serif;
-
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
       overflow-x: hidden;
     }
 
@@ -106,517 +75,283 @@
       border: 0;
       background: none;
       cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    img {
-      display: block;
-      max-width: 100%;
-    }
-
-    /* =========================================================
-       SPLASH
-       ========================================================= */
-
-    .splash {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      background:
-        radial-gradient(
-          circle at 50% 42%,
-          rgba(255,255,255,.12),
-          transparent 28%
-        ),
-        linear-gradient(
-          145deg,
-          var(--primary-deep),
-          var(--primary)
-        );
-
-      transition:
-        opacity .65s ease,
-        visibility .65s ease;
-    }
-
-    .splash.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .splash-inner {
-      width: min(86vw, 340px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      color: white;
-    }
-
-    .splash-mark {
-      width: 92px;
-      height: 92px;
-
-      display: grid;
-      place-items: center;
-
-      border-radius: 28px;
-
-      background: rgba(255,255,255,.13);
-      border: 1px solid rgba(255,255,255,.22);
-
-      box-shadow:
-        0 18px 55px rgba(0,0,0,.16),
-        inset 0 1px 0 rgba(255,255,255,.2);
-
-      backdrop-filter: blur(12px);
-
-      animation:
-        splashMark .9s cubic-bezier(.2,.8,.2,1) both;
-    }
-
-    .splash-mark svg {
-      width: 58px;
-      height: 58px;
-    }
-
-    .splash-title {
-      margin-top: 28px;
-
-      font-size: 42px;
-      line-height: .95;
-      font-weight: 900;
-      letter-spacing: -1.7px;
-
-      animation:
-        splashText .8s .18s cubic-bezier(.2,.8,.2,1) both;
-    }
-
-    .splash-subtitle {
-      margin-top: 10px;
-
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 5px;
-
-      opacity: .88;
-
-      animation:
-        splashText .8s .30s cubic-bezier(.2,.8,.2,1) both;
-    }
-
-    .splash-line {
-      width: 54px;
-      height: 3px;
-
-      margin-top: 25px;
-
-      border-radius: 99px;
-      background: rgba(255,255,255,.72);
-
-      animation:
-        splashLine .9s .42s ease both;
-    }
-
-    @keyframes splashMark {
-      from {
-        opacity: 0;
-        transform:
-          translateY(22px)
-          scale(.82)
-          rotate(-5deg);
-      }
-
-      to {
-        opacity: 1;
-        transform:
-          translateY(0)
-          scale(1)
-          rotate(0);
-      }
-    }
-
-    @keyframes splashText {
-      from {
-        opacity: 0;
-        transform: translateY(16px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes splashLine {
-      from {
-        opacity: 0;
-        width: 0;
-      }
-
-      to {
-        opacity: 1;
-        width: 54px;
-      }
-    }
-
-    /* =========================================================
-       APP SHELL
-       ========================================================= */
+    /* =========================
+       APP
+    ========================= */
 
     .app {
+      width: 100%;
+      max-width: 620px;
+      margin: 0 auto;
       min-height: 100vh;
-      padding-bottom:
-        calc(
-          var(--nav-height) +
-          var(--safe-bottom) +
-          28px
-        );
+      background: var(--white);
+      position: relative;
     }
 
-    /* =========================================================
-       HERO / HEADER
-       ========================================================= */
+    .page {
+      padding-bottom: calc(
+        var(--nav-height) +
+        var(--safe-bottom) +
+        35px
+      );
+    }
 
-    .hero {
-      position: relative;
-      isolation: isolate;
+    /* =========================
+       TOP HEADER
+    ========================= */
 
-      min-height: 254px;
-
+    .top-header {
       padding:
-        calc(16px + env(safe-area-inset-top, 0px))
+        max(12px, env(safe-area-inset-top))
         18px
-        48px;
+        0;
 
-      overflow: hidden;
-
-      color: white;
-
-      background:
-        radial-gradient(
-          circle at 92% 8%,
-          rgba(255,255,255,.13),
-          transparent 26%
-        ),
-        radial-gradient(
-          circle at 12% 86%,
-          rgba(255,255,255,.07),
-          transparent 30%
-        ),
-        linear-gradient(
-          145deg,
-          #0a6f76,
-          #10949b
-        );
-
-      border-radius:
-        0 0 42px 42px;
-
-      box-shadow:
-        0 16px 42px rgba(7, 85, 91, .16);
+      background: var(--white);
     }
 
-    /* subtle decorative lines */
-    .hero::before,
-    .hero::after {
-      content: "";
-      position: absolute;
-      z-index: -1;
-
-      width: 260px;
-      height: 260px;
-
-      border: 1px solid rgba(255,255,255,.075);
-      border-radius: 50%;
-    }
-
-    .hero::before {
-      top: -180px;
-      right: -80px;
-    }
-
-    .hero::after {
-      bottom: -205px;
-      left: -100px;
-    }
-
-    .hero-top {
-      position: relative;
+    .header-row {
+      min-height: 48px;
 
       display: flex;
       align-items: center;
       justify-content: space-between;
 
-      min-height: 66px;
+      gap: 12px;
     }
 
     .brand {
       display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-
-      user-select: none;
+      align-items: center;
+      gap: 2px;
+      text-decoration: none;
+      color: var(--ink);
+      direction: ltr;
+      flex-shrink: 0;
     }
 
     .brand-main {
-      font-size: 34px;
-      line-height: .9;
-      font-weight: 950;
-      letter-spacing: -1.7px;
+      font-size: 29px;
+      line-height: 0.9;
+      font-weight: 900;
+      letter-spacing: -1.5px;
     }
 
     .brand-sub {
-      margin-top: 7px;
-
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 800;
-      letter-spacing: 5px;
-
-      opacity: .95;
+      letter-spacing: 4px;
+      margin-top: 19px;
+      margin-left: -53px;
+      color: var(--primary);
     }
 
-    .hero-actions {
+    .header-actions {
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 8px;
     }
 
-    .circle-action {
-      position: relative;
+    .icon-button {
+      width: 43px;
+      height: 43px;
 
-      width: 48px;
-      height: 48px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
 
       display: grid;
       place-items: center;
 
-      border-radius: 50%;
+      background: var(--white);
 
-      color: var(--primary-dark);
-      background: rgba(255,255,255,.96);
-
-      box-shadow:
-        0 8px 22px rgba(0,0,0,.10);
+      color: var(--ink);
 
       transition:
-        transform .2s ease,
-        box-shadow .2s ease;
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
     }
 
-    .circle-action:active {
-      transform: scale(.93);
+    .icon-button:active {
+      transform: scale(0.94);
+      background: var(--primary-soft);
+      border-color: transparent;
     }
 
-    .circle-action svg {
-      width: 22px;
-      height: 22px;
+    .icon-button svg {
+      width: 21px;
+      height: 21px;
+      stroke: currentColor;
     }
 
-    .notification-count {
+    .notification {
+      position: relative;
+    }
+
+    .notification-badge {
       position: absolute;
 
       top: -3px;
       right: -2px;
 
-      min-width: 18px;
-      height: 18px;
+      min-width: 17px;
+      height: 17px;
 
-      padding: 0 5px;
+      padding: 0 4px;
 
       display: grid;
       place-items: center;
 
       border-radius: 99px;
 
+      background: var(--primary);
       color: white;
-      background: var(--accent);
-
-      border: 2px solid #fff;
 
       font-size: 9px;
-      font-weight: 900;
+      font-weight: 800;
+
+      border: 2px solid white;
     }
 
-    /* =========================================================
+    /* =========================
        SEARCH
-       ========================================================= */
+    ========================= */
 
     .search-wrap {
-      position: relative;
-      z-index: 4;
-
-      margin-top: 21px;
+      padding: 12px 18px 0;
     }
 
-    .search {
-      width: 100%;
-      height: 58px;
+    .search-box {
+      height: 47px;
 
       display: flex;
       align-items: center;
-      gap: 12px;
 
-      padding: 0 17px 0 18px;
+      gap: 10px;
 
-      color: var(--ink);
+      padding: 0 15px;
 
-      background: rgba(255,255,255,.98);
+      border-radius: 15px;
 
-      border-radius: 19px;
+      background: #f5f7f7;
 
-      box-shadow:
-        0 13px 34px rgba(0,0,0,.12);
+      border: 1px solid #edf0f0;
 
       transition:
-        box-shadow .25s ease,
-        transform .25s ease;
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
     }
 
-    .search:focus-within {
-      transform: translateY(-1px);
+    .search-box:focus-within {
+      border-color: rgba(35, 143, 152, 0.35);
 
       box-shadow:
-        0 17px 40px rgba(0,0,0,.15);
+        0 0 0 4px rgba(35, 143, 152, 0.07);
     }
 
-    .search svg {
-      flex: 0 0 auto;
+    .search-icon {
+      width: 20px;
+      height: 20px;
 
-      width: 23px;
-      height: 23px;
+      flex-shrink: 0;
 
-      color: #7f8b8d;
+      color: var(--muted);
     }
 
-    .search input {
-      min-width: 0;
-      flex: 1;
+    .search-input {
+      width: 100%;
 
       border: 0;
       outline: 0;
 
-      color: var(--ink);
-
       background: transparent;
 
-      text-align: right;
+      color: var(--text);
 
-      font-size: 15px;
+      font-size: 14px;
+      font-weight: 600;
+
+      text-align: right;
+    }
+
+    .search-input::placeholder {
+      color: #929b9d;
+    }
+
+    /* =========================
+       LOCATION
+    ========================= */
+
+    .location-row {
+      padding: 12px 19px 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      color: var(--muted);
+    }
+
+    .location {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      font-size: 12px;
       font-weight: 700;
     }
 
-    .search input::placeholder {
-      color: #899597;
-      opacity: 1;
+    .location svg {
+      width: 17px;
+      height: 17px;
+
+      color: var(--primary);
+      stroke: currentColor;
     }
 
-    /* =========================================================
-       HERO CURVE
-       ========================================================= */
+    .change-location {
+      color: var(--primary);
 
-    .hero-curve {
-      position: absolute;
-
-      left: -5%;
-      right: -5%;
-      bottom: -1px;
-
-      height: 38px;
-
-      background: var(--surface);
-
-      border-radius:
-        55% 55% 0 0 /
-        100% 100% 0 0;
-
-      transform: scaleX(1.08);
+      font-size: 11px;
+      font-weight: 800;
     }
 
-    /* =========================================================
-       CONTENT
-       ========================================================= */
-
-    .content {
-      position: relative;
-      z-index: 2;
-
-      width: min(100%, 620px);
-
-      margin: 0 auto;
-
-      padding:
-        18px
-        16px
-        0;
-    }
-
-    .section {
-      margin-top: 25px;
-    }
-
-    .section:first-child {
-      margin-top: 7px;
-    }
+    /* =========================
+       SECTION HEADER
+    ========================= */
 
     .section-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
 
-      margin-bottom: 13px;
+      padding: 21px 18px 10px;
     }
 
     .section-title {
+      margin: 0;
+
+      font-size: 19px;
+      font-weight: 850;
+
       color: var(--ink);
-
-      font-size: 18px;
-      font-weight: 900;
-
-      letter-spacing: -.4px;
+      letter-spacing: -0.4px;
     }
 
-    .section-title span {
+    .section-action {
       color: var(--primary);
-    }
-
-    .section-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-
-      color: var(--muted);
 
       font-size: 12px;
       font-weight: 800;
     }
 
-    .section-link svg {
-      width: 15px;
-      height: 15px;
-    }
+    /* =========================
+       AUCTION CAROUSEL
+    ========================= */
 
-    /* =========================================================
-       AUCTION
-       ========================================================= */
-
-    .auction-viewport {
-      position: relative;
-
+    .auction-area {
       overflow: hidden;
-
-      border-radius: 27px;
     }
 
     .auction-track {
@@ -624,429 +359,472 @@
 
       direction: rtl;
 
-      transition:
-        transform .58s cubic-bezier(.2,.8,.2,1);
+      gap: 12px;
 
-      will-change: transform;
+      overflow-x: auto;
+
+      padding:
+        4px
+        18px
+        5px;
+
+      scroll-snap-type: x mandatory;
+
+      scrollbar-width: none;
+
+      touch-action: pan-x;
     }
 
-    .auction-slide {
-      flex: 0 0 100%;
-
-      min-width: 0;
-
-      padding: 0 1px;
+    .auction-track::-webkit-scrollbar {
+      display: none;
     }
 
     .auction-card {
       position: relative;
-      overflow: hidden;
+
+      flex: 0 0 min(
+        89vw,
+        530px
+      );
 
       min-height: 166px;
 
-      padding: 17px;
+      scroll-snap-align: center;
 
-      display: flex;
-      align-items: stretch;
-      gap: 13px;
+      border-radius: 25px;
 
-      color: white;
-
-      border-radius: 27px;
+      overflow: hidden;
 
       background:
-        radial-gradient(
-          circle at 10% 20%,
-          rgba(255,255,255,.12),
-          transparent 28%
-        ),
         linear-gradient(
           135deg,
-          #0b6c73,
-          #10949b
+          #f4fbfb 0%,
+          #eaf6f7 55%,
+          #dceff1 100%
         );
 
-      box-shadow:
-        0 17px 34px rgba(8, 96, 102, .18);
+      border: 1px solid #dfeff0;
+
+      box-shadow: var(--shadow-soft);
     }
 
-    .auction-card::before {
+    .auction-card::after {
       content: "";
 
       position: absolute;
 
-      width: 160px;
-      height: 160px;
+      width: 190px;
+      height: 190px;
 
-      left: -70px;
-      bottom: -80px;
-
-      border: 1px solid rgba(255,255,255,.10);
+      left: -75px;
+      bottom: -110px;
 
       border-radius: 50%;
+
+      background: rgba(35, 143, 152, 0.08);
     }
 
-    .auction-info {
+    .auction-content {
       position: relative;
       z-index: 2;
 
-      min-width: 0;
+      height: 100%;
+
+      min-height: 166px;
+
+      display: flex;
+      align-items: center;
+
+      padding: 17px 18px;
+
+      gap: 15px;
+    }
+
+    .auction-info {
       flex: 1;
+      min-width: 0;
 
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      align-items: flex-start;
 
-      padding: 1px 0;
+      text-align: right;
     }
 
-    .auction-badge {
-      width: fit-content;
+    .auction-label {
+      display: inline-flex;
+      align-items: center;
 
-      padding: 6px 9px;
+      height: 25px;
 
-      border-radius: 9px;
+      padding: 0 9px;
 
-      background: rgba(255,255,255,.14);
+      border-radius: 99px;
 
-      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(35, 143, 152, 0.11);
+
+      color: var(--primary-dark);
 
       font-size: 10px;
-      font-weight: 900;
+      font-weight: 850;
     }
 
     .auction-title {
-      margin-top: 9px;
+      margin: 9px 0 0;
 
-      font-size: 21px;
+      color: var(--ink);
+
+      font-size: 20px;
       line-height: 1.15;
-      font-weight: 950;
+      font-weight: 900;
 
-      letter-spacing: -.7px;
+      letter-spacing: -0.5px;
     }
 
     .auction-meta {
-      margin-top: 6px;
+      margin-top: 5px;
 
-      color: rgba(255,255,255,.77);
+      color: var(--muted);
 
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 650;
     }
 
-    .auction-bottom {
+    .auction-price-row {
       display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
+      align-items: baseline;
+      gap: 5px;
 
-      gap: 10px;
-
-      margin-top: 10px;
+      margin-top: 12px;
     }
 
-    .auction-price-label {
-      display: block;
+    .auction-price {
+      color: var(--primary-dark);
 
-      margin-bottom: 2px;
+      font-size: 19px;
+      font-weight: 950;
+    }
 
-      color: rgba(255,255,255,.65);
+    .auction-currency {
+      color: var(--muted);
 
       font-size: 9px;
       font-weight: 700;
     }
 
-    .auction-price {
-      font-size: 17px;
-      font-weight: 950;
-    }
+    .auction-button {
+      margin-top: 11px;
 
-    .auction-cta {
-      flex: 0 0 auto;
+      height: 34px;
 
-      min-height: 36px;
+      padding: 0 14px;
 
-      padding: 0 13px;
+      border-radius: 11px;
 
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-
-      border-radius: 12px;
-
-      color: var(--primary-deep);
-      background: white;
+      background: var(--ink);
+      color: white;
 
       font-size: 11px;
-      font-weight: 900;
+      font-weight: 850;
 
-      box-shadow:
-        0 7px 18px rgba(0,0,0,.10);
+      transition:
+        transform 0.2s ease,
+        background 0.2s ease;
     }
 
-    /* device artwork */
-    .auction-device {
+    .auction-button:active {
+      transform: scale(0.95);
+      background: var(--primary-dark);
+    }
+
+    /* =========================
+       DEVICE VISUAL
+    ========================= */
+
+    .device-stage {
+      width: 125px;
+      height: 138px;
+
+      flex-shrink: 0;
+
       position: relative;
 
-      flex: 0 0 112px;
+      display: grid;
+      place-items: center;
+    }
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .device-glow {
+      position: absolute;
+
+      width: 110px;
+      height: 110px;
+
+      border-radius: 50%;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(255,255,255,0.9),
+          rgba(255,255,255,0)
+        );
     }
 
     .phone {
       position: relative;
 
-      width: 88px;
-      height: 132px;
+      width: 68px;
+      height: 122px;
 
-      padding: 5px;
-
-      border-radius: 22px;
+      border-radius: 15px;
 
       background:
         linear-gradient(
           145deg,
-          #202c2e,
-          #0b1112
+          #31393b,
+          #111719
         );
+
+      border: 2px solid #657174;
 
       box-shadow:
-        0 17px 25px rgba(0,0,0,.23),
-        inset 0 0 0 1px rgba(255,255,255,.16);
+        0 15px 24px rgba(15, 29, 31, 0.18);
 
-      transform:
-        rotate(7deg)
-        translateY(4px);
-    }
-
-    .phone-screen {
-      position: relative;
-
-      width: 100%;
-      height: 100%;
+      transform: rotate(-8deg);
 
       overflow: hidden;
-
-      border-radius: 18px;
-
-      background:
-        radial-gradient(
-          circle at 70% 20%,
-          rgba(255,255,255,.32),
-          transparent 19%
-        ),
-        linear-gradient(
-          145deg,
-          #132f33,
-          #071518 55%,
-          #176c73
-        );
     }
 
-    .phone-camera {
+    .phone::before {
+      content: "";
+
       position: absolute;
 
       top: 6px;
       left: 50%;
 
-      width: 28px;
-      height: 7px;
-
       transform: translateX(-50%);
 
-      border-radius: 0 0 7px 7px;
+      width: 25px;
+      height: 6px;
 
-      background: #0c1112;
+      border-radius: 99px;
+
+      background: #111719;
+
+      z-index: 3;
     }
 
-    .phone-glow {
+    .phone-screen {
       position: absolute;
 
-      width: 65px;
-      height: 65px;
+      inset: 3px;
 
-      right: -15px;
-      bottom: 3px;
+      border-radius: 12px;
 
-      border-radius: 50%;
-
-      background: rgba(87, 219, 225, .18);
-
-      filter: blur(2px);
-    }
-
-    /* second device */
-    .auction-device .phone.back {
-      position: absolute;
-
-      width: 65px;
-      height: 105px;
-
-      left: 2px;
-
-      opacity: .55;
-
-      transform:
-        rotate(-12deg)
-        translate(-4px, 8px);
-
-      z-index: -1;
+      background:
+        linear-gradient(
+          160deg,
+          #dff4f5,
+          #9ccfd3 40%,
+          #367e84 100%
+        );
     }
 
     .camera-module {
       position: absolute;
 
-      top: 11px;
-      right: 9px;
+      top: 10px;
+      left: 8px;
 
-      width: 23px;
-      height: 29px;
+      width: 26px;
+      height: 32px;
 
-      padding: 4px;
+      border-radius: 8px;
 
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3px;
+      background: #171c1d;
 
-      border-radius: 7px;
-
-      background: #11191a;
+      z-index: 5;
     }
 
-    .camera-module i {
-      display: block;
+    .camera-module span {
+      position: absolute;
+
+      width: 8px;
+      height: 8px;
 
       border-radius: 50%;
 
-      background:
-        radial-gradient(
-          circle at 35% 30%,
-          #87999a,
-          #111819 52%
-        );
+      background: #556164;
+
+      border: 1px solid #90999b;
     }
 
-    .dots {
+    .camera-module span:nth-child(1) {
+      top: 5px;
+      left: 5px;
+    }
+
+    .camera-module span:nth-child(2) {
+      top: 5px;
+      right: 5px;
+    }
+
+    .camera-module span:nth-child(3) {
+      bottom: 5px;
+      left: 9px;
+    }
+
+    .auction-arrow {
+      position: absolute;
+
+      left: 13px;
+      top: 12px;
+
+      width: 29px;
+      height: 29px;
+
+      border-radius: 50%;
+
+      display: grid;
+      place-items: center;
+
+      background: rgba(255,255,255,0.72);
+
+      color: var(--primary-dark);
+
+      z-index: 5;
+    }
+
+    .auction-arrow svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    /* =========================
+       DOTS
+    ========================= */
+
+    .carousel-dots {
       display: flex;
       justify-content: center;
+      align-items: center;
+
       gap: 5px;
 
-      margin-top: 10px;
+      padding-top: 8px;
     }
 
     .dot {
-      width: 6px;
-      height: 6px;
+      width: 5px;
+      height: 5px;
 
       border-radius: 50%;
 
-      background: #cbd6d7;
+      background: #ccd5d6;
 
       transition:
-        width .25s ease,
-        background .25s ease;
+        width 0.25s ease,
+        background 0.25s ease;
     }
 
     .dot.active {
-      width: 19px;
+      width: 17px;
 
       border-radius: 99px;
 
       background: var(--primary);
     }
 
-    /* =========================================================
-       DEVICE CATEGORIES
-       ========================================================= */
+    /* =========================
+       DEVICES
+    ========================= */
 
-    .device-rail {
-      display: grid;
-
-      grid-template-columns:
-        repeat(5, minmax(0, 1fr));
-
-      gap: 8px;
+    .devices-section {
+      margin-top: 4px;
     }
 
-    .device-item {
-      min-width: 0;
-
+    .devices-scroll {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 7px;
 
-      padding: 4px 0;
+      gap: 10px;
 
-      transition:
-        transform .22s ease;
+      overflow-x: auto;
+
+      padding:
+        2px
+        18px
+        8px;
+
+      scrollbar-width: none;
     }
 
-    .device-item:active {
-      transform: scale(.94);
+    .devices-scroll::-webkit-scrollbar {
+      display: none;
     }
 
-    .device-icon {
-      width: 55px;
-      height: 55px;
+    .device-category {
+      flex: 0 0 75px;
+
+      text-align: center;
+    }
+
+    .device-icon-box {
+      width: 70px;
+      height: 70px;
+
+      margin: 0 auto;
+
+      border-radius: 19px;
+
+      background: #fafbfb;
+
+      border: 1px solid var(--line);
 
       display: grid;
       place-items: center;
 
-      border-radius: 17px;
-
-      background: white;
-
-      border: 1px solid #edf1f1;
-
       box-shadow:
-        var(--shadow-sm);
+        0 5px 17px rgba(23, 33, 36, 0.045);
+
+      transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
     }
 
-    .device-icon svg {
-      width: 27px;
-      height: 27px;
+    .device-category:active .device-icon-box {
+      transform: scale(0.94);
+      background: var(--primary-soft);
+      border-color: rgba(35, 143, 152, 0.25);
+    }
 
-      color: var(--primary-dark);
+    .device-icon-box svg {
+      width: 32px;
+      height: 32px;
+
+      color: var(--ink);
+
+      stroke: currentColor;
     }
 
     .device-name {
-      overflow: hidden;
+      display: block;
 
-      max-width: 100%;
+      margin-top: 7px;
 
-      color: var(--ink-2);
+      color: #4f595b;
 
-      font-size: 10px;
-      font-weight: 850;
-
-      white-space: nowrap;
-      text-overflow: ellipsis;
+      font-size: 11px;
+      font-weight: 800;
     }
 
-    .device-item.active .device-icon {
-      color: white;
-
-      background: var(--primary);
-
-      border-color: var(--primary);
-
-      box-shadow:
-        0 9px 22px rgba(15,133,140,.20);
-    }
-
-    .device-item.active .device-icon svg {
-      color: white;
-    }
-
-    .device-item.active .device-name {
-      color: var(--primary-dark);
-    }
-
-    /* =========================================================
+    /* =========================
        QUICK ACTIONS
-       ========================================================= */
+    ========================= */
+
+    .quick-section {
+      margin-top: 4px;
+    }
 
     .quick-grid {
       display: grid;
@@ -1055,68 +833,49 @@
         repeat(4, minmax(0, 1fr));
 
       gap: 9px;
+
+      padding: 0 18px;
     }
 
     .quick-card {
-      position: relative;
+      min-height: 84px;
 
-      min-height: 94px;
+      padding: 10px 6px;
 
-      padding: 12px 7px;
+      border: 1px solid var(--line);
+
+      border-radius: 18px;
+
+      background: white;
 
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
 
-      gap: 9px;
-
-      overflow: hidden;
-
-      border: 1px solid #edf1f1;
-
-      border-radius: 19px;
-
-      background: white;
+      gap: 7px;
 
       box-shadow:
-        0 7px 22px rgba(18,42,44,.055);
+        0 6px 18px rgba(23, 33, 36, 0.04);
 
       transition:
-        transform .2s ease,
-        box-shadow .2s ease;
-    }
-
-    .quick-card::after {
-      content: "";
-
-      position: absolute;
-
-      width: 58px;
-      height: 58px;
-
-      left: -25px;
-      bottom: -30px;
-
-      border-radius: 50%;
-
-      background: var(--primary-soft);
+        transform 0.2s ease,
+        background 0.2s ease;
     }
 
     .quick-card:active {
-      transform: scale(.95);
-      box-shadow:
-        0 4px 13px rgba(18,42,44,.08);
+      transform: scale(0.96);
+      background: var(--primary-soft);
     }
 
     .quick-icon {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
+
+      border-radius: 12px;
 
       display: grid;
       place-items: center;
-
-      border-radius: 13px;
 
       background: var(--primary-soft);
 
@@ -1124,386 +883,193 @@
     }
 
     .quick-icon svg {
-      width: 20px;
-      height: 20px;
+      width: 19px;
+      height: 19px;
+
+      stroke: currentColor;
     }
 
     .quick-label {
-      position: relative;
-      z-index: 2;
+      color: #4d5759;
 
-      color: var(--ink-2);
-
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 850;
 
-      text-align: center;
+      white-space: nowrap;
     }
 
-    /* =========================================================
-       EMPTY / UPCOMING AUCTIONS
-       ========================================================= */
+    /* =========================
+       UPCOMING / EMPTY
+    ========================= */
 
-    .empty-card {
-      position: relative;
-
-      min-height: 142px;
+    .upcoming {
+      margin: 8px 18px 0;
 
       padding: 18px;
 
-      overflow: hidden;
+      border-radius: 21px;
 
-      display: flex;
-      align-items: center;
-      gap: 14px;
-
-      border-radius: 24px;
-
-      background: white;
+      background: #f7f9f9;
 
       border: 1px solid #edf1f1;
 
-      box-shadow:
-        var(--shadow-sm);
+      display: flex;
+      align-items: center;
+
+      gap: 14px;
     }
 
-    .empty-decoration {
-      position: relative;
+    .upcoming-icon {
+      width: 48px;
+      height: 48px;
 
-      flex: 0 0 70px;
+      flex-shrink: 0;
 
-      width: 70px;
-      height: 70px;
+      border-radius: 15px;
 
       display: grid;
       place-items: center;
 
-      border-radius: 23px;
+      background: var(--white);
 
       color: var(--primary);
 
-      background: var(--primary-soft);
+      box-shadow: 0 5px 15px rgba(23, 33, 36, 0.04);
     }
 
-    .empty-decoration::before {
-      content: "";
-
-      position: absolute;
-
-      inset: -8px;
-
-      border-radius: 29px;
-
-      border: 1px dashed rgba(15,133,140,.24);
-
-      animation:
-        spinSlow 14s linear infinite;
+    .upcoming-icon svg {
+      width: 23px;
+      height: 23px;
     }
 
-    .empty-decoration svg {
-      width: 32px;
-      height: 32px;
-    }
-
-    .empty-content {
+    .upcoming-text {
       min-width: 0;
-      flex: 1;
     }
 
-    .empty-title {
+    .upcoming-title {
+      margin: 0;
+
+      font-size: 14px;
+      font-weight: 900;
+
       color: var(--ink);
-
-      font-size: 16px;
-      font-weight: 950;
     }
 
-    .empty-text {
-      margin-top: 5px;
-
-      color: var(--muted);
-
-      font-size: 11px;
-      line-height: 1.65;
-      font-weight: 650;
-    }
-
-    @keyframes spinSlow {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    /* =========================================================
-       PRODUCT PREVIEW CARDS
-       ========================================================= */
-
-    .product-grid {
-      display: grid;
-
-      grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-      gap: 10px;
-    }
-
-    .product-card {
-      overflow: hidden;
-
-      border-radius: 21px;
-
-      background: white;
-
-      border: 1px solid #edf1f1;
-
-      box-shadow:
-        0 7px 22px rgba(18,42,44,.055);
-
-      transition:
-        transform .2s ease;
-    }
-
-    .product-card:active {
-      transform: scale(.975);
-    }
-
-    .product-visual {
-      position: relative;
-
-      height: 132px;
-
-      display: grid;
-      place-items: center;
-
-      background:
-        linear-gradient(
-          145deg,
-          #eef5f5,
-          #f9fbfb
-        );
-    }
-
-    .product-phone {
-      position: relative;
-
-      width: 63px;
-      height: 101px;
-
-      padding: 4px;
-
-      border-radius: 16px;
-
-      background:
-        linear-gradient(
-          145deg,
-          #253436,
-          #0c1415
-        );
-
-      transform: rotate(7deg);
-
-      box-shadow:
-        0 15px 25px rgba(16,39,41,.18);
-    }
-
-    .product-phone-screen {
-      width: 100%;
-      height: 100%;
-
-      border-radius: 13px;
-
-      background:
-        linear-gradient(
-          145deg,
-          #123c41,
-          #0c1a1c
-        );
-    }
-
-    .product-info {
-      padding: 11px;
-    }
-
-    .product-name {
-      color: var(--ink);
-
-      font-size: 13px;
-      font-weight: 950;
-    }
-
-    .product-meta {
-      margin-top: 4px;
-
-      color: var(--muted);
+    .upcoming-sub {
+      margin: 4px 0 0;
 
       font-size: 10px;
-      font-weight: 700;
+      line-height: 1.5;
+
+      color: var(--muted);
     }
 
-    .product-row {
-      margin-top: 9px;
-
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      gap: 7px;
-    }
-
-    .product-price {
-      color: var(--primary-dark);
-
-      font-size: 12px;
-      font-weight: 950;
-    }
-
-    .product-status {
-      padding: 4px 7px;
-
-      border-radius: 7px;
-
-      color: var(--primary-dark);
-
-      background: var(--primary-soft);
-
-      font-size: 8px;
-      font-weight: 900;
-    }
-
-    /* =========================================================
+    /* =========================
        BOTTOM NAV
-       ========================================================= */
+    ========================= */
 
     .bottom-nav-wrap {
       position: fixed;
 
       z-index: 100;
 
-      right: 0;
-      bottom: 0;
-      left: 0;
+      left: 50%;
 
-      height:
-        calc(
-          var(--nav-height) +
-          var(--safe-bottom)
-        );
+      bottom:
+        max(10px, env(safe-area-inset-bottom));
+
+      transform: translateX(-50%);
+
+      width: min(
+        calc(100% - 28px),
+        430px
+      );
 
       pointer-events: none;
     }
 
-    .bottom-nav-bg {
-      position: absolute;
-
-      right: 0;
-      bottom: 0;
-      left: 0;
-
-      height:
-        calc(
-          var(--nav-height) +
-          var(--safe-bottom)
-        );
-
-      background: rgba(255,255,255,.94);
-
-      border-top:
-        1px solid rgba(222,231,231,.72);
-
-      box-shadow:
-        0 -12px 35px rgba(18,42,44,.08);
-
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-
-      pointer-events: auto;
-    }
-
-    /*
-      The upper curved cut/shape.
-      This is the second "fikka" from the user's wireframe.
-    */
-    .bottom-nav-bg::before {
-      content: "";
-
-      position: absolute;
-
-      left: -5%;
-      right: -5%;
-      top: -23px;
-
-      height: 43px;
-
-      background: var(--surface);
-
-      border-radius:
-        0 0 50% 50% /
-        0 0 100% 100%;
-
-      box-shadow:
-        0 -1px 0 rgba(226,234,234,.8);
-    }
-
     .bottom-nav {
-      position: relative;
-      z-index: 2;
+      pointer-events: auto;
 
-      width: min(100%, 620px);
-      height: var(--nav-height);
-
-      margin: 0 auto;
+      height: 69px;
 
       padding:
-        6px
-        13px
-        4px;
+        7px
+        9px;
 
       display: grid;
 
       grid-template-columns:
         repeat(4, 1fr);
 
-      pointer-events: auto;
+      align-items: center;
+
+      background: rgba(255,255,255,0.86);
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      border:
+        1px solid rgba(226, 232, 233, 0.92);
+
+      border-radius: 23px;
+
+      box-shadow:
+        0 12px 38px rgba(18, 31, 33, 0.12);
     }
 
     .nav-item {
-      position: relative;
+      height: 56px;
 
       display: flex;
       flex-direction: column;
+
       align-items: center;
       justify-content: center;
 
-      gap: 5px;
+      gap: 4px;
 
-      color: #899597;
+      border-radius: 17px;
+
+      color: #8a9395;
 
       transition:
-        color .22s ease,
-        transform .22s ease;
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
     }
 
     .nav-item:active {
-      transform: scale(.93);
+      transform: scale(0.94);
+    }
+
+    .nav-item.active {
+      color: var(--primary-dark);
     }
 
     .nav-icon {
-      width: 39px;
-      height: 39px;
+      width: 31px;
+      height: 31px;
+
+      border-radius: 11px;
 
       display: grid;
       place-items: center;
 
-      border-radius: 14px;
-
       transition:
-        background .22s ease,
-        color .22s ease,
-        box-shadow .22s ease;
+        background 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .nav-item.active .nav-icon {
+      background: var(--primary-soft);
     }
 
     .nav-icon svg {
-      width: 21px;
-      height: 21px;
+      width: 20px;
+      height: 20px;
+
+      stroke: currentColor;
     }
 
     .nav-label {
@@ -1511,176 +1077,86 @@
       font-weight: 850;
     }
 
-    .nav-item.active {
-      color: var(--primary-dark);
-    }
+    /* =========================
+       TABLET / BIG SCREENS
+    ========================= */
 
-    .nav-item.active .nav-icon {
-      color: white;
+    @media (min-width: 621px) {
 
-      background: var(--primary);
-
-      box-shadow:
-        0 8px 19px rgba(15,133,140,.22);
-    }
-
-    /* =========================================================
-       REVEAL ANIMATIONS
-       ========================================================= */
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(18px);
-
-      animation:
-        reveal .7s cubic-bezier(.2,.8,.2,1) forwards;
-    }
-
-    .reveal.delay-1 {
-      animation-delay: .08s;
-    }
-
-    .reveal.delay-2 {
-      animation-delay: .16s;
-    }
-
-    .reveal.delay-3 {
-      animation-delay: .24s;
-    }
-
-    .reveal.delay-4 {
-      animation-delay: .32s;
-    }
-
-    @keyframes reveal {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* =========================================================
-       TABLET / LARGE PHONES
-       ========================================================= */
-
-    @media (min-width: 600px) {
-      .hero {
-        padding-left: 28px;
-        padding-right: 28px;
+      body {
+        background: #eef2f2;
       }
 
-      .content {
-        padding-left: 24px;
-        padding-right: 24px;
+      .app {
+        min-height: 100vh;
+
+        box-shadow:
+          0 0 70px rgba(20, 35, 37, 0.08);
       }
 
       .auction-card {
-        min-height: 180px;
-        padding: 20px;
+        flex-basis: 530px;
       }
 
-      .auction-device {
-        flex-basis: 135px;
-      }
-
-      .phone {
-        width: 96px;
-        height: 144px;
-      }
-
-      .device-icon {
-        width: 62px;
-        height: 62px;
-      }
-
-      .device-name {
-        font-size: 11px;
-      }
-
-      .quick-card {
-        min-height: 105px;
+      .bottom-nav-wrap {
+        width: 430px;
       }
     }
 
-    /* =========================================================
+    /* =========================
        SMALL PHONES
-       ========================================================= */
+    ========================= */
 
     @media (max-width: 360px) {
-      .hero {
-        min-height: 244px;
-        padding-left: 13px;
-        padding-right: 13px;
-      }
 
       .brand-main {
-        font-size: 30px;
+        font-size: 26px;
       }
 
       .brand-sub {
-        font-size: 9px;
+        font-size: 8px;
+        letter-spacing: 3px;
+        margin-left: -48px;
       }
 
-      .circle-action {
-        width: 43px;
-        height: 43px;
+      .header-actions {
+        gap: 5px;
       }
 
-      .search {
-        height: 54px;
-        border-radius: 17px;
-      }
-
-      .content {
-        padding-left: 12px;
-        padding-right: 12px;
+      .icon-button {
+        width: 39px;
+        height: 39px;
       }
 
       .auction-card {
-        min-height: 153px;
+        min-height: 155px;
+      }
+
+      .auction-content {
+        min-height: 155px;
         padding: 14px;
       }
 
-      .auction-device {
-        flex-basis: 93px;
+      .device-stage {
+        width: 106px;
+        height: 130px;
       }
 
       .phone {
-        width: 76px;
-        height: 116px;
+        transform: scale(0.9) rotate(-8deg);
       }
 
       .auction-title {
         font-size: 18px;
       }
 
-      .auction-price {
-        font-size: 14px;
+      .device-icon-box {
+        width: 64px;
+        height: 64px;
       }
 
-      .auction-cta {
-        min-height: 33px;
-        padding: 0 10px;
-        font-size: 10px;
-      }
-
-      .device-rail {
-        gap: 4px;
-      }
-
-      .device-icon {
-        width: 50px;
-        height: 50px;
-        border-radius: 15px;
-      }
-
-      .device-icon svg {
-        width: 24px;
-        height: 24px;
-      }
-
-      .device-name {
-        font-size: 9px;
+      .device-category {
+        flex-basis: 69px;
       }
 
       .quick-grid {
@@ -1688,504 +1164,367 @@
       }
 
       .quick-card {
-        min-height: 88px;
-        border-radius: 17px;
+        min-height: 79px;
       }
 
       .quick-label {
-        font-size: 9px;
+        font-size: 8px;
       }
     }
 
-    /* =========================================================
-       REDUCED MOTION
-       ========================================================= */
+    /* =========================
+       MOTION
+    ========================= */
 
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        scroll-behavior: auto !important;
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: .01ms !important;
+    @keyframes softAppear {
+      from {
+        opacity: 0;
+        transform: translateY(7px);
       }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .top-header,
+    .search-wrap,
+    .location-row,
+    .auction-area,
+    .devices-section,
+    .quick-section,
+    .upcoming {
+      animation: softAppear 0.45s ease both;
+    }
+
+    .search-wrap {
+      animation-delay: 0.05s;
+    }
+
+    .location-row {
+      animation-delay: 0.08s;
+    }
+
+    .auction-area {
+      animation-delay: 0.12s;
+    }
+
+    .devices-section {
+      animation-delay: 0.17s;
+    }
+
+    .quick-section {
+      animation-delay: 0.21s;
+    }
+
+    .upcoming {
+      animation-delay: 0.25s;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- =======================================================
-       SPLASH
-       ======================================================= -->
-
-  <div class="splash" id="splash">
-    <div class="splash-inner">
-
-      <div class="splash-mark">
-        <svg
-          viewBox="0 0 64 64"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-        >
-          <rect
-            x="14"
-            y="6"
-            width="36"
-            height="52"
-            rx="10"
-            stroke="white"
-            stroke-width="3"
-          />
-
-          <rect
-            x="23"
-            y="11"
-            width="18"
-            height="4"
-            rx="2"
-            fill="white"
-            opacity=".9"
-          />
-
-          <circle
-            cx="32"
-            cy="50"
-            r="2.5"
-            fill="white"
-          />
-
-          <path
-            d="M25 29.5C25 25.9 27.9 23 31.5 23H32.5C36.1 23 39 25.9 39 29.5V33.5C39 37.1 36.1 40 32.5 40H31.5C27.9 40 25 37.1 25 33.5V29.5Z"
-            stroke="white"
-            stroke-width="2.5"
-          />
-        </svg>
-      </div>
-
-      <div class="splash-title">
-        MZAD
-      </div>
-
-      <div class="splash-subtitle">
-        PHONE
-      </div>
-
-      <div class="splash-line"></div>
-
-    </div>
-  </div>
-
-
-  <!-- =======================================================
-       APP
-       ======================================================= -->
-
   <main class="app">
 
-    <!-- =====================================================
-         HERO
-         ===================================================== -->
+    <div class="page">
 
-    <header class="hero">
+      <!-- =========================
+           HEADER
+      ========================== -->
 
-      <div class="hero-top">
+      <header class="top-header">
 
-        <div class="hero-actions">
+        <div class="header-row">
 
-          <button
-            class="circle-action"
-            type="button"
-            aria-label="الحساب"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+          <a class="brand" href="#">
+            <span class="brand-main">MZAD</span>
+            <span class="brand-sub">PHONE</span>
+          </a>
+
+          <div class="header-actions">
+
+            <button
+              class="icon-button notification"
+              aria-label="الإشعارات"
             >
-              <circle cx="12" cy="8" r="3.5"></circle>
-              <path d="M5.5 20c.9-3.2 3.1-5 6.5-5s5.6 1.8 6.5 5"></path>
-            </svg>
-          </button>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+                <path d="M10 21h4"/>
+              </svg>
 
-          <button
-            class="circle-action"
-            type="button"
-            aria-label="الإشعارات"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              <span class="notification-badge">3</span>
+            </button>
+
+            <button
+              class="icon-button"
+              aria-label="الحساب"
             >
-              <path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
-              <path d="M10 21h4"></path>
-            </svg>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="8" r="3.2"/>
+                <path d="M5 20c.8-3.4 3.1-5.2 7-5.2s6.2 1.8 7 5.2"/>
+              </svg>
+            </button>
 
-            <span class="notification-count">
-              3
-            </span>
-          </button>
-
-        </div>
-
-
-        <div class="brand">
-
-          <div class="brand-main">
-            MZAD
-          </div>
-
-          <div class="brand-sub">
-            PHONE
           </div>
 
         </div>
 
-      </div>
+      </header>
 
+      <!-- =========================
+           SEARCH
+      ========================== -->
 
-      <!-- SEARCH -->
+      <section class="search-wrap">
 
-      <div class="search-wrap">
+        <label class="search-box">
 
-        <label class="search">
+          <svg
+            class="search-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="7"/>
+            <path d="m20 20-4-4"/>
+          </svg>
+
+          <input
+            class="search-input"
+            type="search"
+            placeholder="ابحث عن جهاز أو موديل أو مزاد"
+            autocomplete="off"
+          >
+
+        </label>
+
+      </section>
+
+      <!-- =========================
+           LOCATION
+      ========================== -->
+
+      <div class="location-row">
+
+        <div class="location">
 
           <svg
             viewBox="0 0 24 24"
             fill="none"
-            stroke="currentColor"
-            stroke-width="2"
+            stroke-width="1.8"
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-            <circle cx="11" cy="11" r="7"></circle>
-            <path d="m20 20-4-4"></path>
+            <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
+            <circle cx="12" cy="10" r="2.5"/>
           </svg>
 
-          <input
-            id="searchInput"
-            type="search"
-            autocomplete="off"
-            placeholder="ابحث عن جهاز أو موديل أو مزاد"
-          />
+          <span>النجف</span>
 
-        </label>
+        </div>
+
+        <button class="change-location">
+          تغيير الموقع
+        </button>
 
       </div>
 
 
-      <!-- CURVE -->
-
-      <div class="hero-curve"></div>
-
-    </header>
-
-
-    <!-- =====================================================
-         CONTENT
-         ===================================================== -->
-
-    <div class="content">
-
-
-      <!-- ===================================================
+      <!-- =========================
            AUCTION
-           =================================================== -->
+      ========================== -->
 
-      <section class="section first-section reveal">
+      <section class="auction-area">
 
         <div class="section-head">
 
-          <div class="section-title">
-            <span>مزادات</span> اليوم
-          </div>
+          <h2 class="section-title">
+            المزاد الآن
+          </h2>
 
-          <button
-            class="section-link"
-            type="button"
-          >
+          <button class="section-action">
             مشاهدة الكل
-
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="m9 18 6-6-6-6"></path>
-            </svg>
           </button>
 
         </div>
 
+        <div
+          class="auction-track"
+          id="auctionTrack"
+        >
 
-        <div class="auction-viewport">
+          <!-- CARD 1 -->
 
-          <div
-            class="auction-track"
-            id="auctionTrack"
-          >
+          <article class="auction-card">
 
-            <!-- SLIDE 1 -->
+            <div class="auction-content">
 
-            <article class="auction-slide">
+              <div class="auction-info">
 
-              <div class="auction-card">
+                <span class="auction-label">
+                  مزاد مباشر
+                </span>
 
-                <div class="auction-info">
+                <h3 class="auction-title">
+                  iPhone 15 Pro
+                </h3>
 
-                  <div>
+                <span class="auction-meta">
+                  256GB · Natural Titanium
+                </span>
 
-                    <div class="auction-badge">
-                      مزاد مباشر
-                    </div>
+                <div class="auction-price-row">
 
-                    <h2 class="auction-title">
-                      جهاز مميز داخل المزاد
-                    </h2>
+                  <strong class="auction-price">
+                    850,000
+                  </strong>
 
-                    <div class="auction-meta">
-                      يبدأ قريباً · المزايدة مفتوحة
-                    </div>
+                  <span class="auction-currency">
+                    د.ع
+                  </span>
 
-                  </div>
+                </div>
 
+                <button class="auction-button">
+                  دخول المزاد
+                </button>
 
-                  <div class="auction-bottom">
+              </div>
 
-                    <div>
+              <div class="device-stage">
 
-                      <span class="auction-price-label">
-                        السعر الحالي
-                      </span>
+                <div class="device-glow"></div>
 
-                      <div class="auction-price">
-                        850,000 د.ع
-                      </div>
+                <div class="phone">
 
-                    </div>
+                  <div class="phone-screen"></div>
 
-                    <button
-                      class="auction-cta"
-                      type="button"
-                    >
-                      دخول المزاد
-                    </button>
-
+                  <div class="camera-module">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                   </div>
 
                 </div>
 
+                <div class="auction-arrow">
 
-                <div class="auction-device">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="m9 18 6-6-6-6"/>
+                  </svg>
 
-                  <div class="phone back">
+                </div>
 
-                    <div class="phone-screen"></div>
+              </div>
 
-                  </div>
+            </div>
+
+          </article>
 
 
-                  <div class="phone">
+          <!-- CARD 2 -->
 
-                    <div class="phone-screen">
+          <article class="auction-card">
 
-                      <div class="phone-camera"></div>
+            <div class="auction-content">
 
-                      <div class="phone-glow"></div>
+              <div class="auction-info">
 
-                    </div>
+                <span class="auction-label">
+                  يبدأ قريباً
+                </span>
 
+                <h3 class="auction-title">
+                  Galaxy S24 Ultra
+                </h3>
+
+                <span class="auction-meta">
+                  256GB · Titanium Gray
+                </span>
+
+                <div class="auction-price-row">
+
+                  <strong class="auction-price">
+                    720,000
+                  </strong>
+
+                  <span class="auction-currency">
+                    د.ع
+                  </span>
+
+                </div>
+
+                <button class="auction-button">
+                  مشاهدة التفاصيل
+                </button>
+
+              </div>
+
+              <div class="device-stage">
+
+                <div class="device-glow"></div>
+
+                <div
+                  class="phone"
+                  style="transform:rotate(8deg);"
+                >
+
+                  <div
+                    class="phone-screen"
+                    style="
+                      background:
+                      linear-gradient(
+                        145deg,
+                        #d7e0e1,
+                        #89999c 45%,
+                        #354144
+                      );
+                    "
+                  ></div>
+
+                  <div class="camera-module">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                   </div>
 
                 </div>
 
               </div>
 
-            </article>
+            </div>
 
-
-            <!-- SLIDE 2 -->
-
-            <article class="auction-slide">
-
-              <div class="auction-card">
-
-                <div class="auction-info">
-
-                  <div>
-
-                    <div class="auction-badge">
-                      مزاد قادم
-                    </div>
-
-                    <h2 class="auction-title">
-                      جهاز جديد بانتظار المزايدة
-                    </h2>
-
-                    <div class="auction-meta">
-                      تابع المزاد قبل بدايته
-                    </div>
-
-                  </div>
-
-
-                  <div class="auction-bottom">
-
-                    <div>
-
-                      <span class="auction-price-label">
-                        يبدأ من
-                      </span>
-
-                      <div class="auction-price">
-                        600,000 د.ع
-                      </div>
-
-                    </div>
-
-                    <button
-                      class="auction-cta"
-                      type="button"
-                    >
-                      التفاصيل
-                    </button>
-
-                  </div>
-
-                </div>
-
-
-                <div class="auction-device">
-
-                  <div class="phone back">
-
-                    <div class="phone-screen"></div>
-
-                  </div>
-
-
-                  <div class="phone">
-
-                    <div class="phone-screen">
-
-                      <div class="phone-camera"></div>
-
-                      <div class="phone-glow"></div>
-
-                    </div>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </article>
-
-
-            <!-- SLIDE 3 -->
-
-            <article class="auction-slide">
-
-              <div class="auction-card">
-
-                <div class="auction-info">
-
-                  <div>
-
-                    <div class="auction-badge">
-                      قريباً
-                    </div>
-
-                    <h2 class="auction-title">
-                      مزاد أجهزة مختارة
-                    </h2>
-
-                    <div class="auction-meta">
-                      سيتم الإعلان عن الأجهزة قريباً
-                    </div>
-
-                  </div>
-
-
-                  <div class="auction-bottom">
-
-                    <div>
-
-                      <span class="auction-price-label">
-                        الحالة
-                      </span>
-
-                      <div class="auction-price">
-                        قادم
-                      </div>
-
-                    </div>
-
-                    <button
-                      class="auction-cta"
-                      type="button"
-                    >
-                      تابع
-                    </button>
-
-                  </div>
-
-                </div>
-
-
-                <div class="auction-device">
-
-                  <div class="phone back">
-
-                    <div class="phone-screen"></div>
-
-                  </div>
-
-
-                  <div class="phone">
-
-                    <div class="phone-screen">
-
-                      <div class="phone-camera"></div>
-
-                      <div class="phone-glow"></div>
-
-                    </div>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </article>
-
-          </div>
+          </article>
 
         </div>
 
-
-        <div
-          class="dots"
-          id="auctionDots"
-          aria-label="صفحات المزاد"
-        >
+        <div class="carousel-dots">
 
           <span class="dot active"></span>
-          <span class="dot"></span>
           <span class="dot"></span>
 
         </div>
@@ -2193,76 +1532,40 @@
       </section>
 
 
-      <!-- ===================================================
+      <!-- =========================
            DEVICES
-           =================================================== -->
+      ========================== -->
 
-      <section class="section reveal delay-1">
+      <section class="devices-section">
 
         <div class="section-head">
 
-          <div class="section-title">
-            تصفح <span>الأجهزة</span>
-          </div>
+          <h2 class="section-title">
+            تصفح الأجهزة
+          </h2>
 
-          <button
-            class="section-link"
-            type="button"
-          >
+          <button class="section-action">
             الكل
-
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="m9 18 6-6-6-6"></path>
-            </svg>
           </button>
 
         </div>
 
+        <div class="devices-scroll">
 
-        <div class="device-rail">
+          <button class="device-category">
 
-          <!-- iPhone -->
-
-          <button
-            class="device-item active"
-            type="button"
-            data-brand="iPhone"
-          >
-
-            <span class="device-icon">
+            <span class="device-icon-box">
 
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
+                stroke-width="1.7"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               >
-                <rect
-                  x="7"
-                  y="2.5"
-                  width="10"
-                  height="19"
-                  rx="2"
-                ></rect>
-
-                <path d="M10.5 5h3"></path>
-
-                <circle
-                  cx="12"
-                  cy="18.5"
-                  r=".7"
-                  fill="currentColor"
-                  stroke="none"
-                ></circle>
+                <rect x="7" y="2.5" width="10" height="19" rx="2"/>
+                <path d="M10 5h4"/>
+                <path d="M11 18.5h2"/>
               </svg>
 
             </span>
@@ -2274,39 +1577,20 @@
           </button>
 
 
-          <!-- Samsung -->
+          <button class="device-category">
 
-          <button
-            class="device-item"
-            type="button"
-            data-brand="Samsung"
-          >
-
-            <span class="device-icon">
+            <span class="device-icon-box">
 
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
+                stroke-width="1.7"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               >
-                <rect
-                  x="6.5"
-                  y="2.5"
-                  width="11"
-                  height="19"
-                  rx="2.2"
-                ></rect>
-
-                <circle
-                  cx="12"
-                  cy="5"
-                  r="1"
-                ></circle>
-
-                <path d="M9.5 18.5h5"></path>
+                <rect x="6" y="2" width="12" height="20" rx="3"/>
+                <path d="M9 5h6"/>
+                <circle cx="12" cy="18" r="1"/>
               </svg>
 
             </span>
@@ -2318,37 +1602,20 @@
           </button>
 
 
-          <!-- Xiaomi -->
+          <button class="device-category">
 
-          <button
-            class="device-item"
-            type="button"
-            data-brand="Xiaomi"
-          >
-
-            <span class="device-icon">
+            <span class="device-icon-box">
 
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
+                stroke-width="1.7"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               >
-                <rect
-                  x="4"
-                  y="4"
-                  width="16"
-                  height="16"
-                  rx="4"
-                ></rect>
-
-                <path d="M8 9v6"></path>
-                <path d="M8 9h3"></path>
-                <path d="M11 9v6"></path>
-                <path d="M14 9v6"></path>
-                <path d="M14 9h2"></path>
+                <rect x="5" y="4" width="14" height="16" rx="3"/>
+                <path d="M9 7h6"/>
+                <path d="M9 17h6"/>
               </svg>
 
             </span>
@@ -2360,34 +1627,19 @@
           </button>
 
 
-          <!-- Google -->
+          <button class="device-category">
 
-          <button
-            class="device-item"
-            type="button"
-            data-brand="Google"
-          >
-
-            <span class="device-icon">
+            <span class="device-icon-box">
 
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
+                stroke-width="1.7"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               >
-                <rect
-                  x="6"
-                  y="3"
-                  width="12"
-                  height="18"
-                  rx="2.4"
-                ></rect>
-
-                <path d="M9 7h6"></path>
-                <path d="M9 17h6"></path>
+                <rect x="6" y="3" width="12" height="18" rx="2.5"/>
+                <circle cx="12" cy="17.5" r="1"/>
               </svg>
 
             </span>
@@ -2399,41 +1651,26 @@
           </button>
 
 
-          <!-- Other -->
+          <button class="device-category">
 
-          <button
-            class="device-item"
-            type="button"
-            data-brand="Other"
-          >
-
-            <span class="device-icon">
+            <span class="device-icon-box">
 
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
+                stroke-width="1.7"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               >
-                <rect
-                  x="4"
-                  y="5"
-                  width="16"
-                  height="14"
-                  rx="2"
-                ></rect>
-
-                <path d="M8 9h8"></path>
-                <path d="M8 12h5"></path>
-                <path d="M8 15h7"></path>
+                <rect x="5" y="3" width="14" height="18" rx="3"/>
+                <path d="M8 8h8"/>
+                <path d="M8 12h8"/>
               </svg>
 
             </span>
 
             <span class="device-name">
-              أخرى
+              Android
             </span>
 
           </button>
@@ -2443,151 +1680,118 @@
       </section>
 
 
-      <!-- ===================================================
+      <!-- =========================
            QUICK ACTIONS
-           =================================================== -->
+      ========================== -->
 
-      <section class="section reveal delay-2">
+      <section class="quick-section">
 
         <div class="section-head">
 
-          <div class="section-title">
-            الوصول <span>السريع</span>
-          </div>
+          <h2 class="section-title">
+            شنو تريد تسوي؟
+          </h2>
 
         </div>
-
 
         <div class="quick-grid">
 
-          <!-- Sell -->
-
-          <button
-            class="quick-card"
-            type="button"
-          >
+          <button class="quick-card">
 
             <span class="quick-icon">
 
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="currentColor"
                 stroke-width="1.8"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               >
-                <path d="M12 20V5"></path>
-                <path d="m7 10 5-5 5 5"></path>
-                <path d="M5 20h14"></path>
+                <path d="M12 3v18"/>
+                <path d="M5 10l7-7 7 7"/>
               </svg>
 
             </span>
 
             <span class="quick-label">
-              بيع جهاز
+              شارك جهاز
             </span>
 
           </button>
 
 
-          <!-- Auction -->
-
-          <button
-            class="quick-card"
-            type="button"
-          >
+          <button class="quick-card">
 
             <span class="quick-icon">
 
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="currentColor"
                 stroke-width="1.8"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               >
-                <path d="M6 20h12"></path>
-                <path d="M9 17h6"></path>
-                <path d="M8 14 16 6"></path>
-                <path d="m13 5 6 6"></path>
-                <path d="M5 9 9 5"></path>
+                <path d="M4 6h16"/>
+                <path d="M7 6v14h10V6"/>
+                <path d="M9 3h6"/>
+                <path d="M9 10h6"/>
+                <path d="M9 14h4"/>
               </svg>
 
             </span>
 
             <span class="quick-label">
-              مزاداتي
+              بيع مباشر
             </span>
 
           </button>
 
 
-          <!-- Favorites -->
-
-          <button
-            class="quick-card"
-            type="button"
-          >
+          <button class="quick-card">
 
             <span class="quick-icon">
 
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="currentColor"
                 stroke-width="1.8"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               >
-                <path d="M20.8 8.8c0 5.4-8.8 10-8.8 10s-8.8-4.6-8.8-10A4.8 4.8 0 0 1 12 6.1a4.8 4.8 0 0 1 8.8 2.7Z"></path>
+                <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z"/>
+                <path d="M12 7v5l3 2"/>
               </svg>
 
             </span>
 
             <span class="quick-label">
-              المفضلة
+              المزادات
             </span>
 
           </button>
 
 
-          <!-- Orders -->
-
-          <button
-            class="quick-card"
-            type="button"
-          >
+          <button class="quick-card">
 
             <span class="quick-icon">
 
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="currentColor"
                 stroke-width="1.8"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               >
-                <rect
-                  x="4"
-                  y="5"
-                  width="16"
-                  height="15"
-                  rx="2"
-                ></rect>
-
-                <path d="M8 3v4"></path>
-                <path d="M16 3v4"></path>
-                <path d="M4 10h16"></path>
-                <path d="M8 14h3"></path>
+                <path d="M6 3h12v18H6z"/>
+                <path d="M9 7h6"/>
+                <path d="M9 11h6"/>
+                <path d="M9 15h4"/>
               </svg>
 
             </span>
 
             <span class="quick-label">
-              طلباتي
+              طلباتك
             </span>
 
           </button>
@@ -2597,737 +1801,346 @@
       </section>
 
 
-      <!-- ===================================================
+      <!-- =========================
            UPCOMING
-           =================================================== -->
+      ========================== -->
 
-      <section class="section reveal delay-3">
+      <section class="upcoming">
 
-        <div class="section-head">
+        <div class="upcoming-icon">
 
-          <div class="section-title">
-            القادم <span>قريباً</span>
-          </div>
-
-          <button
-            class="section-link"
-            type="button"
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           >
-            المزيد
-          </button>
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 7v5l3 2"/>
+          </svg>
 
         </div>
 
+        <div class="upcoming-text">
 
-        <div class="empty-card">
+          <h3 class="upcoming-title">
+            المزاد القادم قريباً
+          </h3>
 
-          <div class="empty-decoration">
+          <p class="upcoming-sub">
+            راح تظهر هنا الأجهزة الجديدة فور نشرها
+            للمزاد داخل المنصة.
+          </p>
+
+        </div>
+
+      </section>
+
+    </div>
+
+
+    <!-- =========================
+         BOTTOM NAV
+    ========================== -->
+
+    <div class="bottom-nav-wrap">
+
+      <nav class="bottom-nav">
+
+        <button class="nav-item active">
+
+          <span class="nav-icon">
 
             <svg
               viewBox="0 0 24 24"
               fill="none"
-              stroke="currentColor"
-              stroke-width="1.7"
+              stroke-width="1.8"
               stroke-linecap="round"
               stroke-linejoin="round"
             >
-              <path d="M7 3h10"></path>
-              <path d="M7 21h10"></path>
-              <path d="M6 4v4c0 2 2 4 6 4s6-2 6-4V4"></path>
-              <path d="M6 20v-4c0-2 2-4 6-4s6 2 6 4v4"></path>
+              <path d="m3 10 9-7 9 7"/>
+              <path d="M5 9v11h14V9"/>
+              <path d="M9 20v-6h6v6"/>
             </svg>
 
-          </div>
+          </span>
+
+          <span class="nav-label">
+            الرئيسية
+          </span>
+
+        </button>
 
 
-          <div class="empty-content">
+        <button class="nav-item">
 
-            <div class="empty-title">
-              مزادات جديدة قريباً
-            </div>
+          <span class="nav-icon">
 
-            <p class="empty-text">
-              يتم تجهيز أجهزة جديدة للمزاد.
-              راقب الصفحة حتى تظهر الأجهزة المتاحة فعلياً.
-            </p>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 7v5l3 2"/>
+            </svg>
 
-          </div>
+          </span>
 
-        </div>
+          <span class="nav-label">
+            المزادات
+          </span>
 
-      </section>
-
-
-      <!-- ===================================================
-           LISTINGS PREVIEW
-           =================================================== -->
-
-      <section class="section reveal delay-4">
-
-        <div class="section-head">
-
-          <div class="section-title">
-            أجهزة <span>مميزة</span>
-          </div>
-
-          <button
-            class="section-link"
-            type="button"
-          >
-            مشاهدة الكل
-          </button>
-
-        </div>
+        </button>
 
 
-        <div class="product-grid">
+        <button class="nav-item">
 
-          <!-- Design placeholder 1 -->
+          <span class="nav-icon">
 
-          <article class="product-card">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 7h14"/>
+              <path d="M5 12h14"/>
+              <path d="M5 17h10"/>
+              <circle cx="18" cy="17" r="2"/>
+            </svg>
 
-            <div class="product-visual">
+          </span>
 
-              <div class="product-phone">
+          <span class="nav-label">
+            طلباتك
+          </span>
 
-                <div class="product-phone-screen"></div>
-
-              </div>
-
-            </div>
-
-
-            <div class="product-info">
-
-              <div class="product-name">
-                جهاز للبيع
-              </div>
-
-              <div class="product-meta">
-                ستظهر بيانات الجهاز الفعلية هنا
-              </div>
-
-              <div class="product-row">
-
-                <span class="product-price">
-                  —
-                </span>
-
-                <span class="product-status">
-                  بيع مباشر
-                </span>
-
-              </div>
-
-            </div>
-
-          </article>
+        </button>
 
 
-          <!-- Design placeholder 2 -->
+        <button class="nav-item">
 
-          <article class="product-card">
+          <span class="nav-icon">
 
-            <div class="product-visual">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="8" r="3"/>
+              <path d="M5 20c.8-3.4 3.1-5.2 7-5.2s6.2 1.8 7 5.2"/>
+            </svg>
 
-              <div
-                class="product-phone"
-                style="transform:rotate(-7deg)"
-              >
+          </span>
 
-                <div class="product-phone-screen"></div>
+          <span class="nav-label">
+            حسابي
+          </span>
 
-              </div>
+        </button>
 
-            </div>
-
-
-            <div class="product-info">
-
-              <div class="product-name">
-                جهاز للبيع
-              </div>
-
-              <div class="product-meta">
-                ستظهر بيانات الجهاز الفعلية هنا
-              </div>
-
-              <div class="product-row">
-
-                <span class="product-price">
-                  —
-                </span>
-
-                <span class="product-status">
-                  مزاد
-                </span>
-
-              </div>
-
-            </div>
-
-          </article>
-
-        </div>
-
-      </section>
-
+      </nav>
 
     </div>
 
   </main>
 
 
-  <!-- =======================================================
-       BOTTOM NAV
-       ======================================================= -->
-
-  <div class="bottom-nav-wrap">
-
-    <div class="bottom-nav-bg"></div>
-
-    <nav
-      class="bottom-nav"
-      aria-label="التنقل الرئيسي"
-    >
-
-      <!-- Home -->
-
-      <button
-        class="nav-item active"
-        type="button"
-        data-nav="home"
-      >
-
-        <span class="nav-icon">
-
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="m3 10 9-7 9 7"></path>
-            <path d="M5 9v11h14V9"></path>
-            <path d="M9 20v-6h6v6"></path>
-          </svg>
-
-        </span>
-
-        <span class="nav-label">
-          الرئيسية
-        </span>
-
-      </button>
-
-
-      <!-- Auctions -->
-
-      <button
-        class="nav-item"
-        type="button"
-        data-nav="auctions"
-      >
-
-        <span class="nav-icon">
-
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M6 20h12"></path>
-            <path d="M9 17h6"></path>
-            <path d="M8 14 16 6"></path>
-            <path d="m13 5 6 6"></path>
-            <path d="M5 9 9 5"></path>
-          </svg>
-
-        </span>
-
-        <span class="nav-label">
-          المزادات
-        </span>
-
-      </button>
-
-
-      <!-- Orders -->
-
-      <button
-        class="nav-item"
-        type="button"
-        data-nav="orders"
-      >
-
-        <span class="nav-icon">
-
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <rect
-              x="5"
-              y="4"
-              width="14"
-              height="16"
-              rx="2"
-            ></rect>
-
-            <path d="M8 9h8"></path>
-            <path d="M8 13h5"></path>
-            <path d="M8 17h4"></path>
-          </svg>
-
-        </span>
-
-        <span class="nav-label">
-          طلباتي
-        </span>
-
-      </button>
-
-
-      <!-- Account -->
-
-      <button
-        class="nav-item"
-        type="button"
-        data-nav="account"
-      >
-
-        <span class="nav-icon">
-
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle
-              cx="12"
-              cy="8"
-              r="3.5"
-            ></circle>
-
-            <path d="M5.5 20c.9-3.2 3.1-5 6.5-5s5.6 1.8 6.5 5"></path>
-          </svg>
-
-        </span>
-
-        <span class="nav-label">
-          حسابي
-        </span>
-
-      </button>
-
-    </nav>
-
-  </div>
-
-
-  <!-- =======================================================
-       JAVASCRIPT
-       ======================================================= -->
-
   <script>
 
-    /* =======================================================
-       SPLASH
-       ======================================================= */
-
-    const splash = document.getElementById("splash");
-
-    window.addEventListener("load", () => {
-
-      setTimeout(() => {
-
-        splash.classList.add("hidden");
-
-      }, 1450);
-
-    });
-
-
-    /* =======================================================
+    /* ==========================================
        AUCTION CAROUSEL
-       ======================================================= */
+    ========================================== */
 
-    const auctionTrack =
+    const track =
       document.getElementById("auctionTrack");
 
-    const auctionDots =
-      Array.from(
-        document.querySelectorAll("#auctionDots .dot")
-      );
+    const dots =
+      document.querySelectorAll(".dot");
 
-    const auctionSlides =
-      Array.from(
-        document.querySelectorAll(".auction-slide")
-      );
+    let currentSlide = 0;
 
-    let auctionIndex = 0;
-    let auctionTimer = null;
+    function getCardWidth() {
 
-    function updateAuction(index, animate = true) {
+      const card =
+        track.querySelector(".auction-card");
 
-      if (!auctionTrack || !auctionSlides.length) {
-        return;
-      }
+      if (!card) return 0;
 
-      auctionIndex =
-        (index + auctionSlides.length) %
-        auctionSlides.length;
+      const gap = 12;
 
-      if (!animate) {
-        auctionTrack.style.transition = "none";
-      } else {
-        auctionTrack.style.transition =
-          "transform .58s cubic-bezier(.2,.8,.2,1)";
-      }
+      return card.offsetWidth + gap;
+    }
 
-      /*
-        RTL:
-        each slide is 100% width.
-        Moving with translateX keeps the carousel
-        visually natural for Arabic.
-      */
+    function updateDots(index) {
 
-      auctionTrack.style.transform =
-        `translateX(${auctionIndex * 100}%)`;
-
-      auctionDots.forEach((dot, i) => {
+      dots.forEach((dot, i) => {
 
         dot.classList.toggle(
           "active",
-          i === auctionIndex
+          i === index
         );
 
       });
 
-      if (!animate) {
-
-        requestAnimationFrame(() => {
-
-          auctionTrack.style.transition =
-            "transform .58s cubic-bezier(.2,.8,.2,1)";
-
-        });
-
-      }
-
     }
 
+    function goToSlide(index) {
 
-    function nextAuction() {
+      const width = getCardWidth();
 
-      updateAuction(
-        auctionIndex + 1
-      );
+      if (!width) return;
 
+      currentSlide = index;
+
+      track.scrollTo({
+        left:
+          index === 0
+            ? 0
+            : width * index,
+        behavior: "smooth"
+      });
+
+      updateDots(index);
     }
 
+    let autoSlide =
+      setInterval(() => {
 
-    function startAuctionTimer() {
+        currentSlide++;
 
-      clearInterval(auctionTimer);
-
-      auctionTimer =
-        setInterval(
-          nextAuction,
-          3000
-        );
-
-    }
-
-
-    startAuctionTimer();
-
-
-    /* =======================================================
-       SWIPE SUPPORT
-       ======================================================= */
-
-    let touchStartX = 0;
-    let touchCurrentX = 0;
-    let touchStartTime = 0;
-
-    const auctionViewport =
-      document.querySelector(".auction-viewport");
-
-    if (auctionViewport) {
-
-      auctionViewport.addEventListener(
-        "touchstart",
-        (event) => {
-
-          touchStartX =
-            event.touches[0].clientX;
-
-          touchCurrentX =
-            touchStartX;
-
-          touchStartTime =
-            Date.now();
-
-          clearInterval(auctionTimer);
-
-        },
-        {
-          passive: true
+        if (currentSlide >= dots.length) {
+          currentSlide = 0;
         }
-      );
+
+        goToSlide(currentSlide);
+
+      }, 3000);
 
 
-      auctionViewport.addEventListener(
-        "touchmove",
-        (event) => {
-
-          touchCurrentX =
-            event.touches[0].clientX;
-
-        },
-        {
-          passive: true
-        }
-      );
+    track.addEventListener(
+      "touchstart",
+      () => {
+        clearInterval(autoSlide);
+      },
+      { passive: true }
+    );
 
 
-      auctionViewport.addEventListener(
-        "touchend",
-        () => {
+    track.addEventListener(
+      "touchend",
+      () => {
 
-          const distance =
-            touchCurrentX -
-            touchStartX;
+        autoSlide =
+          setInterval(() => {
 
-          const elapsed =
-            Date.now() -
-            touchStartTime;
+            currentSlide++;
 
-          const velocity =
-            Math.abs(distance) /
-            Math.max(elapsed, 1);
-
-          const threshold =
-            velocity > .45
-              ? 25
-              : 55;
-
-          if (Math.abs(distance) > threshold) {
-
-            if (distance < 0) {
-
-              updateAuction(
-                auctionIndex + 1
-              );
-
-            } else {
-
-              updateAuction(
-                auctionIndex - 1
-              );
-
+            if (currentSlide >= dots.length) {
+              currentSlide = 0;
             }
 
-          }
+            goToSlide(currentSlide);
 
-          startAuctionTimer();
+          }, 3000);
 
-        },
-        {
-          passive: true
-        }
-      );
-
-    }
+      },
+      { passive: true }
+    );
 
 
-    /* =======================================================
-       DOT NAVIGATION
-       ======================================================= */
+    track.addEventListener(
+      "scroll",
+      () => {
 
-    auctionDots.forEach((dot, index) => {
+        const width = getCardWidth();
 
-      dot.addEventListener(
-        "click",
-        () => {
+        if (!width) return;
 
-          updateAuction(index);
+        const index =
+          Math.round(track.scrollLeft / width);
 
-          startAuctionTimer();
-
-        }
-      );
-
-    });
-
-
-    /* =======================================================
-       DEVICE FILTER VISUAL
-       ======================================================= */
-
-    const deviceItems =
-      document.querySelectorAll(".device-item");
-
-    deviceItems.forEach((item) => {
-
-      item.addEventListener(
-        "click",
-        () => {
-
-          deviceItems.forEach((other) => {
-
-            other.classList.remove("active");
-
-          });
-
-          item.classList.add("active");
-
-          const brand =
-            item.dataset.brand;
-
-          /*
-            Later:
-            this will query Supabase using the
-            selected brand.
-
-            Example:
-            filterListingsByBrand(brand)
-          */
-
-          console.log(
-            "Selected brand:",
-            brand
+        const safeIndex =
+          Math.max(
+            0,
+            Math.min(index, dots.length - 1)
           );
 
-        }
-      );
+        currentSlide = safeIndex;
 
-    });
+        updateDots(safeIndex);
 
-
-    /* =======================================================
-       SEARCH
-       ======================================================= */
-
-    const searchInput =
-      document.getElementById("searchInput");
-
-    if (searchInput) {
-
-      searchInput.addEventListener(
-        "keydown",
-        (event) => {
-
-          if (event.key !== "Enter") {
-            return;
-          }
-
-          const query =
-            searchInput.value.trim();
-
-          if (!query) {
-            return;
-          }
-
-          /*
-            Later this becomes:
-            Supabase search/filter.
-          */
-
-          console.log(
-            "Search:",
-            query
-          );
-
-        }
-      );
-
-    }
+      },
+      { passive: true }
+    );
 
 
-    /* =======================================================
-       BOTTOM NAV VISUAL STATE
-       ======================================================= */
+    /* ==========================================
+       BOTTOM NAV ACTIVE STATE
+    ========================================== */
 
     const navItems =
       document.querySelectorAll(".nav-item");
 
-    navItems.forEach((item) => {
+    navItems.forEach(item => {
 
-      item.addEventListener(
-        "click",
-        () => {
+      item.addEventListener("click", () => {
 
-          navItems.forEach((nav) => {
+        navItems.forEach(nav =>
+          nav.classList.remove("active")
+        );
 
-            nav.classList.remove("active");
+        item.classList.add("active");
 
-          });
-
-          item.classList.add("active");
-
-          const destination =
-            item.dataset.nav;
-
-          /*
-            Navigation will be connected
-            to the real pages later.
-          */
-
-          console.log(
-            "Navigation:",
-            destination
-          );
-
-        }
-      );
+      });
 
     });
 
 
-    /* =======================================================
-       PAUSE CAROUSEL WHEN TAB IS NOT VISIBLE
-       ======================================================= */
+    /* ==========================================
+       DEVICE / QUICK BUTTON FEEDBACK
+    ========================================== */
 
-    document.addEventListener(
-      "visibilitychange",
-      () => {
+    document
+      .querySelectorAll(
+        ".device-category, .quick-card, .auction-button"
+      )
+      .forEach(button => {
 
-        if (document.hidden) {
+        button.addEventListener(
+          "click",
+          () => {
 
-          clearInterval(auctionTimer);
+            button.animate(
+              [
+                {
+                  transform: "scale(1)"
+                },
+                {
+                  transform: "scale(.96)"
+                },
+                {
+                  transform: "scale(1)"
+                }
+              ],
+              {
+                duration: 180,
+                easing: "ease-out"
+              }
+            );
 
-        } else {
+          }
+        );
 
-          startAuctionTimer();
-
-        }
-
-      }
-    );
-
-
-    /* =======================================================
-       INITIAL POSITION
-       ======================================================= */
-
-    updateAuction(
-      0,
-      false
-    );
+      });
 
   </script>
 
