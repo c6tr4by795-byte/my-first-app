@@ -318,6 +318,7 @@
       font-weight: 600;
 
       color: var(--error);
+
       line-height: 1.6;
     }
 
@@ -399,7 +400,6 @@
       </div>
     </header>
 
-
     <section class="heading">
 
       <h1>إنشاء حساب</h1>
@@ -409,7 +409,6 @@
       </p>
 
     </section>
-
 
     <section class="card">
 
@@ -436,7 +435,6 @@
 
       </div>
 
-
       <div class="field-group">
 
         <label
@@ -461,7 +459,6 @@
 
       </div>
 
-
       <div class="field-group">
 
         <label
@@ -484,7 +481,6 @@
         </div>
 
       </div>
-
 
       <div class="field-group">
 
@@ -550,7 +546,6 @@
 
       </div>
 
-
       <div class="field-group">
 
         <label
@@ -585,14 +580,12 @@
 
       </div>
 
-
       <button
         id="signupBtn"
         class="signup-btn"
         type="button">
         إنشاء الحساب
       </button>
-
 
       <div
         id="message"
@@ -601,13 +594,11 @@
 
     </section>
 
-
     <a
       href="index.html"
       class="login-link">
       لدي حساب بالفعل — تسجيل الدخول
     </a>
-
 
     <div class="note">
       بيانات الحساب تُحفظ ضمن حسابك وتستخدم لإدارة إعلاناتك ومزاداتك.
@@ -692,7 +683,7 @@
       );
 
 
-    function error(input, box, text) {
+    function showError(input, box, text) {
 
       input.classList.add("invalid");
       input.classList.remove("valid");
@@ -713,7 +704,7 @@
     }
 
 
-    function valid(input, box) {
+    function markValid(input, box) {
 
       input.classList.remove("invalid");
       input.classList.add("valid");
@@ -732,7 +723,7 @@
 
       if (!value) {
 
-        error(
+        showError(
           fullName,
           errors.fullName,
           "يرجى إدخال الاسم الكامل"
@@ -745,7 +736,7 @@
 
       if (value.length < 2) {
 
-        error(
+        showError(
           fullName,
           errors.fullName,
           "يرجى إدخال اسم صحيح"
@@ -756,7 +747,7 @@
       }
 
 
-      valid(
+      markValid(
         fullName,
         errors.fullName
       );
@@ -774,7 +765,7 @@
 
       if (!value) {
 
-        error(
+        showError(
           phone,
           errors.phone,
           "يرجى إدخال رقم الهاتف"
@@ -787,7 +778,7 @@
 
       if (!/^07\d{9}$/.test(value)) {
 
-        error(
+        showError(
           phone,
           errors.phone,
           "يرجى إدخال رقم هاتف صحيح"
@@ -798,7 +789,7 @@
       }
 
 
-      valid(
+      markValid(
         phone,
         errors.phone
       );
@@ -816,7 +807,7 @@
 
       if (!value) {
 
-        error(
+        showError(
           email,
           errors.email,
           "يرجى إدخال البريد الإلكتروني"
@@ -828,11 +819,10 @@
 
 
       if (
-        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
-          .test(value)
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
       ) {
 
-        error(
+        showError(
           email,
           errors.email,
           "يرجى إدخال بريد إلكتروني صحيح"
@@ -843,7 +833,7 @@
       }
 
 
-      valid(
+      markValid(
         email,
         errors.email
       );
@@ -900,7 +890,7 @@
         });
 
 
-        error(
+        showError(
           password,
           errors.password,
           "يرجى إدخال كلمة المرور"
@@ -971,7 +961,6 @@
         "valid"
       );
 
-
       passwordRules.classList.remove(
         "show"
       );
@@ -996,7 +985,7 @@
 
       if (!value) {
 
-        error(
+        showError(
           confirmPassword,
           errors.confirm,
           "يرجى تأكيد كلمة المرور"
@@ -1011,7 +1000,7 @@
         value !== password.value
       ) {
 
-        error(
+        showError(
           confirmPassword,
           errors.confirm,
           "كلمتا المرور غير متطابقتين"
@@ -1022,7 +1011,7 @@
       }
 
 
-      valid(
+      markValid(
         confirmPassword,
         errors.confirm
       );
@@ -1188,7 +1177,6 @@
       "click",
       async () => {
 
-
         message.textContent = "";
 
         message.classList.remove(
@@ -1279,7 +1267,7 @@
             data.user.identities.length === 0
           ) {
 
-            error(
+            showError(
               email,
               errors.email,
               "هذا البريد الإلكتروني مستخدم مسبقاً، جرّب بريد إلكتروني آخر أو سجّل الدخول."
@@ -1294,120 +1282,66 @@
 
 
           /*
-           * Supabase رجع خطأ
+           * إذا Supabase رجّع خطأ،
+           * نعرض السبب الحقيقي حالياً.
            */
 
           if (signupError) {
 
             console.error(
-              "Supabase signup error:",
+              "SIGNUP ERROR:",
               signupError
             );
 
 
-            const errorCode =
+            const code =
               String(
                 signupError.code || ""
-              ).toLowerCase();
+              );
 
 
-            const errorMessage =
+            const msg =
               String(
                 signupError.message || ""
-              ).toLowerCase();
+              );
+
+
+            const lowerMsg =
+              msg.toLowerCase();
 
 
             /*
-             * البريد مستخدم
+             * بريد مستخدم
              */
 
-            const emailAlreadyUsed =
+            if (
 
-              errorCode.includes(
-                "email_exists"
-              ) ||
+              code === "email_exists" ||
 
-              errorCode.includes(
-                "user_already_exists"
-              ) ||
+              code === "user_already_exists" ||
 
-              errorMessage.includes(
+              lowerMsg.includes(
                 "user already registered"
               ) ||
 
-              errorMessage.includes(
+              lowerMsg.includes(
                 "email already registered"
               ) ||
 
-              errorMessage.includes(
+              lowerMsg.includes(
                 "email_exists"
-              ) ||
+              )
 
-              (
-                errorMessage.includes(
-                  "already exists"
-                ) &&
-                !errorMessage.includes(
-                  "phone"
-                )
-              );
+            ) {
 
-
-            /*
-             * الهاتف مستخدم
-             */
-
-            const phoneAlreadyUsed =
-
-              errorMessage.includes(
-                "phone"
-              ) &&
-
-              (
-                errorMessage.includes(
-                  "duplicate"
-                ) ||
-
-                errorMessage.includes(
-                  "unique"
-                ) ||
-
-                errorMessage.includes(
-                  "already exists"
-                ) ||
-
-                errorMessage.includes(
-                  "already registered"
-                )
-              );
-
-
-            if (phoneAlreadyUsed) {
-
-              error(
-                phone,
-                errors.phone,
-                "رقم الهاتف مستخدم مسبقاً"
-              );
-
-              message.textContent =
-                "تعذر إنشاء الحساب لأن رقم الهاتف مستخدم مسبقاً.";
-
-              return;
-
-            }
-
-
-            if (emailAlreadyUsed) {
-
-              error(
+              showError(
                 email,
                 errors.email,
                 "هذا البريد الإلكتروني مستخدم مسبقاً، جرّب بريد إلكتروني آخر أو سجّل الدخول."
               );
 
               message.textContent =
-                "تعذر إنشاء الحساب لأن البريد الإلكتروني مستخدم مسبقاً.";
+                "البريد الإلكتروني مستخدم مسبقاً.";
 
               return;
 
@@ -1415,11 +1349,43 @@
 
 
             /*
-             * خطأ آخر من Supabase
+             * رقم الهاتف مستخدم
+             */
+
+            if (
+
+              lowerMsg.includes("phone") &&
+
+              (
+                lowerMsg.includes("duplicate") ||
+                lowerMsg.includes("unique") ||
+                lowerMsg.includes("already exists")
+              )
+
+            ) {
+
+              showError(
+                phone,
+                errors.phone,
+                "رقم الهاتف مستخدم مسبقاً"
+              );
+
+              message.textContent =
+                "رقم الهاتف مستخدم مسبقاً.";
+
+              return;
+
+            }
+
+
+            /*
+             * حالياً نعرض الخطأ الحقيقي
+             * حتى نعرف المشكلة بالضبط.
              */
 
             message.textContent =
-              "تعذر إنشاء الحساب. حاول مرة أخرى.";
+              msg ||
+              "حدث خطأ أثناء إنشاء الحساب.";
 
             return;
 
@@ -1427,13 +1393,13 @@
 
 
           /*
-           * ماكو مستخدم رجع
+           * إذا لم يرجع مستخدم
            */
 
           if (!data?.user) {
 
             message.textContent =
-              "تعذر إنشاء الحساب. حاول مرة أخرى.";
+              "لم يتم إنشاء الحساب. لم يرجع Supabase بيانات المستخدم.";
 
             return;
 
@@ -1441,7 +1407,7 @@
 
 
           /*
-           * نجاح
+           * نجاح مباشر
            */
 
           if (data.session) {
@@ -1487,56 +1453,18 @@
         } catch (err) {
 
           console.error(
-            "Unexpected signup error:",
+            "UNEXPECTED SIGNUP ERROR:",
             err
           );
 
 
           /*
-           * نحاول معرفة إذا الخطأ متعلق
-           * برقم الهاتف
+           * نعرض الخطأ الحقيقي حالياً
            */
 
-          const errorMessage =
-            String(
-              err?.message || ""
-            ).toLowerCase();
-
-
-          if (
-            errorMessage.includes(
-              "phone"
-            ) &&
-            (
-              errorMessage.includes(
-                "duplicate"
-              ) ||
-
-              errorMessage.includes(
-                "unique"
-              ) ||
-
-              errorMessage.includes(
-                "exists"
-              )
-            )
-          ) {
-
-            error(
-              phone,
-              errors.phone,
-              "رقم الهاتف مستخدم مسبقاً"
-            );
-
-            message.textContent =
-              "تعذر إنشاء الحساب لأن رقم الهاتف مستخدم مسبقاً.";
-
-          } else {
-
-            message.textContent =
-              "حدث خطأ غير متوقع أثناء إنشاء الحساب. حاول مرة أخرى.";
-
-          }
+          message.textContent =
+            err?.message ||
+            "حدث خطأ غير متوقع أثناء إنشاء الحساب.";
 
         } finally {
 
