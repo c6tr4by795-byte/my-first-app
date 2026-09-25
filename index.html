@@ -1,196 +1,380 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="format-detection" content="telephone=no,email=no,address=no">
 
   <title>MZAD PHONE - تسجيل الدخول</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
 
   <style>
+    :root {
+      --primary: #2495a0;
+      --primary-dark: #197984;
+      --dark: #172124;
+      --muted: #7d898c;
+      --border: #e1e7e8;
+      --surface: #f7f9f9;
+      --error: #c9684e;
+    }
+
     * {
       box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
     }
 
     body {
-      margin: 0;
       min-height: 100vh;
-      background: #f7f9f9;
+      padding: 22px 17px 28px;
+
       font-family: "Cairo", sans-serif;
-      color: #172124;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
+      color: var(--dark);
+
+      background:
+        radial-gradient(
+          circle at 100% 0%,
+          rgba(36, 149, 160, 0.08),
+          transparent 28%
+        ),
+        linear-gradient(
+          145deg,
+          #f8fbfb,
+          #ffffff 55%,
+          #f6f9f9
+        );
+
+      overflow-x: hidden;
     }
 
-    .card {
+    .page {
       width: 100%;
-      max-width: 430px;
-      background: #ffffff;
-      border-radius: 30px;
-      padding: 42px 26px 34px;
-      box-shadow: 0 18px 50px rgba(23, 33, 36, 0.08);
-      animation: cardIn .55s ease;
-    }
-
-    .logo {
-      width: 82px;
-      height: 82px;
-      margin: 0 auto 25px;
-      border-radius: 24px;
-      background: #2495a0;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 34px;
-      font-weight: 800;
-      animation: logoIn .65s ease;
+      max-width: 400px;
+      margin: 0 auto;
     }
 
     .brand {
       text-align: center;
-      margin-bottom: 8px;
-      font-size: 36px;
+      margin: 8px 0 25px;
+
+      opacity: 0;
+      transform: translateY(-10px);
+      animation: enter 0.6s ease forwards;
+    }
+
+    .brand-main {
+      font-family: Arial, sans-serif;
+      font-size: 40px;
       line-height: 1;
+      font-weight: 900;
+      letter-spacing: -2px;
+    }
+
+    .brand-main span {
+      color: var(--primary);
+    }
+
+    .brand-sub {
+      margin-top: 5px;
+
+      font-family: Arial, sans-serif;
+      font-size: 11px;
       font-weight: 800;
-      letter-spacing: -1px;
+      letter-spacing: 5px;
+
+      color: var(--muted);
+      direction: ltr;
     }
 
-    .brand span {
+    .heading {
+      margin-bottom: 19px;
+
+      opacity: 0;
+      transform: translateY(10px);
+      animation: enter 0.6s ease 0.08s forwards;
+    }
+
+    .heading h1 {
+      margin: 0;
+
+      font-size: 27px;
+      line-height: 1.35;
+      font-weight: 800;
+    }
+
+    .heading p {
+      margin: 5px 0 0;
+
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .card {
+      padding: 22px 20px 21px;
+
+      background: rgba(255, 255, 255, 0.97);
+
+      border: 1px solid #e5eaeb;
+      border-radius: 27px;
+
+      box-shadow:
+        0 16px 42px rgba(23, 33, 36, 0.065),
+        0 2px 8px rgba(23, 33, 36, 0.025);
+
+      opacity: 0;
+      transform: translateY(12px);
+      animation: enter 0.65s ease 0.16s forwards;
+    }
+
+    .field-group {
+      margin-bottom: 15px;
+    }
+
+    .field-label {
       display: block;
-      margin-top: 8px;
-      font-size: 17px;
-      letter-spacing: 3px;
+
+      margin: 0 0 6px;
+      padding-right: 2px;
+
+      font-size: 12.5px;
       font-weight: 700;
-      color: #2495a0;
+
+      color: #465356;
     }
 
-    .subtitle {
-      text-align: center;
-      color: #7d898c;
-      font-size: 17px;
-      margin: 22px 0 34px;
+    .input-wrap {
+      position: relative;
     }
 
-    .field {
-      margin-bottom: 16px;
-    }
-
-    .field label {
-      display: block;
-      margin: 0 4px 8px;
-      font-size: 14px;
-      font-weight: 600;
-      color: #172124;
-    }
-
-    input {
+    .input {
       width: 100%;
-      height: 58px;
-      border: 1px solid #e1e7e8;
-      border-radius: 17px;
-      background: #fff;
-      padding: 0 18px;
-      font-family: inherit;
-      font-size: 16px;
+      height: 54px;
+
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+
+      background: var(--surface);
+      color: var(--dark);
+
+      padding: 0 15px;
+
+      font-family: "Cairo", sans-serif;
+      font-size: 15px;
+
       outline: none;
-      transition: .2s;
+
+      transition:
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        background 0.18s ease;
+    }
+
+    .input:focus {
+      background: #fff;
+
+      border-color: var(--primary);
+
+      box-shadow:
+        0 0 0 3px rgba(36, 149, 160, 0.08);
+    }
+
+    .input.invalid {
+      border-color: var(--error);
+
+      box-shadow:
+        0 0 0 3px rgba(201, 104, 78, 0.06);
+    }
+
+    .email-input {
       direction: ltr;
       text-align: left;
     }
 
-    input:focus {
-      border-color: #2495a0;
-      box-shadow: 0 0 0 4px rgba(36, 149, 160, .09);
+    .password-input {
+      direction: ltr;
+      text-align: left;
+      padding-left: 58px;
     }
 
-    .error {
-      display: none;
-      color: #c9684e;
-      font-size: 13px;
-      margin: 7px 5px 0;
-    }
+    .toggle-password {
+      position: absolute;
 
-    .login-btn {
-      width: 100%;
-      height: 60px;
-      margin-top: 8px;
+      left: 11px;
+      top: 50%;
+
+      transform: translateY(-50%);
+
       border: 0;
-      border-radius: 18px;
-      background: #2495a0;
-      color: #fff;
-      font-family: inherit;
-      font-size: 18px;
+      background: transparent;
+
+      padding: 6px;
+
+      color: #8b9699;
+
+      font-family: "Cairo", sans-serif;
+      font-size: 11px;
       font-weight: 700;
+
       cursor: pointer;
-      transition: transform .15s, opacity .15s;
     }
 
-    .login-btn:active {
-      transform: scale(.98);
+    .field-error {
+      display: none;
+
+      margin-top: 6px;
+      padding-right: 3px;
+
+      color: var(--error);
+
+      font-size: 11px;
+      font-weight: 600;
+
+      line-height: 1.5;
     }
 
-    .login-btn:disabled {
-      opacity: .65;
-      cursor: default;
+    .field-error.show {
+      display: block;
     }
 
     .forgot {
       display: block;
-      text-align: center;
-      margin-top: 20px;
-      color: #2495a0;
-      text-decoration: none;
-      font-size: 15px;
-      font-weight: 600;
-    }
 
-    .signup {
-      text-align: center;
-      margin-top: 25px;
-      color: #7d898c;
-      font-size: 14px;
-    }
+      margin-top: -4px;
+      margin-bottom: 16px;
 
-    .signup a {
-      color: #2495a0;
+      color: var(--primary-dark);
+
       text-decoration: none;
+
+      font-size: 12px;
       font-weight: 700;
     }
 
-    .success {
-      display: none;
-      text-align: center;
-      color: #2495a0;
-      font-size: 14px;
-      margin-top: 14px;
+    .login-btn {
+      width: 100%;
+      height: 57px;
+
+      border: 0;
+      border-radius: 17px;
+
+      background: var(--primary);
+      color: #fff;
+
+      font-family: "Cairo", sans-serif;
+      font-size: 15.5px;
+      font-weight: 800;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 9px 20px rgba(36, 149, 160, 0.18);
+
+      transition:
+        transform 0.18s ease,
+        background 0.18s ease;
     }
 
-    @keyframes cardIn {
+    .login-btn:active {
+      transform: scale(0.985);
+    }
+
+    .login-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .login-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 10px;
+
+      text-align: center;
+
+      font-size: 11.5px;
+      font-weight: 600;
+
+      color: var(--error);
+
+      line-height: 1.7;
+
+      word-break: break-word;
+    }
+
+    .message.success {
+      color: var(--primary-dark);
+    }
+
+    .signup-link {
+      display: block;
+
+      margin-top: 17px;
+
+      text-align: center;
+
+      color: var(--primary-dark);
+
+      text-decoration: none;
+
+      font-size: 13.5px;
+      font-weight: 700;
+
+      opacity: 0;
+      animation: enter 0.6s ease 0.28s forwards;
+    }
+
+    .note {
+      margin-top: 12px;
+
+      text-align: center;
+
+      color: #a0a9ab;
+
+      font-size: 10.5px;
+      line-height: 1.7;
+    }
+
+    @keyframes enter {
       from {
         opacity: 0;
-        transform: translateY(18px);
+        transform: translateY(10px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
       }
     }
 
-    @keyframes logoIn {
-      from {
-        opacity: 0;
-        transform: scale(.75);
+    @media (max-width: 360px) {
+
+      body {
+        padding-left: 13px;
+        padding-right: 13px;
       }
-      to {
-        opacity: 1;
-        transform: scale(1);
+
+      .card {
+        padding: 20px 17px;
+      }
+
+      .input {
+        height: 52px;
+      }
+
+      .login-btn {
+        height: 55px;
       }
     }
   </style>
@@ -198,87 +382,191 @@
 
 <body>
 
-  <main class="card">
+  <main class="page">
 
-    <div class="logo">م</div>
+    <!-- =========================
+         BRAND
+    ========================== -->
 
-    <div class="brand">
-      MZAD
-      <span>PHONE</span>
-    </div>
+    <header class="brand">
 
-    <div class="subtitle">تسجيل الدخول إلى حسابك</div>
+      <div class="brand-main">
+        MZ<span>AD</span>
+      </div>
 
-    <form id="loginForm">
+      <div class="brand-sub">
+        PHONE
+      </div>
 
-      <div class="field">
-        <label for="email">البريد الإلكتروني</label>
+    </header>
+
+
+    <!-- =========================
+         HEADING
+    ========================== -->
+
+    <section class="heading">
+
+      <h1>
+        تسجيل الدخول
+      </h1>
+
+      <p>
+        سجّل دخولك للوصول إلى حسابك
+      </p>
+
+    </section>
+
+
+    <!-- =========================
+         LOGIN CARD
+    ========================== -->
+
+    <section class="card">
+
+      <!-- EMAIL -->
+
+      <div class="field-group">
+
+        <label
+          class="field-label"
+          for="email"
+        >
+          البريد الإلكتروني
+        </label>
 
         <input
           id="email"
+          class="input email-input"
           type="email"
           autocomplete="email"
-          dir="ltr"
+          maxlength="120"
+          inputmode="email"
+          spellcheck="false"
         >
 
-        <div id="emailError" class="error"></div>
-      </div>
-
-      <div class="field">
-        <label for="password">كلمة المرور</label>
-
-        <input
-          id="password"
-          type="password"
-          autocomplete="current-password"
-          dir="ltr"
+        <div
+          id="emailError"
+          class="field-error"
         >
+        </div>
 
-        <div id="passwordError" class="error"></div>
       </div>
 
-      <button id="loginBtn" class="login-btn" type="submit">
+
+      <!-- PASSWORD -->
+
+      <div class="field-group">
+
+        <label
+          class="field-label"
+          for="password"
+        >
+          كلمة المرور
+        </label>
+
+        <div class="input-wrap">
+
+          <input
+            id="password"
+            class="input password-input"
+            type="password"
+            autocomplete="current-password"
+            maxlength="72"
+          >
+
+          <button
+            type="button"
+            class="toggle-password"
+            id="togglePassword"
+          >
+            إظهار
+          </button>
+
+        </div>
+
+        <div
+          id="passwordError"
+          class="field-error"
+        >
+        </div>
+
+      </div>
+
+
+      <!-- FORGOT PASSWORD -->
+
+      <a
+        href="forgot.html"
+        class="forgot"
+      >
+        نسيت كلمة المرور؟
+      </a>
+
+
+      <!-- LOGIN BUTTON -->
+
+      <button
+        id="loginBtn"
+        class="login-btn"
+        type="button"
+      >
         تسجيل الدخول
       </button>
 
-      <div id="success" class="success"></div>
 
-    </form>
+      <!-- MESSAGE -->
 
-    <a class="forgot" href="forgot.html">
-      نسيت كلمة المرور؟
+      <div
+        id="message"
+        class="message"
+      >
+      </div>
+
+    </section>
+
+
+    <!-- SIGNUP -->
+
+    <a
+      href="signup.html"
+      class="signup-link"
+    >
+      ليس لديك حساب؟ إنشاء حساب
     </a>
 
-    <div class="signup">
-      ما عندك حساب؟
-      <a href="signup.html">إنشاء حساب</a>
+
+    <div class="note">
+      تسجيل الدخول يتم بشكل آمن عبر حسابك.
     </div>
 
   </main>
 
+
+  <!-- =========================
+       SUPABASE LOGIN
+  ========================== -->
+
   <script type="module">
 
-    import { createClient } from
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+    import { supabase } from "./js/supabase.js";
 
-    const SUPABASE_URL =
-      "https://ldvxctpngkidvatkisae.supabase.co";
 
-    const SUPABASE_KEY =
-      "sb_publishable_iKh2hmOMdYJt9MmGmCX3jA_Hs-MovkB";
+    /* =========================
+       العناصر
+    ========================= */
 
-    const supabase = createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
-
-    const form = document.getElementById("loginForm");
-
-    const emailInput =
+    const email =
       document.getElementById("email");
 
-    const passwordInput =
+    const password =
       document.getElementById("password");
+
+    const loginBtn =
+      document.getElementById("loginBtn");
+
+    const message =
+      document.getElementById("message");
 
     const emailError =
       document.getElementById("emailError");
@@ -286,151 +574,249 @@
     const passwordError =
       document.getElementById("passwordError");
 
-    const loginBtn =
-      document.getElementById("loginBtn");
-
-    const success =
-      document.getElementById("success");
+    const togglePassword =
+      document.getElementById("togglePassword");
 
 
-    function showError(element, message) {
-      element.textContent = message;
-      element.style.display = "block";
-    }
-
-
-    function hideError(element) {
-      element.textContent = "";
-      element.style.display = "none";
-    }
-
+    /* =========================
+       أدوات الأخطاء
+    ========================= */
 
     function clearErrors() {
-      hideError(emailError);
-      hideError(passwordError);
 
-      success.textContent = "";
-      success.style.display = "none";
+      email.classList.remove("invalid");
+      password.classList.remove("invalid");
+
+      emailError.textContent = "";
+      passwordError.textContent = "";
+
+      emailError.classList.remove("show");
+      passwordError.classList.remove("show");
+
     }
 
 
-    function getArabicLoginError(error) {
+    function showEmailError(text) {
 
-      const message =
-        String(error?.message || "").toLowerCase();
+      email.classList.add("invalid");
 
-      const code =
-        String(error?.code || "").toLowerCase();
+      emailError.textContent = text;
 
-      const status =
-        Number(error?.status || 0);
+      emailError.classList.add("show");
 
-
-      console.error("SUPABASE LOGIN ERROR:", {
-        message: error?.message,
-        code: error?.code,
-        status: error?.status,
-        name: error?.name
-      });
-
-
-      if (
-        message.includes("invalid login credentials") ||
-        message.includes("invalid credentials") ||
-        code.includes("invalid_credentials") ||
-        status === 400
-      ) {
-        return {
-          type: "password",
-          message: "البريد الإلكتروني أو كلمة المرور غير صحيحة"
-        };
-      }
-
-
-      if (
-        message.includes("email not confirmed") ||
-        code.includes("email_not_confirmed")
-      ) {
-        return {
-          type: "email",
-          message: "هذا البريد الإلكتروني غير مؤكد"
-        };
-      }
-
-
-      if (
-        message.includes("too many requests") ||
-        message.includes("rate limit") ||
-        status === 429
-      ) {
-        return {
-          type: "email",
-          message: "محاولات تسجيل الدخول كثيرة. انتظر قليلاً وحاول مرة أخرى."
-        };
-      }
-
-
-      if (
-        message.includes("network") ||
-        message.includes("fetch") ||
-        message.includes("failed to fetch")
-      ) {
-        return {
-          type: "email",
-          message: "تعذر الاتصال بالخادم. تأكد من الإنترنت وحاول مرة أخرى."
-        };
-      }
-
-
-      return {
-        type: "email",
-        message: "تعذر تسجيل الدخول. حاول مرة أخرى."
-      };
     }
 
 
-    form.addEventListener("submit", async (event) => {
+    function showPasswordError(text) {
 
-      event.preventDefault();
+      password.classList.add("invalid");
+
+      passwordError.textContent = text;
+
+      passwordError.classList.add("show");
+
+    }
+
+
+    /* =========================
+       إظهار / إخفاء كلمة المرور
+    ========================== */
+
+    togglePassword.addEventListener(
+      "click",
+      () => {
+
+        if (password.type === "password") {
+
+          password.type = "text";
+
+          togglePassword.textContent =
+            "إخفاء";
+
+        } else {
+
+          password.type = "password";
+
+          togglePassword.textContent =
+            "إظهار";
+
+        }
+
+      }
+    );
+
+
+    /* =========================
+       التحقق المحلي
+    ========================== */
+
+    function validateForm() {
 
       clearErrors();
-
-      const email =
-        emailInput.value.trim();
-
-      const password =
-        passwordInput.value;
-
 
       let valid = true;
 
 
-      if (!email) {
+      const emailValue =
+        email.value.trim();
 
-        showError(
-          emailError,
+
+      const passwordValue =
+        password.value;
+
+
+      if (!emailValue) {
+
+        showEmailError(
           "يرجى إدخال البريد الإلكتروني"
         );
 
         valid = false;
+
+      } else if (
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+          emailValue
+        )
+      ) {
+
+        showEmailError(
+          "يرجى إدخال بريد إلكتروني صحيح"
+        );
+
+        valid = false;
+
       }
 
 
-      if (!password) {
+      if (!passwordValue) {
 
-        showError(
-          passwordError,
+        showPasswordError(
           "يرجى إدخال كلمة المرور"
         );
 
         valid = false;
+
       }
 
 
-      if (!valid) {
+      return valid;
+
+    }
+
+
+    /* =========================
+       تنظيف رسالة الخطأ
+    ========================== */
+
+    function showMessage(
+      text,
+      success = false
+    ) {
+
+      message.textContent = text;
+
+      message.classList.toggle(
+        "success",
+        success
+      );
+
+    }
+
+
+    /* =========================
+       تشخيص خطأ Supabase
+    ========================== */
+
+    function getArabicLoginError(error) {
+
+      /*
+       * مهم جداً:
+       * هنا نطبع الخطأ الحقيقي بالكامل
+       * حتى نعرف السبب الفعلي للمشكلة.
+       */
+
+      console.error(
+        "================================"
+      );
+
+      console.error(
+        "SUPABASE LOGIN ERROR"
+      );
+
+      console.error(
+        "message:",
+        error?.message
+      );
+
+      console.error(
+        "code:",
+        error?.code
+      );
+
+      console.error(
+        "status:",
+        error?.status
+      );
+
+      console.error(
+        "name:",
+        error?.name
+      );
+
+      console.error(
+        "full error:",
+        error
+      );
+
+      console.error(
+        "================================"
+      );
+
+
+      /*
+       * لا نخفي الخطأ الحقيقي.
+       */
+
+      const realMessage =
+        error?.message ||
+        "سبب غير معروف";
+
+
+      return {
+        type: "email",
+        message:
+          "خطأ الدخول الحقيقي: " +
+          realMessage
+      };
+
+    }
+
+
+    /* =========================
+       تسجيل الدخول
+    ========================== */
+
+    async function login() {
+
+      showMessage("");
+
+      clearErrors();
+
+
+      /* =========================
+         فحص الحقول
+      ========================== */
+
+      if (!validateForm()) {
+
         return;
+
       }
 
+
+      /* =========================
+         تعطيل الزر
+      ========================== */
 
       loginBtn.disabled = true;
 
@@ -440,79 +826,268 @@
 
       try {
 
+        const emailValue =
+          email.value
+            .trim()
+            .toLowerCase();
+
+
+        const passwordValue =
+          password.value;
+
+
+        console.log(
+          "LOGIN START"
+        );
+
+        console.log(
+          "Email:",
+          emailValue
+        );
+
+
+        /* =========================
+           تسجيل الدخول عبر Supabase
+        ========================== */
+
         const {
           data,
           error
-        } = await supabase.auth.signInWithPassword({
-          email: email,
-          password: password
-        });
+        } =
+          await supabase.auth.signInWithPassword({
 
+            email:
+              emailValue,
+
+            password:
+              passwordValue
+
+          });
+
+
+        /* =========================
+           إذا حدث خطأ
+        ========================== */
 
         if (error) {
-          throw error;
-        }
+
+          const result =
+            getArabicLoginError(error);
 
 
-        if (!data || !data.user) {
-          throw new Error("NO_USER");
-        }
-
-
-        if (!data.session) {
-          throw new Error("NO_SESSION");
-        }
-
-
-        success.textContent =
-          "تم تسجيل الدخول بنجاح";
-
-        success.style.display =
-          "block";
-
-
-        setTimeout(() => {
-
-          window.location.href =
-            "home.html";
-
-        }, 500);
-
-
-      } catch (error) {
-
-        const result =
-          getArabicLoginError(error);
-
-
-        if (result.type === "password") {
-
-          showError(
-            passwordError,
+          showMessage(
             result.message
           );
 
-        } else {
 
-          showError(
-            emailError,
-            result.message
-          );
+          return;
+
         }
 
+
+        /* =========================
+           التحقق من المستخدم
+        ========================== */
+
+        console.log(
+          "LOGIN DATA:",
+          data
+        );
+
+
+        if (!data?.user) {
+
+          showMessage(
+            "لم يتم العثور على بيانات المستخدم."
+          );
+
+          return;
+
+        }
+
+
+        /* =========================
+           التحقق من الجلسة
+        ========================== */
+
+        if (!data?.session) {
+
+          showMessage(
+            "تم التحقق من الحساب ولكن لم يتم إنشاء جلسة دخول."
+          );
+
+          return;
+
+        }
+
+
+        /* =========================
+           نجاح
+        ========================== */
+
+        console.log(
+          "LOGIN SUCCESS"
+        );
+
+        console.log(
+          "USER ID:",
+          data.user.id
+        );
+
+
+        showMessage(
+          "تم تسجيل الدخول بنجاح.",
+          true
+        );
+
+
+        /* =========================
+           الانتقال
+        ========================== */
+
+        setTimeout(
+          () => {
+
+            window.location.replace(
+              "home.html"
+            );
+
+          },
+          500
+        );
+
+
+      } catch (err) {
+
+        /*
+         * أي خطأ غير متوقع
+         */
+
+        console.error(
+          "================================"
+        );
+
+        console.error(
+          "UNEXPECTED LOGIN ERROR"
+        );
+
+        console.error(
+          err
+        );
+
+        console.error(
+          "message:",
+          err?.message
+        );
+
+        console.error(
+          "stack:",
+          err?.stack
+        );
+
+        console.error(
+          "================================"
+        );
+
+
+        showMessage(
+          "حدث خطأ غير متوقع: " +
+          (
+            err?.message ||
+            "سبب غير معروف"
+          )
+        );
 
       } finally {
 
-        loginBtn.disabled = false;
+        loginBtn.disabled =
+          false;
 
         loginBtn.textContent =
           "تسجيل الدخول";
 
       }
 
-    });
+    }
+
+
+    /* =========================
+       زر تسجيل الدخول
+    ========================== */
+
+    loginBtn.addEventListener(
+      "click",
+      login
+    );
+
+
+    /* =========================
+       Enter
+    ========================== */
+
+    [email, password].forEach(
+      input => {
+
+        input.addEventListener(
+          "keydown",
+          event => {
+
+            if (
+              event.key === "Enter"
+            ) {
+
+              login();
+
+            }
+
+          }
+        );
+
+      }
+    );
+
+
+    /* =========================
+       تنظيف الأخطاء أثناء الكتابة
+    ========================== */
+
+    email.addEventListener(
+      "input",
+      () => {
+
+        email.classList.remove(
+          "invalid"
+        );
+
+        emailError.textContent = "";
+
+        emailError.classList.remove(
+          "show"
+        );
+
+      }
+    );
+
+
+    password.addEventListener(
+      "input",
+      () => {
+
+        password.classList.remove(
+          "invalid"
+        );
+
+        passwordError.textContent = "";
+
+        passwordError.classList.remove(
+          "show"
+        );
+
+      }
+    );
 
   </script>
 
 </body>
+
 </html>
