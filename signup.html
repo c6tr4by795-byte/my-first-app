@@ -691,6 +691,10 @@
       );
 
 
+    /* =========================
+       أدوات الأخطاء
+    ========================= */
+
     function showError(
       input,
       box,
@@ -734,6 +738,10 @@
     }
 
 
+    /* =========================
+       الاسم
+    ========================= */
+
     function checkName() {
 
       const value =
@@ -776,6 +784,10 @@
     }
 
 
+    /* =========================
+       الهاتف
+    ========================= */
+
     function checkPhone() {
 
       const value =
@@ -817,6 +829,10 @@
 
     }
 
+
+    /* =========================
+       البريد
+    ========================= */
 
     function checkEmail() {
 
@@ -861,6 +877,10 @@
 
     }
 
+
+    /* =========================
+       كلمة المرور
+    ========================= */
 
     function passwordStatus(value) {
 
@@ -989,6 +1009,10 @@
     }
 
 
+    /* =========================
+       تأكيد كلمة المرور
+    ========================= */
+
     function checkConfirm(
       showEmptyError = true
     ) {
@@ -1039,6 +1063,10 @@
     }
 
 
+    /* =========================
+       إظهار / إخفاء كلمة المرور
+    ========================= */
+
     document
       .querySelectorAll(".toggle-password")
       .forEach(button => {
@@ -1077,6 +1105,10 @@
       });
 
 
+    /* =========================
+       الهاتف أثناء الكتابة
+    ========================= */
+
     phone.addEventListener(
       "input",
       () => {
@@ -1104,6 +1136,10 @@
     );
 
 
+    /* =========================
+       الاسم أثناء الكتابة
+    ========================= */
+
     fullName.addEventListener(
       "input",
       () => {
@@ -1124,6 +1160,10 @@
       }
     );
 
+
+    /* =========================
+       البريد أثناء الكتابة
+    ========================= */
 
     email.addEventListener(
       "input",
@@ -1146,6 +1186,10 @@
     );
 
 
+    /* =========================
+       كلمة المرور أثناء الكتابة
+    ========================= */
+
     password.addEventListener(
       "input",
       () => {
@@ -1162,6 +1206,10 @@
     );
 
 
+    /* =========================
+       التأكيد أثناء الكتابة
+    ========================= */
+
     confirmPassword.addEventListener(
       "input",
       () => {
@@ -1171,6 +1219,10 @@
       }
     );
 
+
+    /* =========================
+       إنشاء الحساب
+    ========================= */
 
     signupBtn.addEventListener(
       "click",
@@ -1182,6 +1234,10 @@
           "success"
         );
 
+
+        /* =========================
+           فحص الحقول المحلية
+        ========================= */
 
         const nameOK =
           checkName();
@@ -1224,31 +1280,84 @@
         try {
 
           /* =========================
-             فحص رقم الهاتف أولاً
+             فحص الهاتف والبريد
+             بنفس الوقت
           ========================= */
 
-          const {
-            data: phoneTaken,
-            error: phoneCheckError
-          } =
-            await supabase.rpc(
-              "phone_exists",
-              {
-                p_phone:
-                  phone.value.trim()
-              }
-            );
+          const [
+            phoneResult,
+            emailResult
+          ] =
+            await Promise.all([
+
+              supabase.rpc(
+                "phone_exists",
+                {
+                  p_phone:
+                    phone.value.trim()
+                }
+              ),
+
+              supabase.rpc(
+                "email_exists",
+                {
+                  p_email:
+                    email.value
+                      .trim()
+                      .toLowerCase()
+                }
+              )
+
+            ]);
 
 
-          if (phoneCheckError) {
+          const phoneTaken =
+            phoneResult.data === true;
+
+          const emailTaken =
+            emailResult.data === true;
+
+
+          /* =========================
+             خطأ أثناء فحص الهاتف
+          ========================= */
+
+          if (phoneResult.error) {
 
             console.error(
               "PHONE CHECK ERROR:",
-              phoneCheckError
+              phoneResult.error
             );
 
+          }
+
+
+          /* =========================
+             خطأ أثناء فحص البريد
+          ========================= */
+
+          if (emailResult.error) {
+
+            console.error(
+              "EMAIL CHECK ERROR:",
+              emailResult.error
+            );
+
+          }
+
+
+          /*
+           * إذا صار خطأ تقني بالفحص
+           * نوقف العملية ولا ننشئ حساب
+           */
+
+          if (
+            phoneResult.error ||
+            emailResult.error
+          ) {
+
             message.textContent =
-              "تعذر التحقق من رقم الهاتف. حاول مرة أخرى.";
+              "تعذر التحقق من بيانات الحساب. حاول مرة أخرى.";
 
             return;
 
@@ -1256,10 +1365,13 @@
 
 
           /* =========================
-             الرقم موجود مسبقاً
+             عرض أخطاء الاثنين معاً
           ========================= */
 
-          if (phoneTaken === true) {
+          let duplicateFound = false;
+
+
+          if (phoneTaken) {
 
             showError(
               phone,
@@ -1267,8 +1379,50 @@
               "هذا الرقم مستخدم مسبقاً، جرّب رقم هاتف آخر."
             );
 
-            message.textContent =
-              "رقم الهاتف مستخدم مسبقاً.";
+            duplicateFound = true;
+
+          }
+
+
+          if (emailTaken) {
+
+            showError(
+              email,
+              errors.email,
+              "هذا البريد الإلكتروني مستخدم مسبقاً، جرّب بريد إلكتروني آخر أو سجّل الدخول."
+            );
+
+            duplicateFound = true;
+
+          }
+
+
+          /*
+           * إذا واحد أو الاثنين مستخدمين
+           * لا ننشئ الحساب
+           */
+
+          if (duplicateFound) {
+
+            if (
+              phoneTaken &&
+              emailTaken
+            ) {
+
+              message.textContent =
+                "رقم الهاتف والبريد الإلكتروني مستخدمان مسبقاً.";
+
+            } else if (phoneTaken) {
+
+              message.textContent =
+                "رقم الهاتف مستخدم مسبقاً.";
+
+            } else {
+
+              message.textContent =
+                "البريد الإلكتروني مستخدم مسبقاً.";
+
+            }
 
             return;
 
@@ -1421,7 +1575,7 @@
 
 
           /* =========================
-             البريد موجود مسبقاً
+             حماية إضافية للبريد
           ========================= */
 
           if (
