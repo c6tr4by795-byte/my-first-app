@@ -412,6 +412,8 @@
 
     <section class="card">
 
+      <!-- الاسم -->
+
       <div class="field-group">
 
         <label
@@ -434,6 +436,9 @@
         </div>
 
       </div>
+
+
+      <!-- الهاتف -->
 
       <div class="field-group">
 
@@ -459,6 +464,9 @@
 
       </div>
 
+
+      <!-- البريد -->
+
       <div class="field-group">
 
         <label
@@ -481,6 +489,9 @@
         </div>
 
       </div>
+
+
+      <!-- كلمة المرور -->
 
       <div class="field-group">
 
@@ -546,6 +557,9 @@
 
       </div>
 
+
+      <!-- تأكيد كلمة المرور -->
+
       <div class="field-group">
 
         <label
@@ -580,12 +594,14 @@
 
       </div>
 
+
       <button
         id="signupBtn"
         class="signup-btn"
         type="button">
         إنشاء الحساب
       </button>
+
 
       <div
         id="message"
@@ -594,11 +610,13 @@
 
     </section>
 
+
     <a
       href="index.html"
       class="login-link">
       لدي حساب بالفعل — تسجيل الدخول
     </a>
+
 
     <div class="note">
       بيانات الحساب تُحفظ ضمن حسابك وتستخدم لإدارة إعلاناتك ومزاداتك.
@@ -611,6 +629,10 @@
 
     import { supabase } from "./js/supabase.js";
 
+
+    /* =========================
+       العناصر
+    ========================= */
 
     const fullName =
       document.getElementById("fullName");
@@ -683,7 +705,15 @@
       );
 
 
-    function showError(input, box, text) {
+    /* =========================
+       رسائل الحقول
+    ========================= */
+
+    function showError(
+      input,
+      box,
+      text
+    ) {
 
       input.classList.add("invalid");
       input.classList.remove("valid");
@@ -694,9 +724,13 @@
     }
 
 
-    function clearError(input, box) {
+    function clearError(
+      input,
+      box
+    ) {
 
       input.classList.remove("invalid");
+      input.classList.remove("valid");
 
       box.textContent = "";
       box.classList.remove("show");
@@ -704,7 +738,10 @@
     }
 
 
-    function markValid(input, box) {
+    function markValid(
+      input,
+      box
+    ) {
 
       input.classList.remove("invalid");
       input.classList.add("valid");
@@ -714,6 +751,10 @@
 
     }
 
+
+    /* =========================
+       الاسم
+    ========================= */
 
     function checkName() {
 
@@ -757,6 +798,10 @@
     }
 
 
+    /* =========================
+       الهاتف
+    ========================= */
+
     function checkPhone() {
 
       const value =
@@ -798,6 +843,10 @@
 
     }
 
+
+    /* =========================
+       البريد
+    ========================= */
 
     function checkEmail() {
 
@@ -843,6 +892,10 @@
     }
 
 
+    /* =========================
+       كلمة المرور
+    ========================= */
+
     function passwordStatus(value) {
 
       return {
@@ -876,19 +929,10 @@
           "show"
         );
 
-        [
-          ruleLength,
-          ruleUpper,
-          ruleLower,
-          ruleNumber
-        ].forEach(rule => {
-
-          rule.classList.remove(
-            "show"
-          );
-
-        });
-
+        ruleLength.classList.remove("show");
+        ruleUpper.classList.remove("show");
+        ruleLower.classList.remove("show");
+        ruleNumber.classList.remove("show");
 
         showError(
           password,
@@ -901,13 +945,13 @@
       }
 
 
+      const result =
+        passwordStatus(value);
+
+
       passwordRules.classList.add(
         "show"
       );
-
-
-      const result =
-        passwordStatus(value);
 
 
       ruleLength.classList.toggle(
@@ -948,6 +992,9 @@
           "valid"
         );
 
+        errors.password.textContent = "";
+        errors.password.classList.remove("show");
+
         return false;
 
       }
@@ -965,7 +1012,6 @@
         "show"
       );
 
-
       clearError(
         password,
         errors.password
@@ -977,24 +1023,42 @@
     }
 
 
-    function checkConfirm() {
+    /* =========================
+       تأكيد كلمة المرور
+    ========================= */
+
+    function checkConfirm(
+      showEmptyError = true
+    ) {
 
       const value =
         confirmPassword.value;
 
 
+      /*
+       * إذا الحقل فارغ
+       */
+
       if (!value) {
 
-        showError(
-          confirmPassword,
-          errors.confirm,
-          "يرجى تأكيد كلمة المرور"
-        );
+        if (showEmptyError) {
+
+          showError(
+            confirmPassword,
+            errors.confirm,
+            "يرجى تأكيد كلمة المرور"
+          );
+
+        }
 
         return false;
 
       }
 
+
+      /*
+       * إذا كلمة المرور مختلفة
+       */
 
       if (
         value !== password.value
@@ -1011,6 +1075,10 @@
       }
 
 
+      /*
+       * متطابقة
+       */
+
       markValid(
         confirmPassword,
         errors.confirm
@@ -1020,6 +1088,10 @@
 
     }
 
+
+    /* =========================
+       إظهار / إخفاء كلمة المرور
+    ========================= */
 
     document
       .querySelectorAll(".toggle-password")
@@ -1059,6 +1131,10 @@
       });
 
 
+    /* =========================
+       الهاتف أثناء الكتابة
+    ========================= */
+
     phone.addEventListener(
       "input",
       () => {
@@ -1086,6 +1162,10 @@
     );
 
 
+    /* =========================
+       الاسم أثناء الكتابة
+    ========================= */
+
     fullName.addEventListener(
       "input",
       () => {
@@ -1106,6 +1186,10 @@
       }
     );
 
+
+    /* =========================
+       البريد أثناء الكتابة
+    ========================= */
 
     email.addEventListener(
       "input",
@@ -1128,6 +1212,10 @@
     );
 
 
+    /* =========================
+       كلمة المرور أثناء الكتابة
+    ========================= */
+
     password.addEventListener(
       "input",
       () => {
@@ -1135,43 +1223,43 @@
         updatePassword();
 
 
+        /*
+         * إذا المستخدم كان قد بدأ
+         * بتعبئة التأكيد، نتحقق منه.
+         */
+
         if (confirmPassword.value) {
 
-          checkConfirm();
-
-        } else {
-
-          clearError(
-            confirmPassword,
-            errors.confirm
-          );
+          checkConfirm(false);
 
         }
 
       }
     );
 
+
+    /* =========================
+       التأكيد أثناء الكتابة
+    ========================= */
 
     confirmPassword.addEventListener(
       "input",
       () => {
 
-        if (confirmPassword.value) {
+        /*
+         * هنا إذا المستخدم كتب
+         * أي شيء نتحقق فوراً.
+         */
 
-          checkConfirm();
-
-        } else {
-
-          clearError(
-            confirmPassword,
-            errors.confirm
-          );
-
-        }
+        checkConfirm(true);
 
       }
     );
 
+
+    /* =========================
+       إنشاء الحساب
+    ========================= */
 
     signupBtn.addEventListener(
       "click",
@@ -1196,8 +1284,15 @@
         const passwordOK =
           updatePassword();
 
+        /*
+         * مهم:
+         * عند الضغط على إنشاء الحساب
+         * إذا التأكيد فارغ يظهر الخطأ
+         * مباشرة داخل حقل التأكيد.
+         */
+
         const confirmOK =
-          checkConfirm();
+          checkConfirm(true);
 
 
         if (
@@ -1255,36 +1350,9 @@
             });
 
 
-          /*
-           * البريد مستخدم مسبقاً
-           */
-
-          if (
-            data?.user &&
-            Array.isArray(
-              data.user.identities
-            ) &&
-            data.user.identities.length === 0
-          ) {
-
-            showError(
-              email,
-              errors.email,
-              "هذا البريد الإلكتروني مستخدم مسبقاً، جرّب بريد إلكتروني آخر أو سجّل الدخول."
-            );
-
-            message.textContent =
-              "تعذر إنشاء الحساب لأن البريد الإلكتروني مستخدم مسبقاً.";
-
-            return;
-
-          }
-
-
-          /*
-           * إذا Supabase رجّع خطأ،
-           * نعرض السبب الحقيقي حالياً.
-           */
+          /* =========================
+             خطأ Supabase
+          ========================= */
 
           if (signupError) {
 
@@ -1297,7 +1365,7 @@
             const code =
               String(
                 signupError.code || ""
-              );
+              ).toLowerCase();
 
 
             const msg =
@@ -1310,9 +1378,9 @@
               msg.toLowerCase();
 
 
-            /*
-             * بريد مستخدم
-             */
+            /* =========================
+               البريد مستخدم مسبقاً
+            ========================= */
 
             if (
 
@@ -1348,18 +1416,24 @@
             }
 
 
-            /*
-             * رقم الهاتف مستخدم
-             */
+            /* =========================
+               الهاتف مستخدم مسبقاً
+            ========================= */
 
             if (
 
-              lowerMsg.includes("phone") &&
+              lowerMsg.includes("phone") ||
 
-              (
-                lowerMsg.includes("duplicate") ||
-                lowerMsg.includes("unique") ||
-                lowerMsg.includes("already exists")
+              lowerMsg.includes(
+                "profiles_phone_key"
+              ) ||
+
+              lowerMsg.includes(
+                "duplicate key"
+              ) ||
+
+              lowerMsg.includes(
+                "unique constraint"
               )
 
             ) {
@@ -1379,36 +1453,61 @@
 
 
             /*
-             * حالياً نعرض الخطأ الحقيقي
-             * حتى نعرف المشكلة بالضبط.
+             * لا نعرض الخطأ الإنجليزي
+             * للمستخدم.
              */
 
             message.textContent =
-              msg ||
-              "حدث خطأ أثناء إنشاء الحساب.";
+              "حدث خطأ أثناء إنشاء الحساب. حاول مرة أخرى.";
 
             return;
 
           }
 
 
-          /*
-           * إذا لم يرجع مستخدم
-           */
+          /* =========================
+             تحقق البريد من Supabase
+          ========================= */
+
+          if (
+            data?.user &&
+            Array.isArray(
+              data.user.identities
+            ) &&
+            data.user.identities.length === 0
+          ) {
+
+            showError(
+              email,
+              errors.email,
+              "هذا البريد الإلكتروني مستخدم مسبقاً، جرّب بريد إلكتروني آخر أو سجّل الدخول."
+            );
+
+            message.textContent =
+              "البريد الإلكتروني مستخدم مسبقاً.";
+
+            return;
+
+          }
+
+
+          /* =========================
+             لا يوجد مستخدم
+          ========================= */
 
           if (!data?.user) {
 
             message.textContent =
-              "لم يتم إنشاء الحساب. لم يرجع Supabase بيانات المستخدم.";
+              "لم يتم إنشاء الحساب. حاول مرة أخرى.";
 
             return;
 
           }
 
 
-          /*
-           * نجاح مباشر
-           */
+          /* =========================
+             نجاح
+          ========================= */
 
           if (data.session) {
 
@@ -1427,7 +1526,6 @@
               );
 
             }, 1000);
-
 
           } else {
 
@@ -1459,12 +1557,12 @@
 
 
           /*
-           * نعرض الخطأ الحقيقي حالياً
+           * لا نعرض الخطأ التقني
+           * للمستخدم.
            */
 
           message.textContent =
-            err?.message ||
-            "حدث خطأ غير متوقع أثناء إنشاء الحساب.";
+            "حدث خطأ غير متوقع أثناء إنشاء الحساب. حاول مرة أخرى.";
 
         } finally {
 
