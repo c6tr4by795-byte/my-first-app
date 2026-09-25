@@ -22,7 +22,7 @@
       --border: #e5eaeb;
       --surface: #f7f9f9;
       --white: #ffffff;
-      --accent: #d98b6c;
+      --error: #c75f42;
     }
 
     * {
@@ -63,13 +63,10 @@
       position: relative;
     }
 
-    /* العلامة */
-
     .brand {
       text-align: center;
       padding-top: 18px;
       margin-bottom: 30px;
-
       opacity: 0;
       transform: translateY(-14px);
       animation: brandIn 0.7s ease forwards;
@@ -98,11 +95,8 @@
       direction: ltr;
     }
 
-    /* العنوان */
-
     .heading {
       margin-bottom: 24px;
-
       opacity: 0;
       transform: translateY(15px);
       animation: contentIn 0.7s ease 0.12s forwards;
@@ -123,8 +117,6 @@
       font-weight: 500;
     }
 
-    /* البطاقة */
-
     .card {
       background: rgba(255, 255, 255, 0.96);
       border: 1px solid rgba(229, 234, 235, 0.9);
@@ -133,7 +125,6 @@
       box-shadow:
         0 18px 50px rgba(23, 33, 36, 0.07),
         0 3px 10px rgba(23, 33, 36, 0.03);
-
       opacity: 0;
       transform: translateY(18px);
       animation: contentIn 0.75s ease 0.25s forwards;
@@ -170,12 +161,7 @@
       transition:
         border-color 0.2s ease,
         background 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.2s ease;
-    }
-
-    .input::placeholder {
-      color: #a2abad;
+        box-shadow 0.2s ease;
     }
 
     .input:focus {
@@ -184,7 +170,17 @@
       box-shadow: 0 0 0 4px rgba(31, 143, 155, 0.09);
     }
 
-    .phone-input {
+    .input.invalid {
+      border-color: var(--error);
+      box-shadow: 0 0 0 4px rgba(199, 95, 66, 0.07);
+    }
+
+    .input.valid {
+      border-color: var(--primary);
+    }
+
+    .phone-input,
+    .email-input {
       direction: ltr;
       text-align: right;
     }
@@ -212,7 +208,43 @@
       transform: translateY(-50%) scale(0.94);
     }
 
-    /* زر التسجيل */
+    .field-error {
+      min-height: 0;
+      margin-top: 6px;
+      padding: 0 3px;
+      color: var(--error);
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.6;
+      opacity: 0;
+      transform: translateY(-3px);
+      transition:
+        opacity 0.18s ease,
+        transform 0.18s ease;
+    }
+
+    .field-error.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .password-rules {
+      margin-top: 7px;
+      padding: 0 3px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .password-rule {
+      font-size: 11px;
+      color: #9aa4a6;
+      transition: color 0.18s ease;
+    }
+
+    .password-rule.ok {
+      color: var(--primary-dark);
+    }
 
     .signup-btn {
       width: 100%;
@@ -248,13 +280,11 @@
       transform: none;
     }
 
-    /* الرسائل */
-
     .message {
-      min-height: 22px;
-      margin-top: 13px;
+      min-height: 0;
+      margin-top: 12px;
       text-align: center;
-      color: #c75f42;
+      color: var(--error);
       font-size: 13px;
       font-weight: 600;
       line-height: 1.7;
@@ -264,8 +294,6 @@
       color: var(--primary-dark);
     }
 
-    /* تسجيل الدخول */
-
     .login-link {
       display: block;
       margin-top: 20px;
@@ -274,13 +302,8 @@
       text-decoration: none;
       font-size: 14px;
       font-weight: 700;
-
       opacity: 0;
       animation: contentIn 0.7s ease 0.4s forwards;
-    }
-
-    .login-link:active {
-      opacity: 0.7;
     }
 
     .note {
@@ -290,8 +313,6 @@
       font-size: 11px;
       line-height: 1.8;
     }
-
-    /* حركة بسيطة للخلفية */
 
     .orb {
       position: fixed;
@@ -310,7 +331,7 @@
       width: 130px;
       height: 130px;
       border-radius: 50%;
-      background: rgba(217, 139, 108, 0.035);
+      background: rgba(31, 143, 155, 0.025);
       bottom: -55px;
       right: -45px;
       pointer-events: none;
@@ -342,8 +363,7 @@
     }
 
     @keyframes orbFloat {
-      0%,
-      100% {
+      0%, 100% {
         transform: translate(0, 0);
       }
 
@@ -353,8 +373,7 @@
     }
 
     @keyframes orbFloatTwo {
-      0%,
-      100% {
+      0%, 100% {
         transform: translate(0, 0);
       }
 
@@ -423,9 +442,7 @@
 
     <section class="heading">
 
-      <h1>
-        إنشاء حساب
-      </h1>
+      <h1>إنشاء حساب</h1>
 
       <p>
         أنشئ حسابك وابدأ بيع وشراء الأجهزة
@@ -435,6 +452,8 @@
 
 
     <section class="card">
+
+      <!-- الاسم -->
 
       <div class="field-group">
 
@@ -448,34 +467,19 @@
           id="fullName"
           class="input"
           type="text"
-          placeholder="مثال: محمد علي"
           autocomplete="name"
           maxlength="60"
         >
 
-      </div>
-
-
-      <div class="field-group">
-
-        <label
-          class="field-label"
-          for="username">
-          اسم المستخدم
-        </label>
-
-        <input
-          id="username"
-          class="input"
-          type="text"
-          placeholder="مثال: mohammed"
-          autocomplete="username"
-          maxlength="30"
-          dir="ltr"
-        >
+        <div
+          id="fullNameError"
+          class="field-error">
+        </div>
 
       </div>
 
+
+      <!-- الهاتف -->
 
       <div class="field-group">
 
@@ -489,14 +493,20 @@
           id="phone"
           class="input phone-input"
           type="tel"
-          placeholder="07xxxxxxxxx"
           autocomplete="tel"
-          inputmode="tel"
-          maxlength="15"
+          inputmode="numeric"
+          maxlength="11"
         >
+
+        <div
+          id="phoneError"
+          class="field-error">
+        </div>
 
       </div>
 
+
+      <!-- البريد -->
 
       <div class="field-group">
 
@@ -508,16 +518,21 @@
 
         <input
           id="email"
-          class="input"
+          class="input email-input"
           type="email"
-          placeholder="example@gmail.com"
           autocomplete="email"
           maxlength="120"
-          dir="ltr"
         >
+
+        <div
+          id="emailError"
+          class="field-error">
+        </div>
 
       </div>
 
+
+      <!-- كلمة المرور -->
 
       <div class="field-group">
 
@@ -533,7 +548,6 @@
             id="password"
             class="input password-input"
             type="password"
-            placeholder="6 أحرف أو أكثر"
             autocomplete="new-password"
             maxlength="72"
           >
@@ -547,8 +561,43 @@
 
         </div>
 
+        <div class="password-rules">
+
+          <div
+            id="ruleLength"
+            class="password-rule">
+            6 أحرف أو أكثر
+          </div>
+
+          <div
+            id="ruleUpper"
+            class="password-rule">
+            حرف إنجليزي كبير
+          </div>
+
+          <div
+            id="ruleLower"
+            class="password-rule">
+            حرف إنجليزي صغير
+          </div>
+
+          <div
+            id="ruleNumber"
+            class="password-rule">
+            رقم
+          </div>
+
+        </div>
+
+        <div
+          id="passwordError"
+          class="field-error">
+        </div>
+
       </div>
 
+
+      <!-- تأكيد كلمة المرور -->
 
       <div class="field-group">
 
@@ -564,7 +613,6 @@
             id="confirmPassword"
             class="input password-input"
             type="password"
-            placeholder="أعد كتابة كلمة المرور"
             autocomplete="new-password"
             maxlength="72"
           >
@@ -576,6 +624,11 @@
             إظهار
           </button>
 
+        </div>
+
+        <div
+          id="confirmPasswordError"
+          class="field-error">
         </div>
 
       </div>
@@ -619,9 +672,6 @@
     const fullName =
       document.getElementById("fullName");
 
-    const username =
-      document.getElementById("username");
-
     const phone =
       document.getElementById("phone");
 
@@ -641,46 +691,302 @@
       document.getElementById("message");
 
 
-    function showMessage(text, success = false) {
+    const errors = {
 
-      message.textContent = text;
+      fullName:
+        document.getElementById("fullNameError"),
 
-      message.classList.toggle(
-        "success",
-        success
+      phone:
+        document.getElementById("phoneError"),
+
+      email:
+        document.getElementById("emailError"),
+
+      password:
+        document.getElementById("passwordError"),
+
+      confirmPassword:
+        document.getElementById("confirmPasswordError")
+
+    };
+
+
+    const rules = {
+
+      length:
+        document.getElementById("ruleLength"),
+
+      upper:
+        document.getElementById("ruleUpper"),
+
+      lower:
+        document.getElementById("ruleLower"),
+
+      number:
+        document.getElementById("ruleNumber")
+
+    };
+
+
+    function setError(input, element, text) {
+
+      input.classList.add("invalid");
+      input.classList.remove("valid");
+
+      element.textContent = text;
+      element.classList.add("show");
+
+    }
+
+
+    function clearError(input, element) {
+
+      input.classList.remove("invalid");
+
+      element.textContent = "";
+      element.classList.remove("show");
+
+    }
+
+
+    function setValid(input, element) {
+
+      input.classList.remove("invalid");
+      input.classList.add("valid");
+
+      element.textContent = "";
+      element.classList.remove("show");
+
+    }
+
+
+    function checkFullName() {
+
+      const value =
+        fullName.value.trim();
+
+      if (!value) {
+
+        return false;
+
+      }
+
+      if (value.length < 2) {
+
+        setError(
+          fullName,
+          errors.fullName,
+          "يرجى إدخال اسم صحيح"
+        );
+
+        return false;
+
+      }
+
+      setValid(
+        fullName,
+        errors.fullName
       );
 
-    }
-
-
-    function normalizePhone(value) {
-
-      return value
-        .trim()
-        .replace(/\s+/g, "");
+      return true;
 
     }
 
 
-    function normalizeUsername(value) {
+    function checkPhone() {
 
-      return value
-        .trim()
-        .toLowerCase();
+      const value =
+        phone.value.trim();
+
+      if (!value) {
+
+        return false;
+
+      }
+
+      if (!/^07\d{9}$/.test(value)) {
+
+        setError(
+          phone,
+          errors.phone,
+          "يرجى إدخال رقم هاتف صحيح"
+        );
+
+        return false;
+
+      }
+
+      setValid(
+        phone,
+        errors.phone
+      );
+
+      return true;
 
     }
 
 
-    function validUsername(value) {
+    function checkEmail() {
 
-      return /^[a-z0-9_.]{3,30}$/.test(value);
+      const value =
+        email.value.trim();
+
+      if (!value) {
+
+        return false;
+
+      }
+
+      const valid =
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+          .test(value);
+
+      if (!valid) {
+
+        setError(
+          email,
+          errors.email,
+          "يرجى إدخال بريد إلكتروني صحيح"
+        );
+
+        return false;
+
+      }
+
+      setValid(
+        email,
+        errors.email
+      );
+
+      return true;
 
     }
 
 
-    function validIraqiPhone(value) {
+    function getPasswordRules(value) {
 
-      return /^07\d{9}$/.test(value);
+      return {
+
+        length:
+          value.length >= 6,
+
+        upper:
+          /[A-Z]/.test(value),
+
+        lower:
+          /[a-z]/.test(value),
+
+        number:
+          /\d/.test(value)
+
+      };
+
+    }
+
+
+    function updatePasswordRules() {
+
+      const value =
+        password.value;
+
+      const result =
+        getPasswordRules(value);
+
+
+      rules.length.classList.toggle(
+        "ok",
+        result.length
+      );
+
+      rules.upper.classList.toggle(
+        "ok",
+        result.upper
+      );
+
+      rules.lower.classList.toggle(
+        "ok",
+        result.lower
+      );
+
+      rules.number.classList.toggle(
+        "ok",
+        result.number
+      );
+
+
+      if (!value) {
+
+        clearError(
+          password,
+          errors.password
+        );
+
+        return false;
+
+      }
+
+
+      const valid =
+        result.length &&
+        result.upper &&
+        result.lower &&
+        result.number;
+
+
+      if (!valid) {
+
+        setError(
+          password,
+          errors.password,
+          "كلمة المرور لا تستوفي الشروط"
+        );
+
+        return false;
+
+      }
+
+
+      setValid(
+        password,
+        errors.password
+      );
+
+      return true;
+
+    }
+
+
+    function checkConfirmPassword() {
+
+      const value =
+        confirmPassword.value;
+
+      if (!value) {
+
+        return false;
+
+      }
+
+      if (
+        value !== password.value
+      ) {
+
+        setError(
+          confirmPassword,
+          errors.confirmPassword,
+          "كلمتا المرور غير متطابقتين"
+        );
+
+        return false;
+
+      }
+
+      setValid(
+        confirmPassword,
+        errors.confirmPassword
+      );
+
+      return true;
 
     }
 
@@ -689,148 +995,129 @@
       .querySelectorAll(".toggle-password")
       .forEach(button => {
 
-        button.addEventListener("click", () => {
+        button.addEventListener(
+          "click",
+          () => {
 
-          const target =
-            document.getElementById(
-              button.dataset.target
-            );
+            const target =
+              document.getElementById(
+                button.dataset.target
+              );
 
-          if (target.type === "password") {
+            if (
+              target.type === "password"
+            ) {
 
-            target.type = "text";
-            button.textContent = "إخفاء";
+              target.type = "text";
+              button.textContent = "إخفاء";
 
-          } else {
+            } else {
 
-            target.type = "password";
-            button.textContent = "إظهار";
+              target.type = "password";
+              button.textContent = "إظهار";
+
+            }
 
           }
-
-        });
+        );
 
       });
 
 
-    phone.addEventListener("input", () => {
+    phone.addEventListener(
+      "input",
+      () => {
 
-      phone.value =
-        phone.value
-          .replace(/\D/g, "")
-          .slice(0, 11);
+        phone.value =
+          phone.value
+            .replace(/\D/g, "")
+            .slice(0, 11);
 
-    });
+        if (phone.value) {
+          checkPhone();
+        }
+
+      }
+    );
+
+
+    fullName.addEventListener(
+      "input",
+      () => {
+
+        if (fullName.value) {
+          checkFullName();
+        }
+
+      }
+    );
+
+
+    email.addEventListener(
+      "input",
+      () => {
+
+        if (email.value) {
+          checkEmail();
+        }
+
+      }
+    );
+
+
+    password.addEventListener(
+      "input",
+      () => {
+
+        updatePasswordRules();
+
+        if (confirmPassword.value) {
+          checkConfirmPassword();
+        }
+
+      }
+    );
+
+
+    confirmPassword.addEventListener(
+      "input",
+      () => {
+
+        if (confirmPassword.value) {
+          checkConfirmPassword();
+        }
+
+      }
+    );
 
 
     signupBtn.addEventListener(
       "click",
       async () => {
 
-        const nameValue =
-          fullName.value.trim();
+        const nameOK =
+          checkFullName();
 
-        const usernameValue =
-          normalizeUsername(username.value);
+        const phoneOK =
+          checkPhone();
 
-        const phoneValue =
-          normalizePhone(phone.value);
+        const emailOK =
+          checkEmail();
 
-        const emailValue =
-          email.value.trim().toLowerCase();
+        const passwordOK =
+          updatePasswordRules();
 
-        const passwordValue =
-          password.value;
-
-        const confirmValue =
-          confirmPassword.value;
-
-
-        showMessage("");
+        const confirmOK =
+          checkConfirmPassword();
 
 
         if (
-          !nameValue ||
-          !usernameValue ||
-          !phoneValue ||
-          !emailValue ||
-          !passwordValue ||
-          !confirmValue
+          !nameOK ||
+          !phoneOK ||
+          !emailOK ||
+          !passwordOK ||
+          !confirmOK
         ) {
-
-          showMessage(
-            "يرجى إكمال جميع البيانات."
-          );
-
-          return;
-
-        }
-
-
-        if (nameValue.length < 2) {
-
-          showMessage(
-            "اكتب اسمك الكامل بشكل صحيح."
-          );
-
-          return;
-
-        }
-
-
-        if (!validUsername(usernameValue)) {
-
-          showMessage(
-            "اسم المستخدم يجب أن يحتوي على أحرف إنجليزية وأرقام فقط."
-          );
-
-          return;
-
-        }
-
-
-        if (!validIraqiPhone(phoneValue)) {
-
-          showMessage(
-            "أدخل رقم هاتف عراقي صحيح يبدأ بـ 07."
-          );
-
-          return;
-
-        }
-
-
-        if (
-          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-            emailValue
-          )
-        ) {
-
-          showMessage(
-            "أدخل بريداً إلكترونياً صحيحاً."
-          );
-
-          return;
-
-        }
-
-
-        if (passwordValue.length < 6) {
-
-          showMessage(
-            "كلمة المرور يجب أن تكون 6 أحرف أو أكثر."
-          );
-
-          return;
-
-        }
-
-
-        if (passwordValue !== confirmValue) {
-
-          showMessage(
-            "كلمتا المرور غير متطابقتين."
-          );
 
           return;
 
@@ -842,7 +1129,8 @@
         signupBtn.textContent =
           "جاري إنشاء الحساب...";
 
-        showMessage("");
+        message.textContent = "";
+        message.classList.remove("success");
 
 
         try {
@@ -852,19 +1140,23 @@
             error
           } = await supabase.auth.signUp({
 
-            email: emailValue,
+            email:
+              email.value
+                .trim()
+                .toLowerCase(),
 
-            password: passwordValue,
+            password:
+              password.value,
 
             options: {
 
               data: {
 
-                full_name: nameValue,
+                full_name:
+                  fullName.value.trim(),
 
-                username: usernameValue,
-
-                phone: phoneValue
+                phone:
+                  phone.value.trim()
 
               }
 
@@ -880,10 +1172,9 @@
               error
             );
 
-            showMessage(
+            message.textContent =
               "تعذر إنشاء الحساب: " +
-              error.message
-            );
+              error.message;
 
             return;
 
@@ -892,9 +1183,8 @@
 
           if (!data.user) {
 
-            showMessage(
-              "تعذر إنشاء الحساب. حاول مرة أخرى."
-            );
+            message.textContent =
+              "تعذر إنشاء الحساب. حاول مرة أخرى.";
 
             return;
 
@@ -903,9 +1193,11 @@
 
           if (data.session) {
 
-            showMessage(
-              "تم إنشاء حسابك بنجاح.",
-              true
+            message.textContent =
+              "تم إنشاء حسابك بنجاح.";
+
+            message.classList.add(
+              "success"
             );
 
 
@@ -920,9 +1212,11 @@
 
           } else {
 
-            showMessage(
-              "تم إنشاء الحساب. تحقق من بريدك الإلكتروني إذا كان تأكيد البريد مفعلاً.",
-              true
+            message.textContent =
+              "تم إنشاء الحساب. تحقق من بريدك الإلكتروني.";
+
+            message.classList.add(
+              "success"
             );
 
 
@@ -944,9 +1238,8 @@
             error
           );
 
-          showMessage(
-            "حدث خطأ غير متوقع. حاول مرة أخرى."
-          );
+          message.textContent =
+            "حدث خطأ غير متوقع. حاول مرة أخرى.";
 
 
         } finally {
