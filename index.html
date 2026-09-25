@@ -4,255 +4,193 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>العراق الأخضر</title>
+  <title>MZAD PHONE - تسجيل الدخول</title>
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap"
-    rel="stylesheet"
-  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     * {
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
       margin: 0;
       min-height: 100vh;
+      background: #f7f9f9;
       font-family: "Cairo", sans-serif;
-      background: linear-gradient(145deg, #f7f2e8, #ffffff);
+      color: #172124;
       display: flex;
-      align-items: center;
       justify-content: center;
-      overflow: hidden;
+      align-items: center;
+      padding: 20px;
     }
 
-    .login-box {
-      width: min(90%, 420px);
+    .card {
+      width: 100%;
+      max-width: 430px;
       background: #ffffff;
-      border-radius: 28px;
-      padding: 35px 25px;
-      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.10);
-      text-align: center;
+      border-radius: 30px;
+      padding: 42px 26px 34px;
+      box-shadow: 0 18px 50px rgba(23, 33, 36, 0.08);
+      animation: cardIn .55s ease;
     }
 
     .logo {
       width: 82px;
       height: 82px;
-      margin: 0 auto 18px;
+      margin: 0 auto 25px;
       border-radius: 24px;
-      background: #32b8c4;
+      background: #2495a0;
+      color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
       font-size: 34px;
       font-weight: 800;
-      animation: floatLogo 3s ease-in-out infinite;
+      animation: logoIn .65s ease;
     }
 
-    h1 {
-      margin: 0 0 8px;
-      color: #222;
-      font-size: 28px;
+    .brand {
+      text-align: center;
+      margin-bottom: 8px;
+      font-size: 36px;
+      line-height: 1;
       font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 8px;
+      font-size: 17px;
+      letter-spacing: 3px;
+      font-weight: 700;
+      color: #2495a0;
     }
 
     .subtitle {
-      color: #777;
-      margin-bottom: 28px;
+      text-align: center;
+      color: #7d898c;
+      font-size: 17px;
+      margin: 22px 0 34px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      margin: 0 4px 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #172124;
     }
 
     input {
       width: 100%;
-      padding: 15px;
-      margin-bottom: 14px;
-      border: 1px solid #e5e5e5;
-      border-radius: 15px;
+      height: 58px;
+      border: 1px solid #e1e7e8;
+      border-radius: 17px;
+      background: #fff;
+      padding: 0 18px;
       font-family: inherit;
-      font-size: 15px;
+      font-size: 16px;
       outline: none;
+      transition: .2s;
+      direction: ltr;
+      text-align: left;
     }
 
     input:focus {
-      border-color: #32b8c4;
+      border-color: #2495a0;
+      box-shadow: 0 0 0 4px rgba(36, 149, 160, .09);
     }
 
-    button {
+    .error {
+      display: none;
+      color: #c9684e;
+      font-size: 13px;
+      margin: 7px 5px 0;
+    }
+
+    .login-btn {
       width: 100%;
+      height: 60px;
+      margin-top: 8px;
       border: 0;
-      border-radius: 15px;
-      padding: 15px;
+      border-radius: 18px;
+      background: #2495a0;
+      color: #fff;
       font-family: inherit;
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 700;
       cursor: pointer;
-      background: #e91d4f;
-      color: white;
-      transition: transform 0.2s ease;
+      transition: transform .15s, opacity .15s;
     }
 
-    button:active {
-      transform: scale(0.97);
+    .login-btn:active {
+      transform: scale(.98);
     }
 
-    .links {
-      margin-top: 18px;
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
+    .login-btn:disabled {
+      opacity: .65;
+      cursor: default;
     }
 
-    .links a {
-      color: #32b8c4;
+    .forgot {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #2495a0;
       text-decoration: none;
-      font-size: 13px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .signup {
+      text-align: center;
+      margin-top: 25px;
+      color: #7d898c;
+      font-size: 14px;
+    }
+
+    .signup a {
+      color: #2495a0;
+      text-decoration: none;
       font-weight: 700;
     }
 
-    #message {
-      margin-top: 15px;
-      font-size: 14px;
-      color: #e91d4f;
-    }
-
-    /* شاشة الترحيب */
-
-    .welcome-screen {
-      position: fixed;
-      inset: 0;
-      background: #ffffff;
+    .success {
       display: none;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      z-index: 99999;
+      text-align: center;
+      color: #2495a0;
+      font-size: 14px;
+      margin-top: 14px;
     }
 
-    .welcome-screen.show {
-      display: flex;
-      animation: screenAppear 0.5s ease forwards;
-    }
-
-    .welcome-logo {
-      width: 115px;
-      height: 115px;
-      border-radius: 32px;
-      background: #32b8c4;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-      font-size: 48px;
-      font-weight: 800;
-      box-shadow: 0 15px 40px rgba(50, 184, 196, 0.25);
-
-      animation: logoAppear 1s cubic-bezier(.17,.67,.3,1.3) forwards;
-    }
-
-    .welcome-title {
-      margin-top: 28px;
-      font-size: 32px;
-      font-weight: 800;
-      color: #222222;
-
-      opacity: 0;
-      animation: textAppear 0.8s ease 0.5s forwards;
-    }
-
-    .welcome-text {
-      margin-top: 5px;
-      color: #777777;
-      font-size: 16px;
-
-      opacity: 0;
-      animation: textAppear 0.8s ease 0.8s forwards;
-    }
-
-    .loader {
-      width: 70px;
-      height: 5px;
-      margin-top: 30px;
-      border-radius: 20px;
-      background: #e91d4f;
-
-      opacity: 0;
-      animation:
-        loaderAppear 0.5s ease 1s forwards,
-        loaderMove 1.2s ease-in-out 1s infinite;
-    }
-
-    @keyframes screenAppear {
+    @keyframes cardIn {
       from {
         opacity: 0;
+        transform: translateY(18px);
       }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes logoAppear {
-      0% {
-        opacity: 0;
-        transform: scale(0.2) rotate(-20deg);
-      }
-
-      60% {
-        opacity: 1;
-        transform: scale(1.12) rotate(5deg);
-      }
-
-      100% {
-        opacity: 1;
-        transform: scale(1) rotate(0deg);
-      }
-    }
-
-    @keyframes textAppear {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-
       to {
         opacity: 1;
         transform: translateY(0);
       }
     }
 
-    @keyframes loaderAppear {
+    @keyframes logoIn {
       from {
         opacity: 0;
+        transform: scale(.75);
       }
-
       to {
         opacity: 1;
-      }
-    }
-
-    @keyframes loaderMove {
-      0% {
-        transform: scaleX(0.4);
-      }
-
-      50% {
-        transform: scaleX(1);
-      }
-
-      100% {
-        transform: scaleX(0.4);
-      }
-    }
-
-    @keyframes floatLogo {
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-6px);
+        transform: scale(1);
       }
     }
   </style>
@@ -260,200 +198,200 @@
 
 <body>
 
-  <!-- صفحة تسجيل الدخول -->
+  <main class="card">
 
-  <div class="login-box" id="loginBox">
+    <div class="logo">م</div>
 
-    <div class="logo">
-      ع
+    <div class="brand">
+      MZAD
+      <span>PHONE</span>
     </div>
 
-    <h1>
-      العراق الأخضر
-    </h1>
-
-    <div class="subtitle">
-      تسجيل الدخول إلى حسابك
-    </div>
+    <div class="subtitle">تسجيل الدخول إلى حسابك</div>
 
     <form id="loginForm">
 
-      <input
-        id="email"
-        type="email"
-        placeholder="البريد الإلكتروني"
-        autocomplete="email"
-        required
-      >
+      <div class="field">
+        <label for="email">البريد الإلكتروني</label>
+        <input
+          id="email"
+          type="email"
+          autocomplete="email"
+          dir="ltr"
+        >
+        <div id="emailError" class="error"></div>
+      </div>
 
-      <input
-        id="password"
-        type="password"
-        placeholder="كلمة المرور"
-        autocomplete="current-password"
-        required
-      >
+      <div class="field">
+        <label for="password">كلمة المرور</label>
+        <input
+          id="password"
+          type="password"
+          autocomplete="current-password"
+          dir="ltr"
+        >
+        <div id="passwordError" class="error"></div>
+      </div>
 
-      <button type="submit" id="loginButton">
+      <button id="loginBtn" class="login-btn" type="submit">
         تسجيل الدخول
       </button>
 
+      <div id="success" class="success"></div>
+
     </form>
 
-    <div id="message"></div>
+    <a class="forgot" href="forgot.html">
+      نسيت كلمة المرور؟
+    </a>
 
-    <div class="links">
-
-      <a href="signup.html">
-        إنشاء حساب
-      </a>
-
-      <a href="forgot.html">
-        نسيت كلمة المرور؟
-      </a>
-
+    <div class="signup">
+      ما عندك حساب؟
+      <a href="signup.html">إنشاء حساب</a>
     </div>
 
-  </div>
-
-
-  <!-- شاشة الترحيب بعد تسجيل الدخول -->
-
-  <div
-    class="welcome-screen"
-    id="welcomeScreen"
-  >
-
-    <div class="welcome-logo">
-      ع
-    </div>
-
-    <div class="welcome-title">
-      مرحباً بك
-    </div>
-
-    <div class="welcome-text">
-      العراق الأخضر
-    </div>
-
-    <div class="loader"></div>
-
-  </div>
-
+  </main>
 
   <script type="module">
 
-    import {
-      signInWithEmailAndPassword
-    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+    import { createClient } from
+      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-    import {
-      auth
-    } from "./js/firebase.js";
+    const SUPABASE_URL =
+      "https://ldvxctpngkidvatkisae.supabase.co";
 
+    const SUPABASE_KEY =
+      "sb_publishable_iKh2hmOMdYJt9MmGmCX3jA_Hs-MovkB";
 
-    const loginForm =
-      document.getElementById("loginForm");
+    const supabase = createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
 
-    const loginButton =
-      document.getElementById("loginButton");
+    const form = document.getElementById("loginForm");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
 
-    const message =
-      document.getElementById("message");
+    const emailError = document.getElementById("emailError");
+    const passwordError = document.getElementById("passwordError");
 
-    const loginBox =
-      document.getElementById("loginBox");
+    const loginBtn = document.getElementById("loginBtn");
+    const success = document.getElementById("success");
 
-    const welcomeScreen =
-      document.getElementById("welcomeScreen");
+    function showError(element, message) {
+      element.textContent = message;
+      element.style.display = "block";
+    }
 
+    function hideError(element) {
+      element.textContent = "";
+      element.style.display = "none";
+    }
 
-    loginForm.addEventListener(
-      "submit",
-      async function(event) {
+    function clearErrors() {
+      hideError(emailError);
+      hideError(passwordError);
+      success.style.display = "none";
+      success.textContent = "";
+    }
 
-        event.preventDefault();
+    form.addEventListener("submit", async (event) => {
 
-        message.textContent = "";
+      event.preventDefault();
 
-        const email =
-          document
-            .getElementById("email")
-            .value
-            .trim();
+      clearErrors();
 
-        const password =
-          document
-            .getElementById("password")
-            .value;
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
 
+      let valid = true;
 
-        loginButton.disabled = true;
+      if (!email) {
+        showError(
+          emailError,
+          "يرجى إدخال البريد الإلكتروني"
+        );
+        valid = false;
+      }
 
-        loginButton.textContent =
-          "جاري تسجيل الدخول...";
+      if (!password) {
+        showError(
+          passwordError,
+          "يرجى إدخال كلمة المرور"
+        );
+        valid = false;
+      }
 
+      if (!valid) return;
 
-        try {
+      loginBtn.disabled = true;
+      loginBtn.textContent = "جاري تسجيل الدخول...";
 
-          await signInWithEmailAndPassword(
-            auth,
+      try {
+
+        const { data, error } =
+          await supabase.auth.signInWithPassword({
             email,
             password
-          );
+          });
 
-
-          /*
-            تسجيل الدخول نجح.
-            نخفي شاشة تسجيل الدخول.
-          */
-
-          loginBox.style.display = "none";
-
-
-          /*
-            نظهر شاشة الترحيب.
-          */
-
-          welcomeScreen.classList.add("show");
-
-
-          /*
-            نبقى على شاشة الترحيب 4 ثواني
-            ثم ننتقل إلى الصفحة الرئيسية.
-          */
-
-          setTimeout(
-            function() {
-
-              window.location.replace(
-                "home.html"
-              );
-
-            },
-            4000
-          );
-
-
-        } catch (error) {
-
-          console.error(
-            "Login error:",
-            error
-          );
-
-          loginButton.disabled = false;
-
-          loginButton.textContent =
-            "تسجيل الدخول";
-
-          message.textContent =
-            "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
-
+        if (error) {
+          throw error;
         }
 
+        if (!data.session) {
+          throw new Error("NO_SESSION");
+        }
+
+        success.textContent = "تم تسجيل الدخول بنجاح";
+        success.style.display = "block";
+
+        setTimeout(() => {
+          window.location.href = "home.html";
+        }, 500);
+
+      } catch (error) {
+
+        console.error("LOGIN ERROR:", error);
+
+        const message =
+          String(error?.message || "").toLowerCase();
+
+        if (
+          message.includes("invalid login credentials") ||
+          message.includes("invalid credentials")
+        ) {
+
+          showError(
+            emailError,
+            "البريد الإلكتروني أو كلمة المرور غير صحيحة"
+          );
+
+        } else if (
+          message.includes("email not confirmed")
+        ) {
+
+          showError(
+            emailError,
+            "تعذر تسجيل الدخول بهذا البريد الإلكتروني"
+          );
+
+        } else {
+
+          showError(
+            emailError,
+            "تعذر تسجيل الدخول. حاول مرة أخرى."
+          );
+        }
+
+      } finally {
+
+        loginBtn.disabled = false;
+        loginBtn.textContent = "تسجيل الدخول";
+
       }
-    );
+
+    });
 
   </script>
 
