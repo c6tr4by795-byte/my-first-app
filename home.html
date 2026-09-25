@@ -1,3344 +1,1905 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>MZAD PHONE</title>
 
-  <meta
-    name="format-detection"
-    content="telephone=no,email=no,address=no">
+<style>
+:root{
+    --primary:#2495a0;
+    --primary-dark:#167780;
+    --primary-soft:#e9f7f8;
 
-  <title>MZAD PHONE</title>
+    --bg:#f7f9f9;
+    --white:#ffffff;
+    --text:#172124;
+    --muted:#7d898c;
+    --border:#e5ebec;
 
-  <style>
+    --radius-xl:24px;
+    --radius-lg:20px;
+    --radius-md:16px;
 
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
+    --shadow:0 8px 28px rgba(23,33,36,.07);
+}
 
-    :root {
-      --primary: #159aa6;
-      --primary-dark: #087b87;
-      --secondary: #1769d8;
-      --text: #111827;
-      --muted: #7b8491;
-      --bg: #f7f9fb;
-      --card: #ffffff;
-      --border: #e9edf1;
-      --soft: #eef8f9;
-      --danger: #ef476f;
-      --success: #12a67a;
-    }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
 
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+html{
+    scroll-behavior:smooth;
+}
 
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-
-      background:
-        linear-gradient(
-          180deg,
-          #ffffff 0%,
-          #f7f9fb 55%,
-          #f4f7f9 100%
-        );
-
-      color: var(--text);
-
-      font-family:
-        "Cairo",
+body{
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "Segoe UI",
         Arial,
         sans-serif;
 
-      min-height: 100vh;
+    background:var(--bg);
+    color:var(--text);
 
-      overflow-x: hidden;
-    }
+    min-height:100vh;
+    overflow-x:hidden;
+}
 
-    button,
-    input {
-      font-family: inherit;
-    }
+button,
+input{
+    font:inherit;
+}
 
-    button {
-      border: 0;
-      cursor: pointer;
-    }
+button{
+    border:0;
+    cursor:pointer;
+}
 
+a{
+    text-decoration:none;
+    color:inherit;
+}
 
-    /* =========================
-       APP
-    ========================== */
+/* =========================================================
+   PAGE
+========================================================= */
 
-    .app {
-      width: 100%;
-      max-width: 520px;
+.page{
+    width:100%;
+    min-height:100vh;
+    padding-bottom:105px;
+}
 
-      min-height: 100vh;
+/* =========================================================
+   HEADER
+========================================================= */
 
-      margin: 0 auto;
+.header{
+    position:relative;
 
-      padding:
-        18px
+    background:
+        linear-gradient(
+            145deg,
+            #167d86 0%,
+            #2495a0 55%,
+            #39aab3 100%
+        );
+
+    padding:
+        calc(env(safe-area-inset-top) + 15px)
         16px
-        105px;
-    }
+        18px;
 
+    border-radius:0 0 28px 28px;
 
-    /* =========================
-       HEADER
-    ========================== */
+    box-shadow:
+        0 8px 25px rgba(22,125,134,.14);
 
-    .header {
-      display: flex;
+    animation:headerIn .55s ease both;
+}
 
-      align-items: center;
-      justify-content: space-between;
+.header-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
 
-      margin-bottom: 22px;
-    }
+    height:40px;
+}
 
-    .brand {
-      display: flex;
+.location{
+    display:flex;
+    align-items:center;
+    gap:9px;
 
-      flex-direction: column;
+    color:#fff;
+}
 
-      line-height: 1;
-    }
+.location-icon{
+    width:34px;
+    height:34px;
 
-    .brand-main {
-      font-size: 27px;
+    border-radius:12px;
 
-      font-weight: 900;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-      letter-spacing: -1px;
+    background:rgba(255,255,255,.14);
 
-      color: var(--text);
-    }
+    backdrop-filter:blur(8px);
+}
 
-    .brand-main span {
-      color: var(--primary);
-    }
+.location-text{
+    display:flex;
+    flex-direction:column;
+    gap:1px;
+}
 
-    .brand-sub {
-      margin-top: 5px;
+.location-small{
+    font-size:10px;
+    opacity:.75;
+}
 
-      font-size: 10px;
+.location-name{
+    font-size:13px;
+    font-weight:700;
+}
 
-      letter-spacing: 3px;
+.header-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
 
-      color: var(--muted);
+.header-icon{
+    width:36px;
+    height:36px;
 
-      font-weight: 700;
-    }
+    border-radius:12px;
 
-    .header-actions {
-      display: flex;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-      align-items: center;
+    color:#fff;
 
-      gap: 9px;
-    }
+    background:rgba(255,255,255,.14);
 
-    .icon-button {
-      width: 43px;
-      height: 43px;
+    backdrop-filter:blur(8px);
 
-      border-radius: 15px;
+    transition:.2s ease;
+}
 
-      background: #fff;
+.header-icon:active{
+    transform:scale(.92);
+}
 
-      border: 1px solid var(--border);
+.logo{
+    position:absolute;
 
-      display: flex;
+    left:50%;
+    top:calc(env(safe-area-inset-top) + 19px);
 
-      align-items: center;
-      justify-content: center;
+    transform:translateX(-50%);
 
-      box-shadow:
-        0 5px 18px rgba(16, 32, 48, .05);
+    color:#fff;
 
-      position: relative;
+    font-size:16px;
+    font-weight:900;
+    letter-spacing:1.1px;
 
-      transition:
-        transform .18s ease,
-        box-shadow .18s ease;
-    }
+    pointer-events:none;
+}
 
-    .icon-button:active {
-      transform: scale(.94);
-    }
+.logo span{
+    display:block;
 
-    .icon {
-      width: 19px;
-      height: 19px;
+    margin-top:-3px;
 
-      position: relative;
-    }
+    font-size:7px;
+    letter-spacing:2.7px;
+    text-align:center;
 
+    opacity:.72;
+}
 
-    /* bell */
+/* =========================================================
+   SEARCH
+========================================================= */
 
-    .bell {
-      border: 2px solid #20252b;
+.search-wrap{
+    margin-top:17px;
+}
 
-      border-bottom: 0;
+.search{
+    height:47px;
 
-      border-radius:
-        11px 11px 5px 5px;
+    width:100%;
 
-      width: 15px;
-      height: 16px;
+    display:flex;
+    align-items:center;
 
-      margin-top: 2px;
-    }
+    gap:10px;
 
-    .bell::after {
-      content: "";
+    background:#fff;
 
-      position: absolute;
+    border:1px solid rgba(255,255,255,.7);
 
-      width: 6px;
-      height: 3px;
+    border-radius:15px;
 
-      background: #20252b;
+    padding:0 14px;
 
-      border-radius: 0 0 5px 5px;
+    box-shadow:
+        0 7px 18px rgba(0,0,0,.09);
 
-      bottom: -5px;
+    transition:.2s ease;
+}
 
-      left: 50%;
+.search:focus-within{
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.14);
+}
 
-      transform: translateX(-50%);
-    }
+.search svg{
+    flex:none;
+    color:#748184;
+}
 
-    .notification-dot {
-      position: absolute;
+.search input{
+    width:100%;
 
-      width: 8px;
-      height: 8px;
+    border:0;
+    outline:0;
 
-      border-radius: 50%;
+    background:transparent;
 
-      background: var(--danger);
+    color:var(--text);
 
-      top: 8px;
-      right: 8px;
+    font-size:13px;
+}
 
-      border: 2px solid white;
-    }
+.search input::placeholder{
+    color:#9aa5a7;
+}
 
+/* =========================================================
+   MAIN
+========================================================= */
 
-    /* =========================
-       SEARCH
-    ========================== */
+.main{
+    padding:0 16px;
+}
 
-    .search {
-      height: 53px;
+/* =========================================================
+   CATEGORIES
+========================================================= */
 
-      width: 100%;
+.categories-section{
+    margin-top:18px;
 
-      background: #fff;
+    animation:fadeUp .55s .08s ease both;
+}
 
-      border: 1px solid var(--border);
+.section-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
 
-      border-radius: 17px;
+    margin-bottom:11px;
+}
 
-      display: flex;
+.section-title{
+    font-size:17px;
+    font-weight:850;
+}
 
-      align-items: center;
+.section-link{
+    color:var(--primary);
+    font-size:11px;
+    font-weight:700;
+}
 
-      gap: 12px;
+.categories{
+    display:flex;
 
-      padding: 0 16px;
+    gap:10px;
 
-      box-shadow:
-        0 7px 25px rgba(20, 40, 60, .045);
+    overflow-x:auto;
 
-      margin-bottom: 24px;
-    }
+    padding:2px 1px 6px;
 
-    .search-icon {
-      width: 19px;
-      height: 19px;
+    scrollbar-width:none;
 
-      border:
-        2px solid #7d8792;
+    direction:rtl;
+}
 
-      border-radius: 50%;
+.categories::-webkit-scrollbar{
+    display:none;
+}
 
-      position: relative;
+.category{
+    flex:0 0 67px;
 
-      flex-shrink: 0;
-    }
+    display:flex;
+    flex-direction:column;
+    align-items:center;
 
-    .search-icon::after {
-      content: "";
+    gap:6px;
+}
 
-      position: absolute;
+.category-box{
+    width:58px;
+    height:58px;
 
-      width: 8px;
-      height: 2px;
+    background:#fff;
 
-      background: #7d8792;
+    border:1px solid var(--border);
 
-      transform: rotate(45deg);
+    border-radius:17px;
 
-      bottom: -4px;
-      right: -6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-      border-radius: 2px;
-    }
+    box-shadow:0 4px 13px rgba(23,33,36,.045);
 
-    .search input {
-      border: 0;
+    transition:.22s ease;
+}
 
-      outline: none;
+.category.active .category-box{
+    background:var(--primary-soft);
 
-      background: transparent;
+    border-color:#b9e2e5;
 
-      width: 100%;
+    color:var(--primary);
 
-      font-size: 14px;
+    transform:translateY(-2px);
+}
 
-      color: var(--text);
+.category:active .category-box{
+    transform:scale(.94);
+}
 
-      text-align: right;
-    }
+.category-name{
+    font-size:10px;
+    font-weight:700;
 
-    .search input::placeholder {
-      color: #a2a9b1;
-    }
+    color:#657174;
 
+    white-space:nowrap;
+}
 
-    /* =========================
-       WELCOME
-    ========================== */
+.category.active .category-name{
+    color:var(--primary-dark);
+}
 
-    .welcome {
-      background:
+/* =========================================================
+   AUCTION
+========================================================= */
+
+.auction-section{
+    margin-top:18px;
+
+    animation:fadeUp .55s .16s ease both;
+}
+
+.auction-carousel{
+    position:relative;
+
+    width:calc(100% + 16px);
+
+    margin-right:-8px;
+
+    overflow:hidden;
+
+    padding:3px 8px 8px;
+}
+
+.auction-track{
+    display:flex;
+
+    direction:rtl;
+
+    gap:10px;
+
+    will-change:transform;
+
+    transition:
+        transform .65s cubic-bezier(.22,.61,.36,1);
+}
+
+.auction-card{
+    flex:0 0 calc(100vw - 74px);
+
+    max-width:380px;
+
+    height:190px;
+
+    background:#fff;
+
+    border:1px solid var(--border);
+
+    border-radius:22px;
+
+    overflow:hidden;
+
+    box-shadow:var(--shadow);
+
+    display:flex;
+
+    direction:rtl;
+
+    position:relative;
+}
+
+.auction-image{
+    flex:0 0 43%;
+
+    position:relative;
+
+    background:
         linear-gradient(
-          135deg,
-          #087f8b,
-          #159eaa
+            145deg,
+            #edf5f6,
+            #dcebed
         );
 
-      border-radius: 23px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-      padding:
-        21px
-        20px
-        20px;
+    overflow:hidden;
+}
 
-      color: white;
+.phone-placeholder{
+    width:67px;
+    height:130px;
 
-      position: relative;
+    border-radius:15px;
 
-      overflow: hidden;
-
-      min-height: 136px;
-
-      box-shadow:
-        0 13px 30px rgba(15, 145, 158, .18);
-
-      margin-bottom: 28px;
-    }
-
-    .welcome::before {
-      content: "";
-
-      position: absolute;
-
-      width: 190px;
-      height: 190px;
-
-      border-radius: 50%;
-
-      border: 1px solid rgba(255,255,255,.13);
-
-      left: -80px;
-      bottom: -115px;
-    }
-
-    .welcome::after {
-      content: "";
-
-      position: absolute;
-
-      width: 130px;
-      height: 130px;
-
-      border-radius: 50%;
-
-      border: 1px solid rgba(255,255,255,.12);
-
-      right: -55px;
-      top: -75px;
-    }
-
-    .welcome-content {
-      position: relative;
-
-      z-index: 2;
-    }
-
-    .welcome-small {
-      font-size: 12px;
-
-      opacity: .82;
-
-      margin-bottom: 7px;
-    }
-
-    .welcome-title {
-      margin: 0;
-
-      font-size: 25px;
-
-      font-weight: 900;
-
-      line-height: 1.35;
-    }
-
-    .welcome-description {
-      margin: 7px 0 0;
-
-      font-size: 12px;
-
-      opacity: .85;
-    }
-
-
-    /* =========================
-       SECTION HEADER
-    ========================== */
-
-    .section-head {
-      display: flex;
-
-      align-items: center;
-
-      justify-content: space-between;
-
-      margin-bottom: 13px;
-    }
-
-    .section-title {
-      margin: 0;
-
-      font-size: 20px;
-
-      font-weight: 900;
-
-      color: var(--text);
-    }
-
-    .section-link {
-      background: transparent;
-
-      color: var(--primary);
-
-      font-size: 12px;
-
-      font-weight: 800;
-
-      padding: 4px;
-    }
-
-
-    /* =========================
-       FILTERS
-    ========================== */
-
-    .filters {
-      display: flex;
-
-      gap: 8px;
-
-      overflow-x: auto;
-
-      scrollbar-width: none;
-
-      margin-bottom: 17px;
-
-      direction: rtl;
-    }
-
-    .filters::-webkit-scrollbar {
-      display: none;
-    }
-
-    .filter {
-      flex-shrink: 0;
-
-      padding: 8px 14px;
-
-      border-radius: 12px;
-
-      background: #fff;
-
-      border: 1px solid var(--border);
-
-      color: #66717c;
-
-      font-size: 12px;
-
-      font-weight: 700;
-    }
-
-    .filter.active {
-      background: var(--soft);
-
-      color: var(--primary-dark);
-
-      border-color:
-        rgba(21,154,166,.2);
-    }
-
-
-    /* =========================
-       AUCTION CAROUSEL
-    ========================== */
-
-    .auction-wrapper {
-      position: relative;
-
-      margin:
-        0 -16px
-        29px;
-    }
-
-    .auction-track {
-      display: flex;
-
-      gap: 13px;
-
-      overflow-x: auto;
-
-      scroll-snap-type: x mandatory;
-
-      scrollbar-width: none;
-
-      padding:
-        2px
-        16px
-        12px;
-
-      direction: rtl;
-
-      overscroll-behavior-x: contain;
-    }
-
-    .auction-track::-webkit-scrollbar {
-      display: none;
-    }
-
-    .auction-card {
-      flex:
-        0 0 calc(100vw - 52px);
-
-      max-width: 455px;
-
-      scroll-snap-align: center;
-
-      background: #fff;
-
-      border:
-        1px solid var(--border);
-
-      border-radius: 23px;
-
-      overflow: hidden;
-
-      box-shadow:
-        0 9px 28px rgba(20, 40, 60, .07);
-
-      transition:
-        transform .3s ease,
-        box-shadow .3s ease;
-    }
-
-    .device-image {
-      height: 245px;
-
-      background:
+    background:
         linear-gradient(
-          145deg,
-          #edf4f6,
-          #f9fbfc
+            145deg,
+            #313a3d,
+            #111719
         );
 
-      position: relative;
+    box-shadow:
+        0 14px 22px rgba(0,0,0,.16);
 
-      display: flex;
+    position:relative;
 
-      align-items: center;
+    transform:rotate(-7deg);
 
-      justify-content: center;
+    animation:phoneFloat 3s ease-in-out infinite;
+}
 
-      overflow: hidden;
-    }
+.phone-placeholder::before{
+    content:"";
 
-    .device-image::before {
-      content: "";
+    position:absolute;
 
-      position: absolute;
+    width:22px;
+    height:5px;
 
-      width: 210px;
-      height: 210px;
+    border-radius:10px;
 
-      border-radius: 50%;
+    background:#080b0c;
 
-      background:
-        radial-gradient(
-          circle,
-          rgba(21,154,166,.12),
-          transparent 68%
-        );
-    }
+    top:7px;
+    left:50%;
 
-    .phone {
-      width: 118px;
-      height: 218px;
+    transform:translateX(-50%);
+}
 
-      border-radius: 24px;
+.phone-placeholder::after{
+    content:"";
 
-      background:
+    position:absolute;
+
+    inset:7px;
+
+    border-radius:11px;
+
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.auction-badge{
+    position:absolute;
+
+    top:10px;
+    right:10px;
+
+    padding:5px 9px;
+
+    border-radius:999px;
+
+    background:#fff;
+
+    color:var(--primary-dark);
+
+    font-size:9px;
+    font-weight:800;
+
+    box-shadow:0 4px 10px rgba(0,0,0,.07);
+}
+
+.auction-content{
+    flex:1;
+
+    min-width:0;
+
+    padding:15px 14px;
+
+    display:flex;
+    flex-direction:column;
+
+    justify-content:space-between;
+}
+
+.auction-label{
+    font-size:9px;
+
+    color:var(--primary);
+
+    font-weight:800;
+}
+
+.auction-title{
+    margin-top:4px;
+
+    font-size:16px;
+    font-weight:850;
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.auction-specs{
+    margin-top:4px;
+
+    font-size:10px;
+
+    color:var(--muted);
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.auction-bottom{
+    display:flex;
+    align-items:end;
+    justify-content:space-between;
+
+    gap:8px;
+}
+
+.price-label{
+    font-size:9px;
+    color:var(--muted);
+}
+
+.price{
+    margin-top:2px;
+
+    font-size:16px;
+    font-weight:900;
+}
+
+.price span{
+    font-size:9px;
+    font-weight:700;
+
+    margin-right:2px;
+}
+
+.auction-time{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+
+    font-size:9px;
+    color:var(--muted);
+}
+
+.time-value{
+    margin-top:3px;
+
+    padding:5px 8px;
+
+    background:var(--primary-soft);
+
+    color:var(--primary-dark);
+
+    border-radius:8px;
+
+    font-size:10px;
+    font-weight:800;
+}
+
+.auction-dots{
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    gap:5px;
+
+    margin-top:7px;
+}
+
+.dot{
+    width:5px;
+    height:5px;
+
+    border-radius:50%;
+
+    background:#d5dfe0;
+
+    transition:.3s ease;
+}
+
+.dot.active{
+    width:17px;
+
+    border-radius:999px;
+
+    background:var(--primary);
+}
+
+/* =========================================================
+   QUICK ACTIONS
+========================================================= */
+
+.quick-actions{
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:9px;
+
+    margin-top:17px;
+
+    animation:fadeUp .55s .24s ease both;
+}
+
+.quick-card{
+    min-height:94px;
+
+    background:#fff;
+
+    border:1px solid var(--border);
+
+    border-radius:18px;
+
+    padding:12px 8px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    gap:8px;
+
+    box-shadow:
+        0 5px 16px rgba(23,33,36,.045);
+
+    transition:.22s ease;
+}
+
+.quick-card:active{
+    transform:scale(.96);
+}
+
+.quick-icon{
+    width:39px;
+    height:39px;
+
+    border-radius:13px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:var(--primary-soft);
+
+    color:var(--primary);
+}
+
+.quick-title{
+    font-size:10px;
+    font-weight:800;
+
+    text-align:center;
+}
+
+/* =========================================================
+   FEATURED
+========================================================= */
+
+.featured-section{
+    margin-top:21px;
+
+    animation:fadeUp .55s .3s ease both;
+}
+
+.products{
+    display:flex;
+
+    gap:10px;
+
+    overflow-x:auto;
+
+    padding:2px 1px 7px;
+
+    scrollbar-width:none;
+
+    direction:rtl;
+}
+
+.products::-webkit-scrollbar{
+    display:none;
+}
+
+.product-card{
+    flex:0 0 145px;
+
+    background:#fff;
+
+    border:1px solid var(--border);
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 5px 16px rgba(23,33,36,.045);
+}
+
+.product-image{
+    height:110px;
+
+    background:
         linear-gradient(
-          145deg,
-          #20252b,
-          #07090b
+            145deg,
+            #eef5f6,
+            #e0eaeb
         );
 
-      border:
-        4px solid #3c4248;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
 
-      box-shadow:
-        0 20px 35px rgba(0,0,0,.2);
+.mini-phone{
+    width:43px;
+    height:80px;
 
-      position: relative;
+    border-radius:11px;
 
-      transform:
-        rotate(-4deg);
+    background:#20292b;
 
-      animation:
-        phoneFloat 4s ease-in-out infinite;
-    }
-
-    .phone::before {
-      content: "";
-
-      position: absolute;
-
-      top: 8px;
-      left: 50%;
-
-      transform: translateX(-50%);
-
-      width: 42px;
-      height: 10px;
-
-      background: #050607;
-
-      border-radius: 10px;
-
-      z-index: 2;
-    }
-
-    .phone::after {
-      content: "";
-
-      position: absolute;
-
-      width: 70px;
-      height: 70px;
-
-      border-radius: 19px;
-
-      background:
-        linear-gradient(
-          145deg,
-          #1b2328,
-          #070a0c
-        );
-
-      top: 18px;
-      left: 13px;
-
-      box-shadow:
-        inset 0 0 0 2px #444b50;
-    }
-
-    .device-badge {
-      position: absolute;
-
-      top: 14px;
-      right: 14px;
-
-      z-index: 4;
-
-      padding: 6px 10px;
-
-      border-radius: 9px;
-
-      background:
-        rgba(255,255,255,.9);
-
-      color: var(--primary-dark);
-
-      font-size: 10px;
-
-      font-weight: 900;
-
-      border:
-        1px solid rgba(21,154,166,.15);
-    }
-
-    .favorite {
-      position: absolute;
-
-      top: 14px;
-      left: 14px;
-
-      width: 36px;
-      height: 36px;
-
-      border-radius: 12px;
-
-      background:
-        rgba(255,255,255,.9);
-
-      border:
-        1px solid rgba(0,0,0,.05);
-
-      z-index: 4;
-
-      display: flex;
-
-      align-items: center;
-      justify-content: center;
-    }
-
-    .heart {
-      width: 15px;
-      height: 15px;
-
-      border:
-        2px solid #5c6670;
-
-      transform:
-        rotate(45deg);
-
-      border-radius:
-        2px 4px 2px 4px;
-
-      position: relative;
-    }
-
-    .heart::before,
-    .heart::after {
-      content: "";
-
-      position: absolute;
-
-      width: 13px;
-      height: 13px;
-
-      border:
-        2px solid #5c6670;
-
-      background: white;
-
-      border-radius: 50%;
-    }
-
-    .heart::before {
-      top: -8px;
-      left: -2px;
-    }
-
-    .heart::after {
-      top: -2px;
-      left: -8px;
-    }
-
-
-    /* auction details */
-
-    .auction-info {
-      padding: 17px 17px 16px;
-    }
-
-    .device-name {
-      margin: 0;
-
-      font-size: 18px;
-
-      font-weight: 900;
-
-      color: var(--text);
-    }
-
-    .device-meta {
-      margin-top: 4px;
-
-      font-size: 11px;
-
-      color: var(--muted);
-
-      font-weight: 600;
-    }
-
-    .auction-row {
-      display: flex;
-
-      align-items: flex-end;
-
-      justify-content: space-between;
-
-      gap: 10px;
-
-      margin-top: 15px;
-    }
-
-    .price-label {
-      display: block;
-
-      font-size: 10px;
-
-      color: var(--muted);
-
-      margin-bottom: 2px;
-    }
-
-    .price {
-      font-size: 21px;
-
-      font-weight: 900;
-
-      color: var(--primary-dark);
-
-      direction: rtl;
-    }
-
-    .price-unit {
-      font-size: 11px;
-
-      font-weight: 700;
-
-      margin-right: 3px;
-    }
-
-    .timer {
-      text-align: left;
-
-      direction: ltr;
-    }
-
-    .timer-label {
-      display: block;
-
-      font-size: 9px;
-
-      color: var(--muted);
-
-      margin-bottom: 3px;
-
-      direction: rtl;
-
-      text-align: left;
-    }
-
-    .timer-value {
-      font-size: 15px;
-
-      font-weight: 900;
-
-      color: var(--text);
-
-      letter-spacing: .5px;
-    }
-
-    .auction-bottom {
-      display: flex;
-
-      align-items: center;
-
-      justify-content: space-between;
-
-      gap: 10px;
-
-      margin-top: 15px;
-    }
-
-    .bids {
-      font-size: 10px;
-
-      color: var(--muted);
-
-      font-weight: 700;
-    }
-
-    .auction-button {
-      flex: 1;
-
-      height: 42px;
-
-      border-radius: 13px;
-
-      background:
-        var(--primary);
-
-      color: white;
-
-      font-size: 12px;
-
-      font-weight: 900;
-
-      box-shadow:
-        0 7px 17px rgba(21,154,166,.18);
-
-      transition:
-        transform .18s ease,
-        background .18s ease;
-    }
-
-    .auction-button:active {
-      transform: scale(.97);
-    }
-
-
-    /* =========================
-       DOTS
-    ========================== */
-
-    .carousel-dots {
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      gap: 5px;
-
-      direction: ltr;
-
-      margin-top: 1px;
-    }
-
-    .carousel-dot {
-      width: 5px;
-      height: 5px;
-
-      border-radius: 50%;
-
-      background: #ccd3d9;
-
-      transition:
-        width .25s ease,
-        background .25s ease;
-    }
-
-    .carousel-dot.active {
-      width: 19px;
-
-      border-radius: 8px;
-
-      background: var(--primary);
-    }
-
-
-    /* =========================
-       DIRECT SALE
-    ========================== */
-
-    .mode-grid {
-      display: grid;
-
-      grid-template-columns:
-        repeat(2, 1fr);
+    transform:rotate(-6deg);
 
-      gap: 11px;
+    box-shadow:0 8px 15px rgba(0,0,0,.13);
+}
 
-      margin-bottom: 28px;
-    }
-
-    .mode-card {
-      background: #fff;
-
-      border:
-        1px solid var(--border);
-
-      border-radius: 18px;
-
-      padding: 17px;
-
-      min-height: 118px;
-
-      box-shadow:
-        0 7px 23px rgba(20,40,60,.045);
-
-      transition:
-        transform .2s ease;
-    }
-
-    .mode-card:active {
-      transform: scale(.98);
-    }
-
-    .mode-line {
-      width: 33px;
-      height: 4px;
-
-      border-radius: 10px;
-
-      background: var(--primary);
-
-      margin-bottom: 13px;
-    }
-
-    .mode-card h3 {
-      margin: 0;
-
-      font-size: 15px;
-
-      font-weight: 900;
-    }
-
-    .mode-card p {
-      margin: 6px 0 0;
-
-      font-size: 10px;
-
-      color: var(--muted);
-
-      line-height: 1.7;
-
-      font-weight: 600;
-    }
-
-
-    /* =========================
-       QUICK ACTIONS
-    ========================== */
-
-    .quick {
-      display: grid;
-
-      grid-template-columns:
-        repeat(3, 1fr);
-
-      gap: 9px;
-
-      margin-bottom: 27px;
-    }
-
-    .quick-item {
-      background: #fff;
-
-      border:
-        1px solid var(--border);
-
-      border-radius: 16px;
-
-      padding: 14px 8px;
-
-      text-align: center;
-
-      box-shadow:
-        0 6px 18px rgba(20,40,60,.04);
-    }
-
-    .quick-icon {
-      width: 34px;
-      height: 34px;
-
-      border-radius: 11px;
-
-      background: var(--soft);
-
-      margin: 0 auto 8px;
-
-      position: relative;
-    }
-
-    .quick-icon::after {
-      content: "";
-
-      position: absolute;
-
-      width: 10px;
-      height: 10px;
-
-      border:
-        2px solid var(--primary);
-
-      border-radius: 50%;
-
-      left: 50%;
-      top: 50%;
-
-      transform: translate(-50%,-50%);
-    }
-
-    .quick-item span {
-      display: block;
-
-      font-size: 10px;
-
-      color: #5f6872;
-
-      font-weight: 800;
-    }
-
-
-    /* =========================
-       ACCOUNT PREVIEW
-    ========================== */
-
-    .account-card {
-      background: #fff;
-
-      border:
-        1px solid var(--border);
-
-      border-radius: 20px;
-
-      padding: 16px;
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: space-between;
-
-      gap: 12px;
-
-      box-shadow:
-        0 7px 22px rgba(20,40,60,.045);
-
-      margin-bottom: 20px;
-    }
-
-    .account-info {
-      min-width: 0;
-    }
+.product-content{
+    padding:10px;
+}
 
-    .account-label {
-      font-size: 10px;
+.product-name{
+    font-size:11px;
+    font-weight:850;
+}
 
-      color: var(--muted);
+.product-meta{
+    margin-top:4px;
 
-      margin-bottom: 3px;
-    }
-
-    .account-email {
-      font-size: 12px;
-
-      font-weight: 800;
-
-      white-space: nowrap;
+    color:var(--muted);
 
-      overflow: hidden;
+    font-size:9px;
+}
 
-      text-overflow: ellipsis;
+.product-price{
+    margin-top:7px;
 
-      direction: ltr;
+    font-size:12px;
+    font-weight:900;
+}
 
-      text-align: right;
-    }
+/* =========================================================
+   EMPTY / NO DATA
+========================================================= */
 
-    .logout {
-      flex-shrink: 0;
+.empty-state{
+    min-height:155px;
 
-      height: 36px;
+    background:#fff;
 
-      padding: 0 13px;
+    border:1px dashed #cbdfe1;
 
-      border-radius: 11px;
+    border-radius:21px;
 
-      background: #f9eef1;
+    display:flex;
+    flex-direction:column;
 
-      color: #c43d5d;
+    align-items:center;
+    justify-content:center;
 
-      font-size: 10px;
+    text-align:center;
 
-      font-weight: 900;
-    }
+    padding:20px;
 
+    color:var(--muted);
+}
 
-    /* =========================
-       BOTTOM NAV
-    ========================== */
+.empty-icon{
+    width:43px;
+    height:43px;
 
-    .bottom-space {
-      height: 20px;
-    }
+    border-radius:14px;
 
-    .bottom-nav {
-      position: fixed;
+    background:var(--primary-soft);
 
-      z-index: 50;
+    color:var(--primary);
 
-      bottom: 12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-      left: 50%;
+    margin-bottom:9px;
+}
 
-      transform: translateX(-50%);
+.empty-title{
+    color:var(--text);
 
-      width:
-        min(
-          calc(100% - 24px),
-          488px
-        );
+    font-size:14px;
+    font-weight:850;
+}
 
-      height: 68px;
+.empty-text{
+    margin-top:5px;
 
-      background:
-        rgba(255,255,255,.94);
+    font-size:10px;
 
-      border:
-        1px solid rgba(225,230,234,.95);
+    line-height:1.7;
+}
 
-      border-radius: 23px;
+/* =========================================================
+   BOTTOM NAV
+========================================================= */
 
-      box-shadow:
-        0 12px 38px rgba(20,40,60,.12);
+.bottom-nav{
+    position:fixed;
 
-      backdrop-filter:
-        blur(18px);
+    z-index:1000;
 
-      -webkit-backdrop-filter:
-        blur(18px);
+    left:50%;
+    bottom:calc(10px + env(safe-area-inset-bottom));
 
-      display: grid;
+    transform:translateX(-50%);
 
-      grid-template-columns:
-        repeat(5, 1fr);
+    width:calc(100% - 24px);
+    max-width:430px;
 
-      align-items: center;
+    height:67px;
 
-      padding: 5px;
-    }
+    background:rgba(255,255,255,.96);
 
-    .nav-item {
-      height: 56px;
+    border:1px solid var(--border);
 
-      background: transparent;
+    border-radius:21px;
 
-      border-radius: 17px;
+    box-shadow:
+        0 10px 32px rgba(23,33,36,.12);
 
-      display: flex;
+    backdrop-filter:blur(18px);
 
-      flex-direction: column;
+    display:grid;
 
-      align-items: center;
+    grid-template-columns:repeat(5,1fr);
 
-      justify-content: center;
+    align-items:center;
+}
 
-      gap: 4px;
+.nav-item{
+    height:100%;
 
-      color: #8a929b;
+    display:flex;
+    flex-direction:column;
 
-      transition:
-        background .2s ease,
-        color .2s ease,
-        transform .2s ease;
-    }
+    align-items:center;
+    justify-content:center;
 
-    .nav-item:active {
-      transform: scale(.94);
-    }
+    gap:4px;
 
-    .nav-item.active {
-      background: var(--soft);
+    color:#899496;
 
-      color: var(--primary-dark);
-    }
+    transition:.2s ease;
 
-    .nav-symbol {
-      width: 20px;
-      height: 20px;
+    position:relative;
+}
 
-      position: relative;
-    }
+.nav-item.active{
+    color:var(--primary-dark);
+}
 
-    .nav-symbol.home {
-      border:
-        2px solid currentColor;
+.nav-icon{
+    width:27px;
+    height:27px;
 
-      border-top: 0;
+    border-radius:9px;
 
-      width: 18px;
-      height: 14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-      margin-top: 4px;
+    transition:.2s ease;
+}
 
-      border-radius: 2px;
-    }
+.nav-item.active .nav-icon{
+    background:var(--primary-soft);
+}
 
-    .nav-symbol.home::before {
-      content: "";
+.nav-label{
+    font-size:8px;
+    font-weight:750;
+}
 
-      position: absolute;
+.add-button{
+    width:43px;
+    height:43px;
 
-      width: 13px;
-      height: 13px;
+    border-radius:15px;
 
-      border-top:
-        2px solid currentColor;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-      border-right:
-        2px solid currentColor;
+    background:var(--primary);
 
-      transform:
-        rotate(-45deg);
+    color:#fff;
 
-      top: -8px;
-      left: 1px;
-    }
+    box-shadow:
+        0 7px 16px rgba(36,149,160,.24);
 
-    .nav-symbol.auction {
-      border:
-        2px solid currentColor;
+    transform:translateY(-8px);
 
-      border-radius: 5px;
+    border:4px solid var(--bg);
+}
 
-      width: 18px;
-      height: 18px;
-    }
+/* =========================================================
+   SVG
+========================================================= */
 
-    .nav-symbol.auction::before {
-      content: "";
+svg{
+    width:20px;
+    height:20px;
 
-      position: absolute;
+    stroke:currentColor;
 
-      width: 7px;
-      height: 7px;
+    fill:none;
 
-      border:
-        2px solid currentColor;
+    stroke-width:1.8;
 
-      border-radius: 50%;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
 
-      left: 50%;
-      top: 50%;
+/* =========================================================
+   ANIMATIONS
+========================================================= */
 
-      transform:
-        translate(-50%,-50%);
+@keyframes headerIn{
+    from{
+        opacity:0;
+        transform:translateY(-15px);
     }
-
-    .nav-symbol.plus {
-      width: 24px;
-      height: 24px;
-
-      border-radius: 50%;
-
-      background: var(--primary);
 
-      box-shadow:
-        0 6px 15px rgba(21,154,166,.23);
+    to{
+        opacity:1;
+        transform:translateY(0);
     }
+}
 
-    .nav-symbol.plus::before,
-    .nav-symbol.plus::after {
-      content: "";
-
-      position: absolute;
-
-      background: white;
-
-      border-radius: 2px;
-
-      left: 50%;
-      top: 50%;
-
-      transform: translate(-50%,-50%);
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(12px);
     }
 
-    .nav-symbol.plus::before {
-      width: 11px;
-      height: 2px;
+    to{
+        opacity:1;
+        transform:translateY(0);
     }
+}
 
-    .nav-symbol.plus::after {
-      width: 2px;
-      height: 11px;
+@keyframes phoneFloat{
+    0%,100%{
+        transform:rotate(-7deg) translateY(0);
     }
-
-    .nav-symbol.heart-nav {
-      width: 17px;
-      height: 17px;
 
-      border:
-        2px solid currentColor;
-
-      transform: rotate(45deg);
-
-      border-radius:
-        3px 6px 3px 6px;
+    50%{
+        transform:rotate(-5deg) translateY(-4px);
     }
+}
 
-    .nav-symbol.profile {
-      width: 18px;
-      height: 18px;
+/* =========================================================
+   SMALL PHONES
+========================================================= */
 
-      border:
-        2px solid currentColor;
+@media(max-width:360px){
 
-      border-radius: 50%;
+    .main{
+        padding:0 13px;
     }
-
-    .nav-symbol.profile::before {
-      content: "";
 
-      position: absolute;
-
-      width: 5px;
-      height: 5px;
-
-      border:
-        2px solid currentColor;
-
-      border-radius: 50%;
-
-      top: 2px;
-      left: 50%;
-
-      transform: translateX(-50%);
+    .header{
+        padding-left:13px;
+        padding-right:13px;
     }
-
-    .nav-symbol.profile::after {
-      content: "";
-
-      position: absolute;
-
-      width: 9px;
-      height: 5px;
-
-      border:
-        2px solid currentColor;
-
-      border-bottom: 0;
 
-      border-radius: 8px 8px 0 0;
-
-      bottom: 2px;
-      left: 50%;
-
-      transform: translateX(-50%);
+    .auction-card{
+        flex-basis:calc(100vw - 62px);
     }
 
-    .nav-label {
-      font-size: 8px;
-
-      font-weight: 800;
+    .auction-image{
+        flex-basis:40%;
     }
-
-
-    /* =========================
-       TOAST
-    ========================== */
-
-    .toast {
-      position: fixed;
-
-      z-index: 100;
-
-      left: 50%;
-
-      bottom: 93px;
-
-      transform:
-        translate(-50%, 15px);
-
-      opacity: 0;
-
-      pointer-events: none;
-
-      background: #20262c;
-
-      color: white;
-
-      padding: 10px 17px;
-
-      border-radius: 12px;
-
-      font-size: 11px;
-
-      font-weight: 700;
-
-      transition:
-        opacity .25s ease,
-        transform .25s ease;
 
-      white-space: nowrap;
+    .quick-card{
+        min-height:88px;
     }
 
-    .toast.show {
-      opacity: 1;
-
-      transform:
-        translate(-50%, 0);
+    .product-card{
+        flex-basis:137px;
     }
-
-
-    /* =========================
-       ANIMATIONS
-    ========================== */
-
-    @keyframes phoneFloat {
+}
 
-      0%,
-      100% {
-        transform:
-          translateY(0)
-          rotate(-4deg);
-      }
+@media(min-width:600px){
 
-      50% {
-        transform:
-          translateY(-6px)
-          rotate(-2deg);
-      }
+    body{
+        background:#edf2f2;
     }
 
-    @keyframes cardIn {
+    .page{
+        max-width:480px;
 
-      from {
-        opacity: 0;
+        margin:auto;
 
-        transform:
-          translateY(12px);
-      }
+        background:var(--bg);
 
-      to {
-        opacity: 1;
-
-        transform:
-          translateY(0);
-      }
+        min-height:100vh;
     }
 
-    .welcome,
-    .auction-card,
-    .mode-card,
-    .quick-item,
-    .account-card {
-      animation:
-        cardIn .5s ease both;
+    .header{
+        border-radius:0 0 30px 30px;
     }
-
-
-    /* =========================
-       SMALL PHONES
-    ========================== */
-
-    @media (max-width: 380px) {
-
-      .app {
-        padding-left: 13px;
-        padding-right: 13px;
-      }
 
-      .brand-main {
-        font-size: 24px;
-      }
-
-      .welcome {
-        min-height: 128px;
-      }
-
-      .welcome-title {
-        font-size: 22px;
-      }
-
-      .device-image {
-        height: 225px;
-      }
-
-      .phone {
-        width: 106px;
-        height: 198px;
-      }
-
-      .auction-card {
-        flex-basis:
-          calc(100vw - 42px);
-      }
-
-      .auction-info {
-        padding: 15px;
-      }
-
-      .price {
-        font-size: 19px;
-      }
-
-      .bottom-nav {
-        height: 65px;
-      }
-
-      .nav-item {
-        height: 53px;
-      }
+    .bottom-nav{
+        width:440px;
     }
-
-  </style>
+}
+</style>
 </head>
-
 
 <body>
 
+<div class="page">
 
-  <!-- =========================
-       APP
-  ========================== -->
-
-  <main class="app">
-
-
-    <!-- HEADER -->
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
     <header class="header">
 
-      <div class="brand">
+        <div class="header-top">
 
-        <div class="brand-main">
-          MZAD <span>PHONE</span>
+            <div class="location">
+
+                <div class="location-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12z"/>
+                        <circle cx="12" cy="9" r="2.2"/>
+                    </svg>
+                </div>
+
+                <div class="location-text">
+                    <span class="location-small">موقعك الحالي</span>
+                    <span class="location-name">النجف</span>
+                </div>
+
+            </div>
+
+            <div class="logo">
+                MZAD
+                <span>PHONE</span>
+            </div>
+
+            <div class="header-actions">
+
+                <button class="header-icon" aria-label="الإشعارات">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+                        <path d="M10 21h4"/>
+                    </svg>
+                </button>
+
+                <button class="header-icon" aria-label="الحساب">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="8" r="3.2"/>
+                        <path d="M5.5 20c.7-3.5 2.8-5.3 6.5-5.3s5.8 1.8 6.5 5.3"/>
+                    </svg>
+                </button>
+
+            </div>
+
         </div>
 
-        <div class="brand-sub">
-          SMART MARKET
+        <div class="search-wrap">
+
+            <label class="search">
+
+                <svg viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="6.5"/>
+                    <path d="m16 16 5 5"/>
+                </svg>
+
+                <input
+                    type="search"
+                    placeholder="ابحث عن جهاز أو موديل"
+                    autocomplete="off"
+                >
+
+            </label>
+
         </div>
-
-      </div>
-
-
-      <div class="header-actions">
-
-        <button
-          class="icon-button"
-          id="notificationBtn"
-          aria-label="الإشعارات">
-
-          <div class="icon bell"></div>
-
-          <span class="notification-dot"></span>
-
-        </button>
-
-        <button
-          class="icon-button"
-          id="profileBtn"
-          aria-label="الحساب">
-
-          <div class="icon profile-icon"></div>
-
-        </button>
-
-      </div>
 
     </header>
 
 
-    <!-- SEARCH -->
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
 
-    <div class="search">
+    <main class="main">
 
-      <div class="search-icon"></div>
+        <!-- CATEGORIES -->
 
-      <input
-        id="searchInput"
-        type="search"
-        placeholder="ابحث عن جهاز أو موديل..."
-        autocomplete="off">
+        <section class="categories-section">
 
-    </div>
-
-
-    <!-- WELCOME -->
-
-    <section class="welcome">
-
-      <div class="welcome-content">
-
-        <div class="welcome-small">
-          سوق الأجهزة المستعملة والحديثة
-        </div>
-
-        <h1 class="welcome-title">
-          اشتري، بع، أو زايد بثقة
-        </h1>
-
-        <p class="welcome-description">
-          أجهزة حقيقية ومعلومات واضحة قبل الشراء
-        </p>
-
-      </div>
-
-    </section>
-
-
-    <!-- AUCTIONS -->
-
-    <section>
-
-      <div class="section-head">
-
-        <h2 class="section-title">
-          المزادات الحالية
-        </h2>
-
-        <button
-          class="section-link"
-          id="allAuctionsBtn">
-
-          عرض الكل
-
-        </button>
-
-      </div>
-
-
-      <div class="filters">
-
-        <button class="filter active">
-          الكل
-        </button>
-
-        <button class="filter">
-          iPhone
-        </button>
-
-        <button class="filter">
-          Samsung
-        </button>
-
-        <button class="filter">
-          أجهزة أخرى
-        </button>
-
-      </div>
-
-
-      <div class="auction-wrapper">
-
-        <div
-          class="auction-track"
-          id="auctionTrack">
-
-
-          <!-- DEVICE 1 -->
-
-          <article class="auction-card">
-
-            <div class="device-image">
-
-              <div class="device-badge">
-                مزاد مباشر
-              </div>
-
-              <button
-                class="favorite"
-                aria-label="المفضلة">
-
-                <span class="heart"></span>
-
-              </button>
-
-              <div class="phone"></div>
-
+            <div class="section-head">
+                <h2 class="section-title">تصفح الأجهزة</h2>
+                <a class="section-link" href="#">عرض الكل</a>
             </div>
 
+            <div class="categories">
 
-            <div class="auction-info">
+                <button class="category active">
 
-              <h3 class="device-name">
-                iPhone 15 Pro
-              </h3>
+                    <div class="category-box">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="7" y="3" width="10" height="18" rx="2"/>
+                            <path d="M10 6h4"/>
+                            <path d="M11 18h2"/>
+                        </svg>
+                    </div>
 
-              <div class="device-meta">
-                256GB · Natural Titanium · بطارية 91%
-              </div>
-
-
-              <div class="auction-row">
-
-                <div>
-
-                  <span class="price-label">
-                    السعر الحالي
-                  </span>
-
-                  <div class="price">
-                    1,250,000
-                    <span class="price-unit">
-                      د.ع
-                    </span>
-                  </div>
-
-                </div>
-
-
-                <div class="timer">
-
-                  <span class="timer-label">
-                    ينتهي خلال
-                  </span>
-
-                  <span
-                    class="timer-value"
-                    data-time="02:14:38">
-
-                    02:14:38
-
-                  </span>
-
-                </div>
-
-              </div>
-
-
-              <div class="auction-bottom">
-
-                <span class="bids">
-                  18 مزايدة
-                </span>
-
-                <button
-                  class="auction-button">
-
-                  دخول المزاد
+                    <span class="category-name">الكل</span>
 
                 </button>
 
-              </div>
 
-            </div>
+                <button class="category">
 
-          </article>
+                    <div class="category-box">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="7" y="3" width="10" height="18" rx="2"/>
+                            <path d="M10 6h4"/>
+                        </svg>
+                    </div>
 
+                    <span class="category-name">iPhone</span>
 
-          <!-- DEVICE 2 -->
-
-          <article class="auction-card">
-
-            <div class="device-image">
-
-              <div class="device-badge">
-                مزاد مباشر
-              </div>
-
-              <button
-                class="favorite"
-                aria-label="المفضلة">
-
-                <span class="heart"></span>
-
-              </button>
-
-              <div
-                class="phone"
-                style="
-                  transform:rotate(4deg);
-                  background:linear-gradient(145deg,#d7d9dc,#71767b);
-                  border-color:#a9adb1;
-                ">
-              </div>
-
-            </div>
-
-
-            <div class="auction-info">
-
-              <h3 class="device-name">
-                iPhone 14 Pro Max
-              </h3>
-
-              <div class="device-meta">
-                256GB · Deep Purple · بطارية 88%
-              </div>
-
-
-              <div class="auction-row">
-
-                <div>
-
-                  <span class="price-label">
-                    السعر الحالي
-                  </span>
-
-                  <div class="price">
-                    980,000
-                    <span class="price-unit">
-                      د.ع
-                    </span>
-                  </div>
-
-                </div>
-
-
-                <div class="timer">
-
-                  <span class="timer-label">
-                    ينتهي خلال
-                  </span>
-
-                  <span
-                    class="timer-value"
-                    data-time="04:38:21">
-
-                    04:38:21
-
-                  </span>
-
-                </div>
-
-              </div>
-
-
-              <div class="auction-bottom">
-
-                <span class="bids">
-                  11 مزايدة
-                </span>
-
-                <button class="auction-button">
-                  دخول المزاد
                 </button>
 
-              </div>
 
-            </div>
+                <button class="category">
 
-          </article>
+                    <div class="category-box">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="7" y="3" width="10" height="18" rx="2"/>
+                            <circle cx="10" cy="7" r="1"/>
+                            <circle cx="14" cy="7" r="1"/>
+                        </svg>
+                    </div>
 
+                    <span class="category-name">Samsung</span>
 
-          <!-- DEVICE 3 -->
-
-          <article class="auction-card">
-
-            <div class="device-image">
-
-              <div class="device-badge">
-                مزاد مباشر
-              </div>
-
-              <button
-                class="favorite"
-                aria-label="المفضلة">
-
-                <span class="heart"></span>
-
-              </button>
-
-              <div
-                class="phone"
-                style="
-                  transform:rotate(-3deg);
-                  background:linear-gradient(145deg,#252a30,#0c1013);
-                ">
-              </div>
-
-            </div>
-
-
-            <div class="auction-info">
-
-              <h3 class="device-name">
-                Samsung S24 Ultra
-              </h3>
-
-              <div class="device-meta">
-                512GB · Titanium Black · بطارية ممتازة
-              </div>
-
-
-              <div class="auction-row">
-
-                <div>
-
-                  <span class="price-label">
-                    السعر الحالي
-                  </span>
-
-                  <div class="price">
-                    1,090,000
-                    <span class="price-unit">
-                      د.ع
-                    </span>
-                  </div>
-
-                </div>
-
-
-                <div class="timer">
-
-                  <span class="timer-label">
-                    ينتهي خلال
-                  </span>
-
-                  <span
-                    class="timer-value"
-                    data-time="06:12:44">
-
-                    06:12:44
-
-                  </span>
-
-                </div>
-
-              </div>
-
-
-              <div class="auction-bottom">
-
-                <span class="bids">
-                  9 مزايدات
-                </span>
-
-                <button class="auction-button">
-                  دخول المزاد
                 </button>
 
-              </div>
 
-            </div>
+                <button class="category">
 
-          </article>
+                    <div class="category-box">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="7" y="3" width="10" height="18" rx="2"/>
+                            <path d="M9 17h6"/>
+                        </svg>
+                    </div>
 
+                    <span class="category-name">Xiaomi</span>
 
-          <!-- DEVICE 4 -->
-
-          <article class="auction-card">
-
-            <div class="device-image">
-
-              <div class="device-badge">
-                مزاد مباشر
-              </div>
-
-              <button
-                class="favorite"
-                aria-label="المفضلة">
-
-                <span class="heart"></span>
-
-              </button>
-
-              <div
-                class="phone"
-                style="
-                  transform:rotate(3deg);
-                  background:linear-gradient(145deg,#f1f1ef,#aaa9a2);
-                  border-color:#d0d0ca;
-                ">
-              </div>
-
-            </div>
-
-
-            <div class="auction-info">
-
-              <h3 class="device-name">
-                iPhone 13 Pro
-              </h3>
-
-              <div class="device-meta">
-                128GB · Sierra Blue · بطارية 86%
-              </div>
-
-
-              <div class="auction-row">
-
-                <div>
-
-                  <span class="price-label">
-                    السعر الحالي
-                  </span>
-
-                  <div class="price">
-                    650,000
-                    <span class="price-unit">
-                      د.ع
-                    </span>
-                  </div>
-
-                </div>
-
-
-                <div class="timer">
-
-                  <span class="timer-label">
-                    ينتهي خلال
-                  </span>
-
-                  <span
-                    class="timer-value"
-                    data-time="08:41:12">
-
-                    08:41:12
-
-                  </span>
-
-                </div>
-
-              </div>
-
-
-              <div class="auction-bottom">
-
-                <span class="bids">
-                  7 مزايدات
-                </span>
-
-                <button class="auction-button">
-                  دخول المزاد
                 </button>
 
-              </div>
 
-            </div>
+                <button class="category">
 
-          </article>
+                    <div class="category-box">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="7" y="3" width="10" height="18" rx="2"/>
+                            <circle cx="12" cy="18" r=".8"/>
+                        </svg>
+                    </div>
 
+                    <span class="category-name">Google</span>
 
-          <!-- DEVICE 5 -->
-
-          <article class="auction-card">
-
-            <div class="device-image">
-
-              <div class="device-badge">
-                مزاد مباشر
-              </div>
-
-              <button
-                class="favorite"
-                aria-label="المفضلة">
-
-                <span class="heart"></span>
-
-              </button>
-
-              <div
-                class="phone"
-                style="
-                  transform:rotate(-4deg);
-                  background:linear-gradient(145deg,#e4e6e8,#8f9498);
-                  border-color:#b9bdc0;
-                ">
-              </div>
-
-            </div>
-
-
-            <div class="auction-info">
-
-              <h3 class="device-name">
-                Samsung S23 Ultra
-              </h3>
-
-              <div class="device-meta">
-                256GB · Phantom Black · بطارية 90%
-              </div>
-
-
-              <div class="auction-row">
-
-                <div>
-
-                  <span class="price-label">
-                    السعر الحالي
-                  </span>
-
-                  <div class="price">
-                    730,000
-                    <span class="price-unit">
-                      د.ع
-                    </span>
-                  </div>
-
-                </div>
-
-
-                <div class="timer">
-
-                  <span class="timer-label">
-                    ينتهي خلال
-                  </span>
-
-                  <span
-                    class="timer-value"
-                    data-time="11:25:36">
-
-                    11:25:36
-
-                  </span>
-
-                </div>
-
-              </div>
-
-
-              <div class="auction-bottom">
-
-                <span class="bids">
-                  13 مزايدة
-                </span>
-
-                <button class="auction-button">
-                  دخول المزاد
                 </button>
 
-              </div>
 
-            </div>
+                <button class="category">
 
-          </article>
+                    <div class="category-box">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="7" y="3" width="10" height="18" rx="2"/>
+                            <path d="M9 8h6"/>
+                            <path d="M9 11h6"/>
+                        </svg>
+                    </div>
 
+                    <span class="category-name">أخرى</span>
 
-          <!-- DEVICE 6 -->
-
-          <article class="auction-card">
-
-            <div class="device-image">
-
-              <div class="device-badge">
-                مزاد مباشر
-              </div>
-
-              <button
-                class="favorite"
-                aria-label="المفضلة">
-
-                <span class="heart"></span>
-
-              </button>
-
-              <div
-                class="phone"
-                style="
-                  transform:rotate(3deg);
-                  background:linear-gradient(145deg,#253744,#0b171e);
-                ">
-              </div>
-
-            </div>
-
-
-            <div class="auction-info">
-
-              <h3 class="device-name">
-                iPhone 15
-              </h3>
-
-              <div class="device-meta">
-                128GB · Black · بطارية 94%
-              </div>
-
-
-              <div class="auction-row">
-
-                <div>
-
-                  <span class="price-label">
-                    السعر الحالي
-                  </span>
-
-                  <div class="price">
-                    790,000
-                    <span class="price-unit">
-                      د.ع
-                    </span>
-                  </div>
-
-                </div>
-
-
-                <div class="timer">
-
-                  <span class="timer-label">
-                    ينتهي خلال
-                  </span>
-
-                  <span
-                    class="timer-value"
-                    data-time="15:04:22">
-
-                    15:04:22
-
-                  </span>
-
-                </div>
-
-              </div>
-
-
-              <div class="auction-bottom">
-
-                <span class="bids">
-                  6 مزايدات
-                </span>
-
-                <button class="auction-button">
-                  دخول المزاد
                 </button>
 
-              </div>
-
             </div>
 
-          </article>
+        </section>
 
 
-          <!-- DEVICE 7 -->
+        <!-- AUCTIONS -->
 
-          <article class="auction-card">
+        <section class="auction-section">
 
-            <div class="device-image">
-
-              <div class="device-badge">
-                مزاد مباشر
-              </div>
-
-              <button
-                class="favorite"
-                aria-label="المفضلة">
-
-                <span class="heart"></span>
-
-              </button>
-
-              <div
-                class="phone"
-                style="
-                  transform:rotate(-3deg);
-                  background:linear-gradient(145deg,#282828,#111);
-                ">
-              </div>
-
+            <div class="section-head">
+                <h2 class="section-title">المزادات</h2>
+                <a class="section-link" href="#">عرض الكل</a>
             </div>
 
 
-            <div class="auction-info">
+            <div class="auction-carousel">
 
-              <h3 class="device-name">
-                Google Pixel 9 Pro
-              </h3>
+                <div class="auction-track" id="auctionTrack">
 
-              <div class="device-meta">
-                256GB · Obsidian · حالة ممتازة
-              </div>
+                    <!-- CARD 1 -->
+
+                    <article class="auction-card">
+
+                        <div class="auction-image">
+
+                            <span class="auction-badge">
+                                مزاد مباشر
+                            </span>
+
+                            <div class="phone-placeholder"></div>
+
+                        </div>
+
+                        <div class="auction-content">
+
+                            <div>
+                                <div class="auction-label">
+                                    المزاد القادم
+                                </div>
+
+                                <h3 class="auction-title">
+                                    جهاز للبيع بالمزاد
+                                </h3>
+
+                                <p class="auction-specs">
+                                    سيظهر موديل الجهاز ومواصفاته هنا
+                                </p>
+                            </div>
+
+                            <div class="auction-bottom">
+
+                                <div>
+                                    <div class="price-label">
+                                        يبدأ من
+                                    </div>
+
+                                    <div class="price">
+                                        — <span>د.ع</span>
+                                    </div>
+                                </div>
+
+                                <div class="auction-time">
+                                    يبدأ خلال
+                                    <span class="time-value">
+                                        قريباً
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </article>
 
 
-              <div class="auction-row">
+                    <!-- CARD 2 -->
 
-                <div>
+                    <article class="auction-card">
 
-                  <span class="price-label">
-                    السعر الحالي
-                  </span>
+                        <div class="auction-image">
 
-                  <div class="price">
-                    840,000
-                    <span class="price-unit">
-                      د.ع
-                    </span>
-                  </div>
+                            <span class="auction-badge">
+                                مزاد مباشر
+                            </span>
+
+                            <div class="phone-placeholder"></div>
+
+                        </div>
+
+                        <div class="auction-content">
+
+                            <div>
+                                <div class="auction-label">
+                                    المزاد القادم
+                                </div>
+
+                                <h3 class="auction-title">
+                                    جهاز جديد بالمزاد
+                                </h3>
+
+                                <p class="auction-specs">
+                                    ستظهر مواصفات الجهاز الفعلية هنا
+                                </p>
+                            </div>
+
+                            <div class="auction-bottom">
+
+                                <div>
+                                    <div class="price-label">
+                                        يبدأ من
+                                    </div>
+
+                                    <div class="price">
+                                        — <span>د.ع</span>
+                                    </div>
+                                </div>
+
+                                <div class="auction-time">
+                                    يبدأ خلال
+                                    <span class="time-value">
+                                        قريباً
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- CARD 3 -->
+
+                    <article class="auction-card">
+
+                        <div class="auction-image">
+
+                            <span class="auction-badge">
+                                مزاد مباشر
+                            </span>
+
+                            <div class="phone-placeholder"></div>
+
+                        </div>
+
+                        <div class="auction-content">
+
+                            <div>
+                                <div class="auction-label">
+                                    المزاد القادم
+                                </div>
+
+                                <h3 class="auction-title">
+                                    مزاد جهاز جديد
+                                </h3>
+
+                                <p class="auction-specs">
+                                    ستظهر بيانات المزاد عند توفرها
+                                </p>
+                            </div>
+
+                            <div class="auction-bottom">
+
+                                <div>
+                                    <div class="price-label">
+                                        يبدأ من
+                                    </div>
+
+                                    <div class="price">
+                                        — <span>د.ع</span>
+                                    </div>
+                                </div>
+
+                                <div class="auction-time">
+                                    يبدأ خلال
+                                    <span class="time-value">
+                                        قريباً
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </article>
 
                 </div>
 
-
-                <div class="timer">
-
-                  <span class="timer-label">
-                    ينتهي خلال
-                  </span>
-
-                  <span
-                    class="timer-value"
-                    data-time="19:31:08">
-
-                    19:31:08
-
-                  </span>
-
-                </div>
-
-              </div>
+            </div>
 
 
-              <div class="auction-bottom">
+            <div class="auction-dots" id="auctionDots">
 
-                <span class="bids">
-                  5 مزايدات
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+
+            </div>
+
+        </section>
+
+
+        <!-- QUICK ACTIONS -->
+
+        <section class="quick-actions">
+
+            <button class="quick-card">
+
+                <span class="quick-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 7h16"/>
+                        <path d="M6 7v12h12V7"/>
+                        <path d="M9 7V5h6v2"/>
+                        <path d="M9 11v4"/>
+                        <path d="M15 11v4"/>
+                    </svg>
                 </span>
 
-                <button class="auction-button">
-                  دخول المزاد
-                </button>
+                <span class="quick-title">
+                    المزادات
+                </span>
 
-              </div>
+            </button>
+
+
+            <button class="quick-card">
+
+                <span class="quick-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 7h16v12H4z"/>
+                        <path d="M8 7V5h8v2"/>
+                        <path d="M8 12h8"/>
+                    </svg>
+                </span>
+
+                <span class="quick-title">
+                    بيع مباشر
+                </span>
+
+            </button>
+
+
+            <button class="quick-card">
+
+                <span class="quick-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 5v14"/>
+                        <path d="M5 12h14"/>
+                    </svg>
+                </span>
+
+                <span class="quick-title">
+                    بيع جهاز
+                </span>
+
+            </button>
+
+        </section>
+
+
+        <!-- FEATURED -->
+
+        <section class="featured-section">
+
+            <div class="section-head">
+
+                <h2 class="section-title">
+                    أجهزة مميزة
+                </h2>
+
+                <a class="section-link" href="#">
+                    عرض الكل
+                </a>
 
             </div>
 
-          </article>
 
+            <div class="products">
 
-        </div>
+                <article class="product-card">
 
+                    <div class="product-image">
+                        <div class="mini-phone"></div>
+                    </div>
 
-        <div
-          class="carousel-dots"
-          id="carouselDots">
+                    <div class="product-content">
 
-          <span class="carousel-dot active"></span>
-          <span class="carousel-dot"></span>
-          <span class="carousel-dot"></span>
-          <span class="carousel-dot"></span>
-          <span class="carousel-dot"></span>
-          <span class="carousel-dot"></span>
-          <span class="carousel-dot"></span>
+                        <div class="product-name">
+                            جهاز مميز
+                        </div>
 
-        </div>
+                        <div class="product-meta">
+                            ستظهر التفاصيل هنا
+                        </div>
 
-      </div>
+                        <div class="product-price">
+                            — د.ع
+                        </div>
 
-    </section>
+                    </div>
 
+                </article>
 
-    <!-- MODES -->
 
-    <section>
+                <article class="product-card">
 
-      <div class="section-head">
+                    <div class="product-image">
+                        <div class="mini-phone"></div>
+                    </div>
 
-        <h2 class="section-title">
-          طريقة الشراء
-        </h2>
+                    <div class="product-content">
 
-      </div>
+                        <div class="product-name">
+                            جهاز مميز
+                        </div>
 
+                        <div class="product-meta">
+                            ستظهر التفاصيل هنا
+                        </div>
 
-      <div class="mode-grid">
+                        <div class="product-price">
+                            — د.ع
+                        </div>
 
+                    </div>
 
-        <button class="mode-card">
+                </article>
 
-          <div class="mode-line"></div>
 
-          <h3>
-            مزاد
-          </h3>
+                <article class="product-card">
 
-          <p>
-            زايد على الجهاز وشوف السعر الحالي والوقت المتبقي.
-          </p>
+                    <div class="product-image">
+                        <div class="mini-phone"></div>
+                    </div>
 
-        </button>
+                    <div class="product-content">
 
+                        <div class="product-name">
+                            جهاز مميز
+                        </div>
 
-        <button class="mode-card">
+                        <div class="product-meta">
+                            ستظهر التفاصيل هنا
+                        </div>
 
-          <div class="mode-line"></div>
+                        <div class="product-price">
+                            — د.ع
+                        </div>
 
-          <h3>
-            بيع مباشر
-          </h3>
+                    </div>
 
-          <p>
-            أجهزة بسعر ثابت بدون انتظار انتهاء المزاد.
-          </p>
+                </article>
 
-        </button>
+            </div>
 
+        </section>
 
-      </div>
+    </main>
 
-    </section>
 
+    <!-- =====================================================
+         BOTTOM NAV
+    ====================================================== -->
 
-    <!-- QUICK -->
+    <nav class="bottom-nav">
 
-    <section>
+        <a href="#" class="nav-item active">
 
-      <div class="section-head">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="m4 10 8-6 8 6"/>
+                    <path d="M6 9v10h12V9"/>
+                    <path d="M10 19v-5h4v5"/>
+                </svg>
+            </span>
 
-        <h2 class="section-title">
-          الوصول السريع
-        </h2>
+            <span class="nav-label">الرئيسية</span>
 
-      </div>
+        </a>
 
 
-      <div class="quick">
+        <a href="#" class="nav-item">
 
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M4 7h16"/>
+                    <path d="M6 7v12h12V7"/>
+                    <path d="M9 7V5h6v2"/>
+                </svg>
+            </span>
 
-        <button class="quick-item">
+            <span class="nav-label">المزادات</span>
 
-          <div class="quick-icon"></div>
+        </a>
 
-          <span>
-            أجهزتي
-          </span>
 
-        </button>
+        <a href="#" class="nav-item">
 
+            <span class="add-button">
 
-        <button class="quick-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 5v14"/>
+                    <path d="M5 12h14"/>
+                </svg>
 
-          <div class="quick-icon"></div>
+            </span>
 
-          <span>
-            المفضلة
-          </span>
+        </a>
 
-        </button>
 
+        <a href="#" class="nav-item">
 
-        <button class="quick-item">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20 8c0 5-8 11-8 11S4 13 4 8a4 4 0 0 1 7-2 4 4 0 0 1 9 2z"/>
+                </svg>
+            </span>
 
-          <div class="quick-icon"></div>
+            <span class="nav-label">المفضلة</span>
 
-          <span>
-            المزادات
-          </span>
+        </a>
 
-        </button>
 
+        <a href="#" class="nav-item">
 
-      </div>
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="8" r="3"/>
+                    <path d="M5 20c.8-3.4 3-5.2 7-5.2s6.2 1.8 7 5.2"/>
+                </svg>
+            </span>
 
-    </section>
+            <span class="nav-label">حسابي</span>
 
+        </a>
 
-    <!-- ACCOUNT -->
+    </nav>
 
-    <section class="account-card">
+</div>
 
-      <div class="account-info">
 
-        <div class="account-label">
-          الحساب الحالي
-        </div>
+<script>
 
-        <div
-          class="account-email"
-          id="userEmail">
+/* =========================================================
+   AUCTION CAROUSEL
+========================================================= */
 
-          جاري تحميل الحساب...
+const track = document.getElementById("auctionTrack");
+const dots = [...document.querySelectorAll(".dot")];
 
-        </div>
+let currentSlide = 0;
+let autoPlay;
 
-      </div>
+function getSlideWidth(){
 
+    const card = track.querySelector(".auction-card");
 
-      <button
-        class="logout"
-        id="logoutBtn">
+    if(!card){
+        return 0;
+    }
 
-        تسجيل الخروج
+    const gap = 10;
 
-      </button>
+    return card.getBoundingClientRect().width + gap;
+}
 
-    </section>
 
+function moveAuction(index){
 
-    <div class="bottom-space"></div>
+    const total = dots.length;
 
-  </main>
+    currentSlide = (index + total) % total;
 
+    const distance = getSlideWidth();
 
-  <!-- =========================
-       BOTTOM NAV
-  ========================== -->
+    track.style.transform =
+        `translateX(${currentSlide * distance}px)`;
 
-  <nav class="bottom-nav">
+    dots.forEach((dot,i)=>{
 
-    <button
-      class="nav-item active"
-      data-page="home">
+        dot.classList.toggle(
+            "active",
+            i === currentSlide
+        );
 
-      <span class="nav-symbol home"></span>
+    });
 
-      <span class="nav-label">
-        الرئيسية
-      </span>
+}
 
-    </button>
 
+/* كل 3 ثواني */
 
-    <button
-      class="nav-item"
-      data-page="auctions">
+function startAutoPlay(){
 
-      <span class="nav-symbol auction"></span>
+    stopAutoPlay();
 
-      <span class="nav-label">
-        المزادات
-      </span>
+    autoPlay = setInterval(()=>{
 
-    </button>
+        moveAuction(currentSlide + 1);
 
+    },3000);
 
-    <button
-      class="nav-item"
-      data-page="add">
+}
 
-      <span class="nav-symbol plus"></span>
 
-      <span class="nav-label">
-        إضافة
-      </span>
+function stopAutoPlay(){
 
-    </button>
+    if(autoPlay){
 
+        clearInterval(autoPlay);
 
-    <button
-      class="nav-item"
-      data-page="favorites">
-
-      <span class="nav-symbol heart-nav"></span>
-
-      <span class="nav-label">
-        المفضلة
-      </span>
-
-    </button>
-
-
-    <button
-      class="nav-item"
-      data-page="profile">
-
-      <span class="nav-symbol profile"></span>
-
-      <span class="nav-label">
-        حسابي
-      </span>
-
-    </button>
-
-  </nav>
-
-
-  <!-- TOAST -->
-
-  <div
-    class="toast"
-    id="toast">
-
-    قريباً
-
-  </div>
-
-
-  <!-- =========================
-       SUPABASE
-  ========================== -->
-
-  <script type="module">
-
-    import { supabase }
-      from "./js/supabase.js";
-
-
-    const userEmail =
-      document.getElementById(
-        "userEmail"
-      );
-
-    const logoutBtn =
-      document.getElementById(
-        "logoutBtn"
-      );
-
-    const toast =
-      document.getElementById(
-        "toast"
-      );
-
-    const auctionTrack =
-      document.getElementById(
-        "auctionTrack"
-      );
-
-    const carouselDots =
-      document.querySelectorAll(
-        ".carousel-dot"
-      );
-
-
-    /* =========================
-       TOAST
-    ========================== */
-
-    function showToast(text) {
-
-      toast.textContent = text;
-
-      toast.classList.add("show");
-
-      clearTimeout(
-        window.toastTimer
-      );
-
-      window.toastTimer =
-        setTimeout(() => {
-
-          toast.classList.remove(
-            "show"
-          );
-
-        }, 1800);
+        autoPlay = null;
 
     }
 
-
-    /* =========================
-       SESSION
-    ========================== */
-
-    async function checkSession() {
-
-      try {
-
-        const {
-          data,
-          error
-        } =
-          await supabase.auth.getSession();
+}
 
 
-        if (error) {
+/* =========================================================
+   TOUCH SWIPE
+========================================================= */
 
-          console.error(
-            "SESSION ERROR:",
-            error
-          );
+let touchStartX = 0;
+let touchEndX = 0;
 
-          window.location.replace(
-            "index.html"
-          );
+track.addEventListener(
+    "touchstart",
+    event=>{
 
-          return;
+        stopAutoPlay();
+
+        touchStartX =
+            event.changedTouches[0].clientX;
+
+    },
+    {passive:true}
+);
+
+
+track.addEventListener(
+    "touchend",
+    event=>{
+
+        touchEndX =
+            event.changedTouches[0].clientX;
+
+        const difference =
+            touchStartX - touchEndX;
+
+        if(Math.abs(difference) > 40){
+
+            if(difference > 0){
+
+                moveAuction(currentSlide + 1);
+
+            }else{
+
+                moveAuction(currentSlide - 1);
+
+            }
 
         }
 
+        startAutoPlay();
 
-        const session =
-          data?.session;
-
-
-        if (!session?.user) {
-
-          window.location.replace(
-            "index.html"
-          );
-
-          return;
-
-        }
+    },
+    {passive:true}
+);
 
 
-        userEmail.textContent =
-          session.user.email ||
-          "الحساب";
+/* =========================================================
+   DOT CLICK
+========================================================= */
+
+dots.forEach((dot,index)=>{
+
+    dot.addEventListener("click",()=>{
+
+        moveAuction(index);
+
+        startAutoPlay();
+
+    });
+
+});
 
 
-      } catch (error) {
+/* =========================================================
+   RESIZE
+========================================================= */
 
-        console.error(
-          "SESSION CHECK ERROR:",
-          error
-        );
+window.addEventListener(
+    "resize",
+    ()=>{
 
-        window.location.replace(
-          "index.html"
-        );
-
-      }
+        moveAuction(currentSlide);
 
     }
+);
 
 
-    /* =========================
-       AUTH LISTENER
-    ========================== */
+/* START */
 
-    supabase.auth.onAuthStateChange(
-      (event, session) => {
+startAutoPlay();
 
-        console.log(
-          "AUTH EVENT:",
-          event
-        );
 
+/* =========================================================
+   CATEGORY ACTIVE
+========================================================= */
 
-        if (
-          event === "SIGNED_OUT"
-        ) {
+document
+.querySelectorAll(".category")
+.forEach(category=>{
 
-          window.location.replace(
-            "index.html"
-          );
-
-          return;
-
-        }
-
-
-        if (session?.user) {
-
-          userEmail.textContent =
-            session.user.email ||
-            "الحساب";
-
-        }
-
-      }
-    );
-
-
-    /* =========================
-       LOGOUT
-    ========================== */
-
-    logoutBtn.addEventListener(
-      "click",
-      async () => {
-
-        logoutBtn.disabled = true;
-
-        logoutBtn.textContent =
-          "جاري الخروج...";
-
-
-        try {
-
-          const {
-            error
-          } =
-            await supabase.auth.signOut();
-
-
-          if (error) {
-
-            console.error(
-              "LOGOUT ERROR:",
-              error
-            );
-
-            logoutBtn.disabled =
-              false;
-
-            logoutBtn.textContent =
-              "تسجيل الخروج";
-
-            showToast(
-              "تعذر تسجيل الخروج"
-            );
-
-            return;
-
-          }
-
-
-          window.location.replace(
-            "index.html"
-          );
-
-
-        } catch (error) {
-
-          console.error(
-            "UNEXPECTED LOGOUT ERROR:",
-            error
-          );
-
-          logoutBtn.disabled =
-            false;
-
-          logoutBtn.textContent =
-            "تسجيل الخروج";
-
-          showToast(
-            "حدث خطأ غير متوقع"
-          );
-
-        }
-
-      }
-    );
-
-
-    /* =========================
-       CAROUSEL DOTS
-    ========================== */
-
-    auctionTrack.addEventListener(
-      "scroll",
-      () => {
-
-        const cards =
-          auctionTrack.querySelectorAll(
-            ".auction-card"
-          );
-
-        if (!cards.length) return;
-
-
-        const center =
-          auctionTrack.scrollLeft
-          +
-          auctionTrack.clientWidth / 2;
-
-
-        let closest = 0;
-        let distance = Infinity;
-
-
-        cards.forEach(
-          (card, index) => {
-
-            const cardCenter =
-              card.offsetLeft
-              +
-              card.offsetWidth / 2;
-
-            const currentDistance =
-              Math.abs(
-                center - cardCenter
-              );
-
-
-            if (
-              currentDistance <
-              distance
-            ) {
-
-              distance =
-                currentDistance;
-
-              closest =
-                index;
-
-            }
-
-          }
-        );
-
-
-        carouselDots.forEach(
-          (dot, index) => {
-
-            dot.classList.toggle(
-              "active",
-              index === closest
-            );
-
-          }
-        );
-
-      },
-      {
-        passive: true
-      }
-    );
-
-
-    /* =========================
-       FAVORITES
-    ========================== */
-
-    document
-      .querySelectorAll(".favorite")
-      .forEach(button => {
-
-        button.addEventListener(
-          "click",
-          event => {
-
-            event.stopPropagation();
-
-            button.classList.toggle(
-              "saved"
-            );
-
-            const heart =
-              button.querySelector(
-                ".heart"
-              );
-
-
-            if (
-              button.classList.contains(
-                "saved"
-              )
-            ) {
-
-              heart.style.borderColor =
-                "#ef476f";
-
-              heart.style.background =
-                "#ef476f";
-
-              showToast(
-                "تمت إضافة الجهاز للمفضلة"
-              );
-
-            } else {
-
-              heart.style.borderColor =
-                "#5c6670";
-
-              heart.style.background =
-                "transparent";
-
-              showToast(
-                "تمت إزالة الجهاز"
-              );
-
-            }
-
-          }
-        );
-
-      });
-
-
-    /* =========================
-       AUCTION BUTTONS
-    ========================== */
-
-    document
-      .querySelectorAll(
-        ".auction-button"
-      )
-      .forEach(button => {
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            showToast(
-              "صفحة المزاد قريباً"
-            );
-
-          }
-        );
-
-      });
-
-
-    /* =========================
-       FILTERS
-    ========================== */
-
-    document
-      .querySelectorAll(".filter")
-      .forEach(filter => {
-
-        filter.addEventListener(
-          "click",
-          () => {
-
-            document
-              .querySelectorAll(
-                ".filter"
-              )
-              .forEach(item => {
-
-                item.classList.remove(
-                  "active"
-                );
-
-              });
-
-
-            filter.classList.add(
-              "active"
-            );
-
-          }
-        );
-
-      });
-
-
-    /* =========================
-       SEARCH
-    ========================== */
-
-    const searchInput =
-      document.getElementById(
-        "searchInput"
-      );
-
-
-    searchInput.addEventListener(
-      "input",
-      () => {
-
-        const query =
-          searchInput.value
-            .trim()
-            .toLowerCase();
-
-
-        if (!query) {
-
-          document
-            .querySelectorAll(
-              ".auction-card"
-            )
-            .forEach(card => {
-
-              card.style.display =
-                "";
-
-            });
-
-          return;
-
-        }
-
+    category.addEventListener("click",()=>{
 
         document
-          .querySelectorAll(
-            ".auction-card"
-          )
-          .forEach(card => {
-
-            const text =
-              card.textContent
-                .toLowerCase();
-
-
-            card.style.display =
-              text.includes(query)
-                ? ""
-                : "none";
-
-          });
-
-      }
-    );
-
-
-    /* =========================
-       NAVIGATION
-    ========================== */
-
-    document
-      .querySelectorAll(
-        ".nav-item"
-      )
-      .forEach(item => {
-
-        item.addEventListener(
-          "click",
-          () => {
-
-            const page =
-              item.dataset.page;
-
-
-            if (
-              page !== "home"
-            ) {
-
-              showToast(
-                "هذه الصفحة قيد التجهيز"
-              );
-
-              return;
-
-            }
-
-          }
+        .querySelectorAll(".category")
+        .forEach(item=>
+            item.classList.remove("active")
         );
 
-      });
+        category.classList.add("active");
 
+    });
 
-    document
-      .querySelectorAll(
-        ".quick-item, .mode-card"
-      )
-      .forEach(item => {
+});
 
-        item.addEventListener(
-          "click",
-          () => {
-
-            showToast(
-              "قريباً"
-            );
-
-          }
-        );
-
-      });
-
-
-    document
-      .getElementById(
-        "notificationBtn"
-      )
-      .addEventListener(
-        "click",
-        () => {
-
-          showToast(
-            "لا توجد إشعارات جديدة"
-          );
-
-        }
-      );
-
-
-    document
-      .getElementById(
-        "profileBtn"
-      )
-      .addEventListener(
-        "click",
-        () => {
-
-          showToast(
-            "صفحة الحساب قريباً"
-          );
-
-        }
-      );
-
-
-    document
-      .getElementById(
-        "allAuctionsBtn"
-      )
-      .addEventListener(
-        "click",
-        () => {
-
-          showToast(
-            "صفحة المزادات قريباً"
-          );
-
-        }
-      );
-
-
-    /* =========================
-       COUNTDOWN
-    ========================== */
-
-    function startCountdowns() {
-
-      const timers =
-        document.querySelectorAll(
-          ".timer-value"
-        );
-
-
-      timers.forEach(timer => {
-
-        let parts =
-          timer
-            .dataset.time
-            .split(":")
-            .map(Number);
-
-
-        let total =
-          parts[0] * 3600
-          +
-          parts[1] * 60
-          +
-          parts[2];
-
-
-        function update() {
-
-          if (total <= 0) {
-
-            timer.textContent =
-              "انتهى";
-
-            return;
-
-          }
-
-
-          total--;
-
-
-          const hours =
-            Math.floor(
-              total / 3600
-            );
-
-
-          const minutes =
-            Math.floor(
-              (total % 3600) / 60
-            );
-
-
-          const seconds =
-            total % 60;
-
-
-          timer.textContent =
-            String(hours)
-              .padStart(2, "0")
-            + ":"
-            +
-            String(minutes)
-              .padStart(2, "0")
-            + ":"
-            +
-            String(seconds)
-              .padStart(2, "0");
-
-        }
-
-
-        update();
-
-        setInterval(
-          update,
-          1000
-        );
-
-      });
-
-    }
-
-
-    /* =========================
-       START
-    ========================== */
-
-    checkSession();
-
-    startCountdowns();
-
-  </script>
+</script>
 
 </body>
-
 </html>
