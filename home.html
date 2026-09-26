@@ -24,9 +24,13 @@
 --safe-bottom:env(safe-area-inset-bottom,0px)
 }
 
-*{box-sizing:border-box}
+*{
+box-sizing:border-box
+}
 
-html{scroll-behavior:smooth}
+html{
+scroll-behavior:smooth
+}
 
 body{
 margin:0;
@@ -38,9 +42,21 @@ font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Seg
 text-rendering:optimizeLegibility
 }
 
-button,input{font:inherit}
-button{border:0;background:none;color:inherit;cursor:pointer}
-a{text-decoration:none;color:inherit}
+button,input{
+font:inherit
+}
+
+button{
+border:0;
+background:none;
+color:inherit;
+cursor:pointer
+}
+
+a{
+text-decoration:none;
+color:inherit
+}
 
 .page{
 width:min(100%,520px);
@@ -79,7 +95,9 @@ padding:7px 5px;
 min-width:0
 }
 
-.location-copy{min-width:0}
+.location-copy{
+min-width:0
+}
 
 .location-label{
 display:block;
@@ -153,7 +171,9 @@ box-shadow:
 0 5px 20px rgba(109,92,231,.13)
 }
 
-.search::placeholder{color:#9ba6aa}
+.search::placeholder{
+color:#9ba6aa
+}
 
 .search:focus{
 border-color:#acdfe2;
@@ -188,7 +208,9 @@ opacity:1;
 pointer-events:auto
 }
 
-.section{margin-top:20px}
+.section{
+margin-top:20px
+}
 
 .section-head{
 display:flex;
@@ -220,7 +242,9 @@ scrollbar-width:none;
 scroll-snap-type:x proximity
 }
 
-.horizontal::-webkit-scrollbar{display:none}
+.horizontal::-webkit-scrollbar{
+display:none
+}
 
 .category{
 width:64px;
@@ -291,29 +315,45 @@ white-space:nowrap
 color:var(--primary-dark)
 }
 
-.auction-shell{position:relative}
+
+/* ================================
+   AUCTION SLIDER
+================================ */
+
+.auction-shell{
+position:relative;
+width:100%;
+overflow:hidden
+}
 
 .auction-track{
 display:flex;
-gap:0;
+gap:12px;
+width:100%;
 overflow-x:auto;
-padding:1px 0 5px;
+padding:1px 2px 6px;
 scroll-snap-type:x mandatory;
 scrollbar-width:none;
 scroll-behavior:smooth;
-overscroll-behavior-inline:contain
+overscroll-behavior-x:contain;
+-webkit-overflow-scrolling:touch;
+touch-action:pan-x
 }
 
-.auction-track::-webkit-scrollbar{display:none}
+.auction-track::-webkit-scrollbar{
+display:none
+}
 
 .auction-card{
 flex:0 0 100%;
+width:100%;
 height:188px;
 min-height:166px;
 border-radius:22px;
 overflow:hidden;
 position:relative;
-scroll-snap-align:start;
+scroll-snap-align:center;
+scroll-snap-stop:always;
 background:linear-gradient(145deg,#243b80 0%,#4d43a8 55%,#7c3aed 100%);
 box-shadow:0 16px 34px rgba(76,67,168,.18);
 color:#fff;
@@ -323,7 +363,10 @@ justify-content:space-between;
 isolation:isolate;
 transform:scale(.985);
 opacity:.86;
-transition:.35s ease
+transition:
+transform .35s ease,
+opacity .35s ease,
+box-shadow .35s ease
 }
 
 .auction-card.is-current{
@@ -452,7 +495,8 @@ width:6px;
 height:6px;
 border-radius:50%;
 background:#ccd8d8;
-transition:.2s ease
+transition:.2s ease;
+cursor:pointer
 }
 
 .dot.active{
@@ -460,6 +504,11 @@ width:19px;
 border-radius:999px;
 background:var(--purple)
 }
+
+
+/* ================================
+   ACTION CARDS
+================================ */
 
 .actions-grid{
 display:grid;
@@ -533,6 +582,11 @@ font-size:10px;
 color:var(--muted);
 margin-top:2px
 }
+
+
+/* ================================
+   DEVICES
+================================ */
 
 .device-card{
 flex:0 0 178px;
@@ -670,6 +724,11 @@ padding:5px 7px;
 border-radius:8px
 }
 
+
+/* ================================
+   TRUST
+================================ */
+
 .trust-card{
 display:grid;
 grid-template-columns:repeat(3,1fr);
@@ -680,7 +739,9 @@ border:1px solid var(--line);
 border-radius:18px
 }
 
-.trust-item{text-align:center}
+.trust-item{
+text-align:center
+}
 
 .trust-icon{
 width:26px;
@@ -693,8 +754,21 @@ place-items:center;
 color:#466066
 }
 
-.trust-title{font-size:9px;font-weight:900}
-.trust-copy{font-size:8px;color:var(--muted);margin-top:2px}
+.trust-title{
+font-size:9px;
+font-weight:900
+}
+
+.trust-copy{
+font-size:8px;
+color:var(--muted);
+margin-top:2px
+}
+
+
+/* ================================
+   BOTTOM NAV
+================================ */
 
 .bottom-wrap{
 position:fixed;
@@ -749,6 +823,11 @@ width:22px;
 height:22px
 }
 
+
+/* ================================
+   TOAST
+================================ */
+
 .toast{
 position:fixed;
 left:50%;
@@ -774,35 +853,65 @@ opacity:1;
 transform:translateX(-50%) translateY(0)
 }
 
+
+/* ================================
+   REVEAL
+================================ */
+
 .reveal{
 opacity:0;
 transform:translateY(9px);
 animation:reveal .55s cubic-bezier(.2,.7,.2,1) forwards
 }
 
-.d1{animation-delay:.04s}
-.d2{animation-delay:.09s}
-.d3{animation-delay:.14s}
-.d4{animation-delay:.19s}
-.d5{animation-delay:.24s}
+.d1{
+animation-delay:.04s
+}
+
+.d2{
+animation-delay:.09s
+}
+
+.d3{
+animation-delay:.14s
+}
+
+.d4{
+animation-delay:.19s
+}
+
+.d5{
+animation-delay:.24s
+}
 
 @keyframes reveal{
+
 to{
 opacity:1;
 transform:translateY(0)
 }
+
 }
 
 @media(min-width:700px){
-.page{padding-inline:18px}
-.bottom-wrap{padding-inline:18px}
+
+.page{
+padding-inline:18px
+}
+
+.bottom-wrap{
+padding-inline:18px
+}
+
 }
 </style>
 </head>
 
+
 <body>
 
 <main class="page">
+
 
 <header class="reveal">
 
@@ -815,42 +924,98 @@ transform:translateY(0)
 <span>PHONE</span>
 </div>
 
-<button class="icon-btn" id="notificationBtn" type="button" aria-label="الإشعارات">
-<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+<button
+class="icon-btn"
+id="notificationBtn"
+type="button"
+aria-label="الإشعارات">
+
+<svg
+width="22"
+height="22"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.9"
+stroke-linecap="round"
+stroke-linejoin="round">
+
 <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
 <path d="M10 21h4"/>
+
 </svg>
+
 </button>
 
 </div>
 
-<button class="location-box" id="locationBtn" type="button">
+
+<button
+class="location-box"
+id="locationBtn"
+type="button">
 
 <div class="location-copy">
-<span class="location-label">موقعك الحالي</span>
-<span class="location-name">
-النجف
-<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-<polyline points="6 9 12 15 18 9"/>
-</svg>
+
+<span class="location-label">
+موقعك الحالي
 </span>
+
+<span class="location-name">
+
+النجف
+
+<svg
+width="13"
+height="13"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="2">
+
+<polyline points="6 9 12 15 18 9"/>
+
+</svg>
+
+</span>
+
 </div>
 
-<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+
+<svg
+width="21"
+height="21"
+viewBox="0 0 24 24"
+fill="none"
+stroke="var(--primary)"
+stroke-width="2">
+
 <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
 <circle cx="12" cy="10" r="2.5"/>
+
 </svg>
 
 </button>
 
 </div>
 
-<div class="search-wrap reveal d1" id="searchWrap">
 
-<svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+<div
+class="search-wrap reveal d1"
+id="searchWrap">
+
+<svg
+class="search-icon"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.9">
+
 <circle cx="11" cy="11" r="7"/>
 <path d="m20 20-4-4"/>
+
 </svg>
+
 
 <input
 id="searchInput"
@@ -861,10 +1026,24 @@ inputmode="search"
 placeholder='ابحث عن جهاز، مثل "iPhone 15 Pro"'
 aria-label="البحث عن جهاز">
 
-<button id="searchClear" class="search-clear" type="button">
-<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+
+<button
+id="searchClear"
+class="search-clear"
+type="button">
+
+<svg
+width="15"
+height="15"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.9">
+
 <path d="M7 7l10 10M17 7 7 17"/>
+
 </svg>
+
 </button>
 
 </div>
@@ -872,127 +1051,475 @@ aria-label="البحث عن جهاز">
 </header>
 
 
+
+<!-- ================================
+     CATEGORIES
+================================ -->
+
 <section class="section reveal d2">
 
 <div class="section-head">
-<h2 class="section-title">التصنيفات</h2>
-<a class="section-link" href="auctions.html">عرض الكل</a>
+
+<h2 class="section-title">
+التصنيفات
+</h2>
+
+<a
+class="section-link"
+href="auctions.html">
+
+عرض الكل
+
+</a>
+
 </div>
 
-<div class="horizontal" id="categories">
 
-<button class="category active" data-go="market.html?brand=all">
+<div
+class="horizontal"
+id="categories">
+
+
+<button
+class="category active"
+data-go="market.html?brand=all">
+
 <span class="category-icon">
-<svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-<rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/>
+
+<svg
+width="29"
+height="29"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8">
+
+<rect
+x="6.5"
+y="2.5"
+width="11"
+height="19"
+rx="2.5"/>
+
 <path d="M9.5 5.5h5"/>
 <path d="M11 18.5h2"/>
+
 </svg>
+
 </span>
-<span class="category-name">الكل</span>
+
+<span class="category-name">
+الكل
+</span>
+
 </button>
 
-<button class="category" data-go="market.html?brand=apple">
+
+<button
+class="category"
+data-go="market.html?brand=apple">
+
 <span class="category-icon">
-<svg width="29" height="29" viewBox="0 0 24 24" fill="currentColor">
+
+<svg
+width="29"
+height="29"
+viewBox="0 0 24 24"
+fill="currentColor">
+
 <path d="M16.9 12.65c-.02-2.25 1.84-3.34 1.92-3.39-1.05-1.53-2.68-1.74-3.25-1.77-1.36-.14-2.66.82-3.35.82-.7 0-1.79-.8-2.94-.78-1.5.02-2.9.87-3.67 2.2-1.58 2.7-.4 6.7 1.1 8.88.75 1.07 1.63 2.25 2.81 2.2 1.13-.05 1.55-.72 2.91-.72 1.35 0 1.73.72 2.92.69 1.21-.02 1.98-1.09 2.72-2.15.86-1.25 1.2-2.46 1.22-2.52-.03-.01-2.37-.91-2.39-3.46Zm-1.97-6.45c.62-.75 1.04-1.79.92-2.82-.9.04-1.99.58-2.62 1.33-.57.66-1.08 1.7-.94 2.71 1 .08 2.02-.51 2.64-1.22Z"/>
+
 </svg>
+
 </span>
-<span class="category-name">iPhone</span>
+
+<span class="category-name">
+iPhone
+</span>
+
 </button>
 
-<button class="category" data-go="market.html?brand=samsung">
-<span class="category-icon"><span style="font-weight:950;font-size:9px;letter-spacing:-.06em">SAMSUNG</span></span>
-<span class="category-name">Samsung</span>
+
+<button
+class="category"
+data-go="market.html?brand=samsung">
+
+<span class="category-icon">
+
+<span style="font-weight:950;font-size:9px;letter-spacing:-.06em">
+SAMSUNG
+</span>
+
+</span>
+
+<span class="category-name">
+Samsung
+</span>
+
 </button>
 
-<button class="category" data-go="market.html?brand=xiaomi">
-<span class="category-icon"><span style="font-weight:950;font-size:16px">mi</span></span>
-<span class="category-name">Xiaomi</span>
+
+<button
+class="category"
+data-go="market.html?brand=xiaomi">
+
+<span class="category-icon">
+
+<span style="font-weight:950;font-size:16px">
+mi
+</span>
+
+</span>
+
+<span class="category-name">
+Xiaomi
+</span>
+
 </button>
 
-<button class="category" data-go="market.html?brand=google">
-<span class="category-icon"><span style="font-weight:950;font-size:17px">G</span></span>
-<span class="category-name">Google</span>
+
+<button
+class="category"
+data-go="market.html?brand=google">
+
+<span class="category-icon">
+
+<span style="font-weight:950;font-size:17px">
+G
+</span>
+
+</span>
+
+<span class="category-name">
+Google
+</span>
+
 </button>
 
-<button class="category" data-go="market.html?brand=huawei">
-<span class="category-icon"><span style="font-weight:950;font-size:10px">HUAWEI</span></span>
-<span class="category-name">Huawei</span>
+
+<button
+class="category"
+data-go="market.html?brand=huawei">
+
+<span class="category-icon">
+
+<span style="font-weight:950;font-size:10px">
+HUAWEI
+</span>
+
+</span>
+
+<span class="category-name">
+Huawei
+</span>
+
 </button>
 
-<button class="category" data-go="market.html?brand=oppo">
-<span class="category-icon"><span style="font-weight:950;font-size:12px">OPPO</span></span>
-<span class="category-name">OPPO</span>
+
+<button
+class="category"
+data-go="market.html?brand=oppo">
+
+<span class="category-icon">
+
+<span style="font-weight:950;font-size:12px">
+OPPO
+</span>
+
+</span>
+
+<span class="category-name">
+OPPO
+</span>
+
 </button>
 
-<button class="category" data-go="market.html?brand=honor">
-<span class="category-icon"><span style="font-weight:950;font-size:12px">HONOR</span></span>
-<span class="category-name">HONOR</span>
+
+<button
+class="category"
+data-go="market.html?brand=honor">
+
+<span class="category-icon">
+
+<span style="font-weight:950;font-size:12px">
+HONOR
+</span>
+
+</span>
+
+<span class="category-name">
+HONOR
+</span>
+
 </button>
 
-<button class="category" data-go="market.html?brand=oneplus">
-<span class="category-icon"><span style="font-weight:950;font-size:10px">ONEPLUS</span></span>
-<span class="category-name">OnePlus</span>
+
+<button
+class="category"
+data-go="market.html?brand=oneplus">
+
+<span class="category-icon">
+
+<span style="font-weight:950;font-size:10px">
+ONEPLUS
+</span>
+
+</span>
+
+<span class="category-name">
+OnePlus
+</span>
+
 </button>
 
-<button class="category" data-go="market.html?brand=realme">
-<span class="category-icon"><span style="font-weight:950;font-size:10px">realme</span></span>
-<span class="category-name">realme</span>
+
+<button
+class="category"
+data-go="market.html?brand=realme">
+
+<span class="category-icon">
+
+<span style="font-weight:950;font-size:10px">
+realme
+</span>
+
+</span>
+
+<span class="category-name">
+realme
+</span>
+
 </button>
 
-<button class="category" data-go="market.html?brand=motorola">
-<span class="category-icon"><span style="font-weight:950;font-size:18px">M</span></span>
-<span class="category-name">Motorola</span>
+
+<button
+class="category"
+data-go="market.html?brand=motorola">
+
+<span class="category-icon">
+
+<span style="font-weight:950;font-size:18px">
+M
+</span>
+
+</span>
+
+<span class="category-name">
+Motorola
+</span>
+
 </button>
 
-<button class="category" data-go="market.html?brand=sony">
-<span class="category-icon"><span style="font-weight:950;font-size:11px">SONY</span></span>
-<span class="category-name">Sony</span>
+
+<button
+class="category"
+data-go="market.html?brand=sony">
+
+<span class="category-icon">
+
+<span style="font-weight:950;font-size:11px">
+SONY
+</span>
+
+</span>
+
+<span class="category-name">
+Sony
+</span>
+
 </button>
 
-<button class="category" data-go="market.html?brand=nokia">
-<span class="category-icon"><span style="font-weight:950;font-size:12px">NOKIA</span></span>
-<span class="category-name">Nokia</span>
+
+<button
+class="category"
+data-go="market.html?brand=nokia">
+
+<span class="category-icon">
+
+<span style="font-weight:950;font-size:12px">
+NOKIA
+</span>
+
+</span>
+
+<span class="category-name">
+Nokia
+</span>
+
 </button>
 
-<button class="category" data-go="market.html?brand=tecno">
-<span class="category-icon"><span style="font-weight:950;font-size:11px">TECNO</span></span>
-<span class="category-name">Tecno</span>
+
+<button
+class="category"
+data-go="market.html?brand=tecno">
+
+<span class="category-icon">
+
+<span style="font-weight:950;font-size:11px">
+TECNO
+</span>
+
+</span>
+
+<span class="category-name">
+Tecno
+</span>
+
 </button>
 
-<button class="category" data-go="market.html?brand=infinix">
-<span class="category-icon"><span style="font-weight:950;font-size:10px">Infinix</span></span>
-<span class="category-name">Infinix</span>
+
+<button
+class="category"
+data-go="market.html?brand=infinix">
+
+<span class="category-icon">
+
+<span style="font-weight:950;font-size:10px">
+Infinix
+</span>
+
+</span>
+
+<span class="category-name">
+Infinix
+</span>
+
 </button>
+
 
 </div>
+
 </section>
 
+
+
+<!-- ================================
+     AUCTIONS
+================================ -->
 
 <section class="section reveal d3">
 
 <div class="section-head">
-<h2 class="section-title">المزادات الحالية</h2>
-<a class="section-link" href="auctions.html">عرض الكل</a>
+
+<h2 class="section-title">
+المزادات الحالية
+</h2>
+
+<a
+class="section-link"
+href="auctions.html">
+
+عرض الكل
+
+</a>
+
 </div>
+
 
 <div class="auction-shell">
 
-<div class="auction-track" id="auctionTrack">
+<div
+class="auction-track"
+id="auctionTrack">
 
-<article class="auction-card is-current" data-go="auctions.html">
+
+<article
+class="auction-card is-current"
+data-go="auctions.html">
 
 <div class="auction-top">
-<span class="auction-badge">مزاد MZAD PHONE</span>
-<span class="auction-state">المحتوى الفعلي سيظهر تلقائياً</span>
+
+<span class="auction-badge">
+مزاد MZAD PHONE
+</span>
+
+<span class="auction-state">
+المحتوى الفعلي سيظهر تلقائياً
+</span>
+
+</div>
+
+
+<div class="auction-copy">
+
+<p class="auction-kicker">
+لا توجد مزادات منشورة حالياً
+</p>
+
+<h3 class="auction-title">
+المزاد القادم قريباً
+</h3>
+
+<p class="auction-desc">
+عند نشر أول جهاز بالمزاد، سيظهر هنا مع صورته الحقيقية والسعر الحالي والوقت المتبقي بشكل مباشر.
+</p>
+
+
+<div class="auction-bottom">
+
+<div class="auction-note">
+
+<svg
+width="16"
+height="16"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8">
+
+<circle cx="12" cy="12" r="9"/>
+<polyline points="12 7 12 12 15 14"/>
+
+</svg>
+
+بيانات حيّة من قاعدة البيانات
+
+</div>
+
+
+<button
+class="auction-cta"
+id="viewAuctionsBtn"
+type="button">
+
+استكشف المزادات
+
+</button>
+
+</div>
+
+</div>
+
+</article>
+
+
+
+<article
+class="auction-card"
+data-go="auctions.html"
+aria-hidden="true">
+
+<div class="auction-top">
+
+<span class="auction-badge">
+مزاد MZAD PHONE
+</span>
+
+<span class="auction-state">
+صفحة 2 من 7
+</span>
+
 </div>
 
 <div class="auction-copy">
 
-<p class="auction-kicker">لا توجد مزادات منشورة حالياً</p>
+<p class="auction-kicker">
+لا توجد مزادات منشورة حالياً
+</p>
 
-<h3 class="auction-title">المزاد القادم قريباً</h3>
+<h3 class="auction-title">
+المزاد القادم قريباً
+</h3>
 
 <p class="auction-desc">
 عند نشر أول جهاز بالمزاد، سيظهر هنا مع صورته الحقيقية والسعر الحالي والوقت المتبقي بشكل مباشر.
@@ -1001,120 +1528,289 @@ aria-label="البحث عن جهاز">
 <div class="auction-bottom">
 
 <div class="auction-note">
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-<circle cx="12" cy="12" r="9"/>
-<polyline points="12 7 12 12 15 14"/>
-</svg>
 بيانات حيّة من قاعدة البيانات
 </div>
 
-<button class="auction-cta" id="viewAuctionsBtn" type="button">
-استكشف المزادات
+<button
+class="auction-cta"
+type="button">
+
+قريباً
+
 </button>
 
 </div>
+
 </div>
+
 </article>
 
-<article class="auction-card" data-go="auctions.html" aria-hidden="true">
+
+
+<article
+class="auction-card"
+aria-hidden="true">
+
 <div class="auction-top">
-<span class="auction-badge">مزاد MZAD PHONE</span>
-<span class="auction-state">صفحة 2 من 7</span>
+
+<span class="auction-badge">
+مزاد MZAD PHONE
+</span>
+
+<span class="auction-state">
+صفحة 3 من 7
+</span>
+
 </div>
+
 <div class="auction-copy">
-<p class="auction-kicker">لا توجد مزادات منشورة حالياً</p>
-<h3 class="auction-title">المزاد القادم قريباً</h3>
-<p class="auction-desc">عند نشر أول جهاز بالمزاد، سيظهر هنا مع صورته الحقيقية والسعر الحالي والوقت المتبقي بشكل مباشر.</p>
+
+<p class="auction-kicker">
+لا توجد مزادات منشورة حالياً
+</p>
+
+<h3 class="auction-title">
+المزاد القادم قريباً
+</h3>
+
+<p class="auction-desc">
+عند نشر أول جهاز بالمزاد، سيظهر هنا مع صورته الحقيقية والسعر الحالي والوقت المتبقي بشكل مباشر.
+</p>
+
 <div class="auction-bottom">
-<div class="auction-note">بيانات حيّة من قاعدة البيانات</div>
-<button class="auction-cta" type="button">قريباً</button>
+
+<div class="auction-note">
+بيانات حيّة من قاعدة البيانات
 </div>
+
+<button
+class="auction-cta"
+type="button">
+
+قريباً
+
+</button>
+
 </div>
+
+</div>
+
 </article>
 
-<article class="auction-card" aria-hidden="true">
+
+
+<article
+class="auction-card"
+aria-hidden="true">
+
 <div class="auction-top">
-<span class="auction-badge">مزاد MZAD PHONE</span>
-<span class="auction-state">صفحة 3 من 7</span>
+
+<span class="auction-badge">
+مزاد MZAD PHONE
+</span>
+
+<span class="auction-state">
+صفحة 4 من 7
+</span>
+
 </div>
+
 <div class="auction-copy">
-<p class="auction-kicker">لا توجد مزادات منشورة حالياً</p>
-<h3 class="auction-title">المزاد القادم قريباً</h3>
-<p class="auction-desc">عند نشر أول جهاز بالمزاد، سيظهر هنا مع صورته الحقيقية والسعر الحالي والوقت المتبقي بشكل مباشر.</p>
+
+<p class="auction-kicker">
+لا توجد مزادات منشورة حالياً
+</p>
+
+<h3 class="auction-title">
+المزاد القادم قريباً
+</h3>
+
+<p class="auction-desc">
+عند نشر أول جهاز بالمزاد، سيظهر هنا مع صورته الحقيقية والسعر الحالي والوقت المتبقي بشكل مباشر.
+</p>
+
 <div class="auction-bottom">
-<div class="auction-note">بيانات حيّة من قاعدة البيانات</div>
-<button class="auction-cta" type="button">قريباً</button>
+
+<div class="auction-note">
+بيانات حيّة من قاعدة البيانات
 </div>
+
+<button
+class="auction-cta"
+type="button">
+
+قريباً
+
+</button>
+
 </div>
+
+</div>
+
 </article>
 
-<article class="auction-card" aria-hidden="true">
+
+
+<article
+class="auction-card"
+aria-hidden="true">
+
 <div class="auction-top">
-<span class="auction-badge">مزاد MZAD PHONE</span>
-<span class="auction-state">صفحة 4 من 7</span>
+
+<span class="auction-badge">
+مزاد MZAD PHONE
+</span>
+
+<span class="auction-state">
+صفحة 5 من 7
+</span>
+
 </div>
+
 <div class="auction-copy">
-<p class="auction-kicker">لا توجد مزادات منشورة حالياً</p>
-<h3 class="auction-title">المزاد القادم قريباً</h3>
-<p class="auction-desc">عند نشر أول جهاز بالمزاد، سيظهر هنا مع صورته الحقيقية والسعر الحالي والوقت المتبقي بشكل مباشر.</p>
+
+<p class="auction-kicker">
+لا توجد مزادات منشورة حالياً
+</p>
+
+<h3 class="auction-title">
+المزاد القادم قريباً
+</h3>
+
+<p class="auction-desc">
+عند نشر أول جهاز بالمزاد، سيظهر هنا مع صورته الحقيقية والسعر الحالي والوقت المتبقي بشكل مباشر.
+</p>
+
 <div class="auction-bottom">
-<div class="auction-note">بيانات حيّة من قاعدة البيانات</div>
-<button class="auction-cta" type="button">قريباً</button>
+
+<div class="auction-note">
+بيانات حيّة من قاعدة البيانات
 </div>
+
+<button
+class="auction-cta"
+type="button">
+
+قريباً
+
+</button>
+
 </div>
+
+</div>
+
 </article>
 
-<article class="auction-card" aria-hidden="true">
+
+
+<article
+class="auction-card"
+aria-hidden="true">
+
 <div class="auction-top">
-<span class="auction-badge">مزاد MZAD PHONE</span>
-<span class="auction-state">صفحة 5 من 7</span>
+
+<span class="auction-badge">
+مزاد MZAD PHONE
+</span>
+
+<span class="auction-state">
+صفحة 6 من 7
+</span>
+
 </div>
+
 <div class="auction-copy">
-<p class="auction-kicker">لا توجد مزادات منشورة حالياً</p>
-<h3 class="auction-title">المزاد القادم قريباً</h3>
-<p class="auction-desc">عند نشر أول جهاز بالمزاد، سيظهر هنا مع صورته الحقيقية والسعر الحالي والوقت المتبقي بشكل مباشر.</p>
+
+<p class="auction-kicker">
+لا توجد مزادات منشورة حالياً
+</p>
+
+<h3 class="auction-title">
+المزاد القادم قريباً
+</h3>
+
+<p class="auction-desc">
+عند نشر أول جهاز بالمزاد، سيظهر هنا مع صورته الحقيقية والسعر الحالي والوقت المتبقي بشكل مباشر.
+</p>
+
 <div class="auction-bottom">
-<div class="auction-note">بيانات حيّة من قاعدة البيانات</div>
-<button class="auction-cta" type="button">قريباً</button>
+
+<div class="auction-note">
+بيانات حيّة من قاعدة البيانات
 </div>
+
+<button
+class="auction-cta"
+type="button">
+
+قريباً
+
+</button>
+
 </div>
+
+</div>
+
 </article>
 
-<article class="auction-card" aria-hidden="true">
+
+
+<article
+class="auction-card"
+aria-hidden="true">
+
 <div class="auction-top">
-<span class="auction-badge">مزاد MZAD PHONE</span>
-<span class="auction-state">صفحة 6 من 7</span>
-</div>
-<div class="auction-copy">
-<p class="auction-kicker">لا توجد مزادات منشورة حالياً</p>
-<h3 class="auction-title">المزاد القادم قريباً</h3>
-<p class="auction-desc">عند نشر أول جهاز بالمزاد، سيظهر هنا مع صورته الحقيقية والسعر الحالي والوقت المتبقي بشكل مباشر.</p>
-<div class="auction-bottom">
-<div class="auction-note">بيانات حيّة من قاعدة البيانات</div>
-<button class="auction-cta" type="button">قريباً</button>
-</div>
-</div>
-</article>
 
-<article class="auction-card" aria-hidden="true">
-<div class="auction-top">
-<span class="auction-badge">مزاد MZAD PHONE</span>
-<span class="auction-state">صفحة 7 من 7</span>
-</div>
-<div class="auction-copy">
-<p class="auction-kicker">لا توجد مزادات منشورة حالياً</p>
-<h3 class="auction-title">المزاد القادم قريباً</h3>
-<p class="auction-desc">عند نشر أول جهاز بالمزاد، سيظهر هنا مع صورته الحقيقية والسعر الحالي والوقت المتبقي بشكل مباشر.</p>
-<div class="auction-bottom">
-<div class="auction-note">بيانات حيّة من قاعدة البيانات</div>
-<button class="auction-cta" type="button">قريباً</button>
-</div>
-</div>
-</article>
+<span class="auction-badge">
+مزاد MZAD PHONE
+</span>
+
+<span class="auction-state">
+صفحة 7 من 7
+</span>
 
 </div>
+
+<div class="auction-copy">
+
+<p class="auction-kicker">
+لا توجد مزادات منشورة حالياً
+</p>
+
+<h3 class="auction-title">
+المزاد القادم قريباً
+</h3>
+
+<p class="auction-desc">
+عند نشر أول جهاز بالمزاد، سيظهر هنا مع صورته الحقيقية والسعر الحالي والوقت المتبقي بشكل مباشر.
+</p>
+
+<div class="auction-bottom">
+
+<div class="auction-note">
+بيانات حيّة من قاعدة البيانات
+</div>
+
+<button
+class="auction-cta"
+type="button">
+
+قريباً
+
+</button>
+
+</div>
+
+</div>
+
+</article>
+
+
+</div>
+
 
 <div class="auction-dots">
+
 <span class="dot active"></span>
 <span class="dot"></span>
 <span class="dot"></span>
@@ -1122,297 +1818,758 @@ aria-label="البحث عن جهاز">
 <span class="dot"></span>
 <span class="dot"></span>
 <span class="dot"></span>
+
 </div>
 
 </div>
+
 </section>
 
+
+
+<!-- ================================
+     ACTIONS
+================================ -->
 
 <section class="section reveal d4">
 
 <div class="actions-grid">
 
-<button class="action-card" data-go="auctions.html">
+
+<button
+class="action-card"
+data-go="auctions.html">
+
 <span class="action-icon">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+
+<svg
+width="20"
+height="20"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.9">
+
 <path d="M7 11h10"/>
 <path d="M9 7h6"/>
 <path d="M6 15h12"/>
 <path d="M5 19h14"/>
 <path d="m8 4 3-2 1 2 4-1 2 2"/>
+
 </svg>
+
 </span>
+
 <span>
-<span class="action-title">المزادات</span><br>
-<span class="action-sub">شاهد الأجهزة</span>
+
+<span class="action-title">
+المزادات
 </span>
+
+<br>
+
+<span class="action-sub">
+شاهد الأجهزة
+</span>
+
+</span>
+
 </button>
 
-<button class="action-card" data-go="sell-auction.html">
+
+
+<button
+class="action-card"
+data-go="sell-auction.html">
+
 <span class="action-icon">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+
+<svg
+width="20"
+height="20"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.9">
+
 <path d="M12 5v14"/>
 <path d="M5 12h14"/>
+
 </svg>
+
 </span>
+
 <span>
-<span class="action-title">بيع مزاد</span><br>
-<span class="action-sub">اعرض جهازك بالمزاد</span>
+
+<span class="action-title">
+بيع مزاد
 </span>
+
+<br>
+
+<span class="action-sub">
+اعرض جهازك بالمزاد
+</span>
+
+</span>
+
 </button>
 
-<button class="action-card" data-go="sell.html">
+
+
+<button
+class="action-card"
+data-go="sell.html">
+
 <span class="action-icon">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+
+<svg
+width="20"
+height="20"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.9">
+
 <path d="M12 5v14"/>
 <path d="M5 12h14"/>
+
 </svg>
+
 </span>
+
 <span>
-<span class="action-title">بيع جهاز</span><br>
-<span class="action-sub">أضف جهازك</span>
+
+<span class="action-title">
+بيع جهاز
 </span>
+
+<br>
+
+<span class="action-sub">
+أضف جهازك
+</span>
+
+</span>
+
 </button>
+
 
 </div>
+
 </section>
 
+
+
+<!-- ================================
+     FEATURED DEVICES
+================================ -->
 
 <section class="section reveal d5">
 
 <div class="section-head">
-<h2 class="section-title">أجهزة مميزة</h2>
-<a class="section-link" href="market.html">عرض الكل</a>
+
+<h2 class="section-title">
+أجهزة مميزة
+</h2>
+
+<a
+class="section-link"
+href="market.html">
+
+عرض الكل
+
+</a>
+
 </div>
+
 
 <div class="horizontal">
 
-<article class="device-card" data-go="market.html">
+
+<article
+class="device-card"
+data-go="market.html">
+
 <div class="device-image">
 
-<button class="favorite-btn" type="button" data-favorite>
-<svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<button
+class="favorite-btn"
+type="button"
+data-favorite>
+
+<svg
+width="25"
+height="25"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8"
+stroke-linecap="round"
+stroke-linejoin="round">
+
 <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
+
 </svg>
+
 </button>
 
-<span>سيظهر الجهاز الحقيقي هنا</span>
+<span>
+سيظهر الجهاز الحقيقي هنا
+</span>
+
 </div>
+
 
 <div class="device-body">
-<h3 class="device-title">لا توجد أجهزة منشورة</h3>
-<div class="device-meta">بانتظار أول إعلان فعلي</div>
+
+<h3 class="device-title">
+لا توجد أجهزة منشورة
+</h3>
+
+<div class="device-meta">
+بانتظار أول إعلان فعلي
+</div>
 
 <div class="device-row">
-<span class="device-price">—</span>
-<span class="device-type">بيع مباشر</span>
+
+<span class="device-price">
+—
+</span>
+
+<span class="device-type">
+بيع مباشر
+</span>
+
 </div>
+
 </div>
+
 </article>
 
 
-<article class="device-card" data-go="market.html">
+
+<article
+class="device-card"
+data-go="market.html">
+
 <div class="device-image">
 
-<button class="favorite-btn" type="button" data-favorite>
-<svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<button
+class="favorite-btn"
+type="button"
+data-favorite>
+
+<svg
+width="25"
+height="25"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8"
+stroke-linecap="round"
+stroke-linejoin="round">
+
 <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
+
 </svg>
+
 </button>
 
-<span>سيظهر الجهاز الحقيقي هنا</span>
+<span>
+سيظهر الجهاز الحقيقي هنا
+</span>
+
 </div>
+
 
 <div class="device-body">
-<h3 class="device-title">لا توجد أجهزة منشورة</h3>
-<div class="device-meta">البيانات من قاعدة البيانات</div>
+
+<h3 class="device-title">
+لا توجد أجهزة منشورة
+</h3>
+
+<div class="device-meta">
+البيانات من قاعدة البيانات
+</div>
 
 <div class="device-row">
-<span class="device-price">—</span>
-<span class="device-type">مزاد</span>
+
+<span class="device-price">
+—
+</span>
+
+<span class="device-type">
+مزاد
+</span>
+
 </div>
+
 </div>
+
 </article>
 
 
-<article class="device-card" data-go="market.html">
+
+<article
+class="device-card"
+data-go="market.html">
+
 <div class="device-image">
 
-<button class="favorite-btn" type="button" data-favorite>
-<svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<button
+class="favorite-btn"
+type="button"
+data-favorite>
+
+<svg
+width="25"
+height="25"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8"
+stroke-linecap="round"
+stroke-linejoin="round">
+
 <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
+
 </svg>
+
 </button>
 
-<span>سيظهر الجهاز الحقيقي هنا</span>
+<span>
+سيظهر الجهاز الحقيقي هنا
+</span>
+
 </div>
+
 
 <div class="device-body">
-<h3 class="device-title">جاهز لبيانات حقيقية</h3>
-<div class="device-meta">صور ومواصفات فعلية</div>
+
+<h3 class="device-title">
+جاهز لبيانات حقيقية
+</h3>
+
+<div class="device-meta">
+صور ومواصفات فعلية
+</div>
 
 <div class="device-row">
-<span class="device-price">—</span>
-<span class="device-type">قريباً</span>
+
+<span class="device-price">
+—
+</span>
+
+<span class="device-type">
+قريباً
+</span>
+
 </div>
+
 </div>
+
 </article>
 
 
-<article class="device-card" data-go="market.html">
+
+<article
+class="device-card"
+data-go="market.html">
+
 <div class="device-image">
 
-<button class="favorite-btn" type="button" data-favorite>
-<svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<button
+class="favorite-btn"
+type="button"
+data-favorite>
+
+<svg
+width="25"
+height="25"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8"
+stroke-linecap="round"
+stroke-linejoin="round">
+
 <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
+
 </svg>
+
 </button>
 
-<span>سيظهر الجهاز الحقيقي هنا</span>
+<span>
+سيظهر الجهاز الحقيقي هنا
+</span>
+
 </div>
+
 
 <div class="device-body">
-<h3 class="device-title">لا توجد أجهزة منشورة</h3>
-<div class="device-meta">بانتظار أول إعلان فعلي</div>
+
+<h3 class="device-title">
+لا توجد أجهزة منشورة
+</h3>
+
+<div class="device-meta">
+بانتظار أول إعلان فعلي
+</div>
 
 <div class="device-row">
-<span class="device-price">—</span>
-<span class="device-type">قريباً</span>
-</div>
-</div>
-</article>
+
+<span class="device-price">
+—
+</span>
+
+<span class="device-type">
+قريباً
+</span>
 
 </div>
+
+</div>
+
+</article>
+
+
+</div>
+
 </section>
 
+
+
+<!-- ================================
+     TRUST
+================================ -->
 
 <section class="section reveal d5">
 
 <div class="trust-card">
 
+
 <div class="trust-item">
+
 <div class="trust-icon">
-<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+
+<svg
+width="15"
+height="15"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8">
+
 <path d="M12 3 5 6v5c0 4.5 3 7.8 7 10 4-2.2 7-5.5 7-10V6l-7-3Z"/>
 <path d="m9 12 2 2 4-4"/>
+
 </svg>
-</div>
-<div class="trust-title">بيانات واضحة</div>
-<div class="trust-copy">مواصفات الجهاز منظمة</div>
+
 </div>
 
+<div class="trust-title">
+بيانات واضحة
+</div>
+
+<div class="trust-copy">
+مواصفات الجهاز منظمة
+</div>
+
+</div>
+
+
+
 <div class="trust-item">
+
 <div class="trust-icon">
-<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+
+<svg
+width="15"
+height="15"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8">
+
 <path d="M12 3v18"/>
 <path d="M17 7H9.5a3 3 0 0 0 0 6h5a3 3 0 0 1 0 6H7"/>
+
 </svg>
+
 </div>
-<div class="trust-title">سعر واضح</div>
-<div class="trust-copy">مزاد أو بيع مباشر</div>
+
+<div class="trust-title">
+سعر واضح
 </div>
+
+<div class="trust-copy">
+مزاد أو بيع مباشر
+</div>
+
+</div>
+
+
 
 <div class="trust-item">
+
 <div class="trust-icon">
-<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-<circle cx="12" cy="7" r="4"/>
+
+<svg
+width="15"
+height="15"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8">
+
+<circle
+cx="12"
+cy="7"
+r="4"/>
+
 <path d="M5.5 21a6.5 6.5 0 0 1 13 0"/>
+
 </svg>
+
 </div>
-<div class="trust-title">بائع معروف</div>
-<div class="trust-copy">تقييم محفوظ للحساب</div>
+
+<div class="trust-title">
+بائع معروف
+</div>
+
+<div class="trust-copy">
+تقييم محفوظ للحساب
 </div>
 
 </div>
+
+
+</div>
+
 </section>
 
 </main>
 
 
+
+<!-- ================================
+     BOTTOM NAV
+================================ -->
+
 <div class="bottom-wrap">
 
 <nav class="bottom-nav">
 
-<button class="nav-item active" data-go="home.html">
-<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+
+<button
+class="nav-item active"
+data-go="home.html">
+
+<svg
+class="nav-icon"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8">
+
 <path d="m4 10 8-6 8 6v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-9Z"/>
+
 </svg>
-<span class="nav-label">الرئيسية</span>
+
+<span class="nav-label">
+الرئيسية
+</span>
+
 </button>
 
-<button class="nav-item" data-go="auctions.html">
-<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+
+
+<button
+class="nav-item"
+data-go="auctions.html">
+
+<svg
+class="nav-icon"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8">
+
 <path d="m7 11 7.5-7.5 3 3L10 14"/>
 <path d="m5 13 6 6"/>
 <path d="M4 20h16"/>
+
 </svg>
-<span class="nav-label">المزادات</span>
+
+<span class="nav-label">
+المزادات
+</span>
+
 </button>
 
-<button class="nav-item" data-go="sell.html">
-<span class="action-icon" style="width:42px;height:42px;border-radius:13px;background:linear-gradient(145deg,#176b87,#257f98);color:#fff">
-<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+
+<button
+class="nav-item"
+data-go="sell.html">
+
+<span
+class="action-icon"
+style="width:42px;height:42px;border-radius:13px;background:linear-gradient(145deg,#176b87,#257f98);color:#fff">
+
+<svg
+width="22"
+height="22"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="2">
+
 <path d="M12 5v14"/>
 <path d="M5 12h14"/>
+
 </svg>
+
 </span>
-<span class="nav-label">إضافة</span>
+
+<span class="nav-label">
+إضافة
+</span>
+
 </button>
 
-<button class="nav-item" data-go="favorites.html">
-<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+
+
+<button
+class="nav-item"
+data-go="favorites.html">
+
+<svg
+class="nav-icon"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8">
+
 <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
+
 </svg>
-<span class="nav-label">المفضلة</span>
+
+<span class="nav-label">
+المفضلة
+</span>
+
 </button>
 
-<button class="nav-item" data-go="profile.html">
-<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-<circle cx="12" cy="8" r="3.5"/>
+
+
+<button
+class="nav-item"
+data-go="profile.html">
+
+<svg
+class="nav-icon"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8">
+
+<circle
+cx="12"
+cy="8"
+r="3.5"/>
+
 <path d="M5 21a7 7 0 0 1 14 0"/>
+
 </svg>
-<span class="nav-label">حسابي</span>
+
+<span class="nav-label">
+حسابي
+</span>
+
 </button>
+
 
 </nav>
+
 </div>
 
 
-<div class="toast" id="toast"></div>
+<div
+class="toast"
+id="toast">
+</div>
+
 
 
 <script type="module">
 
 import { supabase } from "./js/supabase.js";
 
-const toast=document.getElementById("toast");
-const searchInput=document.getElementById("searchInput");
-const searchWrap=document.getElementById("searchWrap");
-const searchClear=document.getElementById("searchClear");
-const locationBtn=document.getElementById("locationBtn");
-const notificationBtn=document.getElementById("notificationBtn");
-const viewAuctionsBtn=document.getElementById("viewAuctionsBtn");
-const categories=[...document.querySelectorAll(".category")];
-const auctionTrack=document.getElementById("auctionTrack");
-const dots=[...document.querySelectorAll(".dot")];
+
+/* ================================
+   ELEMENTS
+================================ */
+
+const toast=
+document.getElementById("toast");
+
+const searchInput=
+document.getElementById("searchInput");
+
+const searchWrap=
+document.getElementById("searchWrap");
+
+const searchClear=
+document.getElementById("searchClear");
+
+const locationBtn=
+document.getElementById("locationBtn");
+
+const notificationBtn=
+document.getElementById("notificationBtn");
+
+const viewAuctionsBtn=
+document.getElementById("viewAuctionsBtn");
+
+const categories=
+[...document.querySelectorAll(".category")];
+
+const auctionTrack=
+document.getElementById("auctionTrack");
+
+const dots=
+[...document.querySelectorAll(".dot")];
+
 
 let toastTimer;
 
+
+/* ================================
+   TOAST
+================================ */
+
 function showToast(message){
+
 toast.textContent=message;
+
 toast.classList.add("show");
 
 clearTimeout(toastTimer);
 
 toastTimer=setTimeout(()=>{
+
 toast.classList.remove("show");
+
 },2200);
+
 }
 
 
-/* =========================================================
-   AUTH SYSTEM
-   ========================================================= */
+/* ================================
+   AUTH
+================================ */
 
 const LOGIN_PAGE="index.html";
 
@@ -1421,18 +2578,29 @@ async function isLoggedIn(){
 
 try{
 
-const {data,error}=await supabase.auth.getSession();
+const {data,error}=
+await supabase.auth.getSession();
 
 if(error){
-console.error("Supabase session error:",error);
+
+console.error(
+"Supabase session error:",
+error
+);
+
 return false;
+
 }
 
 return !!data?.session;
 
 }catch(error){
 
-console.error("Auth check failed:",error);
+console.error(
+"Auth check failed:",
+error
+);
+
 return false;
 
 }
@@ -1452,18 +2620,23 @@ url
 
 async function requireAuth(url){
 
-const loggedIn=await isLoggedIn();
+const loggedIn=
+await isLoggedIn();
+
 
 if(loggedIn){
 
 window.location.href=url;
+
 return;
 
 }
 
+
 savePendingAction(url);
 
 showToast("سجّل دخولك أولاً");
+
 
 setTimeout(()=>{
 
@@ -1482,32 +2655,38 @@ window.location.href=url;
 }
 
 
-/* =========================================================
-   NORMAL NAVIGATION
-   ========================================================= */
+/* ================================
+   NAVIGATION
+================================ */
 
 function bindNavigation(){
 
-document.querySelectorAll("[data-go]").forEach(el=>{
+document
+.querySelectorAll("[data-go]")
+.forEach(el=>{
 
-el.addEventListener("click",async event=>{
+el.addEventListener(
+"click",
+async event=>{
 
 event.preventDefault();
 
-if(el.classList.contains("category")) return;
 
-const url=el.dataset.go;
+if(
+el.classList.contains("category")
+){
 
-if(!url) return;
+return;
+
+}
 
 
-/*
-   الأشياء التي تحتاج حساب:
-   - بيع جهاز
-   - بيع بالمزاد
-   - المفضلة
-   - حسابي
-*/
+const url=
+el.dataset.go;
+
+
+if(!url)return;
+
 
 const protectedPaths=[
 "sell.html",
@@ -1516,10 +2695,14 @@ const protectedPaths=[
 "profile.html"
 ];
 
+
 const needsAuth=
 protectedPaths.some(path=>
+
 url.split("?")[0]===path
+
 );
+
 
 if(needsAuth){
 
@@ -1528,6 +2711,7 @@ await requireAuth(url);
 return;
 
 }
+
 
 go(url);
 
@@ -1538,9 +2722,9 @@ go(url);
 }
 
 
-/* =========================================================
+/* ================================
    SEARCH
-   ========================================================= */
+================================ */
 
 function bindSearch(){
 
@@ -1553,34 +2737,53 @@ searchInput.value.trim().length>0
 
 }
 
-searchInput.addEventListener("input",sync);
 
-searchClear.addEventListener("click",()=>{
+searchInput.addEventListener(
+"input",
+sync
+);
+
+
+searchClear.addEventListener(
+"click",
+()=>{
 
 searchInput.value="";
+
 sync();
+
 searchInput.focus();
 
 });
 
 
-searchInput.addEventListener("keydown",event=>{
+searchInput.addEventListener(
+"keydown",
+event=>{
 
-if(event.key!=="Enter") return;
+if(event.key!=="Enter")return;
 
-const query=searchInput.value.trim();
+
+const query=
+searchInput.value.trim();
+
 
 if(!query){
 
-showToast("اكتب اسم الجهاز أولاً");
+showToast(
+"اكتب اسم الجهاز أولاً"
+);
+
 return;
 
 }
+
 
 sessionStorage.setItem(
 "mzad_search_query",
 query
 );
+
 
 go("auctions.html");
 
@@ -1589,27 +2792,45 @@ go("auctions.html");
 }
 
 
-/* =========================================================
+/* ================================
    CATEGORIES
-   ========================================================= */
+================================ */
 
 function bindCategories(){
 
 categories.forEach(button=>{
 
-button.addEventListener("click",()=>{
+button.addEventListener(
+"click",
+()=>{
 
 categories.forEach(item=>
-item.classList.remove("active")
+
+item.classList.remove(
+"active"
+)
+
 );
 
-button.classList.add("active");
+
+button.classList.add(
+"active"
+);
+
 
 const label=
-button.querySelector(".category-name")?.textContent?.trim()
-||"التصنيف";
+button
+.querySelector(".category-name")
+?.textContent
+?.trim()
+||
+"التصنيف";
 
-showToast(`تم اختيار ${label}`);
+
+showToast(
+`تم اختيار ${label}`
+);
+
 
 setTimeout(()=>{
 
@@ -1624,49 +2845,59 @@ go(button.dataset.go);
 }
 
 
-/* =========================================================
-   AUCTION CAROUSEL
-   ========================================================= */
+/* ================================
+   FIXED AUCTION SLIDER
+================================ */
 
 function bindAuctionCarousel(){
 
-const cards=[
-...auctionTrack.querySelectorAll(".auction-card")
+const cards=
+[
+...auctionTrack
+.querySelectorAll(".auction-card")
 ];
 
-let current=0;
-let timer=null;
-
-
-function setCurrent(index,smooth=true){
 
 if(!cards.length)return;
+
+
+let current=0;
+
+let timer=null;
+
+let isScrolling=false;
+
+let scrollEndTimer=null;
+
+
+/* تحديث الواجهة */
+
+function updateUI(index){
 
 current=
 (index+cards.length)%cards.length;
 
-const card=cards[current];
 
-auctionTrack.scrollTo({
+cards.forEach(
+(card,i)=>{
 
-left:Math.max(0,card.offsetLeft-2),
-
-behavior:smooth?"smooth":"auto"
-
-});
-
-
-cards.forEach((item,i)=>{
-
-item.classList.toggle(
+card.classList.toggle(
 "is-current",
 i===current
+);
+
+card.setAttribute(
+"aria-hidden",
+i===current
+?"false"
+:"true"
 );
 
 });
 
 
-dots.forEach((dot,i)=>{
+dots.forEach(
+(dot,i)=>{
 
 dot.classList.toggle(
 "active",
@@ -1678,80 +2909,204 @@ i===current
 }
 
 
+/* الانتقال */
+
+function setCurrent(
+index,
+smooth=true
+){
+
+if(!cards.length)return;
+
+
+current=
+(index+cards.length)%cards.length;
+
+
+const card=
+cards[current];
+
+
+isScrolling=true;
+
+
+auctionTrack.scrollTo({
+
+left:
+card.offsetLeft-
+auctionTrack.offsetLeft,
+
+behavior:
+smooth
+?"smooth"
+:"auto"
+
+});
+
+
+updateUI(current);
+
+
+clearTimeout(scrollEndTimer);
+
+
+scrollEndTimer=
+setTimeout(()=>{
+
+isScrolling=false;
+
+},500);
+
+}
+
+
+/* التشغيل التلقائي */
+
 function startAuto(){
 
 clearInterval(timer);
 
-timer=setInterval(()=>{
 
-setCurrent(current+1);
+timer=
+setInterval(()=>{
+
+setCurrent(
+current+1,
+true
+);
 
 },5000);
 
 }
 
 
-auctionTrack.addEventListener("scroll",()=>{
+/* لمس */
 
-const center=
-auctionTrack.scrollLeft+
-auctionTrack.clientWidth*.33;
-
-let nearest=0;
-let distance=Infinity;
-
-
-cards.forEach((card,i)=>{
-
-const cardCenter=
-card.offsetLeft+
-card.offsetWidth*.33;
-
-const d=
-Math.abs(cardCenter-center);
-
-if(d<distance){
-
-distance=d;
-nearest=i;
-
-}
-
-});
-
-
-current=nearest;
-
-
-cards.forEach((item,i)=>{
-
-item.classList.toggle(
-"is-current",
-i===current
-);
-
-});
-
-
-dots.forEach((dot,i)=>{
-
-dot.classList.toggle(
-"active",
-i===current
-);
-
-});
-
-},{passive:true});
-
-
-dots.forEach((dot,i)=>{
-
-dot.addEventListener("click",()=>{
+auctionTrack.addEventListener(
+"touchstart",
+()=>{
 
 clearInterval(timer);
 
-setCurrent(i);
+},
+{
+passive:true
+}
+);
+
+
+/* انتهاء اللمس */
+
+auctionTrack.addEventListener(
+"touchend",
+()=>{
+
+clearTimeout(scrollEndTimer);
+
+scrollEndTimer=
+setTimeout(()=>{
+
+isScrolling=false;
+
+startAuto();
+
+},500);
+
+},
+{
+passive:true
+}
+);
+
+
+/* السحب */
+
+auctionTrack.addEventListener(
+"scroll",
+()=>{
+
+if(isScrolling)return;
+
+
+clearTimeout(scrollEndTimer);
+
+
+scrollEndTimer=
+setTimeout(()=>{
+
+const scrollLeft=
+auctionTrack.scrollLeft;
+
+
+let nearest=0;
+
+let smallestDistance=
+Infinity;
+
+
+cards.forEach(
+(card,index)=>{
+
+const distance=
+Math.abs(
+card.offsetLeft-
+auctionTrack.offsetLeft-
+scrollLeft
+);
+
+
+if(
+distance<
+smallestDistance
+){
+
+smallestDistance=
+distance;
+
+nearest=
+index;
+
+}
+
+});
+
+
+if(
+nearest!==current
+){
+
+updateUI(nearest);
+
+}
+
+
+startAuto();
+
+
+},90);
+
+},
+{
+passive:true
+}
+);
+
+
+/* النقاط */
+
+dots.forEach(
+(dot,index)=>{
+
+dot.addEventListener(
+"click",
+event=>{
+
+event.preventDefault();
+
+setCurrent(
+index,
+true
+);
 
 startAuto();
 
@@ -1760,34 +3115,46 @@ startAuto();
 });
 
 
-setCurrent(0,false);
+/* أول تشغيل */
+
+updateUI(0);
+
+setCurrent(
+0,
+false
+);
 
 startAuto();
 
 }
 
 
-/* =========================================================
+/* ================================
    FAVORITES
-   ========================================================= */
+================================ */
 
-document.querySelectorAll("[data-favorite]").forEach((button,index)=>{
+document
+.querySelectorAll("[data-favorite]")
+.forEach(button=>{
 
-button.addEventListener("click",async event=>{
+button.addEventListener(
+"click",
+async event=>{
 
 event.preventDefault();
+
 event.stopPropagation();
 
 
-const loggedIn=await isLoggedIn();
+const loggedIn=
+await isLoggedIn();
 
 
 if(!loggedIn){
 
-const currentUrl=
-"market.html";
-
-await requireAuth(currentUrl);
+await requireAuth(
+"favorites.html"
+);
 
 return;
 
@@ -1795,22 +3162,28 @@ return;
 
 
 /*
-   حالياً نخلي شكل القلب فقط.
-   ربطه بجدول المفضلة في Supabase
-   راح نسويه بالخطوة الخاصة بالمفضلة.
+   الربط الحقيقي مع جدول
+   المفضلة في Supabase
+   سيكون بالمرحلة الخاصة بالمفضلة.
 */
 
 const active=
-button.classList.toggle("active");
+button.classList.toggle(
+"active"
+);
 
 
 if(active){
 
-showToast("تمت إضافة الجهاز إلى المفضلة");
+showToast(
+"تمت إضافة الجهاز إلى المفضلة"
+);
 
 }else{
 
-showToast("تمت إزالة الجهاز من المفضلة");
+showToast(
+"تمت إزالة الجهاز من المفضلة"
+);
 
 }
 
@@ -1819,42 +3192,55 @@ showToast("تمت إزالة الجهاز من المفضلة");
 });
 
 
-/* =========================================================
-   HEADER
-   ========================================================= */
+/* ================================
+   HEADER BUTTONS
+================================ */
 
-locationBtn.addEventListener("click",()=>{
+locationBtn.addEventListener(
+"click",
+()=>{
 
-showToast("الموقع الافتراضي حالياً: النجف");
-
-});
-
-
-notificationBtn.addEventListener("click",()=>{
-
-showToast("لا توجد إشعارات جديدة");
+showToast(
+"الموقع الافتراضي حالياً: النجف"
+);
 
 });
 
 
-/* =========================================================
-   AUCTIONS BUTTON
-   ========================================================= */
+notificationBtn.addEventListener(
+"click",
+()=>{
 
-viewAuctionsBtn.addEventListener("click",()=>{
+showToast(
+"لا توجد إشعارات جديدة"
+);
+
+});
+
+
+/* ================================
+   AUCTION BUTTON
+================================ */
+
+viewAuctionsBtn.addEventListener(
+"click",
+()=>{
 
 go("auctions.html");
 
 });
 
 
-/* =========================================================
-   START
-   ========================================================= */
+/* ================================
+   START APP
+================================ */
 
 bindNavigation();
+
 bindSearch();
+
 bindCategories();
+
 bindAuctionCarousel();
 
 </script>
