@@ -8,6 +8,25 @@
 
   <title>MZAD PHONE - تسجيل الدخول</title>
 
+  <!--
+    إذا تم فتح index.html مباشرة بدون:
+    login=1
+    أو returnTo
+    نعتبره دخول للموقع الرئيسي ونذهب إلى home.html
+  -->
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+
+      const hasReturnTo = !!params.get("returnTo");
+      const explicitLogin = params.get("login") === "1";
+
+      if (!hasReturnTo && !explicitLogin) {
+        window.location.replace("home.html");
+      }
+    })();
+  </script>
+
   <link
     href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
@@ -569,11 +588,6 @@
       }
 
 
-      /*
-       * نسمح فقط بالصفحات الداخلية.
-       * نرفض أي رابط خارجي.
-       */
-
       try {
 
         const decoded =
@@ -611,10 +625,6 @@
 
     }
 
-
-    /* =========================
-       العناصر المطلوبة بعد الدخول
-    ========================== */
 
     const returnTo =
       getSafeReturnTo();
@@ -987,17 +997,8 @@
         );
 
 
-        /*
-         * نخلي الجلسة تستقر قبل الانتقال.
-         */
-
         setTimeout(
           () => {
-
-            /*
-             * يرجع المستخدم للمكان
-             * الذي طلبه قبل تسجيل الدخول.
-             */
 
             window.location.replace(
               returnTo
