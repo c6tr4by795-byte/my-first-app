@@ -283,6 +283,14 @@
       font-size:11px;
     }
 
+    .photo-count{
+      margin-top:9px;
+      font-size:11px;
+      color:#6246D9;
+      font-weight:700;
+      display:none;
+    }
+
     .location{
       display:flex;
       align-items:center;
@@ -677,6 +685,8 @@
           multiple
         >
 
+        <div class="photo-count" id="photoCount"></div>
+
       </div>
 
     </section>
@@ -828,6 +838,8 @@
 
   const toast = document.getElementById("toast");
   const submitBtn = document.getElementById("submitBtn");
+  const photosInput = document.getElementById("photos");
+  const photoCount = document.getElementById("photoCount");
 
 
   function showToast(message){
@@ -896,6 +908,165 @@
     });
 
 
+  photosInput.addEventListener("change", () => {
+
+    const count = photosInput.files?.length || 0;
+
+    if(count === 0){
+
+      photoCount.style.display = "none";
+      photoCount.textContent = "";
+
+      return;
+
+    }
+
+    photoCount.textContent =
+      count === 1
+        ? "تم اختيار صورة واحدة"
+        : `تم اختيار ${count} صور`;
+
+    photoCount.style.display = "block";
+
+  });
+
+
+  function getFileExtension(file){
+
+    const originalName =
+      file.name?.split(".").pop()?.toLowerCase();
+
+    if(originalName && /^[a-z0-9]+$/.test(originalName)){
+
+      return originalName;
+
+    }
+
+    const mime =
+      file.type?.split("/").pop()?.toLowerCase();
+
+    if(mime === "jpeg") return "jpg";
+
+    return mime || "jpg";
+
+  }
+
+
+  async function uploadDeviceImages(user, files){
+
+    const uploadedPaths = [];
+    const publicUrls = [];
+
+
+    for(let i = 0; i < files.length; i++){
+
+      const file = files[i];
+
+
+      if(!file.type.startsWith("image/")){
+
+        throw new Error("IMAGE_ONLY");
+
+      }
+
+
+      const extension =
+        getFileExtension(file);
+
+
+      const uniqueName =
+        `${Date.now()}-${crypto.randomUUID()}.${extension}`;
+
+
+      const path =
+        `${user.id}/${uniqueName}`;
+
+
+      const { error: uploadError } =
+        await supabase
+          .storage
+          .from("device-images")
+          .upload(path, file, {
+
+            cacheControl: "3600",
+
+            contentType: file.type,
+
+            upsert: false
+
+          });
+
+
+      if(uploadError){
+
+        console.error(
+          "IMAGE UPLOAD ERROR:",
+          uploadError
+        );
+
+        throw new Error("UPLOAD_FAILED");
+
+      }
+
+
+      uploadedPaths.push(path);
+
+
+      const { data } =
+        supabase
+          .storage
+          .from("device-images")
+          .getPublicUrl(path);
+
+
+      if(!data?.publicUrl){
+
+        throw new Error("URL_FAILED");
+
+      }
+
+
+      publicUrls.push(data.publicUrl);
+
+    }
+
+
+    return {
+      uploadedPaths,
+      publicUrls
+    };
+
+  }
+
+
+  async function removeUploadedImages(paths){
+
+    if(!paths || paths.length === 0){
+
+      return;
+
+    }
+
+
+    try{
+
+      await supabase
+        .storage
+        .from("device-images")
+        .remove(paths);
+
+    }catch(error){
+
+      console.error(
+        "IMAGE CLEANUP ERROR:",
+        error
+      );
+
+    }
+
+  }
+
+
   async function saveDevice(){
 
     const user = await requireLogin();
@@ -942,7 +1113,9 @@
 
 
     const photos =
-      document.getElementById("photos").files;
+      Array.from(
+        document.getElementById("photos").files || []
+      );
 
 
     if(!brand){
@@ -1001,7 +1174,7 @@
     }
 
 
-    if(!photos || photos.length === 0){
+    if(photos.length === 0){
 
       showToast("أضف صورة واحدة على الأقل للجهاز");
       return;
@@ -1009,9 +1182,31 @@
     }
 
 
+    if(photos.length > 10){
+
+      showToast("الحد الأقصى 10 صور للجهاز");
+      return;
+
+    }
+
+
+    const invalidImage =
+      photos.find(
+        file => !file.type.startsWith("image/")
+      );
+
+
+    if(invalidImage){
+
+      showToast("تأكد أن كل الملفات صور");
+      return;
+
+    }
+
+
     submitBtn.disabled = true;
 
-    submitBtn.textContent = "جاري الحفظ...";
+    submitBtn.textContent = "جاري رفع الصور...";
 
 
     const fullName =
@@ -1024,78 +1219,150 @@
       "";
 
 
-    /*
-      حالياً نحتفظ بمسارات الصور كبيانات مؤقتة فارغة.
-      رفع الصور الحقيقي إلى Supabase Storage
-      راح يكون بالخطوة التالية.
-    */
-
-    const images = "[]";
+    let uploadedPaths = [];
 
 
-    const { data, error } =
-      await supabase
-        .from("devices")
-        .insert({
+    try{
 
-          brand: brand,
-
-          model: model,
-
-          storage: storage,
-
-          color: color,
-
-          battery_health: battery,
-
-          condition: condition,
-
-          price: price,
-
-          location: "النجف",
-
-          sale_type: "direct",
-
-          seller_id: user.id,
-
-          seller_name: fullName,
-
-          seller_phone: phone,
-
-          images: images
-
-        })
-        .select()
-        .single();
+      const uploadResult =
+        await uploadDeviceImages(
+          user,
+          photos
+        );
 
 
-    if(error){
+      uploadedPaths =
+        uploadResult.uploadedPaths;
 
-      console.error("DEVICE INSERT ERROR:",error);
+
+      const images =
+        JSON.stringify(
+          uploadResult.publicUrls
+        );
+
+
+      submitBtn.textContent =
+        "جاري نشر الجهاز...";
+
+
+      const { data, error } =
+        await supabase
+          .from("devices")
+          .insert({
+
+            brand: brand,
+
+            model: model,
+
+            storage: storage,
+
+            color: color,
+
+            battery_health: battery,
+
+            condition: condition,
+
+            price: price,
+
+            location: "النجف",
+
+            sale_type: "direct",
+
+            seller_id: user.id,
+
+            seller_name: fullName,
+
+            seller_phone: phone,
+
+            images: images
+
+          })
+          .select()
+          .single();
+
+
+      if(error){
+
+        console.error(
+          "DEVICE INSERT ERROR:",
+          error
+        );
+
+
+        await removeUploadedImages(
+          uploadedPaths
+        );
+
+
+        showToast(
+          "ما قدرنا نحفظ الجهاز حالياً"
+        );
+
+
+        submitBtn.disabled = false;
+
+        submitBtn.textContent =
+          "نشر الجهاز";
+
+        return;
+
+      }
+
 
       showToast(
-        "ما قدرنا نحفظ الجهاز حالياً"
+        "تم نشر الجهاز بنجاح"
       );
+
+
+      setTimeout(() => {
+
+        window.location.href =
+          "device.html?id=" +
+          encodeURIComponent(data.id);
+
+      },900);
+
+
+    }catch(error){
+
+      console.error(
+        "SELL DEVICE ERROR:",
+        error
+      );
+
+
+      await removeUploadedImages(
+        uploadedPaths
+      );
+
+
+      if(error.message === "IMAGE_ONLY"){
+
+        showToast(
+          "كل الملفات لازم تكون صور"
+        );
+
+      }else if(error.message === "URL_FAILED"){
+
+        showToast(
+          "تعذر الحصول على رابط الصورة"
+        );
+
+      }else{
+
+        showToast(
+          "صار خطأ أثناء رفع الصور"
+        );
+
+      }
+
 
       submitBtn.disabled = false;
 
-      submitBtn.textContent = "نشر الجهاز";
-
-      return;
+      submitBtn.textContent =
+        "نشر الجهاز";
 
     }
-
-
-    showToast("تم حفظ الجهاز بنجاح");
-
-
-    setTimeout(() => {
-
-      window.location.href =
-        "device.html?id=" +
-        encodeURIComponent(data.id);
-
-    },900);
 
   }
 
