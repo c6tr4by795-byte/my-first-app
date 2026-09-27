@@ -14,12 +14,16 @@
 --ink:#17202a;
 --muted:#667085;
 --line:#e6e9ed;
+
 --primary:#176b87;
 --primary-dark:#125a73;
+--primary-soft:#e8f3f6;
+
 --purple:#6246d9;
 --purple-soft:#e5e0ff;
+
 --success:#159a72;
---shadow:0 12px 28px rgba(23,32,42,.07);
+
 --safe-bottom:env(safe-area-inset-bottom,0px)
 }
 
@@ -37,10 +41,21 @@ margin:0;
 min-height:100vh;
 background:var(--bg);
 color:var(--ink);
-font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
+
+font-family:
+-apple-system,
+BlinkMacSystemFont,
+"SF Pro Display",
+"SF Pro Text",
+"Segoe UI",
+Tahoma,
+Arial,
+sans-serif;
+
 -webkit-font-smoothing:antialiased;
 text-rendering:optimizeLegibility;
-padding-bottom:96px
+
+padding-bottom:88px
 }
 
 button{
@@ -57,70 +72,83 @@ margin:0 auto
 }
 
 
-/* =========================
+/* =====================================================
    HEADER
-========================= */
+===================================================== */
 
 .header{
-height:76px;
-padding:10px 14px;
+height:68px;
+
+padding:
+8px
+14px;
 
 display:flex;
 align-items:center;
 justify-content:space-between;
 
 background:var(--bg);
+
 position:sticky;
 top:0;
-z-index:30
-}
-
-.header-title{
-margin:0;
-font-size:23px;
-font-weight:900;
-letter-spacing:-.04em
+z-index:40
 }
 
 .header-btn{
-width:42px;
-height:42px;
+width:40px;
+height:40px;
 
 display:grid;
 place-items:center;
 
 border:1px solid var(--line);
-border-radius:14px;
+border-radius:13px;
 
 background:#fff;
+
 color:var(--primary);
 
-box-shadow:0 6px 16px rgba(23,32,42,.045)
+box-shadow:
+0 6px 15px rgba(23,32,42,.045)
 }
 
 .header-btn svg{
-width:21px;
-height:21px
+width:20px;
+height:20px
+}
+
+.header-title{
+margin:0;
+
+font-size:19px;
+font-weight:900;
+
+letter-spacing:-.035em
 }
 
 
-/* =========================
-   PHOTO GALLERY
-========================= */
+/* =====================================================
+   IMAGE GALLERY
+===================================================== */
+
+/*
+  مساحة الصورة موحدة.
+  الصورة نفسها لا يتم قصها.
+*/
 
 .gallery{
 position:relative;
+
 width:100%;
 
-/*
-  مساحة موحدة لكل الأجهزة.
-  مو الصورة نفسها.
-*/
-height:430px;
+height:318px;
 
-background:var(--bg);
+background:#fff;
 
-overflow:hidden
+overflow:hidden;
+
+border-bottom:
+1px solid var(--line)
 }
 
 .gallery-track{
@@ -128,12 +156,14 @@ height:100%;
 width:100%;
 
 display:flex;
+
 direction:ltr;
 
 overflow-x:auto;
 overflow-y:hidden;
 
 scroll-snap-type:x mandatory;
+
 scrollbar-width:none;
 
 -webkit-overflow-scrolling:touch
@@ -149,49 +179,65 @@ width:100%;
 height:100%;
 
 display:flex;
+
 align-items:center;
 justify-content:center;
 
-padding:4px 12px;
+padding:
+10px
+18px;
 
-scroll-snap-align:center
+scroll-snap-align:center;
+
+background:#fff
 }
 
 /*
-  أهم سطرين بالصفحة كلها:
-  الصورة كاملة.
-  ماكو crop.
+  الصورة كاملة دائماً.
+  لا cover.
+  لا crop.
 */
+
 .slide img{
 display:block;
 
 width:100%;
 height:100%;
 
+max-width:100%;
+max-height:100%;
+
 object-fit:contain !important;
-object-position:center;
+
+object-position:center center;
 
 border:0;
+
+outline:0;
+
 box-shadow:none;
 
 user-select:none;
--webkit-user-drag:none
+
+-webkit-user-drag:none;
+
+image-rendering:auto
 }
 
 
-/* =========================
-   IMAGE CONTROLS
-========================= */
+/* =====================================================
+   IMAGE BUTTONS
+===================================================== */
 
 .image-btn{
 position:absolute;
 
-top:14px;
+top:13px;
 
-width:42px;
-height:42px;
+width:40px;
+height:40px;
 
-border-radius:14px;
+border-radius:13px;
 
 background:rgba(255,255,255,.96);
 
@@ -200,14 +246,15 @@ place-items:center;
 
 color:var(--primary);
 
-box-shadow:0 7px 18px rgba(23,32,42,.10);
+box-shadow:
+0 7px 17px rgba(23,32,42,.10);
 
-z-index:5
+z-index:10
 }
 
 .image-btn svg{
-width:20px;
-height:20px
+width:19px;
+height:19px
 }
 
 .image-share{
@@ -215,51 +262,58 @@ right:14px
 }
 
 .image-favorite{
-right:64px
+right:61px
 }
 
 .image-counter{
 position:absolute;
 
 left:14px;
-bottom:14px;
+bottom:13px;
 
-height:34px;
-min-width:48px;
+height:31px;
 
-padding:0 10px;
+min-width:47px;
+
+padding:
+0
+9px;
 
 display:flex;
 align-items:center;
 justify-content:center;
 
-border-radius:12px;
+border-radius:11px;
 
 background:rgba(23,32,42,.78);
+
 color:#fff;
 
-font-size:11px;
+font-size:10px;
 font-weight:900;
 
 direction:ltr;
 
-z-index:5
+z-index:10
 }
 
 .image-dots{
 position:absolute;
 
-bottom:17px;
 left:50%;
+bottom:16px;
 
 transform:translateX(-50%);
 
 display:flex;
+
+align-items:center;
+
 gap:5px;
 
 direction:ltr;
 
-z-index:5
+z-index:10
 }
 
 .image-dot{
@@ -268,102 +322,123 @@ height:5px;
 
 border-radius:20px;
 
-background:rgba(23,32,42,.22);
+background:rgba(23,32,42,.23);
 
-transition:.2s ease
+transition:
+width .2s ease,
+background .2s ease
 }
 
 .image-dot.active{
-width:17px;
+width:16px;
+
 background:var(--purple)
 }
 
 
-/* =========================
-   PRODUCT
-========================= */
+/* =====================================================
+   PRODUCT INFO
+===================================================== */
 
 .product{
-padding:4px 20px 0
+padding:
+13px
+20px
+0
 }
 
 .brand{
-font-size:13px;
+font-size:12px;
+
 font-weight:900;
+
 color:var(--purple);
 
-margin-top:4px
+margin-bottom:2px
 }
 
 .model{
-margin:2px 0 0;
+margin:0;
 
-font-size:27px;
-font-weight:900;
+font-size:26px;
 
-letter-spacing:-.045em;
-line-height:1.25
+line-height:1.25;
+
+font-weight:950;
+
+letter-spacing:-.045em
 }
 
 
-/* =========================
+/* =====================================================
    CHIPS
-========================= */
+===================================================== */
 
 .chips{
 display:flex;
-flex-wrap:wrap;
-gap:8px;
 
-margin-top:13px
+flex-wrap:wrap;
+
+gap:7px;
+
+margin-top:12px
 }
 
 .chip{
-height:39px;
+height:36px;
 
-padding:0 14px;
+padding:
+0
+12px;
 
 display:flex;
+
 align-items:center;
 justify-content:center;
 
-border:1px solid var(--line);
-border-radius:13px;
+border:
+1px solid var(--line);
+
+border-radius:12px;
 
 background:#fff;
 
 color:#596273;
 
-font-size:12px;
+font-size:11px;
+
 font-weight:850
 }
 
 
-/* =========================
+/* =====================================================
    PRICE
-========================= */
+===================================================== */
 
 .price-card{
-margin-top:16px;
+margin-top:15px;
 
-padding:18px 19px;
+padding:
+17px
+18px;
 
-border-radius:22px;
+border-radius:21px;
 
 background:
 linear-gradient(
 145deg,
 #6246d9 0%,
-#6d4be0 55%,
+#6e4be0 55%,
 #7950df 100%
 );
 
 color:#fff;
 
 box-shadow:
-0 12px 28px rgba(98,70,217,.14);
+0 11px 25px rgba(98,70,217,.14);
 
 position:relative;
+
 overflow:hidden
 }
 
@@ -372,169 +447,343 @@ content:"";
 
 position:absolute;
 
-width:110px;
-height:110px;
+width:105px;
+height:105px;
 
 border-radius:50%;
 
 left:-55px;
 bottom:-60px;
 
-background:rgba(255,255,255,.07)
+background:
+rgba(255,255,255,.07)
 }
 
 .price-label{
-font-size:12px;
-font-weight:600;
+font-size:11px;
+
+font-weight:700;
+
 opacity:.82
 }
 
 .price-line{
 display:flex;
+
 align-items:baseline;
+
 gap:7px;
 
-margin-top:2px
+margin-top:1px
 }
 
 .price{
-font-size:30px;
+font-size:29px;
+
 font-weight:950;
+
 letter-spacing:-.04em
 }
 
 .currency{
 font-size:12px;
+
 font-weight:800;
+
 opacity:.9
 }
 
 
-/* =========================
+/* =====================================================
+   DETAILS DIVIDER
+===================================================== */
+
+.details-intro{
+margin-top:20px;
+
+padding:
+15px
+16px;
+
+border-radius:18px;
+
+background:
+linear-gradient(
+135deg,
+#f1eeff,
+#e8f3f6
+);
+
+border:
+1px solid #e1ddf5;
+
+position:relative;
+
+overflow:hidden
+}
+
+.details-intro:after{
+content:"";
+
+position:absolute;
+
+width:55px;
+height:55px;
+
+border-radius:50%;
+
+left:-25px;
+bottom:-28px;
+
+background:
+rgba(98,70,217,.08)
+}
+
+.details-intro-title{
+font-size:16px;
+
+font-weight:950;
+
+margin:0;
+
+color:#29245a
+}
+
+.details-intro-copy{
+margin:3px 0 0;
+
+font-size:10px;
+
+line-height:1.7;
+
+color:#667085
+}
+
+
+/* =====================================================
    SECTIONS
-========================= */
+===================================================== */
 
 .section{
-margin-top:23px
+margin-top:21px
+}
+
+.section-head{
+display:flex;
+
+align-items:center;
+
+gap:8px;
+
+margin-bottom:10px
+}
+
+.section-mark{
+width:5px;
+height:21px;
+
+border-radius:8px;
+
+background:var(--purple);
+
+flex:0 0 auto
 }
 
 .section-title{
-margin:0 0 11px;
+margin:0;
 
-font-size:18px;
-font-weight:900;
+font-size:17px;
+
+font-weight:950;
 
 letter-spacing:-.03em
 }
 
 
-/* =========================
-   SPECS
-========================= */
+/* =====================================================
+   SPECIFICATIONS
+===================================================== */
 
 .spec-grid{
 display:grid;
-grid-template-columns:1fr 1fr;
+
+grid-template-columns:
+1fr
+1fr;
+
 gap:8px
 }
 
 .spec{
-min-height:68px;
+min-height:67px;
 
-padding:12px;
+padding:
+11px
+12px;
 
 background:#fff;
 
-border:1px solid var(--line);
-border-radius:16px
+border:
+1px solid var(--line);
+
+border-radius:16px;
+
+position:relative;
+
+overflow:hidden
+}
+
+.spec:nth-child(2n){
+background:
+linear-gradient(
+145deg,
+#fff,
+#f7f5ff
+)
+}
+
+.spec:nth-child(3n){
+background:
+linear-gradient(
+145deg,
+#fff,
+#f2f9fa
+)
 }
 
 .spec-label{
-font-size:10px;
+font-size:9px;
+
 color:var(--muted);
 
 margin-bottom:4px
 }
 
 .spec-value{
-font-size:13px;
-font-weight:900
+font-size:12px;
+
+font-weight:900;
+
+color:var(--ink)
 }
 
 
-/* =========================
+/* =====================================================
    CONDITION
-========================= */
+===================================================== */
 
 .condition{
+padding:7px;
+
 background:#fff;
 
-border:1px solid var(--line);
-border-radius:19px;
+border:
+1px solid var(--line);
 
-padding:8px
+border-radius:18px
 }
 
 .condition-row{
-min-height:48px;
+min-height:47px;
 
-padding:0 11px;
+padding:
+0
+11px;
 
 display:flex;
+
 align-items:center;
+
 justify-content:space-between;
 
-border-radius:13px
+gap:10px;
+
+border-radius:12px
 }
 
 .condition-row:nth-child(even){
-background:#fafbfc
+background:
+linear-gradient(
+90deg,
+#f7f5ff,
+#fafbfc
+)
 }
 
 .condition-label{
-font-size:11px;
+font-size:10px;
+
 color:var(--muted);
+
 font-weight:700
 }
 
 .condition-value{
-font-size:12px;
-font-weight:900
+font-size:11px;
+
+font-weight:900;
+
+text-align:left
+}
+
+.condition-value.good{
+color:var(--success)
 }
 
 
-/* =========================
+/* =====================================================
    NOTES
-========================= */
+===================================================== */
 
 .notes{
-padding:14px;
+padding:
+14px;
 
-background:#fff;
+background:
+linear-gradient(
+145deg,
+#fffdf7,
+#fff
+);
 
-border:1px solid var(--line);
+border:
+1px solid #eee8d9;
+
 border-radius:17px;
 
-font-size:12px;
-line-height:1.8;
+font-size:11px;
+
+line-height:1.9;
+
 color:#4d5965
 }
 
 
-/* =========================
+/* =====================================================
    SELLER
-========================= */
+===================================================== */
 
 .seller{
 display:flex;
+
 align-items:center;
+
 gap:11px;
 
-padding:14px;
+padding:
+13px
+14px;
 
-background:#fff;
+background:
+linear-gradient(
+145deg,
+#fff,
+#f5f2ff
+);
 
-border:1px solid var(--line);
+border:
+1px solid #e2ddf6;
+
 border-radius:18px
 }
 
@@ -545,33 +794,38 @@ height:42px;
 border-radius:13px;
 
 display:grid;
+
 place-items:center;
 
 background:var(--purple-soft);
+
 color:var(--purple);
 
 font-size:16px;
+
 font-weight:900;
 
 flex:0 0 auto
 }
 
 .seller-name{
-font-size:13px;
+font-size:12px;
+
 font-weight:900
 }
 
 .seller-location{
 font-size:10px;
+
 color:var(--muted);
 
 margin-top:2px
 }
 
 
-/* =========================
-   BOTTOM ACTION
-========================= */
+/* =====================================================
+   BOTTOM BUY
+===================================================== */
 
 .bottom{
 position:fixed;
@@ -583,22 +837,27 @@ bottom:0;
 z-index:50;
 
 padding:
-9px
-18px
-calc(9px + var(--safe-bottom));
+8px
+16px
+calc(8px + var(--safe-bottom));
 
-background:rgba(255,255,255,.96);
+background:
+rgba(255,255,255,.96);
 
-border-top:1px solid var(--line);
+border-top:
+1px solid var(--line);
 
-backdrop-filter:blur(12px)
+backdrop-filter:
+blur(12px)
 }
 
 .bottom-inner{
-width:min(100%,484px);
+width:min(100%,488px);
+
 margin:auto;
 
 display:flex;
+
 gap:8px;
 
 direction:rtl
@@ -606,9 +865,10 @@ direction:rtl
 
 .buy{
 flex:1;
-height:56px;
 
-border-radius:18px;
+height:54px;
+
+border-radius:17px;
 
 background:
 linear-gradient(
@@ -619,7 +879,8 @@ linear-gradient(
 
 color:#fff;
 
-font-size:16px;
+font-size:15px;
+
 font-weight:900;
 
 box-shadow:
@@ -627,52 +888,57 @@ box-shadow:
 }
 
 .bottom-favorite{
-width:56px;
-height:56px;
+width:54px;
+height:54px;
 
-border-radius:18px;
+border-radius:17px;
 
 background:#fff;
 
-border:1px solid var(--line);
+border:
+1px solid var(--line);
 
 display:grid;
+
 place-items:center;
 
 color:var(--purple)
 }
 
 .bottom-favorite svg{
-width:22px;
-height:22px
+width:21px;
+height:21px
 }
 
 
-/* =========================
-   LOADING / ERROR
-========================= */
+/* =====================================================
+   LOADING
+===================================================== */
 
 .loading,
 .error{
-padding:80px 20px;
+padding:
+75px
+20px;
 
 text-align:center;
 
-font-size:13px;
+font-size:12px;
+
 font-weight:700;
 
 color:var(--muted)
 }
 
 
-/* =========================
-   SMALL SCREEN
-========================= */
+/* =====================================================
+   SMALL PHONES
+===================================================== */
 
 @media(max-width:380px){
 
 .gallery{
-height:400px
+height:300px
 }
 
 .product{
@@ -680,11 +946,24 @@ padding-inline:17px
 }
 
 .model{
-font-size:25px
+font-size:24px
 }
 
 .price{
 font-size:27px
+}
+
+}
+
+
+/* =====================================================
+   TALL PHONES
+===================================================== */
+
+@media(min-height:850px) and (max-width:430px){
+
+.gallery{
+height:325px
 }
 
 }
@@ -695,6 +974,7 @@ font-size:27px
 <body>
 
 <div class="page">
+
 
 <header class="header">
 
@@ -721,7 +1001,7 @@ stroke-width="2">
 </h1>
 
 
-<div style="width:42px"></div>
+<div style="width:40px"></div>
 
 </header>
 
@@ -743,6 +1023,7 @@ id="bottom"
 style="display:none">
 
 <div class="bottom-inner">
+
 
 <button
 class="bottom-favorite"
@@ -801,19 +1082,19 @@ document.getElementById("bottomFavorite");
 
 const params =
 new URLSearchParams(
-location.search
+window.location.search
 );
 
 const deviceId =
 params.get("id");
 
 
-let device = null;
+let device=null;
 
 
-/* =========================
+/* =====================================================
    HELPERS
-========================= */
+===================================================== */
 
 function escapeHTML(value){
 
@@ -836,7 +1117,7 @@ return value
 }
 
 
-function price(value){
+function formatPrice(value){
 
 return new Intl.NumberFormat(
 "ar-IQ"
@@ -847,13 +1128,15 @@ Number(value || 0)
 }
 
 
-function images(value){
+function getImages(value){
 
 if(!value)
 return [];
 
+
 if(Array.isArray(value))
 return value.filter(Boolean);
+
 
 try{
 
@@ -863,15 +1146,29 @@ JSON.parse(value);
 if(Array.isArray(parsed))
 return parsed.filter(Boolean);
 
-if(typeof parsed === "string")
+if(
+typeof parsed === "string" &&
+parsed.trim()
+){
+
 return [parsed];
 
-}catch(e){}
+}
 
-return String(value)
+}catch(error){}
+
+
+if(typeof value === "string"){
+
+return value
 .split(",")
 .map(x=>x.trim())
 .filter(Boolean);
+
+}
+
+
+return [];
 
 }
 
@@ -881,28 +1178,37 @@ function isApple(brand){
 return String(brand || "")
 .trim()
 .toLowerCase()
-=== "apple";
+==="apple";
 
 }
 
 
-/* =========================
+/* =====================================================
    BACK
-========================= */
+===================================================== */
 
-backBtn.onclick = () => {
+backBtn.addEventListener(
+"click",
+()=>{
 
-if(history.length > 1)
+if(history.length>1){
+
 history.back();
-else
-location.href="market.html";
 
-};
+}else{
+
+window.location.href=
+"market.html";
+
+}
+
+}
+);
 
 
-/* =========================
+/* =====================================================
    SPEC
-========================= */
+===================================================== */
 
 function spec(label,value){
 
@@ -925,7 +1231,19 @@ ${value || "—"}
 }
 
 
+/* =====================================================
+   CONDITION
+===================================================== */
+
 function condition(label,value){
+
+const clean =
+String(value || "").toLowerCase();
+
+const good =
+clean.includes("يعمل") ||
+clean.includes("ممتاز") ||
+clean.includes("جيد جداً");
 
 return `
 
@@ -935,8 +1253,11 @@ return `
 ${escapeHTML(label)}
 </span>
 
-<span class="condition-value">
+<span
+class="condition-value ${good?"good":""}">
+
 ${value || "—"}
+
 </span>
 
 </div>
@@ -946,11 +1267,11 @@ ${value || "—"}
 }
 
 
-/* =========================
+/* =====================================================
    GALLERY
-========================= */
+===================================================== */
 
-function gallery(list){
+function renderGallery(list){
 
 if(!list.length){
 
@@ -979,14 +1300,14 @@ font-weight:800
 
 const slides =
 list.map(
-(src,i)=>`
+(src,index)=>`
 
 <div class="slide">
 
 <img
 src="${escapeHTML(src)}"
 alt="صورة الجهاز"
-loading="${i===0?"eager":"lazy"}"
+loading="${index===0?"eager":"lazy"}"
 decoding="async"
 draggable="false">
 
@@ -997,13 +1318,17 @@ draggable="false">
 
 
 const dots =
-list.length > 1
+list.length>1
 ?
 list.map(
-(_,i)=>`
+(_,index)=>`
 
 <span
-class="image-dot ${i===0?"active":""}">
+class="image-dot ${
+index===0
+?"active"
+:""
+}">
 </span>
 
 `
@@ -1077,7 +1402,7 @@ id="imageCounter">
 
 
 ${
-list.length > 1
+list.length>1
 ?
 `<div class="image-dots">${dots}</div>`
 :
@@ -1091,14 +1416,14 @@ list.length > 1
 }
 
 
-/* =========================
-   RENDER
-========================= */
+/* =====================================================
+   RENDER DEVICE
+===================================================== */
 
-function render(){
+function renderDevice(){
 
 const list =
-images(device.images);
+getImages(device.images);
 
 const apple =
 isApple(device.brand);
@@ -1106,10 +1431,11 @@ isApple(device.brand);
 
 app.innerHTML = `
 
-${gallery(list)}
+${renderGallery(list)}
 
 
 <section class="product">
+
 
 <div class="brand">
 ${value(device.brand)}
@@ -1131,6 +1457,7 @@ device.storage
 ""
 }
 
+
 ${
 device.color
 ?
@@ -1139,13 +1466,17 @@ device.color
 ""
 }
 
+
 <span class="chip">
 
 ${
-device.sale_type === "auction" ||
-device.sale_type === "مزاد"
+device.sale_type==="auction" ||
+device.sale_type==="مزاد"
+
 ? "مزاد"
+
 : "بيع مباشر"
+
 }
 
 </span>
@@ -1162,7 +1493,7 @@ Sale Price
 <div class="price-line">
 
 <span class="price">
-${price(device.price)}
+${formatPrice(device.price)}
 </span>
 
 <span class="currency">
@@ -1174,21 +1505,54 @@ ${price(device.price)}
 </div>
 
 
+<div class="details-intro">
+
+<h3 class="details-intro-title">
+تفاصيل الجهاز
+</h3>
+
+<p class="details-intro-copy">
+المواصفات والحالة ومعلومات البائع
+</p>
+
+</div>
+
+
 <section class="section">
+
+<div class="section-head">
+
+<span class="section-mark"></span>
 
 <h3 class="section-title">
 مواصفات الجهاز
 </h3>
 
+</div>
+
+
 <div class="spec-grid">
 
-${spec("الشركة",value(device.brand))}
+${spec(
+"الشركة",
+value(device.brand)
+)}
 
-${spec("الموديل",value(device.model))}
+${spec(
+"الموديل",
+value(device.model)
+)}
 
-${spec("السعة",value(device.storage))}
+${spec(
+"السعة",
+value(device.storage)
+)}
 
-${spec("اللون",value(device.color))}
+${spec(
+"اللون",
+value(device.color)
+)}
+
 
 ${
 apple
@@ -1207,9 +1571,13 @@ device.battery_health
 ""
 }
 
+
 ${spec(
 "الموقع",
-value(device.location || "النجف")
+value(
+device.location ||
+"النجف"
+)
 )}
 
 </div>
@@ -1219,9 +1587,19 @@ value(device.location || "النجف")
 
 <section class="section">
 
+<div class="section-head">
+
+<span
+class="section-mark"
+style="background:var(--primary)">
+</span>
+
 <h3 class="section-title">
 حالة الجهاز
 </h3>
+
+</div>
+
 
 <div class="condition">
 
@@ -1241,7 +1619,9 @@ value(device.body_condition)
 )}
 
 ${condition(
-apple ? "Face ID" : "البصمة",
+apple
+? "Face ID"
+: "البصمة",
 value(device.face_id)
 )}
 
@@ -1272,9 +1652,18 @@ device.notes
 
 <section class="section">
 
+<div class="section-head">
+
+<span
+class="section-mark"
+style="background:#b59d42">
+</span>
+
 <h3 class="section-title">
 ملاحظات البائع
 </h3>
+
+</div>
 
 <div class="notes">
 ${escapeHTML(device.notes)}
@@ -1290,9 +1679,19 @@ ${escapeHTML(device.notes)}
 
 <section class="section">
 
+<div class="section-head">
+
+<span
+class="section-mark"
+style="background:var(--purple)">
+</span>
+
 <h3 class="section-title">
 البائع
 </h3>
+
+</div>
+
 
 <div class="seller">
 
@@ -1308,20 +1707,26 @@ device.seller_name ||
 
 </div>
 
+
 <div>
 
 <div class="seller-name">
+
 ${value(
 device.seller_name ||
 "بائع الجهاز"
 )}
+
 </div>
 
+
 <div class="seller-location">
+
 ${value(
 device.location ||
 "النجف"
 )}
+
 </div>
 
 </div>
@@ -1329,13 +1734,16 @@ device.location ||
 </div>
 
 </section>
+
 
 </section>
 
 `;
 
 
-bottom.style.display="block";
+bottom.style.display=
+"block";
+
 
 setupGallery(list);
 
@@ -1346,9 +1754,9 @@ setupFavorite();
 }
 
 
-/* =========================
-   GALLERY
-========================= */
+/* =====================================================
+   GALLERY CONTROL
+===================================================== */
 
 function setupGallery(list){
 
@@ -1367,9 +1775,11 @@ return;
 
 
 const dots =
-[...document.querySelectorAll(
+[
+...document.querySelectorAll(
 ".image-dot"
-)];
+)
+];
 
 
 track.addEventListener(
@@ -1383,16 +1793,20 @@ track.clientWidth
 );
 
 
+if(counter){
+
 counter.textContent =
 `${index+1} / ${list.length}`;
 
+}
+
 
 dots.forEach(
-(dot,i)=>{
+(dot,index)=>{
 
 dot.classList.toggle(
 "active",
-i===index
+index===index
 );
 
 });
@@ -1406,21 +1820,24 @@ passive:true
 }
 
 
-/* =========================
+/* =====================================================
    SHARE
-========================= */
+===================================================== */
 
 function setupShare(){
 
-const btn =
+const share =
 document.getElementById(
 "shareBtn"
 );
 
-if(!btn)return;
+if(!share)
+return;
 
-btn.onclick =
-async ()=>{
+
+share.addEventListener(
+"click",
+async()=>{
 
 try{
 
@@ -1435,30 +1852,33 @@ text:
 "شاهد هذا الجهاز على MZAD PHONE",
 
 url:
-location.href
+window.location.href
 
 });
 
 }else{
 
 await navigator.clipboard.writeText(
-location.href
+window.location.href
 );
 
-alert("تم نسخ رابط الجهاز");
+alert(
+"تم نسخ رابط الجهاز"
+);
 
 }
 
-}catch(e){}
+}catch(error){}
 
-};
+}
+);
 
 }
 
 
-/* =========================
+/* =====================================================
    FAVORITE
-========================= */
+===================================================== */
 
 function setupFavorite(){
 
@@ -1467,9 +1887,12 @@ document.getElementById(
 "imageFavorite"
 );
 
+
 function toggle(){
 
-top.classList.toggle("active");
+top.classList.toggle(
+"active"
+);
 
 bottomFavorite.classList.toggle(
 "active"
@@ -1477,25 +1900,39 @@ bottomFavorite.classList.toggle(
 
 }
 
-top.onclick = toggle;
 
-bottomFavorite.onclick = toggle;
+if(top){
+
+top.addEventListener(
+"click",
+toggle
+);
 
 }
 
 
-/* =========================
-   LOAD
-========================= */
+bottomFavorite.addEventListener(
+"click",
+toggle
+);
 
-async function load(){
+}
+
+
+/* =====================================================
+   LOAD DEVICE
+===================================================== */
+
+async function loadDevice(){
 
 if(!deviceId){
 
 app.innerHTML=`
+
 <div class="error">
 لم يتم تحديد الجهاز.
 </div>
+
 `;
 
 return;
@@ -1523,9 +1960,11 @@ if(error || !data){
 console.error(error);
 
 app.innerHTML=`
+
 <div class="error">
 تعذر تحميل بيانات الجهاز.
 </div>
+
 `;
 
 return;
@@ -1535,19 +1974,21 @@ return;
 
 device=data;
 
-render();
+renderDevice();
 
 }
 
-load();
+
+loadDevice();
 
 
-/* =========================
+/* =====================================================
    BUY
-========================= */
+===================================================== */
 
-buyBtn.onclick =
-async ()=>{
+buyBtn.addEventListener(
+"click",
+async()=>{
 
 const {
 data
@@ -1558,8 +1999,8 @@ await supabase.auth.getSession();
 if(!data?.session){
 
 const returnTo =
-location.pathname +
-location.search;
+window.location.pathname +
+window.location.search;
 
 
 sessionStorage.setItem(
@@ -1568,18 +2009,19 @@ returnTo
 );
 
 
-location.href =
+window.location.href =
 `index.html?login=1&returnTo=${encodeURIComponent(returnTo)}`;
 
 return;
 
 }
 
+
 alert(
 "سيتم ربط عملية الشراء هنا."
 );
 
-};
+});
 
 </script>
 
