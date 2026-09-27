@@ -1,604 +1,605 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
-  <title>تفاصيل الجهاز | MZAD PHONE</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-  <style>
-    :root{
-      --bg:#f7f8fa;
-      --white:#fff;
-      --text:#17202a;
-      --muted:#667085;
-      --border:#e6e9ed;
-      --purple:#6246d9;
-      --purple2:#7c3aed;
-      --purpleSoft:#eeeaff;
-      --success:#159a72;
-      --danger:#d64545;
-      --shadow:0 12px 35px rgba(32,39,56,.08);
-    }
-
-    *{
-      box-sizing:border-box;
-      -webkit-tap-highlight-color:transparent;
-    }
-
-    html,body{
-      margin:0;
-      padding:0;
-      background:var(--bg);
-      color:var(--text);
-      font-family:"Cairo",sans-serif;
-    }
-
-    body{
-      min-height:100vh;
-      padding-bottom:105px;
-    }
-
-    button{
-      font-family:inherit;
-      border:0;
-      cursor:pointer;
-    }
-
-    .page{
-      width:100%;
-      max-width:720px;
-      margin:0 auto;
-    }
-
-    /* HEADER */
-    .topbar{
-      height:92px;
-      padding:18px 18px 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      background:rgba(247,248,250,.96);
-      position:sticky;
-      top:0;
-      z-index:20;
-      backdrop-filter:blur(15px);
-    }
-
-    .top-btn{
-      width:54px;
-      height:54px;
-      border-radius:18px;
-      background:#fff;
-      border:1px solid var(--border);
-      box-shadow:0 5px 18px rgba(30,40,55,.05);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#17202a;
-    }
-
-    .top-btn svg{
-      width:24px;
-      height:24px;
-    }
-
-    .page-title{
-      font-size:24px;
-      font-weight:900;
-      margin:0;
-      letter-spacing:-.5px;
-    }
-
-    /* GALLERY */
-    .gallery-wrap{
-      padding:0 24px;
-    }
-
-    .gallery{
-      position:relative;
-      width:100%;
-      height:500px;
-      border-radius:38px;
-      overflow:hidden;
-      background:#e9edf0;
-      box-shadow:var(--shadow);
-      isolation:isolate;
-    }
-
-    /*
-      الخلفية الضبابية مجرد خلفية.
-      الصورة الأصلية فوقها وتبقى كاملة.
-    */
-    .gallery-bg{
-      position:absolute;
-      inset:-25px;
-      background-position:center;
-      background-size:cover;
-      background-repeat:no-repeat;
-      filter:blur(22px);
-      opacity:.22;
-      transform:scale(1.08);
-      z-index:-2;
-    }
-
-    .gallery-overlay{
-      position:absolute;
-      inset:0;
-      background:rgba(255,255,255,.18);
-      z-index:-1;
-    }
-
-    .gallery-track{
-      width:100%;
-      height:100%;
-      display:flex;
-      direction:ltr;
-      overflow-x:auto;
-      overflow-y:hidden;
-      scroll-snap-type:x mandatory;
-      scrollbar-width:none;
-      overscroll-behavior-x:contain;
-    }
-
-    .gallery-track::-webkit-scrollbar{
-      display:none;
-    }
-
-    .gallery-slide{
-      min-width:100%;
-      width:100%;
-      height:100%;
-      flex:0 0 100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      scroll-snap-align:center;
-      padding:18px;
-    }
-
-    /*
-      IMPORTANT:
-      contain = الصورة كلها تظهر.
-      لا يوجد crop.
-    */
-    .gallery-slide img{
-      width:100%;
-      height:100%;
-      object-fit:contain !important;
-      object-position:center center;
-      display:block;
-      user-select:none;
-      -webkit-user-drag:none;
-    }
-
-    .counter{
-      position:absolute;
-      top:22px;
-      left:22px;
-      min-width:62px;
-      height:48px;
-      padding:0 15px;
-      border-radius:17px;
-      background:rgba(35,43,53,.78);
-      color:white;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:16px;
-      font-weight:800;
-      backdrop-filter:blur(10px);
-      z-index:4;
-    }
-
-    .dots{
-      position:absolute;
-      bottom:18px;
-      left:50%;
-      transform:translateX(-50%);
-      display:flex;
-      gap:7px;
-      z-index:4;
-      direction:ltr;
-    }
-
-    .dot{
-      width:8px;
-      height:8px;
-      border-radius:99px;
-      background:rgba(255,255,255,.55);
-      transition:.25s;
-    }
-
-    .dot.active{
-      width:27px;
-      background:#fff;
-    }
-
-    /* PRODUCT INFO */
-    .product{
-      padding:28px 30px 0;
-    }
-
-    .brand{
-      color:var(--purple);
-      font-size:17px;
-      font-weight:900;
-      margin-bottom:4px;
-    }
-
-    .model{
-      font-size:31px;
-      line-height:1.25;
-      font-weight:900;
-      letter-spacing:-1px;
-      margin:0 0 20px;
-    }
-
-    .chips{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-bottom:26px;
-    }
-
-    .chip{
-      min-height:48px;
-      padding:0 17px;
-      border-radius:17px;
-      background:#fff;
-      border:1px solid var(--border);
-      box-shadow:0 5px 16px rgba(30,40,55,.04);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:15px;
-      font-weight:800;
-      color:#596273;
-    }
-
-    /* PRICE */
-    .price-card{
-      position:relative;
-      overflow:hidden;
-      border-radius:31px;
-      padding:30px 27px;
-      color:white;
-      background:
-        radial-gradient(circle at 0% 100%,rgba(255,255,255,.12) 0 85px,transparent 86px),
-        linear-gradient(135deg,#5142c9 0%,#6246d9 48%,#7950df 100%);
-      box-shadow:0 18px 40px rgba(98,70,217,.20);
-      margin-bottom:28px;
-    }
-
-    .price-card:after{
-      content:"";
-      position:absolute;
-      width:120px;
-      height:120px;
-      border-radius:50%;
-      right:-45px;
-      top:-50px;
-      background:rgba(255,255,255,.07);
-    }
-
-    .price-label{
-      position:relative;
-      z-index:1;
-      font-size:16px;
-      opacity:.88;
-      margin-bottom:6px;
-    }
-
-    .price{
-      position:relative;
-      z-index:1;
-      display:flex;
-      align-items:baseline;
-      gap:8px;
-      direction:rtl;
-    }
-
-    .price-number{
-      font-size:39px;
-      font-weight:900;
-      letter-spacing:-1px;
-    }
-
-    .currency{
-      font-size:17px;
-      font-weight:800;
-      opacity:.92;
-    }
-
-    /* SECTION */
-    .section{
-      margin-top:24px;
-    }
-
-    .section-title{
-      font-size:21px;
-      font-weight:900;
-      margin:0 0 14px;
-    }
-
-    /* SPECIFICATIONS */
-    .spec-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:11px;
-    }
-
-    .spec{
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:21px;
-      padding:17px 15px;
-      min-height:83px;
-      box-shadow:0 5px 18px rgba(30,40,55,.035);
-    }
-
-    .spec-label{
-      font-size:13px;
-      color:var(--muted);
-      margin-bottom:5px;
-      font-weight:600;
-    }
-
-    .spec-value{
-      font-size:15px;
-      font-weight:900;
-      color:var(--text);
-    }
-
-    .good{
-      color:var(--success);
-    }
-
-    .bad{
-      color:var(--danger);
-    }
-
-    /* CONDITION */
-    .condition-card{
-      position:relative;
-      overflow:hidden;
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:28px;
-      padding:21px;
-      box-shadow:0 7px 24px rgba(30,40,55,.04);
-    }
-
-    .condition-card:before{
-      content:"";
-      position:absolute;
-      width:125px;
-      height:125px;
-      border-radius:50%;
-      background:var(--purpleSoft);
-      left:-65px;
-      bottom:-65px;
-    }
-
-    .condition-list{
-      position:relative;
-      display:grid;
-      gap:10px;
-    }
-
-    .condition-row{
-      min-height:58px;
-      border-radius:17px;
-      background:#fafbfc;
-      border:1px solid #edf0f3;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 15px;
-      gap:10px;
-    }
-
-    .condition-label{
-      color:var(--muted);
-      font-size:14px;
-      font-weight:700;
-    }
-
-    .condition-value{
-      font-size:14px;
-      font-weight:900;
-      text-align:left;
-    }
-
-    /* NOTES */
-    .notes{
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:24px;
-      padding:20px;
-      color:#4e5868;
-      line-height:1.9;
-      font-size:14px;
-      box-shadow:0 5px 18px rgba(30,40,55,.035);
-    }
-
-    /* SELLER */
-    .seller{
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:26px;
-      padding:20px;
-      box-shadow:0 6px 20px rgba(30,40,55,.04);
-    }
-
-    .seller-top{
-      display:flex;
-      align-items:center;
-      gap:14px;
-    }
-
-    .seller-avatar{
-      width:55px;
-      height:55px;
-      border-radius:18px;
-      background:linear-gradient(135deg,#e8e4ff,#f3f1ff);
-      color:var(--purple);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:20px;
-      font-weight:900;
-    }
-
-    .seller-name{
-      font-size:17px;
-      font-weight:900;
-    }
-
-    .seller-location{
-      color:var(--muted);
-      font-size:13px;
-      margin-top:2px;
-    }
-
-    /* BOTTOM ACTION */
-    .bottom-action{
-      position:fixed;
-      left:0;
-      right:0;
-      bottom:0;
-      z-index:30;
-      padding:12px 24px calc(12px + env(safe-area-inset-bottom));
-      background:rgba(255,255,255,.94);
-      border-top:1px solid rgba(230,233,237,.9);
-      backdrop-filter:blur(18px);
-    }
-
-    .bottom-inner{
-      max-width:672px;
-      margin:auto;
-      display:flex;
-      gap:12px;
-      direction:rtl;
-    }
-
-    .buy-btn{
-      flex:1;
-      height:64px;
-      border-radius:23px;
-      background:linear-gradient(135deg,#6246d9,#7950df);
-      color:#fff;
-      font-size:18px;
-      font-weight:900;
-      box-shadow:0 12px 25px rgba(98,70,217,.20);
-    }
-
-    .favorite-btn{
-      width:70px;
-      height:64px;
-      border-radius:23px;
-      background:#fff;
-      border:1px solid var(--border);
-      color:var(--purple);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .favorite-btn svg{
-      width:28px;
-      height:28px;
-    }
-
-    /* EMPTY / LOADING */
-    .loading{
-      padding:80px 25px;
-      text-align:center;
-      color:var(--muted);
-      font-weight:700;
-    }
-
-    .error{
-      margin:30px 24px;
-      padding:25px;
-      border-radius:24px;
-      background:#fff;
-      border:1px solid var(--border);
-      text-align:center;
-      color:var(--muted);
-      font-weight:700;
-    }
-
-    @media(max-width:500px){
-      .gallery{
-        height:500px;
-      }
-
-      .model{
-        font-size:29px;
-      }
-    }
-
-    @media(max-width:380px){
-      .gallery-wrap{
-        padding:0 17px;
-      }
-
-      .product{
-        padding-left:22px;
-        padding-right:22px;
-      }
-
-      .gallery{
-        height:430px;
-        border-radius:30px;
-      }
-
-      .price-number{
-        font-size:34px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<title>تفاصيل الجهاز | MZAD PHONE</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#f7f8fa;
+  --white:#fff;
+  --text:#17202a;
+  --muted:#667085;
+  --border:#e6e9ed;
+  --purple:#6246d9;
+  --purple2:#7950df;
+}
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Cairo",sans-serif;
+}
+
+body{
+  padding-bottom:105px;
+}
+
+button{
+  font-family:inherit;
+  border:0;
+}
+
+.page{
+  width:100%;
+  max-width:720px;
+  margin:auto;
+}
+
+/* HEADER */
+
+.topbar{
+  height:88px;
+  padding:14px 18px 10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:#f7f8fa;
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.top-btn{
+  width:54px;
+  height:54px;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 5px 18px rgba(20,30,45,.05);
+}
+
+.top-btn svg{
+  width:25px;
+  height:25px;
+}
+
+.page-title{
+  margin:0;
+  font-size:24px;
+  font-weight:900;
+}
+
+/* =========================
+   IMAGE AREA
+   ========================= */
+
+.photo-section{
+  width:100%;
+  padding:0 18px;
+}
+
+/*
+  هذه المنطقة ثابتة.
+  كل الصور مهما كان مقاسها تدخل هنا.
+*/
+.photo-gallery{
+  position:relative;
+  width:100%;
+  aspect-ratio:4 / 3;
+  background:#fff;
+  border-radius:28px;
+  overflow:hidden;
+  border:1px solid #edf0f3;
+}
+
+/*
+  السلايدر نفسه ثابت.
+*/
+.photo-track{
+  width:100%;
+  height:100%;
+  display:flex;
+  direction:ltr;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+  overscroll-behavior-x:contain;
+}
+
+.photo-track::-webkit-scrollbar{
+  display:none;
+}
+
+/*
+  كل صورة لها نفس المساحة بالضبط.
+*/
+.photo-slide{
+  width:100%;
+  min-width:100%;
+  height:100%;
+  flex:0 0 100%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  scroll-snap-align:center;
+
+  background:#fff;
+  padding:8px;
+}
+
+/*
+  أهم نقطة:
+  contain = الصورة كاملة بدون قص.
+*/
+.photo-slide img{
+  display:block;
+
+  width:100%;
+  height:100%;
+
+  object-fit:contain !important;
+  object-position:center center;
+
+  max-width:100%;
+  max-height:100%;
+
+  user-select:none;
+  -webkit-user-drag:none;
+}
+
+/* أزرار فوق الصورة */
+
+.photo-action{
+  position:absolute;
+  top:16px;
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  background:rgba(255,255,255,.96);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:5;
+  box-shadow:0 6px 20px rgba(0,0,0,.12);
+}
+
+.photo-action svg{
+  width:25px;
+  height:25px;
+}
+
+.share{
+  right:16px;
+}
+
+.favorite{
+  right:76px;
+}
+
+.back-photo{
+  left:16px;
+}
+
+.counter{
+  position:absolute;
+  bottom:15px;
+  left:15px;
+  min-width:54px;
+  height:38px;
+  padding:0 12px;
+  border-radius:14px;
+  background:rgba(25,31,40,.82);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:14px;
+  font-weight:800;
+  z-index:5;
+  direction:ltr;
+}
+
+.dots{
+  position:absolute;
+  bottom:18px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:6px;
+  direction:ltr;
+  z-index:5;
+}
+
+.dot{
+  width:7px;
+  height:7px;
+  border-radius:20px;
+  background:rgba(255,255,255,.65);
+  transition:.25s;
+}
+
+.dot.active{
+  width:24px;
+  background:#fff;
+}
+
+/* =========================
+   PRODUCT
+   ========================= */
+
+.product{
+  padding:24px 25px 0;
+}
+
+.brand{
+  color:var(--purple);
+  font-size:16px;
+  font-weight:900;
+  margin-bottom:3px;
+}
+
+.model{
+  margin:0;
+  font-size:30px;
+  line-height:1.25;
+  font-weight:900;
+  letter-spacing:-.7px;
+}
+
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:17px;
+}
+
+.chip{
+  min-height:44px;
+  padding:0 16px;
+  border-radius:16px;
+  background:#fff;
+  border:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#596273;
+  font-size:14px;
+  font-weight:800;
+}
+
+/* PRICE */
+
+.price-card{
+  margin-top:20px;
+  border-radius:28px;
+  padding:25px 24px;
+
+  color:white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #5142c9 0%,
+      #6246d9 52%,
+      #7950df 100%
+    );
+
+  box-shadow:0 16px 35px rgba(98,70,217,.18);
+}
+
+.price-label{
+  font-size:15px;
+  opacity:.9;
+}
+
+.price{
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+  margin-top:3px;
+}
+
+.price-number{
+  font-size:38px;
+  font-weight:900;
+}
+
+.currency{
+  font-size:16px;
+  font-weight:800;
+}
+
+/* SECTIONS */
+
+.section{
+  margin-top:25px;
+}
+
+.section-title{
+  margin:0 0 13px;
+  font-size:20px;
+  font-weight:900;
+}
+
+/* SPECS */
+
+.spec-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.spec{
+  min-height:78px;
+  padding:15px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:20px;
+}
+
+.spec-label{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+
+.spec-value{
+  font-size:15px;
+  font-weight:900;
+}
+
+/* CONDITION */
+
+.condition-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:16px;
+}
+
+.condition-list{
+  display:grid;
+  gap:9px;
+}
+
+.condition-row{
+  min-height:55px;
+  padding:0 14px;
+  border-radius:16px;
+  background:#fafbfc;
+  border:1px solid #edf0f3;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.condition-label{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:700;
+}
+
+.condition-value{
+  font-size:14px;
+  font-weight:900;
+  text-align:left;
+}
+
+/* NOTES */
+
+.notes{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:18px;
+  color:#4e5868;
+  font-size:14px;
+  line-height:1.9;
+}
+
+/* SELLER */
+
+.seller{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:23px;
+  padding:18px;
+}
+
+.seller-top{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+
+.seller-avatar{
+  width:53px;
+  height:53px;
+  border-radius:17px;
+  background:#eeeaff;
+  color:var(--purple);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  font-size:20px;
+}
+
+.seller-name{
+  font-size:16px;
+  font-weight:900;
+}
+
+.seller-location{
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* BOTTOM */
+
+.bottom-action{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:30;
+
+  padding:11px 22px calc(11px + env(safe-area-inset-bottom));
+
+  background:rgba(255,255,255,.96);
+  border-top:1px solid var(--border);
+  backdrop-filter:blur(15px);
+}
+
+.bottom-inner{
+  max-width:672px;
+  margin:auto;
+  display:flex;
+  gap:10px;
+  direction:rtl;
+}
+
+.buy-btn{
+  flex:1;
+  height:62px;
+  border-radius:22px;
+
+  background:linear-gradient(
+    135deg,
+    var(--purple),
+    var(--purple2)
+  );
+
+  color:#fff;
+  font-size:18px;
+  font-weight:900;
+  box-shadow:0 10px 24px rgba(98,70,217,.18);
+}
+
+.favorite-bottom{
+  width:68px;
+  height:62px;
+  border-radius:22px;
+  background:#fff;
+  border:1px solid var(--border);
+  color:var(--purple);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.favorite-bottom svg{
+  width:28px;
+  height:28px;
+}
+
+/* LOADING */
+
+.loading{
+  padding:80px 20px;
+  text-align:center;
+  color:var(--muted);
+  font-weight:700;
+}
+
+.error{
+  margin:30px 20px;
+  padding:25px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:23px;
+  text-align:center;
+  color:var(--muted);
+}
+
+/* SMALL PHONES */
+
+@media(max-width:380px){
+
+  .photo-section{
+    padding:0 12px;
+  }
+
+  .photo-gallery{
+    border-radius:23px;
+  }
+
+  .product{
+    padding-left:20px;
+    padding-right:20px;
+  }
+
+  .model{
+    font-size:27px;
+  }
+
+  .price-number{
+    font-size:34px;
+  }
+}
+</style>
 </head>
 
 <body>
 
 <div class="page">
 
-  <header class="topbar">
-    <button class="top-btn" id="backBtn" aria-label="رجوع">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M9 5l7 7-7 7"/>
-      </svg>
-    </button>
+<header class="topbar">
 
-    <h1 class="page-title">تفاصيل الجهاز</h1>
+  <button class="top-btn" id="topBack">
+    <svg viewBox="0 0 24 24" fill="none"
+      stroke="currentColor"
+      stroke-width="2.2"
+      stroke-linecap="round"
+      stroke-linejoin="round">
+      <path d="M9 5l7 7-7 7"/>
+    </svg>
+  </button>
 
-    <button class="top-btn" id="shareBtn" aria-label="مشاركة">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="18" cy="5" r="2.5"/>
-        <circle cx="6" cy="12" r="2.5"/>
-        <circle cx="18" cy="19" r="2.5"/>
-        <path d="M8.2 10.8l7.5-4.5"/>
-        <path d="M8.2 13.2l7.5 4.5"/>
-      </svg>
-    </button>
-  </header>
+  <h1 class="page-title">تفاصيل الجهاز</h1>
 
-  <main id="app">
-    <div class="loading">جاري تحميل تفاصيل الجهاز...</div>
-  </main>
+  <div style="width:54px"></div>
+
+</header>
+
+<main id="app">
+  <div class="loading">جاري تحميل الجهاز...</div>
+</main>
 
 </div>
 
-<div class="bottom-action" id="bottomAction" style="display:none;">
+<div class="bottom-action" id="bottomAction" style="display:none">
+
   <div class="bottom-inner">
-    <button class="favorite-btn" id="favoriteBtn" aria-label="المفضلة">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+
+    <button class="favorite-bottom" id="favoriteBtn">
+      <svg viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round">
         <path d="M20.8 8.7c0 5.4-8.8 10.4-8.8 10.4S3.2 14.1 3.2 8.7A5.1 5.1 0 0 1 12 5.4a5.1 5.1 0 0 1 8.8 3.3Z"/>
       </svg>
     </button>
@@ -606,513 +607,608 @@
     <button class="buy-btn" id="buyBtn">
       شراء الجهاز
     </button>
+
   </div>
+
 </div>
 
 <script type="module">
-  import { supabase } from "./js/supabase.js";
 
-  const app = document.getElementById("app");
-  const bottomAction = document.getElementById("bottomAction");
-  const backBtn = document.getElementById("backBtn");
-  const shareBtn = document.getElementById("shareBtn");
-  const buyBtn = document.getElementById("buyBtn");
-  const favoriteBtn = document.getElementById("favoriteBtn");
+import { supabase } from "./js/supabase.js";
 
-  const params = new URLSearchParams(window.location.search);
-  const deviceId = params.get("id");
+const app = document.getElementById("app");
+const bottomAction = document.getElementById("bottomAction");
+const topBack = document.getElementById("topBack");
+const buyBtn = document.getElementById("buyBtn");
+const favoriteBtn = document.getElementById("favoriteBtn");
 
-  let device = null;
+const params = new URLSearchParams(location.search);
+const deviceId = params.get("id");
 
-  backBtn.addEventListener("click", () => {
-    if (history.length > 1) {
-      history.back();
-    } else {
-      window.location.href = "market.html";
-    }
-  });
+let device = null;
 
-  function escapeHTML(value){
-    return String(value ?? "")
-      .replace(/&/g,"&amp;")
-      .replace(/</g,"&lt;")
-      .replace(/>/g,"&gt;")
-      .replace(/"/g,"&quot;")
-      .replace(/'/g,"&#039;");
+topBack.addEventListener("click",()=>{
+  if(history.length > 1){
+    history.back();
+  }else{
+    location.href="market.html";
+  }
+});
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+function formatPrice(value){
+
+  return new Intl.NumberFormat("ar-IQ")
+    .format(Number(value || 0));
+
+}
+
+function getImages(value){
+
+  if(!value) return [];
+
+  if(Array.isArray(value)){
+    return value.filter(Boolean);
   }
 
-  function formatPrice(value){
-    const number = Number(value || 0);
-    return new Intl.NumberFormat("ar-IQ").format(number);
-  }
+  try{
 
-  function getImages(value){
-    if(!value) return [];
+    const parsed=JSON.parse(value);
 
-    if(Array.isArray(value)){
-      return value.filter(Boolean);
+    if(Array.isArray(parsed)){
+      return parsed.filter(Boolean);
     }
 
-    try{
-      const parsed = JSON.parse(value);
+    if(typeof parsed==="string"){
+      return [parsed];
+    }
 
-      if(Array.isArray(parsed)){
-        return parsed.filter(Boolean);
+  }catch(e){}
+
+  if(typeof value==="string"){
+
+    return value
+      .split(",")
+      .map(x=>x.trim())
+      .filter(Boolean);
+
+  }
+
+  return [];
+}
+
+function isApple(brand){
+
+  return String(brand || "")
+    .trim()
+    .toLowerCase()==="apple";
+
+}
+
+function value(value){
+
+  return value
+    ? escapeHTML(value)
+    : "—";
+
+}
+
+function renderSpec(label,valueText){
+
+  return `
+    <div class="spec">
+      <div class="spec-label">
+        ${escapeHTML(label)}
+      </div>
+
+      <div class="spec-value">
+        ${value(valueText)}
+      </div>
+    </div>
+  `;
+
+}
+
+function renderCondition(label,valueText){
+
+  return `
+    <div class="condition-row">
+
+      <span class="condition-label">
+        ${escapeHTML(label)}
+      </span>
+
+      <span class="condition-value">
+        ${value(valueText)}
+      </span>
+
+    </div>
+  `;
+
+}
+
+/* الصور */
+
+function renderPhotos(images){
+
+  if(!images.length){
+
+    return `
+      <div class="photo-gallery">
+        <div class="photo-slide">
+          لا توجد صورة للجهاز
+        </div>
+      </div>
+    `;
+
+  }
+
+  const slides=images.map((src,index)=>`
+
+    <div class="photo-slide">
+
+      <img
+        src="${escapeHTML(src)}"
+        alt="صورة الجهاز ${index+1}"
+        draggable="false"
+        loading="${index===0 ? "eager":"lazy"}"
+      >
+
+    </div>
+
+  `).join("");
+
+  const dots=images.length>1
+    ? images.map((_,i)=>`
+        <span class="dot ${i===0?"active":""}"></span>
+      `).join("")
+    : "";
+
+  return `
+
+    <div class="photo-gallery">
+
+      <button class="photo-action share" id="sharePhoto">
+
+        <svg viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+
+          <circle cx="18" cy="5" r="2.5"/>
+          <circle cx="6" cy="12" r="2.5"/>
+          <circle cx="18" cy="19" r="2.5"/>
+
+          <path d="M8.2 10.8l7.5-4.5"/>
+          <path d="M8.2 13.2l7.5 4.5"/>
+
+        </svg>
+
+      </button>
+
+      <button class="photo-action favorite" id="photoFavorite">
+
+        <svg viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+
+          <path d="M20.8 8.7c0 5.4-8.8 10.4-8.8 10.4S3.2 14.1 3.2 8.7A5.1 5.1 0 0 1 12 5.4a5.1 5.1 0 0 1 8.8 3.3Z"/>
+
+        </svg>
+
+      </button>
+
+      <div class="photo-track" id="photoTrack">
+        ${slides}
+      </div>
+
+      <div class="counter" id="counter">
+        1 / ${images.length}
+      </div>
+
+      ${
+        images.length>1
+        ? `<div class="dots">${dots}</div>`
+        : ""
       }
 
-      if(typeof parsed === "string" && parsed){
-        return [parsed];
-      }
-    }catch(e){}
+    </div>
 
-    if(typeof value === "string"){
-      return value
-        .split(",")
-        .map(x => x.trim())
-        .filter(Boolean);
-    }
+  `;
 
-    return [];
-  }
+}
 
-  function isApple(brand){
-    return String(brand || "").toLowerCase() === "apple";
-  }
+function renderDevice(){
 
-  function valueOrDash(value){
-    return value ? escapeHTML(value) : "—";
-  }
+  const images=getImages(device.images);
+  const apple=isApple(device.brand);
 
-  function conditionClass(value){
-    const text = String(value || "").toLowerCase();
+  app.innerHTML=`
 
-    if(
-      text.includes("ممتاز") ||
-      text.includes("يعمل") ||
-      text.includes("لا توجد")
-    ){
-      return "good";
-    }
+    <section class="photo-section">
+      ${renderPhotos(images)}
+    </section>
 
-    if(
-      text.includes("مشكلة") ||
-      text.includes("لا يعمل") ||
-      text.includes("مبدل") ||
-      text.includes("مبدلة") ||
-      text.includes("خدوش")
-    ){
-      return "bad";
-    }
+    <section class="product">
 
-    return "";
-  }
-
-  function renderSpec(label,value){
-    return `
-      <div class="spec">
-        <div class="spec-label">${escapeHTML(label)}</div>
-        <div class="spec-value ${conditionClass(value)}">
-          ${valueOrDash(value)}
-        </div>
+      <div class="brand">
+        ${value(device.brand)}
       </div>
-    `;
-  }
 
-  function renderCondition(label,value){
-    return `
-      <div class="condition-row">
-        <span class="condition-label">${escapeHTML(label)}</span>
-        <span class="condition-value ${conditionClass(value)}">
-          ${valueOrDash(value)}
-        </span>
-      </div>
-    `;
-  }
+      <h2 class="model">
+        ${value(device.model)}
+      </h2>
 
-  function renderGallery(images){
-    if(!images.length){
-      return `
-        <div class="gallery">
-          <div class="gallery-slide">
-            <div style="
-              color:#667085;
-              font-weight:800;
-              font-size:15px;
-            ">
-              لا توجد صورة للجهاز
-            </div>
-          </div>
-        </div>
-      `;
-    }
+      <div class="chips">
 
-    const slides = images.map((src,index) => `
-      <div class="gallery-slide">
-        <img
-          src="${escapeHTML(src)}"
-          alt="صورة الجهاز ${index + 1}"
-          draggable="false"
-          loading="${index === 0 ? "eager" : "lazy"}"
-        />
-      </div>
-    `).join("");
+        ${device.storage
+          ? `<div class="chip">${escapeHTML(device.storage)}</div>`
+          : ""}
 
-    const dots = images.map((_,index) => `
-      <span class="dot ${index === 0 ? "active" : ""}" data-dot="${index}"></span>
-    `).join("");
+        ${device.color
+          ? `<div class="chip">${escapeHTML(device.color)}</div>`
+          : ""}
 
-    return `
-      <div class="gallery">
-        <div
-          class="gallery-bg"
-          id="galleryBg"
-          style="background-image:url('${escapeHTML(images[0])}')"
-        ></div>
-
-        <div class="gallery-overlay"></div>
-
-        <div class="gallery-track" id="galleryTrack">
-          ${slides}
+        <div class="chip">
+          ${
+            device.sale_type==="auction" ||
+            device.sale_type==="مزاد"
+            ? "مزاد"
+            : "بيع مباشر"
+          }
         </div>
 
-        <div class="counter" id="counter">
-          1 / ${images.length}
+      </div>
+
+      <div class="price-card">
+
+        <div class="price-label">
+          Sale Price
         </div>
 
-        ${images.length > 1 ? `
-          <div class="dots" id="dots">
-            ${dots}
-          </div>
-        ` : ""}
+        <div class="price">
+
+          <span class="price-number">
+            ${formatPrice(device.price)}
+          </span>
+
+          <span class="currency">
+            د.ع
+          </span>
+
+        </div>
+
       </div>
-    `;
-  }
 
-  function renderDevice(){
-    const images = getImages(device.images);
+      <section class="section">
 
-    const apple = isApple(device.brand);
+        <h3 class="section-title">
+          مواصفات الجهاز
+        </h3>
 
-    const batteryBlock = apple ? `
-      ${renderSpec(
-        "صحة البطارية",
-        device.battery_health != null
-          ? `${device.battery_health}%`
-          : "غير مذكورة"
-      )}
-    ` : "";
+        <div class="spec-grid">
 
-    const sellerName =
-      device.seller_name ||
-      "بائع الجهاز";
+          ${renderSpec("الشركة",device.brand)}
 
-    const sellerInitial =
-      String(sellerName).trim().charAt(0) || "م";
+          ${renderSpec("الموديل",device.model)}
 
-    app.innerHTML = `
-      <section class="gallery-wrap">
-        ${renderGallery(images)}
+          ${renderSpec("السعة",device.storage)}
+
+          ${renderSpec("اللون",device.color)}
+
+          ${
+            apple
+            ? renderSpec(
+                "صحة البطارية",
+                device.battery_health
+                ? `${device.battery_health}%`
+                : "غير مذكورة"
+              )
+            : ""
+          }
+
+          ${renderSpec(
+            "الموقع",
+            device.location || "النجف"
+          )}
+
+        </div>
+
       </section>
 
-      <section class="product">
+      <section class="section">
 
-        <div class="brand">
-          ${valueOrDash(device.brand)}
+        <h3 class="section-title">
+          حالة الجهاز
+        </h3>
+
+        <div class="condition-card">
+
+          <div class="condition-list">
+
+            ${renderCondition(
+              "حالة الجهاز",
+              device.condition
+            )}
+
+            ${renderCondition(
+              "حالة الشاشة",
+              device.screen_condition
+            )}
+
+            ${renderCondition(
+              "حالة الهيكل",
+              device.body_condition
+            )}
+
+            ${renderCondition(
+              apple
+                ? "Face ID"
+                : "البصمة / القفل",
+              device.face_id
+            )}
+
+            ${renderCondition(
+              "الكاميرات",
+              device.cameras
+            )}
+
+            ${renderCondition(
+              "الشحن",
+              device.charging
+            )}
+
+            ${renderCondition(
+              "القطع المبدلة",
+              device.replaced_parts
+            )}
+
+          </div>
+
         </div>
 
-        <h2 class="model">
-          ${valueOrDash(device.model)}
-        </h2>
+      </section>
 
-        <div class="chips">
-          ${device.storage ? `
-            <div class="chip">${escapeHTML(device.storage)}</div>
-          ` : ""}
-
-          ${device.color ? `
-            <div class="chip">${escapeHTML(device.color)}</div>
-          ` : ""}
-
-          <div class="chip">
-            ${device.sale_type === "auction" || device.sale_type === "مزاد"
-              ? "مزاد"
-              : "بيع مباشر"}
-          </div>
-        </div>
-
-        <div class="price-card">
-          <div class="price-label">Sale Price</div>
-
-          <div class="price">
-            <span class="price-number">
-              ${formatPrice(device.price)}
-            </span>
-
-            <span class="currency">د.ع</span>
-          </div>
-        </div>
-
-        <section class="section">
-          <h3 class="section-title">مواصفات الجهاز</h3>
-
-          <div class="spec-grid">
-            ${renderSpec("الشركة",device.brand)}
-            ${renderSpec("الموديل",device.model)}
-            ${renderSpec("السعة",device.storage)}
-            ${renderSpec("اللون",device.color)}
-            ${batteryBlock}
-            ${renderSpec("الموقع",device.location || "النجف")}
-          </div>
-        </section>
-
-        <section class="section">
-          <h3 class="section-title">حالة الجهاز</h3>
-
-          <div class="condition-card">
-            <div class="condition-list">
-
-              ${renderCondition(
-                "حالة الجهاز",
-                device.condition
-              )}
-
-              ${renderCondition(
-                "حالة الشاشة",
-                device.screen_condition
-              )}
-
-              ${renderCondition(
-                "حالة الهيكل",
-                device.body_condition
-              )}
-
-              ${renderCondition(
-                apple ? "Face ID" : "البصمة / القفل",
-                device.face_id
-              )}
-
-              ${renderCondition(
-                "الكاميرات",
-                device.cameras
-              )}
-
-              ${renderCondition(
-                "الشحن",
-                device.charging
-              )}
-
-              ${renderCondition(
-                "القطع المبدلة",
-                device.replaced_parts
-              )}
-
-            </div>
-          </div>
-        </section>
-
-        ${device.notes ? `
+      ${
+        device.notes
+        ? `
           <section class="section">
-            <h3 class="section-title">ملاحظات البائع</h3>
+
+            <h3 class="section-title">
+              ملاحظات البائع
+            </h3>
 
             <div class="notes">
               ${escapeHTML(device.notes)}
             </div>
+
           </section>
-        ` : ""}
+        `
+        : ""
+      }
 
-        <section class="section">
-          <h3 class="section-title">البائع</h3>
+      <section class="section">
 
-          <div class="seller">
-            <div class="seller-top">
+        <h3 class="section-title">
+          البائع
+        </h3>
 
-              <div class="seller-avatar">
-                ${escapeHTML(sellerInitial)}
+        <div class="seller">
+
+          <div class="seller-top">
+
+            <div class="seller-avatar">
+              ${
+                escapeHTML(
+                  String(
+                    device.seller_name ||
+                    "ب"
+                  ).trim().charAt(0)
+                )
+              }
+            </div>
+
+            <div>
+
+              <div class="seller-name">
+                ${value(device.seller_name || "بائع الجهاز")}
               </div>
 
-              <div>
-                <div class="seller-name">
-                  ${escapeHTML(sellerName)}
-                </div>
-
-                <div class="seller-location">
-                  ${escapeHTML(device.location || "النجف")}
-                </div>
+              <div class="seller-location">
+                ${value(device.location || "النجف")}
               </div>
 
             </div>
+
           </div>
-        </section>
+
+        </div>
 
       </section>
+
+    </section>
+  `;
+
+  bottomAction.style.display="block";
+
+  setupGallery(images);
+
+  setupShare();
+
+}
+
+function setupGallery(images){
+
+  const track=document.getElementById("photoTrack");
+  const counter=document.getElementById("counter");
+
+  if(!track) return;
+
+  const dots=[
+    ...document.querySelectorAll(".dots .dot")
+  ];
+
+  track.addEventListener("scroll",()=>{
+
+    const index=Math.round(
+      track.scrollLeft / track.clientWidth
+    );
+
+    if(counter){
+      counter.textContent=
+        `${index+1} / ${images.length}`;
+    }
+
+    dots.forEach((dot,i)=>{
+      dot.classList.toggle(
+        "active",
+        i===index
+      );
+    });
+
+  });
+
+}
+
+function setupShare(){
+
+  const button=document.getElementById("sharePhoto");
+
+  if(!button) return;
+
+  button.addEventListener("click",async()=>{
+
+    try{
+
+      if(navigator.share){
+
+        await navigator.share({
+          title:`${device.brand} ${device.model}`,
+          text:"شاهد هذا الجهاز على MZAD PHONE",
+          url:location.href
+        });
+
+      }else{
+
+        await navigator.clipboard.writeText(
+          location.href
+        );
+
+        alert("تم نسخ رابط الجهاز");
+
+      }
+
+    }catch(e){}
+
+  });
+
+}
+
+async function loadDevice(){
+
+  if(!deviceId){
+
+    app.innerHTML=`
+      <div class="error">
+        لم يتم تحديد الجهاز.
+      </div>
     `;
 
-    bottomAction.style.display = "block";
-
-    setupGallery(images);
+    return;
   }
 
-  function setupGallery(images){
-    const track = document.getElementById("galleryTrack");
-    const counter = document.getElementById("counter");
-    const bg = document.getElementById("galleryBg");
+  const {data,error}=await supabase
+    .from("devices")
+    .select("*")
+    .eq("id",deviceId)
+    .single();
 
-    if(!track || images.length <= 0) return;
+  if(error || !data){
 
-    const dots = [...document.querySelectorAll(".dot")];
+    console.error(error);
 
-    track.addEventListener("scroll", () => {
-      const index = Math.round(track.scrollLeft / track.clientWidth);
+    app.innerHTML=`
+      <div class="error">
+        تعذر تحميل بيانات الجهاز.
+      </div>
+    `;
 
-      if(counter){
-        counter.textContent = `${index + 1} / ${images.length}`;
-      }
-
-      if(bg && images[index]){
-        bg.style.backgroundImage =
-          `url("${images[index]}")`;
-      }
-
-      dots.forEach((dot,i) => {
-        dot.classList.toggle("active",i === index);
-      });
-    });
-
-    dots.forEach((dot,index) => {
-      dot.addEventListener("click",() => {
-        track.scrollTo({
-          left:index * track.clientWidth,
-          behavior:"smooth"
-        });
-      });
-    });
+    return;
   }
 
-  async function loadDevice(){
-    if(!deviceId){
-      app.innerHTML = `
-        <div class="error">
-          لم يتم تحديد الجهاز.
-        </div>
-      `;
-      return;
-    }
+  device=data;
 
-    const {data,error} = await supabase
-      .from("devices")
-      .select("*")
-      .eq("id",deviceId)
-      .single();
+  renderDevice();
 
-    if(error){
-      console.error(error);
+}
 
-      app.innerHTML = `
-        <div class="error">
-          تعذر تحميل بيانات الجهاز.
-        </div>
-      `;
+buyBtn.addEventListener("click",async()=>{
 
-      return;
-    }
+  const {data}=await supabase.auth.getSession();
 
-    if(!data){
-      app.innerHTML = `
-        <div class="error">
-          الجهاز غير موجود.
-        </div>
-      `;
+  if(!data?.session){
 
-      return;
-    }
+    const returnTo=
+      location.pathname+
+      location.search;
 
-    device = data;
+    sessionStorage.setItem(
+      "mzad_pending_action",
+      returnTo
+    );
 
-    renderDevice();
+    location.href=
+      `index.html?login=1&returnTo=${encodeURIComponent(returnTo)}`;
+
+    return;
+
   }
 
-  shareBtn.addEventListener("click",async () => {
-    const shareData = {
-      title:`${device?.brand || ""} ${device?.model || ""}`,
-      text:"شاهد هذا الجهاز على MZAD PHONE",
-      url:window.location.href
-    };
+  alert("سيتم ربط عملية الشراء هنا.");
 
-    try{
-      if(navigator.share){
-        await navigator.share(shareData);
-      }else{
-        await navigator.clipboard.writeText(window.location.href);
-        alert("تم نسخ رابط الجهاز");
-      }
-    }catch(error){}
-  });
+});
 
-  buyBtn.addEventListener("click",async () => {
-    try{
-      const {data,error} = await supabase.auth.getSession();
+favoriteBtn.addEventListener("click",async()=>{
 
-      if(error || !data?.session){
-        const returnTo =
-          window.location.pathname +
-          window.location.search;
+  const {data}=await supabase.auth.getSession();
 
-        sessionStorage.setItem(
-          "mzad_pending_action",
-          returnTo
-        );
+  if(!data?.session){
 
-        window.location.href =
-          `index.html?login=1&returnTo=${encodeURIComponent(returnTo)}`;
+    const returnTo=
+      location.pathname+
+      location.search;
 
-        return;
-      }
+    sessionStorage.setItem(
+      "mzad_pending_action",
+      returnTo
+    );
 
-      /*
-        لاحقاً نربط هنا عملية الشراء الفعلية.
-      */
-      alert("تم تسجيل دخولك. سيتم ربط عملية الشراء هنا.");
-    }catch(error){
-      console.error(error);
-    }
-  });
+    location.href=
+      `index.html?login=1&returnTo=${encodeURIComponent(returnTo)}`;
 
-  favoriteBtn.addEventListener("click",async () => {
-    try{
-      const {data,error} = await supabase.auth.getSession();
+    return;
 
-      if(error || !data?.session){
-        const returnTo =
-          window.location.pathname +
-          window.location.search;
+  }
 
-        sessionStorage.setItem(
-          "mzad_pending_action",
-          returnTo
-        );
+});
 
-        window.location.href =
-          `index.html?login=1&returnTo=${encodeURIComponent(returnTo)}`;
+loadDevice();
 
-        return;
-      }
-
-      favoriteBtn.style.transform = "scale(.92)";
-
-      setTimeout(() => {
-        favoriteBtn.style.transform = "";
-      },160);
-
-      /*
-        ربط جدول المفضلة الحقيقي يكون هنا
-        بعد إنشاء جدول favorites.
-      */
-    }catch(error){
-      console.error(error);
-    }
-  });
-
-  loadDevice();
 </script>
 
 </body>
