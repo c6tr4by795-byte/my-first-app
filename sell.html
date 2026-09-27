@@ -22,7 +22,7 @@
       font-family:"Cairo",sans-serif;
     }
 
-    button,input,select{
+    button,input,select,textarea{
       font:inherit;
     }
 
@@ -135,28 +135,47 @@
     }
 
     input,
-    select{
+    select,
+    textarea{
       width:100%;
-      height:50px;
       border:1px solid #E0E4E8;
       border-radius:14px;
       background:#F9FAFB;
-      padding:0 14px;
       color:#17202A;
       outline:none;
       transition:.2s;
     }
 
+    input,
+    select{
+      height:50px;
+      padding:0 14px;
+    }
+
+    textarea{
+      min-height:105px;
+      resize:none;
+      padding:12px 14px;
+      line-height:1.8;
+    }
+
     input:focus,
-    select:focus{
-      border-color:#6246D9;
+    select:focus,
+    textarea:focus{
+      border-color:#176B87;
       background:#fff;
-      box-shadow:0 0 0 3px rgba(98,70,217,.09);
+      box-shadow:0 0 0 3px rgba(23,107,135,.08);
     }
 
     select{
       appearance:none;
       -webkit-appearance:none;
+      padding-left:42px;
+    }
+
+    select:disabled{
+      opacity:.58;
+      cursor:not-allowed;
     }
 
     .select-wrap{
@@ -170,6 +189,14 @@
       transform:translateY(-50%);
       pointer-events:none;
       color:#667085;
+      font-size:17px;
+    }
+
+    .model-status{
+      margin-top:7px;
+      font-size:10px;
+      color:#667085;
+      line-height:1.6;
     }
 
     .row{
@@ -192,6 +219,8 @@
       position:absolute;
       opacity:0;
       pointer-events:none;
+      width:1px;
+      height:1px;
     }
 
     .choice label{
@@ -212,9 +241,9 @@
     }
 
     .choice input:checked + label{
-      border-color:#6246D9;
-      background:#E5E0FF;
-      color:#4936B4;
+      border-color:#176B87;
+      background:#E8F3F6;
+      color:#176B87;
     }
 
     .price-box{
@@ -223,7 +252,6 @@
 
     .price-box input{
       padding-left:65px;
-      font-weight:700;
     }
 
     .price-unit{
@@ -234,6 +262,13 @@
       color:#667085;
       font-size:11px;
       font-weight:700;
+      pointer-events:none;
+    }
+
+    .price-help{
+      margin-top:6px;
+      color:#667085;
+      font-size:10px;
     }
 
     .photo-box{
@@ -253,8 +288,8 @@
       width:48px;
       height:48px;
       border-radius:15px;
-      background:#E5E0FF;
-      color:#6246D9;
+      background:#E8F3F6;
+      color:#176B87;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -286,7 +321,7 @@
     .photo-count{
       margin-top:9px;
       font-size:11px;
-      color:#6246D9;
+      color:#176B87;
       font-weight:700;
       display:none;
     }
@@ -330,11 +365,11 @@
       height:55px;
       border:0;
       border-radius:17px;
-      background:#6246D9;
+      background:#176B87;
       color:#fff;
       font-weight:800;
       font-size:15px;
-      box-shadow:0 10px 24px rgba(98,70,217,.20);
+      box-shadow:0 10px 24px rgba(23,107,135,.18);
       transition:.18s;
     }
 
@@ -411,8 +446,8 @@
     }
 
     .nav-item.active{
-      background:#E5E0FF;
-      color:#6246D9;
+      background:#E8F3F6;
+      color:#176B87;
     }
 
     .nav-icon{
@@ -440,7 +475,8 @@
   <header class="topbar">
 
     <button class="back" id="backBtn" type="button" aria-label="رجوع">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
         <path d="M15 18 9 12l6-6"/>
       </svg>
     </button>
@@ -457,7 +493,7 @@
     <h1 class="page-title">بيع جهاز</h1>
 
     <p class="page-subtitle">
-      أدخل معلومات جهازك حتى نجهزه كإعلان واضح للمشترين.
+      اختار معلومات جهازك من القوائم حتى يظهر الإعلان بشكل مرتب وموحّد.
     </p>
 
 
@@ -466,6 +502,8 @@
     <section class="card">
 
       <div class="card-title">معلومات الجهاز</div>
+
+      <!-- BRAND -->
 
       <div class="field">
 
@@ -498,20 +536,30 @@
       </div>
 
 
+      <!-- MODEL -->
+
       <div class="field">
 
         <label class="label">الموديل</label>
 
-        <input
-          id="model"
-          type="text"
-          placeholder="مثال: iPhone 15 Pro"
-          autocomplete="off"
-          required
-        >
+        <div class="select-wrap">
+
+          <select id="model" required disabled>
+            <option value="">اختار الشركة أولاً</option>
+          </select>
+
+          <span class="select-arrow">⌄</span>
+
+        </div>
+
+        <div class="model-status" id="modelStatus">
+          بعد اختيار الشركة راح تظهر موديلاتها.
+        </div>
 
       </div>
 
+
+      <!-- STORAGE + COLOR -->
 
       <div class="row">
 
@@ -523,6 +571,7 @@
 
             <select id="storage" required>
               <option value="">السعة</option>
+              <option value="32GB">32GB</option>
               <option value="64GB">64GB</option>
               <option value="128GB">128GB</option>
               <option value="256GB">256GB</option>
@@ -544,6 +593,7 @@
           <input
             id="color"
             type="text"
+            maxlength="30"
             placeholder="مثال: أسود"
             autocomplete="off"
             required
@@ -563,7 +613,9 @@
       <div class="card-title">حالة الجهاز</div>
 
 
-      <div class="field">
+      <!-- APPLE BATTERY ONLY -->
+
+      <div class="field" id="batteryField" style="display:none;">
 
         <label class="label">صحة البطارية</label>
 
@@ -576,40 +628,210 @@
             max="100"
             inputmode="numeric"
             placeholder="مثال: 91"
-            required
           >
 
           <span class="price-unit">%</span>
 
         </div>
 
+        <div class="price-help">
+          تظهر فقط لأجهزة Apple.
+        </div>
+
       </div>
 
 
+      <!-- BODY -->
+
       <div class="field">
 
-        <label class="label">الحالة العامة</label>
+        <label class="label">حالة الهيكل</label>
 
         <div class="choice-grid">
 
           <div class="choice">
-            <input type="radio" id="condition1" name="condition" value="ممتاز" required>
-            <label for="condition1">ممتاز</label>
+            <input type="radio" id="body1" name="body_condition" value="ممتاز" required>
+            <label for="body1">ممتاز</label>
           </div>
 
           <div class="choice">
-            <input type="radio" id="condition2" name="condition" value="جيد جداً">
-            <label for="condition2">جيد جداً</label>
+            <input type="radio" id="body2" name="body_condition" value="جيد جداً">
+            <label for="body2">جيد جداً</label>
           </div>
 
           <div class="choice">
-            <input type="radio" id="condition3" name="condition" value="جيد">
-            <label for="condition3">جيد</label>
+            <input type="radio" id="body3" name="body_condition" value="جيد">
+            <label for="body3">جيد</label>
           </div>
 
           <div class="choice">
-            <input type="radio" id="condition4" name="condition" value="مقبول">
-            <label for="condition4">مقبول</label>
+            <input type="radio" id="body4" name="body_condition" value="مبدل">
+            <label for="body4">مبدل</label>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- SCREEN -->
+
+      <div class="field">
+
+        <label class="label">حالة الشاشة</label>
+
+        <div class="choice-grid">
+
+          <div class="choice">
+            <input type="radio" id="screen1" name="screen_condition" value="ممتازة" required>
+            <label for="screen1">ممتازة</label>
+          </div>
+
+          <div class="choice">
+            <input type="radio" id="screen2" name="screen_condition" value="جيدة جداً">
+            <label for="screen2">جيدة جداً</label>
+          </div>
+
+          <div class="choice">
+            <input type="radio" id="screen3" name="screen_condition" value="جيدة">
+            <label for="screen3">جيدة</label>
+          </div>
+
+          <div class="choice">
+            <input type="radio" id="screen4" name="screen_condition" value="بها خدوش">
+            <label for="screen4">بها خدوش</label>
+          </div>
+
+          <div class="choice">
+            <input type="radio" id="screen5" name="screen_condition" value="مبدلة">
+            <label for="screen5">مبدلة</label>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- FACE ID / FINGERPRINT -->
+
+      <div class="field">
+
+        <label class="label">Face ID / البصمة</label>
+
+        <div class="choice-grid">
+
+          <div class="choice">
+            <input type="radio" id="security1" name="face_id" value="يعمل" required>
+            <label for="security1">يعمل</label>
+          </div>
+
+          <div class="choice">
+            <input type="radio" id="security2" name="face_id" value="لا يعمل">
+            <label for="security2">لا يعمل</label>
+          </div>
+
+          <div class="choice">
+            <input type="radio" id="security3" name="face_id" value="غير متوفر">
+            <label for="security3">غير متوفر</label>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- CAMERAS -->
+
+      <div class="field">
+
+        <label class="label">الكاميرات</label>
+
+        <div class="choice-grid">
+
+          <div class="choice">
+            <input type="radio" id="camera1" name="cameras" value="تعمل" required>
+            <label for="camera1">تعمل</label>
+          </div>
+
+          <div class="choice">
+            <input type="radio" id="camera2" name="cameras" value="بها مشكلة">
+            <label for="camera2">بها مشكلة</label>
+          </div>
+
+          <div class="choice">
+            <input type="radio" id="camera3" name="cameras" value="لا تعمل">
+            <label for="camera3">لا تعمل</label>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- CHARGING -->
+
+      <div class="field">
+
+        <label class="label">الشحن</label>
+
+        <div class="choice-grid">
+
+          <div class="choice">
+            <input type="radio" id="charging1" name="charging" value="يعمل" required>
+            <label for="charging1">يعمل</label>
+          </div>
+
+          <div class="choice">
+            <input type="radio" id="charging2" name="charging" value="به مشكلة">
+            <label for="charging2">به مشكلة</label>
+          </div>
+
+          <div class="choice">
+            <input type="radio" id="charging3" name="charging" value="لا يعمل">
+            <label for="charging3">لا يعمل</label>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- REPLACED PARTS -->
+
+      <div class="field">
+
+        <label class="label">القطع المبدلة</label>
+
+        <div class="choice-grid">
+
+          <div class="choice">
+            <input type="radio" id="parts1" name="replaced_parts" value="لا توجد" required>
+            <label for="parts1">لا توجد</label>
+          </div>
+
+          <div class="choice">
+            <input type="radio" id="parts2" name="replaced_parts" value="البطارية">
+            <label for="parts2">البطارية</label>
+          </div>
+
+          <div class="choice">
+            <input type="radio" id="parts3" name="replaced_parts" value="الشاشة">
+            <label for="parts3">الشاشة</label>
+          </div>
+
+          <div class="choice">
+            <input type="radio" id="parts4" name="replaced_parts" value="الكاميرات">
+            <label for="parts4">الكاميرات</label>
+          </div>
+
+          <div class="choice">
+            <input type="radio" id="parts5" name="replaced_parts" value="الهيكل">
+            <label for="parts5">الهيكل</label>
+          </div>
+
+          <div class="choice">
+            <input type="radio" id="parts6" name="replaced_parts" value="أكثر من قطعة">
+            <label for="parts6">أكثر من قطعة</label>
           </div>
 
         </div>
@@ -634,7 +856,9 @@
           <input
             id="price"
             type="number"
-            min="1"
+            min="50000"
+            max="10000000"
+            step="1000"
             inputmode="numeric"
             placeholder="مثال: 850000"
             required
@@ -642,6 +866,10 @@
 
           <span class="price-unit">د.ع</span>
 
+        </div>
+
+        <div class="price-help">
+          السعر من 50,000 إلى 10,000,000 د.ع.
         </div>
 
       </div>
@@ -674,7 +902,7 @@
         <div class="photo-title">أضف صور جهازك</div>
 
         <div class="photo-sub">
-          الصور الحقيقية للجهاز مطلوبة قبل النشر النهائي.
+          الصور الحقيقية للجهاز مطلوبة قبل النشر.
         </div>
 
         <input
@@ -686,6 +914,27 @@
         >
 
         <div class="photo-count" id="photoCount"></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- NOTES -->
+
+    <section class="card">
+
+      <div class="card-title">ملاحظات إضافية</div>
+
+      <div class="field">
+
+        <label class="label">ملاحظات اختيارية</label>
+
+        <textarea
+          id="notes"
+          maxlength="300"
+          placeholder="مثال: الجهاز ويا الكرتون والشاحن، توجد خدشة بسيطة بالزاوية..."
+        ></textarea>
 
       </div>
 
@@ -716,7 +965,6 @@
         <div>
 
           <strong>النجف</strong>
-
           <span>نطاق البيع الحالي</span>
 
         </div>
@@ -731,7 +979,7 @@
     </button>
 
     <div class="note">
-      بعد النشر سيظهر الجهاز ضمن إعلاناتك، ويمكن ربطه لاحقاً بصفحة تفاصيل الجهاز.
+      سيتم حفظ معلومات الجهاز وصوره في قاعدة البيانات.
     </div>
 
   </main>
@@ -836,8 +1084,538 @@
   import { supabase } from "./js/supabase.js";
 
 
+  /*
+   * ============================================================
+   * MZAD PHONE — DEVICE CATALOG
+   * ============================================================
+   */
+
+  const DEVICE_CATALOG = {
+
+    Apple: [
+
+      "iPhone 17 Pro Max",
+      "iPhone 17 Pro",
+      "iPhone 17",
+      "iPhone Air",
+
+      "iPhone 16 Pro Max",
+      "iPhone 16 Pro",
+      "iPhone 16 Plus",
+      "iPhone 16",
+
+      "iPhone 16e",
+
+      "iPhone 15 Pro Max",
+      "iPhone 15 Pro",
+      "iPhone 15 Plus",
+      "iPhone 15",
+
+      "iPhone 14 Pro Max",
+      "iPhone 14 Pro",
+      "iPhone 14 Plus",
+      "iPhone 14",
+
+      "iPhone 13 Pro Max",
+      "iPhone 13 Pro",
+      "iPhone 13",
+      "iPhone 13 mini",
+
+      "iPhone 12 Pro Max",
+      "iPhone 12 Pro",
+      "iPhone 12",
+      "iPhone 12 mini",
+
+      "iPhone 11 Pro Max",
+      "iPhone 11 Pro",
+      "iPhone 11",
+
+      "iPhone XS Max",
+      "iPhone XS",
+      "iPhone XR",
+      "iPhone X",
+
+      "iPhone 8 Plus",
+      "iPhone 8",
+
+      "iPhone 7 Plus",
+      "iPhone 7",
+
+      "iPhone SE (3rd generation)",
+      "iPhone SE (2nd generation)"
+    ],
+
+
+    Samsung: [
+
+      "Galaxy S26 Ultra",
+      "Galaxy S26+",
+      "Galaxy S26",
+
+      "Galaxy S25 Ultra",
+      "Galaxy S25+",
+      "Galaxy S25",
+      "Galaxy S25 Edge",
+
+      "Galaxy S24 Ultra",
+      "Galaxy S24+",
+      "Galaxy S24",
+      "Galaxy S24 FE",
+
+      "Galaxy S23 Ultra",
+      "Galaxy S23+",
+      "Galaxy S23",
+      "Galaxy S23 FE",
+
+      "Galaxy S22 Ultra",
+      "Galaxy S22+",
+      "Galaxy S22",
+      "Galaxy S22 FE",
+
+      "Galaxy S21 Ultra",
+      "Galaxy S21+",
+      "Galaxy S21",
+      "Galaxy S21 FE",
+
+      "Galaxy S20 Ultra",
+      "Galaxy S20+",
+      "Galaxy S20",
+      "Galaxy S20 FE",
+
+      "Galaxy Note20 Ultra",
+      "Galaxy Note20",
+
+      "Galaxy Z Fold7",
+      "Galaxy Z Fold6",
+      "Galaxy Z Fold5",
+      "Galaxy Z Fold4",
+      "Galaxy Z Fold3",
+
+      "Galaxy Z Flip7",
+      "Galaxy Z Flip6",
+      "Galaxy Z Flip5",
+      "Galaxy Z Flip4",
+      "Galaxy Z Flip3",
+
+      "Galaxy A56",
+      "Galaxy A55",
+      "Galaxy A54",
+      "Galaxy A53",
+      "Galaxy A52",
+      "Galaxy A51",
+
+      "Galaxy A36",
+      "Galaxy A35",
+      "Galaxy A34",
+      "Galaxy A33",
+
+      "Galaxy A26",
+      "Galaxy A25",
+      "Galaxy A24",
+      "Galaxy A23",
+
+      "Galaxy A16",
+      "Galaxy A15",
+      "Galaxy A14",
+      "Galaxy A13",
+
+      "Galaxy A06",
+      "Galaxy A05s",
+      "Galaxy A05",
+
+      "Galaxy M55",
+      "Galaxy M54",
+      "Galaxy M35",
+      "Galaxy M34",
+      "Galaxy M15"
+    ],
+
+
+    Xiaomi: [
+
+      "Xiaomi 15 Ultra",
+      "Xiaomi 15 Pro",
+      "Xiaomi 15",
+
+      "Xiaomi 14 Ultra",
+      "Xiaomi 14 Pro",
+      "Xiaomi 14",
+
+      "Xiaomi 13 Ultra",
+      "Xiaomi 13 Pro",
+      "Xiaomi 13",
+
+      "Xiaomi 12 Pro",
+      "Xiaomi 12",
+
+      "Redmi Note 14 Pro+",
+      "Redmi Note 14 Pro",
+      "Redmi Note 14",
+
+      "Redmi Note 13 Pro+",
+      "Redmi Note 13 Pro",
+      "Redmi Note 13",
+
+      "Redmi Note 12 Pro+",
+      "Redmi Note 12 Pro",
+      "Redmi Note 12",
+
+      "Redmi Note 11 Pro",
+      "Redmi Note 11",
+
+      "Redmi 14C",
+      "Redmi 13C",
+      "Redmi 12",
+      "Redmi 10",
+
+      "POCO F7 Ultra",
+      "POCO F7 Pro",
+      "POCO F7",
+
+      "POCO F6 Pro",
+      "POCO F6",
+
+      "POCO X7 Pro",
+      "POCO X7",
+      "POCO X6 Pro",
+      "POCO X6",
+
+      "POCO M7 Pro",
+      "POCO M6 Pro"
+    ],
+
+
+    Google: [
+
+      "Pixel 10 Pro XL",
+      "Pixel 10 Pro",
+      "Pixel 10",
+
+      "Pixel 9 Pro XL",
+      "Pixel 9 Pro",
+      "Pixel 9",
+      "Pixel 9 Pro Fold",
+      "Pixel 9a",
+
+      "Pixel 8 Pro",
+      "Pixel 8",
+      "Pixel 8a",
+
+      "Pixel 7 Pro",
+      "Pixel 7",
+      "Pixel 7a",
+
+      "Pixel 6 Pro",
+      "Pixel 6",
+      "Pixel 6a",
+
+      "Pixel 5",
+      "Pixel 5a"
+    ],
+
+
+    Huawei: [
+
+      "Mate 70 Pro+",
+      "Mate 70 Pro",
+      "Mate 70",
+
+      "Mate 60 Pro+",
+      "Mate 60 Pro",
+      "Mate 60",
+
+      "Mate 50 Pro",
+      "Mate 50",
+
+      "Mate 40 Pro",
+      "Mate 40",
+
+      "Pura 70 Ultra",
+      "Pura 70 Pro",
+      "Pura 70",
+
+      "P60 Pro",
+      "P60",
+
+      "P50 Pro",
+      "P50",
+
+      "Nova 13 Pro",
+      "Nova 13",
+
+      "Nova 12 Pro",
+      "Nova 12",
+
+      "Nova 11 Pro",
+      "Nova 11",
+
+      "Nova 10 Pro",
+      "Nova 10"
+    ],
+
+
+    OPPO: [
+
+      "Find X8 Ultra",
+      "Find X8 Pro",
+      "Find X8",
+
+      "Find X7 Ultra",
+      "Find X7",
+
+      "Find X6 Pro",
+      "Find X6",
+
+      "Find X5 Pro",
+      "Find X5",
+
+      "Reno 14 Pro",
+      "Reno 14",
+      "Reno 13 Pro",
+      "Reno 13",
+
+      "Reno 12 Pro",
+      "Reno 12",
+
+      "Reno 11 Pro",
+      "Reno 11",
+
+      "A5 Pro",
+      "A5",
+      "A3 Pro",
+      "A3",
+      "A2 Pro",
+      "A2"
+    ],
+
+
+    HONOR: [
+
+      "Magic7 Pro",
+      "Magic7",
+      "Magic6 Pro",
+      "Magic6",
+
+      "Magic V5",
+      "Magic V3",
+      "Magic V2",
+
+      "Magic Vs",
+
+      "HONOR 400 Pro",
+      "HONOR 400",
+      "HONOR 300 Pro",
+      "HONOR 300",
+
+      "HONOR 200 Pro",
+      "HONOR 200",
+
+      "HONOR 90",
+      "HONOR 90 Lite",
+
+      "X9c",
+      "X9b",
+      "X8c",
+      "X8b",
+      "X7c",
+      "X7b",
+
+      "X6c",
+      "X6b"
+    ],
+
+
+    OnePlus: [
+
+      "OnePlus 13",
+      "OnePlus 13R",
+
+      "OnePlus 12",
+      "OnePlus 12R",
+
+      "OnePlus 11",
+      "OnePlus 11R",
+
+      "OnePlus 10 Pro",
+      "OnePlus 10T",
+
+      "OnePlus 9 Pro",
+      "OnePlus 9",
+
+      "OnePlus Open",
+
+      "OnePlus Nord 5",
+      "OnePlus Nord 4",
+      "OnePlus Nord 3",
+      "OnePlus Nord 2T",
+
+      "OnePlus Nord CE5",
+      "OnePlus Nord CE4"
+    ],
+
+
+    realme: [
+
+      "GT 7 Pro",
+      "GT 7",
+      "GT 6",
+      "GT 5",
+
+      "GT Neo 6",
+      "GT Neo 5",
+
+      "12 Pro+",
+      "12 Pro",
+      "12",
+
+      "11 Pro+",
+      "11 Pro",
+      "11",
+
+      "C75",
+      "C65",
+      "C55",
+      "C53",
+
+      "Narzo 80 Pro",
+      "Narzo 70 Pro",
+      "Narzo 60 Pro"
+    ],
+
+
+    Motorola: [
+
+      "Razr 60 Ultra",
+      "Razr 60",
+      "Razr 50 Ultra",
+      "Razr 50",
+
+      "Edge 60 Pro",
+      "Edge 60",
+      "Edge 50 Ultra",
+      "Edge 50 Pro",
+      "Edge 50",
+
+      "Moto G86",
+      "Moto G85",
+      "Moto G75",
+      "Moto G55",
+      "Moto G54",
+
+      "Moto G Power",
+      "Moto G Stylus"
+    ],
+
+
+    Sony: [
+
+      "Xperia 1 VII",
+      "Xperia 1 VI",
+      "Xperia 1 V",
+      "Xperia 1 IV",
+
+      "Xperia 5 V",
+      "Xperia 5 IV",
+      "Xperia 5 III",
+
+      "Xperia 10 VI",
+      "Xperia 10 V",
+      "Xperia 10 IV",
+
+      "Xperia Pro-I"
+    ],
+
+
+    Nokia: [
+
+      "Nokia X30",
+      "Nokia X20",
+      "Nokia X10",
+
+      "Nokia G60",
+      "Nokia G50",
+      "Nokia G42",
+      "Nokia G22",
+      "Nokia G21",
+
+      "Nokia C32",
+      "Nokia C31",
+      "Nokia C22",
+
+      "Nokia 8.3 5G",
+      "Nokia 7.2",
+      "Nokia 6.2"
+    ],
+
+
+    Tecno: [
+
+      "Phantom V Fold2",
+      "Phantom V Fold",
+      "Phantom V Flip2",
+      "Phantom V Flip",
+
+      "Camon 40 Pro",
+      "Camon 40",
+      "Camon 30 Pro",
+      "Camon 30",
+
+      "Camon 20 Pro",
+      "Camon 20",
+
+      "Pova 7 Pro",
+      "Pova 7",
+      "Pova 6 Pro",
+      "Pova 6",
+
+      "Spark 30 Pro",
+      "Spark 30",
+      "Spark 20 Pro",
+      "Spark 20"
+    ],
+
+
+    Infinix: [
+
+      "ZERO 40 Pro",
+      "ZERO 40",
+      "ZERO 30",
+
+      "NOTE 50 Pro+",
+      "NOTE 50 Pro",
+      "NOTE 50",
+      "NOTE 40 Pro+",
+      "NOTE 40 Pro",
+      "NOTE 40",
+
+      "GT 30 Pro",
+      "GT 20 Pro",
+
+      "HOT 50 Pro+",
+      "HOT 50 Pro",
+      "HOT 50",
+
+      "HOT 40 Pro",
+      "HOT 40",
+
+      "Smart 9 Pro",
+      "Smart 9",
+      "Smart 8"
+    ]
+
+  };
+
+
   const toast = document.getElementById("toast");
   const submitBtn = document.getElementById("submitBtn");
+
+  const brandInput = document.getElementById("brand");
+  const modelInput = document.getElementById("model");
+  const modelStatus = document.getElementById("modelStatus");
+
+  const batteryField = document.getElementById("batteryField");
+  const batteryInput = document.getElementById("battery");
+
   const photosInput = document.getElementById("photos");
   const photoCount = document.getElementById("photoCount");
 
@@ -851,33 +1629,127 @@
     clearTimeout(window.__toastTimer);
 
     window.__toastTimer = setTimeout(() => {
-
       toast.classList.remove("show");
-
     },2600);
 
   }
 
 
-  async function requireLogin(){
+  /*
+   * BRAND → MODEL
+   */
 
-    const { data, error } =
-      await supabase.auth.getSession();
+  function updateModels(){
+
+    const brand = brandInput.value;
+
+    modelInput.innerHTML = "";
+
+    modelInput.disabled = true;
+
+    modelStatus.textContent =
+      "بعد اختيار الشركة راح تظهر موديلاتها.";
 
 
-    if(error || !data?.session){
+    if(!brand){
 
-      window.location.href =
-        "index.html?login=1&returnTo=" +
-        encodeURIComponent("sell.html");
+      modelInput.innerHTML =
+        '<option value="">اختار الشركة أولاً</option>';
 
-      return null;
+      return;
 
     }
 
-    return data.session.user;
+
+    const models =
+      DEVICE_CATALOG[brand] || [];
+
+
+    if(models.length === 0){
+
+      modelInput.innerHTML =
+        '<option value="">لا توجد موديلات حالياً</option>';
+
+      modelStatus.textContent =
+        "راح نضيف موديلات هذه الشركة لاحقاً.";
+
+      return;
+
+    }
+
+
+    modelInput.innerHTML =
+      '<option value="">اختر الموديل</option>' +
+      models.map(model => {
+
+        return `
+          <option value="${escapeHtml(model)}">
+            ${escapeHtml(model)}
+          </option>
+        `;
+
+      }).join("");
+
+
+    modelInput.disabled = false;
+
+    modelStatus.textContent =
+      `متوفر ${models.length} موديل للاختيار.`;
 
   }
+
+
+  function escapeHtml(value){
+
+    return String(value ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+
+  }
+
+
+  brandInput.addEventListener(
+    "change",
+    updateModels
+  );
+
+
+  /*
+   * APPLE BATTERY
+   */
+
+  function updateBattery(){
+
+    const isApple =
+      brandInput.value === "Apple";
+
+
+    if(isApple){
+
+      batteryField.style.display = "block";
+
+      batteryInput.required = true;
+
+    }else{
+
+      batteryField.style.display = "none";
+
+      batteryInput.required = false;
+
+      batteryInput.value = "";
+
+    }
+
+  }
+
+
+  brandInput.addEventListener(
+    "change",
+    updateBattery
+  );
 
 
   document
@@ -898,9 +1770,7 @@
         const url = button.dataset.go;
 
         if(url){
-
           window.location.href = url;
-
         }
 
       });
@@ -908,9 +1778,15 @@
     });
 
 
-  photosInput.addEventListener("change", () => {
+  /*
+   * PHOTOS
+   */
 
-    const count = photosInput.files?.length || 0;
+  photosInput.addEventListener("change",() => {
+
+    const count =
+      photosInput.files?.length || 0;
+
 
     if(count === 0){
 
@@ -921,10 +1797,12 @@
 
     }
 
+
     photoCount.textContent =
       count === 1
         ? "تم اختيار صورة واحدة"
         : `تم اختيار ${count} صور`;
+
 
     photoCount.style.display = "block";
 
@@ -936,29 +1814,60 @@
     const originalName =
       file.name?.split(".").pop()?.toLowerCase();
 
-    if(originalName && /^[a-z0-9]+$/.test(originalName)){
+
+    if(
+      originalName &&
+      /^[a-z0-9]+$/.test(originalName)
+    ){
 
       return originalName;
 
     }
 
+
     const mime =
       file.type?.split("/").pop()?.toLowerCase();
 
-    if(mime === "jpeg") return "jpg";
+
+    if(mime === "jpeg"){
+      return "jpg";
+    }
+
 
     return mime || "jpg";
 
   }
 
 
-  async function uploadDeviceImages(user, files){
+  async function requireLogin(){
+
+    const { data, error } =
+      await supabase.auth.getSession();
+
+
+    if(error || !data?.session){
+
+      window.location.href =
+        "index.html?login=1&returnTo=" +
+        encodeURIComponent("sell.html");
+
+      return null;
+
+    }
+
+
+    return data.session.user;
+
+  }
+
+
+  async function uploadDeviceImages(user,files){
 
     const uploadedPaths = [];
     const publicUrls = [];
 
 
-    for(let i = 0; i < files.length; i++){
+    for(let i=0;i<files.length;i++){
 
       const file = files[i];
 
@@ -986,15 +1895,15 @@
         await supabase
           .storage
           .from("device-images")
-          .upload(path, file, {
-
-            cacheControl: "3600",
-
-            contentType: file.type,
-
-            upsert: false
-
-          });
+          .upload(
+            path,
+            file,
+            {
+              cacheControl:"3600",
+              contentType:file.type,
+              upsert:false
+            }
+          );
 
 
       if(uploadError){
@@ -1026,7 +1935,9 @@
       }
 
 
-      publicUrls.push(data.publicUrl);
+      publicUrls.push(
+        data.publicUrl
+      );
 
     }
 
@@ -1041,10 +1952,8 @@
 
   async function removeUploadedImages(paths){
 
-    if(!paths || paths.length === 0){
-
+    if(!paths?.length){
       return;
-
     }
 
 
@@ -1067,56 +1976,119 @@
   }
 
 
+  /*
+   * SAVE DEVICE
+   */
+
   async function saveDevice(){
 
-    const user = await requireLogin();
+    const user =
+      await requireLogin();
+
 
     if(!user){
-
       return;
-
     }
 
 
     const brand =
-      document.getElementById("brand").value.trim();
+      brandInput.value.trim();
 
 
     const model =
-      document.getElementById("model").value.trim();
+      modelInput.value.trim();
 
 
     const storage =
-      document.getElementById("storage").value.trim();
+      document
+        .getElementById("storage")
+        .value
+        .trim();
 
 
     const color =
-      document.getElementById("color").value.trim();
+      document
+        .getElementById("color")
+        .value
+        .trim();
+
+
+    const isApple =
+      brand === "Apple";
 
 
     const battery =
-      Number(
-        document.getElementById("battery").value
-      );
+      isApple
+        ? Number(batteryInput.value)
+        : null;
 
 
-    const condition =
-      document.querySelector(
-        'input[name="condition"]:checked'
-      )?.value || "";
+    const bodyCondition =
+      document
+        .querySelector(
+          'input[name="body_condition"]:checked'
+        )?.value || "";
+
+
+    const screenCondition =
+      document
+        .querySelector(
+          'input[name="screen_condition"]:checked'
+        )?.value || "";
+
+
+    const faceId =
+      document
+        .querySelector(
+          'input[name="face_id"]:checked'
+        )?.value || "";
+
+
+    const cameras =
+      document
+        .querySelector(
+          'input[name="cameras"]:checked'
+        )?.value || "";
+
+
+    const charging =
+      document
+        .querySelector(
+          'input[name="charging"]:checked'
+        )?.value || "";
+
+
+    const replacedParts =
+      document
+        .querySelector(
+          'input[name="replaced_parts"]:checked'
+        )?.value || "";
 
 
     const price =
       Number(
-        document.getElementById("price").value
+        document
+          .getElementById("price")
+          .value
       );
+
+
+    const notes =
+      document
+        .getElementById("notes")
+        .value
+        .trim();
 
 
     const photos =
       Array.from(
-        document.getElementById("photos").files || []
+        photosInput.files || []
       );
 
+
+    /*
+     * VALIDATION
+     */
 
     if(!brand){
 
@@ -1128,7 +2100,7 @@
 
     if(!model){
 
-      showToast("اكتب موديل الجهاز");
+      showToast("اختار موديل الجهاز");
       return;
 
     }
@@ -1150,25 +2122,100 @@
     }
 
 
-    if(!battery || battery < 1 || battery > 100){
+    if(isApple){
 
-      showToast("أدخل صحة البطارية من 1 إلى 100");
+      if(
+        !Number.isInteger(battery) ||
+        battery < 1 ||
+        battery > 100
+      ){
+
+        showToast(
+          "أدخل صحة البطارية من 1 إلى 100"
+        );
+
+        return;
+
+      }
+
+    }
+
+
+    if(!bodyCondition){
+
+      showToast("اختار حالة الهيكل");
       return;
 
     }
 
 
-    if(!condition){
+    if(!screenCondition){
 
-      showToast("اختار حالة الجهاز");
+      showToast("اختار حالة الشاشة");
       return;
 
     }
 
 
-    if(!price || price < 1){
+    if(!faceId){
 
-      showToast("أدخل سعر الجهاز");
+      showToast(
+        "اختار حالة Face ID أو البصمة"
+      );
+
+      return;
+
+    }
+
+
+    if(!cameras){
+
+      showToast("اختار حالة الكاميرات");
+      return;
+
+    }
+
+
+    if(!charging){
+
+      showToast("اختار حالة الشحن");
+      return;
+
+    }
+
+
+    if(!replacedParts){
+
+      showToast(
+        "اختار القطع المبدلة"
+      );
+
+      return;
+
+    }
+
+
+    if(
+      !Number.isInteger(price) ||
+      price < 50000 ||
+      price > 10000000
+    ){
+
+      showToast(
+        "السعر لازم يكون بين 50,000 و 10,000,000 د.ع"
+      );
+
+      return;
+
+    }
+
+
+    if(price % 1000 !== 0){
+
+      showToast(
+        "السعر لازم يكون بزيادة 1,000 د.ع"
+      );
+
       return;
 
     }
@@ -1176,7 +2223,10 @@
 
     if(photos.length === 0){
 
-      showToast("أضف صورة واحدة على الأقل للجهاز");
+      showToast(
+        "أضف صورة واحدة على الأقل للجهاز"
+      );
+
       return;
 
     }
@@ -1184,29 +2234,34 @@
 
     if(photos.length > 10){
 
-      showToast("الحد الأقصى 10 صور للجهاز");
-      return;
-
-    }
-
-
-    const invalidImage =
-      photos.find(
-        file => !file.type.startsWith("image/")
+      showToast(
+        "الحد الأقصى 10 صور للجهاز"
       );
 
-
-    if(invalidImage){
-
-      showToast("تأكد أن كل الملفات صور");
       return;
 
     }
 
+
+    if(notes.length > 300){
+
+      showToast(
+        "الملاحظات أقصى شيء 300 حرف"
+      );
+
+      return;
+
+    }
+
+
+    /*
+     * SUBMIT
+     */
 
     submitBtn.disabled = true;
 
-    submitBtn.textContent = "جاري رفع الصور...";
+    submitBtn.textContent =
+      "جاري رفع الصور...";
 
 
     const fullName =
@@ -1245,36 +2300,50 @@
         "جاري نشر الجهاز...";
 
 
-      const { data, error } =
+      const { data,error } =
         await supabase
           .from("devices")
           .insert({
 
-            brand: brand,
+            brand:brand,
 
-            model: model,
+            model:model,
 
-            storage: storage,
+            storage:storage,
 
-            color: color,
+            color:color,
 
-            battery_health: battery,
+            battery_health:battery,
 
-            condition: condition,
+            condition:bodyCondition,
 
-            price: price,
+            body_condition:bodyCondition,
 
-            location: "النجف",
+            screen_condition:screenCondition,
 
-            sale_type: "direct",
+            face_id:faceId,
 
-            seller_id: user.id,
+            cameras:cameras,
 
-            seller_name: fullName,
+            charging:charging,
 
-            seller_phone: phone,
+            replaced_parts:replacedParts,
 
-            images: images
+            price:price,
+
+            location:"النجف",
+
+            sale_type:"direct",
+
+            seller_id:user.id,
+
+            seller_name:fullName,
+
+            seller_phone:phone,
+
+            images:images,
+
+            notes:notes || null
 
           })
           .select()
