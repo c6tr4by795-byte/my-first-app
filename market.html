@@ -76,11 +76,9 @@ HEADER
       #F0EDFF 100%
     );
 
-  border-bottom:
-    1px solid var(--line);
+  border-bottom:1px solid var(--line);
 
-  border-radius:
-    0 0 24px 24px;
+  border-radius:0 0 24px 24px;
 
   box-shadow:
     0 8px 24px rgba(23,32,42,.045);
@@ -180,8 +178,7 @@ SEARCH
 
   background:#fff;
 
-  border:
-    1px solid var(--line);
+  border:1px solid var(--line);
 
   border-radius:15px;
 
@@ -328,8 +325,7 @@ DEVICES GRID
 
   background:#fff;
 
-  border:
-    1px solid var(--line);
+  border:1px solid var(--line);
 
   border-radius:19px;
 
@@ -389,8 +385,7 @@ DEVICES GRID
 
   border-radius:50%;
 
-  background:
-    rgba(255,255,255,.97);
+  background:rgba(255,255,255,.97);
 
   display:grid;
   place-items:center;
@@ -403,6 +398,10 @@ DEVICES GRID
   z-index:3;
 }
 
+.favorite.active{
+  color:var(--purple);
+}
+
 .sale-type{
   position:absolute;
 
@@ -413,8 +412,7 @@ DEVICES GRID
 
   border-radius:8px;
 
-  background:
-    rgba(255,255,255,.95);
+  background:rgba(255,255,255,.95);
 
   color:var(--primary);
 
@@ -563,11 +561,9 @@ BOTTOM NAV
     10px
     calc(7px + var(--safe-bottom));
 
-  background:
-    rgba(255,255,255,.96);
+  background:rgba(255,255,255,.96);
 
-  border-top:
-    1px solid #E5E8EB;
+  border-top:1px solid #E5E8EB;
 
   box-shadow:
     0 -9px 25px rgba(23,32,42,.055);
@@ -763,9 +759,9 @@ ANIMATION
 
 <section class="page-head">
 
-  <h1>كل الأجهزة</h1>
+  <h1 id="pageTitle">كل الأجهزة</h1>
 
-  <p>
+  <p id="pageSubtitle">
     تصفح الأجهزة المعروضة للبيع والمزادات
   </p>
 
@@ -873,25 +869,16 @@ ANIMATION
   id="devicesGrid">
 
 
-  <!--
-    هذه بطاقات تصميم فقط حالياً.
-    لاحقاً نستبدلها بالبيانات الحقيقية
-    القادمة من Supabase.
-  -->
-
-
   <article
     class="device-card"
     data-brand="Apple"
     data-device-id="design-1">
-
 
     <div class="device-photo">
 
       <span class="photo-placeholder">
         سيظهر الجهاز الحقيقي هنا
       </span>
-
 
       <button
         class="favorite"
@@ -913,13 +900,11 @@ ANIMATION
 
       </button>
 
-
       <span class="sale-type">
         بيع مباشر
       </span>
 
     </div>
-
 
     <div class="device-info">
 
@@ -953,13 +938,11 @@ ANIMATION
     data-brand="Samsung"
     data-device-id="design-2">
 
-
     <div class="device-photo">
 
       <span class="photo-placeholder">
         سيظهر الجهاز الحقيقي هنا
       </span>
-
 
       <button
         class="favorite"
@@ -981,13 +964,11 @@ ANIMATION
 
       </button>
 
-
       <span class="sale-type">
         بيع مباشر
       </span>
 
     </div>
-
 
     <div class="device-info">
 
@@ -1021,13 +1002,11 @@ ANIMATION
     data-brand="Xiaomi"
     data-device-id="design-3">
 
-
     <div class="device-photo">
 
       <span class="photo-placeholder">
         سيظهر الجهاز الحقيقي هنا
       </span>
-
 
       <button
         class="favorite"
@@ -1049,13 +1028,11 @@ ANIMATION
 
       </button>
 
-
       <span class="sale-type">
         بيع مباشر
       </span>
 
     </div>
-
 
     <div class="device-info">
 
@@ -1089,13 +1066,11 @@ ANIMATION
     data-brand="Google"
     data-device-id="design-4">
 
-
     <div class="device-photo">
 
       <span class="photo-placeholder">
         سيظهر الجهاز الحقيقي هنا
       </span>
-
 
       <button
         class="favorite"
@@ -1117,13 +1092,11 @@ ANIMATION
 
       </button>
 
-
       <span class="sale-type">
         بيع مباشر
       </span>
 
     </div>
-
 
     <div class="device-info">
 
@@ -1184,7 +1157,6 @@ ANIMATION
 
   </div>
 
-
   <h3>
     ماكو أجهزة بهذا التصنيف
   </h3>
@@ -1199,14 +1171,9 @@ ANIMATION
 </main>
 
 
-<!-- =========================
-BOTTOM NAV
-========================= -->
-
 <nav class="bottom-nav">
 
 <div class="bottom-inner">
-
 
 <button
 class="nav-item"
@@ -1325,7 +1292,6 @@ stroke-width="1.7">
 
 </button>
 
-
 </div>
 
 </nav>
@@ -1333,14 +1299,18 @@ stroke-width="1.7">
 
 <script>
 
+/* =========================
+ELEMENTS
+========================= */
+
 const searchInput =
 document.getElementById("searchInput");
 
 const filters =
-document.querySelectorAll(".filter");
+[...document.querySelectorAll(".filter")];
 
 const cards =
-document.querySelectorAll(".device-card");
+[...document.querySelectorAll(".device-card")];
 
 const emptyState =
 document.getElementById("emptyState");
@@ -1354,8 +1324,140 @@ document.getElementById("backBtn");
 const searchFocusBtn =
 document.getElementById("searchFocusBtn");
 
+const pageTitle =
+document.getElementById("pageTitle");
 
-let selectedBrand = "all";
+const pageSubtitle =
+document.getElementById("pageSubtitle");
+
+
+/* =========================
+BRAND DATA
+========================= */
+
+/*
+  القيمة الموجودة بالرابط
+  هي نفسها التي نستخدمها
+  داخل data-brand.
+*/
+
+const brandConfig = {
+
+  all:{
+    title:"كل الأجهزة",
+    subtitle:"تصفح الأجهزة المعروضة للبيع والمزادات"
+  },
+
+  Apple:{
+    title:"أجهزة iPhone",
+    subtitle:"تصفح أجهزة iPhone المعروضة للبيع والمزادات"
+  },
+
+  Samsung:{
+    title:"أجهزة Samsung",
+    subtitle:"تصفح أجهزة Samsung المعروضة للبيع والمزادات"
+  },
+
+  Xiaomi:{
+    title:"أجهزة Xiaomi",
+    subtitle:"تصفح أجهزة Xiaomi المعروضة للبيع والمزادات"
+  },
+
+  Google:{
+    title:"أجهزة Google",
+    subtitle:"تصفح أجهزة Google المعروضة للبيع والمزادات"
+  },
+
+  Huawei:{
+    title:"أجهزة Huawei",
+    subtitle:"تصفح أجهزة Huawei المعروضة للبيع والمزادات"
+  },
+
+  OPPO:{
+    title:"أجهزة OPPO",
+    subtitle:"تصفح أجهزة OPPO المعروضة للبيع والمزادات"
+  },
+
+  HONOR:{
+    title:"أجهزة HONOR",
+    subtitle:"تصفح أجهزة HONOR المعروضة للبيع والمزادات"
+  },
+
+  OnePlus:{
+    title:"أجهزة OnePlus",
+    subtitle:"تصفح أجهزة OnePlus المعروضة للبيع والمزادات"
+  }
+
+};
+
+
+/* =========================
+READ URL
+========================= */
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+let selectedBrand =
+params.get("brand") || "all";
+
+
+/*
+  نخلي القيمة صحيحة
+  حتى إذا الرابط بيه قيمة
+  غير مدعومة.
+*/
+
+if(!brandConfig[selectedBrand]){
+
+selectedBrand = "all";
+
+}
+
+
+/* =========================
+APPLY BRAND FROM URL
+========================= */
+
+function applyBrandFromURL(){
+
+/*
+  تحديد الفلتر المناسب.
+*/
+
+filters.forEach(filter=>{
+
+filter.classList.toggle(
+"active",
+filter.dataset.brand === selectedBrand
+);
+
+});
+
+
+/*
+  تغيير عنوان الصفحة حسب الشركة.
+*/
+
+const config =
+brandConfig[selectedBrand];
+
+pageTitle.textContent =
+config.title;
+
+pageSubtitle.textContent =
+config.subtitle;
+
+
+/*
+  نطبق الفلترة.
+*/
+
+updateDevices();
+
+}
 
 
 /* =========================
@@ -1377,6 +1479,7 @@ cards.forEach(card=>{
 
 const brand =
 card.dataset.brand;
+
 
 const text =
 card.innerText.toLowerCase();
@@ -1418,13 +1521,28 @@ visibleCount === 0
 : "none";
 
 
+if(selectedBrand === "all"){
+
 resultsText.textContent =
 visibleCount
 ? `${visibleCount} أجهزة معروضة`
 : "لا توجد نتائج";
 
+}else{
+
+resultsText.textContent =
+visibleCount
+? `${visibleCount} أجهزة من ${brandConfig[selectedBrand].title.replace("أجهزة ","")}`
+: "لا توجد أجهزة بهذا التصنيف";
+
 }
 
+}
+
+
+/* =========================
+FILTER BUTTONS
+========================= */
 
 filters.forEach(filter=>{
 
@@ -1432,14 +1550,45 @@ filter.addEventListener(
 "click",
 ()=>{
 
+selectedBrand =
+filter.dataset.brand;
+
+
+/*
+  نحدّث الرابط أيضاً.
+  مثلاً:
+  market.html?brand=Samsung
+*/
+
+const newUrl =
+selectedBrand === "all"
+? "market.html"
+: `market.html?brand=${encodeURIComponent(selectedBrand)}`;
+
+
+window.history.replaceState(
+{},
+"",
+newUrl
+);
+
+
 filters.forEach(item=>
 item.classList.remove("active")
 );
 
 filter.classList.add("active");
 
-selectedBrand =
-filter.dataset.brand;
+
+const config =
+brandConfig[selectedBrand];
+
+pageTitle.textContent =
+config.title;
+
+pageSubtitle.textContent =
+config.subtitle;
+
 
 updateDevices();
 
@@ -1447,6 +1596,10 @@ updateDevices();
 
 });
 
+
+/* =========================
+SEARCH
+========================= */
 
 searchInput.addEventListener(
 "input",
@@ -1483,8 +1636,7 @@ card.addEventListener(
 (event)=>{
 
 /*
-  إذا ضغط على زر القلب،
-  لا نفتح الجهاز.
+  القلب مستقل.
 */
 
 if(
@@ -1496,14 +1648,12 @@ return;
 }
 
 
-/*
-  حالياً نفتح صفحة التصميم.
-  لاحقاً نستبدل design-1
-  بالـID الحقيقي من Supabase.
-*/
-
 const id =
 card.dataset.deviceId;
+
+
+if(!id)return;
+
 
 window.location.href =
 `device.html?id=${encodeURIComponent(id)}`;
@@ -1527,21 +1677,10 @@ button.addEventListener(
 
 event.stopPropagation();
 
+
 button.classList.toggle(
 "active"
 );
-
-if(button.classList.contains("active")){
-
-button.style.color =
-"#6F63C9";
-
-}else{
-
-button.style.color =
-"#727A82";
-
-}
 
 });
 
@@ -1602,7 +1741,7 @@ page;
 START
 ========================= */
 
-updateDevices();
+applyBrandFromURL();
 
 </script>
 
