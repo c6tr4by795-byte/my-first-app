@@ -16,7 +16,6 @@
 
 <title>MZAD PHONE — حسابي</title>
 
-
 <style>
 
 /* =====================================================
@@ -105,6 +104,25 @@ button{
 
 button:disabled{
   cursor:default;
+}
+
+
+/* =====================================================
+   REMOVE LINK UNDERLINES
+===================================================== */
+
+a,
+a:link,
+a:visited,
+a:hover,
+a:active{
+
+  color:inherit;
+
+  text-decoration:none !important;
+
+  -webkit-text-decoration:none !important;
+
 }
 
 
@@ -422,6 +440,11 @@ button:disabled{
   text-overflow:ellipsis;
 }
 
+
+/* =====================================================
+   PROFILE EMAIL
+===================================================== */
+
 .profile-email{
 
   margin:
@@ -447,8 +470,21 @@ button:disabled{
 
   text-overflow:ellipsis;
 
-  text-decoration:none;
+  text-decoration:none !important;
+
+  -webkit-text-decoration:none !important;
+
+  border:0 !important;
+
+  box-shadow:none !important;
+
+  outline:none !important;
 }
+
+
+/* =====================================================
+   PROFILE STATUS
+===================================================== */
 
 .profile-status{
 
@@ -535,6 +571,11 @@ button:disabled{
   margin-bottom:5px;
 }
 
+
+/* =====================================================
+   DETAIL VALUE
+===================================================== */
+
 .detail-value{
 
   color:var(--ink);
@@ -555,7 +596,16 @@ button:disabled{
 
   text-overflow:ellipsis;
 
-  text-decoration:none;
+  text-decoration:none !important;
+
+  -webkit-text-decoration:none !important;
+
+  border:0 !important;
+
+  box-shadow:none !important;
+
+  outline:none !important;
+
 }
 
 
@@ -1260,6 +1310,10 @@ button:disabled{
 <body>
 
 
+<!-- =====================================================
+     LOADING
+===================================================== -->
+
 <div
   class="loading"
   id="loading">
@@ -1271,6 +1325,10 @@ button:disabled{
 
 <main class="page">
 
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <header class="header">
 
@@ -1328,6 +1386,10 @@ button:disabled{
 </header>
 
 
+<!-- =====================================================
+     PROFILE
+===================================================== -->
+
 <section class="profile-card">
 
 
@@ -1361,6 +1423,8 @@ button:disabled{
 
   </div>
 
+
+  <!-- ACCOUNT DETAILS -->
 
   <div class="profile-details">
 
@@ -1402,6 +1466,8 @@ button:disabled{
   </div>
 
 
+  <!-- RATING -->
+
   <div class="rating-box">
 
     <div>
@@ -1431,6 +1497,8 @@ button:disabled{
 
   </div>
 
+
+  <!-- STATS -->
 
   <div class="stats">
 
@@ -1492,6 +1560,10 @@ button:disabled{
 </section>
 
 
+<!-- =====================================================
+     ACCOUNT MENU
+===================================================== -->
+
 <section class="section">
 
 
@@ -1508,6 +1580,8 @@ button:disabled{
 
   <div class="menu-card">
 
+
+    <!-- MY LISTINGS -->
 
     <button
       class="menu-item"
@@ -1567,6 +1641,8 @@ button:disabled{
     </button>
 
 
+    <!-- AUCTIONS -->
+
     <button
       class="menu-item"
       id="myAuctionsBtn"
@@ -1618,6 +1694,8 @@ button:disabled{
     </button>
 
 
+    <!-- PURCHASES -->
+
     <button
       class="menu-item"
       id="purchasesBtn"
@@ -1667,6 +1745,8 @@ button:disabled{
 
     </button>
 
+
+    <!-- SALES -->
 
     <button
       class="menu-item"
@@ -1725,6 +1805,10 @@ button:disabled{
 </section>
 
 
+<!-- =====================================================
+     LOGOUT
+===================================================== -->
+
 <button
   class="logout-btn"
   id="logoutBtn"
@@ -1737,6 +1821,10 @@ button:disabled{
 
 </main>
 
+
+<!-- =====================================================
+     BOTTOM NAV
+===================================================== -->
 
 <div class="bottom-wrap">
 
@@ -1873,6 +1961,10 @@ button:disabled{
 </div>
 
 
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
 <div
   class="toast"
   id="toast">
@@ -1884,6 +1976,10 @@ button:disabled{
 import { supabase }
   from "./js/supabase.js";
 
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
 
 const loading =
   document.getElementById(
@@ -1974,6 +2070,10 @@ const salesBtn =
 let toastTimer;
 
 
+/* =====================================================
+   TOAST
+===================================================== */
+
 function showToast(message){
 
   toast.textContent =
@@ -2001,6 +2101,10 @@ function showToast(message){
 
 }
 
+
+/* =====================================================
+   LOAD PROFILE
+===================================================== */
 
 async function loadProfile(){
 
@@ -2063,6 +2167,10 @@ async function loadProfile(){
       email;
 
 
+    /* =================================================
+       LISTINGS COUNT
+    ================================================= */
+
     const {
       count: listingsTotal,
       error: listingsError
@@ -2091,6 +2199,10 @@ async function loadProfile(){
 
     }
 
+
+    /* =================================================
+       CURRENT STATS
+    ================================================= */
 
     ratingNumber.textContent =
       "0.0";
@@ -2190,7 +2302,7 @@ logoutBtn.addEventListener(
       const {
         error
       } =
-        await supabase.auth.signOut();
+      await supabase.auth.signOut();
 
 
       if(error){
