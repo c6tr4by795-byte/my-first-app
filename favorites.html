@@ -2,736 +2,1196 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<meta name="theme-color" content="#f7f8fa">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F7F8FA">
 
 <title>MZAD PHONE — المفضلة</title>
 
 <style>
 
 :root{
---bg:#f7f8fa;
---surface:#fff;
---ink:#17202a;
---muted:#667085;
---line:#e6e9ed;
+  --bg:#F7F8FA;
+  --white:#FFFFFF;
+  --ink:#17202A;
+  --muted:#667085;
+  --line:#E6E9ED;
 
---primary:#176b87;
---primary-dark:#125a73;
---primary-soft:#e8f3f6;
+  --primary:#176B87;
+  --primary-dark:#125A73;
+  --primary-soft:#E8F3F6;
 
---purple:#6f63c9;
---purple-light:#8d83dc;
---purple-soft:#eeeaff;
+  --purple:#6246D9;
+  --purple-dark:#51477D;
 
---danger:#c63c55;
+  --shadow:0 10px 28px rgba(23,32,42,.06);
 
---safe-bottom:env(safe-area-inset-bottom,0px);
-
---shadow:0 14px 34px rgba(24,44,49,.08)
+  --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 
 *{
-box-sizing:border-box
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
 }
 
 html{
-scroll-behavior:smooth
+  scroll-behavior:smooth;
 }
 
 body{
-margin:0;
-min-height:100vh;
+  margin:0;
+  min-height:100vh;
 
-background:var(--bg);
+  background:var(--bg);
+  color:var(--ink);
 
-color:var(--ink);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    "Segoe UI",
+    Tahoma,
+    Arial,
+    sans-serif;
 
-font-family:
--apple-system,
-BlinkMacSystemFont,
-"SF Pro Display",
-"SF Pro Text",
-"Segoe UI",
-Tahoma,
-Arial,
-sans-serif;
-
--webkit-font-smoothing:antialiased
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
 }
 
 button{
-font:inherit;
-border:0;
-cursor:pointer
+  font:inherit;
+  border:0;
+  cursor:pointer;
+  color:inherit;
 }
 
 .page{
-width:min(100%,520px);
-margin:0 auto;
+  width:min(100%,520px);
+  margin:auto;
 
-padding:
-0
-14px
-calc(102px + var(--safe-bottom))
+  padding:
+    0
+    14px
+    calc(100px + var(--safe-bottom));
 }
 
 
-/* =========================
-HEADER
-========================= */
+/* =====================================================
+   HEADER
+===================================================== */
 
 .header{
-margin-inline:-14px;
+  margin-inline:-14px;
 
-padding:
-14px
-14px
-18px;
+  padding:
+    7px
+    14px
+    15px;
 
-background:
-linear-gradient(
-145deg,
-#ffffff 0%,
-#f7f5ff 50%,
-#efecff 100%
-);
+  background:
+    linear-gradient(
+      145deg,
+      #FFFFFF 0%,
+      #F5F2FF 45%,
+      #E6E1FF 100%
+    );
 
-border-radius:
-0
-0
-26px
-26px;
+  border-bottom:
+    1px solid var(--line);
 
-border-bottom:
-1px solid var(--line);
+  border-radius:
+    0
+    0
+    24px
+    24px;
 
-box-shadow:
-0 10px
-26px
-rgba(23,32,42,.05)
+  box-shadow:
+    0 10px
+    26px
+    rgba(23,32,42,.06);
+
+  position:relative;
+  overflow:hidden;
 }
+
+.header::before{
+  content:"";
+
+  position:absolute;
+
+  width:170px;
+  height:170px;
+
+  left:-82px;
+  top:-112px;
+
+  border-radius:50%;
+
+  background:
+    rgba(98,70,217,.055);
+
+  pointer-events:none;
+}
+
+.header::after{
+  content:"";
+
+  position:absolute;
+
+  width:125px;
+  height:125px;
+
+  right:-65px;
+  bottom:-88px;
+
+  border-radius:50%;
+
+  background:
+    rgba(98,70,217,.07);
+
+  pointer-events:none;
+}
+
+
+/* =====================================================
+   TOP BAR
+===================================================== */
 
 .topbar{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:12px
+  position:relative;
+  z-index:2;
+
+  display:flex;
+  align-items:center;
+
+  gap:8px;
 }
 
-.back-btn{
-width:42px;
-height:38px;
+.back-btn,
+.refresh-btn{
+  width:37px;
+  height:37px;
 
-border-radius:13px;
+  flex:0 0 37px;
 
-background:#fff;
+  border-radius:12px;
 
-border:
-1px solid #ddd9f4;
+  background:#fff;
 
-color:var(--primary);
+  border:
+    1px solid #DDD8F8;
 
-display:grid;
-place-items:center;
+  color:var(--primary);
 
-box-shadow:
-0 7px
-18px
-rgba(23,32,42,.05)
+  display:grid;
+  place-items:center;
+
+  box-shadow:
+    0 7px
+    18px
+    rgba(23,32,42,.045);
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease;
+}
+
+.back-btn:active,
+.refresh-btn:active{
+  transform:scale(.93);
+
+  box-shadow:
+    0 4px
+    11px
+    rgba(23,32,42,.05);
 }
 
 .brand{
-display:flex;
+  flex:1;
 
-flex-direction:column;
+  text-align:center;
 
-align-items:center;
-
-line-height:.9;
-
-flex:1
+  line-height:.9;
 }
 
 .brand strong{
-font-size:20px;
+  display:block;
 
-letter-spacing:-.04em
+  font-size:18px;
+  font-weight:950;
+
+  letter-spacing:-.05em;
 }
 
 .brand span{
-font-size:8px;
+  display:block;
 
-font-weight:900;
+  margin-top:3px;
 
-letter-spacing:.18em;
+  color:#8A929A;
 
-color:#89939e;
+  font-size:7px;
+  font-weight:950;
 
-margin-top:4px
-}
-
-.header-spacer{
-width:42px
+  letter-spacing:.2em;
 }
 
 
-/* =========================
-TITLE
-========================= */
+/* =====================================================
+   TITLE
+===================================================== */
 
-.page-title{
-margin-top:20px;
+.header-content{
+  position:relative;
+  z-index:2;
 
-display:flex;
-
-align-items:flex-end;
-
-justify-content:space-between;
-
-gap:12px
+  margin-top:9px;
 }
 
-.page-title h1{
-margin:0;
+.header-title-row{
+  display:flex;
 
-font-size:22px;
+  align-items:center;
+  justify-content:space-between;
 
-font-weight:950;
-
-letter-spacing:-.04em
+  gap:9px;
 }
 
-.page-title p{
-margin:5px 0 0;
-
-font-size:10px;
-
-color:var(--muted)
+.header-title{
+  min-width:0;
 }
 
+.header-title h1{
+  margin:0;
 
-/* =========================
-EMPTY STATE
-========================= */
+  font-size:19px;
+  line-height:1.15;
 
-.empty-card{
-margin-top:17px;
+  font-weight:950;
 
-min-height:310px;
-
-padding:
-30px
-18px;
-
-border-radius:23px;
-
-background:#fff;
-
-border:
-1px solid var(--line);
-
-box-shadow:
-0 12px
-28px
-rgba(23,32,42,.055);
-
-display:flex;
-
-flex-direction:column;
-
-align-items:center;
-
-justify-content:center;
-
-text-align:center;
-
-position:relative;
-
-overflow:hidden
+  letter-spacing:-.045em;
 }
 
-.empty-card:before{
-content:"";
+.header-title p{
+  margin:
+    4px
+    0
+    0;
 
-position:absolute;
+  color:#667085;
 
-width:190px;
-height:190px;
+  font-size:9px;
 
-border-radius:50%;
-
-background:
-rgba(111,99,201,.055);
-
-top:-105px;
-
-right:-65px
+  line-height:1.4;
 }
 
-.empty-card:after{
-content:"";
+.header-count{
+  flex:0 0 auto;
 
-position:absolute;
+  padding:
+    6px
+    9px;
 
-width:130px;
-height:130px;
+  border-radius:10px;
 
-border-radius:50%;
+  background:
+    rgba(255,255,255,.86);
 
-background:
-rgba(23,107,135,.045);
+  border:
+    1px solid rgba(98,70,217,.12);
 
-bottom:-75px;
+  color:#51477D;
 
-left:-50px
-}
+  font-size:8px;
+  font-weight:950;
 
-.empty-icon{
-position:relative;
+  white-space:nowrap;
 
-z-index:2;
-
-width:72px;
-height:72px;
-
-border-radius:22px;
-
-display:grid;
-place-items:center;
-
-background:
-linear-gradient(
-145deg,
-#f0eeff,
-#e7e2ff
-);
-
-color:var(--purple);
-
-border:
-1px solid #ddd8f7;
-
-box-shadow:
-0 12px
-25px
-rgba(98,70,217,.10)
-}
-
-.empty-title{
-position:relative;
-
-z-index:2;
-
-margin:
-17px
-0
-0;
-
-font-size:17px;
-
-font-weight:950
-}
-
-.empty-copy{
-position:relative;
-
-z-index:2;
-
-max-width:290px;
-
-margin:
-7px
-auto
-0;
-
-font-size:10px;
-
-line-height:1.8;
-
-color:var(--muted)
-}
-
-.browse-btn{
-position:relative;
-
-z-index:2;
-
-margin-top:17px;
-
-height:43px;
-
-padding:
-0
-18px;
-
-border-radius:13px;
-
-background:
-linear-gradient(
-145deg,
-#176b87,
-#257f98
-);
-
-color:#fff;
-
-font-size:11px;
-
-font-weight:950;
-
-box-shadow:
-0 10px
-22px
-rgba(23,107,135,.18)
-}
-
-.browse-btn:active{
-transform:scale(.97)
+  box-shadow:
+    0 5px
+    13px
+    rgba(98,70,217,.055);
 }
 
 
-/* =========================
-DEVICE GRID
-========================= */
+/* =====================================================
+   DEVICES
+===================================================== */
 
 .devices-grid{
-margin-top:17px;
+  margin-top:10px;
 
-display:grid;
+  display:grid;
 
-grid-template-columns:
-repeat(2,minmax(0,1fr));
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
 
-gap:10px
+  gap:10px;
 }
 
 .device-card{
-background:#fff;
+  position:relative;
 
-border:
-1px solid #ddd8f7;
+  overflow:hidden;
 
-border-radius:18px;
+  background:#fff;
 
-overflow:hidden;
+  border:
+    1px solid #E5E2F1;
 
-box-shadow:
-0 9px
-22px
-rgba(98,70,217,.08)
+  border-radius:17px;
+
+  box-shadow:
+    0 9px
+    22px
+    rgba(98,70,217,.08);
+
+  cursor:pointer;
+
+  animation:
+    cardIn .38s cubic-bezier(.2,.7,.2,1) both;
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease;
 }
 
-.device-image{
-height:145px;
+.device-card:active{
+  transform:scale(.975);
 
-background:#fff;
-
-display:grid;
-
-place-items:center;
-
-position:relative;
-
-border-bottom:
-1px solid #eeeef3
+  box-shadow:
+    0 6px
+    16px
+    rgba(98,70,217,.06);
 }
 
-.device-image span{
-font-size:9px;
 
-font-weight:900;
+/* =====================================================
+   PHOTO
+===================================================== */
 
-color:#111827;
+.device-photo{
+  height:175px;
 
-background:#fff;
+  background:#fff;
 
-border:
-1px solid #f0eef6;
+  display:grid;
+  place-items:center;
 
-padding:
-7px
-9px;
+  position:relative;
 
-border-radius:10px
+  overflow:hidden;
 }
+
+.device-photo img{
+  width:100%;
+  height:100%;
+
+  display:block;
+
+  object-fit:contain;
+
+  background:#fff;
+}
+
+.photo-placeholder{
+  color:#111827;
+
+  font-size:9px;
+  font-weight:900;
+
+  text-align:center;
+
+  padding:
+    9px
+    11px;
+
+  border-radius:10px;
+
+  background:#FAFAFA;
+
+  border:
+    1px solid #EEEEEE;
+}
+
+
+/* =====================================================
+   REMOVE FAVORITE
+===================================================== */
 
 .remove-btn{
-position:absolute;
+  position:absolute;
 
-top:10px;
+  top:8px;
+  left:8px;
 
-left:10px;
+  width:33px;
+  height:33px;
 
-width:34px;
-height:34px;
+  border-radius:50%;
 
-border-radius:11px;
+  background:
+    linear-gradient(
+      145deg,
+      #6246D9 0%,
+      #5147B8 100%
+    );
 
-display:grid;
+  color:#fff;
 
-place-items:center;
+  display:grid;
+  place-items:center;
 
-background:#fff;
+  box-shadow:
+    0 7px
+    17px
+    rgba(98,70,217,.30);
 
-color:#7d858b;
+  z-index:4;
 
-box-shadow:
-0 7px
-16px
-rgba(23,32,42,.10)
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease;
 }
 
-.device-body{
-padding:11px;
+.remove-btn:active{
+  transform:scale(.88);
 
-background:
-linear-gradient(
-180deg,
-#f3efff 0%,
-#e8e2ff 100%
-)
+  box-shadow:
+    0 4px
+    10px
+    rgba(98,70,217,.20);
 }
 
-.device-title{
-margin:0;
 
-font-size:12px;
+/* =====================================================
+   SALE TYPE
+===================================================== */
 
-font-weight:950;
+.sale-type{
+  position:absolute;
 
-color:#2b2460
+  top:8px;
+  right:8px;
+
+  padding:
+    6px
+    8px;
+
+  border-radius:8px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #FAF9FF 0%,
+      #F0EDFF 100%
+    );
+
+  color:#51477D;
+
+  font-size:8px;
+  font-weight:950;
+
+  box-shadow:
+    0 5px
+    12px
+    rgba(81,71,125,.08);
+
+  z-index:3;
 }
 
-.device-meta{
-margin-top:5px;
 
-font-size:9px;
+/* =====================================================
+   INFO
+===================================================== */
 
-line-height:1.6;
+.device-info{
+  min-height:128px;
 
-color:#646978
+  padding:
+    10px
+    12px
+    10px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #FAF9FF 0%,
+      #F6F3FF 45%,
+      #EEEAFE 100%
+    );
+
+  position:relative;
+
+  overflow:hidden;
+}
+
+.device-info::before{
+  content:"";
+
+  position:absolute;
+
+  width:72px;
+  height:72px;
+
+  right:-35px;
+  top:-38px;
+
+  border-radius:50%;
+
+  background:
+    rgba(98,70,217,.065);
+
+  pointer-events:none;
+}
+
+.device-info::after{
+  content:"";
+
+  position:absolute;
+
+  width:8px;
+  height:8px;
+
+  left:14px;
+  bottom:13px;
+
+  border-radius:3px;
+
+  background:
+    rgba(98,70,217,.10);
+
+  transform:rotate(18deg);
+
+  pointer-events:none;
+}
+
+.device-name{
+  position:relative;
+  z-index:1;
+
+  font-size:15px;
+
+  font-weight:950;
+
+  line-height:1.3;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+
+  letter-spacing:-.02em;
+
+  color:#2B2460;
+}
+
+.device-details{
+  position:relative;
+  z-index:1;
+
+  margin-top:7px;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,minmax(0,1fr));
+
+  gap:5px 8px;
+}
+
+.detail-item{
+  min-width:0;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:2px;
+
+  padding:2px 0;
+}
+
+.detail-item span{
+  color:#7C758F;
+
+  font-size:8px;
+
+  line-height:1.25;
+
+  font-weight:800;
+}
+
+.detail-item strong{
+  min-width:0;
+
+  color:#29243F;
+
+  font-size:10px;
+
+  line-height:1.3;
+
+  font-weight:950;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+}
+
+
+/* =====================================================
+   PRICE
+===================================================== */
+
+.price-row{
+  position:relative;
+  z-index:1;
+
+  margin-top:6px;
+
+  padding-top:5px;
+
+  border-top:
+    1px solid
+    rgba(81,71,125,.12);
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:6px;
+}
+
+.price-label{
+  color:#7C758F;
+
+  font-size:8px;
+
+  line-height:1.2;
+
+  font-weight:800;
 }
 
 .device-price{
-display:block;
+  color:#51477D;
 
-margin-top:9px;
+  font-size:14px;
 
-font-size:12px;
+  line-height:1.1;
 
-font-weight:950
+  font-weight:950;
+
+  white-space:nowrap;
+
+  letter-spacing:-.025em;
 }
 
 
-/* =========================
-BOTTOM NAV
-========================= */
+/* =====================================================
+   EMPTY
+===================================================== */
 
-.bottom-wrap{
-position:fixed;
+.empty-state{
+  margin-top:14px;
 
-left:0;
-right:0;
-bottom:0;
+  padding:
+    28px
+    18px;
 
-padding:
-8px
-12px
-calc(8px + var(--safe-bottom));
+  min-height:300px;
 
-z-index:50;
+  border-radius:21px;
 
-pointer-events:none
+  background:#fff;
+
+  border:
+    1px solid var(--line);
+
+  box-shadow:var(--shadow);
+
+  text-align:center;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  position:relative;
+
+  overflow:hidden;
 }
 
-.bottom-nav{
-width:min(100%,520px);
+.empty-state::before{
+  content:"";
 
-margin:0 auto;
+  position:absolute;
 
-min-height:67px;
+  width:180px;
+  height:180px;
 
-padding:6px;
+  right:-75px;
+  top:-105px;
 
-border-radius:22px;
+  border-radius:50%;
 
-background:
-linear-gradient(
-180deg,
-rgba(255,255,255,.97),
-rgba(232,243,246,.97)
-);
+  background:
+    rgba(98,70,217,.055);
 
-border:
-1px solid
-rgba(23,107,135,.12);
-
-box-shadow:
-0 16px
-36px
-rgba(23,107,135,.16);
-
-backdrop-filter:blur(16px);
-
-display:grid;
-
-grid-template-columns:
-repeat(5,1fr);
-
-gap:4px;
-
-pointer-events:auto
+  pointer-events:none;
 }
 
-.nav-item{
-min-height:55px;
+.empty-state::after{
+  content:"";
 
-display:flex;
+  position:absolute;
 
-flex-direction:column;
+  width:130px;
+  height:130px;
 
-align-items:center;
+  left:-55px;
+  bottom:-78px;
 
-justify-content:center;
+  border-radius:50%;
 
-gap:3px;
+  background:
+    rgba(23,107,135,.045);
 
-border-radius:16px;
-
-color:#7b8794;
-
-background:none
+  pointer-events:none;
 }
 
-.nav-item.active{
-color:var(--primary-dark);
+.empty-icon{
+  position:relative;
+  z-index:1;
 
-background:
-linear-gradient(
-145deg,
-#e8f3f6,
-#dceef2
-)
+  width:62px;
+  height:62px;
+
+  border-radius:19px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #F0EEFF,
+      #E7E2FF
+    );
+
+  color:var(--purple);
+
+  border:
+    1px solid #DDD8F7;
+
+  display:grid;
+  place-items:center;
+
+  box-shadow:
+    0 11px
+    24px
+    rgba(98,70,217,.10);
 }
 
-.nav-label{
-font-size:9px;
+.empty-state h3{
+  position:relative;
+  z-index:1;
 
-font-weight:900
+  margin:
+    15px
+    0
+    0;
+
+  font-size:16px;
+
+  font-weight:950;
 }
 
-.nav-icon{
-width:22px;
-height:22px
+.empty-state p{
+  position:relative;
+  z-index:1;
+
+  max-width:285px;
+
+  margin:
+    7px
+    auto
+    0;
+
+  color:var(--muted);
+
+  font-size:10px;
+
+  line-height:1.8;
+}
+
+.browse-btn{
+  position:relative;
+  z-index:1;
+
+  margin-top:16px;
+
+  height:43px;
+
+  padding:
+    0
+    18px;
+
+  border-radius:13px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #176B87,
+      #257F98
+    );
+
+  color:#fff;
+
+  font-size:11px;
+
+  font-weight:950;
+
+  box-shadow:
+    0 10px
+    22px
+    rgba(23,107,135,.18);
+
+  transition:
+    transform .18s ease;
+}
+
+.browse-btn:active{
+  transform:scale(.97);
 }
 
 
-/* =========================
-LOADING
-========================= */
+/* =====================================================
+   LOADING
+===================================================== */
 
-.loading{
-position:fixed;
+.loading-state{
+  grid-column:1 / -1;
 
-inset:0;
+  padding:
+    32px
+    18px;
 
-background:var(--bg);
+  text-align:center;
 
-z-index:100;
+  color:var(--muted);
 
-display:flex;
+  font-size:11px;
 
-align-items:center;
+  background:#fff;
 
-justify-content:center;
+  border:
+    1px solid var(--line);
 
-transition:.3s ease
+  border-radius:19px;
 }
 
-.loading.hidden{
-opacity:0;
+.loading-spinner{
+  width:29px;
+  height:29px;
 
-visibility:hidden;
+  margin:
+    0
+    auto
+    10px;
 
-pointer-events:none
-}
+  border-radius:50%;
 
-.loader{
-width:34px;
-height:34px;
+  border:
+    3px solid #E5E8EB;
 
-border:
-3px solid
-#dbe8eb;
+  border-top-color:
+    var(--purple);
 
-border-top-color:
-var(--primary);
-
-border-radius:50%;
-
-animation:
-spin .8s linear infinite
+  animation:
+    spin .8s linear infinite;
 }
 
 @keyframes spin{
-to{
-transform:rotate(360deg)
-}
+  to{
+    transform:rotate(360deg);
+  }
 }
 
 
-/* =========================
-TOAST
-========================= */
+/* =====================================================
+   BOTTOM NAV
+===================================================== */
+
+.bottom-nav{
+  position:fixed;
+
+  left:0;
+  right:0;
+  bottom:0;
+
+  z-index:40;
+
+  padding:
+    7px
+    10px
+    calc(7px + var(--safe-bottom));
+
+  background:
+    rgba(255,255,255,.97);
+
+  border-top:
+    1px solid rgba(23,107,135,.10);
+
+  box-shadow:
+    0 -10px
+    28px
+    rgba(23,107,135,.07);
+
+  backdrop-filter:blur(16px);
+}
+
+.bottom-inner{
+  width:min(100%,520px);
+
+  margin:auto;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(5,1fr);
+
+  align-items:center;
+}
+
+.nav-item{
+  min-width:0;
+
+  height:51px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:4px;
+
+  color:#858D94;
+
+  background:transparent;
+
+  font-size:8px;
+  font-weight:850;
+
+  transition:
+    color .18s ease,
+    transform .18s ease;
+}
+
+.nav-item:active{
+  transform:scale(.95);
+}
+
+.nav-item.active{
+  color:var(--primary-dark);
+}
+
+.nav-icon{
+  width:21px;
+  height:21px;
+}
+
+.add-button{
+  width:43px;
+  height:43px;
+
+  margin-top:-13px;
+
+  border-radius:15px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #176B87,
+      #257F98
+    );
+
+  color:#fff;
+
+  display:grid;
+  place-items:center;
+
+  box-shadow:
+    0 8px
+    20px
+    rgba(23,107,135,.20);
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
 
 .toast{
-position:fixed;
+  position:fixed;
 
-left:50%;
+  left:50%;
+  bottom:88px;
 
-bottom:94px;
+  transform:
+    translateX(-50%)
+    translateY(12px);
 
-transform:
-translateX(-50%)
-translateY(16px);
+  max-width:
+    calc(100% - 40px);
 
-max-width:
-calc(100% - 40px);
+  padding:
+    10px
+    14px;
 
-padding:
-10px
-14px;
+  border-radius:13px;
 
-border-radius:13px;
+  background:#1E2C30;
 
-background:#1e2c30;
+  color:#fff;
 
-color:#fff;
+  font-size:11px;
 
-font-size:11px;
+  font-weight:800;
 
-font-weight:800;
+  text-align:center;
 
-box-shadow:var(--shadow);
+  box-shadow:
+    0 12px
+    30px
+    rgba(23,32,42,.16);
 
-opacity:0;
+  opacity:0;
 
-pointer-events:none;
+  pointer-events:none;
 
-transition:.25s ease;
+  transition:
+    opacity .22s ease,
+    transform .22s ease;
 
-z-index:80;
-
-text-align:center
+  z-index:80;
 }
 
 .toast.show{
-opacity:1;
+  opacity:1;
 
-transform:
-translateX(-50%)
-translateY(0)
+  transform:
+    translateX(-50%)
+    translateY(0);
+}
+
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+.header{
+  animation:
+    headerIn .42s cubic-bezier(.2,.7,.2,1) both;
+}
+
+.header-content{
+  animation:
+    contentIn .42s .05s cubic-bezier(.2,.7,.2,1) both;
+}
+
+.empty-state{
+  animation:
+    contentIn .42s .09s cubic-bezier(.2,.7,.2,1) both;
+}
+
+@keyframes headerIn{
+  from{
+    opacity:0;
+    transform:translateY(-10px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes contentIn{
+  from{
+    opacity:0;
+    transform:translateY(7px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes cardIn{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+
+@media(max-width:360px){
+
+  .device-photo{
+    height:175px;
+  }
+
+  .device-info{
+    min-height:126px;
+
+    padding:
+      9px
+      10px
+      9px;
+  }
+
+  .device-name{
+    font-size:14px;
+  }
+
+  .detail-item span{
+    font-size:7px;
+  }
+
+  .detail-item strong{
+    font-size:9px;
+  }
+
+  .device-price{
+    font-size:13px;
+  }
+
+}
+
+
+@media(prefers-reduced-motion:reduce){
+
+  *,
+  *::before,
+  *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+
 }
 
 </style>
@@ -741,149 +1201,160 @@ translateY(0)
 <body>
 
 
-<div
-class="loading"
-id="loading">
-
-<div class="loader"></div>
-
-</div>
-
-
 <main class="page">
 
 
 <header class="header">
 
-<div class="topbar">
+  <div class="topbar">
+
+    <button
+      class="back-btn"
+      id="backBtn"
+      type="button"
+      aria-label="رجوع">
+
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2">
+
+        <path d="M15 18l-6-6 6-6"/>
+
+      </svg>
+
+    </button>
 
 
-<button
-class="back-btn"
-id="backBtn"
-type="button">
+    <div class="brand">
 
-<svg
-width="21"
-height="21"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="2"
-stroke-linecap="round"
-stroke-linejoin="round">
+      <strong>MZAD</strong>
 
-<path d="M15 18l-6-6 6-6"/>
+      <span>PHONE</span>
 
-</svg>
-
-</button>
+    </div>
 
 
-<div class="brand">
+    <button
+      class="refresh-btn"
+      id="refreshBtn"
+      type="button"
+      aria-label="تحديث">
 
-<strong>MZAD</strong>
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8">
 
-<span>PHONE</span>
+        <path
+          d="M20 11a8 8 0 0 0-14.9-4M4 5v4h4"/>
 
-</div>
+        <path
+          d="M4 13a8 8 0 0 0 14.9 4M20 19v-4h-4"/>
+
+      </svg>
+
+    </button>
+
+  </div>
 
 
-<div class="header-spacer"></div>
+  <div class="header-content">
+
+    <div class="header-title-row">
+
+      <div class="header-title">
+
+        <h1>
+          المفضلة
+        </h1>
+
+        <p>
+          الأجهزة التي حفظتها للرجوع إليها لاحقاً
+        </p>
+
+      </div>
 
 
-</div>
+      <span
+        class="header-count"
+        id="headerCount">
+
+        0 جهاز
+
+      </span>
+
+    </div>
+
+  </div>
 
 </header>
 
 
-<section class="page-title">
+<section
+  class="devices-grid"
+  id="devicesGrid">
 
-<div>
+  <div
+    class="loading-state"
+    id="loadingState">
 
-<h1>
-المفضلة
-</h1>
+    <div class="loading-spinner"></div>
 
-<p>
-الأجهزة والمزادات التي تحفظها
-</p>
+    جاري تحميل المفضلة...
 
-</div>
+  </div>
 
 </section>
 
 
-<!-- =========================
-EMPTY STATE
-========================= -->
-
 <section
-class="empty-card"
-id="emptyState">
+  class="empty-state"
+  id="emptyState"
+  style="display:none;">
+
+  <div class="empty-icon">
+
+    <svg
+      width="29"
+      height="29"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.7">
+
+      <path
+        d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
+
+    </svg>
+
+  </div>
 
 
-<div class="empty-icon">
-
-<svg
-width="31"
-height="31"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.7"
-stroke-linecap="round"
-stroke-linejoin="round">
-
-<path
-d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
-
-</svg>
-
-</div>
+  <h3>
+    ما عندك أجهزة بالمفضلة بعد
+  </h3>
 
 
-<h2 class="empty-title">
-ما عندك أجهزة بالمفضلة بعد
-</h2>
+  <p>
+    احفظ أي جهاز يعجبك حتى تقدر ترجع له بسرعة من هنا.
+  </p>
 
 
-<p class="empty-copy">
-احفظ أي جهاز يعجبك حتى تقدر ترجع له بسرعة وتتابع سعره أو مزاده لاحقاً.
-</p>
+  <button
+    class="browse-btn"
+    id="browseBtn"
+    type="button">
 
+    استكشف الأجهزة
 
-<button
-class="browse-btn"
-id="browseBtn"
-type="button">
-
-استكشف الأجهزة
-
-</button>
-
-
-</section>
-
-
-<!-- =========================
-REAL FAVORITES
-========================= -->
-
-<section
-class="devices-grid"
-id="devicesGrid"
-hidden>
-
-
-<!--
-
-الأجهزة الحقيقية راح تنضاف هنا
-من Supabase.
-
-ما راح نحط بيانات وهمية.
-
--->
+  </button>
 
 </section>
 
@@ -891,142 +1362,138 @@ hidden>
 </main>
 
 
-<!-- =========================
-BOTTOM NAV
-========================= -->
-
-<div class="bottom-wrap">
-
 <nav class="bottom-nav">
 
+<div class="bottom-inner">
 
 <button
-class="nav-item"
-data-go="home.html"
-type="button">
+  class="nav-item"
+  type="button"
+  data-page="home.html">
 
-<svg
-class="nav-icon"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.8">
+  <svg
+    class="nav-icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.7">
 
-<path
-d="m4 10 8-6 8 6v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-9Z"/>
+    <path d="m3 10 9-7 9 7"/>
+    <path d="M5 9v11h14V9"/>
+    <path d="M9 20v-6h6v6"/>
 
-</svg>
+  </svg>
 
-<span class="nav-label">
-الرئيسية
-</span>
+  <span>الرئيسية</span>
 
 </button>
 
 
 <button
-class="nav-item"
-data-go="auctions.html"
-type="button">
+  class="nav-item"
+  type="button"
+  data-page="market.html">
 
-<svg
-class="nav-icon"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.8">
+  <svg
+    class="nav-icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.7">
 
-<path d="m7 11 7.5-7.5 3 3L10 14"/>
-<path d="m5 13 6 6"/>
-<path d="M4 20h16"/>
+    <rect
+      x="4"
+      y="4"
+      width="16"
+      height="16"
+      rx="3"/>
 
-</svg>
+    <path d="M8 9h8"/>
+    <path d="M8 13h8"/>
+    <path d="M8 17h5"/>
 
-<span class="nav-label">
-المزادات
-</span>
+  </svg>
 
-</button>
-
-
-<button
-class="nav-item"
-data-go="sell.html"
-type="button">
-
-<svg
-class="nav-icon"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.9">
-
-<path d="M12 5v14"/>
-<path d="M5 12h14"/>
-
-</svg>
-
-<span class="nav-label">
-إضافة
-</span>
+  <span>الأجهزة</span>
 
 </button>
 
 
 <button
-class="nav-item active"
-type="button">
+  class="nav-item"
+  type="button"
+  data-page="sell.html">
 
-<svg
-class="nav-icon"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.8">
+  <span class="add-button">
 
-<path
-d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2">
 
-</svg>
+      <path d="M12 5v14"/>
+      <path d="M5 12h14"/>
 
-<span class="nav-label">
-المفضلة
-</span>
+    </svg>
+
+  </span>
+
+  <span>إضافة</span>
 
 </button>
 
 
 <button
-class="nav-item"
-data-go="profile.html"
-type="button">
+  class="nav-item active"
+  type="button"
+  data-page="favorites.html">
 
-<svg
-class="nav-icon"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.8">
+  <svg
+    class="nav-icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.7">
 
-<circle
-cx="12"
-cy="8"
-r="3.5"/>
+    <path
+      d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
 
-<path d="M5 21a7 7 0 0 1 14 0"/>
+  </svg>
 
-</svg>
-
-<span class="nav-label">
-حسابي
-</span>
+  <span>المفضلة</span>
 
 </button>
 
 
-</nav>
+<button
+  class="nav-item"
+  type="button"
+  data-page="profile.html">
+
+  <svg
+    class="nav-icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.7">
+
+    <circle cx="12" cy="8" r="3"/>
+
+    <path
+      d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5"/>
+
+  </svg>
+
+  <span>حسابي</span>
+
+</button>
 
 </div>
+
+</nav>
 
 
 <div
@@ -1040,202 +1507,993 @@ id="toast">
 import { supabase } from "./js/supabase.js";
 
 
-const loading =
-document.getElementById("loading");
+const devicesGrid =
+  document.getElementById("devicesGrid");
+
+const loadingState =
+  document.getElementById("loadingState");
 
 const emptyState =
-document.getElementById("emptyState");
+  document.getElementById("emptyState");
 
-const devicesGrid =
-document.getElementById("devicesGrid");
+const headerCount =
+  document.getElementById("headerCount");
 
 const browseBtn =
-document.getElementById("browseBtn");
+  document.getElementById("browseBtn");
 
 const backBtn =
-document.getElementById("backBtn");
+  document.getElementById("backBtn");
+
+const refreshBtn =
+  document.getElementById("refreshBtn");
 
 const toast =
-document.getElementById("toast");
+  document.getElementById("toast");
+
+
+const FAVORITES_KEY =
+  "mzad_phone_favorites";
+
 
 let toastTimer;
 
 
-/* =========================
-TOAST
-========================= */
+/* =====================================================
+   FAVORITES STORAGE
+===================================================== */
+
+function getFavoriteIds(){
+
+  try{
+
+    const raw =
+      localStorage.getItem(
+        FAVORITES_KEY
+      );
+
+    if(!raw){
+      return [];
+    }
+
+    const parsed =
+      JSON.parse(raw);
+
+    if(!Array.isArray(parsed)){
+      return [];
+    }
+
+    return parsed
+      .map(String)
+      .filter(Boolean);
+
+  }catch(error){
+
+    console.error(
+      "Favorites read error:",
+      error
+    );
+
+    return [];
+
+  }
+
+}
+
+
+function saveFavoriteIds(ids){
+
+  try{
+
+    localStorage.setItem(
+      FAVORITES_KEY,
+      JSON.stringify(
+        [...new Set(
+          ids.map(String)
+        )]
+      )
+    );
+
+  }catch(error){
+
+    console.error(
+      "Favorites save error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   FORMAT PRICE
+===================================================== */
+
+function formatPrice(price){
+
+  const number =
+    Number(price);
+
+  if(
+    !Number.isFinite(number) ||
+    number <= 0
+  ){
+
+    return "السعر يحدد لاحقاً";
+
+  }
+
+  return (
+    new Intl.NumberFormat("en-US")
+      .format(number)
+    + " د.ع"
+  );
+
+}
+
+
+/* =====================================================
+   IMAGES
+===================================================== */
+
+function getDeviceImages(value){
+
+  if(!value){
+    return [];
+  }
+
+  if(Array.isArray(value)){
+
+    return value
+      .filter(Boolean);
+
+  }
+
+  if(typeof value === "string"){
+
+    const text =
+      value.trim();
+
+    if(!text){
+      return [];
+    }
+
+    try{
+
+      const parsed =
+        JSON.parse(text);
+
+      if(Array.isArray(parsed)){
+
+        return parsed
+          .filter(Boolean);
+
+      }
+
+    }catch(error){}
+
+    return [text];
+
+  }
+
+  return [];
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
 
 function showToast(message){
 
-toast.textContent =
-message;
+  toast.textContent =
+    message;
 
-toast.classList.add("show");
+  toast.classList.add(
+    "show"
+  );
 
-clearTimeout(toastTimer);
+  clearTimeout(
+    toastTimer
+  );
 
-toastTimer =
-setTimeout(()=>{
+  toastTimer =
+    setTimeout(
+      () => {
 
-toast.classList.remove("show");
+        toast.classList.remove(
+          "show"
+        );
 
-},2200);
+      },
+      2000
+    );
 
 }
 
 
-/* =========================
-CHECK AUTH
-========================= */
+/* =====================================================
+   LOADING
+===================================================== */
 
-async function checkAuth(){
+function showLoading(){
 
-try{
+  loadingState.style.display =
+    "block";
 
-const {
-data,
-error
-} =
-await supabase.auth.getSession();
+  emptyState.style.display =
+    "none";
+
+}
 
 
-if(
-error ||
-!data?.session
+function hideLoading(){
+
+  loadingState.style.display =
+    "none";
+
+}
+
+
+/* =====================================================
+   DETAIL ITEM
+===================================================== */
+
+function createDetailItem(
+  label,
+  value
 ){
 
-window.location.replace(
-"index.html?login=1&returnTo=favorites.html"
-);
+  const item =
+    document.createElement("div");
 
-return false;
+  item.className =
+    "detail-item";
+
+
+  const labelElement =
+    document.createElement("span");
+
+  labelElement.textContent =
+    label;
+
+
+  const valueElement =
+    document.createElement("strong");
+
+  valueElement.textContent =
+    value || "غير محدد";
+
+
+  item.appendChild(
+    labelElement
+  );
+
+  item.appendChild(
+    valueElement
+  );
+
+
+  return item;
 
 }
 
-return true;
 
-}catch(error){
+/* =====================================================
+   DEVICE CARD
+===================================================== */
 
-console.error(
-"Auth error:",
-error
-);
+function createDeviceCard(
+  device,
+  index
+){
 
-window.location.replace(
-"index.html?login=1&returnTo=favorites.html"
-);
+  const card =
+    document.createElement("article");
 
-return false;
+  card.className =
+    "device-card";
+
+  card.dataset.deviceId =
+    device.id || "";
+
+  card.style.animationDelay =
+    `${Math.min(index * .04,.35)}s`;
+
+
+  /* -------------------------
+     PHOTO
+  ------------------------- */
+
+  const photo =
+    document.createElement("div");
+
+  photo.className =
+    "device-photo";
+
+
+  const images =
+    getDeviceImages(
+      device.images
+    );
+
+
+  if(images.length){
+
+    const img =
+      document.createElement("img");
+
+    img.src =
+      images[0];
+
+    img.alt =
+      `${device.brand || ""} ${device.model || "جهاز"}`;
+
+    img.loading =
+      "lazy";
+
+    img.decoding =
+      "async";
+
+
+    img.addEventListener(
+      "error",
+      () => {
+
+        img.remove();
+
+        const placeholder =
+          document.createElement("span");
+
+        placeholder.className =
+          "photo-placeholder";
+
+        placeholder.textContent =
+          "تعذر تحميل الصورة";
+
+        photo.prepend(
+          placeholder
+        );
+
+      }
+    );
+
+
+    photo.appendChild(
+      img
+    );
+
+  }else{
+
+    const placeholder =
+      document.createElement("span");
+
+    placeholder.className =
+      "photo-placeholder";
+
+    placeholder.textContent =
+      "لا توجد صورة";
+
+    photo.appendChild(
+      placeholder
+    );
+
+  }
+
+
+  /* -------------------------
+     REMOVE
+  ------------------------- */
+
+  const removeButton =
+    document.createElement("button");
+
+  removeButton.type =
+    "button";
+
+  removeButton.className =
+    "remove-btn";
+
+  removeButton.setAttribute(
+    "aria-label",
+    "إزالة من المفضلة"
+  );
+
+
+  removeButton.innerHTML = `
+
+    <svg
+      width="17"
+      height="17"
+      viewBox="0 0 24 24"
+      fill="#FFFFFF"
+      stroke="#FFFFFF"
+      stroke-width="1.8">
+
+      <path
+        d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
+
+    </svg>
+
+  `;
+
+
+  removeButton.addEventListener(
+    "click",
+    async event => {
+
+      event.stopPropagation();
+
+      removeFavorite(
+        device.id
+      );
+
+    }
+  );
+
+
+  photo.appendChild(
+    removeButton
+  );
+
+
+  /* -------------------------
+     SALE TYPE
+  ------------------------- */
+
+  const saleType =
+    document.createElement("span");
+
+  saleType.className =
+    "sale-type";
+
+  saleType.textContent =
+    normalizeSaleType(
+      device.sale_type
+    );
+
+
+  photo.appendChild(
+    saleType
+  );
+
+
+  /* -------------------------
+     INFO
+  ------------------------- */
+
+  const info =
+    document.createElement("div");
+
+  info.className =
+    "device-info";
+
+
+  const name =
+    document.createElement("div");
+
+  name.className =
+    "device-name";
+
+  name.textContent =
+    [
+      device.brand,
+      device.model
+    ]
+    .filter(Boolean)
+    .join(" ") ||
+    "جهاز";
+
+
+  const details =
+    document.createElement("div");
+
+  details.className =
+    "device-details";
+
+
+  const storage =
+    device.storage ||
+    "غير محدد";
+
+
+  const color =
+    device.color ||
+    "غير محدد";
+
+
+  let battery =
+    "غير محددة";
+
+
+  if(
+    device.battery_health !== null &&
+    device.battery_health !== undefined &&
+    device.battery_health !== ""
+  ){
+
+    battery =
+      `${device.battery_health}%`;
+
+  }
+
+
+  details.appendChild(
+    createDetailItem(
+      "التخزين",
+      storage
+    )
+  );
+
+  details.appendChild(
+    createDetailItem(
+      "اللون",
+      color
+    )
+  );
+
+  details.appendChild(
+    createDetailItem(
+      "البطارية",
+      battery
+    )
+  );
+
+
+  const priceRow =
+    document.createElement("div");
+
+  priceRow.className =
+    "price-row";
+
+
+  const priceLabel =
+    document.createElement("span");
+
+  priceLabel.className =
+    "price-label";
+
+  priceLabel.textContent =
+    "السعر";
+
+
+  const price =
+    document.createElement("strong");
+
+  price.className =
+    "device-price";
+
+  price.textContent =
+    formatPrice(
+      device.price
+    );
+
+
+  priceRow.appendChild(
+    priceLabel
+  );
+
+  priceRow.appendChild(
+    price
+  );
+
+
+  info.appendChild(
+    name
+  );
+
+  info.appendChild(
+    details
+  );
+
+  info.appendChild(
+    priceRow
+  );
+
+
+  card.appendChild(
+    photo
+  );
+
+  card.appendChild(
+    info
+  );
+
+
+  /* -------------------------
+     OPEN DEVICE
+  ------------------------- */
+
+  card.addEventListener(
+    "click",
+    () => {
+
+      if(!device.id){
+        return;
+      }
+
+      window.location.href =
+        `device.html?id=${encodeURIComponent(device.id)}`;
+
+    }
+  );
+
+
+  return card;
 
 }
 
+
+/* =====================================================
+   SALE TYPE
+===================================================== */
+
+function normalizeSaleType(
+  value
+){
+
+  const type =
+    String(
+      value || "direct"
+    )
+    .toLowerCase();
+
+
+  if(
+    type === "auction" ||
+    type === "مزاد"
+  ){
+
+    return "مزاد";
+
+  }
+
+
+  return "بيع مباشر";
+
 }
 
 
-/* =========================
-LOAD FAVORITES
-========================= */
+/* =====================================================
+   LOAD FAVORITES
+===================================================== */
 
 async function loadFavorites(){
 
-const loggedIn =
-await checkAuth();
+  showLoading();
 
 
-if(!loggedIn)return;
+  const favoriteIds =
+    getFavoriteIds();
 
 
-/*
-  حالياً ما عدنا جدول المفضلة
-  مربوط بالواجهة.
+  if(!favoriteIds.length){
 
-  لذلك نعرض Empty State
-  بشكل صحيح بدل بيانات وهمية.
+    devicesGrid
+      .querySelectorAll(
+        ".device-card"
+      )
+      .forEach(
+        card => card.remove()
+      );
 
-  لاحقاً هنا راح يكون الاستعلام
-  الحقيقي من Supabase.
-*/
+    hideLoading();
 
-emptyState.hidden = false;
+    emptyState.style.display =
+      "flex";
 
-devicesGrid.hidden = true;
+    headerCount.textContent =
+      "0 جهاز";
 
-loading.classList.add(
-"hidden"
-);
+    return;
+
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await supabase
+      .from("devices")
+      .select(`
+        id,
+        created_at,
+        brand,
+        model,
+        storage,
+        color,
+        battery_health,
+        condition,
+        body_condition,
+        screen_condition,
+        face_id,
+        cameras,
+        charging,
+        replaced_parts,
+        price,
+        location,
+        sale_type,
+        seller_id,
+        seller_name,
+        images,
+        notes
+      `)
+      .in(
+        "id",
+        favoriteIds
+      );
+
+
+  if(error){
+
+    console.error(
+      "FAVORITES LOAD ERROR:",
+      error
+    );
+
+    hideLoading();
+
+    devicesGrid
+      .querySelectorAll(
+        ".device-card"
+      )
+      .forEach(
+        card => card.remove()
+      );
+
+    emptyState.style.display =
+      "flex";
+
+    headerCount.textContent =
+      "تعذر التحميل";
+
+    showToast(
+      "تعذر تحميل المفضلة"
+    );
+
+    return;
+
+  }
+
+
+  const favorites =
+    (data || [])
+      .sort(
+        (a,b) =>
+          favoriteIds.indexOf(
+            String(a.id)
+          ) -
+          favoriteIds.indexOf(
+            String(b.id)
+          )
+      );
+
+
+  /*
+    إذا جهاز انحذف من قاعدة البيانات،
+    ننظف رقمه من المفضلة تلقائياً.
+  */
+
+  const existingIds =
+    new Set(
+      favorites.map(
+        device =>
+          String(device.id)
+      )
+    );
+
+
+  const cleanedIds =
+    favoriteIds.filter(
+      id =>
+        existingIds.has(
+          String(id)
+        )
+    );
+
+
+  if(
+    cleanedIds.length !==
+    favoriteIds.length
+  ){
+
+    saveFavoriteIds(
+      cleanedIds
+    );
+
+  }
+
+
+  devicesGrid
+    .querySelectorAll(
+      ".device-card"
+    )
+    .forEach(
+      card => card.remove()
+    );
+
+
+  favorites.forEach(
+    (device,index) => {
+
+      devicesGrid.appendChild(
+        createDeviceCard(
+          device,
+          index
+        )
+      );
+
+    }
+  );
+
+
+  hideLoading();
+
+
+  if(!favorites.length){
+
+    emptyState.style.display =
+      "flex";
+
+  }else{
+
+    emptyState.style.display =
+      "none";
+
+  }
+
+
+  headerCount.textContent =
+    `${favorites.length} ${
+      favorites.length === 1
+        ? "جهاز"
+        : "أجهزة"
+    }`;
 
 }
 
 
-/* =========================
-BROWSE
-========================= */
+/* =====================================================
+   REMOVE FAVORITE
+===================================================== */
 
-browseBtn.addEventListener(
-"click",
-()=>{
-
-window.location.href =
-"market.html";
-
-});
-
-
-/* =========================
-BACK
-========================= */
-
-backBtn.addEventListener(
-"click",
-()=>{
-
-if(
-document.referrer &&
-document.referrer.includes(
-window.location.host
-)
+function removeFavorite(
+  deviceId
 ){
 
-window.history.back();
+  if(
+    deviceId === undefined ||
+    deviceId === null
+  ){
 
-}else{
+    return;
 
-window.location.href =
-"home.html";
+  }
+
+
+  const id =
+    String(deviceId);
+
+
+  const current =
+    getFavoriteIds();
+
+
+  const next =
+    current.filter(
+      favoriteId =>
+        String(favoriteId) !== id
+    );
+
+
+  saveFavoriteIds(
+    next
+  );
+
+
+  showToast(
+    "تمت إزالة الجهاز من المفضلة"
+  );
+
+
+  loadFavorites();
 
 }
 
-});
+
+/* =====================================================
+   BROWSE
+===================================================== */
+
+browseBtn.addEventListener(
+  "click",
+  () => {
+
+    window.location.href =
+      "market.html";
+
+  }
+);
 
 
-/* =========================
-BOTTOM NAV
-========================= */
+/* =====================================================
+   REFRESH
+===================================================== */
+
+refreshBtn.addEventListener(
+  "click",
+  () => {
+
+    loadFavorites();
+
+  }
+);
+
+
+/* =====================================================
+   BACK
+===================================================== */
+
+backBtn.addEventListener(
+  "click",
+  () => {
+
+    if(
+      document.referrer &&
+      document.referrer.includes(
+        window.location.host
+      )
+    ){
+
+      window.history.back();
+
+    }else{
+
+      window.location.href =
+        "home.html";
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   BOTTOM NAV
+===================================================== */
 
 document
-.querySelectorAll("[data-go]")
-.forEach(button=>{
+  .querySelectorAll(".nav-item")
+  .forEach(
+    item => {
 
-button.addEventListener(
-"click",
-()=>{
+      item.addEventListener(
+        "click",
+        () => {
 
-const url =
-button.dataset.go;
+          const page =
+            item.dataset.page;
 
-if(!url)return;
+          if(page){
 
-window.location.href =
-url;
+            window.location.href =
+              page;
 
-});
+          }
 
-});
+        }
+      );
+
+    }
+  );
 
 
-/* =========================
-START
-========================= */
+/* =====================================================
+   START
+===================================================== */
 
 loadFavorites();
 
