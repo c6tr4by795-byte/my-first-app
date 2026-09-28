@@ -3,694 +3,1272 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<meta name="theme-color" content="#f7f8fa">
+
+<meta name="theme-color" content="#F7F8FA">
+
 <title>MZAD PHONE — حسابي</title>
 
 <style>
+
+/* =====================================================
+   ROOT
+===================================================== */
+
 :root{
---bg:#f7f8fa;
---surface:#fff;
---ink:#17202a;
---muted:#667085;
---line:#e6e9ed;
+  --bg:#F7F8FA;
+  --surface:#FFFFFF;
+  --surface-2:#F1F5F7;
 
---primary:#176b87;
---primary-dark:#125a73;
---primary-soft:#e8f3f6;
+  --ink:#17202A;
+  --muted:#667085;
+  --muted-2:#8A929A;
 
---purple:#6f63c9;
---purple-light:#8d83dc;
---purple-soft:#eeeaff;
+  --line:#E6E9ED;
 
---danger:#c63c55;
---safe-bottom:env(safe-area-inset-bottom,0px);
---shadow:0 14px 34px rgba(24,44,49,.08)
+  --primary:#176B87;
+  --primary-dark:#125A73;
+  --primary-soft:#E8F3F6;
+
+  --purple:#6246D9;
+  --purple-dark:#51477D;
+  --purple-soft:#F0EEFF;
+
+  --danger:#C63C55;
+  --danger-soft:#FFF3F5;
+
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+
+  --shadow:
+    0 10px 28px rgba(23,32,42,.06);
 }
 
+
+/* =====================================================
+   RESET
+===================================================== */
+
 *{
-box-sizing:border-box
+  box-sizing:border-box;
+
+  -webkit-tap-highlight-color:transparent;
 }
 
 html{
-scroll-behavior:smooth
+  scroll-behavior:smooth;
 }
 
 body{
-margin:0;
-min-height:100vh;
-background:var(--bg);
-color:var(--ink);
-font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
--webkit-font-smoothing:antialiased
+  margin:0;
+
+  min-height:100vh;
+
+  background:var(--bg);
+
+  color:var(--ink);
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    "Segoe UI",
+    Tahoma,
+    Arial,
+    sans-serif;
+
+  -webkit-font-smoothing:antialiased;
+
+  text-rendering:optimizeLegibility;
 }
 
 button{
-font:inherit;
-border:0;
-cursor:pointer
+  font:inherit;
+
+  border:0;
+
+  cursor:pointer;
+
+  color:inherit;
+}
+
+button:disabled{
+  cursor:default;
 }
 
 .page{
-width:min(100%,520px);
-margin:0 auto;
-padding:0 14px calc(102px + var(--safe-bottom))
+  width:min(100%,520px);
+
+  margin:auto;
+
+  padding:
+    0
+    14px
+    calc(112px + var(--safe-bottom));
 }
 
 
-/* =========================
+/* =====================================================
    HEADER
-========================= */
+===================================================== */
 
 .header{
-margin-inline:-14px;
-padding:14px 14px 18px;
+  margin-inline:-14px;
 
-background:
-linear-gradient(
-145deg,
-#ffffff 0%,
-#f7f5ff 50%,
-#efecff 100%
-);
+  padding:
+    8px
+    14px
+    17px;
 
-border-radius:0 0 26px 26px;
-border-bottom:1px solid var(--line);
-box-shadow:0 10px 26px rgba(23,32,42,.05)
+  background:
+    linear-gradient(
+      145deg,
+      #FFFFFF 0%,
+      #F7F5FF 45%,
+      #EAE6FF 100%
+    );
+
+  border-bottom:
+    1px solid var(--line);
+
+  border-radius:
+    0
+    0
+    25px
+    25px;
+
+  box-shadow:
+    0 10px
+    26px
+    rgba(23,32,42,.055);
+
+  position:relative;
+
+  overflow:hidden;
+
+  animation:
+    headerIn .42s cubic-bezier(.2,.7,.2,1) both;
 }
 
+.header::before{
+  content:"";
+
+  position:absolute;
+
+  width:190px;
+  height:190px;
+
+  left:-105px;
+  top:-125px;
+
+  border-radius:50%;
+
+  background:
+    rgba(23,107,135,.045);
+
+  pointer-events:none;
+}
+
+.header::after{
+  content:"";
+
+  position:absolute;
+
+  width:150px;
+  height:150px;
+
+  right:-78px;
+  bottom:-108px;
+
+  border-radius:50%;
+
+  background:
+    rgba(98,70,217,.075);
+
+  pointer-events:none;
+}
+
+
+/* =====================================================
+   TOPBAR
+===================================================== */
+
 .topbar{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:12px
+  position:relative;
+
+  z-index:2;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
 }
 
 .back-btn{
-width:42px;
-height:38px;
-border-radius:13px;
+  width:38px;
+  height:38px;
 
-background:#fff;
-border:1px solid #ddd9f4;
+  flex:0 0 38px;
 
-color:var(--primary);
+  border-radius:12px;
 
-display:grid;
-place-items:center;
+  background:#FFFFFF;
 
-box-shadow:0 7px 18px rgba(23,32,42,.05)
+  border:
+    1px solid #DDD8F8;
+
+  color:var(--primary);
+
+  display:grid;
+
+  place-items:center;
+
+  box-shadow:
+    0 7px
+    18px
+    rgba(23,32,42,.045);
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease;
+}
+
+.back-btn:active{
+  transform:scale(.92);
+
+  box-shadow:
+    0 4px
+    11px
+    rgba(23,32,42,.05);
 }
 
 .brand{
-display:flex;
-flex-direction:column;
-align-items:center;
-line-height:.9;
-flex:1
+  flex:1;
+
+  text-align:center;
+
+  line-height:.9;
 }
 
 .brand strong{
-font-size:20px;
-letter-spacing:-.04em
+  display:block;
+
+  font-size:19px;
+
+  font-weight:950;
+
+  letter-spacing:-.055em;
 }
 
 .brand span{
-font-size:8px;
-font-weight:900;
-letter-spacing:.18em;
-color:#89939e;
-margin-top:4px
+  display:block;
+
+  margin-top:4px;
+
+  color:#89929A;
+
+  font-size:7px;
+
+  font-weight:950;
+
+  letter-spacing:.22em;
 }
 
 .header-spacer{
-width:42px
+  width:38px;
+
+  flex:0 0 38px;
 }
 
 
-/* =========================
+/* =====================================================
+   PAGE INTRO
+===================================================== */
+
+.page-intro{
+  position:relative;
+
+  z-index:2;
+
+  margin-top:12px;
+}
+
+.page-intro h1{
+  margin:0;
+
+  font-size:21px;
+
+  line-height:1.2;
+
+  font-weight:950;
+
+  letter-spacing:-.045em;
+}
+
+.page-intro p{
+  margin:
+    5px
+    0
+    0;
+
+  color:var(--muted);
+
+  font-size:10px;
+
+  line-height:1.5;
+}
+
+
+/* =====================================================
    PROFILE CARD
-========================= */
+===================================================== */
 
 .profile-card{
-margin-top:18px;
-padding:19px;
+  margin-top:12px;
 
-border-radius:23px;
+  padding:17px;
 
-background:
-linear-gradient(
-145deg,
-#5968b9 0%,
-#7067c8 52%,
-#887bd5 100%
-);
+  border-radius:22px;
 
-color:#fff;
+  background:
+    linear-gradient(
+      145deg,
+      #FFFFFF 0%,
+      #FAFBFC 58%,
+      #F3F7F8 100%
+    );
 
-position:relative;
-overflow:hidden;
+  border:
+    1px solid var(--line);
 
-box-shadow:
-0 16px 32px rgba(91,91,180,.16)
+  box-shadow:
+    0 12px
+    28px
+    rgba(23,32,42,.065);
+
+  position:relative;
+
+  overflow:hidden;
+
+  animation:
+    contentIn .42s .06s cubic-bezier(.2,.7,.2,1) both;
 }
 
-.profile-card:before{
-content:"";
-position:absolute;
+.profile-card::before{
+  content:"";
 
-width:190px;
-height:190px;
+  position:absolute;
 
-border-radius:50%;
+  width:175px;
+  height:175px;
 
-background:rgba(255,255,255,.07);
+  right:-105px;
+  top:-105px;
 
-top:-105px;
-left:-60px
+  border-radius:50%;
+
+  background:
+    rgba(98,70,217,.065);
+
+  pointer-events:none;
 }
 
-.profile-card:after{
-content:"";
-position:absolute;
+.profile-card::after{
+  content:"";
 
-width:150px;
-height:150px;
+  position:absolute;
 
-border-radius:50%;
+  width:115px;
+  height:115px;
 
-background:rgba(255,255,255,.055);
+  left:-72px;
+  bottom:-78px;
 
-bottom:-105px;
-right:-55px
+  border-radius:50%;
+
+  background:
+    rgba(23,107,135,.045);
+
+  pointer-events:none;
 }
 
 
-/* =========================
-   USER INFO
-========================= */
+/* =====================================================
+   PROFILE TOP
+===================================================== */
+
+.profile-top{
+  position:relative;
+
+  z-index:2;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:12px;
+}
+
+.profile-avatar{
+  width:56px;
+  height:56px;
+
+  flex:0 0 56px;
+
+  border-radius:18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #176B87 0%,
+      #257F98 48%,
+      #6246D9 100%
+    );
+
+  color:#FFFFFF;
+
+  display:grid;
+
+  place-items:center;
+
+  font-size:20px;
+
+  font-weight:950;
+
+  box-shadow:
+    0 10px
+    22px
+    rgba(23,107,135,.16);
+}
 
 .profile-main{
-position:relative;
-z-index:2
+  min-width:0;
+
+  flex:1;
 }
 
 .profile-name{
-margin:0;
+  margin:0;
 
-font-size:21px;
-font-weight:950;
-letter-spacing:-.035em;
+  color:var(--ink);
 
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis
+  font-size:18px;
+
+  line-height:1.25;
+
+  font-weight:950;
+
+  letter-spacing:-.035em;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
 }
 
 .profile-email{
-margin:6px 0 0;
+  margin:
+    4px
+    0
+    0;
 
-font-size:10px;
+  color:var(--muted);
 
-color:rgba(255,255,255,.75);
+  font-size:9px;
 
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis
+  line-height:1.35;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
 }
 
 .profile-status{
-display:inline-flex;
-align-items:center;
-gap:6px;
+  display:inline-flex;
 
-margin-top:10px;
+  align-items:center;
 
-padding:5px 9px;
+  gap:5px;
 
-border-radius:999px;
+  margin-top:7px;
 
-background:rgba(255,255,255,.11);
-border:1px solid rgba(255,255,255,.10);
+  padding:
+    5px
+    8px;
 
-font-size:8px;
-font-weight:900
+  border-radius:999px;
+
+  background:var(--primary-soft);
+
+  border:
+    1px solid #D8EBF0;
+
+  color:var(--primary-dark);
+
+  font-size:8px;
+
+  font-weight:950;
 }
 
 .status-dot{
-width:6px;
-height:6px;
-border-radius:50%;
+  width:6px;
+  height:6px;
 
-background:#6ee0b9
+  border-radius:50%;
+
+  background:#43B98A;
+
+  box-shadow:
+    0 0 0 3px rgba(67,185,138,.10);
 }
 
 
-/* =========================
-   DETAILS
-========================= */
+/* =====================================================
+   ACCOUNT DETAILS
+===================================================== */
 
 .profile-details{
-position:relative;
-z-index:2;
+  position:relative;
 
-margin-top:16px;
-padding-top:14px;
+  z-index:2;
 
-border-top:1px solid rgba(255,255,255,.16);
+  margin-top:15px;
 
-display:grid;
-grid-template-columns:repeat(2,1fr);
+  display:grid;
 
-gap:12px
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+  gap:8px;
+}
+
+.account-detail{
+  min-width:0;
+
+  padding:
+    10px
+    11px;
+
+  border-radius:13px;
+
+  background:
+    #F7F9FA;
+
+  border:
+    1px solid #EDF0F2;
 }
 
 .detail-label{
-font-size:8px;
-color:rgba(255,255,255,.60);
+  color:#89929A;
 
-margin-bottom:4px
+  font-size:8px;
+
+  font-weight:800;
+
+  margin-bottom:4px;
 }
 
 .detail-value{
-font-size:11px;
-font-weight:900;
+  color:var(--ink);
 
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis
+  font-size:10px;
+
+  line-height:1.3;
+
+  font-weight:900;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
 }
 
 
-/* =========================
+/* =====================================================
    RATING
-========================= */
+===================================================== */
 
 .rating-box{
-position:relative;
-z-index:2;
+  position:relative;
 
-margin-top:13px;
+  z-index:2;
 
-padding:11px 12px;
+  margin-top:9px;
 
-border-radius:14px;
+  padding:
+    11px
+    12px;
 
-background:rgba(255,255,255,.10);
+  border-radius:14px;
 
-border:1px solid rgba(255,255,255,.10);
+  background:
+    linear-gradient(
+      145deg,
+      #F6F3FF,
+      #F0EDFF
+    );
 
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px
+  border:
+    1px solid #E5E0FA;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:10px;
 }
 
 .rating-number{
-font-size:18px;
-font-weight:950
+  color:var(--purple-dark);
+
+  font-size:17px;
+
+  line-height:1;
+
+  font-weight:950;
 }
 
 .rating-label{
-margin-top:2px;
+  margin-top:4px;
 
-font-size:8px;
+  color:#7B7399;
 
-color:rgba(255,255,255,.66)
+  font-size:8px;
+
+  font-weight:800;
 }
 
 .rating-count{
-font-size:8px;
-color:rgba(255,255,255,.63);
+  color:#7B7399;
 
-white-space:nowrap
+  font-size:8px;
+
+  font-weight:800;
+
+  white-space:nowrap;
 }
 
 
-/* =========================
+/* =====================================================
    STATS
-========================= */
+===================================================== */
 
 .stats{
-position:relative;
-z-index:2;
+  position:relative;
 
-margin-top:9px;
+  z-index:2;
 
-display:grid;
-grid-template-columns:repeat(3,1fr);
+  margin-top:9px;
 
-gap:7px
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,minmax(0,1fr));
+
+  gap:7px;
 }
 
 .stat{
-padding:10px 6px;
+  min-width:0;
 
-text-align:center;
+  padding:
+    10px
+    5px;
 
-border-radius:13px;
+  text-align:center;
 
-background:rgba(255,255,255,.09);
+  border-radius:13px;
 
-border:1px solid rgba(255,255,255,.08)
+  background:#FFFFFF;
+
+  border:
+    1px solid #E9ECEF;
+
+  box-shadow:
+    0 4px
+    12px
+    rgba(23,32,42,.025);
 }
 
 .stat-number{
-font-size:15px;
-font-weight:950
+  color:var(--ink);
+
+  font-size:15px;
+
+  line-height:1;
+
+  font-weight:950;
 }
 
 .stat-label{
-margin-top:3px;
+  margin-top:4px;
 
-font-size:8px;
+  color:var(--muted);
 
-color:rgba(255,255,255,.64)
+  font-size:8px;
+
+  font-weight:800;
 }
 
 
-/* =========================
+/* =====================================================
    SECTION
-========================= */
+===================================================== */
 
 .section{
-margin-top:20px
+  margin-top:19px;
+
+  animation:
+    contentIn .42s .11s cubic-bezier(.2,.7,.2,1) both;
+}
+
+.section-title-row{
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  margin:
+    0
+    2px
+    9px;
+}
+
+.section-accent{
+  width:4px;
+  height:19px;
+
+  flex:0 0 4px;
+
+  border-radius:999px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #B7A58F,
+      #8D7C68
+    );
 }
 
 .section-title{
-margin:0 2px 10px;
+  margin:0;
 
-font-size:18px;
-font-weight:950;
+  color:#4F463D;
 
-letter-spacing:-.03em
+  font-size:17px;
+
+  line-height:1.2;
+
+  font-weight:950;
+
+  letter-spacing:-.035em;
 }
 
 
-/* =========================
+/* =====================================================
    MENU
-========================= */
+===================================================== */
 
 .menu-card{
-background:#fff;
+  background:#FFFFFF;
 
-border:1px solid var(--line);
+  border:
+    1px solid var(--line);
 
-border-radius:19px;
+  border-radius:19px;
 
-overflow:hidden;
+  overflow:hidden;
 
-box-shadow:
-0 9px 22px rgba(23,32,42,.045)
+  box-shadow:
+    0 9px
+    22px
+    rgba(23,32,42,.045);
 }
 
 .menu-item{
-width:100%;
+  width:100%;
 
-min-height:67px;
+  min-height:65px;
 
-padding:9px 13px;
+  padding:
+    9px
+    12px;
 
-display:flex;
-align-items:center;
+  display:flex;
 
-gap:12px;
+  align-items:center;
 
-background:#fff;
+  gap:11px;
 
-text-align:right;
+  background:#FFFFFF;
 
-border-bottom:1px solid #f0f1f3;
+  text-align:right;
 
-transition:.15s ease
+  border-bottom:
+    1px solid #F0F1F3;
+
+  transition:
+    background .18s ease,
+    transform .18s ease;
 }
 
 .menu-item:last-child{
-border-bottom:0
+  border-bottom:0;
 }
 
 .menu-item:active{
-background:#f8fafb
+  background:#F8FAFB;
+
+  transform:scale(.992);
 }
 
 .menu-icon{
-width:39px;
-height:39px;
+  width:39px;
+  height:39px;
 
-flex:0 0 39px;
+  flex:0 0 39px;
 
-display:grid;
-place-items:center;
+  border-radius:12px;
 
-border-radius:12px;
+  background:
+    linear-gradient(
+      145deg,
+      #E8F3F6,
+      #E0EFF3
+    );
 
-background:var(--primary-soft);
+  color:var(--primary);
 
-color:var(--primary)
+  display:grid;
+
+  place-items:center;
+
+  border:
+    1px solid #DCECEF;
 }
 
 .menu-copy{
-min-width:0;
-flex:1
+  min-width:0;
+
+  flex:1;
 }
 
 .menu-title{
-font-size:12px;
-font-weight:900
+  display:block;
+
+  color:var(--ink);
+
+  font-size:11px;
+
+  line-height:1.25;
+
+  font-weight:950;
 }
 
 .menu-sub{
-font-size:9px;
-color:var(--muted);
+  display:block;
 
-margin-top:3px
+  margin-top:2px;
+
+  color:var(--muted);
+
+  font-size:8px;
+
+  line-height:1.35;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
 }
 
 .menu-arrow{
-width:18px;
-height:18px;
+  width:17px;
+  height:17px;
 
-color:#a3adb5;
+  flex:0 0 17px;
 
-flex:0 0 auto
+  color:#A5ADB4;
 }
 
 
-/* =========================
+/* =====================================================
    LOGOUT
-========================= */
+===================================================== */
 
 .logout-btn{
-width:100%;
-height:49px;
+  width:100%;
 
-margin-top:17px;
+  height:48px;
 
-border-radius:15px;
+  margin-top:15px;
 
-background:#fff;
+  border-radius:14px;
 
-border:1px solid #f0cdd4;
+  background:
+    var(--danger-soft);
 
-color:var(--danger);
+  border:
+    1px solid #F1D5DB;
 
-font-size:12px;
-font-weight:950;
+  color:var(--danger);
 
-box-shadow:
-0 8px 20px rgba(198,60,85,.05)
+  font-size:11px;
+
+  font-weight:950;
+
+  box-shadow:
+    0 7px
+    18px
+    rgba(198,60,85,.045);
+
+  transition:
+    transform .18s ease,
+    background .18s ease;
 }
 
 .logout-btn:active{
-transform:scale(.985)
+  transform:scale(.985);
+
+  background:#FFECEF;
 }
 
 
-/* =========================
+/* =====================================================
    BOTTOM NAV
-========================= */
+===================================================== */
 
 .bottom-wrap{
-position:fixed;
+  position:fixed;
 
-left:0;
-right:0;
-bottom:0;
+  left:0;
+  right:0;
+  bottom:0;
 
-padding:
-8px
-12px
-calc(8px + var(--safe-bottom));
+  padding:
+    7px
+    10px
+    calc(7px + var(--safe-bottom));
 
-z-index:50;
+  z-index:50;
 
-pointer-events:none
+  pointer-events:none;
 }
 
 .bottom-nav{
-width:min(100%,520px);
+  width:min(100%,520px);
 
-margin:0 auto;
+  margin:auto;
 
-min-height:67px;
+  min-height:65px;
 
-padding:6px;
+  padding:6px;
 
-border-radius:22px;
+  border-radius:21px;
 
-background:
-linear-gradient(
-180deg,
-rgba(255,255,255,.97),
-rgba(232,243,246,.97)
-);
+  background:
+    rgba(255,255,255,.97);
 
-border:1px solid rgba(23,107,135,.12);
+  border:
+    1px solid rgba(23,107,135,.10);
 
-box-shadow:
-0 16px 36px rgba(23,107,135,.16);
+  box-shadow:
+    0 -8px
+    27px
+    rgba(23,107,135,.08);
 
-backdrop-filter:blur(16px);
+  backdrop-filter:blur(16px);
 
-display:grid;
+  display:grid;
 
-grid-template-columns:repeat(5,1fr);
+  grid-template-columns:
+    repeat(5,1fr);
 
-gap:4px;
+  gap:3px;
 
-pointer-events:auto
+  pointer-events:auto;
 }
 
 .nav-item{
-min-height:55px;
+  min-width:0;
 
-display:flex;
-flex-direction:column;
+  min-height:52px;
 
-align-items:center;
-justify-content:center;
+  display:flex;
 
-gap:3px;
+  flex-direction:column;
 
-border-radius:16px;
+  align-items:center;
 
-color:#7b8794;
+  justify-content:center;
 
-background:none
+  gap:3px;
+
+  border-radius:15px;
+
+  color:#858D94;
+
+  background:transparent;
+
+  transition:
+    color .18s ease,
+    background .18s ease,
+    transform .18s ease;
+}
+
+.nav-item:active{
+  transform:scale(.94);
 }
 
 .nav-item.active{
-color:var(--primary-dark);
+  color:var(--primary-dark);
 
-background:
-linear-gradient(
-145deg,
-#e8f3f6,
-#dceef2
-)
+  background:
+    linear-gradient(
+      145deg,
+      #E8F3F6,
+      #DCEEF2
+    );
 }
 
 .nav-label{
-font-size:9px;
-font-weight:900
+  font-size:8px;
+
+  line-height:1;
+
+  font-weight:900;
 }
 
 .nav-icon{
-width:22px;
-height:22px
+  width:21px;
+  height:21px;
 }
 
 
-/* =========================
+/* =====================================================
    TOAST
-========================= */
+===================================================== */
 
 .toast{
-position:fixed;
+  position:fixed;
 
-left:50%;
-bottom:94px;
+  left:50%;
 
-transform:
-translateX(-50%)
-translateY(16px);
+  bottom:
+    calc(88px + var(--safe-bottom));
 
-max-width:calc(100% - 40px);
+  transform:
+    translateX(-50%)
+    translateY(12px);
 
-padding:10px 14px;
+  max-width:
+    calc(100% - 40px);
 
-border-radius:13px;
+  padding:
+    10px
+    14px;
 
-background:#1e2c30;
-color:#fff;
+  border-radius:13px;
 
-font-size:11px;
-font-weight:800;
+  background:#1E2C30;
 
-box-shadow:var(--shadow);
+  color:#FFFFFF;
 
-opacity:0;
+  font-size:11px;
 
-pointer-events:none;
+  font-weight:800;
 
-transition:.25s ease;
+  text-align:center;
 
-z-index:80;
+  box-shadow:
+    0 12px
+    30px
+    rgba(23,32,42,.16);
 
-text-align:center
+  opacity:0;
+
+  pointer-events:none;
+
+  transition:
+    opacity .22s ease,
+    transform .22s ease;
+
+  z-index:80;
 }
 
 .toast.show{
-opacity:1;
+  opacity:1;
 
-transform:
-translateX(-50%)
-translateY(0)
+  transform:
+    translateX(-50%)
+    translateY(0);
 }
 
 
-/* =========================
+/* =====================================================
    LOADING
-========================= */
+===================================================== */
 
 .loading{
-position:fixed;
-inset:0;
+  position:fixed;
 
-background:var(--bg);
+  inset:0;
 
-z-index:100;
+  z-index:100;
 
-display:flex;
-align-items:center;
-justify-content:center;
+  background:var(--bg);
 
-transition:.3s ease
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  transition:
+    opacity .28s ease,
+    visibility .28s ease;
 }
 
 .loading.hidden{
-opacity:0;
-visibility:hidden;
-pointer-events:none
+  opacity:0;
+
+  visibility:hidden;
+
+  pointer-events:none;
 }
 
 .loader{
-width:34px;
-height:34px;
+  width:32px;
+  height:32px;
 
-border:3px solid #dbe8eb;
+  border-radius:50%;
 
-border-top-color:var(--primary);
+  border:
+    3px solid #DCE7EA;
 
-border-radius:50%;
+  border-top-color:
+    var(--primary);
 
-animation:spin .8s linear infinite
+  animation:
+    spin .8s linear infinite;
 }
 
 @keyframes spin{
-to{
-transform:rotate(360deg)
+  to{
+    transform:rotate(360deg);
+  }
 }
+
+
+/* =====================================================
+   ANIMATIONS
+===================================================== */
+
+@keyframes headerIn{
+
+  from{
+    opacity:0;
+
+    transform:
+      translateY(-10px);
+  }
+
+  to{
+    opacity:1;
+
+    transform:
+      translateY(0);
+  }
+
 }
+
+@keyframes contentIn{
+
+  from{
+    opacity:0;
+
+    transform:
+      translateY(8px);
+  }
+
+  to{
+    opacity:1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+
+/* =====================================================
+   SMALL SCREENS
+===================================================== */
+
+@media(max-width:360px){
+
+  .page{
+    padding-inline:12px;
+  }
+
+  .header{
+    margin-inline:-12px;
+  }
+
+  .profile-card{
+    padding:15px;
+  }
+
+  .profile-avatar{
+    width:52px;
+    height:52px;
+
+    flex-basis:52px;
+
+    border-radius:16px;
+
+    font-size:18px;
+  }
+
+  .profile-name{
+    font-size:17px;
+  }
+
+  .menu-title{
+    font-size:10px;
+  }
+
+  .menu-sub{
+    font-size:7px;
+  }
+
+}
+
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media(prefers-reduced-motion:reduce){
+
+  *,
+  *::before,
+  *::after{
+    animation:none !important;
+
+    transition:none !important;
+  }
+
+}
+
 </style>
 </head>
 
@@ -698,11 +1276,15 @@ transform:rotate(360deg)
 <body>
 
 
-<div
-class="loading"
-id="loading">
+<!-- =====================================================
+     LOADING
+===================================================== -->
 
-<div class="loader"></div>
+<div
+  class="loading"
+  id="loading">
+
+  <div class="loader"></div>
 
 </div>
 
@@ -710,516 +1292,636 @@ id="loading">
 <main class="page">
 
 
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
 <header class="header">
 
-<div class="topbar">
+  <div class="topbar">
 
-<button
-class="back-btn"
-id="backBtn"
-type="button"
-aria-label="رجوع">
+    <button
+      class="back-btn"
+      id="backBtn"
+      type="button"
+      aria-label="رجوع">
 
-<svg
-width="21"
-height="21"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="2"
-stroke-linecap="round"
-stroke-linejoin="round">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round">
 
-<path d="M15 18l-6-6 6-6"/>
+        <path d="M15 18l-6-6 6-6"/>
 
-</svg>
+      </svg>
 
-</button>
-
-
-<div class="brand">
-
-<strong>MZAD</strong>
-
-<span>PHONE</span>
-
-</div>
+    </button>
 
 
-<div class="header-spacer"></div>
+    <div class="brand">
 
-</div>
+      <strong>MZAD</strong>
+
+      <span>PHONE</span>
+
+    </div>
+
+
+    <div class="header-spacer"></div>
+
+  </div>
+
+
+  <div class="page-intro">
+
+    <h1>
+      حسابي
+    </h1>
+
+    <p>
+      إدارة حسابك ومتابعة نشاطك على MZAD PHONE
+    </p>
+
+  </div>
 
 </header>
 
 
-<!-- =========================
-     PROFILE
-========================= -->
+<!-- =====================================================
+     PROFILE CARD
+===================================================== -->
 
 <section class="profile-card">
 
 
-<div class="profile-main">
+  <div class="profile-top">
 
-<h1
-class="profile-name"
-id="profileName">
 
-جاري التحميل...
+    <div
+      class="profile-avatar"
+      id="profileAvatar">
 
-</h1>
+      م
 
+    </div>
 
-<p
-class="profile-email"
-id="profileEmail">
 
-—
+    <div class="profile-main">
 
-</p>
+      <h2
+        class="profile-name"
+        id="profileName">
 
+        جاري التحميل...
 
-<div class="profile-status">
+      </h2>
 
-<span class="status-dot"></span>
 
-حساب نشط
+      <p
+        class="profile-email"
+        id="profileEmail">
 
-</div>
+        —
 
-</div>
+      </p>
 
 
-<div class="profile-details">
+      <div class="profile-status">
 
+        <span class="status-dot"></span>
 
-<div class="detail">
+        حساب نشط
 
-<div class="detail-label">
-رقم الهاتف
-</div>
+      </div>
 
-<div
-class="detail-value"
-id="infoPhone">
+    </div>
 
-—
+  </div>
 
-</div>
 
-</div>
+  <!-- ACCOUNT DETAILS -->
 
+  <div class="profile-details">
 
-<div class="detail">
 
-<div class="detail-label">
-البريد الإلكتروني
-</div>
+    <div class="account-detail">
 
-<div
-class="detail-value"
-id="infoEmail">
+      <div class="detail-label">
+        رقم الهاتف
+      </div>
 
-—
+      <div
+        class="detail-value"
+        id="infoPhone">
 
-</div>
+        —
 
-</div>
+      </div>
 
+    </div>
 
-</div>
 
+    <div class="account-detail">
 
-<div class="rating-box">
+      <div class="detail-label">
+        البريد الإلكتروني
+      </div>
 
-<div>
+      <div
+        class="detail-value"
+        id="infoEmail">
 
-<div
-class="rating-number"
-id="ratingNumber">
+        —
 
-0.0
+      </div>
 
-</div>
+    </div>
 
-<div class="rating-label">
-تقييم الحساب
-</div>
 
-</div>
+  </div>
 
 
-<div
-class="rating-count"
-id="ratingCount">
+  <!-- RATING -->
 
-لا توجد تقييمات بعد
+  <div class="rating-box">
 
-</div>
+    <div>
 
-</div>
+      <div
+        class="rating-number"
+        id="ratingNumber">
 
+        0.0
 
-<div class="stats">
+      </div>
 
+      <div class="rating-label">
+        تقييم الحساب
+      </div>
 
-<div class="stat">
+    </div>
 
-<div
-class="stat-number"
-id="salesCount">
 
-0
+    <div
+      class="rating-count"
+      id="ratingCount">
 
-</div>
+      لا توجد تقييمات بعد
 
-<div class="stat-label">
-مبيعات
-</div>
+    </div>
 
-</div>
+  </div>
 
 
-<div class="stat">
+  <!-- STATS -->
 
-<div
-class="stat-number"
-id="purchasesCount">
+  <div class="stats">
 
-0
 
-</div>
+    <div class="stat">
 
-<div class="stat-label">
-مشتريات
-</div>
+      <div
+        class="stat-number"
+        id="salesCount">
 
-</div>
+        0
 
+      </div>
 
-<div class="stat">
+      <div class="stat-label">
+        مبيعات
+      </div>
 
-<div
-class="stat-number"
-id="listingsCount">
+    </div>
 
-0
 
-</div>
+    <div class="stat">
 
-<div class="stat-label">
-إعلانات
-</div>
+      <div
+        class="stat-number"
+        id="purchasesCount">
 
-</div>
+        0
 
+      </div>
 
-</div>
+      <div class="stat-label">
+        مشتريات
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div
+        class="stat-number"
+        id="listingsCount">
+
+        0
+
+      </div>
+
+      <div class="stat-label">
+        إعلانات
+      </div>
+
+    </div>
+
+
+  </div>
+
 
 </section>
 
 
-<!-- =========================
-     SERVICES
-========================= -->
+<!-- =====================================================
+     ACCOUNT
+===================================================== -->
 
 <section class="section">
 
-<h2 class="section-title">
-حسابي
-</h2>
 
+  <div class="section-title-row">
 
-<div class="menu-card">
+    <span class="section-accent"></span>
 
+    <h2 class="section-title">
+      حسابي
+    </h2>
 
-<button
-class="menu-item"
-id="myListingsBtn"
-type="button">
+  </div>
 
-<span class="menu-icon">
 
-<svg
-width="20"
-height="20"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.8">
+  <div class="menu-card">
 
-<rect
-x="4"
-y="4"
-width="16"
-height="16"
-rx="2"/>
 
-<path d="M8 9h8"/>
-<path d="M8 13h8"/>
-<path d="M8 17h5"/>
+    <!-- MY LISTINGS -->
 
-</svg>
+    <button
+      class="menu-item"
+      id="myListingsBtn"
+      type="button">
 
-</span>
 
+      <span class="menu-icon">
 
-<span class="menu-copy">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8">
 
-<span class="menu-title">
-أجهزتي المعروضة
-</span>
+          <rect
+            x="4"
+            y="4"
+            width="16"
+            height="16"
+            rx="2"/>
 
-<br>
+          <path d="M8 9h8"/>
+          <path d="M8 13h8"/>
+          <path d="M8 17h5"/>
 
-<span class="menu-sub">
-إدارة الأجهزة التي تعرضها للبيع
-</span>
+        </svg>
 
-</span>
+      </span>
 
 
-<svg
-class="menu-arrow"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="2">
+      <span class="menu-copy">
 
-<path d="M9 18l6-6-6-6"/>
+        <span class="menu-title">
+          أجهزتي المعروضة
+        </span>
 
-</svg>
+        <span class="menu-sub">
+          إدارة الأجهزة التي تعرضها للبيع
+        </span>
 
-</button>
+      </span>
 
 
-<button
-class="menu-item"
-id="myAuctionsBtn"
-type="button">
+      <svg
+        class="menu-arrow"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2">
 
-<span class="menu-icon">
+        <path d="M9 18l6-6-6-6"/>
 
-<svg
-width="20"
-height="20"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.8">
+      </svg>
 
-<path d="m7 11 7.5-7.5 3 3L10 14"/>
-<path d="m5 13 6 6"/>
-<path d="M4 20h16"/>
 
-</svg>
+    </button>
 
-</span>
 
+    <!-- AUCTIONS -->
 
-<span class="menu-copy">
+    <button
+      class="menu-item"
+      id="myAuctionsBtn"
+      type="button">
 
-<span class="menu-title">
-مزاداتي
-</span>
 
-<br>
+      <span class="menu-icon">
 
-<span class="menu-sub">
-إدارة الأجهزة المعروضة بالمزاد
-</span>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8">
 
-</span>
+          <path d="m7 11 7.5-7.5 3 3L10 14"/>
 
+          <path d="m5 13 6 6"/>
 
-<svg
-class="menu-arrow"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="2">
+          <path d="M4 20h16"/>
 
-<path d="M9 18l6-6-6-6"/>
+        </svg>
 
-</svg>
+      </span>
 
-</button>
 
+      <span class="menu-copy">
 
-<button
-class="menu-item"
-id="purchasesBtn"
-type="button">
+        <span class="menu-title">
+          مزاداتي
+        </span>
 
-<span class="menu-icon">
+        <span class="menu-sub">
+          إدارة الأجهزة المعروضة بالمزاد
+        </span>
 
-<svg
-width="20"
-height="20"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.8">
+      </span>
 
-<path d="M6 7h12l1 13H5L6 7Z"/>
-<path d="M9 7a3 3 0 0 1 6 0"/>
 
-</svg>
+      <svg
+        class="menu-arrow"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2">
 
-</span>
+        <path d="M9 18l6-6-6-6"/>
 
+      </svg>
 
-<span class="menu-copy">
 
-<span class="menu-title">
-مشترياتي
-</span>
+    </button>
 
-<br>
 
-<span class="menu-sub">
-الأجهزة التي اشتريتها من المنصة
-</span>
+    <!-- PURCHASES -->
 
-</span>
+    <button
+      class="menu-item"
+      id="purchasesBtn"
+      type="button">
 
 
-<svg
-class="menu-arrow"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="2">
+      <span class="menu-icon">
 
-<path d="M9 18l6-6-6-6"/>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8">
 
-</svg>
+          <path d="M6 7h12l1 13H5L6 7Z"/>
 
-</button>
+          <path d="M9 7a3 3 0 0 1 6 0"/>
 
+        </svg>
 
-<button
-class="menu-item"
-id="salesBtn"
-type="button">
+      </span>
 
-<span class="menu-icon">
 
-<svg
-width="20"
-height="20"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.8">
+      <span class="menu-copy">
 
-<path d="M4 17h16"/>
-<path d="M7 17V9"/>
-<path d="M12 17V5"/>
-<path d="M17 17v-6"/>
+        <span class="menu-title">
+          مشترياتي
+        </span>
 
-</svg>
+        <span class="menu-sub">
+          الأجهزة التي اشتريتها من المنصة
+        </span>
 
-</span>
+      </span>
 
 
-<span class="menu-copy">
+      <svg
+        class="menu-arrow"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2">
 
-<span class="menu-title">
-مبيعاتي
-</span>
+        <path d="M9 18l6-6-6-6"/>
 
-<br>
+      </svg>
 
-<span class="menu-sub">
-سجل الأجهزة التي تم بيعها
-</span>
 
-</span>
+    </button>
 
 
-<svg
-class="menu-arrow"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="2">
+    <!-- SALES -->
 
-<path d="M9 18l6-6-6-6"/>
+    <button
+      class="menu-item"
+      id="salesBtn"
+      type="button">
 
-</svg>
 
-</button>
+      <span class="menu-icon">
 
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8">
 
-<button
-class="menu-item"
-id="settingsBtn"
-type="button">
+          <path d="M4 17h16"/>
 
-<span class="menu-icon">
+          <path d="M7 17V9"/>
 
-<svg
-width="20"
-height="20"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.8">
+          <path d="M12 17V5"/>
 
-<circle
-cx="12"
-cy="12"
-r="3"/>
+          <path d="M17 17v-6"/>
 
-<path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.5 1.5-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5v.2h-2.1v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1-1.5-1.5.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H7v-2.1h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1 1.5-1.5.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.5V5h2.1v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1 1.5 1.5-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.5 1h.2v2.1h-.2a1.7 1.7 0 0 0-1.5 1Z"/>
+        </svg>
 
-</svg>
+      </span>
 
-</span>
 
+      <span class="menu-copy">
 
-<span class="menu-copy">
+        <span class="menu-title">
+          مبيعاتي
+        </span>
 
-<span class="menu-title">
-الإعدادات
-</span>
+        <span class="menu-sub">
+          سجل الأجهزة التي تم بيعها
+        </span>
 
-<br>
+      </span>
 
-<span class="menu-sub">
-بيانات الحساب والإشعارات لاحقاً
-</span>
 
-</span>
+      <svg
+        class="menu-arrow"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2">
 
+        <path d="M9 18l6-6-6-6"/>
 
-<svg
-class="menu-arrow"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="2">
+      </svg>
 
-<path d="M9 18l6-6-6-6"/>
 
-</svg>
+    </button>
 
-</button>
 
+    <!-- FAVORITES -->
 
-</div>
+    <button
+      class="menu-item"
+      id="favoritesBtn"
+      type="button">
+
+
+      <span class="menu-icon">
+
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8">
+
+          <path
+            d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
+
+        </svg>
+
+      </span>
+
+
+      <span class="menu-copy">
+
+        <span class="menu-title">
+          المفضلة
+        </span>
+
+        <span class="menu-sub">
+          الأجهزة التي حفظتها للرجوع إليها
+        </span>
+
+      </span>
+
+
+      <svg
+        class="menu-arrow"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2">
+
+        <path d="M9 18l6-6-6-6"/>
+
+      </svg>
+
+
+    </button>
+
+
+    <!-- SETTINGS -->
+
+    <button
+      class="menu-item"
+      id="settingsBtn"
+      type="button">
+
+
+      <span class="menu-icon">
+
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8">
+
+          <circle
+            cx="12"
+            cy="12"
+            r="3"/>
+
+          <path
+            d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.5 1.5-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5v.2h-2.1v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1-1.5-1.5.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H7v-2.1h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1 1.5-1.5.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.5V5h2.1v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1 1.5 1.5-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0-1.5 1h.2v2.1h-.2a1.7 1.7 0 0 0-1.5 1Z"/>
+
+        </svg>
+
+      </span>
+
+
+      <span class="menu-copy">
+
+        <span class="menu-title">
+          الإعدادات
+        </span>
+
+        <span class="menu-sub">
+          بيانات الحساب والإشعارات لاحقاً
+        </span>
+
+      </span>
+
+
+      <svg
+        class="menu-arrow"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2">
+
+        <path d="M9 18l6-6-6-6"/>
+
+      </svg>
+
+
+    </button>
+
+
+  </div>
 
 </section>
 
 
-<button
-class="logout-btn"
-id="logoutBtn"
-type="button">
+<!-- =====================================================
+     LOGOUT
+===================================================== -->
 
-تسجيل الخروج
+<button
+  class="logout-btn"
+  id="logoutBtn"
+  type="button">
+
+  تسجيل الخروج
 
 </button>
 
@@ -1227,9 +1929,9 @@ type="button">
 </main>
 
 
-<!-- =========================
+<!-- =====================================================
      BOTTOM NAV
-========================= -->
+===================================================== -->
 
 <div class="bottom-wrap">
 
@@ -1237,123 +1939,128 @@ type="button">
 
 
 <button
-class="nav-item"
-data-go="home.html"
-type="button">
+  class="nav-item"
+  data-go="home.html"
+  type="button">
 
-<svg
-class="nav-icon"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.8">
+  <svg
+    class="nav-icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.8">
 
-<path d="m4 10 8-6 8 6v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-9Z"/>
+    <path d="m4 10 8-6 8 6v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-9Z"/>
 
-</svg>
+  </svg>
 
-<span class="nav-label">
-الرئيسية
-</span>
-
-</button>
-
-
-<button
-class="nav-item"
-data-go="auctions.html"
-type="button">
-
-<svg
-class="nav-icon"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.8">
-
-<path d="m7 11 7.5-7.5 3 3L10 14"/>
-<path d="m5 13 6 6"/>
-<path d="M4 20h16"/>
-
-</svg>
-
-<span class="nav-label">
-المزادات
-</span>
+  <span class="nav-label">
+    الرئيسية
+  </span>
 
 </button>
 
 
 <button
-class="nav-item"
-data-go="sell.html"
-type="button">
+  class="nav-item"
+  data-go="auctions.html"
+  type="button">
 
-<svg
-class="nav-icon"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.9">
+  <svg
+    class="nav-icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.8">
 
-<path d="M12 5v14"/>
-<path d="M5 12h14"/>
+    <path d="m7 11 7.5-7.5 3 3L10 14"/>
 
-</svg>
+    <path d="m5 13 6 6"/>
 
-<span class="nav-label">
-إضافة
-</span>
+    <path d="M4 20h16"/>
 
-</button>
+  </svg>
 
-
-<button
-class="nav-item"
-data-go="favorites.html"
-type="button">
-
-<svg
-class="nav-icon"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.8">
-
-<path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
-
-</svg>
-
-<span class="nav-label">
-المفضلة
-</span>
+  <span class="nav-label">
+    المزادات
+  </span>
 
 </button>
 
 
 <button
-class="nav-item active"
-type="button">
+  class="nav-item"
+  data-go="sell.html"
+  type="button">
 
-<svg
-class="nav-icon"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.8">
+  <svg
+    class="nav-icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.9">
 
-<circle
-cx="12"
-cy="8"
-r="3.5"/>
+    <path d="M12 5v14"/>
 
-<path d="M5 21a7 7 0 0 1 14 0"/>
+    <path d="M5 12h14"/>
 
-</svg>
+  </svg>
 
-<span class="nav-label">
-حسابي
-</span>
+  <span class="nav-label">
+    إضافة
+  </span>
+
+</button>
+
+
+<button
+  class="nav-item"
+  data-go="favorites.html"
+  type="button">
+
+  <svg
+    class="nav-icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.8">
+
+    <path
+      d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
+
+  </svg>
+
+  <span class="nav-label">
+    المفضلة
+  </span>
+
+</button>
+
+
+<button
+  class="nav-item active"
+  type="button">
+
+  <svg
+    class="nav-icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.8">
+
+    <circle
+      cx="12"
+      cy="8"
+      r="3.5"/>
+
+    <path
+      d="M5 21a7 7 0 0 1 14 0"/>
+
+  </svg>
+
+  <span class="nav-label">
+    حسابي
+  </span>
 
 </button>
 
@@ -1363,9 +2070,13 @@ r="3.5"/>
 </div>
 
 
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
 <div
-class="toast"
-id="toast">
+  class="toast"
+  id="toast">
 </div>
 
 
@@ -1374,371 +2085,477 @@ id="toast">
 import { supabase } from "./js/supabase.js";
 
 
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
 const loading =
-document.getElementById("loading");
+  document.getElementById("loading");
 
 const profileName =
-document.getElementById("profileName");
+  document.getElementById("profileName");
 
 const profileEmail =
-document.getElementById("profileEmail");
+  document.getElementById("profileEmail");
+
+const profileAvatar =
+  document.getElementById("profileAvatar");
 
 const infoPhone =
-document.getElementById("infoPhone");
+  document.getElementById("infoPhone");
 
 const infoEmail =
-document.getElementById("infoEmail");
+  document.getElementById("infoEmail");
 
 const ratingNumber =
-document.getElementById("ratingNumber");
+  document.getElementById("ratingNumber");
 
 const ratingCount =
-document.getElementById("ratingCount");
+  document.getElementById("ratingCount");
 
 const salesCount =
-document.getElementById("salesCount");
+  document.getElementById("salesCount");
 
 const purchasesCount =
-document.getElementById("purchasesCount");
+  document.getElementById("purchasesCount");
 
 const listingsCount =
-document.getElementById("listingsCount");
+  document.getElementById("listingsCount");
 
 const toast =
-document.getElementById("toast");
+  document.getElementById("toast");
 
 const backBtn =
-document.getElementById("backBtn");
+  document.getElementById("backBtn");
 
 const logoutBtn =
-document.getElementById("logoutBtn");
+  document.getElementById("logoutBtn");
 
 const myListingsBtn =
-document.getElementById("myListingsBtn");
+  document.getElementById("myListingsBtn");
 
 const myAuctionsBtn =
-document.getElementById("myAuctionsBtn");
+  document.getElementById("myAuctionsBtn");
 
 const purchasesBtn =
-document.getElementById("purchasesBtn");
+  document.getElementById("purchasesBtn");
 
 const salesBtn =
-document.getElementById("salesBtn");
+  document.getElementById("salesBtn");
+
+const favoritesBtn =
+  document.getElementById("favoritesBtn");
 
 const settingsBtn =
-document.getElementById("settingsBtn");
+  document.getElementById("settingsBtn");
 
 
 let toastTimer;
 
 
+/* =====================================================
+   TOAST
+===================================================== */
+
 function showToast(message){
 
-toast.textContent = message;
+  toast.textContent =
+    message;
 
-toast.classList.add("show");
+  toast.classList.add("show");
 
-clearTimeout(toastTimer);
+  clearTimeout(
+    toastTimer
+  );
 
-toastTimer =
-setTimeout(()=>{
+  toastTimer =
+    setTimeout(
+      () => {
 
-toast.classList.remove("show");
+        toast.classList.remove(
+          "show"
+        );
 
-},2200);
+      },
+      2200
+    );
 
 }
 
 
-/* =========================
+/* =====================================================
+   AVATAR LETTER
+===================================================== */
+
+function getInitial(name){
+
+  const text =
+    String(name || "").trim();
+
+  if(!text){
+    return "م";
+  }
+
+  return text.charAt(0);
+
+}
+
+
+/* =====================================================
    LOAD USER
-========================= */
+===================================================== */
 
 async function loadProfile(){
 
-try{
+  try{
 
-const {
-data,
-error
-} =
-await supabase.auth.getUser();
+    const {
+      data,
+      error
+    } =
+      await supabase.auth.getUser();
 
 
-if(error || !data?.user){
+    if(
+      error ||
+      !data?.user
+    ){
 
-window.location.replace(
-"index.html?login=1&returnTo=profile.html"
-);
+      window.location.replace(
+        "index.html?login=1&returnTo=profile.html"
+      );
 
-return;
+      return;
+
+    }
+
+
+    const user =
+      data.user;
+
+    const metadata =
+      user.user_metadata || {};
+
+
+    const fullName =
+      metadata.full_name ||
+      metadata.name ||
+      "مستخدم MZAD PHONE";
+
+
+    const phone =
+      metadata.phone ||
+      "غير مضاف";
+
+
+    const email =
+      user.email ||
+      "غير مضاف";
+
+
+    profileName.textContent =
+      fullName;
+
+    profileEmail.textContent =
+      email;
+
+    infoPhone.textContent =
+      phone;
+
+    infoEmail.textContent =
+      email;
+
+
+    profileAvatar.textContent =
+      getInitial(fullName);
+
+
+    /*
+      حالياً تبقى هذه الأرقام صفر
+      إلى أن نربط جداول المعاملات
+      الحقيقية.
+    */
+
+    ratingNumber.textContent =
+      "0.0";
+
+    ratingCount.textContent =
+      "لا توجد تقييمات بعد";
+
+    salesCount.textContent =
+      "0";
+
+    purchasesCount.textContent =
+      "0";
+
+    listingsCount.textContent =
+      "0";
+
+
+    loading.classList.add(
+      "hidden"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "Profile error:",
+      error
+    );
+
+
+    showToast(
+      "تعذر تحميل الحساب"
+    );
+
+
+    setTimeout(
+      () => {
+
+        loading.classList.add(
+          "hidden"
+        );
+
+      },
+      500
+    );
+
+  }
 
 }
 
 
-const user =
-data.user;
-
-const metadata =
-user.user_metadata || {};
-
-
-const fullName =
-metadata.full_name ||
-metadata.name ||
-"مستخدم MZAD PHONE";
-
-
-const phone =
-metadata.phone ||
-"غير مضاف";
-
-
-const email =
-user.email ||
-"غير مضاف";
-
-
-profileName.textContent =
-fullName;
-
-profileEmail.textContent =
-email;
-
-infoPhone.textContent =
-phone;
-
-infoEmail.textContent =
-email;
-
-
-/*
-  هذه الأرقام مؤقتاً صفر
-  إلى أن نربط جداول المنصة
-  الحقيقية.
-*/
-
-ratingNumber.textContent =
-"0.0";
-
-ratingCount.textContent =
-"لا توجد تقييمات بعد";
-
-salesCount.textContent =
-"0";
-
-purchasesCount.textContent =
-"0";
-
-listingsCount.textContent =
-"0";
-
-
-loading.classList.add("hidden");
-
-
-}catch(error){
-
-console.error(
-"Profile error:",
-error
-);
-
-showToast(
-"تعذر تحميل الحساب"
-);
-
-setTimeout(()=>{
-
-loading.classList.add("hidden");
-
-},500);
-
-}
-
-}
-
-
-/* =========================
+/* =====================================================
    BACK
-========================= */
+===================================================== */
 
 backBtn.addEventListener(
-"click",
-()=>{
+  "click",
+  () => {
 
-if(
-document.referrer &&
-document.referrer.includes(
-window.location.host
-)
-){
+    if(
+      document.referrer &&
+      document.referrer.includes(
+        window.location.host
+      )
+    ){
 
-window.history.back();
+      window.history.back();
 
-}else{
+    }else{
 
-window.location.href =
-"home.html";
+      window.location.href =
+        "home.html";
 
-}
+    }
 
-});
+  }
+);
 
 
-/* =========================
+/* =====================================================
    LOGOUT
-========================= */
+===================================================== */
 
 logoutBtn.addEventListener(
-"click",
-async ()=>{
+  "click",
+  async () => {
 
-logoutBtn.disabled = true;
+    logoutBtn.disabled =
+      true;
 
-logoutBtn.textContent =
-"جاري تسجيل الخروج...";
-
-
-try{
-
-const {
-error
-} =
-await supabase.auth.signOut();
+    logoutBtn.textContent =
+      "جاري تسجيل الخروج...";
 
 
-if(error){
+    try{
 
-logoutBtn.disabled = false;
+      const {
+        error
+      } =
+        await supabase.auth.signOut();
 
-logoutBtn.textContent =
-"تسجيل الخروج";
 
-showToast(
-"تعذر تسجيل الخروج"
+      if(error){
+
+        logoutBtn.disabled =
+          false;
+
+        logoutBtn.textContent =
+          "تسجيل الخروج";
+
+        showToast(
+          "تعذر تسجيل الخروج"
+        );
+
+        return;
+
+      }
+
+
+      sessionStorage.removeItem(
+        "mzad_pending_action"
+      );
+
+
+      window.location.replace(
+        "home.html"
+      );
+
+
+    }catch(error){
+
+      console.error(
+        error
+      );
+
+
+      logoutBtn.disabled =
+        false;
+
+      logoutBtn.textContent =
+        "تسجيل الخروج";
+
+
+      showToast(
+        "حدث خطأ أثناء تسجيل الخروج"
+      );
+
+    }
+
+  }
 );
 
-return;
 
-}
-
-
-sessionStorage.removeItem(
-"mzad_pending_action"
-);
-
-
-window.location.replace(
-"home.html"
-);
-
-
-}catch(error){
-
-console.error(error);
-
-logoutBtn.disabled = false;
-
-logoutBtn.textContent =
-"تسجيل الخروج";
-
-showToast(
-"حدث خطأ أثناء تسجيل الخروج"
-);
-
-}
-
-});
-
-
-/* =========================
-   SERVICES
-========================= */
+/* =====================================================
+   MY LISTINGS
+===================================================== */
 
 myListingsBtn.addEventListener(
-"click",
-()=>{
+  "click",
+  () => {
 
-showToast(
-"قسم أجهزتك راح يتفعل مع نظام البيع"
+    showToast(
+      "قسم أجهزتك راح يتفعل مع نظام البيع"
+    );
+
+  }
 );
 
-});
 
+/* =====================================================
+   MY AUCTIONS
+===================================================== */
 
 myAuctionsBtn.addEventListener(
-"click",
-()=>{
+  "click",
+  () => {
 
-showToast(
-"قسم مزاداتك راح يتفعل مع نظام المزادات"
+    showToast(
+      "قسم مزاداتك راح يتفعل مع نظام المزادات"
+    );
+
+  }
 );
 
-});
 
+/* =====================================================
+   PURCHASES
+===================================================== */
 
 purchasesBtn.addEventListener(
-"click",
-()=>{
+  "click",
+  () => {
 
-showToast(
-"سجل المشتريات راح يتفعل مع نظام الشراء"
+    showToast(
+      "سجل المشتريات راح يتفعل مع نظام الشراء"
+    );
+
+  }
 );
 
-});
 
+/* =====================================================
+   SALES
+===================================================== */
 
 salesBtn.addEventListener(
-"click",
-()=>{
+  "click",
+  () => {
 
-showToast(
-"سجل المبيعات راح يتفعل مع نظام البيع"
+    showToast(
+      "سجل المبيعات راح يتفعل مع نظام البيع"
+    );
+
+  }
 );
 
-});
 
+/* =====================================================
+   FAVORITES
+===================================================== */
+
+favoritesBtn.addEventListener(
+  "click",
+  () => {
+
+    window.location.href =
+      "favorites.html";
+
+  }
+);
+
+
+/* =====================================================
+   SETTINGS
+===================================================== */
 
 settingsBtn.addEventListener(
-"click",
-()=>{
+  "click",
+  () => {
 
-showToast(
-"الإعدادات راح نضيفها لاحقاً"
+    showToast(
+      "الإعدادات راح نضيفها لاحقاً"
+    );
+
+  }
 );
 
-});
 
-
-/* =========================
+/* =====================================================
    BOTTOM NAV
-========================= */
+===================================================== */
 
 document
-.querySelectorAll("[data-go]")
-.forEach(button=>{
+  .querySelectorAll("[data-go]")
+  .forEach(
+    button => {
 
-button.addEventListener(
-"click",
-()=>{
+      button.addEventListener(
+        "click",
+        () => {
 
-const url =
-button.dataset.go;
+          const url =
+            button.dataset.go;
 
-if(!url)return;
+          if(!url){
+            return;
+          }
 
-window.location.href =
-url;
+          window.location.href =
+            url;
 
-});
+        }
+      );
 
-});
+    }
+  );
 
 
-/* =========================
+/* =====================================================
    START
-========================= */
+===================================================== */
 
 loadProfile();
 
