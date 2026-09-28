@@ -2,202 +2,324 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f7f8fa" />
+
+  <title>تفاصيل الجهاز | MZAD PHONE</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
   />
 
-  <title>MZAD PHONE</title>
-
   <style>
+
     :root{
-      --primary:#176b87;
-      --purple:#6246d9;
-
       --bg:#f7f8fa;
-      --card:#ffffff;
+      --surface:#ffffff;
+      --surface-2:#eef3f7;
 
-      --text:#17212b;
-      --muted:#7c8792;
-      --line:#edf0f3;
+      --ink:#17202a;
+      --muted:#667085;
+      --line:#e6e9ed;
+
+      --primary:#176b87;
+      --primary-dark:#125a73;
+      --primary-soft:#e8f3f6;
+
+      --purple:#6246d9;
+      --purple-dark:#5237c7;
+      --purple-soft:#e5e0ff;
 
       --pale:#e6e3f6;
       --pale-dark:#d8d3ee;
       --pale-text:#51477d;
 
-      --green:#22a06b;
-      --red:#dc4b4b;
+      --danger:#d94b61;
 
-      --shadow:0 8px 25px rgba(23,35,45,.06);
+      --shadow:0 14px 34px rgba(24,44,49,.08);
+      --shadow-soft:0 7px 20px rgba(24,44,49,.06);
+
+      --radius:20px;
     }
+
 
     *{
       box-sizing:border-box;
       -webkit-tap-highlight-color:transparent;
     }
 
-    html,
-    body{
-      margin:0;
-      padding:0;
-      width:100%;
-      min-height:100%;
-      background:var(--bg);
-      color:var(--text);
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "SF Pro Text",
-        "Segoe UI",
-        Tahoma,
-        Arial,
-        sans-serif;
+
+    html{
+      scroll-behavior:smooth;
     }
 
+
     body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:"Cairo",sans-serif;
       overflow-x:hidden;
     }
 
-    button{
-      font-family:inherit;
+
+    button,
+    input{
+      font:inherit;
     }
+
+
+    button{
+      border:0;
+      cursor:pointer;
+    }
+
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
 
     .page{
       width:100%;
-      max-width:720px;
+      max-width:520px;
       margin:0 auto;
       min-height:100vh;
-      background:var(--bg);
+      padding-bottom:105px;
     }
+
 
     /* =========================
        HEADER
     ========================= */
 
-    .top-header{
-      position:relative;
-      overflow:hidden;
-
-      padding:
-        calc(13px + env(safe-area-inset-top))
-        16px
-        15px;
-
-      background:
-        linear-gradient(
-          135deg,
-          rgba(23,107,135,.98),
-          rgba(35,111,137,.96) 42%,
-          rgba(98,70,217,.92)
-        );
-
-      color:#fff;
-
-      border-bottom-left-radius:24px;
-      border-bottom-right-radius:24px;
-
-      box-shadow:
-        0 8px 24px rgba(23,107,135,.12);
-    }
-
-    .top-header::after{
-      content:"";
-      position:absolute;
-      left:-10%;
-      right:-10%;
-      bottom:-34px;
-      height:70px;
-
-      background:rgba(255,255,255,.10);
-
-      border-radius:50% 50% 0 0;
-      transform:rotate(-1deg);
-      pointer-events:none;
-    }
-
-    .header-row{
-      position:relative;
-      z-index:2;
+    .topbar{
+      height:68px;
 
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:12px;
+
+      padding:0 16px;
+
+      position:sticky;
+      top:0;
+      z-index:30;
+
+      overflow:hidden;
+
+      background:
+        radial-gradient(
+          190px 75px at 8% 50%,
+          rgba(23,107,135,.14),
+          transparent 72%
+        ),
+        radial-gradient(
+          210px 85px at 88% 0%,
+          rgba(98,70,217,.18),
+          transparent 72%
+        ),
+        linear-gradient(
+          110deg,
+          #ffffff 0%,
+          #edf7f9 34%,
+          #f2effb 69%,
+          #ffffff 100%
+        );
+
+      border-bottom:1px solid rgba(230,233,237,.8);
+
+      box-shadow:
+        0 7px 22px rgba(24,44,49,.055);
+
+      isolation:isolate;
     }
 
-    .header-side{
-      display:flex;
-      align-items:center;
-      gap:8px;
+
+    .topbar::before{
+      content:"";
+
+      position:absolute;
+
+      width:250px;
+      height:72px;
+
+      left:-90px;
+      bottom:-46px;
+
+      border-radius:50%;
+
+      background:rgba(23,107,135,.12);
+
+      filter:blur(14px);
+
+      animation:
+        headerWave
+        7s ease-in-out
+        infinite alternate;
+
+      z-index:-1;
     }
 
-    .icon-button{
-      width:40px;
-      height:40px;
 
-      border:0;
-      border-radius:13px;
+    .topbar::after{
+      content:"";
+
+      position:absolute;
+
+      width:250px;
+      height:78px;
+
+      right:-85px;
+      top:-48px;
+
+      border-radius:50%;
+
+      background:rgba(98,70,217,.11);
+
+      filter:blur(15px);
+
+      animation:
+        headerWaveReverse
+        8s ease-in-out
+        infinite alternate;
+
+      z-index:-1;
+    }
+
+
+    @keyframes headerWave{
+
+      0%{
+        transform:
+          translateX(-5px)
+          rotate(-3deg)
+          scale(1);
+      }
+
+      100%{
+        transform:
+          translateX(55px)
+          rotate(5deg)
+          scale(1.08);
+      }
+
+    }
+
+
+    @keyframes headerWaveReverse{
+
+      0%{
+        transform:
+          translateX(10px)
+          rotate(3deg)
+          scale(1);
+      }
+
+      100%{
+        transform:
+          translateX(-45px)
+          rotate(-5deg)
+          scale(1.08);
+      }
+
+    }
+
+
+    .top-side{
+      width:42px;
+      height:42px;
 
       display:flex;
       align-items:center;
       justify-content:center;
 
-      color:#fff;
-      background:rgba(255,255,255,.13);
-
-      cursor:pointer;
-
-      transition:
-        transform .18s ease,
-        background .18s ease;
+      position:relative;
+      z-index:2;
     }
 
-    .icon-button:active{
+
+    .icon-btn{
+      width:40px;
+      height:40px;
+
+      border-radius:13px;
+
+      background:rgba(255,255,255,.78);
+
+      color:var(--ink);
+
+      border:1px solid rgba(255,255,255,.85);
+
+      box-shadow:
+        0 5px 14px rgba(24,44,49,.07);
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      transition:.18s ease;
+
+      backdrop-filter:blur(10px);
+    }
+
+
+    .icon-btn:active{
       transform:scale(.94);
-      background:rgba(255,255,255,.20);
     }
 
-    .icon-button svg{
-      width:20px;
-      height:20px;
+
+    .icon-btn svg{
+      width:19px;
+      height:19px;
       stroke:currentColor;
-      fill:none;
-      stroke-width:1.9;
-      stroke-linecap:round;
-      stroke-linejoin:round;
     }
 
-    .header-title{
+
+    .page-title{
       text-align:center;
-      flex:1;
       min-width:0;
+
+      position:relative;
+      z-index:2;
     }
 
-    .header-title .brand{
-      font-size:13px;
+
+    .page-title strong{
+      display:block;
+
+      font-size:17px;
       font-weight:800;
-      letter-spacing:.5px;
-      margin-bottom:2px;
+
+      line-height:1.2;
     }
 
-    .header-title .sub{
-      font-size:10px;
-      color:rgba(255,255,255,.76);
+
+    .page-title span{
+      display:block;
+
+      margin-top:2px;
+
+      color:var(--muted);
+
+      font-size:11px;
       font-weight:600;
     }
+
 
     /* =========================
        MAIN
     ========================= */
 
     main{
-      padding:0 16px 110px;
+      padding:0 16px 0;
     }
 
-    .content{
-      width:100%;
-    }
 
     /* =========================
        GALLERY
@@ -205,838 +327,65 @@
 
     .gallery-card{
       width:calc(100% + 32px);
+
       margin-right:-16px;
       margin-left:-16px;
 
-      margin-bottom:20px;
+      margin-bottom:0;
+
+      background:#fff;
 
       border:0;
       border-radius:0;
 
       box-shadow:none;
-      overflow:hidden;
 
-      background:#f1f2f4;
+      overflow:hidden;
     }
+
 
     .gallery{
       position:relative;
+
       width:100%;
       height:300px;
 
       background:#f1f2f4;
 
       overflow:hidden;
-      touch-action:pan-y;
     }
+
 
     .gallery-track{
-      width:100%;
       height:100%;
+      width:100%;
 
       display:flex;
+      direction:ltr;
 
       overflow-x:auto;
-      overflow-y:hidden;
 
       scroll-snap-type:x mandatory;
+
       scroll-behavior:smooth;
 
-      -webkit-overflow-scrolling:touch;
-
       scrollbar-width:none;
+
+      overscroll-behavior-x:contain;
+
+      touch-action:pan-x;
     }
+
 
     .gallery-track::-webkit-scrollbar{
       display:none;
     }
 
+
     .gallery-slide{
-      position:relative;
-
       flex:0 0 100%;
-      width:100%;
-      height:100%;
 
-      scroll-snap-align:start;
-
-      cursor:pointer;
-
-      user-select:none;
-      -webkit-user-select:none;
-    }
-
-    .gallery-slide img{
-      display:block;
-
-      width:100%;
-      height:100%;
-
-      object-fit:cover;
-
-      user-select:none;
-      -webkit-user-drag:none;
-      pointer-events:none;
-    }
-
-    .gallery-counter{
-      position:absolute;
-      top:14px;
-      right:14px;
-      z-index:5;
-
-      min-width:58px;
-      height:30px;
-
-      padding:0 10px;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-
-      border-radius:999px;
-
-      background:rgba(15,20,25,.62);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-
-      color:#fff;
-
-      font-size:11px;
-      font-weight:800;
-      letter-spacing:.4px;
-
-      pointer-events:none;
-    }
-
-    .gallery-dots{
-      position:absolute;
-      left:50%;
-      bottom:13px;
-      z-index:5;
-
-      transform:translateX(-50%);
-
-      display:flex;
-      align-items:center;
-      gap:5px;
-
-      padding:6px 9px;
-
-      border-radius:999px;
-
-      background:rgba(15,20,25,.48);
-
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-
-      pointer-events:none;
-    }
-
-    .gallery-dot{
-      width:5px;
-      height:5px;
-
-      border-radius:50%;
-
-      background:rgba(255,255,255,.45);
-
-      transition:
-        width .2s ease,
-        background .2s ease;
-    }
-
-    .gallery-dot.active{
-      width:16px;
-      border-radius:999px;
-      background:#fff;
-    }
-
-    /* الملاحظة الصغيرة الجديدة */
-
-    .photo-hint{
-      margin-top:-8px;
-      margin-bottom:8px;
-
-      text-align:center;
-
-      color:#8a96a1;
-
-      font-size:10px;
-      font-weight:600;
-
-      line-height:1.6;
-    }
-
-    /* =========================
-       PRODUCT HEADER
-    ========================= */
-
-    .product-head{
-      padding-top:2px;
-      margin-bottom:18px;
-    }
-
-    .product-brand{
-      font-size:13px;
-      font-weight:800;
-      color:var(--primary);
-      margin-bottom:4px;
-    }
-
-    .product-name{
-      margin:0;
-
-      font-size:25px;
-      line-height:1.2;
-
-      font-weight:900;
-      letter-spacing:-.4px;
-
-      color:var(--text);
-    }
-
-    .chips{
-      display:flex;
-      flex-wrap:wrap;
-      gap:7px;
-
-      margin-top:12px;
-    }
-
-    .chip{
-      min-height:34px;
-
-      padding:0 11px;
-
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-
-      border-radius:10px;
-
-      background:#fff;
-      border:1px solid var(--line);
-
-      color:#596572;
-
-      font-size:12px;
-      font-weight:700;
-    }
-
-    .chip.sale{
-      background:#fff;
-      color:#596572;
-    }
-
-    /* =========================
-       PRICE
-    ========================= */
-
-    .price-card{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-
-      padding:15px;
-
-      background:var(--pale);
-
-      border-radius:17px;
-
-      margin-bottom:22px;
-    }
-
-    .price-info{
-      min-width:0;
-    }
-
-    .price-label{
-      font-size:11px;
-      font-weight:700;
-      color:var(--pale-text);
-
-      margin-bottom:4px;
-    }
-
-    .price{
-      font-size:29px;
-      line-height:1;
-
-      font-weight:900;
-      letter-spacing:-.6px;
-
-      color:#40375f;
-    }
-
-    .price-currency{
-      font-size:12px;
-      font-weight:800;
-      color:var(--pale-text);
-
-      margin-right:4px;
-    }
-
-    .price-icon{
-      width:48px;
-      height:48px;
-
-      flex:0 0 48px;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-
-      border-radius:14px;
-
-      background:var(--pale-dark);
-
-      color:var(--pale-text);
-    }
-
-    .price-icon svg{
-      width:23px;
-      height:23px;
-
-      stroke:currentColor;
-      fill:none;
-
-      stroke-width:1.8;
-      stroke-linecap:round;
-      stroke-linejoin:round;
-    }
-
-    /* =========================
-       SECTION INTRO
-    ========================= */
-
-    .details-intro{
-      margin-bottom:12px;
-    }
-
-    .details-intro strong{
-      display:block;
-
-      font-size:15px;
-      font-weight:900;
-
-      margin-bottom:3px;
-    }
-
-    .details-intro span{
-      display:block;
-
-      font-size:12px;
-      color:var(--muted);
-      font-weight:600;
-    }
-
-    .section-title{
-      margin:23px 0 11px;
-
-      font-size:17px;
-      font-weight:900;
-
-      color:var(--text);
-    }
-
-    /* =========================
-       SPEC GRID
-    ========================= */
-
-    .spec-grid{
-      display:grid;
-
-      grid-template-columns:repeat(2, minmax(0,1fr));
-
-      gap:10px;
-    }
-
-    .spec-card{
-      min-height:88px;
-
-      padding:12px;
-
-      background:var(--card);
-
-      border:1px solid var(--line);
-
-      border-radius:16px;
-
-      box-shadow:var(--shadow);
-
-      display:flex;
-      align-items:center;
-
-      gap:10px;
-    }
-
-    .spec-icon{
-      width:44px;
-      height:44px;
-
-      flex:0 0 44px;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-
-      border-radius:13px;
-
-      background:#f0f5f7;
-      color:var(--primary);
-    }
-
-    .spec-icon svg{
-      width:22px;
-      height:22px;
-
-      stroke:currentColor;
-      fill:none;
-
-      stroke-width:1.8;
-      stroke-linecap:round;
-      stroke-linejoin:round;
-    }
-
-    .spec-text{
-      min-width:0;
-    }
-
-    .spec-label{
-      display:block;
-
-      font-size:11px;
-      color:var(--muted);
-
-      font-weight:700;
-
-      margin-bottom:4px;
-    }
-
-    .spec-value{
-      display:block;
-
-      font-size:13px;
-      color:var(--text);
-
-      font-weight:800;
-
-      line-height:1.4;
-
-      word-break:break-word;
-    }
-
-    /* =========================
-       CONDITION
-    ========================= */
-
-    .condition-card{
-      padding:16px;
-
-      background:#fff;
-
-      border:1px solid var(--line);
-
-      border-radius:18px;
-
-      box-shadow:var(--shadow);
-    }
-
-    .condition-summary{
-      display:flex;
-      align-items:flex-start;
-      gap:12px;
-
-      padding-bottom:14px;
-
-      border-bottom:1px solid var(--line);
-
-      margin-bottom:13px;
-    }
-
-    .condition-shield{
-      width:46px;
-      height:46px;
-
-      flex:0 0 46px;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-
-      border-radius:14px;
-
-      background:#eef7f2;
-      color:var(--green);
-    }
-
-    .condition-shield svg{
-      width:24px;
-      height:24px;
-
-      stroke:currentColor;
-      fill:none;
-
-      stroke-width:1.8;
-      stroke-linecap:round;
-      stroke-linejoin:round;
-    }
-
-    .condition-summary-text strong{
-      display:block;
-
-      font-size:16px;
-      font-weight:900;
-
-      margin-bottom:5px;
-    }
-
-    .condition-summary-text span{
-      display:block;
-
-      font-size:13px;
-
-      color:var(--muted);
-
-      font-weight:600;
-
-      line-height:1.7;
-    }
-
-    .condition-list{
-      display:grid;
-      gap:10px;
-    }
-
-    .condition-row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-
-      gap:12px;
-    }
-
-    .condition-label{
-      font-size:12px;
-      color:var(--muted);
-      font-weight:700;
-    }
-
-    .condition-value{
-      font-size:14px;
-      color:var(--text);
-      font-weight:800;
-
-      text-align:left;
-    }
-
-    /* status dots removed */
-    .status-dot{
-      display:none;
-    }
-
-    /* =========================
-       NOTES
-    ========================= */
-
-    .notes-card{
-      padding:15px;
-
-      background:#fff;
-
-      border:1px solid var(--line);
-
-      border-radius:17px;
-
-      box-shadow:var(--shadow);
-
-      font-size:15px;
-      line-height:1.9;
-
-      color:#45515c;
-
-      white-space:pre-wrap;
-      word-break:break-word;
-    }
-
-    /* =========================
-       SELLER
-    ========================= */
-
-    .seller-card{
-      padding:15px;
-
-      background:#fff;
-
-      border:1px solid var(--line);
-
-      border-radius:18px;
-
-      box-shadow:var(--shadow);
-
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-
-      gap:12px;
-    }
-
-    .seller-main{
-      min-width:0;
-    }
-
-    .seller-name{
-      font-size:14px;
-      font-weight:900;
-
-      margin-bottom:5px;
-
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .seller-meta{
-      display:flex;
-      flex-wrap:wrap;
-
-      gap:5px 9px;
-
-      font-size:11px;
-      color:var(--muted);
-
-      font-weight:600;
-    }
-
-    .seller-rating{
-      flex:0 0 auto;
-
-      min-width:78px;
-
-      padding:9px 10px;
-
-      border-radius:13px;
-
-      background:#f5f6f8;
-
-      text-align:center;
-    }
-
-    .seller-rating strong{
-      display:block;
-
-      font-size:14px;
-      font-weight:900;
-
-      color:var(--text);
-    }
-
-    .seller-rating span{
-      display:block;
-
-      margin-top:2px;
-
-      font-size:10px;
-      color:var(--muted);
-
-      font-weight:700;
-    }
-
-    /* =========================
-       BOTTOM ACTION
-    ========================= */
-
-    .bottom-action{
-      position:fixed;
-
-      left:0;
-      right:0;
-      bottom:0;
-
-      z-index:50;
-
-      padding:
-        10px
-        16px
-        calc(10px + env(safe-area-inset-bottom));
-
-      background:
-        linear-gradient(
-          to top,
-          rgba(247,248,250,1),
-          rgba(247,248,250,.96),
-          rgba(247,248,250,0)
-        );
-    }
-
-    .bottom-action-inner{
-      width:100%;
-      max-width:720px;
-
-      margin:0 auto;
-    }
-
-    .buy-button{
-      width:100%;
-      min-height:54px;
-
-      border:0;
-
-      border-radius:17px;
-
-      background:var(--pale);
-
-      color:#40375f;
-
-      font-size:15px;
-      font-weight:900;
-
-      cursor:pointer;
-
-      box-shadow:
-        0 10px 24px rgba(80,70,130,.10);
-
-      transition:
-        transform .18s ease,
-        background .18s ease;
-    }
-
-    .buy-button:active{
-      transform:scale(.985);
-      background:var(--pale-dark);
-    }
-
-    /* =========================
-       FULL PHOTO VIEWER
-    ========================= */
-
-    .photo-viewer{
-      position:fixed;
-
-      inset:0;
-
-      z-index:9999;
-
-      display:none;
-
-      background:#090b0d;
-    }
-
-    .photo-viewer.open{
-      display:block;
-    }
-
-    .viewer-backdrop{
-      position:absolute;
-      inset:0;
-
-      background:
-        radial-gradient(
-          circle at center,
-          rgba(30,35,40,.35),
-          rgba(5,7,9,.98)
-        );
-    }
-
-    .viewer-top{
-      position:absolute;
-
-      top:0;
-      left:0;
-      right:0;
-
-      z-index:10;
-
-      padding:
-        calc(14px + env(safe-area-inset-top))
-        16px
-        14px;
-
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
-
-    .viewer-count{
-      min-width:64px;
-      height:32px;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-
-      border-radius:999px;
-
-      background:rgba(255,255,255,.12);
-
-      color:#fff;
-
-      font-size:11px;
-      font-weight:800;
-
-      backdrop-filter:blur(12px);
-      -webkit-backdrop-filter:blur(12px);
-    }
-
-    .viewer-close{
-      width:40px;
-      height:40px;
-
-      border:0;
-      border-radius:13px;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-
-      background:rgba(255,255,255,.12);
-
-      color:#fff;
-
-      cursor:pointer;
-
-      backdrop-filter:blur(12px);
-      -webkit-backdrop-filter:blur(12px);
-    }
-
-    .viewer-close svg{
-      width:21px;
-      height:21px;
-
-      stroke:currentColor;
-      fill:none;
-
-      stroke-width:2;
-      stroke-linecap:round;
-    }
-
-    .viewer-track{
-      position:absolute;
-
-      inset:0;
-
-      display:flex;
-
-      overflow-x:auto;
-      overflow-y:hidden;
-
-      scroll-snap-type:x mandatory;
-
-      scrollbar-width:none;
-
-      touch-action:pan-x;
-    }
-
-    .viewer-track::-webkit-scrollbar{
-      display:none;
-    }
-
-    .viewer-slide{
-      flex:0 0 100%;
-      width:100%;
+      min-width:100%;
       height:100%;
 
       display:flex;
@@ -1045,106 +394,1425 @@
 
       scroll-snap-align:center;
 
-      padding:
-        calc(65px + env(safe-area-inset-top))
-        12px
-        calc(30px + env(safe-area-inset-bottom));
+      padding:0;
+
+      background:#f1f2f4;
+
+      overflow:hidden;
+
+      cursor:pointer;
+
+      user-select:none;
+      -webkit-user-select:none;
     }
 
-    .viewer-slide img{
+
+    .gallery-slide img{
+      width:100%;
+      height:100%;
+
       display:block;
 
+      object-fit:cover;
+      object-position:center;
+
+      user-select:none;
+      -webkit-user-drag:none;
+
+      pointer-events:none;
+    }
+
+
+    .gallery-empty{
+      width:100%;
+      height:100%;
+
+      display:flex;
+      flex-direction:column;
+
+      align-items:center;
+      justify-content:center;
+
+      gap:8px;
+
+      color:var(--muted);
+
+      background:var(--surface-2);
+    }
+
+
+    .gallery-empty-icon{
+      width:50px;
+      height:50px;
+
+      border-radius:16px;
+
+      background:var(--primary-soft);
+      color:var(--primary);
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+
+    .gallery-empty-icon svg{
+      width:25px;
+      height:25px;
+    }
+
+
+    .gallery-empty strong{
+      font-size:13px;
+    }
+
+
+    .gallery-empty span{
+      font-size:11px;
+    }
+
+
+    /* =========================
+       PHOTO COUNTER
+    ========================= */
+
+    .gallery-counter{
+      position:absolute;
+
+      top:12px;
+      right:12px;
+
+      min-width:58px;
+      height:32px;
+
+      padding:0 11px;
+
+      border-radius:12px;
+
+      background:rgba(23,32,42,.72);
+
+      color:#fff;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      font-size:11px;
+      font-weight:800;
+
+      direction:ltr;
+
+      letter-spacing:.4px;
+
+      backdrop-filter:blur(9px);
+      -webkit-backdrop-filter:blur(9px);
+
+      z-index:5;
+
+      pointer-events:none;
+    }
+
+
+    /* =========================
+       DOTS
+    ========================= */
+
+    .gallery-dots{
+      position:absolute;
+
+      left:50%;
+      bottom:13px;
+
+      transform:translateX(-50%);
+
+      height:auto;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      gap:6px;
+
+      padding:8px 11px;
+
+      background:rgba(23,32,42,.62);
+
+      border-radius:18px;
+
+      backdrop-filter:blur(9px);
+      -webkit-backdrop-filter:blur(9px);
+
+      z-index:5;
+
+      pointer-events:none;
+    }
+
+
+    .gallery-dot{
+      width:7px;
+      height:7px;
+
+      border-radius:50%;
+
+      background:rgba(255,255,255,.52);
+
+      transition:.22s ease;
+    }
+
+
+    .gallery-dot.active{
+      width:18px;
+      height:7px;
+
+      border-radius:999px;
+
+      background:#fff;
+    }
+
+
+    /* =========================
+       PHOTO HINT
+       ملاحظة صغيرة تحت الصورة
+    ========================= */
+
+    .photo-hint{
+      min-height:38px;
+
+      padding:8px 4px 6px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      text-align:center;
+
+      color:#8b95a0;
+
+      font-size:10px;
+      font-weight:600;
+
+      line-height:1.6;
+
+      background:#fff;
+
+      user-select:none;
+      pointer-events:none;
+    }
+
+
+    .photo-hint::before{
+      content:"";
+
+      width:4px;
+      height:4px;
+
+      margin-left:6px;
+
+      border-radius:50%;
+
+      background:#b7bec5;
+
+      flex:0 0 4px;
+    }
+
+
+    /* =========================
+       FULLSCREEN PHOTO VIEWER
+    ========================= */
+
+    .photo-viewer{
+      position:fixed;
+
+      inset:0;
+
+      z-index:200;
+
+      display:none;
+
+      background:rgba(8,10,14,.97);
+
+      touch-action:none;
+    }
+
+
+    .photo-viewer.open{
+      display:block;
+    }
+
+
+    .photo-viewer-top{
+      position:absolute;
+
+      top:0;
+      right:0;
+      left:0;
+
+      z-index:5;
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+
+      padding:
+        calc(env(safe-area-inset-top) + 14px)
+        15px
+        14px;
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(0,0,0,.45),
+          transparent
+        );
+    }
+
+
+    .photo-viewer-counter{
+      min-width:58px;
+      height:32px;
+
+      padding:0 11px;
+
+      border-radius:11px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      color:#fff;
+
+      background:rgba(255,255,255,.11);
+
+      font-size:11px;
+      font-weight:800;
+
+      direction:ltr;
+
+      letter-spacing:.4px;
+
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+
+
+    .photo-viewer-close{
+      width:40px;
+      height:40px;
+
+      border-radius:13px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      background:rgba(255,255,255,.11);
+
+      color:#fff;
+
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+
+
+    .photo-viewer-close svg{
+      width:20px;
+      height:20px;
+    }
+
+
+    .photo-viewer-stage{
+      position:absolute;
+
+      inset:0;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      padding:
+        75px
+        16px
+        30px;
+
+      overflow:hidden;
+    }
+
+
+    .photo-viewer-image{
       max-width:100%;
       max-height:100%;
 
       width:auto;
       height:auto;
 
+      display:block;
+
       object-fit:contain;
 
       user-select:none;
       -webkit-user-drag:none;
 
-      border-radius:4px;
+      transition:
+        opacity .18s ease,
+        transform .22s ease;
+
+      opacity:1;
     }
 
-    .viewer-hint{
+
+    .photo-viewer-image.changing{
+      opacity:.35;
+
+      transform:scale(.985);
+    }
+
+
+    .photo-viewer-arrow{
       position:absolute;
 
-      left:50%;
-      bottom:calc(17px + env(safe-area-inset-bottom));
+      top:50%;
 
-      transform:translateX(-50%);
+      transform:translateY(-50%);
 
-      color:rgba(255,255,255,.65);
+      z-index:6;
 
-      font-size:10px;
-      font-weight:600;
+      width:42px;
+      height:42px;
 
-      pointer-events:none;
-      white-space:nowrap;
-    }
-
-    /* =========================
-       LOADING / ERROR
-    ========================= */
-
-    .loading{
-      min-height:60vh;
+      border-radius:50%;
 
       display:flex;
       align-items:center;
       justify-content:center;
 
-      color:var(--muted);
+      color:#fff;
+
+      background:rgba(255,255,255,.10);
+
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+
+
+    .photo-viewer-prev{
+      right:12px;
+    }
+
+
+    .photo-viewer-next{
+      left:12px;
+    }
+
+
+    .photo-viewer-arrow svg{
+      width:20px;
+      height:20px;
+    }
+
+
+    @media(max-width:360px){
+
+      .photo-viewer-arrow{
+        width:38px;
+        height:38px;
+      }
+
+      .photo-viewer-prev{
+        right:8px;
+      }
+
+      .photo-viewer-next{
+        left:8px;
+      }
+
+    }
+
+
+    /* =========================
+       PRODUCT
+    ========================= */
+
+    .product-head{
+      padding:20px 2px 0;
+    }
+
+
+    .brand{
+      color:var(--primary);
+
+      font-size:13px;
+      font-weight:800;
+
+      letter-spacing:.2px;
+
+      margin-bottom:5px;
+    }
+
+
+    .product-name{
+      margin:0;
+
+      font-size:25px;
+      line-height:1.35;
+
+      font-weight:800;
+
+      letter-spacing:-.4px;
+    }
+
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+
+      gap:7px;
+
+      margin-top:11px;
+    }
+
+
+    .chip{
+      height:34px;
+
+      padding:0 12px;
+
+      border-radius:10px;
+
+      background:var(--surface);
+
+      border:1px solid var(--line);
+
+      color:#4c5865;
+
+      display:inline-flex;
+      align-items:center;
+
+      gap:6px;
 
       font-size:12px;
       font-weight:700;
     }
 
-    .error-box{
-      margin-top:30px;
 
-      padding:22px;
+    .chip svg{
+      width:16px;
+      height:16px;
+      stroke:currentColor;
+    }
+
+
+    .chip.sale{
+      color:#59616b;
+
+      background:#fff;
+
+      border-color:var(--line);
+    }
+
+
+    /* =========================
+       PRICE
+    ========================= */
+
+    .price-card{
+      margin-top:14px;
+
+      padding:17px 18px;
+
+      border-radius:18px;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--pale) 0%,
+          #ebe9f7 52%,
+          #e2dff2 100%
+        );
+
+      color:var(--pale-text);
+
+      border:1px solid rgba(216,211,238,.8);
+
+      box-shadow:
+        0 13px 28px rgba(98,70,217,.10);
+
+      position:relative;
+
+      overflow:hidden;
+    }
+
+
+    .price-card::after{
+      content:"";
+
+      position:absolute;
+
+      width:145px;
+      height:145px;
+
+      border-radius:50%;
+
+      right:-70px;
+      top:-85px;
+
+      background:rgba(255,255,255,.38);
+    }
+
+
+    .price-label{
+      position:relative;
+      z-index:1;
+
+      font-size:11px;
+      font-weight:800;
+
+      letter-spacing:.5px;
+
+      opacity:.70;
+
+      direction:rtl;
+      text-align:right;
+    }
+
+
+    .price-row{
+      position:relative;
+      z-index:1;
+
+      display:flex;
+
+      align-items:baseline;
+      justify-content:space-between;
+
+      gap:10px;
+
+      margin-top:3px;
+    }
+
+
+    .price{
+      font-size:29px;
+
+      font-weight:800;
+
+      line-height:1.2;
+
+      direction:ltr;
+
+      white-space:nowrap;
+
+      color:#4c426f;
+    }
+
+
+    .sale-type{
+      padding:6px 10px;
+
+      border-radius:9px;
+
+      background:var(--pale);
+
+      border:1px solid rgba(255,255,255,.58);
+
+      color:#51477d;
+
+      font-size:11px;
+
+      font-weight:800;
+
+      white-space:nowrap;
+
+      box-shadow:
+        0 3px 9px rgba(98,70,217,.06);
+    }
+
+
+    /* =========================
+       DETAILS INTRO
+    ========================= */
+
+    .details-intro{
+      margin-top:18px;
+
+      padding:13px 14px;
+
+      border-radius:15px;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--primary-soft),
+          #f2f7f9
+        );
+
+      border:1px solid #dcecf1;
+
+      display:flex;
+      align-items:center;
+
+      gap:11px;
+    }
+
+
+    .details-intro-icon{
+      flex:0 0 38px;
+
+      width:38px;
+      height:38px;
+
+      border-radius:12px;
+
+      background:#fff;
+
+      color:var(--primary);
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      box-shadow:
+        0 5px 14px rgba(23,107,135,.08);
+    }
+
+
+    .details-intro-icon svg{
+      width:19px;
+      height:19px;
+    }
+
+
+    .details-intro-copy{
+      flex:1;
+      min-width:0;
+    }
+
+
+    .details-intro-copy strong{
+      display:block;
+
+      font-size:15px;
+      font-weight:800;
+    }
+
+
+    .details-intro-copy span{
+      display:block;
+
+      color:var(--muted);
+
+      font-size:12px;
+
+      margin-top:2px;
+
+      line-height:1.6;
+    }
+
+
+    .intro-arrow{
+      color:#8a96a1;
+
+      display:flex;
+    }
+
+
+    .intro-arrow svg{
+      width:16px;
+      height:16px;
+    }
+
+
+    /* =========================
+       SECTION
+    ========================= */
+
+    .section{
+      margin-top:20px;
+    }
+
+
+    .section-head{
+      display:flex;
+
+      align-items:flex-end;
+      justify-content:space-between;
+
+      gap:10px;
+
+      margin-bottom:10px;
+    }
+
+
+    .section-title{
+      margin:0;
+
+      font-size:17px;
+      font-weight:800;
+    }
+
+
+    /* =========================
+       SPECS
+    ========================= */
+
+    .spec-grid{
+      display:grid;
+
+      grid-template-columns:1fr 1fr;
+
+      gap:9px;
+    }
+
+
+    .spec-card{
+      min-height:88px;
+
+      padding:12px;
+
+      border-radius:16px;
+
+      border:1px solid var(--line);
+
+      background:var(--surface);
+
+      display:flex;
+      align-items:center;
+
+      gap:11px;
+
+      box-shadow:
+        0 5px 16px rgba(24,44,49,.035);
+    }
+
+
+    .spec-card:nth-child(3n+1){
+      background:
+        linear-gradient(
+          145deg,
+          #fff,
+          #f9fbfc
+        );
+    }
+
+
+    .spec-card:nth-child(3n+2){
+      background:
+        linear-gradient(
+          145deg,
+          #fff,
+          #f6f3ff
+        );
+
+      border-color:#e7e2fa;
+    }
+
+
+    .spec-card:nth-child(3n){
+      background:
+        linear-gradient(
+          145deg,
+          #fff,
+          #f2f9fa
+        );
+
+      border-color:#dfeef1;
+    }
+
+
+    .spec-icon{
+      flex:0 0 44px;
+
+      width:44px;
+      height:44px;
+
+      border-radius:13px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      background:var(--surface-2);
+
+      color:var(--primary);
+
+      box-shadow:
+        0 4px 10px rgba(24,44,49,.045);
+    }
+
+
+    .spec-card:nth-child(3n+2) .spec-icon{
+      color:var(--purple);
+      background:var(--purple-soft);
+    }
+
+
+    .spec-icon svg{
+      width:23px;
+      height:23px;
+
+      stroke:currentColor;
+    }
+
+
+    .spec-info{
+      min-width:0;
+      flex:1;
+    }
+
+
+    .spec-label{
+      color:var(--muted);
+
+      display:block;
+
+      font-size:11px;
+      font-weight:600;
+
+      margin-bottom:3px;
+    }
+
+
+    .spec-value{
+      display:block;
+
+      font-size:13px;
+      font-weight:800;
+
+      line-height:1.45;
+
+      overflow:hidden;
+
+      text-overflow:ellipsis;
+
+      white-space:nowrap;
+    }
+
+
+    /* =========================
+       CONDITION
+    ========================= */
+
+    .condition-box{
+      border-radius:18px;
 
       background:#fff;
 
       border:1px solid var(--line);
 
+      overflow:hidden;
+
+      box-shadow:
+        0 6px 18px rgba(24,44,49,.04);
+    }
+
+
+    .condition-summary{
+      padding:16px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #e8f3f6,
+          #f5f9fa
+        );
+
+      border-bottom:1px solid #e1ecef;
+
+      display:flex;
+      align-items:center;
+
+      gap:12px;
+    }
+
+
+    .condition-badge{
+      flex:0 0 46px;
+
+      width:46px;
+      height:46px;
+
+      border-radius:14px;
+
+      background:#fff;
+
+      color:var(--primary);
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      box-shadow:
+        0 5px 14px rgba(23,107,135,.08);
+    }
+
+
+    .condition-badge svg{
+      width:24px;
+      height:24px;
+    }
+
+
+    .condition-summary-text{
+      flex:1;
+      min-width:0;
+    }
+
+
+    .condition-summary-text strong{
+      display:block;
+
+      font-size:16px;
+      font-weight:800;
+    }
+
+
+    .condition-summary-text span{
+      display:block;
+
+      color:var(--muted);
+
+      font-size:13px;
+
+      margin-top:3px;
+
+      line-height:1.9;
+    }
+
+
+    .condition-grid{
+      padding:11px;
+
+      display:grid;
+
+      grid-template-columns:1fr 1fr;
+
+      gap:9px;
+    }
+
+
+    .condition-item{
+      padding:13px;
+
+      min-height:72px;
+
+      border-radius:14px;
+
+      background:#fafbfc;
+
+      border:1px solid #edf0f2;
+    }
+
+
+    .condition-item-label{
+      display:block;
+
+      color:var(--muted);
+
+      font-size:12px;
+      font-weight:600;
+
+      margin-bottom:5px;
+    }
+
+
+    .condition-item-value{
+      display:flex;
+
+      align-items:center;
+
+      gap:5px;
+
+      font-size:14px;
+      font-weight:800;
+
+      line-height:1.6;
+    }
+
+
+    .status-dot{
+      display:none;
+    }
+
+
+    /* =========================
+       NOTES
+    ========================= */
+
+    .notes-card{
+      padding:15px 16px;
+
+      border-radius:16px;
+
+      background:var(--surface);
+
+      border:1px solid var(--line);
+
+      box-shadow:
+        0 5px 16px rgba(24,44,49,.035);
+    }
+
+
+    .notes-card p{
+      margin:0;
+
+      color:#4e5a66;
+
+      font-size:15px;
+
+      line-height:2;
+
+      white-space:pre-wrap;
+    }
+
+
+    /* =========================
+       SELLER
+    ========================= */
+
+    .seller-card{
+      padding:16px;
+
+      border-radius:17px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ffffff 0%,
+          #fbfcfd 100%
+        );
+
+      border:1px solid var(--line);
+
+      box-shadow:
+        0 6px 18px rgba(24,44,49,.045);
+
+      display:flex;
+      align-items:center;
+
+      gap:12px;
+    }
+
+
+    .seller-info{
+      flex:1;
+      min-width:0;
+    }
+
+
+    .seller-name{
+      font-size:15px;
+      font-weight:800;
+
+      line-height:1.4;
+    }
+
+
+    .seller-meta{
+      display:flex;
+      align-items:center;
+
+      gap:6px;
+
+      margin-top:5px;
+
+      color:var(--muted);
+
+      font-size:12px;
+    }
+
+
+    .seller-meta svg{
+      width:15px;
+      height:15px;
+
+      flex:0 0 15px;
+    }
+
+
+    .seller-status{
+      margin-top:5px;
+
+      color:var(--muted);
+
+      font-size:11px;
+      font-weight:600;
+    }
+
+
+    .seller-rating{
+      min-width:82px;
+
+      text-align:left;
+      direction:rtl;
+
+      padding-right:2px;
+    }
+
+
+    .rating-number{
+      display:block;
+
+      font-size:14px;
+      font-weight:800;
+
+      color:var(--ink);
+
+      white-space:nowrap;
+    }
+
+
+    .rating-label{
+      display:block;
+
+      color:var(--muted);
+
+      font-size:10px;
+
+      margin-top:2px;
+
+      white-space:nowrap;
+    }
+
+
+    .seller-new{
+      color:var(--primary);
+
+      font-size:12px;
+      font-weight:800;
+    }
+
+
+    /* =========================
+       BOTTOM ACTIONS
+    ========================= */
+
+    .action-wrap{
+      margin-top:24px;
+    }
+
+
+    .action-bar{
+      position:sticky;
+
+      bottom:12px;
+
+      z-index:20;
+
+      display:flex;
+
+      gap:9px;
+
+      padding:9px;
+
+      background:rgba(255,255,255,.96);
+
+      border:1px solid var(--line);
+
       border-radius:18px;
+
+      box-shadow:
+        0 12px 30px rgba(24,44,49,.12);
+
+      backdrop-filter:blur(12px);
+    }
+
+
+    .favorite-btn{
+      width:50px;
+      height:50px;
+
+      flex:0 0 50px;
+
+      border-radius:14px;
+
+      background:var(--surface-2);
+
+      color:var(--ink);
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      transition:.18s ease;
+    }
+
+
+    .favorite-btn:active{
+      transform:scale(.95);
+    }
+
+
+    .favorite-btn.active{
+      color:var(--purple);
+
+      background:var(--purple-soft);
+    }
+
+
+    .favorite-btn svg{
+      width:22px;
+      height:22px;
+    }
+
+
+    .buy-btn{
+      flex:1;
+
+      height:50px;
+
+      border-radius:14px;
+
+      background:var(--pale);
+
+      color:#51477d;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      gap:8px;
+
+      font-size:15px;
+      font-weight:800;
+
+      border:1px solid var(--pale-dark);
+
+      box-shadow:
+        0 9px 18px rgba(98,70,217,.10);
+
+      transition:.18s ease;
+    }
+
+
+    .buy-btn:active{
+      transform:
+        translateY(1px)
+        scale(.99);
+
+      background:var(--pale-dark);
+    }
+
+
+    .buy-btn svg{
+      width:20px;
+      height:20px;
+    }
+
+
+    /* =========================
+       LOADING
+    ========================= */
+
+    .loading{
+      min-height:70vh;
+
+      display:flex;
+      flex-direction:column;
+
+      align-items:center;
+      justify-content:center;
+
+      gap:12px;
+
+      color:var(--muted);
+
+      font-size:12px;
+    }
+
+
+    .spinner{
+      width:32px;
+      height:32px;
+
+      border-radius:50%;
+
+      border:3px solid #dfe8eb;
+
+      border-top-color:var(--primary);
+
+      animation:
+        spin
+        .8s linear
+        infinite;
+    }
+
+
+    @keyframes spin{
+
+      to{
+        transform:rotate(360deg);
+      }
+
+    }
+
+
+    /* =========================
+       ERROR
+    ========================= */
+
+    .error-box{
+      margin-top:35px;
+
+      padding:22px 18px;
+
+      border-radius:18px;
+
+      background:#fff;
+
+      border:1px solid var(--line);
 
       text-align:center;
 
-      box-shadow:var(--shadow);
+      box-shadow:var(--shadow-soft);
     }
+
+
+    .error-icon{
+      width:48px;
+      height:48px;
+
+      margin:0 auto 10px;
+
+      border-radius:15px;
+
+      background:#fff0f2;
+
+      color:var(--danger);
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+
+    .error-icon svg{
+      width:22px;
+      height:22px;
+    }
+
 
     .error-box strong{
       display:block;
 
       font-size:16px;
-      font-weight:900;
-
-      margin-bottom:6px;
+      font-weight:800;
     }
 
-    .error-box span{
-      display:block;
 
-      font-size:12px;
+    .error-box p{
+      margin:5px 0 15px;
+
       color:var(--muted);
 
-      line-height:1.7;
+      font-size:12px;
     }
 
-    .back-home{
-      margin-top:16px;
 
-      min-height:44px;
+    .back-home{
+      height:42px;
 
       padding:0 18px;
 
-      border:0;
-      border-radius:13px;
+      border-radius:12px;
 
       background:var(--primary);
 
@@ -1152,9 +1820,8 @@
 
       font-size:13px;
       font-weight:800;
-
-      cursor:pointer;
     }
+
 
     /* =========================
        TOAST
@@ -1164,39 +1831,40 @@
       position:fixed;
 
       left:50%;
-
       bottom:90px;
-
-      z-index:10000;
 
       transform:
         translateX(-50%)
-        translateY(20px);
+        translateY(15px);
 
-      opacity:0;
+      width:max-content;
 
-      pointer-events:none;
+      max-width:
+        calc(100vw - 35px);
 
       padding:10px 14px;
 
-      max-width:calc(100vw - 32px);
+      border-radius:12px;
 
-      border-radius:13px;
+      background:#17202a;
 
-      background:#182027;
       color:#fff;
 
       font-size:12px;
       font-weight:700;
 
-      box-shadow:0 12px 30px rgba(0,0,0,.18);
+      opacity:0;
 
-      transition:
-        opacity .2s ease,
-        transform .2s ease;
+      pointer-events:none;
 
-      text-align:center;
+      transition:.22s ease;
+
+      z-index:100;
+
+      box-shadow:
+        0 12px 25px rgba(0,0,0,.18);
     }
+
 
     .toast.show{
       opacity:1;
@@ -1206,44 +1874,120 @@
         translateY(0);
     }
 
+
     /* =========================
-       RESPONSIVE
+       SMALL MOBILE
     ========================= */
 
     @media(max-width:360px){
+
+      .gallery{
+        height:270px;
+      }
+
+
+      .photo-hint{
+        min-height:36px;
+        padding:7px 4px 5px;
+        font-size:9px;
+      }
+
 
       .product-name{
         font-size:23px;
       }
 
+
       .price{
         font-size:27px;
       }
+
+
+      .spec-card{
+        padding:10px;
+      }
+
+
+      .spec-icon{
+        width:40px;
+        height:40px;
+
+        flex-basis:40px;
+      }
+
+
+      .spec-icon svg{
+        width:21px;
+        height:21px;
+      }
+
 
       .spec-label{
         font-size:10px;
       }
 
+
       .spec-value{
         font-size:12px;
       }
 
-      .condition-label{
-        font-size:10px;
+
+      .condition-summary{
+        padding:14px;
       }
 
-      .condition-value{
+
+      .condition-summary-text strong{
+        font-size:15px;
+      }
+
+
+      .condition-summary-text span{
+        font-size:12px;
+      }
+
+
+      .condition-item{
+        padding:11px;
+        min-height:68px;
+      }
+
+
+      .condition-item-label{
         font-size:11px;
       }
 
-      .notes-card{
+
+      .condition-item-value{
+        font-size:13px;
+      }
+
+
+      .notes-card p{
         font-size:14px;
       }
 
-      .gallery{
-        height:270px;
+
+      .seller-name{
+        font-size:14px;
       }
+
+
+      .seller-meta{
+        font-size:11px;
+      }
+
+
+      .seller-rating{
+        min-width:74px;
+      }
+
     }
+
+
+    /* =========================
+       TABLET / LARGER PHONE
+    ========================= */
 
     @media(min-width:600px){
 
@@ -1251,111 +1995,103 @@
         height:380px;
       }
 
-      .spec-grid{
-        grid-template-columns:repeat(3,minmax(0,1fr));
-      }
     }
+
   </style>
 </head>
+
 
 <body>
 
   <div class="page">
 
-    <!-- =========================
-         HEADER
-    ========================= -->
+    <header class="topbar">
 
-    <header class="top-header">
+      <div class="top-side">
 
-      <div class="header-row">
+        <button
+          class="icon-btn"
+          id="backBtn"
+          aria-label="رجوع"
+        >
 
-        <div class="header-side">
-
-          <button
-            class="icon-button"
-            id="backButton"
-            type="button"
-            aria-label="رجوع"
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           >
-            <svg viewBox="0 0 24 24">
-              <path d="M15 18l-6-6 6-6"></path>
-            </svg>
-          </button>
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
 
-        </div>
+        </button>
 
-        <div class="header-title">
-          <div class="brand">MZAD PHONE</div>
-          <div class="sub">تفاصيل الجهاز</div>
-        </div>
+      </div>
 
-        <div class="header-side">
 
-          <button
-            class="icon-button"
-            id="shareButton"
-            type="button"
-            aria-label="مشاركة"
+      <div class="page-title">
+
+        <strong>
+          تفاصيل الجهاز
+        </strong>
+
+        <span>
+          MZAD PHONE
+        </span>
+
+      </div>
+
+
+      <div class="top-side">
+
+        <button
+          class="icon-btn"
+          id="shareBtn"
+          aria-label="مشاركة"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           >
-            <svg viewBox="0 0 24 24">
-              <circle cx="18" cy="5" r="2.5"></circle>
-              <circle cx="6" cy="12" r="2.5"></circle>
-              <circle cx="18" cy="19" r="2.5"></circle>
-              <path d="M8.3 10.8l7.4-4.5"></path>
-              <path d="M8.3 13.2l7.4 4.5"></path>
-            </svg>
-          </button>
+            <circle cx="18" cy="5" r="2.5"/>
+            <circle cx="6" cy="12" r="2.5"/>
+            <circle cx="18" cy="19" r="2.5"/>
+            <path d="M8.2 10.8l7.5-4.3M8.2 13.2l7.5 4.3"/>
+          </svg>
 
-        </div>
+        </button>
 
       </div>
 
     </header>
 
 
-    <!-- =========================
-         MAIN
-    ========================= -->
-
     <main id="app">
 
       <div class="loading">
-        جاري تحميل بيانات الجهاز...
+
+        <div class="spinner"></div>
+
+        <span>
+          جاري تحميل الجهاز...
+        </span>
+
       </div>
 
     </main>
-
-
-    <!-- =========================
-         BOTTOM ACTION
-    ========================= -->
-
-    <div
-      class="bottom-action"
-      id="bottomAction"
-      style="display:none;"
-    >
-
-      <div class="bottom-action-inner">
-
-        <button
-          class="buy-button"
-          id="buyButton"
-          type="button"
-        >
-          شراء الجهاز
-        </button>
-
-      </div>
-
-    </div>
 
   </div>
 
 
   <!-- =========================
-       FULL PHOTO VIEWER
+       PHOTO VIEWER
   ========================= -->
 
   <div
@@ -1364,46 +2100,98 @@
     aria-hidden="true"
   >
 
-    <div class="viewer-backdrop"></div>
-
-    <div class="viewer-top">
+    <div class="photo-viewer-top">
 
       <div
-        class="viewer-count"
-        id="viewerCount"
+        class="photo-viewer-counter"
+        id="photoViewerCounter"
       >
         01 / 01
       </div>
 
+
       <button
-        class="viewer-close"
-        id="viewerClose"
-        type="button"
+        class="photo-viewer-close"
+        id="photoViewerClose"
         aria-label="إغلاق"
+        type="button"
       >
-        <svg viewBox="0 0 24 24">
-          <path d="M6 6l12 12"></path>
-          <path d="M18 6L6 18"></path>
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M18 6L6 18"/>
+          <path d="M6 6l12 12"/>
         </svg>
+
       </button>
 
     </div>
 
-    <div
-      class="viewer-track"
-      id="viewerTrack"
-    ></div>
 
-    <div class="viewer-hint">
-      اسحب يميناً أو يساراً لتصفح الصور
+    <div
+      class="photo-viewer-stage"
+      id="photoViewerStage"
+    >
+
+      <img
+        class="photo-viewer-image"
+        id="photoViewerImage"
+        alt=""
+        draggable="false"
+      />
+
     </div>
+
+
+    <button
+      class="photo-viewer-arrow photo-viewer-prev"
+      id="photoViewerPrev"
+      aria-label="الصورة السابقة"
+      type="button"
+    >
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M14 18l-6-6 6-6"/>
+      </svg>
+
+    </button>
+
+
+    <button
+      class="photo-viewer-arrow photo-viewer-next"
+      id="photoViewerNext"
+      aria-label="الصورة التالية"
+      type="button"
+    >
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M10 18l6-6-6-6"/>
+      </svg>
+
+    </button>
 
   </div>
 
-
-  <!-- =========================
-       TOAST
-  ========================= -->
 
   <div
     class="toast"
@@ -1411,24 +2199,40 @@
   ></div>
 
 
-  <!-- =========================
-       SCRIPT
-  ========================= -->
-
   <script type="module">
 
     import { supabase } from "./js/supabase.js";
 
 
-    /* =====================================================
-       GLOBALS
-    ===================================================== */
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
 
-    let deviceData = null;
 
-    let galleryImages = [];
+    const deviceId =
+      params.get("id");
+
+
+    const app =
+      document.getElementById("app");
+
+
+    const toast =
+      document.getElementById("toast");
+
+
+    let device = null;
+
+    let galleryTrack = null;
 
     let viewerImages = [];
+
+    let viewerIndex = 0;
+
+    let viewerTouchStartX = 0;
+
+    let viewerTouchStartY = 0;
 
     let galleryAutoPlayTimer = null;
 
@@ -1436,18 +2240,238 @@
 
     let galleryTouchStartX = 0;
 
-    let viewerTouchStartX = 0;
 
-    let viewerTouchMoved = false;
-
-    let currentGalleryIndex = 0;
-
-    let currentViewerIndex = 0;
+    const photoViewer =
+      document.getElementById(
+        "photoViewer"
+      );
 
 
-    /* =====================================================
+    const photoViewerImage =
+      document.getElementById(
+        "photoViewerImage"
+      );
+
+
+    const photoViewerCounter =
+      document.getElementById(
+        "photoViewerCounter"
+      );
+
+
+    const photoViewerClose =
+      document.getElementById(
+        "photoViewerClose"
+      );
+
+
+    const photoViewerPrev =
+      document.getElementById(
+        "photoViewerPrev"
+      );
+
+
+    const photoViewerNext =
+      document.getElementById(
+        "photoViewerNext"
+      );
+
+
+    const photoViewerStage =
+      document.getElementById(
+        "photoViewerStage"
+      );
+
+
+    /* =========================
+       ICONS
+    ========================= */
+
+    const icons = {
+
+      image: `
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="4" width="18" height="16" rx="3"/>
+          <circle cx="8.5" cy="9" r="1.5"/>
+          <path d="M21 15l-4.5-4.5L8 19"/>
+        </svg>
+      `,
+
+
+      storage: `
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M6 4h12l2 4v11H4V8l2-4z"/>
+          <path d="M4 8h16M9 12h6"/>
+        </svg>
+      `,
+
+
+      color: `
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M12 3a9 9 0 1 0 0 18h1.5a2 2 0 0 0 0-4H12a2 2 0 0 1 0-4h3a6 6 0 0 0 0-12h-3z"/>
+          <circle cx="7.5" cy="9" r="1"/>
+          <circle cx="11" cy="6.5" r="1"/>
+          <circle cx="15.5" cy="7" r="1"/>
+        </svg>
+      `,
+
+
+      battery: `
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="7" width="17" height="10" rx="2"/>
+          <path d="M20 10h2v4h-2M7 10v4M10 10v4M13 10v4"/>
+        </svg>
+      `,
+
+
+      location: `
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"/>
+          <circle cx="12" cy="10" r="2.5"/>
+        </svg>
+      `,
+
+
+      phone: `
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="7" y="2.5" width="10" height="19" rx="2"/>
+          <path d="M10 5h4M11 18.5h2"/>
+        </svg>
+      `,
+
+
+      info: `
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 10v6M12 7h.01"/>
+        </svg>
+      `,
+
+
+      shield: `
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z"/>
+          <path d="M9 12l2 2 4-4"/>
+        </svg>
+      `,
+
+
+      heart: `
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M20.8 8.9c0 5.1-8.8 10.1-8.8 10.1S3.2 14 3.2 8.9A4.7 4.7 0 0 1 12 6.4a4.7 4.7 0 0 1 8.8 2.5z"/>
+        </svg>
+      `,
+
+
+      heartFill: `
+        <svg
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path d="M20.8 8.9c0 5.1-8.8 10.1-8.8 10.1S3.2 14 3.2 8.9A4.7 4.7 0 0 1 12 6.4a4.7 4.7 0 0 1 8.8 2.5z"/>
+        </svg>
+      `,
+
+
+      cart: `
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 1.9-1.5L20 8H6"/>
+          <circle cx="10" cy="19" r="1.4"/>
+          <circle cx="17" cy="19" r="1.4"/>
+        </svg>
+      `,
+
+
+      alert: `
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M12 3l9 17H3L12 3z"/>
+          <path d="M12 9v5M12 17h.01"/>
+        </svg>
+      `
+
+    };
+
+
+    /* =========================
        HELPERS
-    ===================================================== */
+    ========================= */
 
     function escapeHTML(value){
 
@@ -1463,37 +2487,36 @@
 
     function clean(value){
 
-      return String(value ?? "")
-        .trim();
+      if(
+        value === null ||
+        value === undefined
+      ){
+        return "";
+      }
+
+      return String(value).trim();
 
     }
 
 
     function formatPrice(value){
 
-      const number = Number(value);
+      const number =
+        Number(value);
 
       if(!Number.isFinite(number)){
         return "—";
       }
 
-      return number.toLocaleString("ar-IQ");
+      return `${new Intl.NumberFormat("en-US").format(number)} IQD`;
 
     }
 
 
-    function firstLetter(value){
+    function isApple(){
 
-      const text = clean(value);
-
-      return text ? text.charAt(0).toUpperCase() : "M";
-
-    }
-
-
-    function isApple(brand){
-
-      return clean(brand).toLowerCase() === "apple";
+      return clean(device?.brand)
+        .toLowerCase() === "apple";
 
     }
 
@@ -1505,12 +2528,13 @@
       }
 
       if(Array.isArray(value)){
-        return value;
+        return value.filter(Boolean);
       }
 
       if(typeof value === "string"){
 
-        const text = value.trim();
+        const text =
+          value.trim();
 
         if(!text){
           return [];
@@ -1518,75 +2542,73 @@
 
         try{
 
-          const parsed = JSON.parse(text);
+          const parsed =
+            JSON.parse(text);
 
           if(Array.isArray(parsed)){
-            return parsed;
+            return parsed.filter(Boolean);
           }
 
-        }catch(error){}
+        }catch(e){}
 
         return text
           .split(",")
-          .map(item => item.trim())
+          .map(item=>item.trim())
           .filter(Boolean);
+
       }
 
       return [];
+
     }
 
 
     function imageURL(path){
 
-      const value = clean(path);
-
-      if(!value){
+      if(!path){
         return "";
       }
+
+      const value =
+        String(path).trim();
 
       if(
         value.startsWith("http://") ||
         value.startsWith("https://") ||
-        value.startsWith("data:")
+        value.startsWith("data:") ||
+        value.startsWith("blob:")
       ){
+
         return value;
+
       }
 
-      const cleanPath = value
-        .replace(/^\/+/,"")
-        .replace(/^device-images\//,"");
-
-      const {
-        data
-      } = supabase
-        .storage
-        .from("device-images")
-        .getPublicUrl(cleanPath);
+      const { data } =
+        supabase
+          .storage
+          .from("device-images")
+          .getPublicUrl(value);
 
       return data?.publicUrl || "";
+
     }
 
 
     function showToast(message){
 
-      const toast =
-        document.getElementById("toast");
-
-      if(!toast){
-        return;
-      }
-
-      toast.textContent = message;
+      toast.textContent =
+        message;
 
       toast.classList.add("show");
 
-      clearTimeout(showToast.timer);
+      clearTimeout(
+        window.__toastTimer
+      );
 
-      showToast.timer = setTimeout(() => {
-
-        toast.classList.remove("show");
-
-      },2500);
+      window.__toastTimer =
+        setTimeout(()=>{
+          toast.classList.remove("show");
+        },2200);
 
     }
 
@@ -1603,19 +2625,61 @@
         return "مزاد";
       }
 
-      return "بيع مباشر";
+      if(
+        text.includes("direct") ||
+        text.includes("بيع")
+      ){
+        return "بيع مباشر";
+      }
+
+      return clean(value) || "بيع مباشر";
+
     }
 
 
     function normalizeCondition(value){
 
-      const text = clean(value);
+      const text =
+        clean(value);
 
       if(!text){
-        return "غير محدد";
+        return "غير محددة";
+      }
+
+      const lower =
+        text.toLowerCase();
+
+      if(
+        lower.includes("new") ||
+        text.includes("جديد")
+      ){
+        return "جديد";
+      }
+
+      if(
+        lower.includes("excellent") ||
+        text.includes("ممتاز")
+      ){
+        return "ممتاز";
+      }
+
+      if(
+        lower.includes("very good") ||
+        text.includes("جيد جداً") ||
+        text.includes("جيد جدًا")
+      ){
+        return "جيد جداً";
+      }
+
+      if(
+        lower.includes("good") ||
+        text.includes("جيد")
+      ){
+        return "جيد";
       }
 
       return text;
+
     }
 
 
@@ -1625,442 +2689,454 @@
         clean(value).toLowerCase();
 
       if(
-        text.includes("excellent") ||
+        text.includes("لا يوجد") ||
+        text.includes("سليم") ||
+        text.includes("يعمل") ||
+        text.includes("جيد") ||
         text.includes("ممتاز") ||
-        text.includes("جيد جداً") ||
-        text.includes("جيد جدا")
+        text.includes("نعم")
       ){
-        return "ممتاز";
+        return "ok";
       }
 
       if(
-        text.includes("good") ||
-        text.includes("جيد")
+        text.includes("لا") ||
+        text.includes("عطل") ||
+        text.includes("مشكلة")
       ){
-        return "جيد";
+        return "bad";
       }
 
-      if(
-        text.includes("fair") ||
-        text.includes("متوسط")
-      ){
-        return "متوسط";
-      }
+      return "neutral";
 
-      return clean(value) || "غير محدد";
     }
 
 
     function statusClass(value){
 
-      const text =
-        clean(value).toLowerCase();
+      const status =
+        conditionStatus(value);
 
-      if(
-        text.includes("excellent") ||
-        text.includes("ممتاز")
-      ){
-        return "good";
+      if(status === "ok"){
+        return "";
       }
 
-      if(
-        text.includes("good") ||
-        text.includes("جيد")
-      ){
-        return "good";
+      if(status === "bad"){
+        return "bad";
       }
 
-      if(
-        text.includes("fair") ||
-        text.includes("متوسط")
-      ){
-        return "normal";
-      }
-
-      return "normal";
-    }
-
-
-    /* =====================================================
-       DEVICE ID
-    ===================================================== */
-
-    function getDeviceId(){
-
-      const params =
-        new URLSearchParams(
-          window.location.search
-        );
-
-      return (
-        params.get("id") ||
-        params.get("device") ||
-        params.get("device_id")
-      );
+      return "neutral";
 
     }
 
 
-    /* =====================================================
-       LOAD DEVICE
-    ===================================================== */
+    /* =========================
+       FETCH
+    ========================= */
 
     async function loadDevice(){
-
-      const deviceId =
-        getDeviceId();
 
       if(!deviceId){
 
         renderError(
-          "لم يتم العثور على الجهاز."
+          "رابط الجهاز غير صحيح"
         );
 
         return;
+
       }
 
-      const {
-        data,
-        error
-      } =
-        await supabase
-          .from("devices")
-          .select("*")
-          .eq("id",deviceId)
-          .single();
+      try{
 
-      if(error){
+        const { data,error } =
+          await supabase
+            .from("devices")
+            .select("*")
+            .eq("id",deviceId)
+            .single();
 
-        console.error(error);
+        if(error){
+          throw error;
+        }
+
+        if(!data){
+
+          renderError(
+            "الجهاز غير موجود"
+          );
+
+          return;
+
+        }
+
+        device =
+          data;
+
+        renderDevice();
+
+      }catch(error){
+
+        console.error(
+          "DEVICE LOAD ERROR:",
+          error
+        );
 
         renderError(
-          "تعذر تحميل بيانات الجهاز."
+          "تعذر تحميل بيانات الجهاز"
         );
 
-        return;
       }
-
-      if(!data){
-
-        renderError(
-          "الجهاز غير موجود."
-        );
-
-        return;
-      }
-
-      deviceData = data;
-
-      renderDevice(data);
 
     }
 
 
-    /* =====================================================
-       RENDER ERROR
-    ===================================================== */
+    /* =========================
+       RENDER
+    ========================= */
 
-    function renderError(message){
-
-      const app =
-        document.getElementById("app");
-
-      app.innerHTML = `
-
-        <div class="error-box">
-
-          <strong>حدث خطأ</strong>
-
-          <span>
-            ${escapeHTML(message)}
-          </span>
-
-          <button
-            class="back-home"
-            type="button"
-            id="errorBack"
-          >
-            العودة للرئيسية
-          </button>
-
-        </div>
-
-      `;
-
-      document
-        .getElementById("errorBack")
-        ?.addEventListener("click",() => {
-
-          window.location.href =
-            "home.html";
-
-        });
-
-    }
-
-
-    /* =====================================================
-       RENDER DEVICE
-    ===================================================== */
-
-    function renderDevice(device){
-
-      const app =
-        document.getElementById("app");
-
-      const rawImages =
-        parseImages(device.images);
+    function renderDevice(){
 
       /*
-        الحد الأقصى 6 صور فقط
+        الحد الأقصى 6 صور فقط.
       */
 
       const images =
-        rawImages
+        parseImages(device.images)
           .map(imageURL)
           .filter(Boolean)
           .slice(0,6);
 
-      galleryImages = images;
 
-      viewerImages = [...images];
+      viewerImages =
+        [...images];
+
 
       const brand =
         clean(device.brand) ||
         "هاتف";
 
+
       const model =
         clean(device.model) ||
         "جهاز";
 
-      const storage =
-        clean(device.storage) ||
-        "غير محدد";
-
-      const color =
-        clean(device.color) ||
-        "غير محدد";
-
-      const battery =
-        clean(device.battery_health) ||
-        "غير محدد";
-
-      const condition =
-        normalizeCondition(
-          device.condition
-        );
-
-      const screen =
-        conditionStatus(
-          device.screen_condition
-        );
-
-      const body =
-        conditionStatus(
-          device.body_condition
-        );
-
-      const faceId =
-        clean(device.face_id) ||
-        "غير محدد";
-
-      const cameras =
-        clean(device.cameras) ||
-        "غير محدد";
-
-      const charging =
-        clean(device.charging) ||
-        "غير محدد";
-
-      const replaced =
-        clean(device.replaced_parts) ||
-        "لا يوجد";
-
-      const location =
-        clean(device.location) ||
-        "غير محدد";
 
       const saleType =
         normalizeSaleType(
           device.sale_type
         );
 
-      const price =
-        formatPrice(device.price);
+
+      const sellerName =
+        clean(device.seller_name) ||
+        "البائع";
+
+
+      const sellerLocation =
+        clean(device.location) ||
+        "النجف";
+
+
+      const condition =
+        normalizeCondition(
+          device.condition
+        );
+
 
       const notes =
         clean(device.notes);
 
-      const sellerName =
-        clean(device.seller_name) ||
-        "مستخدم جديد";
 
-      /*
-        قاعدة التقييم الحالية:
-        إذا ماكو بيانات تقييم فعلية
-        نعرض مستخدم جديد.
-        لا نجوم.
-      */
-
-      const ratingHTML = `
-
-        <strong>مستخدم جديد</strong>
-
-        <span>
-          لم تتم أول عملية بيع بعد
-        </span>
-
-      `;
+      const sellerRating =
+        Number(
+          device.seller_rating ??
+          device.rating ??
+          NaN
+        );
 
 
-      /* =========================
-         GALLERY HTML
-      ========================= */
-
-      let galleryHTML = "";
-
-      if(images.length){
-
-        galleryHTML = `
-
-          <section class="gallery-card">
-
-            <div class="gallery">
-
-              <div
-                class="gallery-track"
-                id="galleryTrack"
-              >
-
-                ${images.map((src,index) => `
-
-                  <div
-                    class="gallery-slide"
-                    data-index="${index}"
-                  >
-
-                    <img
-                      src="${escapeHTML(src)}"
-                      alt="${escapeHTML(model)}"
-                      draggable="false"
-                    />
-
-                  </div>
-
-                `).join("")}
-
-              </div>
+      const sellerRatingCount =
+        Number(
+          device.seller_rating_count ??
+          device.rating_count ??
+          NaN
+        );
 
 
-              <div
-                class="gallery-counter"
-                id="galleryCounter"
-              >
-                01 / ${String(images.length).padStart(2,"0")}
-              </div>
+      const hasRating =
+        Number.isFinite(sellerRating) &&
+        Number.isFinite(sellerRatingCount) &&
+        sellerRatingCount > 0;
 
 
-              <div
-                class="gallery-dots"
-                id="galleryDots"
-              >
+      const specs = [];
 
-                ${images.map((_,index) => `
 
-                  <span
-                    class="gallery-dot ${index === 0 ? "active" : ""}"
-                    data-index="${index}"
-                  ></span>
+      if(clean(device.storage)){
 
-                `).join("")}
-
-              </div>
-
-            </div>
-
-          </section>
-
-          <div
-            class="photo-hint"
-            aria-hidden="true"
-          >
-            ملاحظة: اضغط على الصورة لعرضها كاملة
-          </div>
-
-        `;
-
-      }else{
-
-        galleryHTML = `
-
-          <section class="gallery-card">
-
-            <div class="gallery">
-
-              <div
-                class="gallery-track"
-                id="galleryTrack"
-              >
-
-                <div class="gallery-slide">
-
-                  <div
-                    style="
-                      width:100%;
-                      height:100%;
-                      display:flex;
-                      align-items:center;
-                      justify-content:center;
-                      color:#8a96a1;
-                      font-size:12px;
-                      font-weight:700;
-                    "
-                  >
-                    لا توجد صور للجهاز
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </section>
-
-        `;
+        specs.push({
+          label:"السعة",
+          value:clean(device.storage),
+          icon:icons.storage
+        });
 
       }
 
 
-      /* =========================
-         SPECS
-      ========================= */
+      if(clean(device.color)){
+
+        specs.push({
+          label:"اللون",
+          value:clean(device.color),
+          icon:icons.color
+        });
+
+      }
+
+
+      if(
+        isApple() &&
+        device.battery_health !== null &&
+        device.battery_health !== undefined &&
+        clean(device.battery_health) !== ""
+      ){
+
+        specs.push({
+          label:"صحة البطارية",
+          value:`${device.battery_health}%`,
+          icon:icons.battery
+        });
+
+      }
+
+
+      if(clean(device.location)){
+
+        specs.push({
+          label:"الموقع",
+          value:clean(device.location),
+          icon:icons.location
+        });
+
+      }
+
+
+      if(!specs.length){
+
+        specs.push({
+          label:"النوع",
+          value:"هاتف ذكي",
+          icon:icons.phone
+        });
+
+      }
+
+
+      const conditionItems = [
+
+        {
+          label:"حالة الشاشة",
+          value:clean(device.screen_condition)
+        },
+
+        {
+          label:"حالة الهيكل",
+          value:clean(device.body_condition)
+        },
+
+        {
+          label:isApple()
+            ? "Face ID"
+            : "البصمة",
+          value:clean(device.face_id)
+        },
+
+        {
+          label:"الكاميرات",
+          value:clean(device.cameras)
+        },
+
+        {
+          label:"الشحن",
+          value:clean(device.charging)
+        },
+
+        {
+          label:"القطع المستبدلة",
+          value:clean(device.replaced_parts)
+        }
+
+      ].filter(item=>item.value);
+
+
+      const safeBrand =
+        escapeHTML(brand);
+
+
+      const safeModel =
+        escapeHTML(model);
+
 
       app.innerHTML = `
 
-        ${galleryHTML}
+        <section class="gallery-card">
+
+          <div class="gallery">
+
+            ${
+              images.length
+              ? `
+
+                <div
+                  class="gallery-track"
+                  id="galleryTrack"
+                >
+
+                  ${images.map((src,index)=>`
+
+                    <div
+                      class="gallery-slide"
+                      data-index="${index}"
+                    >
+
+                      <img
+                        src="${escapeHTML(src)}"
+                        alt="${safeBrand} ${safeModel}"
+                        loading="${index === 0 ? "eager" : "lazy"}"
+                        draggable="false"
+                        onerror="this.closest('.gallery-slide').style.display='none'"
+                      />
+
+                    </div>
+
+                  `).join("")}
+
+                </div>
+
+
+                <div
+                  class="gallery-counter"
+                  id="galleryCounter"
+                >
+                  01 / ${String(images.length).padStart(2,"0")}
+                </div>
+
+
+                ${
+                  images.length > 1
+                  ? `
+
+                    <div
+                      class="gallery-dots"
+                      id="galleryDots"
+                    >
+
+                      ${images.map((_,index)=>`
+
+                        <span
+                          class="gallery-dot ${index === 0 ? "active" : ""}"
+                        ></span>
+
+                      `).join("")}
+
+                    </div>
+
+                  `
+                  : `<div class="gallery-dots"></div>`
+                }
+
+              `
+              : `
+
+                <div class="gallery-empty">
+
+                  <div class="gallery-empty-icon">
+                    ${icons.image}
+                  </div>
+
+                  <strong>
+                    لا توجد صور
+                  </strong>
+
+                  <span>
+                    لم تتم إضافة صورة للجهاز
+                  </span>
+
+                </div>
+
+                <div class="gallery-dots"></div>
+
+              `
+            }
+
+          </div>
+
+        </section>
+
+
+        ${
+          images.length
+          ? `
+
+            <div
+              class="photo-hint"
+              aria-hidden="true"
+            >
+              ملاحظة: اضغط على الصورة لعرضها كاملة
+            </div>
+
+          `
+          : ""
+        }
 
 
         <section class="product-head">
 
-          <div class="product-brand">
-            ${escapeHTML(brand)}
+          <div class="brand">
+            ${safeBrand}
           </div>
 
+
           <h1 class="product-name">
-            ${escapeHTML(model)}
+            ${safeModel}
           </h1>
 
 
           <div class="chips">
 
-            <span class="chip">
-              ${escapeHTML(storage)}
-            </span>
+            ${
+              clean(device.storage)
+              ? `
 
-            <span class="chip">
-              ${escapeHTML(color)}
-            </span>
+                <span class="chip">
+
+                  ${icons.storage}
+
+                  ${escapeHTML(device.storage)}
+
+                </span>
+
+              `
+              : ""
+            }
+
+
+            ${
+              clean(device.color)
+              ? `
+
+                <span class="chip">
+
+                  ${icons.color}
+
+                  ${escapeHTML(device.color)}
+
+                </span>
+
+              `
+              : ""
+            }
+
 
             <span class="chip sale">
               ${escapeHTML(saleType)}
@@ -2073,42 +3149,58 @@
 
         <section class="price-card">
 
-          <div class="price-info">
+          <div class="price-label">
+            السعر
+          </div>
 
-            <div class="price-label">
-              السعر المطلوب
-            </div>
+
+          <div class="price-row">
 
             <div class="price">
-              ${price}
-              <span class="price-currency">
-                د.ع
-              </span>
+              ${formatPrice(device.price)}
+            </div>
+
+
+            <div class="sale-type">
+              ${escapeHTML(saleType)}
             </div>
 
           </div>
 
+        </section>
 
-          <div class="price-icon">
 
-            <svg viewBox="0 0 24 24">
+        <section class="details-intro">
 
-              <rect
-                x="5"
-                y="2.5"
-                width="14"
-                height="19"
-                rx="2.5"
-              ></rect>
+          <div class="details-intro-icon">
+            ${icons.info}
+          </div>
 
-              <path d="M9 5h6"></path>
 
-              <circle
-                cx="12"
-                cy="18"
-                r="1"
-              ></circle>
+          <div class="details-intro-copy">
 
+            <strong>
+              تفاصيل الجهاز
+            </strong>
+
+            <span>
+              المواصفات والحالة ومعلومات البائع
+            </span>
+
+          </div>
+
+
+          <div class="intro-arrow">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M9 18l6-6-6-6"/>
             </svg>
 
           </div>
@@ -2116,338 +3208,67 @@
         </section>
 
 
-        <section>
+        <section class="section">
 
-          <div class="details-intro">
+          <div class="section-head">
 
-            <strong>
-              تفاصيل الجهاز
-            </strong>
-
-            <span>
-              معلومات الجهاز كما أدخلها البائع
-            </span>
+            <h2 class="section-title">
+              مواصفات الجهاز
+            </h2>
 
           </div>
 
 
-          <h2 class="section-title">
-            المواصفات
-          </h2>
-
-
           <div class="spec-grid">
 
+            ${specs.map(item=>`
 
-            <div class="spec-card">
+              <div class="spec-card">
 
-              <div class="spec-icon">
+                <div class="spec-icon">
+                  ${item.icon}
+                </div>
 
-                <svg viewBox="0 0 24 24">
 
-                  <rect
-                    x="4"
-                    y="3"
-                    width="16"
-                    height="18"
-                    rx="2"
-                  ></rect>
+                <div class="spec-info">
 
-                  <path d="M9 6h6"></path>
+                  <span class="spec-label">
+                    ${escapeHTML(item.label)}
+                  </span>
 
-                  <circle
-                    cx="12"
-                    cy="18"
-                    r="1"
-                  ></circle>
 
-                </svg>
+                  <strong class="spec-value">
+                    ${escapeHTML(item.value)}
+                  </strong>
+
+                </div>
 
               </div>
 
-              <div class="spec-text">
-
-                <span class="spec-label">
-                  الجهاز
-                </span>
-
-                <span class="spec-value">
-                  ${escapeHTML(model)}
-                </span>
-
-              </div>
-
-            </div>
-
-
-            <div class="spec-card">
-
-              <div class="spec-icon">
-
-                <svg viewBox="0 0 24 24">
-
-                  <path d="M12 3v18"></path>
-                  <path d="M3 12h18"></path>
-                  <path d="M5 5l14 14"></path>
-                  <path d="M19 5L5 19"></path>
-
-                </svg>
-
-              </div>
-
-              <div class="spec-text">
-
-                <span class="spec-label">
-                  الذاكرة
-                </span>
-
-                <span class="spec-value">
-                  ${escapeHTML(storage)}
-                </span>
-
-              </div>
-
-            </div>
-
-
-            <div class="spec-card">
-
-              <div class="spec-icon">
-
-                <svg viewBox="0 0 24 24">
-
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="8"
-                  ></circle>
-
-                  <path d="M12 8v4l3 2"></path>
-
-                </svg>
-
-              </div>
-
-              <div class="spec-text">
-
-                <span class="spec-label">
-                  البطارية
-                </span>
-
-                <span class="spec-value">
-                  ${escapeHTML(battery)}
-                </span>
-
-              </div>
-
-            </div>
-
-
-            <div class="spec-card">
-
-              <div class="spec-icon">
-
-                <svg viewBox="0 0 24 24">
-
-                  <rect
-                    x="3"
-                    y="5"
-                    width="18"
-                    height="14"
-                    rx="2"
-                  ></rect>
-
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="4"
-                  ></circle>
-
-                  <circle
-                    cx="17.5"
-                    cy="8.5"
-                    r="1"
-                  ></circle>
-
-                </svg>
-
-              </div>
-
-              <div class="spec-text">
-
-                <span class="spec-label">
-                  الكاميرات
-                </span>
-
-                <span class="spec-value">
-                  ${escapeHTML(cameras)}
-                </span>
-
-              </div>
-
-            </div>
-
-
-            <div class="spec-card">
-
-              <div class="spec-icon">
-
-                <svg viewBox="0 0 24 24">
-
-                  <path d="M8 7h8"></path>
-                  <path d="M8 17h8"></path>
-
-                  <path d="M6 9V7a4 4 0 0 1 4-4h4"></path>
-                  <path d="M18 15v2a4 4 0 0 1-4 4h-4"></path>
-
-                </svg>
-
-              </div>
-
-              <div class="spec-text">
-
-                <span class="spec-label">
-                  الشحن
-                </span>
-
-                <span class="spec-value">
-                  ${escapeHTML(charging)}
-                </span>
-
-              </div>
-
-            </div>
-
-
-            <div class="spec-card">
-
-              <div class="spec-icon">
-
-                <svg viewBox="0 0 24 24">
-
-                  <path d="M12 3l7 4v5c0 4.5-3 7.8-7 9-4-1.2-7-4.5-7-9V7l7-4z"></path>
-
-                  <path d="M9 12l2 2 4-4"></path>
-
-                </svg>
-
-              </div>
-
-              <div class="spec-text">
-
-                <span class="spec-label">
-                  Face ID
-                </span>
-
-                <span class="spec-value">
-                  ${escapeHTML(faceId)}
-                </span>
-
-              </div>
-
-            </div>
-
-
-            <div class="spec-card">
-
-              <div class="spec-icon">
-
-                <svg viewBox="0 0 24 24">
-
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="8"
-                  ></circle>
-
-                  <path d="M12 8v4"></path>
-                  <circle
-                    cx="12"
-                    cy="16"
-                    r=".7"
-                    fill="currentColor"
-                    stroke="none"
-                  ></circle>
-
-                </svg>
-
-              </div>
-
-              <div class="spec-text">
-
-                <span class="spec-label">
-                  القطع المستبدلة
-                </span>
-
-                <span class="spec-value">
-                  ${escapeHTML(replaced)}
-                </span>
-
-              </div>
-
-            </div>
-
-
-            <div class="spec-card">
-
-              <div class="spec-icon">
-
-                <svg viewBox="0 0 24 24">
-
-                  <path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11z"></path>
-
-                  <circle
-                    cx="12"
-                    cy="10"
-                    r="2.3"
-                  ></circle>
-
-                </svg>
-
-              </div>
-
-              <div class="spec-text">
-
-                <span class="spec-label">
-                  الموقع
-                </span>
-
-                <span class="spec-value">
-                  ${escapeHTML(location)}
-                </span>
-
-              </div>
-
-            </div>
-
+            `).join("")}
 
           </div>
 
         </section>
 
 
-        <section>
+        <section class="section">
 
-          <h2 class="section-title">
-            حالة الجهاز
-          </h2>
+          <div class="section-head">
+
+            <h2 class="section-title">
+              حالة الجهاز
+            </h2>
+
+          </div>
 
 
-          <div class="condition-card">
-
+          <div class="condition-box">
 
             <div class="condition-summary">
 
-              <div class="condition-shield">
-
-                <svg viewBox="0 0 24 24">
-
-                  <path d="M12 3l7 4v5c0 4.5-3 7.8-7 9-4-1.2-7-4.5-7-9V7l7-4z"></path>
-
-                  <path d="M9 12l2 2 4-4"></path>
-
-                </svg>
-
+              <div class="condition-badge">
+                ${icons.shield}
               </div>
 
 
@@ -2457,9 +3278,9 @@
                   حماية MZAD PHONE
                 </strong>
 
+
                 <span>
-                  بيانات الجهاز موثقة من البائع
-                  <br>
+                  بيانات الجهاز موثقة من البائع<br>
                   التواصل والبيع يتم عبر المنصة
                 </span>
 
@@ -2468,49 +3289,53 @@
             </div>
 
 
-            <div class="condition-list">
+            ${
+              conditionItems.length
+              ? `
+
+                <div class="condition-grid">
+
+                  ${conditionItems.map(item=>`
+
+                    <div class="condition-item">
+
+                      <span class="condition-item-label">
+                        ${escapeHTML(item.label)}
+                      </span>
 
 
-              <div class="condition-row">
+                      <div class="condition-item-value">
 
-                <span class="condition-label">
-                  حالة الجهاز
-                </span>
+                        <span class="status-dot ${statusClass(item.value)}"></span>
 
-                <span class="condition-value">
-                  ${escapeHTML(condition)}
-                </span>
+                        <span>
+                          ${escapeHTML(item.value)}
+                        </span>
 
-              </div>
+                      </div>
 
+                    </div>
 
-              <div class="condition-row">
+                  `).join("")}
 
-                <span class="condition-label">
-                  الشاشة
-                </span>
+                </div>
 
-                <span class="condition-value">
-                  ${escapeHTML(screen)}
-                </span>
+              `
+              : `
 
-              </div>
+                <div
+                  style="
+                    padding:16px;
+                    color:#667085;
+                    font-size:13px;
+                    text-align:center;
+                  "
+                >
+                  لا توجد تفاصيل إضافية عن الحالة
+                </div>
 
-
-              <div class="condition-row">
-
-                <span class="condition-label">
-                  الهيكل
-                </span>
-
-                <span class="condition-value">
-                  ${escapeHTML(body)}
-                </span>
-
-              </div>
-
-
-            </div>
+              `
+            }
 
           </div>
 
@@ -2519,73 +3344,148 @@
 
         ${
           notes
-          ?
-          `
+          ? `
 
-            <section>
+            <section class="section">
 
-              <h2 class="section-title">
-                ملاحظات البائع
-              </h2>
+              <div class="section-head">
+
+                <h2 class="section-title">
+                  ملاحظات البائع
+                </h2>
+
+              </div>
+
 
               <div class="notes-card">
-                ${escapeHTML(notes)}
+
+                <p>
+                  ${escapeHTML(notes)}
+                </p>
+
               </div>
 
             </section>
 
           `
-          :
-          ""
+          : ""
         }
 
 
-        <section>
+        <section class="section">
 
-          <h2 class="section-title">
-            البائع
-          </h2>
+          <div class="section-head">
+
+            <h2 class="section-title">
+              البائع
+            </h2>
+
+          </div>
 
 
           <div class="seller-card">
 
-            <div class="seller-main">
+            <div class="seller-info">
 
               <div class="seller-name">
                 ${escapeHTML(sellerName)}
               </div>
 
+
               <div class="seller-meta">
 
-                <span>
-                  ${escapeHTML(location)}
-                </span>
+                ${icons.location}
 
                 <span>
-                  عضو في MZAD PHONE
+                  ${escapeHTML(sellerLocation)}
                 </span>
 
               </div>
 
+
+              ${
+                hasRating
+                ? ""
+                : `
+                  <div class="seller-status">
+                    عضو في MZAD PHONE
+                  </div>
+                `
+              }
+
             </div>
 
 
-            <div class="seller-rating">
+            ${
+              hasRating
+              ? `
 
-              ${ratingHTML}
+                <div class="seller-rating">
 
-            </div>
+                  <span class="rating-number">
+                    ${sellerRating.toFixed(1)}
+                  </span>
+
+                  <span class="rating-label">
+                    ${sellerRatingCount} تقييم
+                  </span>
+
+                </div>
+
+              `
+              : `
+
+                <div class="seller-rating">
+
+                  <span class="seller-new">
+                    مستخدم جديد
+                  </span>
+
+                </div>
+
+              `
+            }
+
+          </div>
+
+        </section>
+
+
+        <section class="action-wrap">
+
+          <div class="action-bar">
+
+            <button
+              class="favorite-btn"
+              id="favoriteBtn"
+              aria-label="إضافة للمفضلة"
+            >
+              ${icons.heart}
+            </button>
+
+
+            <button
+              class="buy-btn"
+              id="buyBtn"
+            >
+
+              ${icons.cart}
+
+              <span>
+                ${
+                  saleType === "مزاد"
+                  ? "دخول المزاد"
+                  : "شراء الجهاز"
+                }
+              </span>
+
+            </button>
 
           </div>
 
         </section>
 
       `;
-
-
-      document
-        .getElementById("bottomAction")
-        .style.display = "block";
 
 
       setupGallery();
@@ -2595,33 +3495,68 @@
     }
 
 
-    /* =====================================================
+    /* =========================
        GALLERY
-    ===================================================== */
+       AUTOPLAY 5 SECONDS
+    ========================= */
 
     function setupGallery(){
 
-      const galleryTrack =
-        document.getElementById("galleryTrack");
+      galleryTrack =
+        document.getElementById(
+          "galleryTrack"
+        );
 
-      if(!galleryTrack || galleryImages.length === 0){
+      if(!galleryTrack){
         return;
       }
 
 
       const counter =
-        document.getElementById("galleryCounter");
+        document.getElementById(
+          "galleryCounter"
+        );
+
 
       const dots =
-        [...document.querySelectorAll(".gallery-dot")];
+        [
+          ...document.querySelectorAll(
+            ".gallery-dot"
+          )
+        ];
 
 
-      function updateGalleryUI(index){
+      const total =
+        Math.min(
+          6,
+          dots.length ||
+          galleryTrack.children.length ||
+          1
+        );
 
-        currentGalleryIndex = index;
 
-        const total =
-          galleryImages.length;
+      function updateGalleryUI(){
+
+        const width =
+          galleryTrack.clientWidth;
+
+        if(!width){
+          return;
+        }
+
+
+        const index =
+          Math.max(
+            0,
+            Math.min(
+              Math.round(
+                galleryTrack.scrollLeft /
+                width
+              ),
+              total - 1
+            )
+          );
+
 
         if(counter){
 
@@ -2631,11 +3566,11 @@
         }
 
 
-        dots.forEach((dot,dotIndex) => {
+        dots.forEach((dot,i)=>{
 
           dot.classList.toggle(
             "active",
-            dotIndex === index
+            i === index
           );
 
         });
@@ -2643,123 +3578,88 @@
       }
 
 
-      function getCurrentIndex(){
-
-        const width =
-          galleryTrack.clientWidth;
-
-        if(!width){
-          return 0;
-        }
-
-        return Math.round(
-          galleryTrack.scrollLeft / width
-        );
-
-      }
-
-
       galleryTrack.addEventListener(
         "scroll",
-        () => {
-
-          const index =
-            Math.max(
-              0,
-              Math.min(
-                galleryImages.length - 1,
-                getCurrentIndex()
-              )
-            );
-
-          updateGalleryUI(index);
-
+        ()=>{
+          requestAnimationFrame(
+            updateGalleryUI
+          );
         },
-        {
-          passive:true
-        }
+        {passive:true}
       );
 
 
       /* =========================
-         TOUCH / SWIPE
+         TOUCH DETECTION
       ========================= */
 
       galleryTrack.addEventListener(
         "touchstart",
-        event => {
+        (event)=>{
 
-          galleryTouchMoved = false;
+          galleryTouchMoved =
+            false;
 
           galleryTouchStartX =
             event.touches[0]?.clientX || 0;
 
-          stopGalleryAutoplay();
+          restartGalleryAutoplay();
 
         },
-        {
-          passive:true
-        }
+        {passive:true}
       );
 
 
       galleryTrack.addEventListener(
         "touchmove",
-        event => {
+        (event)=>{
 
           const currentX =
             event.touches[0]?.clientX || 0;
 
+
           if(
             Math.abs(
-              currentX - galleryTouchStartX
+              currentX -
+              galleryTouchStartX
             ) > 8
           ){
 
-            galleryTouchMoved = true;
+            galleryTouchMoved =
+              true;
 
           }
 
         },
-        {
-          passive:true
-        }
+        {passive:true}
       );
 
 
       galleryTrack.addEventListener(
         "touchend",
-        () => {
+        ()=>{
+          restartGalleryAutoplay();
 
-          setTimeout(() => {
-
-            restartGalleryAutoplay();
-
-          },100);
-
+          setTimeout(()=>{
+            galleryTouchMoved = false;
+          },80);
         },
-        {
-          passive:true
-        }
+        {passive:true}
       );
 
 
       /* =========================
-         CLICK IMAGE = FULL VIEW
+         CLICK IMAGE
       ========================= */
 
       galleryTrack.addEventListener(
         "click",
-        event => {
-
-          /*
-            إذا المستخدم سحب الصورة
-            لا نعتبرها ضغطة.
-          */
+        (event)=>{
 
           if(galleryTouchMoved){
 
-            galleryTouchMoved = false;
+            galleryTouchMoved =
+              false;
 
             return;
 
@@ -2771,267 +3671,177 @@
               ".gallery-slide"
             );
 
+
           if(!slide){
             return;
           }
 
 
-          const slides =
-            [...galleryTrack.querySelectorAll(".gallery-slide")];
-
           const index =
-            slides.indexOf(slide);
+            Number(
+              slide.dataset.index
+            );
 
-          if(index >= 0){
 
-            openPhotoViewer(index);
-
+          if(
+            !Number.isInteger(index)
+          ){
+            return;
           }
+
+
+          openPhotoViewer(index);
 
         }
       );
 
 
       /* =========================
-         DOT CLICK
+         POINTER
       ========================= */
 
-      dots.forEach(dot => {
-
-        dot.addEventListener(
-          "click",
-          event => {
-
-            event.stopPropagation();
-
-            const index =
-              Number(
-                dot.dataset.index
-              );
-
-            if(
-              !Number.isInteger(index) ||
-              index < 0 ||
-              index >= galleryImages.length
-            ){
-              return;
-            }
-
-            goToGallery(index);
-
-          }
-        );
-
-      });
+      galleryTrack.addEventListener(
+        "pointerdown",
+        ()=>{
+          restartGalleryAutoplay();
+        },
+        {passive:true}
+      );
 
 
       /* =========================
-         START AUTOPLAY
+         AUTOPLAY
       ========================= */
 
-      restartGalleryAutoplay();
+      function goToSlide(index){
 
-    }
-
-
-    function goToGallery(index){
-
-      const galleryTrack =
-        document.getElementById("galleryTrack");
-
-      if(!galleryTrack){
-        return;
-      }
-
-      const width =
-        galleryTrack.clientWidth;
-
-      galleryTrack.scrollTo({
-
-        left:index * width,
-
-        behavior:"smooth"
-
-      });
-
-      currentGalleryIndex = index;
-
-      updateGalleryCounter(index);
-
-      restartGalleryAutoplay();
-
-    }
-
-
-    function updateGalleryCounter(index){
-
-      const counter =
-        document.getElementById("galleryCounter");
-
-      if(!counter){
-        return;
-      }
-
-      counter.textContent =
-        `${String(index + 1).padStart(2,"0")} / ${String(galleryImages.length).padStart(2,"0")}`;
-
-
-      document
-        .querySelectorAll(".gallery-dot")
-        .forEach((dot,dotIndex) => {
-
-          dot.classList.toggle(
-            "active",
-            dotIndex === index
+        const safeIndex =
+          Math.max(
+            0,
+            Math.min(
+              index,
+              total - 1
+            )
           );
+
+
+        galleryTrack.scrollTo({
+
+          left:
+            safeIndex *
+            galleryTrack.clientWidth,
+
+          behavior:"smooth"
 
         });
 
-    }
+      }
 
 
-    function stopGalleryAutoplay(){
-
-      if(galleryAutoPlayTimer){
+      function startAutoplay(){
 
         clearInterval(
           galleryAutoPlayTimer
         );
 
-        galleryAutoPlayTimer = null;
+
+        if(total <= 1){
+          return;
+        }
+
+
+        galleryAutoPlayTimer =
+          setInterval(()=>{
+
+            const width =
+              galleryTrack.clientWidth;
+
+            if(!width){
+              return;
+            }
+
+
+            let current =
+              Math.round(
+                galleryTrack.scrollLeft /
+                width
+              );
+
+
+            let next =
+              current + 1;
+
+
+            if(next >= total){
+              next = 0;
+            }
+
+
+            goToSlide(next);
+
+          },5000);
 
       }
+
+
+      function restartGalleryAutoplay(){
+
+        clearInterval(
+          galleryAutoPlayTimer
+        );
+
+
+        galleryAutoPlayTimer =
+          setTimeout(()=>{
+
+            startAutoplay();
+
+          },5000);
+
+      }
+
+
+      window.__restartGalleryAutoplay =
+        restartGalleryAutoplay;
+
+
+      updateGalleryUI();
+
+      startAutoplay();
 
     }
 
 
-    function restartGalleryAutoplay(){
-
-      stopGalleryAutoplay();
-
-      if(galleryImages.length <= 1){
-        return;
-      }
-
-
-      galleryAutoPlayTimer =
-        setInterval(() => {
-
-          const nextIndex =
-            currentGalleryIndex >= galleryImages.length - 1
-            ? 0
-            : currentGalleryIndex + 1;
-
-          goToGalleryWithoutRestart(
-            nextIndex
-          );
-
-        },5000);
-
-    }
-
-
-    function goToGalleryWithoutRestart(index){
-
-      const galleryTrack =
-        document.getElementById("galleryTrack");
-
-      if(!galleryTrack){
-        return;
-      }
-
-      const width =
-        galleryTrack.clientWidth;
-
-      galleryTrack.scrollTo({
-
-        left:index * width,
-
-        behavior:"smooth"
-
-      });
-
-      currentGalleryIndex =
-        index;
-
-      updateGalleryCounter(
-        index
-      );
-
-    }
-
-
-    /* =====================================================
+    /* =========================
        PHOTO VIEWER
-    ===================================================== */
+    ========================= */
 
-    function buildPhotoViewer(){
-
-      const viewerTrack =
-        document.getElementById("viewerTrack");
-
-      if(!viewerTrack){
-        return;
-      }
-
-
-      viewerTrack.innerHTML =
-        viewerImages
-          .map((src,index) => `
-
-            <div
-              class="viewer-slide"
-              data-index="${index}"
-            >
-
-              <img
-                src="${escapeHTML(src)}"
-                alt="صورة الجهاز ${index + 1}"
-                draggable="false"
-              />
-
-            </div>
-
-          `)
-          .join("");
-
-    }
-
-
-    function openPhotoViewer(index = 0){
+    function openPhotoViewer(index){
 
       if(!viewerImages.length){
         return;
       }
 
-      stopGalleryAutoplay();
 
-      buildPhotoViewer();
-
-
-      const viewer =
-        document.getElementById("photoViewer");
-
-      const viewerTrack =
-        document.getElementById("viewerTrack");
-
-      const viewerCount =
-        document.getElementById("viewerCount");
-
-
-      currentViewerIndex =
+      viewerIndex =
         Math.max(
           0,
           Math.min(
-            viewerImages.length - 1,
-            index
+            index,
+            viewerImages.length - 1
           )
         );
 
 
-      viewer.classList.add("open");
+      updatePhotoViewer();
 
-      viewer.setAttribute(
+
+      photoViewer.classList.add(
+        "open"
+      );
+
+
+      photoViewer.setAttribute(
         "aria-hidden",
         "false"
       );
@@ -3041,34 +3851,21 @@
         "hidden";
 
 
-      updateViewerCount();
-
-
-      requestAnimationFrame(() => {
-
-        const width =
-          viewerTrack.clientWidth;
-
-        viewerTrack.scrollLeft =
-          currentViewerIndex * width;
-
-      });
+      clearInterval(
+        galleryAutoPlayTimer
+      );
 
     }
 
 
     function closePhotoViewer(){
 
-      const viewer =
-        document.getElementById("photoViewer");
+      photoViewer.classList.remove(
+        "open"
+      );
 
-      if(!viewer){
-        return;
-      }
 
-      viewer.classList.remove("open");
-
-      viewer.setAttribute(
+      photoViewer.setAttribute(
         "aria-hidden",
         "true"
       );
@@ -3078,214 +3875,607 @@
         "";
 
 
-      restartGalleryAutoplay();
+      if(
+        galleryTrack &&
+        viewerImages.length
+      ){
+
+        galleryTrack.scrollTo({
+
+          left:
+            viewerIndex *
+            galleryTrack.clientWidth,
+
+          behavior:"auto"
+
+        });
+
+      }
+
+
+      if(
+        typeof window.__restartGalleryAutoplay ===
+        "function"
+      ){
+
+        window.__restartGalleryAutoplay();
+
+      }
 
     }
 
 
-    function updateViewerCount(){
+    function updatePhotoViewer(){
 
-      const viewerCount =
-        document.getElementById("viewerCount");
+      const src =
+        viewerImages[viewerIndex];
 
-      if(!viewerCount){
+
+      if(!src){
         return;
       }
 
-      viewerCount.textContent =
-        `${String(currentViewerIndex + 1).padStart(2,"0")} / ${String(viewerImages.length).padStart(2,"0")}`;
+
+      photoViewerImage.classList.add(
+        "changing"
+      );
+
+
+      setTimeout(()=>{
+
+        photoViewerImage.src =
+          src;
+
+
+        photoViewerImage.alt =
+          `${clean(device?.brand)} ${clean(device?.model)}`;
+
+
+        photoViewerCounter.textContent =
+          `${String(viewerIndex + 1).padStart(2,"0")} / ${String(viewerImages.length).padStart(2,"0")}`;
+
+
+        photoViewerImage.classList.remove(
+          "changing"
+        );
+
+      },90);
+
+
+      const showArrows =
+        viewerImages.length > 1;
+
+
+      photoViewerPrev.style.display =
+        showArrows
+          ? "flex"
+          : "none";
+
+
+      photoViewerNext.style.display =
+        showArrows
+          ? "flex"
+          : "none";
 
     }
 
 
-    function setupViewer(){
+    function nextPhoto(){
 
-      const viewer =
-        document.getElementById("photoViewer");
-
-      const viewerTrack =
-        document.getElementById("viewerTrack");
-
-      const closeButton =
-        document.getElementById("viewerClose");
+      if(!viewerImages.length){
+        return;
+      }
 
 
-      closeButton?.addEventListener(
-        "click",
-        closePhotoViewer
-      );
+      if(
+        viewerIndex <
+        viewerImages.length - 1
+      ){
+
+        viewerIndex++;
+
+      }else{
+
+        viewerIndex = 0;
+
+      }
 
 
-      /*
-        الضغط على الخلفية يغلق المشاهد
-      */
+      updatePhotoViewer();
 
-      viewer
-        ?.querySelector(".viewer-backdrop")
-        ?.addEventListener(
-          "click",
-          closePhotoViewer
+    }
+
+
+    function previousPhoto(){
+
+      if(!viewerImages.length){
+        return;
+      }
+
+
+      if(viewerIndex > 0){
+
+        viewerIndex--;
+
+      }else{
+
+        viewerIndex =
+          viewerImages.length - 1;
+
+      }
+
+
+      updatePhotoViewer();
+
+    }
+
+
+    photoViewerClose.addEventListener(
+      "click",
+      closePhotoViewer
+    );
+
+
+    photoViewerPrev.addEventListener(
+      "click",
+      (event)=>{
+
+        event.stopPropagation();
+
+        previousPhoto();
+
+      }
+    );
+
+
+    photoViewerNext.addEventListener(
+      "click",
+      (event)=>{
+
+        event.stopPropagation();
+
+        nextPhoto();
+
+      }
+    );
+
+
+    photoViewerStage.addEventListener(
+      "click",
+      (event)=>{
+
+        if(
+          event.target ===
+          photoViewerStage
+        ){
+
+          closePhotoViewer();
+
+        }
+
+      }
+    );
+
+
+    /* =========================
+       SWIPE VIEWER
+    ========================= */
+
+    photoViewerStage.addEventListener(
+      "touchstart",
+      (event)=>{
+
+        const touch =
+          event.changedTouches[0];
+
+
+        viewerTouchStartX =
+          touch.clientX;
+
+
+        viewerTouchStartY =
+          touch.clientY;
+
+      },
+      {passive:true}
+    );
+
+
+    photoViewerStage.addEventListener(
+      "touchend",
+      (event)=>{
+
+        const touch =
+          event.changedTouches[0];
+
+
+        const deltaX =
+          touch.clientX -
+          viewerTouchStartX;
+
+
+        const deltaY =
+          touch.clientY -
+          viewerTouchStartY;
+
+
+        if(
+          Math.abs(deltaX) < 50
+        ){
+          return;
+        }
+
+
+        if(
+          Math.abs(deltaX) <
+          Math.abs(deltaY)
+        ){
+          return;
+        }
+
+
+        if(deltaX < 0){
+
+          nextPhoto();
+
+        }else{
+
+          previousPhoto();
+
+        }
+
+      },
+      {passive:true}
+    );
+
+
+    /* =========================
+       KEYBOARD
+    ========================= */
+
+    document.addEventListener(
+      "keydown",
+      (event)=>{
+
+        if(
+          !photoViewer.classList.contains(
+            "open"
+          )
+        ){
+          return;
+        }
+
+
+        if(
+          event.key === "Escape"
+        ){
+
+          closePhotoViewer();
+
+        }
+
+
+        if(
+          event.key === "ArrowLeft"
+        ){
+
+          nextPhoto();
+
+        }
+
+
+        if(
+          event.key === "ArrowRight"
+        ){
+
+          previousPhoto();
+
+        }
+
+      }
+    );
+
+
+    /* =========================
+       ACTIONS
+    ========================= */
+
+    function setupActions(){
+
+      const shareButton =
+        document.getElementById(
+          "shareBtn"
         );
 
 
-      /* =========================
-         VIEWER SCROLL
-      ========================= */
+      if(shareButton){
 
-      viewerTrack?.addEventListener(
-        "scroll",
-        () => {
+        shareButton.addEventListener(
+          "click",
+          shareDevice
+        );
 
-          const width =
-            viewerTrack.clientWidth;
+      }
 
-          if(!width){
-            return;
-          }
 
-          const index =
-            Math.round(
-              viewerTrack.scrollLeft / width
+      const favoriteBtn =
+        document.getElementById(
+          "favoriteBtn"
+        );
+
+
+      if(favoriteBtn){
+
+        favoriteBtn.addEventListener(
+          "click",
+          async()=>{
+
+            const { data } =
+              await supabase.auth.getSession();
+
+
+            if(!data?.session){
+
+              const returnTo =
+                window.location.href;
+
+
+              sessionStorage.setItem(
+                "mzad_pending_action",
+                returnTo
+              );
+
+
+              showToast(
+                "سجّل دخولك أو أنشئ حساباً أولاً"
+              );
+
+
+              setTimeout(()=>{
+
+                window.location.href =
+                  `index.html?login=1&returnTo=${encodeURIComponent(returnTo)}`;
+
+              },450);
+
+
+              return;
+
+            }
+
+
+            favoriteBtn.classList.toggle(
+              "active"
             );
 
-          currentViewerIndex =
-            Math.max(
-              0,
-              Math.min(
-                viewerImages.length - 1,
-                index
+
+            if(
+              favoriteBtn.classList.contains(
+                "active"
               )
-            );
+            ){
 
-          updateViewerCount();
+              favoriteBtn.innerHTML =
+                icons.heartFill;
 
-        },
-        {
-          passive:true
-        }
-      );
+              showToast(
+                "تمت إضافة الجهاز للمفضلة"
+              );
 
+            }else{
 
-      /* =========================
-         VIEWER TOUCH
-      ========================= */
+              favoriteBtn.innerHTML =
+                icons.heart;
 
-      viewerTrack?.addEventListener(
-        "touchstart",
-        event => {
-
-          viewerTouchMoved = false;
-
-          viewerTouchStartX =
-            event.touches[0]?.clientX || 0;
-
-        },
-        {
-          passive:true
-        }
-      );
-
-
-      viewerTrack?.addEventListener(
-        "touchmove",
-        event => {
-
-          const currentX =
-            event.touches[0]?.clientX || 0;
-
-          if(
-            Math.abs(
-              currentX - viewerTouchStartX
-            ) > 8
-          ){
-
-            viewerTouchMoved = true;
-
-          }
-
-        },
-        {
-          passive:true
-        }
-      );
-
-
-      /*
-        النقر على الصورة داخل المشاهد
-        لا يغلق المشاهد.
-      */
-
-      viewerTrack?.addEventListener(
-        "click",
-        event => {
-
-          if(viewerTouchMoved){
-
-            viewerTouchMoved = false;
-
-            return;
-
-          }
-
-        }
-      );
-
-
-      /* =========================
-         ESC
-      ========================= */
-
-      document.addEventListener(
-        "keydown",
-        event => {
-
-          if(event.key === "Escape"){
-
-            const isOpen =
-              document
-                .getElementById("photoViewer")
-                ?.classList
-                .contains("open");
-
-            if(isOpen){
-
-              closePhotoViewer();
+              showToast(
+                "تمت إزالة الجهاز من المفضلة"
+              );
 
             }
 
           }
+        );
 
-        }
-      );
+      }
+
+
+      const buyBtn =
+        document.getElementById(
+          "buyBtn"
+        );
+
+
+      if(buyBtn){
+
+        buyBtn.addEventListener(
+          "click",
+          async()=>{
+
+            const { data } =
+              await supabase.auth.getSession();
+
+
+            if(!data?.session){
+
+              const returnTo =
+                window.location.href;
+
+
+              sessionStorage.setItem(
+                "mzad_pending_action",
+                returnTo
+              );
+
+
+              showToast(
+                "سجّل دخولك أو أنشئ حساباً أولاً"
+              );
+
+
+              setTimeout(()=>{
+
+                window.location.href =
+                  `index.html?login=1&returnTo=${encodeURIComponent(returnTo)}`;
+
+              },450);
+
+
+              return;
+
+            }
+
+
+            if(
+              normalizeSaleType(
+                device.sale_type
+              ) === "مزاد"
+            ){
+
+              showToast(
+                "المزاد راح نربطه بالخطوة الخاصة بالمزايدة"
+              );
+
+            }else{
+
+              showToast(
+                "شراء الجهاز راح نربطه بخطوة الشراء"
+              );
+
+            }
+
+          }
+        );
+
+      }
 
     }
 
 
-    /* =====================================================
-       ACTIONS
-    ===================================================== */
+    /* =========================
+       SHARE
+    ========================= */
 
-    function setupActions(){
+    async function shareDevice(){
 
-      const backButton =
-        document.getElementById("backButton");
-
-      const shareButton =
-        document.getElementById("shareButton");
-
-      const buyButton =
-        document.getElementById("buyButton");
+      const url =
+        window.location.href;
 
 
-      backButton?.addEventListener(
+      const title =
+        `${clean(device?.brand)} ${clean(device?.model)}`
+          .trim() ||
+        "جهاز على MZAD PHONE";
+
+
+      try{
+
+        if(navigator.share){
+
+          await navigator.share({
+
+            title,
+
+            text:
+              `شوف هذا الجهاز على MZAD PHONE`,
+
+            url
+
+          });
+
+          return;
+
+        }
+
+
+        await navigator.clipboard.writeText(
+          url
+        );
+
+
+        showToast(
+          "تم نسخ رابط الجهاز"
+        );
+
+      }catch(error){
+
+        if(
+          error?.name !== "AbortError"
+        ){
+
+          showToast(
+            "تعذر مشاركة الرابط"
+          );
+
+        }
+
+      }
+
+    }
+
+
+    /* =========================
+       ERROR
+    ========================= */
+
+    function renderError(message){
+
+      app.innerHTML = `
+
+        <div class="error-box">
+
+          <div class="error-icon">
+            ${icons.alert}
+          </div>
+
+
+          <strong>
+            ${escapeHTML(message)}
+          </strong>
+
+
+          <p>
+            تأكد من الرابط وحاول مرة ثانية
+          </p>
+
+
+          <button
+            class="back-home"
+            id="errorBack"
+          >
+            العودة للرئيسية
+          </button>
+
+        </div>
+
+      `;
+
+
+      document
+        .getElementById("errorBack")
+        ?.addEventListener(
+          "click",
+          ()=>{
+            window.location.href =
+              "home.html";
+          }
+        );
+
+    }
+
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    document
+      .getElementById("backBtn")
+      .addEventListener(
         "click",
-        () => {
+        ()=>{
 
-          if(
-            window.history.length > 1
-          ){
+          if(document.referrer){
 
-            window.history.back();
+            history.back();
 
           }else{
 
@@ -3298,163 +4488,9 @@
       );
 
 
-      shareButton?.addEventListener(
-        "click",
-        shareDevice
-      );
-
-
-      buyButton?.addEventListener(
-        "click",
-        handleBuy
-      );
-
-    }
-
-
-    /* =====================================================
-       SHARE
-    ===================================================== */
-
-    async function shareDevice(){
-
-      if(!deviceData){
-        return;
-      }
-
-      const title =
-        `${clean(deviceData.brand)} ${clean(deviceData.model)}`;
-
-      const text =
-        `شوف هذا الجهاز على MZAD PHONE`;
-
-      const url =
-        window.location.href;
-
-
-      if(
-        navigator.share
-      ){
-
-        try{
-
-          await navigator.share({
-
-            title,
-            text,
-            url
-
-          });
-
-          return;
-
-        }catch(error){
-
-          if(
-            error?.name === "AbortError"
-          ){
-
-            return;
-
-          }
-
-        }
-
-      }
-
-
-      try{
-
-        await navigator.clipboard.writeText(
-          url
-        );
-
-        showToast(
-          "تم نسخ رابط الجهاز"
-        );
-
-      }catch(error){
-
-        showToast(
-          "تعذر نسخ الرابط"
-        );
-
-      }
-
-    }
-
-
-    /* =====================================================
-       BUY
-    ===================================================== */
-
-    async function handleBuy(){
-
-      if(!deviceData){
-        return;
-      }
-
-
-      const {
-        data
-      } =
-        await supabase.auth.getSession();
-
-
-      const session =
-        data?.session;
-
-
-      /*
-        إذا المستخدم مو مسجل:
-        نوجهه لتسجيل الدخول
-        مع حفظ العملية.
-      */
-
-      if(!session){
-
-        try{
-
-          sessionStorage.setItem(
-            "pendingDeviceAction",
-            JSON.stringify({
-
-              action:"buy",
-              deviceId:deviceData.id
-
-            })
-          );
-
-        }catch(error){}
-
-
-        window.location.href =
-          `index.html?redirect=${encodeURIComponent(
-            window.location.href
-          )}`;
-
-        return;
-
-      }
-
-
-      /*
-        هنا نخلي المنطق الحالي
-        الخاص بالشراء كما هو.
-      */
-
-      showToast(
-        "سيتم متابعة عملية الشراء عبر المنصة"
-      );
-
-    }
-
-
-    /* =====================================================
-       INIT
-    ===================================================== */
-
-    setupViewer();
+    /* =========================
+       START
+    ========================= */
 
     loadDevice();
 
