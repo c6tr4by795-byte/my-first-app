@@ -32,7 +32,11 @@
       --purple-dark:#5237c7;
       --purple-soft:#e5e0ff;
 
-      --success:#159a72;
+      /* اللون الفاتح المعتمد */
+      --pale:#e6e3f6;
+      --pale-dark:#d8d3ee;
+      --pale-text:#51477d;
+
       --danger:#d94b61;
 
       --shadow:0 14px 34px rgba(24,44,49,.08);
@@ -86,16 +90,86 @@
     ========================= */
 
     .topbar{
-      height:66px;
+      height:68px;
       display:flex;
       align-items:center;
       justify-content:space-between;
       padding:0 16px;
-      background:var(--surface);
-      border-bottom:1px solid rgba(230,233,237,.75);
       position:sticky;
       top:0;
       z-index:30;
+      overflow:hidden;
+
+      background:
+        radial-gradient(
+          190px 75px at 8% 50%,
+          rgba(23,107,135,.14),
+          transparent 72%
+        ),
+        radial-gradient(
+          210px 85px at 88% 0%,
+          rgba(98,70,217,.18),
+          transparent 72%
+        ),
+        linear-gradient(
+          110deg,
+          #ffffff 0%,
+          #edf7f9 34%,
+          #f2effb 69%,
+          #ffffff 100%
+        );
+
+      border-bottom:1px solid rgba(230,233,237,.8);
+      box-shadow:0 7px 22px rgba(24,44,49,.055);
+      isolation:isolate;
+    }
+
+    .topbar::before{
+      content:"";
+      position:absolute;
+      width:250px;
+      height:72px;
+      left:-90px;
+      bottom:-46px;
+      border-radius:50%;
+      background:rgba(23,107,135,.12);
+      filter:blur(14px);
+      animation:headerWave 7s ease-in-out infinite alternate;
+      z-index:-1;
+    }
+
+    .topbar::after{
+      content:"";
+      position:absolute;
+      width:250px;
+      height:78px;
+      right:-85px;
+      top:-48px;
+      border-radius:50%;
+      background:rgba(98,70,217,.11);
+      filter:blur(15px);
+      animation:headerWaveReverse 8s ease-in-out infinite alternate;
+      z-index:-1;
+    }
+
+    @keyframes headerWave{
+      0%{
+        transform:translateX(-5px) rotate(-3deg) scale(1);
+      }
+
+      100%{
+        transform:translateX(55px) rotate(5deg) scale(1.08);
+      }
+    }
+
+    @keyframes headerWaveReverse{
+      0%{
+        transform:translateX(10px) rotate(3deg) scale(1);
+      }
+
+      100%{
+        transform:translateX(-45px) rotate(-5deg) scale(1.08);
+      }
     }
 
     .top-side{
@@ -104,18 +178,23 @@
       display:flex;
       align-items:center;
       justify-content:center;
+      position:relative;
+      z-index:2;
     }
 
     .icon-btn{
       width:40px;
       height:40px;
       border-radius:13px;
-      background:var(--surface-2);
+      background:rgba(255,255,255,.78);
       color:var(--ink);
+      border:1px solid rgba(255,255,255,.85);
+      box-shadow:0 5px 14px rgba(24,44,49,.07);
       display:flex;
       align-items:center;
       justify-content:center;
       transition:.18s ease;
+      backdrop-filter:blur(10px);
     }
 
     .icon-btn:active{
@@ -131,6 +210,8 @@
     .page-title{
       text-align:center;
       min-width:0;
+      position:relative;
+      z-index:2;
     }
 
     .page-title strong{
@@ -263,26 +344,6 @@
       backdrop-filter:blur(8px);
     }
 
-    .share-gallery{
-      position:absolute;
-      top:12px;
-      left:12px;
-      width:38px;
-      height:38px;
-      border-radius:12px;
-      background:#fff;
-      color:var(--ink);
-      box-shadow:0 7px 18px rgba(23,32,42,.12);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .share-gallery svg{
-      width:18px;
-      height:18px;
-    }
-
     .gallery-dots{
       height:34px;
       display:flex;
@@ -351,10 +412,17 @@
       font-weight:700;
     }
 
+    .chip svg{
+      width:14px;
+      height:14px;
+      stroke:currentColor;
+    }
+
+    /* بيع مباشر بدون البنفسجي */
     .chip.sale{
-      color:var(--purple);
-      background:var(--purple-soft);
-      border-color:transparent;
+      color:#59616b;
+      background:#fff;
+      border-color:var(--line);
     }
 
     /* =========================
@@ -365,9 +433,18 @@
       margin-top:14px;
       padding:17px 18px;
       border-radius:18px;
-      background:linear-gradient(135deg,#6246d9 0%,#563bc8 100%);
-      color:#fff;
-      box-shadow:0 13px 28px rgba(98,70,217,.20);
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--pale) 0%,
+          #ebe9f7 52%,
+          #e2dff2 100%
+        );
+
+      color:var(--pale-text);
+      border:1px solid rgba(216,211,238,.8);
+      box-shadow:0 13px 28px rgba(98,70,217,.10);
       position:relative;
       overflow:hidden;
     }
@@ -380,7 +457,7 @@
       border-radius:50%;
       right:-70px;
       top:-85px;
-      background:rgba(255,255,255,.08);
+      background:rgba(255,255,255,.38);
     }
 
     .price-label{
@@ -389,7 +466,7 @@
       font-size:9px;
       font-weight:800;
       letter-spacing:1px;
-      opacity:.76;
+      opacity:.70;
       direction:ltr;
       text-align:right;
     }
@@ -410,15 +487,19 @@
       line-height:1.15;
       direction:ltr;
       white-space:nowrap;
+      color:#4c426f;
     }
 
     .sale-type{
       padding:5px 8px;
       border-radius:8px;
-      background:rgba(255,255,255,.13);
+      background:var(--pale);
+      border:1px solid rgba(255,255,255,.58);
+      color:#51477d;
       font-size:9px;
       font-weight:700;
       white-space:nowrap;
+      box-shadow:0 3px 9px rgba(98,70,217,.06);
     }
 
     /* =========================
@@ -508,13 +589,6 @@
       font-weight:800;
     }
 
-    .section-sub{
-      color:var(--muted);
-      font-size:9px;
-      font-weight:600;
-      white-space:nowrap;
-    }
-
     /* =========================
        SPEC CATALOG
     ========================= */
@@ -525,15 +599,16 @@
       gap:9px;
     }
 
+    /* أكبر من القديم */
     .spec-card{
-      min-height:73px;
+      min-height:82px;
       padding:11px;
-      border-radius:15px;
+      border-radius:16px;
       border:1px solid var(--line);
       background:var(--surface);
       display:flex;
       align-items:center;
-      gap:9px;
+      gap:11px;
       box-shadow:0 5px 16px rgba(24,44,49,.035);
     }
 
@@ -551,16 +626,18 @@
       border-color:#dfeef1;
     }
 
+    /* كل حاويات الأيقونات مكبرة */
     .spec-icon{
-      flex:0 0 36px;
-      width:36px;
-      height:36px;
-      border-radius:11px;
+      flex:0 0 44px;
+      width:44px;
+      height:44px;
+      border-radius:13px;
       display:flex;
       align-items:center;
       justify-content:center;
       background:var(--surface-2);
       color:var(--primary);
+      box-shadow:0 4px 10px rgba(24,44,49,.045);
     }
 
     .spec-card:nth-child(3n+2) .spec-icon{
@@ -569,8 +646,8 @@
     }
 
     .spec-icon svg{
-      width:18px;
-      height:18px;
+      width:23px;
+      height:23px;
       stroke:currentColor;
     }
 
@@ -598,7 +675,7 @@
     }
 
     /* =========================
-       CONDITION CATALOG
+       CONDITION
     ========================= */
 
     .condition-box{
@@ -610,7 +687,7 @@
     }
 
     .condition-summary{
-      padding:13px 14px;
+      padding:14px;
       background:linear-gradient(135deg,#e8f3f6,#f5f9fa);
       border-bottom:1px solid #e1ecef;
       display:flex;
@@ -619,21 +696,21 @@
     }
 
     .condition-badge{
-      flex:0 0 40px;
-      width:40px;
-      height:40px;
+      flex:0 0 42px;
+      width:42px;
+      height:42px;
       border-radius:13px;
       background:#fff;
-      color:var(--success);
+      color:var(--primary);
       display:flex;
       align-items:center;
       justify-content:center;
-      box-shadow:0 5px 14px rgba(21,154,114,.08);
+      box-shadow:0 5px 14px rgba(23,107,135,.08);
     }
 
     .condition-badge svg{
-      width:20px;
-      height:20px;
+      width:22px;
+      height:22px;
     }
 
     .condition-summary-text{
@@ -643,15 +720,16 @@
 
     .condition-summary-text strong{
       display:block;
-      font-size:12px;
+      font-size:13px;
       font-weight:800;
     }
 
     .condition-summary-text span{
       display:block;
       color:var(--muted);
-      font-size:9px;
+      font-size:10px;
       margin-top:2px;
+      line-height:1.7;
     }
 
     .condition-grid{
@@ -685,20 +763,9 @@
       line-height:1.4;
     }
 
+    /* النقاط الخضراء مخفية */
     .status-dot{
-      width:7px;
-      height:7px;
-      flex:0 0 7px;
-      border-radius:50%;
-      background:var(--success);
-    }
-
-    .status-dot.neutral{
-      background:#9aa5ae;
-    }
-
-    .status-dot.bad{
-      background:var(--danger);
+      display:none;
     }
 
     /* =========================
@@ -736,18 +803,9 @@
       gap:11px;
     }
 
+    /* مربع حرف البائع مخفي */
     .seller-avatar{
-      flex:0 0 44px;
-      width:44px;
-      height:44px;
-      border-radius:14px;
-      background:var(--primary-soft);
-      color:var(--primary);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:16px;
-      font-weight:800;
+      display:none;
     }
 
     .seller-info{
@@ -841,25 +899,33 @@
       height:20px;
     }
 
+    /* زر الشراء بنفس اللون الفاتح */
     .buy-btn{
       flex:1;
       height:50px;
       border-radius:14px;
-      background:var(--primary);
-      color:#fff;
+
+      background:var(--pale);
+
+      color:#51477d;
+
       display:flex;
       align-items:center;
       justify-content:center;
       gap:8px;
+
       font-size:13px;
       font-weight:800;
-      box-shadow:0 9px 18px rgba(23,107,135,.18);
+
+      border:1px solid var(--pale-dark);
+      box-shadow:0 9px 18px rgba(98,70,217,.10);
+
       transition:.18s ease;
     }
 
     .buy-btn:active{
       transform:translateY(1px) scale(.99);
-      background:var(--primary-dark);
+      background:var(--pale-dark);
     }
 
     .buy-btn svg{
@@ -891,7 +957,9 @@
     }
 
     @keyframes spin{
-      to{transform:rotate(360deg)}
+      to{
+        transform:rotate(360deg)
+      }
     }
 
     /* =========================
@@ -981,6 +1049,7 @@
     ========================= */
 
     @media(max-width:360px){
+
       .gallery{
         height:270px;
       }
@@ -998,9 +1067,14 @@
       }
 
       .spec-icon{
-        width:33px;
-        height:33px;
-        flex-basis:33px;
+        width:40px;
+        height:40px;
+        flex-basis:40px;
+      }
+
+      .spec-icon svg{
+        width:21px;
+        height:21px;
       }
     }
   </style>
@@ -1011,54 +1085,123 @@
   <div class="page">
 
     <header class="topbar">
+
       <div class="top-side">
-        <button class="icon-btn" id="backBtn" aria-label="رجوع">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+
+        <button
+          class="icon-btn"
+          id="backBtn"
+          aria-label="رجوع"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <path d="M15 18l-6-6 6-6"/>
           </svg>
+
         </button>
+
       </div>
+
 
       <div class="page-title">
-        <strong>تفاصيل الجهاز</strong>
-        <span>MZAD PHONE</span>
+
+        <strong>
+          تفاصيل الجهاز
+        </strong>
+
+        <span>
+          MZAD PHONE
+        </span>
+
       </div>
 
+
       <div class="top-side">
-        <button class="icon-btn" id="shareBtn" aria-label="مشاركة">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+
+        <button
+          class="icon-btn"
+          id="shareBtn"
+          aria-label="مشاركة"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <circle cx="18" cy="5" r="2.5"/>
             <circle cx="6" cy="12" r="2.5"/>
             <circle cx="18" cy="19" r="2.5"/>
             <path d="M8.2 10.8l7.5-4.3M8.2 13.2l7.5 4.3"/>
           </svg>
+
         </button>
+
       </div>
+
     </header>
 
+
     <main id="app">
+
       <div class="loading">
+
         <div class="spinner"></div>
-        <span>جاري تحميل الجهاز...</span>
+
+        <span>
+          جاري تحميل الجهاز...
+        </span>
+
       </div>
+
     </main>
 
   </div>
 
-  <div class="toast" id="toast"></div>
+
+  <div
+    class="toast"
+    id="toast"
+  ></div>
+
 
   <script type="module">
 
     import { supabase } from "./js/supabase.js";
 
-    const params = new URLSearchParams(window.location.search);
-    const deviceId = params.get("id");
 
-    const app = document.getElementById("app");
-    const toast = document.getElementById("toast");
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+
+    const deviceId =
+      params.get("id");
+
+
+    const app =
+      document.getElementById("app");
+
+
+    const toast =
+      document.getElementById("toast");
+
 
     let device = null;
+
     let galleryTrack = null;
+
 
     /* =========================
        ICONS
@@ -1067,29 +1210,45 @@
     const icons = {
 
       image: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <rect x="3" y="4" width="18" height="16" rx="3"/>
           <circle cx="8.5" cy="9" r="1.5"/>
           <path d="M21 15l-4.5-4.5L8 19"/>
         </svg>
       `,
 
-      cpu: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="7" y="7" width="10" height="10" rx="2"/>
-          <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/>
-        </svg>
-      `,
 
       storage: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path d="M6 4h12l2 4v11H4V8l2-4z"/>
           <path d="M4 8h16M9 12h6"/>
         </svg>
       `,
 
+
       color: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path d="M12 3a9 9 0 1 0 0 18h1.5a2 2 0 0 0 0-4H12a2 2 0 0 1 0-4h3a6 6 0 0 0 0-12h-3z"/>
           <circle cx="7.5" cy="9" r="1"/>
           <circle cx="11" cy="6.5" r="1"/>
@@ -1097,164 +1256,207 @@
         </svg>
       `,
 
+
       battery: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <rect x="3" y="7" width="17" height="10" rx="2"/>
           <path d="M20 10h2v4h-2M7 10v4M10 10v4M13 10v4"/>
         </svg>
       `,
 
+
       location: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"/>
           <circle cx="12" cy="10" r="2.5"/>
         </svg>
       `,
 
+
       phone: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <rect x="7" y="2.5" width="10" height="19" rx="2"/>
           <path d="M10 5h4M11 18.5h2"/>
         </svg>
       `,
 
-      screen: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="5" y="3" width="14" height="18" rx="2.5"/>
-          <path d="M9 6h6M10 18h4"/>
+
+      info: `
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 10v6M12 7h.01"/>
         </svg>
       `,
 
-      body: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>
-          <path d="M9 6h6"/>
-        </svg>
-      `,
-
-      face: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/>
-          <circle cx="12" cy="12" r="3"/>
-        </svg>
-      `,
-
-      camera: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z"/>
-          <circle cx="12" cy="13" r="3.5"/>
-        </svg>
-      `,
-
-      charging: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M13 2L5 13h6l-1 9 8-11h-6l1-9z"/>
-        </svg>
-      `,
-
-      parts: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14.5 6.5a4 4 0 0 0-5.8 5.3L3 17.5a2 2 0 1 0 2.8 2.8l5.7-5.7a4 4 0 0 0 5.3-5.8l-2.4 2.4-2.8-.5-.5-2.8z"/>
-        </svg>
-      `,
 
       shield: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z"/>
           <path d="M9 12l2 2 4-4"/>
         </svg>
       `,
 
+
       heart: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path d="M20.8 8.9c0 5.1-8.8 10.1-8.8 10.1S3.2 14 3.2 8.9A4.7 4.7 0 0 1 12 6.4a4.7 4.7 0 0 1 8.8 2.5z"/>
         </svg>
       `,
+
 
       heartFill: `
-        <svg viewBox="0 0 24 24" fill="currentColor">
+        <svg
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
           <path d="M20.8 8.9c0 5.1-8.8 10.1-8.8 10.1S3.2 14 3.2 8.9A4.7 4.7 0 0 1 12 6.4a4.7 4.7 0 0 1 8.8 2.5z"/>
         </svg>
       `,
 
+
       cart: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 1.9-1.5L20 8H6"/>
           <circle cx="10" cy="19" r="1.4"/>
           <circle cx="17" cy="19" r="1.4"/>
         </svg>
       `,
 
-      share: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="18" cy="5" r="2.5"/>
-          <circle cx="6" cy="12" r="2.5"/>
-          <circle cx="18" cy="19" r="2.5"/>
-          <path d="M8.2 10.8l7.5-4.3M8.2 13.2l7.5 4.3"/>
-        </svg>
-      `,
-
-      check: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 12l4 4L19 6"/>
-        </svg>
-      `,
-
-      info: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="9"/>
-          <path d="M12 10v6M12 7h.01"/>
-        </svg>
-      `,
 
       alert: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path d="M12 3l9 17H3L12 3z"/>
           <path d="M12 9v5M12 17h.01"/>
         </svg>
       `
     };
 
+
     /* =========================
        HELPERS
     ========================= */
 
     function escapeHTML(value){
+
       return String(value ?? "")
         .replace(/&/g,"&amp;")
         .replace(/</g,"&lt;")
         .replace(/>/g,"&gt;")
         .replace(/"/g,"&quot;")
         .replace(/'/g,"&#039;");
+
     }
+
 
     function clean(value){
-      if(value === null || value === undefined) return "";
+
+      if(
+        value === null ||
+        value === undefined
+      ){
+        return "";
+      }
+
       return String(value).trim();
+
     }
 
+
     function formatPrice(value){
-      const number = Number(value);
+
+      const number =
+        Number(value);
 
       if(!Number.isFinite(number)){
         return "—";
       }
 
       return `${new Intl.NumberFormat("en-US").format(number)} IQD`;
+
     }
+
 
     function firstLetter(value){
-      const text = clean(value);
-      return text ? text.charAt(0).toUpperCase() : "م";
+
+      const text =
+        clean(value);
+
+      return text
+        ? text.charAt(0).toUpperCase()
+        : "م";
+
     }
 
+
     function isApple(){
-      return clean(device?.brand).toLowerCase() === "apple";
+
+      return clean(device?.brand)
+        .toLowerCase() === "apple";
+
     }
+
 
     function parseImages(value){
 
-      if(!value) return [];
+      if(!value){
+        return [];
+      }
 
       if(Array.isArray(value)){
         return value.filter(Boolean);
@@ -1262,32 +1464,44 @@
 
       if(typeof value === "string"){
 
-        const text = value.trim();
+        const text =
+          value.trim();
 
-        if(!text) return [];
+        if(!text){
+          return [];
+        }
 
         try{
-          const parsed = JSON.parse(text);
+
+          const parsed =
+            JSON.parse(text);
 
           if(Array.isArray(parsed)){
             return parsed.filter(Boolean);
           }
+
         }catch(e){}
 
         return text
           .split(",")
-          .map(item => item.trim())
+          .map(item=>item.trim())
           .filter(Boolean);
+
       }
 
       return [];
+
     }
+
 
     function imageURL(path){
 
-      if(!path) return "";
+      if(!path){
+        return "";
+      }
 
-      const value = String(path).trim();
+      const value =
+        String(path).trim();
 
       if(
         value.startsWith("http://") ||
@@ -1295,32 +1509,45 @@
         value.startsWith("data:") ||
         value.startsWith("blob:")
       ){
+
         return value;
+
       }
 
-      const { data } = supabase
-        .storage
-        .from("device-images")
-        .getPublicUrl(value);
+      const { data } =
+        supabase
+          .storage
+          .from("device-images")
+          .getPublicUrl(value);
 
       return data?.publicUrl || "";
+
     }
+
 
     function showToast(message){
 
-      toast.textContent = message;
+      toast.textContent =
+        message;
+
       toast.classList.add("show");
 
-      clearTimeout(window.__toastTimer);
+      clearTimeout(
+        window.__toastTimer
+      );
 
-      window.__toastTimer = setTimeout(()=>{
-        toast.classList.remove("show");
-      },2200);
+      window.__toastTimer =
+        setTimeout(()=>{
+          toast.classList.remove("show");
+        },2200);
+
     }
+
 
     function normalizeSaleType(value){
 
-      const text = clean(value).toLowerCase();
+      const text =
+        clean(value).toLowerCase();
 
       if(
         text.includes("auction") ||
@@ -1337,15 +1564,21 @@
       }
 
       return clean(value) || "بيع مباشر";
+
     }
+
 
     function normalizeCondition(value){
 
-      const text = clean(value);
+      const text =
+        clean(value);
 
-      if(!text) return "غير محددة";
+      if(!text){
+        return "غير محددة";
+      }
 
-      const lower = text.toLowerCase();
+      const lower =
+        text.toLowerCase();
 
       if(
         lower.includes("new") ||
@@ -1377,11 +1610,14 @@
       }
 
       return text;
+
     }
+
 
     function conditionStatus(value){
 
-      const text = clean(value).toLowerCase();
+      const text =
+        clean(value).toLowerCase();
 
       if(
         text.includes("لا يوجد") ||
@@ -1403,17 +1639,27 @@
       }
 
       return "neutral";
+
     }
+
 
     function statusClass(value){
 
-      const status = conditionStatus(value);
+      const status =
+        conditionStatus(value);
 
-      if(status === "ok") return "";
-      if(status === "bad") return "bad";
+      if(status === "ok"){
+        return "";
+      }
+
+      if(status === "bad"){
+        return "bad";
+      }
 
       return "neutral";
+
     }
+
 
     /* =========================
        FETCH
@@ -1422,36 +1668,58 @@
     async function loadDevice(){
 
       if(!deviceId){
-        renderError("رابط الجهاز غير صحيح");
+
+        renderError(
+          "رابط الجهاز غير صحيح"
+        );
+
         return;
+
       }
 
       try{
 
-        const { data,error } = await supabase
-          .from("devices")
-          .select("*")
-          .eq("id",deviceId)
-          .single();
+        const { data,error } =
+          await supabase
+            .from("devices")
+            .select("*")
+            .eq("id",deviceId)
+            .single();
 
-        if(error) throw error;
-
-        if(!data){
-          renderError("الجهاز غير موجود");
-          return;
+        if(error){
+          throw error;
         }
 
-        device = data;
+        if(!data){
+
+          renderError(
+            "الجهاز غير موجود"
+          );
+
+          return;
+
+        }
+
+        device =
+          data;
 
         renderDevice();
 
       }catch(error){
 
-        console.error("DEVICE LOAD ERROR:",error);
+        console.error(
+          "DEVICE LOAD ERROR:",
+          error
+        );
 
-        renderError("تعذر تحميل بيانات الجهاز");
+        renderError(
+          "تعذر تحميل بيانات الجهاز"
+        );
+
       }
+
     }
+
 
     /* =========================
        RENDER
@@ -1459,103 +1727,160 @@
 
     function renderDevice(){
 
-      const images = parseImages(device.images)
-        .map(imageURL)
-        .filter(Boolean);
+      const images =
+        parseImages(device.images)
+          .map(imageURL)
+          .filter(Boolean);
 
-      const brand = clean(device.brand) || "هاتف";
-      const model = clean(device.model) || "جهاز";
-      const saleType = normalizeSaleType(device.sale_type);
+
+      const brand =
+        clean(device.brand) ||
+        "هاتف";
+
+
+      const model =
+        clean(device.model) ||
+        "جهاز";
+
+
+      const saleType =
+        normalizeSaleType(
+          device.sale_type
+        );
+
 
       const sellerName =
         clean(device.seller_name) ||
         "البائع";
 
+
       const sellerLocation =
         clean(device.location) ||
         "النجف";
 
+
       const condition =
-        normalizeCondition(device.condition);
+        normalizeCondition(
+          device.condition
+        );
+
 
       const notes =
         clean(device.notes);
 
+
       const specs = [];
 
+
       if(clean(device.storage)){
+
         specs.push({
           label:"السعة",
           value:clean(device.storage),
           icon:icons.storage
         });
+
       }
 
+
       if(clean(device.color)){
+
         specs.push({
           label:"اللون",
           value:clean(device.color),
           icon:icons.color
         });
+
       }
 
-      if(isApple() && device.battery_health !== null && device.battery_health !== undefined && clean(device.battery_health) !== ""){
+
+      if(
+        isApple() &&
+        device.battery_health !== null &&
+        device.battery_health !== undefined &&
+        clean(device.battery_health) !== ""
+      ){
+
         specs.push({
           label:"صحة البطارية",
           value:`${device.battery_health}%`,
           icon:icons.battery
         });
+
       }
 
+
       if(clean(device.location)){
+
         specs.push({
           label:"الموقع",
           value:clean(device.location),
           icon:icons.location
         });
+
       }
 
+
       if(!specs.length){
+
         specs.push({
           label:"النوع",
           value:"هاتف ذكي",
           icon:icons.phone
         });
+
       }
 
+
       const conditionItems = [
+
         {
           label:"حالة الشاشة",
           value:clean(device.screen_condition)
         },
+
         {
           label:"حالة الهيكل",
           value:clean(device.body_condition)
         },
+
         {
-          label:isApple() ? "Face ID" : "البصمة",
+          label:isApple()
+            ? "Face ID"
+            : "البصمة",
           value:clean(device.face_id)
         },
+
         {
           label:"الكاميرات",
           value:clean(device.cameras)
         },
+
         {
           label:"الشحن",
           value:clean(device.charging)
         },
+
         {
           label:"القطع المستبدلة",
           value:clean(device.replaced_parts)
         }
-      ].filter(item => item.value);
 
-      const safeBrand = escapeHTML(brand);
-      const safeModel = escapeHTML(model);
+      ].filter(item=>item.value);
+
+
+      const safeBrand =
+        escapeHTML(brand);
+
+
+      const safeModel =
+        escapeHTML(model);
+
 
       app.innerHTML = `
 
         <!-- Gallery -->
+
         <section class="gallery-card">
 
           <div class="gallery">
@@ -1563,10 +1888,16 @@
             ${
               images.length
               ? `
-                <div class="gallery-track" id="galleryTrack">
+
+                <div
+                  class="gallery-track"
+                  id="galleryTrack"
+                >
 
                   ${images.map((src,index)=>`
+
                     <div class="gallery-slide">
+
                       <img
                         src="${escapeHTML(src)}"
                         alt="${safeBrand} ${safeModel}"
@@ -1574,43 +1905,68 @@
                         draggable="false"
                         onerror="this.closest('.gallery-slide').style.display='none'"
                       />
+
                     </div>
+
                   `).join("")}
 
                 </div>
 
-                <div class="gallery-counter" id="galleryCounter">
+
+                <div
+                  class="gallery-counter"
+                  id="galleryCounter"
+                >
                   1 / ${images.length}
                 </div>
+
 
                 ${
                   images.length > 1
                   ? `
-                    <div class="gallery-dots" id="galleryDots">
+
+                    <div
+                      class="gallery-dots"
+                      id="galleryDots"
+                    >
+
                       ${images.map((_,index)=>`
-                        <span class="gallery-dot ${index === 0 ? "active" : ""}"></span>
+
+                        <span
+                          class="gallery-dot ${index === 0 ? "active" : ""}"
+                        ></span>
+
                       `).join("")}
+
                     </div>
+
                   `
                   : `<div class="gallery-dots"></div>`
                 }
+
               `
               : `
+
                 <div class="gallery-empty">
+
                   <div class="gallery-empty-icon">
                     ${icons.image}
                   </div>
-                  <strong>لا توجد صور</strong>
-                  <span>لم تتم إضافة صورة للجهاز</span>
+
+                  <strong>
+                    لا توجد صور
+                  </strong>
+
+                  <span>
+                    لم تتم إضافة صورة للجهاز
+                  </span>
+
                 </div>
 
                 <div class="gallery-dots"></div>
+
               `
             }
-
-            <button class="share-gallery" id="galleryShare" aria-label="مشاركة">
-              ${icons.share}
-            </button>
 
           </div>
 
@@ -1618,42 +1974,59 @@
 
 
         <!-- Product -->
+
         <section class="product-head">
 
           <div class="brand">
             ${safeBrand}
           </div>
 
+
           <h1 class="product-name">
             ${safeModel}
           </h1>
+
 
           <div class="chips">
 
             ${
               clean(device.storage)
               ? `
+
                 <span class="chip">
+
                   ${icons.storage}
+
                   ${escapeHTML(device.storage)}
+
                 </span>
+
               `
               : ""
             }
+
 
             ${
               clean(device.color)
               ? `
+
                 <span class="chip">
+
                   ${icons.color}
+
                   ${escapeHTML(device.color)}
+
                 </span>
+
               `
               : ""
             }
 
+
             <span class="chip sale">
+
               ${escapeHTML(saleType)}
+
             </span>
 
           </div>
@@ -1662,17 +2035,20 @@
 
 
         <!-- Price -->
+
         <section class="price-card">
 
           <div class="price-label">
-            PRICE
+            السعر
           </div>
+
 
           <div class="price-row">
 
             <div class="price">
               ${formatPrice(device.price)}
             </div>
+
 
             <div class="sale-type">
               ${escapeHTML(saleType)}
@@ -1684,27 +2060,47 @@
 
 
         <!-- Details Intro -->
+
         <section class="details-intro">
 
           <div class="details-intro-icon">
             ${icons.info}
           </div>
 
+
           <div class="details-intro-copy">
-            <strong>تفاصيل الجهاز</strong>
-            <span>المواصفات والحالة ومعلومات البائع</span>
+
+            <strong>
+              تفاصيل الجهاز
+            </strong>
+
+            <span>
+              المواصفات والحالة ومعلومات البائع
+            </span>
+
           </div>
 
+
           <div class="intro-arrow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <path d="M9 18l6-6-6-6"/>
             </svg>
+
           </div>
 
         </section>
 
 
         <!-- Specs -->
+
         <section class="section">
 
           <div class="section-head">
@@ -1713,32 +2109,35 @@
               مواصفات الجهاز
             </h2>
 
-            <span class="section-sub">
-              DEVICE SPECS
-            </span>
-
           </div>
+
 
           <div class="spec-grid">
 
             ${specs.map(item=>`
+
               <div class="spec-card">
 
                 <div class="spec-icon">
                   ${item.icon}
                 </div>
 
+
                 <div class="spec-info">
+
                   <span class="spec-label">
                     ${escapeHTML(item.label)}
                   </span>
 
+
                   <strong class="spec-value">
                     ${escapeHTML(item.value)}
                   </strong>
+
                 </div>
 
               </div>
+
             `).join("")}
 
           </div>
@@ -1747,6 +2146,7 @@
 
 
         <!-- Condition -->
+
         <section class="section">
 
           <div class="section-head">
@@ -1755,11 +2155,8 @@
               حالة الجهاز
             </h2>
 
-            <span class="section-sub">
-              CONDITION
-            </span>
-
           </div>
+
 
           <div class="condition-box">
 
@@ -1769,23 +2166,28 @@
                 ${icons.shield}
               </div>
 
+
               <div class="condition-summary-text">
 
                 <strong>
-                  ${escapeHTML(condition)}
+                  حماية MZAD PHONE
                 </strong>
 
+
                 <span>
-                  الحالة العامة حسب معلومات البائع
+                  بيانات الجهاز موثقة من البائع<br>
+                  التواصل والبيع يتم عبر المنصة
                 </span>
 
               </div>
 
             </div>
 
+
             ${
               conditionItems.length
               ? `
+
                 <div class="condition-grid">
 
                   ${conditionItems.map(item=>`
@@ -1795,6 +2197,7 @@
                       <span class="condition-item-label">
                         ${escapeHTML(item.label)}
                       </span>
+
 
                       <div class="condition-item-value">
 
@@ -1811,16 +2214,21 @@
                   `).join("")}
 
                 </div>
+
               `
               : `
-                <div style="
-                  padding:16px;
-                  color:#667085;
-                  font-size:10px;
-                  text-align:center;
-                ">
+
+                <div
+                  style="
+                    padding:16px;
+                    color:#667085;
+                    font-size:10px;
+                    text-align:center;
+                  "
+                >
                   لا توجد تفاصيل إضافية عن الحالة
                 </div>
+
               `
             }
 
@@ -1832,30 +2240,37 @@
         ${
           notes
           ? `
+
             <!-- Notes -->
+
             <section class="section">
 
               <div class="section-head">
+
                 <h2 class="section-title">
                   ملاحظات البائع
                 </h2>
 
-                <span class="section-sub">
-                  NOTES
-                </span>
               </div>
 
+
               <div class="notes-card">
-                <p>${escapeHTML(notes)}</p>
+
+                <p>
+                  ${escapeHTML(notes)}
+                </p>
+
               </div>
 
             </section>
+
           `
           : ""
         }
 
 
         <!-- Seller -->
+
         <section class="section">
 
           <div class="section-head">
@@ -1864,11 +2279,8 @@
               البائع
             </h2>
 
-            <span class="section-sub">
-              SELLER
-            </span>
-
           </div>
+
 
           <div class="seller-card">
 
@@ -1876,18 +2288,26 @@
               ${escapeHTML(firstLetter(sellerName))}
             </div>
 
+
             <div class="seller-info">
 
               <div class="seller-name">
                 ${escapeHTML(sellerName)}
               </div>
 
+
               <div class="seller-meta">
+
                 ${icons.location}
-                <span>${escapeHTML(sellerLocation)}</span>
+
+                <span>
+                  ${escapeHTML(sellerLocation)}
+                </span>
+
               </div>
 
             </div>
+
 
             <div class="seller-rating">
 
@@ -1907,6 +2327,7 @@
 
 
         <!-- Actions -->
+
         <section class="action-wrap">
 
           <div class="action-bar">
@@ -1919,14 +2340,22 @@
               ${icons.heart}
             </button>
 
+
             <button
               class="buy-btn"
               id="buyBtn"
             >
+
               ${icons.cart}
+
               <span>
-                ${saleType === "مزاد" ? "دخول المزاد" : "شراء الجهاز"}
+                ${
+                  saleType === "مزاد"
+                  ? "دخول المزاد"
+                  : "شراء الجهاز"
+                }
               </span>
+
             </button>
 
           </div>
@@ -1935,9 +2364,13 @@
 
       `;
 
+
       setupGallery();
+
       setupActions();
+
     }
+
 
     /* =========================
        GALLERY
@@ -1945,54 +2378,113 @@
 
     function setupGallery(){
 
-      galleryTrack = document.getElementById("galleryTrack");
-
-      if(!galleryTrack) return;
-
-      const counter = document.getElementById("galleryCounter");
-      const dots = [...document.querySelectorAll(".gallery-dot")];
-
-      galleryTrack.addEventListener("scroll",()=>{
-
-        const width = galleryTrack.clientWidth;
-
-        if(!width) return;
-
-        const index = Math.round(
-          galleryTrack.scrollLeft / width
+      galleryTrack =
+        document.getElementById(
+          "galleryTrack"
         );
 
-        if(counter){
-          counter.textContent =
-            `${Math.min(index + 1,dots.length || 1)} / ${dots.length || 1}`;
+      if(!galleryTrack){
+        return;
+      }
+
+
+      const counter =
+        document.getElementById(
+          "galleryCounter"
+        );
+
+
+      const dots =
+        [
+          ...document.querySelectorAll(
+            ".gallery-dot"
+          )
+        ];
+
+
+      galleryTrack.addEventListener(
+        "scroll",
+        ()=>{
+
+          const width =
+            galleryTrack.clientWidth;
+
+          if(!width){
+            return;
+          }
+
+
+          const index =
+            Math.round(
+              galleryTrack.scrollLeft / width
+            );
+
+
+          if(counter){
+
+            counter.textContent =
+              `${Math.min(
+                index + 1,
+                dots.length || 1
+              )} / ${dots.length || 1}`;
+
+          }
+
+
+          dots.forEach((dot,i)=>{
+
+            dot.classList.toggle(
+              "active",
+              i === index
+            );
+
+          });
+
         }
+      );
 
-        dots.forEach((dot,i)=>{
-          dot.classList.toggle(
-            "active",
-            i === index
-          );
-        });
-
-      });
 
       let startX = 0;
+
       let startScroll = 0;
 
-      galleryTrack.addEventListener("touchstart",(event)=>{
-        startX = event.touches[0].clientX;
-        startScroll = galleryTrack.scrollLeft;
-      },{passive:true});
 
-      galleryTrack.addEventListener("touchmove",(event)=>{
+      galleryTrack.addEventListener(
+        "touchstart",
+        (event)=>{
 
-        if(Math.abs(event.touches[0].clientX - startX) > 8){
-          event.stopPropagation();
-        }
+          startX =
+            event.touches[0].clientX;
 
-      },{passive:true});
+          startScroll =
+            galleryTrack.scrollLeft;
+
+        },
+        {passive:true}
+      );
+
+
+      galleryTrack.addEventListener(
+        "touchmove",
+        (event)=>{
+
+          if(
+            Math.abs(
+              event.touches[0].clientX -
+              startX
+            ) > 8
+          ){
+
+            event.stopPropagation();
+
+          }
+
+        },
+        {passive:true}
+      );
 
     }
+
 
     /* =========================
        ACTIONS
@@ -2000,108 +2492,174 @@
 
     function setupActions(){
 
-      const shareButtons = [
-        document.getElementById("shareBtn"),
-        document.getElementById("galleryShare")
-      ].filter(Boolean);
+      const shareButton =
+        document.getElementById(
+          "shareBtn"
+        );
 
-      shareButtons.forEach(button=>{
-        button.addEventListener("click",shareDevice);
-      });
 
-      const favoriteBtn =
-        document.getElementById("favoriteBtn");
+      if(shareButton){
 
-      if(favoriteBtn){
-
-        favoriteBtn.addEventListener("click",async()=>{
-
-          const { data } =
-            await supabase.auth.getSession();
-
-          if(!data?.session){
-
-            const returnTo =
-              window.location.href;
-
-            sessionStorage.setItem(
-              "mzad_pending_action",
-              returnTo
-            );
-
-            showToast(
-              "سجّل دخولك أو أنشئ حساباً أولاً"
-            );
-
-            setTimeout(()=>{
-              window.location.href =
-                `index.html?login=1&returnTo=${encodeURIComponent(returnTo)}`;
-            },450);
-
-            return;
-          }
-
-          favoriteBtn.classList.toggle("active");
-
-          if(favoriteBtn.classList.contains("active")){
-            favoriteBtn.innerHTML = icons.heartFill;
-            showToast("تمت إضافة الجهاز للمفضلة");
-          }else{
-            favoriteBtn.innerHTML = icons.heart;
-            showToast("تمت إزالة الجهاز من المفضلة");
-          }
-
-        });
+        shareButton.addEventListener(
+          "click",
+          shareDevice
+        );
 
       }
 
+
+      const favoriteBtn =
+        document.getElementById(
+          "favoriteBtn"
+        );
+
+
+      if(favoriteBtn){
+
+        favoriteBtn.addEventListener(
+          "click",
+          async()=>{
+
+            const { data } =
+              await supabase.auth.getSession();
+
+
+            if(!data?.session){
+
+              const returnTo =
+                window.location.href;
+
+
+              sessionStorage.setItem(
+                "mzad_pending_action",
+                returnTo
+              );
+
+
+              showToast(
+                "سجّل دخولك أو أنشئ حساباً أولاً"
+              );
+
+
+              setTimeout(()=>{
+
+                window.location.href =
+                  `index.html?login=1&returnTo=${encodeURIComponent(returnTo)}`;
+
+              },450);
+
+
+              return;
+
+            }
+
+
+            favoriteBtn.classList.toggle(
+              "active"
+            );
+
+
+            if(
+              favoriteBtn.classList.contains(
+                "active"
+              )
+            ){
+
+              favoriteBtn.innerHTML =
+                icons.heartFill;
+
+              showToast(
+                "تمت إضافة الجهاز للمفضلة"
+              );
+
+            }else{
+
+              favoriteBtn.innerHTML =
+                icons.heart;
+
+              showToast(
+                "تمت إزالة الجهاز من المفضلة"
+              );
+
+            }
+
+          }
+        );
+
+      }
+
+
       const buyBtn =
-        document.getElementById("buyBtn");
+        document.getElementById(
+          "buyBtn"
+        );
+
 
       if(buyBtn){
 
-        buyBtn.addEventListener("click",async()=>{
+        buyBtn.addEventListener(
+          "click",
+          async()=>{
 
-          const { data } =
-            await supabase.auth.getSession();
+            const { data } =
+              await supabase.auth.getSession();
 
-          if(!data?.session){
 
-            const returnTo =
-              window.location.href;
+            if(!data?.session){
 
-            sessionStorage.setItem(
-              "mzad_pending_action",
-              returnTo
-            );
+              const returnTo =
+                window.location.href;
 
-            showToast(
-              "سجّل دخولك أو أنشئ حساباً أولاً"
-            );
 
-            setTimeout(()=>{
-              window.location.href =
-                `index.html?login=1&returnTo=${encodeURIComponent(returnTo)}`;
-            },450);
+              sessionStorage.setItem(
+                "mzad_pending_action",
+                returnTo
+              );
 
-            return;
+
+              showToast(
+                "سجّل دخولك أو أنشئ حساباً أولاً"
+              );
+
+
+              setTimeout(()=>{
+
+                window.location.href =
+                  `index.html?login=1&returnTo=${encodeURIComponent(returnTo)}`;
+
+              },450);
+
+
+              return;
+
+            }
+
+
+            if(
+              normalizeSaleType(
+                device.sale_type
+              ) === "مزاد"
+            ){
+
+              showToast(
+                "المزاد راح نربطه بالخطوة الخاصة بالمزايدة"
+              );
+
+            }else{
+
+              showToast(
+                "شراء الجهاز راح نربطه بخطوة الشراء"
+              );
+
+            }
+
           }
-
-          if(normalizeSaleType(device.sale_type) === "مزاد"){
-
-            showToast("المزاد راح نربطه بالخطوة الخاصة بالمزايدة");
-
-          }else{
-
-            showToast("شراء الجهاز راح نربطه بخطوة الشراء");
-
-          }
-
-        });
+        );
 
       }
 
     }
+
 
     /* =========================
        SHARE
@@ -2109,38 +2667,61 @@
 
     async function shareDevice(){
 
-      const url = window.location.href;
+      const url =
+        window.location.href;
+
 
       const title =
-        `${clean(device?.brand)} ${clean(device?.model)}`.trim() ||
+        `${clean(device?.brand)} ${clean(device?.model)}`
+          .trim() ||
         "جهاز على MZAD PHONE";
+
 
       try{
 
         if(navigator.share){
 
           await navigator.share({
+
             title,
-            text:`شوف هذا الجهاز على MZAD PHONE`,
+
+            text:
+              `شوف هذا الجهاز على MZAD PHONE`,
+
             url
+
           });
 
           return;
+
         }
 
-        await navigator.clipboard.writeText(url);
 
-        showToast("تم نسخ رابط الجهاز");
+        await navigator.clipboard.writeText(
+          url
+        );
+
+
+        showToast(
+          "تم نسخ رابط الجهاز"
+        );
 
       }catch(error){
 
-        if(error?.name !== "AbortError"){
-          showToast("تعذر مشاركة الرابط");
+        if(
+          error?.name !== "AbortError"
+        ){
+
+          showToast(
+            "تعذر مشاركة الرابط"
+          );
+
         }
 
       }
 
     }
+
 
     /* =========================
        ERROR
@@ -2156,15 +2737,21 @@
             ${icons.alert}
           </div>
 
+
           <strong>
             ${escapeHTML(message)}
           </strong>
+
 
           <p>
             تأكد من الرابط وحاول مرة ثانية
           </p>
 
-          <button class="back-home" id="errorBack">
+
+          <button
+            class="back-home"
+            id="errorBack"
+          >
             العودة للرئيسية
           </button>
 
@@ -2172,13 +2759,19 @@
 
       `;
 
+
       document
         .getElementById("errorBack")
-        ?.addEventListener("click",()=>{
-          window.location.href="home.html";
-        });
+        ?.addEventListener(
+          "click",
+          ()=>{
+            window.location.href =
+              "home.html";
+          }
+        );
 
     }
+
 
     /* =========================
        HEADER
@@ -2186,15 +2779,24 @@
 
     document
       .getElementById("backBtn")
-      .addEventListener("click",()=>{
+      .addEventListener(
+        "click",
+        ()=>{
 
-        if(document.referrer){
-          history.back();
-        }else{
-          window.location.href="home.html";
+          if(document.referrer){
+
+            history.back();
+
+          }else{
+
+            window.location.href =
+              "home.html";
+
+          }
+
         }
+      );
 
-      });
 
     /* =========================
        START
