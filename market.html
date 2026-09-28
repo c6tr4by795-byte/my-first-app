@@ -19,13 +19,11 @@
   --primary-dark:#125A73;
   --primary-soft:#E8F3F6;
 
-  --purple:#6F63C9;
-  --purple-soft:#EEEAFE;
-
-  --success:#159A72;
+  --purple:#6246D9;
+  --purple-soft:#E5E0FF;
 
   --card-purple:#51477D;
-  --card-purple-soft:#F6F3FF;
+  --card-purple-soft:#F0EDFF;
 
   --shadow:0 10px 28px rgba(23,32,42,.06);
   --safe-bottom:env(safe-area-inset-bottom,0px);
@@ -44,7 +42,6 @@ body{
   margin:0;
   background:var(--bg);
   color:var(--ink);
-
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -54,8 +51,8 @@ body{
     Tahoma,
     Arial,
     sans-serif;
-
   -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
 }
 
 button,
@@ -66,6 +63,7 @@ input{
 button{
   border:0;
   cursor:pointer;
+  color:inherit;
 }
 
 .page{
@@ -91,8 +89,8 @@ button{
     linear-gradient(
       145deg,
       #FFFFFF 0%,
-      #FAF9FF 48%,
-      #F0EDFF 100%
+      #F5F2FF 45%,
+      #E6E1FF 100%
     );
 
   border-bottom:1px solid var(--line);
@@ -100,16 +98,35 @@ button{
   border-radius:
     0
     0
-    22px
-    22px;
+    24px
+    24px;
 
   box-shadow:
-    0 8px
-    22px
-    rgba(23,32,42,.05);
+    0 10px
+    26px
+    rgba(23,32,42,.06);
 
   position:relative;
   overflow:hidden;
+}
+
+.header::before{
+  content:"";
+
+  position:absolute;
+
+  width:170px;
+  height:170px;
+
+  left:-82px;
+  top:-112px;
+
+  border-radius:50%;
+
+  background:
+    rgba(98,70,217,.055);
+
+  pointer-events:none;
 }
 
 .header::after{
@@ -117,16 +134,16 @@ button{
 
   position:absolute;
 
-  width:115px;
-  height:115px;
+  width:125px;
+  height:125px;
 
-  left:-48px;
-  top:-70px;
+  right:-65px;
+  bottom:-88px;
 
   border-radius:50%;
 
   background:
-    rgba(111,99,201,.06);
+    rgba(98,70,217,.07);
 
   pointer-events:none;
 }
@@ -158,7 +175,7 @@ button{
   background:#fff;
 
   border:
-    1px solid #E4E0F4;
+    1px solid #DDD8F8;
 
   color:var(--primary);
 
@@ -166,17 +183,22 @@ button{
   place-items:center;
 
   box-shadow:
-    0 5px
-    13px
+    0 7px
+    18px
     rgba(23,32,42,.045);
 
   transition:
-    transform .18s ease;
+    transform .18s ease,
+    box-shadow .18s ease;
 }
 
 .back-btn:active,
 .action-btn:active{
   transform:scale(.93);
+  box-shadow:
+    0 4px
+    11px
+    rgba(23,32,42,.05);
 }
 
 .brand{
@@ -251,7 +273,7 @@ button{
     0
     0;
 
-  color:var(--muted);
+  color:#667085;
 
   font-size:9px;
 
@@ -263,22 +285,27 @@ button{
 
   padding:
     6px
-    8px;
+    9px;
 
-  border-radius:9px;
+  border-radius:10px;
 
   background:
-    rgba(255,255,255,.85);
+    rgba(255,255,255,.86);
 
   border:
-    1px solid rgba(111,99,201,.12);
+    1px solid rgba(98,70,217,.12);
 
-  color:var(--primary);
+  color:#51477D;
 
   font-size:8px;
   font-weight:950;
 
   white-space:nowrap;
+
+  box-shadow:
+    0 5px
+    13px
+    rgba(98,70,217,.055);
 }
 
 
@@ -309,12 +336,15 @@ button{
   border:
     1px solid #E2E5E8;
 
-  border-radius:13px;
+  border-radius:15px;
 
   box-shadow:
-    0 6px
-    16px
-    rgba(23,32,42,.05);
+    0 8px
+    22px
+    rgba(18,57,62,.07),
+    0 5px
+    18px
+    rgba(109,92,231,.08);
 
   transition:
     border-color .2s ease,
@@ -323,17 +353,16 @@ button{
 
 .search-box:focus-within{
   border-color:
-    rgba(23,107,135,.32);
+    rgba(98,70,217,.22);
 
   box-shadow:
-    0 8px
-    20px
-    rgba(23,107,135,.08);
+    0 10px
+    24px
+    rgba(98,70,217,.10);
 }
 
 .search-icon{
   color:#7C858D;
-
   flex:0 0 auto;
 }
 
@@ -382,7 +411,6 @@ button{
 
 .filters-wrap{
   margin-top:8px;
-
   position:relative;
 }
 
@@ -437,7 +465,8 @@ button{
     background .18s ease,
     color .18s ease,
     transform .18s ease,
-    border-color .18s ease;
+    border-color .18s ease,
+    box-shadow .18s ease;
 }
 
 .filter:active{
@@ -445,16 +474,21 @@ button{
 }
 
 .filter.active{
-  background:var(--primary);
+  background:
+    linear-gradient(
+      145deg,
+      #176B87,
+      #257F98
+    );
 
-  border-color:var(--primary);
+  border-color:#176B87;
 
   color:#fff;
 
   box-shadow:
-    0 5px
-    13px
-    rgba(23,107,135,.13);
+    0 7px
+    16px
+    rgba(23,107,135,.14);
 }
 
 
@@ -478,6 +512,7 @@ button{
 .results{
   font-size:9px;
   color:var(--muted);
+  font-weight:700;
 }
 
 .sort-btn{
@@ -492,7 +527,7 @@ button{
 
   gap:6px;
 
-  border-radius:9px;
+  border-radius:10px;
 
   background:#fff;
 
@@ -503,6 +538,23 @@ button{
 
   font-size:8px;
   font-weight:900;
+
+  box-shadow:
+    0 5px
+    13px
+    rgba(23,32,42,.035);
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease;
+}
+
+.sort-btn:active{
+  transform:scale(.96);
+  box-shadow:
+    0 3px
+    9px
+    rgba(23,32,42,.04);
 }
 
 
@@ -529,23 +581,29 @@ button{
   background:#fff;
 
   border:
-    1px solid var(--line);
+    1px solid #E5E2F1;
 
   border-radius:17px;
 
   box-shadow:
-    0 7px
-    18px
-    rgba(23,32,42,.05);
+    0 9px
+    22px
+    rgba(98,70,217,.08);
 
   cursor:pointer;
 
   transition:
-    transform .18s ease;
+    transform .18s ease,
+    box-shadow .18s ease;
 }
 
 .device-card:active{
   transform:scale(.975);
+
+  box-shadow:
+    0 6px
+    16px
+    rgba(98,70,217,.06);
 }
 
 
@@ -595,6 +653,11 @@ button{
 
   border:
     1px solid #EEEEEE;
+
+  box-shadow:
+    0 5px
+    12px
+    rgba(23,32,42,.025);
 }
 
 
@@ -627,10 +690,19 @@ button{
     rgba(23,32,42,.10);
 
   z-index:3;
+
+  transition:
+    transform .18s ease,
+    color .18s ease,
+    background .18s ease;
+}
+
+.favorite:active{
+  transform:scale(.88);
 }
 
 .favorite.active{
-  color:var(--card-purple);
+  color:#51477D;
 
   background:
     #F0EDFF;
@@ -639,7 +711,6 @@ button{
 
 /* =====================================================
    SALE TYPE
-   بنفس البنفسجي الفاتح
 ===================================================== */
 
 .sale-type{
@@ -661,7 +732,7 @@ button{
       #F0EDFF 100%
     );
 
-  color:var(--card-purple);
+  color:#51477D;
 
   font-size:8px;
   font-weight:950;
@@ -675,7 +746,6 @@ button{
 
 /* =====================================================
    DEVICE INFO
-   تدرج بنفس اللون المطلوب
 ===================================================== */
 
 .device-info{
@@ -695,6 +765,50 @@ button{
     );
 
   color:#17202A;
+
+  position:relative;
+
+  overflow:hidden;
+}
+
+.device-info::before{
+  content:"";
+
+  position:absolute;
+
+  width:72px;
+  height:72px;
+
+  right:-35px;
+  top:-38px;
+
+  border-radius:50%;
+
+  background:
+    rgba(98,70,217,.065);
+
+  pointer-events:none;
+}
+
+.device-info::after{
+  content:"";
+
+  position:absolute;
+
+  width:8px;
+  height:8px;
+
+  left:14px;
+  bottom:13px;
+
+  border-radius:3px;
+
+  background:
+    rgba(98,70,217,.10);
+
+  transform:rotate(18deg);
+
+  pointer-events:none;
 }
 
 
@@ -703,6 +817,9 @@ button{
 ===================================================== */
 
 .device-name{
+  position:relative;
+  z-index:1;
+
   font-size:15px;
 
   font-weight:950;
@@ -716,6 +833,8 @@ button{
   text-overflow:ellipsis;
 
   letter-spacing:-.02em;
+
+  color:#2B2460;
 }
 
 
@@ -724,7 +843,10 @@ button{
 ===================================================== */
 
 .device-details{
-  margin-top:6px;
+  position:relative;
+  z-index:1;
+
+  margin-top:7px;
 
   display:grid;
 
@@ -747,23 +869,23 @@ button{
 }
 
 .detail-item span{
-  color:#7C858D;
+  color:#7C758F;
 
-  font-size:7px;
+  font-size:8px;
 
-  line-height:1.2;
+  line-height:1.25;
 
-  font-weight:750;
+  font-weight:800;
 }
 
 .detail-item strong{
   min-width:0;
 
-  color:#17202A;
+  color:#29243F;
 
-  font-size:9px;
+  font-size:10px;
 
-  line-height:1.25;
+  line-height:1.3;
 
   font-weight:950;
 
@@ -780,6 +902,9 @@ button{
 ===================================================== */
 
 .price-row{
+  position:relative;
+  z-index:1;
+
   margin-top:6px;
 
   padding-top:5px;
@@ -800,11 +925,11 @@ button{
 .price-label{
   color:#7C758F;
 
-  font-size:7px;
+  font-size:8px;
 
   line-height:1.2;
 
-  font-weight:750;
+  font-weight:800;
 }
 
 .device-price{
@@ -927,7 +1052,7 @@ button{
     3px solid #E5E8EB;
 
   border-top-color:
-    var(--primary);
+    var(--purple);
 
   animation:
     spin .8s linear infinite;
@@ -959,17 +1084,17 @@ button{
     calc(7px + var(--safe-bottom));
 
   background:
-    rgba(255,255,255,.96);
+    rgba(255,255,255,.97);
 
   border-top:
-    1px solid #E5E8EB;
+    1px solid rgba(23,107,135,.10);
 
   box-shadow:
-    0 -9px
-    25px
-    rgba(23,32,42,.055);
+    0 -10px
+    28px
+    rgba(23,107,135,.07);
 
-  backdrop-filter:blur(15px);
+  backdrop-filter:blur(16px);
 }
 
 .bottom-inner{
@@ -1006,10 +1131,18 @@ button{
 
   font-size:8px;
   font-weight:850;
+
+  transition:
+    color .18s ease,
+    transform .18s ease;
+}
+
+.nav-item:active{
+  transform:scale(.95);
 }
 
 .nav-item.active{
-  color:var(--primary);
+  color:var(--primary-dark);
 }
 
 .nav-icon{
@@ -1029,7 +1162,7 @@ button{
     linear-gradient(
       145deg,
       #176B87,
-      #125A73
+      #257F98
     );
 
   color:#fff;
@@ -1040,7 +1173,7 @@ button{
   box-shadow:
     0 8px
     20px
-    rgba(23,107,135,.22);
+    rgba(23,107,135,.20);
 }
 
 
@@ -1050,32 +1183,32 @@ button{
 
 .header{
   animation:
-    headerIn .4s ease both;
+    headerIn .42s cubic-bezier(.2,.7,.2,1) both;
 }
 
 .header-content{
   animation:
-    contentIn .4s .05s ease both;
+    contentIn .42s .05s cubic-bezier(.2,.7,.2,1) both;
 }
 
 .search-box{
   animation:
-    contentIn .4s .09s ease both;
+    contentIn .42s .09s cubic-bezier(.2,.7,.2,1) both;
 }
 
 .filters-wrap{
   animation:
-    contentIn .4s .13s ease both;
+    contentIn .42s .13s cubic-bezier(.2,.7,.2,1) both;
 }
 
 .tools{
   animation:
-    contentIn .4s .17s ease both;
+    contentIn .42s .17s cubic-bezier(.2,.7,.2,1) both;
 }
 
 .device-card{
   animation:
-    cardIn .38s ease both;
+    cardIn .38s cubic-bezier(.2,.7,.2,1) both;
 }
 
 @keyframes headerIn{
@@ -1205,6 +1338,7 @@ button{
 
     </button>
 
+
     <div class="brand">
 
       <strong>MZAD</strong>
@@ -1212,6 +1346,7 @@ button{
       <span>PHONE</span>
 
     </div>
+
 
     <button
       class="action-btn"
@@ -1252,6 +1387,7 @@ button{
         </p>
 
       </div>
+
 
       <span
         class="header-count"
