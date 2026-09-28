@@ -2,34 +2,35 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
   />
 
-  <meta name="theme-color" content="#f7f8fa" />
-
-  <title>تفاصيل الجهاز | MZAD PHONE</title>
+  <title>MZAD PHONE</title>
 
   <style>
     :root{
       --petrol:#176b87;
+      --petrol-dark:#125a71;
+
       --purple:#6246d9;
-
-      --bg:#f7f8fa;
-      --card:#ffffff;
-
-      --text:#16181c;
-      --muted:#8a8d95;
-      --line:#ececf0;
 
       --pale:#e6e3f6;
       --pale-dark:#d8d3ee;
       --pale-text:#51477d;
 
-      --danger:#e85c67;
-      --success:#3ca56d;
+      --bg:#f7f8fa;
+      --card:#ffffff;
+
+      --text:#17191c;
+      --muted:#8a9098;
+      --line:#eceef2;
+
+      --green:#25a86b;
+      --red:#d94d5c;
+
+      --shadow:0 10px 28px rgba(20,30,40,.07);
 
       --radius:20px;
     }
@@ -59,18 +60,15 @@
       overflow-x:hidden;
     }
 
-    body.viewer-open{
-      overflow:hidden;
-    }
-
     button,
-    input{
+    input,
+    textarea{
       font:inherit;
     }
 
     button{
       border:0;
-      cursor:pointer;
+      outline:0;
     }
 
     .page{
@@ -78,372 +76,273 @@
       padding-bottom:110px;
     }
 
-    /* =====================================================
-       TOP BAR
-    ===================================================== */
+    /* =========================
+       HEADER
+    ========================= */
 
-    .topbar{
-      position:sticky;
-      top:0;
-      z-index:80;
+    .top-header{
+      position:relative;
+      overflow:hidden;
+      padding:
+        calc(env(safe-area-inset-top) + 13px)
+        16px
+        18px;
 
-      height:68px;
+      background:
+        radial-gradient(
+          circle at 15% 10%,
+          rgba(255,255,255,.20),
+          transparent 28%
+        ),
+        linear-gradient(
+          135deg,
+          #176b87 0%,
+          #286f91 36%,
+          #6246d9 72%,
+          #7560dc 100%
+        );
+
+      color:#fff;
+      border-radius:0 0 30px 30px;
+      box-shadow:0 8px 25px rgba(23,107,135,.16);
+    }
+
+    .top-header::before{
+      content:"";
+      position:absolute;
+      width:240px;
+      height:120px;
+      left:-80px;
+      bottom:-80px;
+      border-radius:50%;
+      background:rgba(255,255,255,.10);
+      filter:blur(2px);
+      animation:headerFloat 7s ease-in-out infinite;
+    }
+
+    .top-header::after{
+      content:"";
+      position:absolute;
+      width:280px;
+      height:140px;
+      right:-100px;
+      top:-90px;
+      border-radius:50%;
+      background:rgba(255,255,255,.08);
+      animation:headerFloat2 8s ease-in-out infinite;
+    }
+
+    @keyframes headerFloat{
+      0%,100%{transform:translate3d(0,0,0)}
+      50%{transform:translate3d(35px,-8px,0)}
+    }
+
+    @keyframes headerFloat2{
+      0%,100%{transform:translate3d(0,0,0)}
+      50%{transform:translate3d(-25px,15px,0)}
+    }
+
+    .header-row{
+      position:relative;
+      z-index:2;
 
       display:flex;
       align-items:center;
       justify-content:space-between;
-
-      padding:
-        max(8px, env(safe-area-inset-top))
-        16px
-        8px;
-
-      background:
-        linear-gradient(
-          115deg,
-          rgba(23,107,135,.96),
-          rgba(98,70,217,.94),
-          rgba(230,227,246,.96),
-          rgba(23,107,135,.94)
-        );
-
-      background-size:300% 300%;
-
-      animation:
-        headerFlow 9s ease-in-out infinite;
-
-      box-shadow:
-        0 8px 24px rgba(23,107,135,.10);
-
-      backdrop-filter:blur(16px);
-      -webkit-backdrop-filter:blur(16px);
+      gap:12px;
     }
 
-    .topbar::after{
-      content:"";
-      position:absolute;
-      left:0;
-      right:0;
-      bottom:-1px;
-      height:12px;
-
-      background:
-        radial-gradient(
-          22px 10px at 10% 0,
-          transparent 70%,
-          var(--bg) 72%
-        ),
-        radial-gradient(
-          26px 10px at 30% 0,
-          transparent 70%,
-          var(--bg) 72%
-        ),
-        radial-gradient(
-          22px 10px at 50% 0,
-          transparent 70%,
-          var(--bg) 72%
-        ),
-        radial-gradient(
-          28px 10px at 72% 0,
-          transparent 70%,
-          var(--bg) 72%
-        ),
-        radial-gradient(
-          22px 10px at 92% 0,
-          transparent 70%,
-          var(--bg) 72%
-        );
-
-      pointer-events:none;
-    }
-
-    @keyframes headerFlow{
-      0%{
-        background-position:0% 50%;
-      }
-
-      50%{
-        background-position:100% 50%;
-      }
-
-      100%{
-        background-position:0% 50%;
-      }
-    }
-
-    .topbar-side{
-      width:42px;
-      height:42px;
-
+    .header-left{
       display:flex;
       align-items:center;
-      justify-content:center;
-
-      border-radius:15px;
-
-      background:rgba(255,255,255,.16);
-
-      border:1px solid rgba(255,255,255,.22);
-
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.24);
-
-      color:#fff;
-
-      transition:
-        transform .2s ease,
-        background .2s ease;
-    }
-
-    .topbar-side:active{
-      transform:scale(.91);
-      background:rgba(255,255,255,.25);
-    }
-
-    .topbar-side svg{
-      width:21px;
-      height:21px;
-      stroke:currentColor;
-      stroke-width:1.9;
-      fill:none;
-    }
-
-    .topbar-title{
-      flex:1;
+      gap:10px;
       min-width:0;
+    }
+
+    .header-back{
+      width:40px;
+      height:40px;
+      border-radius:14px;
 
       display:flex;
-      flex-direction:column;
       align-items:center;
       justify-content:center;
 
       color:#fff;
+      background:rgba(255,255,255,.13);
+      backdrop-filter:blur(10px);
 
-      text-align:center;
-
-      pointer-events:none;
+      cursor:pointer;
     }
 
-    .topbar-title strong{
+    .header-back svg{
+      width:20px;
+      height:20px;
+    }
+
+    .header-title{
+      min-width:0;
+    }
+
+    .header-title strong{
+      display:block;
       font-size:17px;
-      line-height:20px;
       font-weight:800;
-      letter-spacing:-.3px;
+      line-height:1.2;
     }
 
-    .topbar-title span{
-      margin-top:2px;
-
-      font-size:9px;
-      line-height:12px;
-
-      font-weight:800;
-
-      letter-spacing:1.7px;
-
+    .header-title span{
+      display:block;
+      margin-top:3px;
+      font-size:11px;
       opacity:.82;
     }
 
-    /* =====================================================
+    .header-actions{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .header-icon{
+      width:40px;
+      height:40px;
+      border-radius:14px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      color:#fff;
+      background:rgba(255,255,255,.13);
+      backdrop-filter:blur(10px);
+
+      cursor:pointer;
+    }
+
+    .header-icon svg{
+      width:19px;
+      height:19px;
+    }
+
+    /* =========================
        MAIN
-    ===================================================== */
+    ========================= */
 
     main{
       width:100%;
-      max-width:620px;
+      max-width:720px;
       margin:0 auto;
       padding:0 16px;
     }
 
-    /* =====================================================
-       LOADING
-    ===================================================== */
-
-    .loading{
-      min-height:55vh;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-
-      color:var(--muted);
-
-      font-size:12px;
-      font-weight:700;
-    }
-
-    .loading::before{
-      content:"";
-      width:20px;
-      height:20px;
-
-      margin-left:9px;
-
-      border-radius:50%;
-
-      border:
-        2px solid #dddce6;
-
-      border-top-color:var(--purple);
-
-      animation:spin .8s linear infinite;
-    }
-
-    @keyframes spin{
-      to{
-        transform:rotate(360deg);
-      }
-    }
-
-    /* =====================================================
+    /* =========================
        GALLERY
-    ===================================================== */
+    ========================= */
 
     .gallery-card{
       width:calc(100% + 32px);
-
       margin-right:-16px;
       margin-left:-16px;
-
-      margin-bottom:0;
+      margin-bottom:20px;
 
       border:0;
       border-radius:0;
-
-      overflow:hidden;
-
-      background:#f1f2f4;
-
       box-shadow:none;
+      overflow:hidden;
+      background:#f1f2f4;
     }
 
     .gallery{
       position:relative;
-
       width:100%;
       height:300px;
 
-      background:#f1f2f4;
-
-      overflow:hidden;
-    }
-
-    .gallery-track{
-      width:100%;
-      height:100%;
-
       display:flex;
-
       overflow-x:auto;
       overflow-y:hidden;
 
       scroll-snap-type:x mandatory;
-
       scrollbar-width:none;
 
-      overscroll-behavior-x:contain;
-
-      -webkit-overflow-scrolling:touch;
+      background:#f1f2f4;
     }
 
-    .gallery-track::-webkit-scrollbar{
+    .gallery::-webkit-scrollbar{
       display:none;
     }
 
     .gallery-slide{
-      position:relative;
-
       flex:0 0 100%;
-      width:100%;
       height:100%;
-
       scroll-snap-align:center;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-
+      position:relative;
       background:#f1f2f4;
-
-      overflow:hidden;
     }
 
     .gallery-slide img{
+      display:block;
       width:100%;
       height:100%;
-
-      display:block;
-
       object-fit:cover;
-
       user-select:none;
       -webkit-user-drag:none;
     }
 
-    .gallery-counter{
-      position:absolute;
-
-      top:14px;
-      right:14px;
-
-      min-width:43px;
-      height:28px;
-
-      padding:0 9px;
+    .gallery-empty{
+      width:100%;
+      height:100%;
 
       display:flex;
       align-items:center;
       justify-content:center;
 
-      border-radius:10px;
+      color:#a2a7ae;
+      font-size:13px;
+    }
 
-      background:rgba(15,17,22,.46);
+    .gallery-counter{
+      position:absolute;
+      top:14px;
+      right:14px;
+      z-index:5;
 
+      padding:7px 10px;
+      border-radius:12px;
+
+      background:rgba(20,20,25,.58);
       color:#fff;
 
-      font-size:10px;
-      font-weight:800;
+      font-size:11px;
+      font-weight:700;
 
       backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-
-      z-index:8;
     }
 
     .gallery-dots{
       position:absolute;
-
-      left:50%;
       bottom:13px;
-
+      left:50%;
       transform:translateX(-50%);
 
-      min-height:20px;
-
-      padding:5px 8px;
+      z-index:5;
 
       display:flex;
       align-items:center;
-      justify-content:center;
       gap:5px;
 
+      padding:6px 8px;
       border-radius:999px;
 
-      background:rgba(15,17,22,.42);
-
+      background:rgba(15,18,22,.48);
       backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-
-      z-index:8;
     }
 
     .gallery-dot{
       width:5px;
       height:5px;
-
       border-radius:50%;
-
-      background:rgba(255,255,255,.48);
+      background:rgba(255,255,255,.50);
 
       transition:
         width .25s ease,
@@ -452,510 +351,292 @@
 
     .gallery-dot.active{
       width:15px;
-      border-radius:999px;
       background:#fff;
+      border-radius:999px;
     }
 
-    /* =====================================================
-       PHOTO PULSE
-       المنطقة البيضاء الجديدة
-    ===================================================== */
+    /* =========================
+       PHOTO MOTION ZONE
+       المنطقة الجديدة فقط
+    ========================= */
 
-    .photo-pulse{
+    .photo-motion-zone{
       position:relative;
 
-      height:82px;
+      height:62px;
 
       margin:
-        0 -4px
-        16px;
+        -20px
+        0
+        4px;
 
       display:flex;
       align-items:center;
       justify-content:center;
-
-      overflow:hidden;
 
       cursor:pointer;
 
+      outline:none;
       user-select:none;
-      -webkit-user-select:none;
-
-      -webkit-tap-highlight-color:transparent;
     }
 
-    .photo-pulse::before,
-    .photo-pulse::after{
-      content:"";
-
-      position:absolute;
-
-      left:50%;
-      top:50%;
-
-      width:45px;
-      height:45px;
-
-      border:
-        1px solid
-        rgba(98,70,217,.20);
-
-      border-radius:50%;
-
-      transform:
-        translate(-50%,-50%)
-        scale(.65);
-
-      opacity:0;
-
-      pointer-events:none;
-
-      animation:
-        photoPulseWave
-        3s
-        ease-out
-        infinite;
+    .photo-motion-zone:active{
+      transform:scale(.995);
     }
 
-    .photo-pulse::after{
-      animation-delay:1.5s;
-    }
-
-    @keyframes photoPulseWave{
-      0%{
-        transform:
-          translate(-50%,-50%)
-          scale(.65);
-
-        opacity:0;
-      }
-
-      12%{
-        opacity:.75;
-      }
-
-      70%{
-        opacity:.18;
-      }
-
-      100%{
-        transform:
-          translate(-50%,-50%)
-          scale(2.15);
-
-        opacity:0;
-      }
-    }
-
-    .photo-pulse-core{
+    .photo-motion-line{
       position:relative;
 
-      width:50px;
-      height:50px;
+      width:82px;
+      height:2px;
 
-      border-radius:18px;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      border-radius:999px;
 
       background:
         linear-gradient(
-          145deg,
-          #f0eefb,
-          #e6e3f6
+          90deg,
+          rgba(23,107,135,0),
+          rgba(23,107,135,.18),
+          rgba(98,70,217,.18),
+          rgba(23,107,135,0)
         );
 
-      box-shadow:
-        0 9px 22px rgba(98,70,217,.11),
-        inset 0 1px 0 rgba(255,255,255,.95);
-
-      z-index:4;
-
-      animation:
-        photoFloat
-        2.6s
-        ease-in-out
-        infinite;
-
-      transition:
-        transform .35s cubic-bezier(.2,.8,.2,1),
-        box-shadow .35s ease;
+      overflow:hidden;
     }
 
-    .photo-pulse-core svg{
-      width:23px;
-      height:23px;
+    .photo-motion-line::before{
+      content:"";
 
-      stroke:var(--purple);
-
-      stroke-width:1.8;
-
-      fill:none;
-
-      transition:
-        transform .35s ease;
-    }
-
-    .photo-pulse-shine{
       position:absolute;
+      top:0;
+      left:-35px;
 
-      width:85px;
-      height:18px;
+      width:35px;
+      height:2px;
+
+      border-radius:999px;
 
       background:
         linear-gradient(
           90deg,
           transparent,
-          rgba(255,255,255,.92),
+          rgba(255,255,255,.95),
+          rgba(98,70,217,.72),
           transparent
         );
 
-      transform:
-        translateX(-110px)
-        rotate(-18deg);
+      filter:blur(.3px);
 
       animation:
-        photoShine
-        3.4s
-        ease-in-out
-        infinite;
-
-      z-index:5;
-
-      pointer-events:none;
+        photoLight 2.7s ease-in-out infinite;
     }
 
-    @keyframes photoShine{
-      0%{
-        transform:
-          translateX(-110px)
-          rotate(-18deg);
-
-        opacity:0;
-      }
-
-      25%{
-        opacity:.8;
-      }
-
-      55%{
-        transform:
-          translateX(110px)
-          rotate(-18deg);
-
-        opacity:0;
-      }
-
-      100%{
-        opacity:0;
-      }
-    }
-
-    @keyframes photoFloat{
-      0%,100%{
-        transform:
-          translateY(0)
-          rotate(0deg);
-      }
-
-      50%{
-        transform:
-          translateY(-3px)
-          rotate(.8deg);
-      }
-    }
-
-    .photo-pulse-label{
+    .photo-motion-dot{
       position:absolute;
 
-      bottom:3px;
-
-      display:flex;
-      align-items:center;
-      gap:5px;
-
-      color:#8a8797;
-
-      font-size:10px;
-      font-weight:750;
-
-      opacity:.86;
-
-      z-index:5;
-    }
-
-    .photo-pulse-label span{
-      width:4px;
-      height:4px;
+      width:5px;
+      height:5px;
 
       border-radius:50%;
 
       background:var(--purple);
 
+      box-shadow:
+        0 0 0 4px rgba(98,70,217,.07),
+        0 0 12px rgba(98,70,217,.24);
+
       animation:
-        photoDot
-        1.6s
-        ease-in-out
-        infinite;
+        photoDot 3.2s ease-in-out infinite;
     }
 
-    @keyframes photoDot{
-      0%,100%{
-        transform:scale(.75);
-        opacity:.35;
+    @keyframes photoLight{
+      0%{
+        transform:translateX(0);
+        opacity:0;
+      }
+
+      20%{
+        opacity:.8;
       }
 
       50%{
-        transform:scale(1.25);
         opacity:1;
       }
-    }
 
-    .photo-pulse:active .photo-pulse-core{
-      transform:scale(.86);
-      box-shadow:
-        0 4px 12px rgba(98,70,217,.08);
-    }
-
-    .photo-pulse:active .photo-pulse-core svg{
-      transform:scale(.88);
-    }
-
-    .photo-pulse.is-opening .photo-pulse-core{
-      animation:none;
-
-      transform:scale(1.16);
-
-      box-shadow:
-        0 12px 35px rgba(98,70,217,.18);
-    }
-
-    .photo-pulse.is-opening::before,
-    .photo-pulse.is-opening::after{
-      animation:none;
-      opacity:0;
-    }
-
-    .photo-pulse-ripple{
-      position:absolute;
-
-      width:22px;
-      height:22px;
-
-      border-radius:50%;
-
-      background:
-        rgba(98,70,217,.13);
-
-      transform:
-        translate(-50%,-50%)
-        scale(0);
-
-      pointer-events:none;
-
-      z-index:20;
-    }
-
-    .photo-pulse-ripple.active{
-      animation:
-        rippleExpand
-        .72s
-        cubic-bezier(.2,.8,.2,1)
-        forwards;
-    }
-
-    @keyframes rippleExpand{
-      0%{
-        transform:
-          translate(-50%,-50%)
-          scale(0);
-
+      80%{
         opacity:.8;
       }
 
       100%{
-        transform:
-          translate(-50%,-50%)
-          scale(18);
-
+        transform:translateX(117px);
         opacity:0;
       }
     }
 
-    /* =====================================================
+    @keyframes photoDot{
+      0%,100%{
+        transform:translateX(-35px);
+        opacity:.45;
+      }
+
+      50%{
+        transform:translateX(35px);
+        opacity:.95;
+      }
+    }
+
+    .photo-motion-zone:focus-visible{
+      border-radius:14px;
+      box-shadow:0 0 0 2px rgba(98,70,217,.18);
+    }
+
+    /* =========================
        PRODUCT HEAD
-    ===================================================== */
+    ========================= */
 
     .product-head{
-      padding-top:0;
+      margin-top:0;
+      margin-bottom:18px;
     }
 
     .brand{
       font-size:13px;
-      font-weight:800;
-
       color:var(--petrol);
-
-      margin-bottom:5px;
+      font-weight:800;
+      margin-bottom:4px;
     }
 
     .product-name{
       margin:0;
 
       font-size:25px;
-      line-height:1.25;
-
+      line-height:1.2;
       font-weight:850;
-
-      letter-spacing:-.7px;
-
-      color:var(--text);
+      letter-spacing:-.3px;
     }
 
-    .chips{
+    .product-meta{
       display:flex;
-      align-items:center;
       flex-wrap:wrap;
-
+      align-items:center;
       gap:7px;
 
-      margin-top:12px;
+      margin-top:11px;
     }
 
-    .chip{
+    .meta-chip{
       height:34px;
-
       padding:0 12px;
 
-      display:inline-flex;
+      display:flex;
       align-items:center;
-      justify-content:center;
 
-      border-radius:12px;
+      border-radius:11px;
 
       background:#fff;
-
       border:1px solid var(--line);
 
-      color:#555861;
-
+      color:#5e646d;
       font-size:12px;
-      font-weight:750;
-
-      box-shadow:
-        0 4px 12px rgba(20,25,35,.035);
+      font-weight:700;
     }
 
-    .chip.sale{
-      color:#666873;
+    .meta-chip.sale{
       background:#fff;
+      color:#646a72;
     }
 
-    /* =====================================================
-       PRICE
-    ===================================================== */
+    /* =========================
+       PRICE CARD
+    ========================= */
 
     .price-card{
       position:relative;
 
-      margin-top:18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
 
-      padding:18px;
+      padding:16px;
+
+      margin-bottom:20px;
 
       border-radius:20px;
 
-      background:
-        linear-gradient(
-          145deg,
-          var(--pale),
-          #eeecf8
-        );
-
-      border:1px solid rgba(98,70,217,.08);
-
-      overflow:hidden;
-
-      box-shadow:
-        0 8px 25px rgba(98,70,217,.055);
+      background:var(--pale);
+      border:1px solid rgba(98,70,217,.06);
     }
 
-    .price-card::after{
-      content:"";
-
-      position:absolute;
-
-      width:120px;
-      height:120px;
-
-      left:-50px;
-      top:-60px;
-
-      border-radius:50%;
-
-      background:
-        rgba(255,255,255,.34);
-
-      filter:blur(3px);
+    .price-info{
+      min-width:0;
     }
 
     .price-label{
-      position:relative;
-      z-index:2;
-
-      font-size:11px;
-      font-weight:750;
+      display:block;
+      margin-bottom:3px;
 
       color:var(--pale-text);
 
-      margin-bottom:4px;
+      font-size:11px;
+      font-weight:700;
     }
 
     .price{
-      position:relative;
-      z-index:2;
-
       display:flex;
       align-items:baseline;
-      flex-wrap:wrap;
+      gap:5px;
 
-      gap:6px;
+      color:#29243f;
 
       font-size:29px;
-      line-height:1.1;
+      line-height:1;
 
       font-weight:900;
-
-      color:#332d52;
-
       letter-spacing:-.6px;
     }
 
     .price-currency{
       font-size:12px;
       font-weight:800;
-
       color:var(--pale-text);
-
-      letter-spacing:0;
     }
 
-    /* =====================================================
+    .price-icon{
+      flex:0 0 auto;
+
+      width:52px;
+      height:52px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      border-radius:16px;
+
+      background:rgba(255,255,255,.55);
+      color:var(--pale-text);
+    }
+
+    .price-icon svg{
+      width:24px;
+      height:24px;
+    }
+
+    /* =========================
        DETAILS INTRO
-    ===================================================== */
+    ========================= */
 
     .details-intro{
-      margin-top:27px;
-      margin-bottom:13px;
+      margin-bottom:12px;
     }
 
     .details-intro strong{
       display:block;
 
       font-size:15px;
+      line-height:1.35;
       font-weight:850;
-
-      color:var(--text);
     }
 
     .details-intro span{
@@ -963,681 +644,665 @@
 
       margin-top:3px;
 
-      font-size:12px;
-
       color:var(--muted);
+      font-size:12px;
+      line-height:1.5;
+    }
 
-      line-height:1.6;
+    /* =========================
+       SECTIONS
+    ========================= */
+
+    .section{
+      margin-bottom:20px;
     }
 
     .section-title{
-      margin:0 0 11px;
+      margin-bottom:10px;
 
       font-size:17px;
-
+      line-height:1.3;
       font-weight:850;
-
-      letter-spacing:-.25px;
     }
 
-    /* =====================================================
+    /* =========================
        SPECS
-    ===================================================== */
+    ========================= */
 
     .spec-grid{
       display:grid;
-
-      grid-template-columns:
-        repeat(2,minmax(0,1fr));
-
-      gap:10px;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:9px;
     }
 
     .spec-card{
       min-height:88px;
 
-      padding:13px;
+      padding:13px 12px;
+
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
 
       border-radius:17px;
 
-      background:var(--card);
-
+      background:#fff;
       border:1px solid var(--line);
 
-      box-shadow:
-        0 5px 16px rgba(20,25,35,.035);
+      box-shadow:0 5px 16px rgba(20,30,40,.035);
+    }
 
+    .spec-top{
       display:flex;
       align-items:center;
-
-      gap:11px;
+      gap:9px;
     }
 
     .spec-icon{
-      flex:0 0 43px;
+      flex:0 0 auto;
 
-      width:43px;
-      height:43px;
-
-      border-radius:14px;
+      width:38px;
+      height:38px;
 
       display:flex;
       align-items:center;
       justify-content:center;
 
-      background:#f1f0f8;
+      border-radius:12px;
 
-      color:var(--purple);
+      background:#f3f5f7;
+      color:var(--petrol);
     }
 
     .spec-icon svg{
-      width:22px;
-      height:22px;
-
-      stroke:currentColor;
-      stroke-width:1.7;
-
-      fill:none;
-    }
-
-    .spec-text{
-      min-width:0;
+      width:20px;
+      height:20px;
     }
 
     .spec-label{
+      color:#969ba2;
       font-size:11px;
-
-      color:var(--muted);
-
       font-weight:700;
-
-      line-height:1.3;
     }
 
     .spec-value{
-      margin-top:4px;
+      margin-top:9px;
+
+      color:#292d32;
 
       font-size:13px;
-
-      color:var(--text);
-
-      font-weight:850;
-
       line-height:1.35;
+      font-weight:800;
 
       word-break:break-word;
     }
 
-    /* =====================================================
-       CONDITION
-    ===================================================== */
+    /* =========================
+       PROTECTION
+    ========================= */
 
-    .condition-box{
-      margin-top:18px;
+    .protection-card{
+      position:relative;
 
-      padding:17px;
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+
+      padding:16px;
 
       border-radius:20px;
 
       background:#fff;
-
       border:1px solid var(--line);
 
-      box-shadow:
-        0 5px 17px rgba(20,25,35,.035);
+      box-shadow:var(--shadow);
     }
 
-    .condition-summary{
-      display:flex;
-      align-items:flex-start;
-      gap:11px;
+    .protection-icon{
+      flex:0 0 auto;
 
-      margin-bottom:15px;
-    }
-
-    .shield{
-      flex:0 0 43px;
-
-      width:43px;
-      height:43px;
-
-      border-radius:14px;
-
-      background:#eef7f2;
-
-      color:var(--success);
+      width:46px;
+      height:46px;
 
       display:flex;
       align-items:center;
       justify-content:center;
+
+      border-radius:15px;
+
+      background:#eef8f4;
+      color:var(--green);
     }
 
-    .shield svg{
-      width:23px;
-      height:23px;
+    .protection-icon svg{
+      width:25px;
+      height:25px;
+    }
 
-      stroke:currentColor;
-      stroke-width:1.7;
+    .protection-text strong{
+      display:block;
 
-      fill:none;
+      font-size:16px;
+      line-height:1.3;
+      font-weight:850;
+    }
+
+    .protection-text span{
+      display:block;
+
+      margin-top:5px;
+
+      color:#747a82;
+      font-size:13px;
+      line-height:1.65;
+    }
+
+    /* =========================
+       CONDITION
+    ========================= */
+
+    .condition-summary{
+      padding:16px;
+
+      border-radius:20px;
+
+      background:#fff;
+      border:1px solid var(--line);
+
+      box-shadow:0 5px 18px rgba(20,30,40,.035);
     }
 
     .condition-summary strong{
       display:block;
 
       font-size:16px;
-
+      line-height:1.35;
       font-weight:850;
-
-      color:var(--text);
     }
 
-    .condition-summary span{
+    .condition-summary > span{
       display:block;
 
-      margin-top:4px;
+      margin-top:5px;
+
+      color:#777d85;
 
       font-size:13px;
-
       line-height:1.6;
-
-      color:var(--muted);
     }
 
-    .condition-list{
+    .condition-grid{
+      margin-top:13px;
+
       display:grid;
-
-      grid-template-columns:
-        repeat(2,minmax(0,1fr));
-
-      gap:8px;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:9px;
     }
 
     .condition-item{
-      padding:11px 12px;
+      padding:12px;
 
-      border-radius:14px;
+      border-radius:15px;
 
-      background:#f8f8fa;
+      background:#f8f9fa;
+      border:1px solid #f0f1f3;
     }
 
     .condition-item-label{
+      display:block;
+
+      color:#92979e;
+
       font-size:12px;
-
-      color:var(--muted);
-
       font-weight:700;
     }
 
     .condition-item-value{
+      display:block;
+
       margin-top:4px;
 
+      color:#292d32;
+
       font-size:14px;
-
-      color:var(--text);
-
+      line-height:1.45;
       font-weight:800;
     }
 
-    /* =====================================================
+    .condition-item.good .condition-item-value{
+      color:#18885b;
+    }
+
+    .condition-item.warn .condition-item-value{
+      color:#aa7a17;
+    }
+
+    .condition-item.bad .condition-item-value{
+      color:#bd4654;
+    }
+
+    /* =========================
        NOTES
-    ===================================================== */
+    ========================= */
 
-    .notes-box{
-      margin-top:18px;
-
-      padding:17px;
+    .notes-card{
+      padding:16px;
 
       border-radius:20px;
 
       background:#fff;
-
       border:1px solid var(--line);
-
-      box-shadow:
-        0 5px 17px rgba(20,25,35,.035);
     }
 
-    .notes-box p{
+    .notes-card p{
       margin:0;
 
+      color:#555b63;
+
       font-size:15px;
-
-      line-height:1.8;
-
-      color:#555860;
-
+      line-height:1.75;
       white-space:pre-wrap;
     }
 
-    /* =====================================================
+    /* =========================
        SELLER
-    ===================================================== */
+    ========================= */
 
-    .seller-box{
-      margin-top:18px;
+    .seller-card{
+      display:flex;
+      align-items:center;
+      gap:12px;
 
-      padding:17px;
+      padding:15px;
 
       border-radius:20px;
 
       background:#fff;
-
       border:1px solid var(--line);
-
-      box-shadow:
-        0 5px 17px rgba(20,25,35,.035);
     }
 
-    .seller-top{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-
-      gap:12px;
+    .seller-avatar{
+      display:none;
     }
 
-    .seller-info{
+    .seller-main{
       min-width:0;
+      flex:1;
     }
 
     .seller-name{
       font-size:14px;
-
       font-weight:850;
-
-      color:var(--text);
-
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
     }
 
     .seller-meta{
-      margin-top:4px;
+      margin-top:3px;
+
+      color:#92979e;
 
       font-size:11px;
-
-      color:var(--muted);
     }
 
     .seller-rating{
       flex:0 0 auto;
 
-      min-width:58px;
+      text-align:left;
+    }
 
-      padding:8px 9px;
+    .seller-rating strong{
+      display:block;
 
-      border-radius:13px;
-
-      background:#f6f5fa;
-
-      color:#625e70;
-
-      text-align:center;
+      color:#353941;
 
       font-size:14px;
-
       font-weight:850;
     }
 
-    .seller-member{
-      margin-top:13px;
+    .seller-rating span{
+      display:block;
 
-      padding-top:13px;
+      margin-top:2px;
 
-      border-top:1px solid #f0f0f3;
+      color:#a0a5ac;
 
-      display:flex;
-      align-items:center;
-      gap:7px;
-
-      font-size:11px;
-
-      color:var(--muted);
+      font-size:10px;
     }
 
-    .seller-member-dot{
-      width:6px;
-      height:6px;
+    /* =========================
+       ACTION BAR
+    ========================= */
 
-      border-radius:50%;
-
-      background:var(--petrol);
-    }
-
-    /* =====================================================
-       BOTTOM ACTIONS
-    ===================================================== */
-
-    .bottom-actions{
+    .action-bar{
       position:fixed;
-
-      left:0;
       right:0;
       bottom:0;
+      left:0;
 
-      z-index:70;
+      z-index:50;
 
       padding:
         10px
         16px
-        max(10px, env(safe-area-inset-bottom));
+        calc(10px + env(safe-area-inset-bottom));
 
-      background:
-        rgba(247,248,250,.88);
-
-      border-top:1px solid rgba(220,221,225,.7);
-
+      background:rgba(247,248,250,.90);
       backdrop-filter:blur(18px);
-      -webkit-backdrop-filter:blur(18px);
+
+      border-top:1px solid rgba(0,0,0,.05);
     }
 
-    .bottom-actions-inner{
+    .action-inner{
       width:100%;
-      max-width:620px;
+      max-width:720px;
       margin:0 auto;
 
-      display:grid;
-
-      grid-template-columns:54px 1fr;
-
+      display:flex;
+      align-items:center;
       gap:9px;
     }
 
-    .favorite-btn{
-      width:54px;
-      height:52px;
+    .action-small{
+      flex:0 0 48px;
 
-      border-radius:17px;
-
-      background:#fff;
-
-      border:1px solid var(--line);
-
-      color:#777a82;
+      width:48px;
+      height:50px;
 
       display:flex;
       align-items:center;
       justify-content:center;
 
-      transition:
-        transform .2s ease,
-        color .2s ease,
-        background .2s ease;
+      border-radius:16px;
+
+      background:#fff;
+      border:1px solid var(--line);
+
+      color:#555b63;
+
+      cursor:pointer;
     }
 
-    .favorite-btn:active{
-      transform:scale(.94);
+    .action-small svg{
+      width:21px;
+      height:21px;
     }
 
-    .favorite-btn.active{
-      color:var(--purple);
+    .buy-button{
+      flex:1;
+
+      min-height:50px;
+
+      border-radius:16px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
 
       background:var(--pale);
-
-      border-color:transparent;
-    }
-
-    .favorite-btn svg{
-      width:22px;
-      height:22px;
-
-      stroke:currentColor;
-      stroke-width:1.8;
-
-      fill:none;
-    }
-
-    .buy-btn{
-      height:52px;
-
-      border-radius:17px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #e6e3f6,
-          #ddd9f0
-        );
-
-      color:#51477d;
+      color:var(--pale-text);
 
       font-size:15px;
-
       font-weight:900;
 
-      box-shadow:
-        0 8px 20px rgba(98,70,217,.08);
+      cursor:pointer;
 
       transition:
-        transform .2s ease,
-        filter .2s ease;
+        transform .18s ease,
+        background .18s ease;
     }
 
-    .buy-btn:active{
+    .buy-button:active{
       transform:scale(.985);
-      filter:brightness(.97);
+      background:var(--pale-dark);
     }
 
-    /* =====================================================
+    /* =========================
+       LOADING
+    ========================= */
+
+    .loading{
+      min-height:70vh;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      color:#858b93;
+
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .loading-wrap{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:12px;
+    }
+
+    .loading-spinner{
+      width:30px;
+      height:30px;
+
+      border-radius:50%;
+
+      border:3px solid #e5e8ec;
+      border-top-color:var(--petrol);
+
+      animation:spin .8s linear infinite;
+    }
+
+    @keyframes spin{
+      to{transform:rotate(360deg)}
+    }
+
+    /* =========================
+       ERROR
+    ========================= */
+
+    .error-box{
+      min-height:70vh;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      padding:20px;
+
+      text-align:center;
+    }
+
+    .error-card{
+      width:100%;
+      max-width:360px;
+
+      padding:25px 20px;
+
+      border-radius:22px;
+
+      background:#fff;
+      border:1px solid var(--line);
+    }
+
+    .error-card strong{
+      display:block;
+
+      font-size:16px;
+      font-weight:850;
+    }
+
+    .error-card p{
+      margin:8px 0 18px;
+
+      color:#858b93;
+
+      font-size:12px;
+      line-height:1.7;
+    }
+
+    .back-home{
+      height:45px;
+      padding:0 18px;
+
+      border-radius:14px;
+
+      background:var(--petrol);
+      color:#fff;
+
+      font-size:13px;
+      font-weight:800;
+
+      cursor:pointer;
+    }
+
+    /* =========================
        TOAST
-    ===================================================== */
+    ========================= */
 
     .toast{
       position:fixed;
 
       left:50%;
-      bottom:90px;
+      bottom:88px;
 
-      z-index:300;
-
-      max-width:calc(100% - 32px);
-
-      padding:11px 15px;
-
-      border-radius:14px;
-
-      background:#191b20;
-
-      color:#fff;
-
-      font-size:12px;
-      font-weight:700;
+      z-index:100;
 
       transform:
         translate(-50%,20px);
 
       opacity:0;
-      visibility:hidden;
+      pointer-events:none;
+
+      max-width:calc(100% - 30px);
+
+      padding:11px 15px;
+
+      border-radius:13px;
+
+      background:#22262b;
+      color:#fff;
+
+      font-size:12px;
+      line-height:1.4;
+      font-weight:700;
+
+      box-shadow:0 12px 30px rgba(0,0,0,.18);
 
       transition:
-        opacity .25s ease,
-        transform .25s ease,
-        visibility .25s ease;
-
-      box-shadow:
-        0 12px 30px rgba(0,0,0,.18);
-
-      text-align:center;
+        opacity .22s ease,
+        transform .22s ease;
     }
 
     .toast.show{
       opacity:1;
-      visibility:visible;
-
-      transform:
-        translate(-50%,0);
+      transform:translate(-50%,0);
     }
 
-    /* =====================================================
+    /* =========================
        FULLSCREEN PHOTO VIEWER
-    ===================================================== */
+    ========================= */
 
     .photo-viewer{
       position:fixed;
-
       inset:0;
 
-      z-index:500;
+      z-index:200;
+
+      display:none;
 
       background:
-        rgba(8,10,15,.97);
+        rgba(8,10,14,.97);
 
       opacity:0;
-      visibility:hidden;
 
-      transition:
-        opacity .28s ease,
-        visibility .28s ease;
+      transition:opacity .22s ease;
     }
 
     .photo-viewer.open{
+      display:block;
       opacity:1;
-      visibility:visible;
     }
 
-    .viewer-top{
+    .photo-viewer-top{
       position:absolute;
-
       top:0;
-      left:0;
       right:0;
+      left:0;
 
-      z-index:30;
-
-      padding:
-        max(14px, env(safe-area-inset-top))
-        16px
-        12px;
+      z-index:5;
 
       display:flex;
       align-items:center;
       justify-content:space-between;
 
-      pointer-events:none;
+      padding:
+        calc(env(safe-area-inset-top) + 14px)
+        15px
+        14px;
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(0,0,0,.42),
+          transparent
+        );
     }
 
     .viewer-counter{
-      min-width:52px;
-      height:31px;
-
-      padding:0 10px;
+      padding:7px 10px;
 
       border-radius:11px;
 
-      display:flex;
-      align-items:center;
-      justify-content:center;
-
-      background:rgba(255,255,255,.10);
-
       color:#fff;
+      background:rgba(255,255,255,.11);
 
       font-size:11px;
       font-weight:800;
 
       backdrop-filter:blur(12px);
-      -webkit-backdrop-filter:blur(12px);
     }
 
     .viewer-close{
       width:40px;
       height:40px;
 
-      border-radius:14px;
-
       display:flex;
       align-items:center;
       justify-content:center;
 
-      background:rgba(255,255,255,.10);
+      border-radius:14px;
 
+      background:rgba(255,255,255,.11);
       color:#fff;
 
-      pointer-events:auto;
+      cursor:pointer;
 
       backdrop-filter:blur(12px);
-      -webkit-backdrop-filter:blur(12px);
-
-      transition:
-        transform .2s ease,
-        background .2s ease;
-    }
-
-    .viewer-close:active{
-      transform:scale(.9);
-      background:rgba(255,255,255,.18);
     }
 
     .viewer-close svg{
-      width:21px;
-      height:21px;
-
-      stroke:currentColor;
-      stroke-width:1.8;
-
-      fill:none;
+      width:20px;
+      height:20px;
     }
 
     .viewer-stage{
       position:absolute;
-
       inset:0;
-
-      overflow:hidden;
-
-      touch-action:none;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .viewer-track{
-      width:100%;
-      height:100%;
-
-      display:flex;
-
-      overflow-x:auto;
-      overflow-y:hidden;
-
-      scroll-snap-type:x mandatory;
-
-      scrollbar-width:none;
-
-      overscroll-behavior-x:contain;
-
-      -webkit-overflow-scrolling:touch;
-    }
-
-    .viewer-track::-webkit-scrollbar{
-      display:none;
-    }
-
-    .viewer-slide{
-      position:relative;
-
-      flex:0 0 100%;
-      width:100%;
-      height:100%;
-
-      scroll-snap-align:center;
 
       display:flex;
       align-items:center;
       justify-content:center;
 
       padding:
-        70px
+        72px
         18px
-        80px;
+        38px;
 
       overflow:hidden;
+
+      touch-action:none;
     }
 
-    .viewer-slide img{
+    .viewer-image{
       max-width:100%;
       max-height:100%;
 
@@ -1646,195 +1311,100 @@
 
       object-fit:contain;
 
-      border-radius:8px;
+      border-radius:4px;
 
       user-select:none;
       -webkit-user-drag:none;
 
       transform:
-        scale(1)
-        translate3d(0,0,0);
+        scale(.96);
 
-      transform-origin:center center;
-
-      will-change:transform;
+      opacity:0;
 
       transition:
-        transform .25s cubic-bezier(.2,.8,.2,1);
+        opacity .22s ease,
+        transform .28s cubic-bezier(.2,.8,.2,1);
     }
 
-    .viewer-slide.zoomed img{
-      transition:none;
+    .photo-viewer.open .viewer-image{
+      opacity:1;
+      transform:scale(1);
+    }
+
+    .viewer-nav{
+      position:absolute;
+
+      top:50%;
+      transform:translateY(-50%);
+
+      z-index:8;
+
+      width:44px;
+      height:44px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      border-radius:50%;
+
+      color:#fff;
+      background:rgba(255,255,255,.10);
+
+      backdrop-filter:blur(12px);
+
+      cursor:pointer;
+    }
+
+    .viewer-prev{
+      right:14px;
+    }
+
+    .viewer-next{
+      left:14px;
+    }
+
+    .viewer-nav svg{
+      width:21px;
+      height:21px;
     }
 
     .viewer-hint{
       position:absolute;
 
-      left:50%;
       bottom:
-        max(28px, env(safe-area-inset-bottom));
+        calc(16px + env(safe-area-inset-bottom));
 
+      left:50%;
       transform:translateX(-50%);
 
-      padding:8px 12px;
-
-      border-radius:999px;
-
-      background:rgba(255,255,255,.08);
-
-      color:rgba(255,255,255,.62);
+      color:rgba(255,255,255,.55);
 
       font-size:10px;
-
-      pointer-events:none;
-
       white-space:nowrap;
 
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-
-      transition:
-        opacity .4s ease;
+      pointer-events:none;
     }
 
-    .viewer-hint.hide{
-      opacity:0;
+    .viewer-image.switching{
+      animation:viewerSwitch .22s ease;
     }
 
-    .viewer-thumbs{
-      position:absolute;
+    @keyframes viewerSwitch{
+      0%{
+        opacity:.35;
+        transform:scale(.975);
+      }
 
-      left:50%;
-      bottom:
-        max(12px, env(safe-area-inset-bottom));
-
-      transform:translateX(-50%);
-
-      z-index:25;
-
-      max-width:calc(100% - 32px);
-
-      display:flex;
-      align-items:center;
-
-      gap:6px;
-
-      padding:5px;
-
-      border-radius:13px;
-
-      background:rgba(255,255,255,.08);
-
-      backdrop-filter:blur(12px);
-      -webkit-backdrop-filter:blur(12px);
+      100%{
+        opacity:1;
+        transform:scale(1);
+      }
     }
 
-    .viewer-thumb{
-      width:30px;
-      height:30px;
-
-      padding:0;
-
-      border-radius:8px;
-
-      overflow:hidden;
-
-      opacity:.48;
-
-      border:1px solid transparent;
-
-      background:#222;
-
-      transition:
-        opacity .2s ease,
-        transform .2s ease,
-        border-color .2s ease;
-    }
-
-    .viewer-thumb.active{
-      opacity:1;
-
-      border-color:#fff;
-
-      transform:scale(1.08);
-    }
-
-    .viewer-thumb img{
-      width:100%;
-      height:100%;
-
-      object-fit:cover;
-
-      display:block;
-    }
-
-    /* =====================================================
-       ERROR
-    ===================================================== */
-
-    .error-box{
-      min-height:55vh;
-
-      display:flex;
-      flex-direction:column;
-
-      align-items:center;
-      justify-content:center;
-
-      text-align:center;
-
-      padding:30px;
-    }
-
-    .error-box strong{
-      font-size:16px;
-      font-weight:850;
-
-      color:var(--text);
-    }
-
-    .error-box span{
-      margin-top:7px;
-
-      font-size:12px;
-
-      color:var(--muted);
-
-      line-height:1.6;
-    }
-
-    .error-home{
-      margin-top:18px;
-
-      height:42px;
-
-      padding:0 18px;
-
-      border-radius:14px;
-
-      background:var(--petrol);
-
-      color:#fff;
-
-      font-size:13px;
-      font-weight:800;
-    }
-
-    /* =====================================================
-       HIDE OLD STATUS DOTS / AVATAR
-    ===================================================== */
-
-    .status-dot{
-      display:none !important;
-    }
-
-    .seller-avatar{
-      display:none !important;
-    }
-
-    /* =====================================================
-       MOBILE SMALL
-    ===================================================== */
+    /* =========================
+       RESPONSIVE
+    ========================= */
 
     @media(max-width:360px){
 
@@ -1866,12 +1436,8 @@
         font-size:11px;
       }
 
-      .notes-box p{
+      .notes-card p{
         font-size:14px;
-      }
-
-      .photo-pulse{
-        height:76px;
       }
     }
 
@@ -1881,25 +1447,18 @@
         height:380px;
       }
 
-      .gallery-card{
-        width:calc(100% + 32px);
+      .spec-grid{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+      }
+
+      .condition-grid{
+        grid-template-columns:repeat(3,minmax(0,1fr));
       }
     }
 
-    /* =====================================================
-       REDUCE MOTION
-    ===================================================== */
-
-    @media(prefers-reduced-motion:reduce){
-
-      *,
-      *::before,
-      *::after{
-        animation-duration:.001ms !important;
-        animation-iteration-count:1 !important;
-        transition-duration:.001ms !important;
-        scroll-behavior:auto !important;
-      }
+    /* Hide status dots from older markup if present */
+    .status-dot{
+      display:none !important;
     }
   </style>
 </head>
@@ -1908,77 +1467,132 @@
 
   <div class="page">
 
-    <!-- ===================================================
+    <!-- =========================
          HEADER
-    =================================================== -->
+    ========================= -->
 
-    <header class="topbar">
+    <header class="top-header">
 
-      <button
-        class="topbar-side"
-        id="shareBtn"
-        type="button"
-        aria-label="مشاركة"
-      >
-        <svg viewBox="0 0 24 24">
-          <circle cx="18" cy="5" r="2.2"></circle>
-          <circle cx="6" cy="12" r="2.2"></circle>
-          <circle cx="18" cy="19" r="2.2"></circle>
+      <div class="header-row">
 
-          <path d="M8 11l8-4"></path>
-          <path d="M8 13l8 4"></path>
-        </svg>
-      </button>
+        <div class="header-left">
 
-      <div class="topbar-title">
-        <strong>تفاصيل الجهاز</strong>
-        <span>MZAD PHONE</span>
+          <button
+            class="header-back"
+            id="backBtn"
+            aria-label="رجوع"
+            type="button"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+          </button>
+
+          <div class="header-title">
+            <strong>MZAD PHONE</strong>
+            <span>تفاصيل الجهاز</span>
+          </div>
+
+        </div>
+
+        <div class="header-actions">
+
+          <button
+            class="header-icon"
+            id="shareBtn"
+            aria-label="مشاركة"
+            type="button"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="18" cy="5" r="3"/>
+              <circle cx="6" cy="12" r="3"/>
+              <circle cx="18" cy="19" r="3"/>
+              <path d="M8.6 13.5l6.8 4"/>
+              <path d="M15.4 6.5l-6.8 4"/>
+            </svg>
+          </button>
+
+        </div>
+
       </div>
-
-      <button
-        class="topbar-side"
-        id="backBtn"
-        type="button"
-        aria-label="رجوع"
-      >
-        <svg viewBox="0 0 24 24">
-          <path d="M9 5l7 7-7 7"></path>
-        </svg>
-      </button>
 
     </header>
 
-
-    <!-- ===================================================
-         CONTENT
-    =================================================== -->
+    <!-- =========================
+         APP
+    ========================= -->
 
     <main id="app">
 
       <div class="loading">
-        جاري تحميل الجهاز...
+        <div class="loading-wrap">
+          <div class="loading-spinner"></div>
+          <span>جاري تحميل الجهاز...</span>
+        </div>
       </div>
 
     </main>
 
   </div>
 
+  <!-- =========================
+       ACTION BAR
+  ========================= -->
 
-  <!-- =====================================================
-       TOAST
-  ===================================================== -->
+  <div class="action-bar" id="actionBar" hidden>
 
-  <div
-    class="toast"
-    id="toast"
-    role="status"
-    aria-live="polite"
-  ></div>
+    <div class="action-inner">
 
+      <button
+        class="action-small"
+        id="favoriteBtn"
+        aria-label="المفضلة"
+        type="button"
+      >
+        <svg
+          id="favoriteIcon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M20.8 8.8c0 5.5-8.8 10.2-8.8 10.2S3.2 14.3 3.2 8.8A4.8 4.8 0 0 1 8 4a5.3 5.3 0 0 1 4 2.1A5.3 5.3 0 0 1 16 4a4.8 4.8 0 0 1 4.8 4.8Z"
+          />
+        </svg>
+      </button>
 
-  <!-- =====================================================
+      <button
+        class="buy-button"
+        id="buyBtn"
+        type="button"
+      >
+        شراء الجهاز
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- =========================
        FULLSCREEN VIEWER
-  ===================================================== -->
+  ========================= -->
 
   <div
     class="photo-viewer"
@@ -1986,7 +1600,7 @@
     aria-hidden="true"
   >
 
-    <div class="viewer-top">
+    <div class="photo-viewer-top">
 
       <div
         class="viewer-counter"
@@ -1998,108 +1612,251 @@
       <button
         class="viewer-close"
         id="viewerClose"
+        aria-label="إغلاق"
         type="button"
-        aria-label="إغلاق الصور"
       >
-        <svg viewBox="0 0 24 24">
-          <path d="M6 6l12 12"></path>
-          <path d="M18 6L6 18"></path>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M18 6L6 18"/>
+          <path d="M6 6l12 12"/>
         </svg>
       </button>
 
     </div>
-
 
     <div
       class="viewer-stage"
       id="viewerStage"
     >
 
-      <div
-        class="viewer-track"
-        id="viewerTrack"
-      ></div>
+      <img
+        class="viewer-image"
+        id="viewerImage"
+        alt=""
+        draggable="false"
+      />
 
     </div>
 
-
-    <div
-      class="viewer-hint"
-      id="viewerHint"
+    <button
+      class="viewer-nav viewer-prev"
+      id="viewerPrev"
+      aria-label="الصورة السابقة"
+      type="button"
     >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M14 18l-6-6 6-6"/>
+      </svg>
+    </button>
+
+    <button
+      class="viewer-nav viewer-next"
+      id="viewerNext"
+      aria-label="الصورة التالية"
+      type="button"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M10 18l6-6-6-6"/>
+      </svg>
+    </button>
+
+    <div class="viewer-hint">
       اسحب للتنقل بين الصور
     </div>
 
-
-    <div
-      class="viewer-thumbs"
-      id="viewerThumbs"
-    ></div>
-
   </div>
 
+  <div
+    class="toast"
+    id="toast"
+  ></div>
 
-  <!-- =====================================================
-       JAVASCRIPT
-  ===================================================== -->
+  <!-- =========================
+       SCRIPT
+  ========================= -->
 
   <script type="module">
 
     import { supabase } from "./js/supabase.js";
 
+    /* =========================================
+       DEVICE ID
+    ========================================= */
 
-    /* =====================================================
-       BASIC
-    ===================================================== */
+    const params = new URLSearchParams(window.location.search);
+    const deviceId = params.get("id");
 
     const app = document.getElementById("app");
-
-    const toast = document.getElementById("toast");
+    const actionBar = document.getElementById("actionBar");
 
     const shareBtn = document.getElementById("shareBtn");
+    const favoriteBtn = document.getElementById("favoriteBtn");
+    const favoriteIcon = document.getElementById("favoriteIcon");
+    const buyBtn = document.getElementById("buyBtn");
 
     const backBtn = document.getElementById("backBtn");
 
-    const photoViewer =
-      document.getElementById("photoViewer");
+    const toast = document.getElementById("toast");
 
-    const viewerTrack =
-      document.getElementById("viewerTrack");
+    const photoViewer = document.getElementById("photoViewer");
+    const viewerStage = document.getElementById("viewerStage");
+    const viewerImage = document.getElementById("viewerImage");
+    const viewerCounter = document.getElementById("viewerCounter");
 
-    const viewerCounter =
-      document.getElementById("viewerCounter");
+    const viewerClose = document.getElementById("viewerClose");
+    const viewerPrev = document.getElementById("viewerPrev");
+    const viewerNext = document.getElementById("viewerNext");
 
-    const viewerClose =
-      document.getElementById("viewerClose");
-
-    const viewerThumbs =
-      document.getElementById("viewerThumbs");
-
-    const viewerHint =
-      document.getElementById("viewerHint");
-
-
-    const params =
-      new URLSearchParams(window.location.search);
-
-    const deviceId =
-      params.get("id");
-
-
-    let device = null;
-
-    let images = [];
+    let currentDevice = null;
+    let currentImages = [];
 
     let currentViewerIndex = 0;
 
-    let viewerOpened = false;
+    let touchStartX = 0;
+    let touchStartY = 0;
 
-    let hintTimer = null;
+    let lastTapTime = 0;
 
+    /* =========================================
+       HELPERS
+    ========================================= */
 
-    /* =====================================================
-       TOAST
-    ===================================================== */
+    function escapeHTML(value){
+      return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+    }
+
+    function clean(value, fallback = "غير محدد"){
+      const text = String(value ?? "").trim();
+      return text || fallback;
+    }
+
+    function formatPrice(value){
+
+      const number = Number(value);
+
+      if(!Number.isFinite(number)){
+        return clean(value,"0");
+      }
+
+      return new Intl.NumberFormat("en-US").format(number);
+    }
+
+    function firstLetter(value){
+
+      const text = String(value ?? "").trim();
+
+      if(!text){
+        return "M";
+      }
+
+      return text.charAt(0).toUpperCase();
+    }
+
+    function isApple(brand){
+      return String(brand ?? "")
+        .toLowerCase()
+        .includes("apple")
+      ||
+      String(brand ?? "")
+        .toLowerCase()
+        .includes("iphone");
+    }
+
+    function parseImages(value){
+
+      if(Array.isArray(value)){
+        return value;
+      }
+
+      if(!value){
+        return [];
+      }
+
+      if(typeof value === "string"){
+
+        const trimmed = value.trim();
+
+        if(!trimmed){
+          return [];
+        }
+
+        try{
+
+          const parsed = JSON.parse(trimmed);
+
+          if(Array.isArray(parsed)){
+            return parsed;
+          }
+
+          if(typeof parsed === "string"){
+            return [parsed];
+          }
+
+        }catch{}
+
+        return trimmed
+          .split(",")
+          .map(item => item.trim())
+          .filter(Boolean);
+      }
+
+      return [];
+    }
+
+    function imageURL(path){
+
+      if(!path){
+        return "";
+      }
+
+      const value = String(path).trim();
+
+      if(!value){
+        return "";
+      }
+
+      if(
+        value.startsWith("http://") ||
+        value.startsWith("https://") ||
+        value.startsWith("data:")
+      ){
+        return value;
+      }
+
+      const {
+        data
+      } = supabase
+        .storage
+        .from("device-images")
+        .getPublicUrl(value);
+
+      return data?.publicUrl || "";
+    }
 
     function showToast(message){
 
@@ -2110,667 +1867,695 @@
       clearTimeout(showToast.timer);
 
       showToast.timer = setTimeout(() => {
-
         toast.classList.remove("show");
-
-      }, 2600);
+      },2300);
     }
 
+    function normalizeSaleType(value){
 
-    /* =====================================================
-       ESCAPE HTML
-    ===================================================== */
-
-    function escapeHtml(value){
-
-      if(value === null || value === undefined){
-        return "";
-      }
-
-      return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-    }
-
-
-    /* =====================================================
-       FORMAT PRICE
-    ===================================================== */
-
-    function formatPrice(value){
+      const text = String(value ?? "")
+        .trim()
+        .toLowerCase();
 
       if(
-        value === null ||
-        value === undefined ||
-        value === ""
+        text.includes("auction") ||
+        text.includes("مزاد") ||
+        text.includes("bid")
       ){
-        return "—";
+        return "auction";
       }
 
-      const number =
-        Number(String(value).replace(/,/g,""));
-
-      if(Number.isNaN(number)){
-        return escapeHtml(value);
-      }
-
-      return new Intl.NumberFormat("ar-IQ")
-        .format(number);
+      return "direct";
     }
 
+    function normalizeCondition(value){
 
-    /* =====================================================
-       NORMALIZE IMAGES
-    ===================================================== */
+      const text = String(value ?? "")
+        .trim()
+        .toLowerCase();
 
-    function normalizeImages(value){
-
-      if(!value){
-        return [];
+      if(
+        text.includes("new") ||
+        text.includes("جديد")
+      ){
+        return "new";
       }
 
-      let list = value;
+      if(
+        text.includes("excellent") ||
+        text.includes("ممتاز")
+      ){
+        return "excellent";
+      }
 
-      if(typeof value === "string"){
+      if(
+        text.includes("very good") ||
+        text.includes("جيد جدا") ||
+        text.includes("جيد جدًا")
+      ){
+        return "very-good";
+      }
 
-        try{
-          list = JSON.parse(value);
-        }catch{
-          list = value
-            .split(",")
-            .map(item => item.trim())
-            .filter(Boolean);
+      if(
+        text.includes("good") ||
+        text.includes("جيد")
+      ){
+        return "good";
+      }
+
+      return "other";
+    }
+
+    function conditionStatus(value){
+
+      const normalized = normalizeCondition(value);
+
+      if(normalized === "new"){
+        return {
+          text:"جديد",
+          className:"good"
+        };
+      }
+
+      if(normalized === "excellent"){
+        return {
+          text:"ممتاز",
+          className:"good"
+        };
+      }
+
+      if(normalized === "very-good"){
+        return {
+          text:"جيد جداً",
+          className:"good"
+        };
+      }
+
+      if(normalized === "good"){
+        return {
+          text:"جيد",
+          className:"warn"
+        };
+      }
+
+      return {
+        text:clean(value),
+        className:"warn"
+      };
+    }
+
+    function statusClass(value){
+      return conditionStatus(value).className;
+    }
+
+    /* =========================================
+       LOAD DEVICE
+    ========================================= */
+
+    async function loadDevice(){
+
+      if(!deviceId){
+
+        showError("معرّف الجهاز غير موجود.");
+
+        return;
+      }
+
+      try{
+
+        const {
+          data,
+          error
+        } = await supabase
+          .from("devices")
+          .select("*")
+          .eq("id",deviceId)
+          .single();
+
+        if(error){
+          throw error;
         }
+
+        if(!data){
+          throw new Error("Device not found");
+        }
+
+        currentDevice = data;
+
+        renderDevice(data);
+
+        actionBar.hidden = false;
+
+        setupGallery();
+
+        setupPhotoMotion(currentImages);
+
+        setupActions();
+
+      }catch(error){
+
+        console.error(error);
+
+        showError(
+          "تعذر تحميل بيانات الجهاز حالياً."
+        );
       }
-
-      if(!Array.isArray(list)){
-        list = [list];
-      }
-
-      return list
-        .map(item => {
-
-          if(
-            typeof item === "object" &&
-            item !== null
-          ){
-            return (
-              item.url ||
-              item.path ||
-              item.src ||
-              ""
-            );
-          }
-
-          return String(item);
-        })
-        .filter(Boolean)
-        .map(item => {
-
-          if(
-            item.startsWith("http://") ||
-            item.startsWith("https://") ||
-            item.startsWith("data:")
-          ){
-            return item;
-          }
-
-          const {
-            data
-          } =
-            supabase
-              .storage
-              .from("device-images")
-              .getPublicUrl(item);
-
-          return data?.publicUrl || item;
-
-        });
-
     }
 
-
-    /* =====================================================
-       ICONS
-    ===================================================== */
-
-    const icons = {
-
-      storage: `
-        <svg viewBox="0 0 24 24">
-          <path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"></path>
-          <path d="M9 7h6"></path>
-          <path d="M9 17h6"></path>
-        </svg>
-      `,
-
-      battery: `
-        <svg viewBox="0 0 24 24">
-          <rect x="3" y="7" width="16" height="10" rx="2"></rect>
-          <path d="M21 10v4"></path>
-          <path d="M7 10v4"></path>
-          <path d="M10 10v4"></path>
-          <path d="M13 10v4"></path>
-        </svg>
-      `,
-
-      color: `
-        <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="7"></circle>
-          <path d="M12 5v14"></path>
-          <path d="M5 12h14"></path>
-        </svg>
-      `,
-
-      camera: `
-        <svg viewBox="0 0 24 24">
-          <path d="M4 7h4l2-2h4l2 2h4v12H4Z"></path>
-          <circle cx="12" cy="13" r="3.5"></circle>
-        </svg>
-      `,
-
-      face: `
-        <svg viewBox="0 0 24 24">
-          <path d="M8 4H6a2 2 0 0 0-2 2v2"></path>
-          <path d="M16 4h2a2 2 0 0 1 2 2v2"></path>
-          <path d="M8 20H6a2 2 0 0 1-2-2v-2"></path>
-          <path d="M16 20h2a2 2 0 0 0 2-2v-2"></path>
-          <path d="M9 10h.01"></path>
-          <path d="M15 10h.01"></path>
-          <path d="M9 15c1.8 1.3 4.2 1.3 6 0"></path>
-        </svg>
-      `,
-
-      charging: `
-        <svg viewBox="0 0 24 24">
-          <path d="M8 2v7"></path>
-          <path d="M16 2v7"></path>
-          <path d="M6 9h12"></path>
-          <path d="M12 9v13"></path>
-          <path d="M9 22h6"></path>
-        </svg>
-      `,
-
-      parts: `
-        <svg viewBox="0 0 24 24">
-          <path d="M14 6a5 5 0 0 0-6 6l-5 5a2 2 0 0 0 3 3l5-5a5 5 0 0 0 6-6l-3 3-3-1-1-3Z"></path>
-          <path d="M16 3l5 5"></path>
-        </svg>
-      `,
-
-      location: `
-        <svg viewBox="0 0 24 24">
-          <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path>
-          <circle cx="12" cy="10" r="2.5"></circle>
-        </svg>
-      `,
-
-      shield: `
-        <svg viewBox="0 0 24 24">
-          <path d="M12 3l7 3v5c0 4.7-3 8-7 10-4-2-7-5.3-7-10V6l7-3Z"></path>
-          <path d="m8.5 12 2.2 2.2 4.8-5"></path>
-        </svg>
-      `,
-
-      image: `
-        <svg viewBox="0 0 24 24">
-          <rect x="3" y="4" width="18" height="16" rx="3"></rect>
-          <circle cx="8.5" cy="9" r="1.5"></circle>
-          <path d="m5 17 4.5-4 3 2.5 2.2-2 4.3 3.5"></path>
-        </svg>
-      `
-
-    };
-
-
-    /* =====================================================
-       VALUE
-    ===================================================== */
-
-    function valueOrDash(value){
-
-      if(
-        value === null ||
-        value === undefined ||
-        String(value).trim() === ""
-      ){
-        return "غير مذكور";
-      }
-
-      return escapeHtml(value);
-    }
-
-
-    /* =====================================================
+    /* =========================================
        RENDER DEVICE
-    ===================================================== */
+    ========================================= */
 
-    function renderDevice(){
+    function renderDevice(device){
 
-      const brand =
-        valueOrDash(device.brand);
+      const images =
+        parseImages(device.images)
+          .map(imageURL)
+          .filter(Boolean);
 
-      const model =
-        valueOrDash(device.model);
-
-      const storage =
-        valueOrDash(device.storage);
-
-      const color =
-        valueOrDash(device.color);
-
-      const battery =
-        valueOrDash(device.battery_health);
-
-      const faceId =
-        valueOrDash(device.face_id);
-
-      const cameras =
-        valueOrDash(device.cameras);
-
-      const charging =
-        valueOrDash(device.charging);
-
-      const replacedParts =
-        valueOrDash(device.replaced_parts);
-
-      const location =
-        valueOrDash(device.location);
-
-      const condition =
-        valueOrDash(device.condition);
-
-      const screenCondition =
-        valueOrDash(device.screen_condition);
-
-      const bodyCondition =
-        valueOrDash(device.body_condition);
-
-      const notes =
-        valueOrDash(device.notes);
-
-      const sellerName =
-        valueOrDash(device.seller_name);
+      currentImages = images;
 
       const saleType =
-        device.sale_type === "auction"
+        normalizeSaleType(device.sale_type);
+
+      const condition =
+        conditionStatus(device.condition);
+
+      const galleryHTML =
+        images.length
+          ? `
+            <div class="gallery" id="gallery">
+
+              ${images.map((src,index) => `
+                <div class="gallery-slide">
+                  <img
+                    src="${escapeHTML(src)}"
+                    alt="${escapeHTML(
+                      clean(device.brand,"الجهاز")
+                    )} ${escapeHTML(
+                      clean(device.model,"")
+                    )}"
+                    loading="${index === 0 ? "eager" : "lazy"}"
+                    draggable="false"
+                  />
+                </div>
+              `).join("")}
+
+              <div
+                class="gallery-counter"
+                id="galleryCounter"
+              >
+                1 / ${images.length}
+              </div>
+
+              ${
+                images.length > 1
+                  ? `
+                    <div
+                      class="gallery-dots"
+                      id="galleryDots"
+                    >
+                      ${images.map((_,index) => `
+                        <span
+                          class="gallery-dot ${
+                            index === 0 ? "active" : ""
+                          }"
+                          data-index="${index}"
+                        ></span>
+                      `).join("")}
+                    </div>
+                  `
+                  : ""
+              }
+
+            </div>
+          `
+          : `
+            <div class="gallery">
+              <div class="gallery-empty">
+                لا توجد صور للجهاز
+              </div>
+            </div>
+          `;
+
+      const directText =
+        saleType === "auction"
           ? "مزاد"
           : "بيع مباشر";
 
-      const price =
-        formatPrice(device.price);
+      const buttonText =
+        saleType === "auction"
+          ? "المزايدة على الجهاز"
+          : "شراء الجهاز";
 
-      const imageSlides =
-        images.length
-          ? images.map((url,index) => `
-              <div
-                class="gallery-slide"
-                data-index="${index}"
-              >
-                <img
-                  src="${escapeHtml(url)}"
-                  alt="${escapeHtml(device.model || "صورة الجهاز")}"
-                  draggable="false"
-                />
-              </div>
-            `).join("")
-          : `
-              <div class="gallery-slide">
-                <div
-                  style="
-                    width:100%;
-                    height:100%;
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                    color:#999;
-                    font-size:12px;
-                    font-weight:700;
-                  "
-                >
-                  لا توجد صورة
-                </div>
-              </div>
-            `;
+      const faceId =
+        String(device.face_id ?? "").trim();
 
+      const cameras =
+        String(device.cameras ?? "").trim();
 
-      const dots =
-        images.length > 1
-          ? images.map((_,index) => `
-              <span
-                class="gallery-dot ${index === 0 ? "active" : ""}"
-                data-dot="${index}"
-              ></span>
-            `).join("")
-          : "";
+      const charging =
+        String(device.charging ?? "").trim();
 
-
-      const pulseLabel =
-        images.length > 1
-          ? "اضغط لاستعراض الصور"
-          : "اضغط لعرض الصورة";
-
+      const replacedParts =
+        String(device.replaced_parts ?? "").trim();
 
       app.innerHTML = `
 
-        <!-- GALLERY -->
+        <div class="gallery-card">
+          ${galleryHTML}
+        </div>
 
-        <section class="gallery-card">
-
-          <div class="gallery">
-
-            <div
-              class="gallery-track"
-              id="galleryTrack"
-            >
-              ${imageSlides}
-            </div>
-
-            <div
-              class="gallery-counter"
-              id="galleryCounter"
-            >
-              1 / ${Math.max(images.length,1)}
-            </div>
-
-            <div
-              class="gallery-dots"
-              id="galleryDots"
-            >
-              ${dots}
-            </div>
-
-          </div>
-
-        </section>
-
-
-        <!-- PHOTO PULSE -->
-
-        <button
-          class="photo-pulse"
-          id="photoPulse"
-          type="button"
-          aria-label="استعراض صور الجهاز"
+        <!-- المنطقة الجديدة فقط -->
+        <div
+          class="photo-motion-zone"
+          id="photoMotionZone"
+          role="button"
+          tabindex="0"
+          aria-label="فتح صور الجهاز"
         >
-
-          <div
-            class="photo-pulse-ripple"
-            id="photoPulseRipple"
-          ></div>
-
-          <div class="photo-pulse-shine"></div>
-
-          <div class="photo-pulse-core">
-
-            ${icons.image}
-
-          </div>
-
-          <div class="photo-pulse-label">
-
-            <span></span>
-
-            ${pulseLabel}
-
-          </div>
-
-        </button>
-
-
-        <!-- PRODUCT -->
+          <div class="photo-motion-line"></div>
+          <div class="photo-motion-dot"></div>
+        </div>
 
         <section class="product-head">
 
           <div class="brand">
-            ${brand}
+            ${escapeHTML(
+              clean(device.brand,"جهاز")
+            )}
           </div>
 
           <h1 class="product-name">
-            ${model}
+            ${escapeHTML(
+              clean(device.model,"جهاز غير محدد")
+            )}
           </h1>
 
-          <div class="chips">
+          <div class="product-meta">
 
             ${
-              storage !== "غير مذكور"
+              device.storage
                 ? `
-                  <div class="chip">
-                    ${storage}
+                  <div class="meta-chip">
+                    ${escapeHTML(
+                      clean(device.storage)
+                    )}
                   </div>
                 `
                 : ""
             }
 
             ${
-              color !== "غير مذكور"
+              device.color
                 ? `
-                  <div class="chip">
-                    ${color}
+                  <div class="meta-chip">
+                    ${escapeHTML(
+                      clean(device.color)
+                    )}
                   </div>
                 `
                 : ""
             }
 
-            <div class="chip sale">
-              ${saleType}
+            <div class="meta-chip sale">
+              ${directText}
             </div>
 
           </div>
 
         </section>
 
-
-        <!-- PRICE -->
-
         <section class="price-card">
 
-          <div class="price-label">
-            السعر
+          <div class="price-info">
+
+            <span class="price-label">
+              السعر
+            </span>
+
+            <div class="price">
+              ${formatPrice(device.price)}
+
+              <span class="price-currency">
+                د.ع
+              </span>
+            </div>
+
           </div>
 
-          <div class="price">
+          <div class="price-icon">
 
-            ${price}
-
-            <span class="price-currency">
-              د.ع
-            </span>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect
+                x="5"
+                y="2"
+                width="14"
+                height="20"
+                rx="3"
+              />
+              <path d="M9 5h6"/>
+              <path d="M10 18h4"/>
+            </svg>
 
           </div>
 
         </section>
 
-
-        <!-- DETAILS -->
-
-        <section class="details-intro">
+        <div class="details-intro">
 
           <strong>
             تفاصيل الجهاز
           </strong>
 
           <span>
-            معلومات الجهاز كما أدخلها البائع
+            كل المعلومات المعروضة حسب بيانات البائع
           </span>
 
-        </section>
+        </div>
 
+        <section class="section">
 
-        <section>
-
-          <h2 class="section-title">
+          <div class="section-title">
             المواصفات
-          </h2>
+          </div>
 
           <div class="spec-grid">
 
             <div class="spec-card">
 
-              <div class="spec-icon">
-                ${icons.storage}
-              </div>
+              <div class="spec-top">
 
-              <div class="spec-text">
+                <div class="spec-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect
+                      x="5"
+                      y="2"
+                      width="14"
+                      height="20"
+                      rx="3"
+                    />
+                    <path d="M9 5h6"/>
+                    <path d="M10 18h4"/>
+                  </svg>
+                </div>
 
-                <div class="spec-label">
+                <span class="spec-label">
                   السعة
-                </div>
+                </span>
 
-                <div class="spec-value">
-                  ${storage}
-                </div>
+              </div>
 
+              <div class="spec-value">
+                ${escapeHTML(
+                  clean(device.storage)
+                )}
               </div>
 
             </div>
 
-
             <div class="spec-card">
 
-              <div class="spec-icon">
-                ${icons.battery}
-              </div>
+              <div class="spec-top">
 
-              <div class="spec-text">
-
-                <div class="spec-label">
-                  صحة البطارية
+                <div class="spec-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M12 3v18"/>
+                    <path d="M3 12h18"/>
+                    <path d="M5 5l14 14"/>
+                    <path d="M19 5L5 19"/>
+                  </svg>
                 </div>
 
-                <div class="spec-value">
-                  ${battery}
-                </div>
-
-              </div>
-
-            </div>
-
-
-            <div class="spec-card">
-
-              <div class="spec-icon">
-                ${icons.color}
-              </div>
-
-              <div class="spec-text">
-
-                <div class="spec-label">
+                <span class="spec-label">
                   اللون
-                </div>
+                </span>
 
-                <div class="spec-value">
-                  ${color}
-                </div>
+              </div>
 
+              <div class="spec-value">
+                ${escapeHTML(
+                  clean(device.color)
+                )}
               </div>
 
             </div>
 
+            <div class="spec-card">
+
+              <div class="spec-top">
+
+                <div class="spec-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M12 4v16"/>
+                    <path d="M4 12h16"/>
+                    <path d="M7 7l10 10"/>
+                    <path d="M17 7L7 17"/>
+                  </svg>
+                </div>
+
+                <span class="spec-label">
+                  البطارية
+                </span>
+
+              </div>
+
+              <div class="spec-value">
+                ${
+                  device.battery_health
+                    ? escapeHTML(
+                        clean(device.battery_health)
+                      )
+                    : "غير محددة"
+                }
+              </div>
+
+            </div>
 
             <div class="spec-card">
 
-              <div class="spec-icon">
-                ${icons.camera}
+              <div class="spec-top">
+
+                <div class="spec-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect
+                      x="3"
+                      y="5"
+                      width="18"
+                      height="14"
+                      rx="2"
+                    />
+                    <path d="M7 9h10"/>
+                    <path d="M7 13h6"/>
+                  </svg>
+                </div>
+
+                <span class="spec-label">
+                  الشاشة
+                </span>
+
               </div>
 
-              <div class="spec-text">
+              <div class="spec-value">
+                ${escapeHTML(
+                  clean(
+                    device.screen_condition,
+                    "غير محددة"
+                  )
+                )}
+              </div>
 
-                <div class="spec-label">
+            </div>
+
+            <div class="spec-card">
+
+              <div class="spec-top">
+
+                <div class="spec-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M7 3h10"/>
+                    <path d="M7 21h10"/>
+                    <rect
+                      x="5"
+                      y="3"
+                      width="14"
+                      height="18"
+                      rx="3"
+                    />
+                    <circle
+                      cx="12"
+                      cy="17"
+                      r="1"
+                    />
+                  </svg>
+                </div>
+
+                <span class="spec-label">
+                  الهيكل
+                </span>
+
+              </div>
+
+              <div class="spec-value">
+                ${escapeHTML(
+                  clean(
+                    device.body_condition,
+                    "غير محدد"
+                  )
+                )}
+              </div>
+
+            </div>
+
+            <div class="spec-card">
+
+              <div class="spec-top">
+
+                <div class="spec-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="7"
+                    />
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="3"
+                    />
+                    <path d="M19 19l2 2"/>
+                  </svg>
+                </div>
+
+                <span class="spec-label">
                   الكاميرات
-                </div>
+                </span>
 
-                <div class="spec-value">
-                  ${cameras}
-                </div>
+              </div>
 
+              <div class="spec-value">
+                ${escapeHTML(
+                  cameras || "غير محددة"
+                )}
               </div>
 
             </div>
 
-
             <div class="spec-card">
 
-              <div class="spec-icon">
-                ${icons.face}
-              </div>
+              <div class="spec-top">
 
-              <div class="spec-text">
-
-                <div class="spec-label">
-                  Face ID
+                <div class="spec-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M7 7h10"/>
+                    <path d="M7 17h10"/>
+                    <path d="M7 7v4"/>
+                    <path d="M17 13v4"/>
+                    <path d="M7 11h4"/>
+                    <path d="M13 13h4"/>
+                  </svg>
                 </div>
 
-                <div class="spec-value">
-                  ${faceId}
-                </div>
-
-              </div>
-
-            </div>
-
-
-            <div class="spec-card">
-
-              <div class="spec-icon">
-                ${icons.charging}
-              </div>
-
-              <div class="spec-text">
-
-                <div class="spec-label">
+                <span class="spec-label">
                   الشحن
-                </div>
+                </span>
 
-                <div class="spec-value">
-                  ${charging}
-                </div>
+              </div>
 
+              <div class="spec-value">
+                ${escapeHTML(
+                  charging || "غير محدد"
+                )}
               </div>
 
             </div>
 
-
             <div class="spec-card">
 
-              <div class="spec-icon">
-                ${icons.parts}
-              </div>
+              <div class="spec-top">
 
-              <div class="spec-text">
+                <div class="spec-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M4 7h16"/>
+                    <path d="M4 12h16"/>
+                    <path d="M4 17h16"/>
+                    <path d="M8 7v10"/>
+                  </svg>
+                </div>
 
-                <div class="spec-label">
+                <span class="spec-label">
                   القطع المستبدلة
-                </div>
-
-                <div class="spec-value">
-                  ${replacedParts}
-                </div>
+                </span>
 
               </div>
 
-            </div>
-
-
-            <div class="spec-card">
-
-              <div class="spec-icon">
-                ${icons.location}
-              </div>
-
-              <div class="spec-text">
-
-                <div class="spec-label">
-                  الموقع
-                </div>
-
-                <div class="spec-value">
-                  ${location}
-                </div>
-
+              <div class="spec-value">
+                ${escapeHTML(
+                  replacedParts || "لا توجد معلومات"
+                )}
               </div>
 
             </div>
@@ -2779,18 +2564,29 @@
 
         </section>
 
+        <section class="section">
 
-        <!-- CONDITION -->
+          <div class="protection-card">
 
-        <section class="condition-box">
+            <div class="protection-icon">
 
-          <div class="condition-summary">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M12 3l7 3v5c0 4.8-3 8.3-7 10-4-1.7-7-5.2-7-10V6l7-3Z"
+                />
+                <path d="M8.5 12l2.2 2.2 4.8-5"/>
+              </svg>
 
-            <div class="shield">
-              ${icons.shield}
             </div>
 
-            <div>
+            <div class="protection-text">
 
               <strong>
                 حماية MZAD PHONE
@@ -2806,56 +2602,99 @@
 
           </div>
 
+        </section>
 
-          <div class="condition-list">
+        <section class="section">
 
-            <div class="condition-item">
+          <div class="section-title">
+            حالة الجهاز
+          </div>
 
-              <div class="condition-item-label">
-                حالة الجهاز
+          <div class="condition-summary">
+
+            <strong>
+              ${escapeHTML(condition.text)}
+            </strong>
+
+            <span>
+              الحالة العامة للجهاز حسب بيانات البائع
+            </span>
+
+            <div class="condition-grid">
+
+              <div
+                class="condition-item ${statusClass(
+                  device.screen_condition
+                )}"
+              >
+                <span class="condition-item-label">
+                  حالة الشاشة
+                </span>
+
+                <span class="condition-item-value">
+                  ${escapeHTML(
+                    clean(
+                      device.screen_condition,
+                      "غير محددة"
+                    )
+                  )}
+                </span>
               </div>
 
-              <div class="condition-item-value">
-                ${condition}
+              <div
+                class="condition-item ${statusClass(
+                  device.body_condition
+                )}"
+              >
+                <span class="condition-item-label">
+                  حالة الهيكل
+                </span>
+
+                <span class="condition-item-value">
+                  ${escapeHTML(
+                    clean(
+                      device.body_condition,
+                      "غير محددة"
+                    )
+                  )}
+                </span>
               </div>
 
-            </div>
+              <div
+                class="condition-item ${
+                  device.battery_health
+                    ? "good"
+                    : "warn"
+                }"
+              >
+                <span class="condition-item-label">
+                  صحة البطارية
+                </span>
 
-
-            <div class="condition-item">
-
-              <div class="condition-item-label">
-                الشاشة
+                <span class="condition-item-value">
+                  ${escapeHTML(
+                    clean(
+                      device.battery_health,
+                      "غير محددة"
+                    )
+                  )}
+                </span>
               </div>
 
-              <div class="condition-item-value">
-                ${screenCondition}
-              </div>
+              <div
+                class="condition-item ${
+                  faceId ? "good" : "warn"
+                }"
+              >
+                <span class="condition-item-label">
+                  Face ID
+                </span>
 
-            </div>
-
-
-            <div class="condition-item">
-
-              <div class="condition-item-label">
-                الهيكل
-              </div>
-
-              <div class="condition-item-value">
-                ${bodyCondition}
-              </div>
-
-            </div>
-
-
-            <div class="condition-item">
-
-              <div class="condition-item-label">
-                القطع المستبدلة
-              </div>
-
-              <div class="condition-item-value">
-                ${replacedParts}
+                <span class="condition-item-value">
+                  ${escapeHTML(
+                    faceId || "غير محدد"
+                  )}
+                </span>
               </div>
 
             </div>
@@ -2864,205 +2703,167 @@
 
         </section>
 
-
-        <!-- NOTES -->
-
         ${
           device.notes
             ? `
-              <section class="notes-box">
+              <section class="section">
 
-                <h2 class="section-title">
+                <div class="section-title">
                   ملاحظات البائع
-                </h2>
+                </div>
 
-                <p>
-                  ${notes}
-                </p>
+                <div class="notes-card">
+
+                  <p>
+                    ${escapeHTML(
+                      clean(device.notes,"")
+                    )}
+                  </p>
+
+                </div>
 
               </section>
             `
             : ""
         }
 
+        <section class="section">
 
-        <!-- SELLER -->
+          <div class="section-title">
+            البائع
+          </div>
 
-        <section class="seller-box">
+          <div class="seller-card">
 
-          <div class="seller-top">
+            <div class="seller-avatar">
+              ${escapeHTML(
+                firstLetter(device.seller_name)
+              )}
+            </div>
 
-            <div class="seller-info">
+            <div class="seller-main">
 
               <div class="seller-name">
-                ${sellerName}
+                ${escapeHTML(
+                  clean(
+                    device.seller_name,
+                    "بائع MZAD PHONE"
+                  )
+                )}
               </div>
 
               <div class="seller-meta">
-                ${location}
+                ${escapeHTML(
+                  clean(
+                    device.location,
+                    "العراق"
+                  )
+                )}
+                · عضو في MZAD PHONE
               </div>
 
             </div>
 
             <div class="seller-rating">
-              0.0
+
+              <strong>
+                0.0
+              </strong>
+
+              <span>
+                التقييم
+              </span>
+
             </div>
-
-          </div>
-
-
-          <div class="seller-member">
-
-            <span class="seller-member-dot"></span>
-
-            عضو في MZAD PHONE
 
           </div>
 
         </section>
 
-
-        <!-- BOTTOM -->
-
-        <div
-          class="bottom-actions"
-          id="bottomActions"
-        >
-
-          <div class="bottom-actions-inner">
-
-            <button
-              class="favorite-btn"
-              id="favoriteBtn"
-              type="button"
-              aria-label="إضافة للمفضلة"
-            >
-
-              <svg viewBox="0 0 24 24">
-
-                <path
-                  d="
-                    M20.8 8.7
-                    c0 5.4-8.8 10.3-8.8 10.3
-                    S3.2 14.1 3.2 8.7
-                    A4.7 4.7 0 0 1 12 6.2
-                    a4.7 4.7 0 0 1 8.8 2.5Z
-                  "
-                ></path>
-
-              </svg>
-
-            </button>
-
-
-            <button
-              class="buy-btn"
-              id="buyBtn"
-              type="button"
-            >
-              شراء الجهاز
-            </button>
-
-          </div>
-
-        </div>
-
       `;
-
-
-      setupGallery();
-
-      setupPhotoPulse();
-
-      setupViewer();
-
-      setupActions();
-
     }
 
-
-    /* =====================================================
+    /* =========================================
        GALLERY
-    ===================================================== */
+    ========================================= */
 
     function setupGallery(){
 
-      const track =
-        document.getElementById("galleryTrack");
+      const gallery =
+        document.getElementById("gallery");
 
-      const counter =
-        document.getElementById("galleryCounter");
-
-      const dotEls =
-        [...document.querySelectorAll(".gallery-dot")];
-
-      if(!track){
+      if(!gallery){
         return;
       }
 
+      const counter =
+        document.getElementById(
+          "galleryCounter"
+        );
+
+      const dots =
+        Array.from(
+          document.querySelectorAll(
+            ".gallery-dot"
+          )
+        );
 
       function updateGallery(){
 
         const width =
-          track.clientWidth || 1;
+          gallery.clientWidth || 1;
 
         const index =
-          Math.round(track.scrollLeft / width);
+          Math.round(
+            gallery.scrollLeft / width
+          );
 
         const safeIndex =
           Math.max(
             0,
             Math.min(
-              index,
-              Math.max(images.length - 1,0)
+              currentImages.length - 1,
+              index
             )
           );
 
-        counter.textContent =
-          `${safeIndex + 1} / ${Math.max(images.length,1)}`;
+        if(counter){
+          counter.textContent =
+            `${safeIndex + 1} / ${currentImages.length}`;
+        }
 
-
-        dotEls.forEach((dot,i) => {
-
+        dots.forEach((dot,i) => {
           dot.classList.toggle(
             "active",
             i === safeIndex
           );
-
         });
-
       }
 
-
-      let scrollTimer = null;
-
-      track.addEventListener(
+      gallery.addEventListener(
         "scroll",
-        () => {
-
-          clearTimeout(scrollTimer);
-
-          scrollTimer = setTimeout(
-            updateGallery,
-            20
-          );
-
-        },
+        updateGallery,
         {
           passive:true
         }
       );
 
-
-      dotEls.forEach((dot,index) => {
+      dots.forEach(dot => {
 
         dot.addEventListener(
           "click",
-          () => {
+          event => {
 
-            track.scrollTo({
+            event.stopPropagation();
+
+            const index =
+              Number(
+                dot.dataset.index
+              );
+
+            gallery.scrollTo({
               left:
-                index * track.clientWidth,
+                gallery.clientWidth * index,
               behavior:"smooth"
             });
 
@@ -3071,286 +2872,101 @@
 
       });
 
-
-      updateGallery();
-
-    }
-
-
-    /* =====================================================
-       PHOTO PULSE
-    ===================================================== */
-
-    function setupPhotoPulse(){
-
-      const pulse =
-        document.getElementById("photoPulse");
-
-      const ripple =
-        document.getElementById("photoPulseRipple");
-
-      if(!pulse){
-        return;
-      }
-
-
-      pulse.addEventListener(
-        "pointerdown",
-        event => {
-
-          const rect =
-            pulse.getBoundingClientRect();
-
-          ripple.style.left =
-            `${event.clientX - rect.left}px`;
-
-          ripple.style.top =
-            `${event.clientY - rect.top}px`;
-
-          ripple.classList.remove("active");
-
-          void ripple.offsetWidth;
-
-          ripple.classList.add("active");
-
-        }
-      );
-
-
-      pulse.addEventListener(
-        "click",
-        () => {
-
-          pulse.classList.add("is-opening");
-
-          setTimeout(
-            () => {
-
-              openViewer(0);
-
-              pulse.classList.remove(
-                "is-opening"
-              );
-
-            },
-            230
-          );
-
-        }
-      );
-
-    }
-
-
-    /* =====================================================
-       VIEWER SETUP
-    ===================================================== */
-
-    function setupViewer(){
-
-      viewerClose.addEventListener(
-        "click",
-        closeViewer
-      );
-
-
-      photoViewer.addEventListener(
+      gallery.addEventListener(
         "click",
         event => {
 
-          if(
-            event.target === photoViewer ||
-            event.target ===
-              document.getElementById("viewerStage")
-          ){
-            closeViewer();
-          }
+          const slide =
+            event.target.closest(
+              ".gallery-slide"
+            );
 
-        }
-      );
-
-
-      document.addEventListener(
-        "keydown",
-        event => {
-
-          if(!viewerOpened){
+          if(!slide){
             return;
           }
 
-          if(event.key === "Escape"){
-            closeViewer();
-          }
+          const slides =
+            Array.from(
+              gallery.querySelectorAll(
+                ".gallery-slide"
+              )
+            );
 
-          if(event.key === "ArrowLeft"){
-            goViewerNext();
-          }
+          const index =
+            slides.indexOf(slide);
 
-          if(event.key === "ArrowRight"){
-            goViewerPrevious();
+          if(index >= 0){
+            openPhotoViewer(index);
           }
 
         }
       );
 
-
-      viewerTrack.addEventListener(
-        "scroll",
-        updateViewerFromScroll,
-        {
-          passive:true
-        }
-      );
-
+      updateGallery();
     }
 
+    /* =========================================
+       PHOTO MOTION
+    ========================================= */
 
-    /* =====================================================
-       BUILD VIEWER
-    ===================================================== */
+    function setupPhotoMotion(images){
 
-    function buildViewer(){
+      const zone =
+        document.getElementById(
+          "photoMotionZone"
+        );
 
-      viewerTrack.innerHTML = "";
-
-      viewerThumbs.innerHTML = "";
-
-
-      if(!images.length){
-
-        viewerTrack.innerHTML = `
-
-          <div
-            class="viewer-slide"
-            style="color:#fff;font-size:13px;"
-          >
-            لا توجد صور لهذا الجهاز
-          </div>
-
-        `;
-
+      if(!zone || !images.length){
         return;
       }
 
+      function open(){
+        openPhotoViewer(0);
+      }
 
-      images.forEach(
-        (url,index) => {
+      zone.addEventListener(
+        "click",
+        open
+      );
 
-          const slide =
-            document.createElement("div");
+      zone.addEventListener(
+        "keydown",
+        event => {
 
-          slide.className =
-            "viewer-slide";
+          if(
+            event.key === "Enter" ||
+            event.key === " "
+          ){
 
-          slide.dataset.index =
-            String(index);
+            event.preventDefault();
 
-
-          const img =
-            document.createElement("img");
-
-          img.src = url;
-
-          img.alt =
-            device?.model
-              ? `${device.model} - ${index + 1}`
-              : `صورة الجهاز ${index + 1}`;
-
-          img.draggable = false;
-
-          img.addEventListener(
-            "dblclick",
-            () => toggleZoom(slide)
-          );
-
-
-          setupPinchAndPan(
-            slide,
-            img
-          );
-
-
-          slide.appendChild(img);
-
-          viewerTrack.appendChild(slide);
-
-
-          const thumb =
-            document.createElement("button");
-
-          thumb.type = "button";
-
-          thumb.className =
-            "viewer-thumb";
-
-          thumb.dataset.index =
-            String(index);
-
-          thumb.setAttribute(
-            "aria-label",
-            `الصورة ${index + 1}`
-          );
-
-
-          thumb.innerHTML = `
-            <img
-              src="${escapeHtml(url)}"
-              alt=""
-            />
-          `;
-
-
-          thumb.addEventListener(
-            "click",
-            event => {
-
-              event.stopPropagation();
-
-              goViewerTo(index);
-
-            }
-          );
-
-
-          viewerThumbs.appendChild(thumb);
+            open();
+          }
 
         }
       );
-
     }
 
+    /* =========================================
+       FULLSCREEN VIEWER
+    ========================================= */
 
-    /* =====================================================
-       OPEN VIEWER
-    ===================================================== */
+    function openPhotoViewer(index = 0){
 
-    function openViewer(index = 0){
-
-      if(!images.length){
-        showToast("لا توجد صور لهذا الجهاز");
+      if(!currentImages.length){
         return;
       }
-
-
-      buildViewer();
-
-
-      viewerOpened = true;
 
       currentViewerIndex =
         Math.max(
           0,
           Math.min(
-            index,
-            images.length - 1
+            currentImages.length - 1,
+            index
           )
         );
 
-
-      document.body.classList.add(
-        "viewer-open"
-      );
-
+      updateViewerImage();
 
       photoViewer.classList.add("open");
 
@@ -3359,742 +2975,331 @@
         "false"
       );
 
-
-      requestAnimationFrame(() => {
-
-        goViewerTo(
-          currentViewerIndex,
-          false
-        );
-
-      });
-
-
-      viewerHint.classList.remove(
-        "hide"
-      );
-
-
-      clearTimeout(hintTimer);
-
-      hintTimer = setTimeout(
-        () => {
-
-          viewerHint.classList.add(
-            "hide"
-          );
-
-        },
-        2600
-      );
-
+      document.body.style.overflow = "hidden";
     }
 
+    function closePhotoViewer(){
 
-    /* =====================================================
-       CLOSE VIEWER
-    ===================================================== */
-
-    function closeViewer(){
-
-      if(!viewerOpened){
-        return;
-      }
-
-
-      photoViewer.classList.remove(
-        "open"
-      );
+      photoViewer.classList.remove("open");
 
       photoViewer.setAttribute(
         "aria-hidden",
         "true"
       );
 
-
-      document.body.classList.remove(
-        "viewer-open"
-      );
-
-
-      viewerOpened = false;
-
-      resetViewerTransforms();
-
+      document.body.style.overflow = "";
     }
 
+    function updateViewerImage(){
 
-    /* =====================================================
-       GO TO VIEWER IMAGE
-    ===================================================== */
+      const src =
+        currentImages[currentViewerIndex];
 
-    function goViewerTo(
-      index,
-      smooth = true
-    ){
-
-      if(!images.length){
+      if(!src){
         return;
       }
 
+      viewerImage.classList.remove(
+        "switching"
+      );
 
-      currentViewerIndex =
-        Math.max(
-          0,
-          Math.min(
-            index,
-            images.length - 1
-          )
-        );
+      void viewerImage.offsetWidth;
 
+      viewerImage.src = src;
 
-      const width =
-        viewerTrack.clientWidth || window.innerWidth;
+      viewerImage.alt =
+        currentDevice
+          ? `${clean(
+              currentDevice.brand,
+              "الجهاز"
+            )} ${clean(
+              currentDevice.model,
+              ""
+            )}`
+          : "صورة الجهاز";
 
+      viewerCounter.textContent =
+        `${currentViewerIndex + 1} / ${currentImages.length}`;
 
-      viewerTrack.scrollTo({
+      viewerImage.classList.add(
+        "switching"
+      );
 
-        left:
-          currentViewerIndex * width,
+      viewerPrev.style.display =
+        currentImages.length > 1
+          ? ""
+          : "none";
 
-        behavior:
-          smooth
-            ? "smooth"
-            : "auto"
-
-      });
-
-
-      updateViewerUI();
-
-      resetViewerTransforms();
-
+      viewerNext.style.display =
+        currentImages.length > 1
+          ? ""
+          : "none";
     }
 
+    function nextPhoto(){
 
-    function goViewerNext(){
+      if(!currentImages.length){
+        return;
+      }
 
       if(
         currentViewerIndex <
-        images.length - 1
+        currentImages.length - 1
       ){
-
-        goViewerTo(
-          currentViewerIndex + 1
-        );
-
-      }
-
-    }
-
-
-    function goViewerPrevious(){
-
-      if(
-        currentViewerIndex > 0
-      ){
-
-        goViewerTo(
-          currentViewerIndex - 1
-        );
-
-      }
-
-    }
-
-
-    /* =====================================================
-       VIEWER UI
-    ===================================================== */
-
-    function updateViewerUI(){
-
-      viewerCounter.textContent =
-        `${currentViewerIndex + 1} / ${Math.max(images.length,1)}`;
-
-
-      [...viewerThumbs.children]
-        .forEach(
-          (thumb,index) => {
-
-            thumb.classList.toggle(
-              "active",
-              index === currentViewerIndex
-            );
-
-          }
-        );
-
-    }
-
-
-    function updateViewerFromScroll(){
-
-      if(!viewerOpened){
-        return;
-      }
-
-
-      const width =
-        viewerTrack.clientWidth || 1;
-
-
-      const index =
-        Math.round(
-          viewerTrack.scrollLeft / width
-        );
-
-
-      const safeIndex =
-        Math.max(
-          0,
-          Math.min(
-            index,
-            images.length - 1
-          )
-        );
-
-
-      if(
-        safeIndex !== currentViewerIndex
-      ){
-
-        currentViewerIndex =
-          safeIndex;
-
-        updateViewerUI();
-
-        resetViewerTransforms();
-
-      }
-
-    }
-
-
-    /* =====================================================
-       DOUBLE TAP ZOOM
-    ===================================================== */
-
-    function toggleZoom(slide){
-
-      const img =
-        slide.querySelector("img");
-
-      if(!img){
-        return;
-      }
-
-
-      const zoomed =
-        slide.classList.contains(
-          "zoomed"
-        );
-
-
-      if(zoomed){
-
-        slide.classList.remove(
-          "zoomed"
-        );
-
-        img.style.transform =
-          "scale(1) translate3d(0,0,0)";
-
+        currentViewerIndex++;
       }else{
-
-        slide.classList.add(
-          "zoomed"
-        );
-
-        img.style.transform =
-          "scale(2) translate3d(0,0,0)";
-
+        currentViewerIndex = 0;
       }
 
+      updateViewerImage();
     }
 
+    function previousPhoto(){
 
-    /* =====================================================
-       PINCH ZOOM + PAN
-    ===================================================== */
-
-    function setupPinchAndPan(
-      slide,
-      img
-    ){
-
-      let pointers = new Map();
-
-      let startDistance = 0;
-
-      let startScale = 1;
-
-      let scale = 1;
-
-      let x = 0;
-
-      let y = 0;
-
-      let startX = 0;
-
-      let startY = 0;
-
-      let dragging = false;
-
-
-      function distance(){
-
-        const values =
-          [...pointers.values()];
-
-        if(values.length < 2){
-          return 0;
-        }
-
-        const a = values[0];
-
-        const b = values[1];
-
-        return Math.hypot(
-          b.x - a.x,
-          b.y - a.y
-        );
-
+      if(!currentImages.length){
+        return;
       }
 
-
-      function apply(){
-
-        scale =
-          Math.max(
-            1,
-            Math.min(
-              scale,
-              4
-            )
-          );
-
-
-        img.style.transform =
-          `translate3d(${x}px,${y}px,0) scale(${scale})`;
-
+      if(currentViewerIndex > 0){
+        currentViewerIndex--;
+      }else{
+        currentViewerIndex =
+          currentImages.length - 1;
       }
 
-
-      function reset(){
-
-        scale = 1;
-
-        x = 0;
-
-        y = 0;
-
-        slide.classList.remove(
-          "zoomed"
-        );
-
-        img.style.transform =
-          "translate3d(0,0,0) scale(1)";
-
-      }
-
-
-      slide.addEventListener(
-        "pointerdown",
-        event => {
-
-          pointers.set(
-            event.pointerId,
-            {
-              x:event.clientX,
-              y:event.clientY
-            }
-          );
-
-
-          try{
-            slide.setPointerCapture(
-              event.pointerId
-            );
-          }catch{}
-
-
-          if(pointers.size === 1){
-
-            startX =
-              event.clientX;
-
-            startY =
-              event.clientY;
-
-            dragging = true;
-
-          }
-
-
-          if(pointers.size === 2){
-
-            startDistance =
-              distance();
-
-            startScale =
-              scale;
-
-            dragging = false;
-
-          }
-
-        }
-      );
-
-
-      slide.addEventListener(
-        "pointermove",
-        event => {
-
-          if(
-            !pointers.has(
-              event.pointerId
-            )
-          ){
-            return;
-          }
-
-
-          pointers.set(
-            event.pointerId,
-            {
-              x:event.clientX,
-              y:event.clientY
-            }
-          );
-
-
-          if(pointers.size >= 2){
-
-            const currentDistance =
-              distance();
-
-
-            if(
-              startDistance > 0 &&
-              currentDistance > 0
-            ){
-
-              scale =
-                startScale *
-                (
-                  currentDistance /
-                  startDistance
-                );
-
-              scale =
-                Math.max(
-                  1,
-                  Math.min(
-                    scale,
-                    4
-                  )
-                );
-
-              slide.classList.toggle(
-                "zoomed",
-                scale > 1.01
-              );
-
-              apply();
-
-            }
-
-            return;
-
-          }
-
-
-          if(
-            dragging &&
-            scale > 1
-          ){
-
-            x +=
-              event.clientX -
-              startX;
-
-            y +=
-              event.clientY -
-              startY;
-
-            startX =
-              event.clientX;
-
-            startY =
-              event.clientY;
-
-            apply();
-
-          }
-
-        }
-      );
-
-
-      slide.addEventListener(
-        "pointerup",
-        event => {
-
-          pointers.delete(
-            event.pointerId
-          );
-
-
-          if(
-            pointers.size === 0
-          ){
-
-            dragging = false;
-
-
-            if(scale < 1.05){
-
-              reset();
-
-            }
-
-          }
-
-        }
-      );
-
-
-      slide.addEventListener(
-        "pointercancel",
-        event => {
-
-          pointers.delete(
-            event.pointerId
-          );
-
-          if(
-            pointers.size === 0
-          ){
-
-            dragging = false;
-
-          }
-
-        }
-      );
-
+      updateViewerImage();
     }
 
+    viewerClose.addEventListener(
+      "click",
+      closePhotoViewer
+    );
 
-    /* =====================================================
-       RESET ZOOM
-    ===================================================== */
+    viewerPrev.addEventListener(
+      "click",
+      event => {
+        event.stopPropagation();
+        previousPhoto();
+      }
+    );
 
-    function resetViewerTransforms(){
+    viewerNext.addEventListener(
+      "click",
+      event => {
+        event.stopPropagation();
+        nextPhoto();
+      }
+    );
 
-      [...viewerTrack.children]
-        .forEach(
-          slide => {
+    viewerStage.addEventListener(
+      "click",
+      event => {
 
-            slide.classList.remove(
-              "zoomed"
-            );
+        if(event.target === viewerStage){
+          closePhotoViewer();
+        }
 
+      }
+    );
 
-            const img =
-              slide.querySelector("img");
+    /* =========================================
+       TOUCH SWIPE
+    ========================================= */
 
+    viewerStage.addEventListener(
+      "touchstart",
+      event => {
 
-            if(img){
+        const touch =
+          event.changedTouches[0];
 
-              img.style.transform =
-                "translate3d(0,0,0) scale(1)";
+        touchStartX =
+          touch.clientX;
 
-            }
+        touchStartY =
+          touch.clientY;
+
+      },
+      {
+        passive:true
+      }
+    );
+
+    viewerStage.addEventListener(
+      "touchend",
+      event => {
+
+        const touch =
+          event.changedTouches[0];
+
+        const dx =
+          touch.clientX - touchStartX;
+
+        const dy =
+          touch.clientY - touchStartY;
+
+        if(Math.abs(dx) < 50){
+          return;
+        }
+
+        if(
+          Math.abs(dx) <
+          Math.abs(dy)
+        ){
+          return;
+        }
+
+        if(dx < 0){
+          nextPhoto();
+        }else{
+          previousPhoto();
+        }
+
+      },
+      {
+        passive:true
+      }
+    );
+
+    /* =========================================
+       DOUBLE TAP
+    ========================================= */
+
+    viewerImage.addEventListener(
+      "click",
+      event => {
+
+        const now =
+          Date.now();
+
+        if(
+          now - lastTapTime <
+          300
+        ){
+
+          event.preventDefault();
+
+          if(
+            viewerImage.style.transform ===
+            "scale(1.8)"
+          ){
+
+            viewerImage.style.transform =
+              "scale(1)";
+
+          }else{
+
+            viewerImage.style.transform =
+              "scale(1.8)";
 
           }
-        );
 
-    }
+        }
 
+        lastTapTime = now;
+      }
+    );
 
-    /* =====================================================
+    /* =========================================
+       KEYBOARD
+    ========================================= */
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if(
+          !photoViewer.classList.contains(
+            "open"
+          )
+        ){
+          return;
+        }
+
+        if(event.key === "Escape"){
+          closePhotoViewer();
+        }
+
+        if(event.key === "ArrowLeft"){
+          nextPhoto();
+        }
+
+        if(event.key === "ArrowRight"){
+          previousPhoto();
+        }
+
+      }
+    );
+
+    /* =========================================
        ACTIONS
-    ===================================================== */
+    ========================================= */
 
     function setupActions(){
 
-      const favoriteBtn =
-        document.getElementById(
-          "favoriteBtn"
-        );
+      shareBtn.onclick =
+        shareDevice;
 
-      const buyBtn =
-        document.getElementById(
-          "buyBtn"
-        );
+      favoriteBtn.onclick =
+        toggleFavorite;
 
+      buyBtn.onclick =
+        handleBuy;
 
-      if(favoriteBtn){
+      backBtn.onclick = () => {
 
-        favoriteBtn.addEventListener(
-          "click",
-          async () => {
-
-            try{
-
-              const {
-                data:{
-                  user
-                }
-              } =
-                await supabase.auth.getUser();
-
-
-              if(!user){
-
-                sessionStorage.setItem(
-                  "pendingAction",
-                  "favorite"
-                );
-
-                sessionStorage.setItem(
-                  "pendingDeviceId",
-                  deviceId
-                );
-
-                sessionStorage.setItem(
-                  "pendingReturn",
-                  window.location.href
-                );
-
-
-                window.location.href =
-                  "index.html";
-
-                return;
-
-              }
-
-
-              favoriteBtn.classList.toggle(
-                "active"
-              );
-
-
-              const active =
-                favoriteBtn.classList.contains(
-                  "active"
-                );
-
-
-              showToast(
-                active
-                  ? "تمت إضافة الجهاز للمفضلة"
-                  : "تمت إزالة الجهاز من المفضلة"
-              );
-
-            }catch(error){
-
-              console.error(error);
-
-              showToast(
-                "حدث خطأ، حاول مرة أخرى"
-              );
-
-            }
-
-          }
-        );
-
-      }
-
-
-      if(buyBtn){
-
-        buyBtn.addEventListener(
-          "click",
-          async () => {
-
-            try{
-
-              const {
-                data:{
-                  user
-                }
-              } =
-                await supabase.auth.getUser();
-
-
-              if(!user){
-
-                sessionStorage.setItem(
-                  "pendingAction",
-                  "buy"
-                );
-
-                sessionStorage.setItem(
-                  "pendingDeviceId",
-                  deviceId
-                );
-
-                sessionStorage.setItem(
-                  "pendingReturn",
-                  window.location.href
-                );
-
-
-                window.location.href =
-                  "index.html";
-
-                return;
-
-              }
-
-
-              showToast(
-                "تم تسجيل طلبك، سيتم إكمال العملية عبر المنصة"
-              );
-
-            }catch(error){
-
-              console.error(error);
-
-              showToast(
-                "حدث خطأ، حاول مرة أخرى"
-              );
-
-            }
-
-          }
-        );
-
-      }
-
-    }
-
-
-    /* =====================================================
-       SHARE
-    ===================================================== */
-
-    async function shareDevice(){
-
-      const shareData = {
-
-        title:
-          `${device?.brand || ""} ${device?.model || ""}`.trim(),
-
-        text:
-          `شاهد هذا الجهاز على MZAD PHONE`,
-
-        url:
-          window.location.href
+        if(
+          window.history.length > 1
+        ){
+          window.history.back();
+        }else{
+          window.location.href =
+            "home.html";
+        }
 
       };
 
+      updateBuyButton();
+    }
+
+    function updateBuyButton(){
+
+      if(!currentDevice){
+        return;
+      }
+
+      const saleType =
+        normalizeSaleType(
+          currentDevice.sale_type
+        );
+
+      buyBtn.textContent =
+        saleType === "auction"
+          ? "المزايدة على الجهاز"
+          : "شراء الجهاز";
+    }
+
+    /* =========================================
+       SHARE
+    ========================================= */
+
+    async function shareDevice(){
+
+      if(!currentDevice){
+        return;
+      }
+
+      const url =
+        window.location.href;
+
+      const title =
+        `${clean(
+          currentDevice.brand,
+          "جهاز"
+        )} ${clean(
+          currentDevice.model,
+          ""
+        )}`;
 
       try{
 
@@ -4102,21 +3307,22 @@
           navigator.share
         ){
 
-          await navigator.share(
-            shareData
-          );
+          await navigator.share({
+            title,
+            text:
+              `شاهد هذا الجهاز على MZAD PHONE`,
+            url
+          });
 
           return;
-
         }
-
 
         if(
           navigator.clipboard
         ){
 
           await navigator.clipboard.writeText(
-            window.location.href
+            url
           );
 
           showToast(
@@ -4124,9 +3330,7 @@
           );
 
           return;
-
         }
-
 
         showToast(
           "تعذر مشاركة الرابط"
@@ -4138,163 +3342,189 @@
           error?.name !==
           "AbortError"
         ){
-
-          showToast(
-            "تعذر مشاركة الجهاز"
-          );
-
+          console.error(error);
         }
 
       }
-
     }
 
+    /* =========================================
+       FAVORITE
+    ========================================= */
 
-    shareBtn.addEventListener(
-      "click",
-      shareDevice
-    );
+    async function toggleFavorite(){
 
-
-    /* =====================================================
-       BACK
-    ===================================================== */
-
-    backBtn.addEventListener(
-      "click",
-      () => {
-
-        if(
-          window.history.length > 1
-        ){
-
-          window.history.back();
-
-        }else{
-
-          window.location.href =
-            "home.html";
-
-        }
-
+      if(!currentDevice){
+        return;
       }
-    );
 
+      const {
+        data: {
+          user
+        }
+      } =
+        await supabase.auth.getUser();
 
-    /* =====================================================
-       LOAD DEVICE
-    ===================================================== */
+      if(!user){
 
-    async function loadDevice(){
+        localStorage.setItem(
+          "pendingOperation",
+          JSON.stringify({
+            type:"favorite",
+            deviceId:currentDevice.id
+          })
+        );
 
-      if(!deviceId){
+        localStorage.setItem(
+          "returnAfterLogin",
+          window.location.href
+        );
 
-        app.innerHTML = `
+        window.location.href =
+          "index.html";
 
-          <div class="error-box">
+        return;
+      }
+
+      /*
+        لا نغير قاعدة البيانات هنا.
+        نترك منطق المفضلة الحالي كما هو
+        في مشروعك إذا كان مربوطاً بصفحة/جدول مستقل.
+      */
+
+      favoriteIcon.setAttribute(
+        "fill",
+        "currentColor"
+      );
+
+      favoriteBtn.style.color =
+        "var(--purple)";
+
+      showToast(
+        "تمت إضافة الجهاز للمفضلة"
+      );
+    }
+
+    /* =========================================
+       BUY / AUCTION
+    ========================================= */
+
+    async function handleBuy(){
+
+      if(!currentDevice){
+        return;
+      }
+
+      const {
+        data: {
+          user
+        }
+      } =
+        await supabase.auth.getUser();
+
+      if(!user){
+
+        localStorage.setItem(
+          "pendingOperation",
+          JSON.stringify({
+            type:
+              normalizeSaleType(
+                currentDevice.sale_type
+              ) === "auction"
+                ? "bid"
+                : "buy",
+            deviceId:currentDevice.id
+          })
+        );
+
+        localStorage.setItem(
+          "returnAfterLogin",
+          window.location.href
+        );
+
+        window.location.href =
+          "index.html";
+
+        return;
+      }
+
+      const saleType =
+        normalizeSaleType(
+          currentDevice.sale_type
+        );
+
+      if(saleType === "auction"){
+
+        showToast(
+          "سيتم فتح المزاد لهذا الجهاز"
+        );
+
+        /*
+          لا نغيّر نظام المزادات أو قاعدة البيانات.
+          إذا كانت صفحة المزاد موجودة عندك،
+          يتم توجيه المستخدم إليها من نفس النظام.
+        */
+
+        return;
+      }
+
+      showToast(
+        "تم اختيار الجهاز للشراء"
+      );
+    }
+
+    /* =========================================
+       ERROR
+    ========================================= */
+
+    function showError(message){
+
+      actionBar.hidden = true;
+
+      app.innerHTML = `
+
+        <div class="error-box">
+
+          <div class="error-card">
 
             <strong>
-              لم يتم العثور على الجهاز
+              تعذر تحميل الجهاز
             </strong>
 
-            <span>
-              رابط الجهاز غير صحيح أو ناقص
-            </span>
+            <p>
+              ${escapeHTML(message)}
+            </p>
 
             <button
-              class="error-home"
+              class="back-home"
               type="button"
-              onclick="location.href='home.html'"
+              id="errorBackHome"
             >
               العودة للرئيسية
             </button>
 
           </div>
 
-        `;
+        </div>
 
-        return;
-      }
+      `;
 
-
-      try{
-
-        const {
-          data,
-          error
-        } =
-          await supabase
-            .from("devices")
-            .select("*")
-            .eq("id",deviceId)
-            .single();
-
-
-        if(error){
-          throw error;
-        }
-
-
-        if(!data){
-
-          throw new Error(
-            "Device not found"
-          );
-
-        }
-
-
-        device = data;
-
-        images =
-          normalizeImages(
-            device.images
-          );
-
-
-        renderDevice();
-
-
-      }catch(error){
-
-        console.error(
-          "DEVICE LOAD ERROR:",
-          error
+      document
+        .getElementById(
+          "errorBackHome"
+        )
+        ?.addEventListener(
+          "click",
+          () => {
+            window.location.href =
+              "home.html";
+          }
         );
-
-
-        app.innerHTML = `
-
-          <div class="error-box">
-
-            <strong>
-              تعذر تحميل الجهاز
-            </strong>
-
-            <span>
-              حاول تحديث الصفحة أو الرجوع والمحاولة مرة أخرى
-            </span>
-
-            <button
-              class="error-home"
-              type="button"
-              onclick="location.reload()"
-            >
-              إعادة المحاولة
-            </button>
-
-          </div>
-
-        `;
-
-      }
-
     }
 
-
-    /* =====================================================
+    /* =========================================
        START
-    ===================================================== */
+    ========================================= */
 
     loadDevice();
 
