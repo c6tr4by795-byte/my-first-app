@@ -14,11 +14,17 @@
   --ink:#17202A;
   --muted:#667085;
   --line:#E6E9ED;
+
   --primary:#176B87;
+  --primary-dark:#125A73;
+  --primary-card:#145F78;
   --primary-soft:#E8F3F6;
+
   --purple:#6F63C9;
   --purple-soft:#EEEAFE;
+
   --success:#159A72;
+
   --shadow:0 10px 28px rgba(23,32,42,.06);
   --safe-bottom:env(safe-area-inset-bottom,0px);
 }
@@ -36,11 +42,22 @@ body{
   margin:0;
   background:var(--bg);
   color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    "Segoe UI",
+    Tahoma,
+    Arial,
+    sans-serif;
+
   -webkit-font-smoothing:antialiased;
 }
 
-button,input{
+button,
+input{
   font:inherit;
 }
 
@@ -55,52 +72,105 @@ button{
   padding:0 14px calc(100px + var(--safe-bottom));
 }
 
-/* HEADER */
+
+/* =====================================================
+   HEADER
+===================================================== */
 
 .header{
   margin-inline:-14px;
-  padding:11px 14px 14px;
-  background:linear-gradient(145deg,#FFFFFF 0%,#FAF9FF 48%,#F0EDFF 100%);
+
+  /* الهيدر صار أعلى وأقصر */
+  padding:
+    7px
+    14px
+    11px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #FFFFFF 0%,
+      #FAF9FF 48%,
+      #F0EDFF 100%
+    );
+
   border-bottom:1px solid var(--line);
-  border-radius:0 0 25px 25px;
-  box-shadow:0 10px 26px rgba(23,32,42,.055);
+
+  border-radius:
+    0
+    0
+    22px
+    22px;
+
+  box-shadow:
+    0 8px
+    22px
+    rgba(23,32,42,.05);
+
   position:relative;
   overflow:hidden;
 }
 
 .header::after{
   content:"";
+
   position:absolute;
-  width:130px;
-  height:130px;
-  left:-55px;
-  top:-75px;
+
+  width:115px;
+  height:115px;
+
+  left:-48px;
+  top:-70px;
+
   border-radius:50%;
-  background:rgba(111,99,201,.07);
+
+  background:
+    rgba(111,99,201,.06);
+
   pointer-events:none;
 }
+
+
+/* =====================================================
+   TOP BAR
+===================================================== */
 
 .topbar{
   position:relative;
   z-index:2;
+
   display:flex;
   align-items:center;
-  gap:10px;
+
+  gap:8px;
 }
 
 .back-btn,
 .action-btn{
-  width:40px;
-  height:40px;
-  flex:0 0 40px;
-  border-radius:13px;
+  width:37px;
+  height:37px;
+
+  flex:0 0 37px;
+
+  border-radius:12px;
+
   background:#fff;
-  border:1px solid #E4E0F4;
+
+  border:
+    1px solid #E4E0F4;
+
   color:var(--primary);
+
   display:grid;
   place-items:center;
-  box-shadow:0 6px 15px rgba(23,32,42,.05);
-  transition:transform .18s ease,box-shadow .18s ease;
+
+  box-shadow:
+    0 5px
+    13px
+    rgba(23,32,42,.045);
+
+  transition:
+    transform .18s ease;
 }
 
 .back-btn:active,
@@ -110,37 +180,53 @@ button{
 
 .brand{
   flex:1;
+
   text-align:center;
+
   line-height:.9;
 }
 
 .brand strong{
   display:block;
-  font-size:20px;
+
+  font-size:18px;
   font-weight:950;
+
   letter-spacing:-.05em;
 }
 
 .brand span{
   display:block;
-  margin-top:4px;
+
+  margin-top:3px;
+
   color:#8A929A;
-  font-size:8px;
+
+  font-size:7px;
   font-weight:950;
+
   letter-spacing:.2em;
 }
+
+
+/* =====================================================
+   TITLE
+===================================================== */
 
 .header-content{
   position:relative;
   z-index:2;
-  margin-top:13px;
+
+  margin-top:8px;
 }
 
 .header-title-row{
   display:flex;
-  align-items:flex-end;
+
+  align-items:center;
   justify-content:space-between;
-  gap:10px;
+
+  gap:9px;
 }
 
 .header-title{
@@ -149,68 +235,119 @@ button{
 
 .header-title h1{
   margin:0;
-  font-size:22px;
+
+  font-size:19px;
   line-height:1.15;
+
   font-weight:950;
+
   letter-spacing:-.045em;
 }
 
 .header-title p{
-  margin:5px 0 0;
+  margin:
+    3px
+    0
+    0;
+
   color:var(--muted);
-  font-size:10px;
-  line-height:1.5;
+
+  font-size:9px;
+
+  line-height:1.4;
 }
 
 .header-count{
   flex:0 0 auto;
-  padding:7px 9px;
-  border-radius:10px;
-  background:rgba(255,255,255,.8);
-  border:1px solid rgba(111,99,201,.13);
-  color:var(--purple);
-  font-size:9px;
+
+  padding:
+    6px
+    8px;
+
+  border-radius:9px;
+
+  background:
+    rgba(255,255,255,.85);
+
+  border:
+    1px solid rgba(111,99,201,.12);
+
+  color:var(--primary);
+
+  font-size:8px;
   font-weight:950;
+
   white-space:nowrap;
 }
 
-/* SEARCH */
+
+/* =====================================================
+   SEARCH
+===================================================== */
 
 .search-box{
   position:relative;
   z-index:2;
-  margin-top:12px;
-  height:47px;
+
+  margin-top:8px;
+
+  height:43px;
+
   display:flex;
   align-items:center;
-  gap:9px;
-  padding:0 13px;
-  background:rgba(255,255,255,.98);
-  border:1px solid #E2E5E8;
-  border-radius:15px;
-  box-shadow:0 7px 19px rgba(23,32,42,.06);
-  transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease;
+
+  gap:8px;
+
+  padding:
+    0
+    12px;
+
+  background:
+    rgba(255,255,255,.98);
+
+  border:
+    1px solid #E2E5E8;
+
+  border-radius:13px;
+
+  box-shadow:
+    0 6px
+    16px
+    rgba(23,32,42,.05);
+
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease;
 }
 
 .search-box:focus-within{
-  border-color:rgba(23,107,135,.35);
-  box-shadow:0 9px 23px rgba(23,107,135,.10);
-  transform:translateY(-1px);
+  border-color:
+    rgba(23,107,135,.32);
+
+  box-shadow:
+    0 8px
+    20px
+    rgba(23,107,135,.08);
 }
 
 .search-icon{
   color:#7C858D;
+
   flex:0 0 auto;
 }
 
 .search-box input{
   width:100%;
   min-width:0;
+
   border:0;
   outline:0;
+
   background:transparent;
+
   color:var(--ink);
-  font-size:11px;
+
+  font-size:10px;
 }
 
 .search-box input::placeholder{
@@ -218,12 +355,17 @@ button{
 }
 
 .clear-search{
-  width:27px;
-  height:27px;
-  flex:0 0 27px;
-  border-radius:9px;
+  width:26px;
+  height:26px;
+
+  flex:0 0 26px;
+
+  border-radius:8px;
+
   background:#F1F3F5;
+
   color:#737B82;
+
   display:none;
   place-items:center;
 }
@@ -232,19 +374,31 @@ button{
   display:grid;
 }
 
-/* FILTERS */
+
+/* =====================================================
+   COMPANY FILTERS
+===================================================== */
 
 .filters-wrap{
-  margin-top:11px;
+  margin-top:8px;
+
   position:relative;
 }
 
 .filters{
   display:flex;
+
   gap:7px;
+
   overflow-x:auto;
-  padding:1px 1px 4px;
+
+  padding:
+    1px
+    1px
+    3px;
+
   scrollbar-width:none;
+
   scroll-snap-type:x proximity;
 }
 
@@ -254,17 +408,34 @@ button{
 
 .filter{
   flex:0 0 auto;
-  height:34px;
-  padding:0 12px;
-  border-radius:10px;
+
+  height:36px;
+
+  padding:
+    0
+    13px;
+
+  border-radius:11px;
+
   background:#fff;
-  border:1px solid var(--line);
+
+  border:
+    1px solid var(--line);
+
   color:#68717A;
+
   font-size:9px;
   font-weight:900;
+
   white-space:nowrap;
+
   scroll-snap-align:start;
-  transition:background .18s ease,color .18s ease,transform .18s ease,border-color .18s ease;
+
+  transition:
+    background .18s ease,
+    color .18s ease,
+    transform .18s ease,
+    border-color .18s ease;
 }
 
 .filter:active{
@@ -273,294 +444,543 @@ button{
 
 .filter.active{
   background:var(--primary);
+
   border-color:var(--primary);
+
   color:#fff;
-  box-shadow:0 6px 15px rgba(23,107,135,.15);
+
+  box-shadow:
+    0 5px
+    13px
+    rgba(23,107,135,.13);
 }
 
-/* TOOLS */
+
+/* =====================================================
+   TOOLS
+===================================================== */
 
 .tools{
-  margin-top:14px;
-  min-height:34px;
+  margin-top:10px;
+
+  min-height:32px;
+
   display:flex;
+
   align-items:center;
   justify-content:space-between;
+
   gap:10px;
 }
 
 .results{
-  font-size:10px;
+  font-size:9px;
   color:var(--muted);
 }
 
 .sort-btn{
-  height:33px;
-  padding:0 11px;
+  height:31px;
+
+  padding:
+    0
+    10px;
+
   display:flex;
   align-items:center;
+
   gap:6px;
-  border-radius:10px;
+
+  border-radius:9px;
+
   background:#fff;
-  border:1px solid var(--line);
+
+  border:
+    1px solid var(--line);
+
   color:#59636B;
-  font-size:9px;
+
+  font-size:8px;
   font-weight:900;
-  transition:transform .16s ease;
 }
 
-.sort-btn:active{
-  transform:scale(.96);
-}
 
-/* GRID */
+/* =====================================================
+   DEVICES
+===================================================== */
 
 .devices-grid{
-  margin-top:10px;
+  margin-top:8px;
+
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:11px;
+
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+  gap:10px;
 }
 
 .device-card{
   position:relative;
+
   overflow:hidden;
+
   background:#fff;
-  border:1px solid var(--line);
-  border-radius:18px;
-  box-shadow:0 8px 20px rgba(23,32,42,.05);
+
+  border:
+    1px solid var(--line);
+
+  border-radius:17px;
+
+  box-shadow:
+    0 7px
+    18px
+    rgba(23,32,42,.05);
+
   cursor:pointer;
-  transition:transform .18s ease,box-shadow .18s ease;
+
+  transition:
+    transform .18s ease;
 }
 
 .device-card:active{
   transform:scale(.975);
 }
 
-/* PHOTO */
+
+/* =====================================================
+   PHOTO
+===================================================== */
 
 .device-photo{
-  height:166px;
+  height:160px;
+
   background:#fff;
+
   display:grid;
   place-items:center;
+
   position:relative;
+
   overflow:hidden;
 }
 
 .device-photo img{
   width:100%;
   height:100%;
+
   display:block;
+
   object-fit:contain;
+
   background:#fff;
 }
 
 .photo-placeholder{
   color:#111827;
+
   font-size:9px;
   font-weight:900;
+
   text-align:center;
-  padding:9px 11px;
+
+  padding:
+    9px
+    11px;
+
   border-radius:10px;
+
   background:#FAFAFA;
-  border:1px solid #EEEEEE;
+
+  border:
+    1px solid #EEEEEE;
 }
 
-/* FAVORITE */
+
+/* =====================================================
+   FAVORITE
+===================================================== */
 
 .favorite{
   position:absolute;
-  top:9px;
-  left:9px;
-  width:34px;
-  height:34px;
+
+  top:8px;
+  left:8px;
+
+  width:33px;
+  height:33px;
+
   border-radius:50%;
-  background:rgba(255,255,255,.97);
+
+  background:
+    rgba(255,255,255,.97);
+
   display:grid;
   place-items:center;
-  color:#727A82;
-  box-shadow:0 6px 15px rgba(23,32,42,.11);
-  z-index:3;
-  transition:transform .18s ease,color .18s ease,background .18s ease;
-}
 
-.favorite:active{
-  transform:scale(.9);
+  color:#727A82;
+
+  box-shadow:
+    0 5px
+    13px
+    rgba(23,32,42,.10);
+
+  z-index:3;
 }
 
 .favorite.active{
-  color:var(--purple);
-  background:var(--purple-soft);
+  color:var(--primary);
+
+  background:
+    var(--primary-soft);
 }
 
-/* SALE TYPE */
+
+/* =====================================================
+   SALE TYPE
+===================================================== */
 
 .sale-type{
   position:absolute;
-  top:9px;
-  right:9px;
-  padding:6px 8px;
+
+  top:8px;
+  right:8px;
+
+  padding:
+    6px
+    8px;
+
   border-radius:8px;
-  background:rgba(255,255,255,.95);
+
+  background:
+    rgba(255,255,255,.95);
+
   color:var(--primary);
+
   font-size:8px;
   font-weight:950;
-  box-shadow:0 5px 13px rgba(23,32,42,.07);
+
+  box-shadow:
+    0 5px
+    12px
+    rgba(23,32,42,.06);
 }
 
-/* INFO */
+
+/* =====================================================
+   DEVICE INFO
+   البترولي الأغمق بدل البنفسجي
+===================================================== */
 
 .device-info{
-  min-height:88px;
-  padding:11px 11px 10px;
-  background:linear-gradient(145deg,#6F63C9,#8176D3);
+
+  /* أكبر حتى التفاصيل تتنفس */
+  min-height:112px;
+
+  padding:
+    13px
+    12px
+    12px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #145F78 0%,
+      #12566D 100%
+    );
+
   color:#fff;
 }
 
+
+/* اسم الجهاز */
+
 .device-name{
-  font-size:13px;
+
+  font-size:15px;
+
   font-weight:950;
-  line-height:1.3;
+
+  line-height:1.35;
+
   white-space:nowrap;
+
   overflow:hidden;
+
   text-overflow:ellipsis;
+
+  letter-spacing:-.02em;
 }
+
+
+/* السعة واللون */
 
 .device-sub{
-  margin-top:4px;
-  font-size:9px;
-  color:rgba(255,255,255,.78);
+
+  margin-top:6px;
+
+  font-size:10px;
+
+  font-weight:700;
+
+  color:
+    rgba(255,255,255,.84);
+
+  line-height:1.35;
+
   white-space:nowrap;
+
   overflow:hidden;
+
   text-overflow:ellipsis;
 }
+
+
+/* معلومات البطارية والسعر */
 
 .device-meta{
-  margin-top:8px;
+
+  margin-top:11px;
+
   display:flex;
-  align-items:center;
+
+  align-items:flex-end;
+
   justify-content:space-between;
-  gap:5px;
+
+  gap:8px;
 }
 
+
+/* البطارية */
+
 .battery{
-  font-size:8px;
-  color:rgba(255,255,255,.85);
+
+  min-width:0;
+
+  font-size:9px;
+
+  font-weight:700;
+
+  color:
+    rgba(255,255,255,.88);
+
   white-space:nowrap;
+
   overflow:hidden;
+
   text-overflow:ellipsis;
 }
 
+
+/* السعر */
+
 .device-price{
-  font-size:11px;
+
+  font-size:14px;
+
+  line-height:1;
+
   font-weight:950;
+
+  color:#FFFFFF;
+
   white-space:nowrap;
+
+  letter-spacing:-.025em;
+
+  text-shadow:
+    0 1px 1px rgba(0,0,0,.08);
 }
 
-/* EMPTY */
+
+/* =====================================================
+   EMPTY
+===================================================== */
 
 .empty-state{
-  margin-top:16px;
-  padding:23px 18px;
-  border-radius:20px;
+  margin-top:14px;
+
+  padding:
+    22px
+    18px;
+
+  border-radius:19px;
+
   background:#fff;
-  border:1px solid var(--line);
+
+  border:
+    1px solid var(--line);
+
   box-shadow:var(--shadow);
+
   text-align:center;
 }
 
 .empty-icon{
-  width:53px;
-  height:53px;
+  width:51px;
+  height:51px;
+
   margin:auto;
-  border-radius:16px;
+
+  border-radius:15px;
+
   background:var(--primary-soft);
+
   color:var(--primary);
+
   display:grid;
   place-items:center;
 }
 
 .empty-state h3{
-  margin:12px 0 0;
+  margin:
+    11px
+    0
+    0;
+
   font-size:14px;
   font-weight:950;
 }
 
 .empty-state p{
-  margin:6px auto 0;
+  margin:
+    6px
+    auto
+    0;
+
   max-width:270px;
+
   font-size:10px;
+
   line-height:1.7;
+
   color:var(--muted);
 }
 
-/* LOADING */
+
+/* =====================================================
+   LOADING
+===================================================== */
 
 .loading-state{
   grid-column:1 / -1;
-  padding:35px 18px;
+
+  padding:
+    32px
+    18px;
+
   text-align:center;
+
   color:var(--muted);
+
   font-size:11px;
+
   background:#fff;
-  border:1px solid var(--line);
-  border-radius:20px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:19px;
 }
 
 .loading-spinner{
-  width:30px;
-  height:30px;
-  margin:0 auto 10px;
+  width:29px;
+  height:29px;
+
+  margin:
+    0
+    auto
+    10px;
+
   border-radius:50%;
-  border:3px solid #E5E8EB;
-  border-top-color:var(--primary);
-  animation:spin .8s linear infinite;
+
+  border:
+    3px solid #E5E8EB;
+
+  border-top-color:
+    var(--primary);
+
+  animation:
+    spin .8s linear infinite;
 }
 
 @keyframes spin{
-  to{transform:rotate(360deg);}
+  to{
+    transform:rotate(360deg);
+  }
 }
 
-/* BOTTOM NAV */
+
+/* =====================================================
+   BOTTOM NAV
+===================================================== */
 
 .bottom-nav{
   position:fixed;
+
   left:0;
   right:0;
   bottom:0;
+
   z-index:40;
-  padding:7px 10px calc(7px + var(--safe-bottom));
-  background:rgba(255,255,255,.96);
-  border-top:1px solid #E5E8EB;
-  box-shadow:0 -9px 25px rgba(23,32,42,.055);
+
+  padding:
+    7px
+    10px
+    calc(7px + var(--safe-bottom));
+
+  background:
+    rgba(255,255,255,.96);
+
+  border-top:
+    1px solid #E5E8EB;
+
+  box-shadow:
+    0 -9px
+    25px
+    rgba(23,32,42,.055);
+
   backdrop-filter:blur(15px);
 }
 
 .bottom-inner{
   width:min(100%,520px);
+
   margin:auto;
+
   display:grid;
-  grid-template-columns:repeat(5,1fr);
+
+  grid-template-columns:
+    repeat(5,1fr);
+
   align-items:center;
 }
 
 .nav-item{
   min-width:0;
+
   height:51px;
+
   display:flex;
+
   flex-direction:column;
+
   align-items:center;
+
   justify-content:center;
+
   gap:4px;
+
   color:#858D94;
+
   background:transparent;
+
   font-size:8px;
   font-weight:850;
 }
 
 .nav-item.active{
-  color:var(--purple);
+  color:var(--primary);
 }
 
 .nav-icon{
@@ -571,46 +991,70 @@ button{
 .add-button{
   width:43px;
   height:43px;
+
   margin-top:-13px;
+
   border-radius:15px;
-  background:linear-gradient(145deg,#6F63C9,#8579D5);
+
+  background:
+    linear-gradient(
+      145deg,
+      #176B87,
+      #125A73
+    );
+
   color:#fff;
+
   display:grid;
   place-items:center;
-  box-shadow:0 8px 20px rgba(111,99,201,.25);
+
+  box-shadow:
+    0 8px
+    20px
+    rgba(23,107,135,.22);
 }
 
-/* ANIMATIONS */
+
+/* =====================================================
+   ANIMATION
+===================================================== */
 
 .header{
-  animation:headerIn .42s ease both;
+  animation:
+    headerIn .4s ease both;
 }
 
 .header-content{
-  animation:contentIn .42s .06s ease both;
+  animation:
+    contentIn .4s .05s ease both;
 }
 
 .search-box{
-  animation:contentIn .42s .11s ease both;
+  animation:
+    contentIn .4s .09s ease both;
 }
 
 .filters-wrap{
-  animation:contentIn .42s .15s ease both;
+  animation:
+    contentIn .4s .13s ease both;
 }
 
 .tools{
-  animation:contentIn .42s .19s ease both;
+  animation:
+    contentIn .4s .17s ease both;
 }
 
 .device-card{
-  animation:cardIn .4s ease both;
+  animation:
+    cardIn .38s ease both;
 }
 
 @keyframes headerIn{
   from{
     opacity:0;
-    transform:translateY(-12px);
+    transform:translateY(-10px);
   }
+
   to{
     opacity:1;
     transform:translateY(0);
@@ -620,8 +1064,9 @@ button{
 @keyframes contentIn{
   from{
     opacity:0;
-    transform:translateY(8px);
+    transform:translateY(7px);
   }
+
   to{
     opacity:1;
     transform:translateY(0);
@@ -631,74 +1076,107 @@ button{
 @keyframes cardIn{
   from{
     opacity:0;
-    transform:translateY(12px);
+    transform:translateY(10px);
   }
+
   to{
     opacity:1;
     transform:translateY(0);
   }
 }
 
-@media(max-height:700px){
-  .header{
-    padding-bottom:12px;
-  }
 
-  .header-content{
-    margin-top:10px;
-  }
+@media(max-height:700px){
 
   .device-photo{
     height:145px;
   }
 
   .device-info{
-    min-height:82px;
+    min-height:105px;
   }
+
 }
 
+
 @media(prefers-reduced-motion:reduce){
+
   *,
   *::before,
   *::after{
     animation:none !important;
     transition:none !important;
   }
+
 }
+
 </style>
 </head>
+
 
 <body>
 
 <main class="page">
 
+
 <header class="header">
 
   <div class="topbar">
 
-    <button class="back-btn" id="backBtn" type="button" aria-label="رجوع">
+    <button
+      class="back-btn"
+      id="backBtn"
+      type="button"
+      aria-label="رجوع">
 
-      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2">
+
         <path d="M15 18l-6-6 6-6"/>
+
       </svg>
 
     </button>
 
+
     <div class="brand">
+
       <strong>MZAD</strong>
+
       <span>PHONE</span>
+
     </div>
 
-    <button class="action-btn" id="searchFocusBtn" type="button" aria-label="بحث">
 
-      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+    <button
+      class="action-btn"
+      id="searchFocusBtn"
+      type="button"
+      aria-label="بحث">
+
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8">
+
         <circle cx="11" cy="11" r="6.5"/>
+
         <path d="m16 16 5 5"/>
+
       </svg>
 
     </button>
 
   </div>
+
 
   <div class="header-content">
 
@@ -706,7 +1184,9 @@ button{
 
       <div class="header-title">
 
-        <h1 id="pageTitle">كل الأجهزة</h1>
+        <h1 id="pageTitle">
+          كل الأجهزة
+        </h1>
 
         <p id="pageSubtitle">
           تصفح الأجهزة المعروضة للبيع والمزادات
@@ -714,18 +1194,35 @@ button{
 
       </div>
 
-      <span class="header-count" id="headerCount">
+
+      <span
+        class="header-count"
+        id="headerCount">
+
         الأجهزة
+
       </span>
 
     </div>
 
+
     <div class="search-box">
 
-      <svg class="search-icon" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <svg
+        class="search-icon"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8">
+
         <circle cx="11" cy="11" r="6.5"/>
+
         <path d="m16 16 5 5"/>
+
       </svg>
+
 
       <input
         id="searchInput"
@@ -733,11 +1230,24 @@ button{
         placeholder="ابحث عن جهاز أو موديل..."
         autocomplete="off">
 
-      <button class="clear-search" id="clearSearch" type="button" aria-label="مسح البحث">
 
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <button
+        class="clear-search"
+        id="clearSearch"
+        type="button"
+        aria-label="مسح البحث">
+
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2">
+
           <path d="M6 6l12 12"/>
           <path d="M18 6 6 18"/>
+
         </svg>
 
       </button>
@@ -748,65 +1258,182 @@ button{
 
 </header>
 
+
 <div class="filters-wrap">
 
-  <div class="filters" id="filters">
+  <div
+    class="filters"
+    id="filters">
 
-    <button class="filter active" data-brand="all">الكل</button>
+    <button
+      class="filter active"
+      data-brand="all">
 
-    <button class="filter" data-brand="Apple">iPhone</button>
+      الكل
 
-    <button class="filter" data-brand="Samsung">Samsung</button>
+    </button>
 
-    <button class="filter" data-brand="Xiaomi">Xiaomi</button>
+    <button
+      class="filter"
+      data-brand="Apple">
 
-    <button class="filter" data-brand="Google">Google</button>
+      iPhone
 
-    <button class="filter" data-brand="Huawei">Huawei</button>
+    </button>
 
-    <button class="filter" data-brand="OPPO">OPPO</button>
+    <button
+      class="filter"
+      data-brand="Samsung">
 
-    <button class="filter" data-brand="HONOR">HONOR</button>
+      Samsung
 
-    <button class="filter" data-brand="OnePlus">OnePlus</button>
+    </button>
 
-    <button class="filter" data-brand="realme">realme</button>
+    <button
+      class="filter"
+      data-brand="Xiaomi">
 
-    <button class="filter" data-brand="Motorola">Motorola</button>
+      Xiaomi
 
-    <button class="filter" data-brand="Sony">Sony</button>
+    </button>
 
-    <button class="filter" data-brand="Nokia">Nokia</button>
+    <button
+      class="filter"
+      data-brand="Google">
 
-    <button class="filter" data-brand="Tecno">Tecno</button>
+      Google
 
-    <button class="filter" data-brand="Infinix">Infinix</button>
+    </button>
+
+    <button
+      class="filter"
+      data-brand="Huawei">
+
+      Huawei
+
+    </button>
+
+    <button
+      class="filter"
+      data-brand="OPPO">
+
+      OPPO
+
+    </button>
+
+    <button
+      class="filter"
+      data-brand="HONOR">
+
+      HONOR
+
+    </button>
+
+    <button
+      class="filter"
+      data-brand="OnePlus">
+
+      OnePlus
+
+    </button>
+
+    <button
+      class="filter"
+      data-brand="realme">
+
+      realme
+
+    </button>
+
+    <button
+      class="filter"
+      data-brand="Motorola">
+
+      Motorola
+
+    </button>
+
+    <button
+      class="filter"
+      data-brand="Sony">
+
+      Sony
+
+    </button>
+
+    <button
+      class="filter"
+      data-brand="Nokia">
+
+      Nokia
+
+    </button>
+
+    <button
+      class="filter"
+      data-brand="Tecno">
+
+      Tecno
+
+    </button>
+
+    <button
+      class="filter"
+      data-brand="Infinix">
+
+      Infinix
+
+    </button>
 
   </div>
 
 </div>
 
+
 <div class="tools">
 
-  <span class="results" id="resultsText">
+  <span
+    class="results"
+    id="resultsText">
+
     جاري تحميل الأجهزة...
+
   </span>
 
-  <button class="sort-btn" id="sortBtn" type="button">
 
-    <span id="sortLabel">الأحدث</span>
+  <button
+    class="sort-btn"
+    id="sortBtn"
+    type="button">
 
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+    <span id="sortLabel">
+      الأحدث
+    </span>
+
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8">
+
       <path d="m6 9 6 6 6-6"/>
+
     </svg>
 
   </button>
 
 </div>
 
-<section class="devices-grid" id="devicesGrid">
 
-  <div class="loading-state" id="loadingState">
+<section
+  class="devices-grid"
+  id="devicesGrid">
+
+  <div
+    class="loading-state"
+    id="loadingState">
 
     <div class="loading-spinner"></div>
 
@@ -816,21 +1443,41 @@ button{
 
 </section>
 
-<div class="empty-state" id="emptyState" style="display:none;">
+
+<div
+  class="empty-state"
+  id="emptyState"
+  style="display:none;">
 
   <div class="empty-icon">
 
-    <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-      <rect x="4" y="5" width="16" height="14" rx="2"/>
+    <svg
+      width="25"
+      height="25"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8">
+
+      <rect
+        x="4"
+        y="5"
+        width="16"
+        height="14"
+        rx="2"/>
+
       <path d="M8 9h8"/>
       <path d="M8 13h5"/>
+
     </svg>
 
   </div>
 
+
   <h3 id="emptyTitle">
     ماكو أجهزة بهذا التصنيف
   </h3>
+
 
   <p id="emptyText">
     جرّب اختيار تصنيف آخر أو البحث عن موديل مختلف.
@@ -838,76 +1485,143 @@ button{
 
 </div>
 
+
 </main>
+
 
 <nav class="bottom-nav">
 
-  <div class="bottom-inner">
+<div class="bottom-inner">
 
-    <button class="nav-item" type="button" data-page="home.html">
+<button
+  class="nav-item"
+  type="button"
+  data-page="home.html">
 
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-        <path d="m3 10 9-7 9 7"/>
-        <path d="M5 9v11h14V9"/>
-        <path d="M9 20v-6h6v6"/>
-      </svg>
+  <svg
+    class="nav-icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.7">
 
-      <span>الرئيسية</span>
+    <path d="m3 10 9-7 9 7"/>
+    <path d="M5 9v11h14V9"/>
+    <path d="M9 20v-6h6v6"/>
 
-    </button>
+  </svg>
 
-    <button class="nav-item active" type="button" data-page="market.html">
+  <span>الرئيسية</span>
 
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-        <rect x="4" y="4" width="16" height="16" rx="3"/>
-        <path d="M8 9h8"/>
-        <path d="M8 13h8"/>
-        <path d="M8 17h5"/>
-      </svg>
+</button>
 
-      <span>الأجهزة</span>
 
-    </button>
+<button
+  class="nav-item active"
+  type="button"
+  data-page="market.html">
 
-    <button class="nav-item" type="button" data-page="sell.html">
+  <svg
+    class="nav-icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.7">
 
-      <span class="add-button">
+    <rect
+      x="4"
+      y="4"
+      width="16"
+      height="16"
+      rx="3"/>
 
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 5v14"/>
-          <path d="M5 12h14"/>
-        </svg>
+    <path d="M8 9h8"/>
+    <path d="M8 13h8"/>
+    <path d="M8 17h5"/>
 
-      </span>
+  </svg>
 
-      <span>إضافة</span>
+  <span>الأجهزة</span>
 
-    </button>
+</button>
 
-    <button class="nav-item" type="button" data-page="favorites.html">
 
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-        <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
-      </svg>
+<button
+  class="nav-item"
+  type="button"
+  data-page="sell.html">
 
-      <span>المفضلة</span>
+  <span class="add-button">
 
-    </button>
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2">
 
-    <button class="nav-item" type="button" data-page="profile.html">
+      <path d="M12 5v14"/>
+      <path d="M5 12h14"/>
 
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-        <circle cx="12" cy="8" r="3"/>
-        <path d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5"/>
-      </svg>
+    </svg>
 
-      <span>حسابي</span>
+  </span>
 
-    </button>
+  <span>إضافة</span>
 
-  </div>
+</button>
+
+
+<button
+  class="nav-item"
+  type="button"
+  data-page="favorites.html">
+
+  <svg
+    class="nav-icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.7">
+
+    <path
+      d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
+
+  </svg>
+
+  <span>المفضلة</span>
+
+</button>
+
+
+<button
+  class="nav-item"
+  type="button"
+  data-page="profile.html">
+
+  <svg
+    class="nav-icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.7">
+
+    <circle cx="12" cy="8" r="3"/>
+
+    <path
+      d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5"/>
+
+  </svg>
+
+  <span>حسابي</span>
+
+</button>
+
+</div>
 
 </nav>
+
 
 <script type="module">
 
@@ -1046,20 +1760,34 @@ const brandConfig = {
 const brandAliases = {
 
   all:"all",
+
   apple:"Apple",
   iphone:"Apple",
+
   samsung:"Samsung",
+
   xiaomi:"Xiaomi",
+
   google:"Google",
+
   huawei:"Huawei",
+
   oppo:"OPPO",
+
   honor:"HONOR",
+
   oneplus:"OnePlus",
+
   realme:"realme",
+
   motorola:"Motorola",
+
   sony:"Sony",
+
   nokia:"Nokia",
+
   tecno:"Tecno",
+
   infinix:"Infinix"
 
 };
@@ -1078,7 +1806,9 @@ const params =
   );
 
 const rawBrand =
-  (params.get("brand") || "all")
+  (
+    params.get("brand") || "all"
+  )
   .trim()
   .toLowerCase();
 
@@ -1300,7 +2030,9 @@ function showLoading(){
 
   devicesGrid
     .querySelectorAll(".device-card")
-    .forEach(card => card.remove());
+    .forEach(
+      card => card.remove()
+    );
 
   resultsText.textContent =
     "جاري تحميل الأجهزة...";
@@ -1562,22 +2294,38 @@ function createDeviceCard(
     "device-price";
 
   price.textContent =
-    formatPrice(device.price);
+    formatPrice(
+      device.price
+    );
 
 
-  meta.appendChild(battery);
+  meta.appendChild(
+    battery
+  );
 
-  meta.appendChild(price);
+  meta.appendChild(
+    price
+  );
 
-  info.appendChild(name);
+  info.appendChild(
+    name
+  );
 
-  info.appendChild(sub);
+  info.appendChild(
+    sub
+  );
 
-  info.appendChild(meta);
+  info.appendChild(
+    meta
+  );
 
-  card.appendChild(photo);
+  card.appendChild(
+    photo
+  );
 
-  card.appendChild(info);
+  card.appendChild(
+    info
+  );
 
 
   card.addEventListener(
@@ -1666,7 +2414,9 @@ function renderDevices(){
 
   devicesGrid
     .querySelectorAll(".device-card")
-    .forEach(card => card.remove());
+    .forEach(
+      card => card.remove()
+    );
 
   result.forEach(
     (device,index) => {
@@ -1767,7 +2517,6 @@ function updateEmptyState(count){
       "none";
 
     return;
-
   }
 
   emptyState.style.display =
@@ -1785,7 +2534,6 @@ function updateEmptyState(count){
       "جرّب اسم جهاز أو موديل مختلف.";
 
     return;
-
   }
 
   if(selectedBrand === "all"){
@@ -1797,7 +2545,6 @@ function updateEmptyState(count){
       "ماكو أجهزة منشورة حالياً.";
 
     return;
-
   }
 
   const brandName =
