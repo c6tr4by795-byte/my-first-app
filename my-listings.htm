@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <title>أجهزتي المعروضة | MZAD PHONE</title>
+
+  <style>
+    :root{
+      --bg:#F7F8FA;
+      --surface:#FFFFFF;
+      --surface-2:#EEF3F7;
+
+      --ink:#17202A;
+      --muted:#667085;
+      --muted-2:#8A939C;
+      --line:#E6E9ED;
+
+      --primary:#176B87;
+      --primary-dark:#125A73;
+      --primary-soft:#E8F3F6;
+
+      --purple:#6246D9;
+      --purple-dark:#5147B8;
+      --purple-soft:#EEEAFE;
+
+      --success:#2E8B57;
+      --danger:#C94B5A;
+
+      --radius:18px;
+      --shadow:0 8px 24px rgba(23,32,42,.07);
+    }
+
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    html,body{
+      margin:0;
+      padding:0;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        "Segoe UI",
+        Tahoma,
+        Arial,
+        sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      padding-bottom:88px;
+    }
+
+    button,
+    input{
+      font:inherit;
+    }
+
+    button{
+      border:0;
+      cursor:pointer;
+    }
+
+    .page{
+      width:100%;
+      max-width:760px;
+      margin:0 auto;
+      min-height:100vh;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .top-header{
+      position:relative;
+      overflow:hidden;
+      padding:18px 16px 20px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #FFFFFF 0%,
+          #F5F2FF 45%,
+          #E6E1FF 100%
+        );
+
+      border-bottom:1px solid rgba(98,70,217,.08);
+    }
+
+    .top-header::after{
+      content:"";
+      position:absolute;
+      width:190px;
+      height:190px;
+      left:-70px;
+      top:-100px;
+      border-radius:50%;
+      background:rgba(23,107,135,.08);
+      filter:blur(8px);
+      pointer-events:none;
+    }
+
+    .header-row{
+      position:relative;
+      z-index:2;
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .header-right{
+      display:flex;
+      align-items:center;
+      gap:11px;
+      min-width:0;
+    }
+
+    .back-btn{
+      width:42px;
+      height:42px;
+      flex:0 0 42px;
+
+      display:grid;
+      place-items:center;
+
+      border-radius:13px;
+      background:rgba(255,255,255,.72);
+      border:1px solid rgba(255,255,255,.95);
+      box-shadow:0 6px 18px rgba(23,32,42,.06);
+
+      color:var(--ink);
+    }
+
+    .back-btn svg{
+      width:20px;
+      height:20px;
+      stroke:currentColor;
+      stroke-width:2;
+      fill:none;
+    }
+
+    .header-copy{
+      min-width:0;
+    }
+
+    .header-title{
+      margin:0;
+
+      color:var(--ink);
+      font-size:18px;
+      line-height:1.25;
+      font-weight:950;
+      letter-spacing:-.3px;
+    }
+
+    .header-subtitle{
+      margin:4px 0 0;
+
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.4;
+      font-weight:700;
+    }
+
+    .logo-mini{
+      position:relative;
+      z-index:2;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      width:43px;
+      height:43px;
+
+      border-radius:14px;
+
+      background:
+        linear-gradient(
+          145deg,
+          var(--primary) 0%,
+          var(--purple) 100%
+        );
+
+      color:#fff;
+      font-size:12px;
+      font-weight:950;
+
+      box-shadow:0 8px 20px rgba(98,70,217,.18);
+    }
+
+    /* =========================
+       CONTENT
+    ========================= */
+
+    .content{
+      padding:18px 14px 22px;
+    }
+
+    .summary-card{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+
+      padding:15px 16px;
+      margin-bottom:15px;
+
+      background:var(--surface);
+      border:1px solid var(--line);
+      border-radius:17px;
+
+      box-shadow:var(--shadow);
+    }
+
+    .summary-text{
+      min-width:0;
+    }
+
+    .summary-title{
+      margin:0;
+
+      font-size:14px;
+      line-height:1.35;
+      font-weight:950;
+    }
+
+    .summary-subtitle{
+      margin:4px 0 0;
+
+      color:var(--muted);
+      font-size:10px;
+      line-height:1.4;
+      font-weight:700;
+    }
+
+    .count-pill{
+      min-width:42px;
+      height:34px;
+      padding:0 11px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      border-radius:11px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #E8F3F6 0%,
+          #DCEEF3 100%
+        );
+
+      color:var(--primary);
+      font-size:13px;
+      font-weight:950;
+      white-space:nowrap;
+    }
+
+    /* =========================
+       ADD BUTTON
+    ========================= */
+
+    .add-device{
+      width:100%;
+      min-height:50px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:9px;
+
+      margin-bottom:17px;
+
+      border-radius:15px;
+
+      background:
+        linear-gradient(
+          145deg,
+          var(--primary) 0%,
+          var(--primary-dark) 100%
+        );
+
+      color:#fff;
+
+      font-size:13px;
+      font-weight:900;
+
+      box-shadow:0 9px 20px rgba(23,107,135,.18);
+
+      transition:
+        transform .16s ease,
+        box-shadow .16s ease;
+    }
+
+    .add-device:active{
+      transform:scale(.985);
+      box-shadow:0 5px 12px rgba(23,107,135,.14);
+    }
+
+    .add-device svg{
+      width:19px;
+      height:19px;
+      stroke:currentColor;
+      stroke-width:2;
+      fill:none;
+    }
+
+    /* =========================
+       GRID
+    ========================= */
+
+    .devices-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+
+    /* =========================
+       DEVICE CARD
+    ========================= */
+
+    .device-card{
+      position:relative;
+      overflow:hidden;
+
+      background:var(--surface);
+
+      border:1px solid var(--line);
+      border-radius:17px;
+
+      box-shadow:
+        0 7px 20px rgba(23,32,42,.055);
+
+      cursor:pointer;
+
+      transition:
+        transform .16s ease,
+        box-shadow .16s ease;
+    }
+
+    .device-card:active{
+      transform:scale(.985);
+      box-shadow:0 4px 12px rgba(23,32,42,.08);
+    }
+
+    .device-image-wrap{
+      position:relative;
+      width:100%;
+      height:175px;
+
+      overflow:hidden;
+
+      background:#F1F2F4;
+    }
+
+    .device-image{
+      width:100%;
+      height:100%;
+
+      display:block;
+
+      object-fit:cover;
+
+      background:#F1F2F4;
+    }
+
+    .device-image.placeholder{
+      object-fit:contain;
+      padding:34px;
+      opacity:.55;
+    }
+
+    .sale-chip{
+      position:absolute;
+      top:9px;
+      right:9px;
+
+      min-height:27px;
+      padding:0 9px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      border-radius:9px;
+
+      background:rgba(255,255,255,.92);
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+
+      color:#51477D;
+      font-size:9px;
+      font-weight:900;
+
+      box-shadow:0 5px 12px rgba(23,32,42,.09);
+
+      z-index:2;
+    }
+
+    .device-body{
+      padding:11px 11px 12px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #FFFFFF 0%,
+          #FAFAFD 100%
+        );
+    }
+
+    .device-brand{
+      margin:0 0 3px;
+
+      color:var(--primary);
+
+      font-size:9px;
+      line-height:1.2;
+      font-weight:900;
+    }
+
+    .device-name{
+      margin:0;
+
+      color:var(--ink);
+
+      font-size:13px;
+      line-height:1.3;
+      font-weight:950;
+
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .details-row{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:5px;
+
+      margin-top:10px;
+    }
+
+    .detail-item{
+      min-width:0;
+    }
+
+    .detail-item span{
+      display:block;
+
+      color:#7C858D;
+
+      font-size:7px;
+      line-height:1.2;
+      font-weight:750;
+    }
+
+    .detail-item strong{
+      display:block;
+      min-width:0;
+
+      margin-top:2px;
+
+      color:var(--ink);
+
+      font-size:9px;
+      line-height:1.25;
+      font-weight:950;
+
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .bottom-row{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:7px;
+
+      margin-top:12px;
+    }
+
+    .device-price{
+      min-width:0;
+
+      color:#51477D;
+
+      font-size:14px;
+      line-height:1.2;
+      font-weight:950;
+
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .device-location{
+      min-width:0;
+      max-width:72px;
+
+      color:var(--muted-2);
+
+      font-size:8px;
+      line-height:1.25;
+      font-weight:800;
+
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    /* =========================
+       EMPTY STATE
+    ========================= */
+
+    .empty-state{
+      display:none;
+
+      padding:34px 20px 30px;
+
+      text-align:center;
+
+      background:var(--surface);
+      border:1px solid var(--line);
+      border-radius:20px;
+
+      box-shadow:var(--shadow);
+    }
+
+    .empty-icon{
+      width:64px;
+      height:64px;
+
+      margin:0 auto 14px;
+
+      display:grid;
+      place-items:center;
+
+      border-radius:20px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #E8F3F6 0%,
+          #E5E0FF 100%
+        );
+
+      color:var(--primary);
+    }
+
+    .empty-icon svg{
+      width:30px;
+      height:30px;
+      stroke:currentColor;
+      stroke-width:1.8;
+      fill:none;
+    }
+
+    .empty-title{
+      margin:0;
+
+      color:var(--ink);
+      font-size:16px;
+      font-weight:950;
+    }
+
+    .empty-text{
+      max-width:270px;
+
+      margin:7px auto 17px;
+
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.7;
+      font-weight:650;
+    }
+
+    .empty-button{
+      min-height:44px;
+      padding:0 18px;
+
+      border-radius:13px;
+
+      background:var(--primary-soft);
+      color:var(--primary);
+
+      font-size:12px;
+      font-weight:900;
+    }
+
+    /* =========================
+       LOADING
+    ========================= */
+
+    .loading{
+      padding:45px 15px;
+
+      text-align:center;
+
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .spinner{
+      width:28px;
+      height:28px;
+
+      margin:0 auto 11px;
+
+      border-radius:50%;
+
+      border:3px solid #E2E7EB;
+      border-top-color:var(--primary);
+
+      animation:spin .8s linear infinite;
+    }
+
+    @keyframes spin{
+      to{
+        transform:rotate(360deg);
+      }
+    }
+
+    /* =========================
+       ERROR
+    ========================= */
+
+    .error-box{
+      display:none;
+
+      padding:25px 18px;
+
+      text-align:center;
+
+      background:#FFF7F8;
+      border:1px solid #F0D6DA;
+      border-radius:17px;
+
+      color:#9D3947;
+
+      font-size:12px;
+      line-height:1.7;
+      font-weight:750;
+    }
+
+    .retry-btn{
+      margin-top:13px;
+
+      min-height:40px;
+      padding:0 16px;
+
+      border-radius:11px;
+
+      background:#F4DDE1;
+      color:#9D3947;
+
+      font-size:11px;
+      font-weight:900;
+    }
+
+    /* =========================
+       BOTTOM NAV
+    ========================= */
+
+    .bottom-nav{
+      position:fixed;
+      right:0;
+      bottom:0;
+      left:0;
+      z-index:50;
+
+      height:76px;
+
+      display:flex;
+      justify-content:center;
+
+      padding:8px 10px 10px;
+
+      background:rgba(255,255,255,.94);
+
+      border-top:1px solid rgba(230,233,237,.95);
+
+      box-shadow:0 -7px 25px rgba(23,32,42,.06);
+
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+    }
+
+    .nav-inner{
+      width:100%;
+      max-width:760px;
+
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:5px;
+    }
+
+    .nav-item{
+      min-width:0;
+
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+
+      background:transparent;
+      color:#8A939C;
+
+      border-radius:13px;
+
+      font-size:8px;
+      font-weight:800;
+    }
+
+    .nav-item svg{
+      width:20px;
+      height:20px;
+
+      stroke:currentColor;
+      stroke-width:1.8;
+      fill:none;
+    }
+
+    .nav-item.active{
+      color:var(--primary);
+      background:var(--primary-soft);
+    }
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:91px;
+      z-index:100;
+
+      transform:
+        translateX(-50%)
+        translateY(15px);
+
+      opacity:0;
+      pointer-events:none;
+
+      min-width:180px;
+      max-width:calc(100vw - 35px);
+
+      padding:11px 15px;
+
+      border-radius:12px;
+
+      background:#17202A;
+      color:#fff;
+
+      text-align:center;
+
+      font-size:11px;
+      line-height:1.4;
+      font-weight:800;
+
+      box-shadow:0 10px 30px rgba(0,0,0,.18);
+
+      transition:
+        opacity .2s ease,
+        transform .2s ease;
+    }
+
+    .toast.show{
+      opacity:1;
+      transform:
+        translateX(-50%)
+        translateY(0);
+    }
+
+    /* =========================
+       SMALL DEVICES
+    ========================= */
+
+    @media(max-width:360px){
+
+      .content{
+        padding-left:10px;
+        padding-right:10px;
+      }
+
+      .devices-grid{
+        gap:9px;
+      }
+
+      .device-image-wrap{
+        height:155px;
+      }
+
+      .device-body{
+        padding:10px 9px 11px;
+      }
+
+      .device-name{
+        font-size:12px;
+      }
+
+      .device-price{
+        font-size:13px;
+      }
+
+      .detail-item span{
+        font-size:6.5px;
+      }
+
+      .detail-item strong{
+        font-size:8px;
+      }
+    }
+
+    @media(min-width:600px){
+
+      .devices-grid{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+      }
+
+      .device-image-wrap{
+        height:205px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <!-- HEADER -->
+    <header class="top-header">
+
+      <div class="header-row">
+
+        <div class="header-right">
+
+          <button
+            class="back-btn"
+            id="backBtn"
+            aria-label="رجوع"
+          >
+            <svg viewBox="0 0 24 24">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+          </button>
+
+          <div class="header-copy">
+            <h1 class="header-title">أجهزتي المعروضة</h1>
+            <p class="header-subtitle">
+              الأجهزة التي عرضتها للبيع على MZAD PHONE
+            </p>
+          </div>
+
+        </div>
+
+        <div class="logo-mini">
+          MZAD
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- CONTENT -->
+    <main class="content">
+
+      <!-- SUMMARY -->
+      <section class="summary-card">
+
+        <div class="summary-text">
+          <h2 class="summary-title">أجهزتي</h2>
+          <p class="summary-subtitle">
+            تابع الأجهزة التي أضفتها للبيع من حسابك
+          </p>
+        </div>
+
+        <div
+          class="count-pill"
+          id="deviceCount"
+        >
+          0
+        </div>
+
+      </section>
+
+
+      <!-- ADD DEVICE -->
+      <button
+        class="add-device"
+        id="addDeviceBtn"
+      >
+
+        <svg viewBox="0 0 24 24">
+          <path d="M12 5v14M5 12h14"/>
+        </svg>
+
+        إضافة جهاز للبيع
+
+      </button>
+
+
+      <!-- LOADING -->
+      <div
+        class="loading"
+        id="loading"
+      >
+
+        <div class="spinner"></div>
+
+        جاري تحميل أجهزتك...
+
+      </div>
+
+
+      <!-- ERROR -->
+      <div
+        class="error-box"
+        id="errorBox"
+      >
+        <div id="errorText">
+          حدث خطأ أثناء تحميل أجهزتك.
+        </div>
+
+        <button
+          class="retry-btn"
+          id="retryBtn"
+        >
+          إعادة المحاولة
+        </button>
+      </div>
+
+
+      <!-- DEVICES -->
+      <div
+        class="devices-grid"
+        id="devicesGrid"
+      ></div>
+
+
+      <!-- EMPTY -->
+      <section
+        class="empty-state"
+        id="emptyState"
+      >
+
+        <div class="empty-icon">
+
+          <svg viewBox="0 0 24 24">
+            <rect x="6" y="3" width="12" height="18" rx="2"/>
+            <path d="M10 18h4"/>
+          </svg>
+
+        </div>
+
+        <h2 class="empty-title">
+          ما عندك أجهزة معروضة حالياً
+        </h2>
+
+        <p class="empty-text">
+          أضف أول جهاز إلك وخليه يظهر للمستخدمين داخل سوق MZAD PHONE.
+        </p>
+
+        <button
+          class="empty-button"
+          id="emptyAddBtn"
+        >
+          إضافة جهاز
+        </button>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+
+    <div class="nav-inner">
+
+      <button
+        class="nav-item"
+        data-page="home.html"
+      >
+        <svg viewBox="0 0 24 24">
+          <path d="M3 11.5L12 4l9 7.5"/>
+          <path d="M5 10.5V20h14v-9.5"/>
+          <path d="M9 20v-5h6v5"/>
+        </svg>
+        الرئيسية
+      </button>
+
+
+      <button
+        class="nav-item"
+        data-page="auctions.html"
+      >
+        <svg viewBox="0 0 24 24">
+          <path d="M6 19h12"/>
+          <path d="M8 16l8-8"/>
+          <path d="M7 8l2-2 9 9-2 2z"/>
+          <path d="M14 5l2-2 3 3-2 2"/>
+        </svg>
+        المزادات
+      </button>
+
+
+      <button
+        class="nav-item"
+        data-page="sell.html"
+      >
+        <svg viewBox="0 0 24 24">
+          <path d="M12 5v14M5 12h14"/>
+        </svg>
+        بيع
+      </button>
+
+
+      <button
+        class="nav-item"
+        data-page="favorites.html"
+      >
+        <svg viewBox="0 0 24 24">
+          <path d="M20.8 8.8c0 5.5-8.8 10.2-8.8 10.2S3.2 14.3 3.2 8.8A4.8 4.8 0 0 1 12 6.1a4.8 4.8 0 0 1 8.8 2.7z"/>
+        </svg>
+        المفضلة
+      </button>
+
+
+      <button
+        class="nav-item active"
+        data-page="profile.html"
+      >
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="3.5"/>
+          <path d="M5 20c.8-4 3.2-6 7-6s6.2 2 7 6"/>
+        </svg>
+        حسابي
+      </button>
+
+    </div>
+
+  </nav>
+
+
+  <!-- TOAST -->
+  <div
+    class="toast"
+    id="toast"
+  ></div>
+
+
+  <script type="module">
+
+    import { supabase } from "./js/supabase.js";
+
+
+    /* =========================
+       ELEMENTS
+    ========================= */
+
+    const loading =
+      document.getElementById("loading");
+
+    const errorBox =
+      document.getElementById("errorBox");
+
+    const errorText =
+      document.getElementById("errorText");
+
+    const devicesGrid =
+      document.getElementById("devicesGrid");
+
+    const emptyState =
+      document.getElementById("emptyState");
+
+    const deviceCount =
+      document.getElementById("deviceCount");
+
+    const toast =
+      document.getElementById("toast");
+
+
+    /* =========================
+       DEVICE SELECT
+    ========================= */
+
+    const DEVICE_FIELDS = `
+      id,
+      created_at,
+      brand,
+      model,
+      storage,
+      color,
+      battery_health,
+      condition,
+      body_condition,
+      screen_condition,
+      face_id,
+      cameras,
+      charging,
+      replaced_parts,
+      price,
+      location,
+      sale_type,
+      seller_id,
+      seller_name,
+      images,
+      notes
+    `;
+
+
+    /* =========================
+       IMAGE PARSER
+    ========================= */
+
+    function getDeviceImages(images){
+
+      if(!images){
+        return [];
+      }
+
+      if(Array.isArray(images)){
+        return images.filter(Boolean);
+      }
+
+      if(typeof images === "string"){
+
+        try{
+
+          const parsed =
+            JSON.parse(images);
+
+          if(Array.isArray(parsed)){
+            return parsed.filter(Boolean);
+          }
+
+        }catch(e){}
+
+        return images
+          .split(",")
+          .map(x => x.trim())
+          .filter(Boolean);
+      }
+
+      return [];
+    }
+
+
+    /* =========================
+       IMAGE URL
+    ========================= */
+
+    function getImageUrl(path){
+
+      if(!path){
+        return "";
+      }
+
+      if(
+        path.startsWith("http://") ||
+        path.startsWith("https://")
+      ){
+        return path;
+      }
+
+      const {
+        data
+      } =
+        supabase
+          .storage
+          .from("device-images")
+          .getPublicUrl(path);
+
+      return data?.publicUrl || "";
+    }
+
+
+    /* =========================
+       PRICE
+    ========================= */
+
+    function formatPrice(price){
+
+      const number =
+        Number(price || 0);
+
+      if(!number){
+        return "السعر غير محدد";
+      }
+
+      return (
+        new Intl.NumberFormat("en-US")
+          .format(number)
+        + " د.ع"
+      );
+    }
+
+
+    /* =========================
+       SALE TYPE
+    ========================= */
+
+    function getSaleType(value){
+
+      const type =
+        String(value || "")
+          .toLowerCase()
+          .trim();
+
+      if(
+        type === "auction" ||
+        type === "مزاد"
+      ){
+        return "مزاد";
+      }
+
+      return "بيع مباشر";
+    }
+
+
+    /* =========================
+       ESCAPE HTML
+    ========================= */
+
+    function escapeHtml(value){
+
+      return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+    }
+
+
+    /* =========================
+       CARD
+    ========================= */
+
+    function createDeviceCard(device){
+
+      const images =
+        getDeviceImages(device.images);
+
+      const firstImage =
+        images.length
+          ? getImageUrl(images[0])
+          : "";
+
+      const brand =
+        escapeHtml(device.brand || "جهاز");
+
+      const model =
+        escapeHtml(device.model || "بدون اسم");
+
+      const storage =
+        escapeHtml(device.storage || "-");
+
+      const color =
+        escapeHtml(device.color || "-");
+
+      const battery =
+        escapeHtml(
+          device.battery_health || "-"
+        );
+
+      const location =
+        escapeHtml(
+          device.location || ""
+        );
+
+      const saleType =
+        getSaleType(device.sale_type);
+
+
+      const card =
+        document.createElement("article");
+
+      card.className =
+        "device-card";
+
+
+      card.innerHTML = `
+
+        <div class="device-image-wrap">
+
+          ${
+            firstImage
+              ? `
+                <img
+                  class="device-image"
+                  src="${escapeHtml(firstImage)}"
+                  alt="${brand} ${model}"
+                  loading="lazy"
+                >
+              `
+              : `
+                <div
+                  class="device-image placeholder"
+                  style="
+                    display:grid;
+                    place-items:center;
+                    color:#8A939C;
+                    font-size:11px;
+                    font-weight:800;
+                  "
+                >
+                  لا توجد صورة
+                </div>
+              `
+          }
+
+          <div class="sale-chip">
+            ${escapeHtml(saleType)}
+          </div>
+
+        </div>
+
+
+        <div class="device-body">
+
+          <p class="device-brand">
+            ${brand}
+          </p>
+
+          <h3 class="device-name">
+            ${model}
+          </h3>
+
+
+          <div class="details-row">
+
+            <div class="detail-item">
+              <span>السعة</span>
+              <strong>${storage}</strong>
+            </div>
+
+            <div class="detail-item">
+              <span>اللون</span>
+              <strong>${color}</strong>
+            </div>
+
+            <div class="detail-item">
+              <span>البطارية</span>
+              <strong>${battery}</strong>
+            </div>
+
+          </div>
+
+
+          <div class="bottom-row">
+
+            <strong class="device-price">
+              ${
+                saleType === "مزاد"
+                  ? "مزاد"
+                  : formatPrice(device.price)
+              }
+            </strong>
+
+            ${
+              location
+                ? `
+                  <span class="device-location">
+                    ${location}
+                  </span>
+                `
+                : ""
+            }
+
+          </div>
+
+        </div>
+      `;
+
+
+      card.addEventListener(
+        "click",
+        () => {
+
+          if(!device.id){
+            return;
+          }
+
+          window.location.href =
+            `device.html?id=${encodeURIComponent(device.id)}`;
+        }
+      );
+
+
+      return card;
+    }
+
+
+    /* =========================
+       LOAD USER LISTINGS
+    ========================= */
+
+    async function loadMyListings(){
+
+      loading.style.display =
+        "block";
+
+      errorBox.style.display =
+        "none";
+
+      emptyState.style.display =
+        "none";
+
+      devicesGrid.innerHTML =
+        "";
+
+      deviceCount.textContent =
+        "0";
+
+
+      try{
+
+        const {
+          data: userData,
+          error: userError
+        } =
+          await supabase.auth.getUser();
+
+
+        if(userError){
+          throw userError;
+        }
+
+
+        const user =
+          userData?.user;
+
+
+        if(!user){
+
+          window.location.href =
+            "index.html?login=1&returnTo=my-listings.html";
+
+          return;
+        }
+
+
+        const {
+          data,
+          error
+        } =
+          await supabase
+            .from("devices")
+            .select(DEVICE_FIELDS)
+            .eq("seller_id", user.id)
+            .order(
+              "created_at",
+              {
+                ascending:false
+              }
+            );
+
+
+        if(error){
+          throw error;
+        }
+
+
+        const devices =
+          Array.isArray(data)
+            ? data
+            : [];
+
+
+        loading.style.display =
+          "none";
+
+
+        deviceCount.textContent =
+          String(devices.length);
+
+
+        if(!devices.length){
+
+          emptyState.style.display =
+            "block";
+
+          return;
+        }
+
+
+        const fragment =
+          document.createDocumentFragment();
+
+
+        devices.forEach(
+          device => {
+
+            fragment.appendChild(
+              createDeviceCard(device)
+            );
+
+          }
+        );
+
+
+        devicesGrid.appendChild(
+          fragment
+        );
+
+
+      }catch(error){
+
+        console.error(
+          "loadMyListings error:",
+          error
+        );
+
+
+        loading.style.display =
+          "none";
+
+        errorBox.style.display =
+          "block";
+
+
+        errorText.textContent =
+          "ما قدرنا نحمل أجهزتك حالياً. حاول مرة ثانية.";
+      }
+    }
+
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    let toastTimer = null;
+
+
+    function showToast(message){
+
+      clearTimeout(toastTimer);
+
+      toast.textContent =
+        message;
+
+      toast.classList.add("show");
+
+
+      toastTimer =
+        setTimeout(
+          () => {
+            toast.classList.remove("show");
+          },
+          2200
+        );
+    }
+
+
+    /* =========================
+       NAVIGATION
+    ========================= */
+
+    document
+      .getElementById("backBtn")
+      .addEventListener(
+        "click",
+        () => {
+
+          if(
+            document.referrer &&
+            document.referrer.includes(
+              window.location.host
+            )
+          ){
+
+            history.back();
+
+          }else{
+
+            window.location.href =
+              "profile.html";
+          }
+
+        }
+      );
+
+
+    document
+      .getElementById("addDeviceBtn")
+      .addEventListener(
+        "click",
+        () => {
+          window.location.href =
+            "sell.html";
+        }
+      );
+
+
+    document
+      .getElementById("emptyAddBtn")
+      .addEventListener(
+        "click",
+        () => {
+          window.location.href =
+            "sell.html";
+        }
+      );
+
+
+    document
+      .getElementById("retryBtn")
+      .addEventListener(
+        "click",
+        loadMyListings
+      );
+
+
+    /* =========================
+       BOTTOM NAV
+    ========================= */
+
+    document
+      .querySelectorAll(".nav-item")
+      .forEach(
+        button => {
+
+          button.addEventListener(
+            "click",
+            () => {
+
+              const page =
+                button.dataset.page;
+
+              if(!page){
+                return;
+              }
+
+              window.location.href =
+                page;
+            }
+          );
+
+        }
+      );
+
+
+    /* =========================
+       START
+    ========================= */
+
+    loadMyListings();
+
+  </script>
+
+</body>
+</html>
