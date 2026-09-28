@@ -38,29 +38,54 @@
       padding-bottom:110px;
     }
 
+    /* =========================
+       HEADER
+    ========================= */
+
     .topbar{
-      padding:18px 18px 12px;
+      padding:16px 18px 12px;
       display:flex;
       align-items:center;
       gap:12px;
-      background:#fff;
-      border-bottom:1px solid #E6E9ED;
+      background:
+        linear-gradient(
+          135deg,
+          #176B87 0%,
+          #176B87 58%,
+          #6246D9 100%
+        );
+      border-bottom:0;
       position:sticky;
       top:0;
       z-index:20;
+      overflow:hidden;
+    }
+
+    .topbar::after{
+      content:"";
+      position:absolute;
+      width:180px;
+      height:180px;
+      left:-75px;
+      top:-120px;
+      background:rgba(255,255,255,.08);
+      border-radius:50%;
+      pointer-events:none;
     }
 
     .back{
       width:42px;
       height:42px;
-      border:1px solid #E6E9ED;
-      background:#fff;
+      border:1px solid rgba(255,255,255,.20);
+      background:rgba(255,255,255,.12);
       border-radius:14px;
       display:flex;
       align-items:center;
       justify-content:center;
-      color:#17202A;
+      color:#fff;
       flex-shrink:0;
+      position:relative;
+      z-index:1;
     }
 
     .back svg{
@@ -70,21 +95,28 @@
 
     .brand{
       line-height:1;
+      position:relative;
+      z-index:1;
     }
 
     .brand-main{
       font-size:20px;
       font-weight:800;
       letter-spacing:1.5px;
+      color:#fff;
     }
 
     .brand-sub{
       margin-top:4px;
       font-size:9px;
       letter-spacing:3px;
-      color:#667085;
+      color:rgba(255,255,255,.72);
       font-weight:700;
     }
+
+    /* =========================
+       CONTENT
+    ========================= */
 
     .content{
       padding:20px 16px 0;
@@ -112,10 +144,27 @@
       box-shadow:0 8px 24px rgba(23,32,42,.04);
     }
 
+    /* =========================
+       EARTHY SECTION TITLES
+    ========================= */
+
     .card-title{
       font-size:15px;
       font-weight:800;
       margin-bottom:15px;
+      color:#4F463D;
+      display:flex;
+      align-items:center;
+      gap:9px;
+    }
+
+    .card-title::before{
+      content:"";
+      width:4px;
+      height:18px;
+      border-radius:999px;
+      background:#B7A58F;
+      flex-shrink:0;
     }
 
     .field{
@@ -205,6 +254,10 @@
       gap:10px;
     }
 
+    /* =========================
+       CHOICES
+    ========================= */
+
     .choice-grid{
       display:grid;
       grid-template-columns:1fr 1fr;
@@ -246,6 +299,10 @@
       color:#176B87;
     }
 
+    /* =========================
+       PRICE
+    ========================= */
+
     .price-box{
       position:relative;
     }
@@ -269,7 +326,12 @@
       margin-top:6px;
       color:#667085;
       font-size:10px;
+      line-height:1.7;
     }
+
+    /* =========================
+       PHOTOS
+    ========================= */
 
     .photo-box{
       border:1.5px dashed #C9CED6;
@@ -326,6 +388,10 @@
       display:none;
     }
 
+    /* =========================
+       LOCATION
+    ========================= */
+
     .location{
       display:flex;
       align-items:center;
@@ -360,6 +426,10 @@
       margin-top:2px;
     }
 
+    /* =========================
+       SUBMIT
+    ========================= */
+
     .submit{
       width:100%;
       height:55px;
@@ -390,6 +460,10 @@
       margin-top:10px;
     }
 
+    /* =========================
+       TOAST
+    ========================= */
+
     .toast{
       position:fixed;
       left:50%;
@@ -413,6 +487,10 @@
       opacity:1;
       transform:translate(-50%,0);
     }
+
+    /* =========================
+       BOTTOM NAV
+    ========================= */
 
     .bottom-nav{
       position:fixed;
@@ -461,9 +539,11 @@
     }
 
     @media(max-width:360px){
+
       .row{
         grid-template-columns:1fr;
       }
+
     }
   </style>
 </head>
@@ -475,22 +555,38 @@
   <header class="topbar">
 
     <button class="back" id="backBtn" type="button" aria-label="رجوع">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-           stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+
+      <svg viewBox="0 0 24 24" fill="none"
+           stroke="currentColor"
+           stroke-width="1.9"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+
         <path d="M15 18 9 12l6-6"/>
+
       </svg>
+
     </button>
 
     <div class="brand">
-      <div class="brand-main">MZAD</div>
-      <div class="brand-sub">PHONE</div>
+
+      <div class="brand-main">
+        MZAD
+      </div>
+
+      <div class="brand-sub">
+        PHONE
+      </div>
+
     </div>
 
   </header>
 
   <main class="content">
 
-    <h1 class="page-title">بيع جهاز</h1>
+    <h1 class="page-title">
+      بيع جهاز
+    </h1>
 
     <p class="page-subtitle">
       اختار معلومات جهازك من القوائم حتى يظهر الإعلان بشكل مرتب وموحّد.
@@ -500,33 +596,85 @@
 
     <section class="card">
 
-      <div class="card-title">معلومات الجهاز</div>
+      <div class="card-title">
+        معلومات الجهاز
+      </div>
 
       <div class="field">
 
-        <label class="label">الشركة</label>
+        <label class="label">
+          الشركة
+        </label>
 
         <div class="select-wrap">
 
           <select id="brand" required>
-            <option value="">اختر الشركة</option>
-            <option value="Apple">Apple</option>
-            <option value="Samsung">Samsung</option>
-            <option value="Xiaomi">Xiaomi</option>
-            <option value="Google">Google</option>
-            <option value="Huawei">Huawei</option>
-            <option value="OPPO">OPPO</option>
-            <option value="HONOR">HONOR</option>
-            <option value="OnePlus">OnePlus</option>
-            <option value="realme">realme</option>
-            <option value="Motorola">Motorola</option>
-            <option value="Sony">Sony</option>
-            <option value="Nokia">Nokia</option>
-            <option value="Tecno">Tecno</option>
-            <option value="Infinix">Infinix</option>
+
+            <option value="">
+              اختر الشركة
+            </option>
+
+            <option value="Apple">
+              Apple
+            </option>
+
+            <option value="Samsung">
+              Samsung
+            </option>
+
+            <option value="Xiaomi">
+              Xiaomi
+            </option>
+
+            <option value="Google">
+              Google
+            </option>
+
+            <option value="Huawei">
+              Huawei
+            </option>
+
+            <option value="OPPO">
+              OPPO
+            </option>
+
+            <option value="HONOR">
+              HONOR
+            </option>
+
+            <option value="OnePlus">
+              OnePlus
+            </option>
+
+            <option value="realme">
+              realme
+            </option>
+
+            <option value="Motorola">
+              Motorola
+            </option>
+
+            <option value="Sony">
+              Sony
+            </option>
+
+            <option value="Nokia">
+              Nokia
+            </option>
+
+            <option value="Tecno">
+              Tecno
+            </option>
+
+            <option value="Infinix">
+              Infinix
+            </option>
+
           </select>
 
-          <span class="select-arrow">⌄</span>
+          <span class="select-arrow">
+            ⌄
+          </span>
 
         </div>
 
@@ -534,15 +682,23 @@
 
       <div class="field">
 
-        <label class="label">الموديل</label>
+        <label class="label">
+          الموديل
+        </label>
 
         <div class="select-wrap">
 
           <select id="model" required disabled>
-            <option value="">اختار الشركة أولاً</option>
+
+            <option value="">
+              اختار الشركة أولاً
+            </option>
+
           </select>
 
-          <span class="select-arrow">⌄</span>
+          <span class="select-arrow">
+            ⌄
+          </span>
 
         </div>
 
@@ -556,21 +712,47 @@
 
         <div class="field">
 
-          <label class="label">السعة</label>
+          <label class="label">
+            السعة
+          </label>
 
           <div class="select-wrap">
 
             <select id="storage" required>
-              <option value="">السعة</option>
-              <option value="32GB">32GB</option>
-              <option value="64GB">64GB</option>
-              <option value="128GB">128GB</option>
-              <option value="256GB">256GB</option>
-              <option value="512GB">512GB</option>
-              <option value="1TB">1TB</option>
+
+              <option value="">
+                السعة
+              </option>
+
+              <option value="32GB">
+                32GB
+              </option>
+
+              <option value="64GB">
+                64GB
+              </option>
+
+              <option value="128GB">
+                128GB
+              </option>
+
+              <option value="256GB">
+                256GB
+              </option>
+
+              <option value="512GB">
+                512GB
+              </option>
+
+              <option value="1TB">
+                1TB
+              </option>
+
             </select>
 
-            <span class="select-arrow">⌄</span>
+            <span class="select-arrow">
+              ⌄
+            </span>
 
           </div>
 
@@ -578,7 +760,9 @@
 
         <div class="field">
 
-          <label class="label">اللون</label>
+          <label class="label">
+            اللون
+          </label>
 
           <input
             id="color"
@@ -595,15 +779,27 @@
 
     </section>
 
+
     <!-- CONDITION -->
 
     <section class="card">
 
-      <div class="card-title">حالة الجهاز</div>
+      <div class="card-title">
+        حالة الجهاز
+      </div>
 
-      <div class="field" id="batteryField" style="display:none;">
 
-        <label class="label">صحة البطارية</label>
+      <!-- BATTERY -->
+
+      <div
+        class="field"
+        id="batteryField"
+        style="display:none;"
+      >
+
+        <label class="label">
+          صحة البطارية
+        </label>
 
         <div class="price-box">
 
@@ -616,7 +812,9 @@
             placeholder="مثال: 91"
           >
 
-          <span class="price-unit">%</span>
+          <span class="price-unit">
+            %
+          </span>
 
         </div>
 
@@ -626,204 +824,503 @@
 
       </div>
 
+
+      <!-- BODY -->
+
       <div class="field">
 
-        <label class="label">حالة الهيكل</label>
+        <label class="label">
+          حالة الهيكل
+        </label>
 
         <div class="choice-grid">
 
           <div class="choice">
-            <input type="radio" id="body1" name="body_condition" value="ممتاز" required>
-            <label for="body1">ممتاز</label>
+
+            <input
+              type="radio"
+              id="body1"
+              name="body_condition"
+              value="ممتاز"
+              required
+            >
+
+            <label for="body1">
+              ممتاز
+            </label>
+
           </div>
 
           <div class="choice">
-            <input type="radio" id="body2" name="body_condition" value="جيد جداً">
-            <label for="body2">جيد جداً</label>
+
+            <input
+              type="radio"
+              id="body2"
+              name="body_condition"
+              value="جيد جداً"
+            >
+
+            <label for="body2">
+              جيد جداً
+            </label>
+
           </div>
 
           <div class="choice">
-            <input type="radio" id="body3" name="body_condition" value="جيد">
-            <label for="body3">جيد</label>
+
+            <input
+              type="radio"
+              id="body3"
+              name="body_condition"
+              value="جيد"
+            >
+
+            <label for="body3">
+              جيد
+            </label>
+
           </div>
 
           <div class="choice">
-            <input type="radio" id="body4" name="body_condition" value="مبدل">
-            <label for="body4">مبدل</label>
+
+            <input
+              type="radio"
+              id="body4"
+              name="body_condition"
+              value="مبدل"
+            >
+
+            <label for="body4">
+              مبدل
+            </label>
+
           </div>
 
         </div>
 
       </div>
 
+
+      <!-- SCREEN -->
+
       <div class="field">
 
-        <label class="label">حالة الشاشة</label>
+        <label class="label">
+          حالة الشاشة
+        </label>
 
         <div class="choice-grid">
 
           <div class="choice">
-            <input type="radio" id="screen1" name="screen_condition" value="ممتازة" required>
-            <label for="screen1">ممتازة</label>
+
+            <input
+              type="radio"
+              id="screen1"
+              name="screen_condition"
+              value="ممتازة"
+              required
+            >
+
+            <label for="screen1">
+              ممتازة
+            </label>
+
           </div>
 
           <div class="choice">
-            <input type="radio" id="screen2" name="screen_condition" value="جيدة جداً">
-            <label for="screen2">جيدة جداً</label>
+
+            <input
+              type="radio"
+              id="screen2"
+              name="screen_condition"
+              value="جيدة جداً"
+            >
+
+            <label for="screen2">
+              جيدة جداً
+            </label>
+
           </div>
 
           <div class="choice">
-            <input type="radio" id="screen3" name="screen_condition" value="جيدة">
-            <label for="screen3">جيدة</label>
+
+            <input
+              type="radio"
+              id="screen3"
+              name="screen_condition"
+              value="جيدة"
+            >
+
+            <label for="screen3">
+              جيدة
+            </label>
+
           </div>
 
           <div class="choice">
-            <input type="radio" id="screen4" name="screen_condition" value="بها خدوش">
-            <label for="screen4">بها خدوش</label>
+
+            <input
+              type="radio"
+              id="screen4"
+              name="screen_condition"
+              value="بها خدوش"
+            >
+
+            <label for="screen4">
+              بها خدوش
+            </label>
+
           </div>
 
           <div class="choice">
-            <input type="radio" id="screen5" name="screen_condition" value="مبدلة">
-            <label for="screen5">مبدلة</label>
+
+            <input
+              type="radio"
+              id="screen5"
+              name="screen_condition"
+              value="مبدلة"
+            >
+
+            <label for="screen5">
+              مبدلة
+            </label>
+
           </div>
 
         </div>
 
       </div>
 
+
+      <!-- FACE ID -->
+
       <div class="field">
 
-        <label class="label">Face ID / البصمة</label>
+        <label class="label">
+          Face ID / البصمة
+        </label>
 
         <div class="choice-grid">
 
           <div class="choice">
-            <input type="radio" id="security1" name="face_id" value="يعمل" required>
-            <label for="security1">يعمل</label>
+
+            <input
+              type="radio"
+              id="security1"
+              name="face_id"
+              value="يعمل"
+              required
+            >
+
+            <label for="security1">
+              يعمل
+            </label>
+
           </div>
 
           <div class="choice">
-            <input type="radio" id="security2" name="face_id" value="لا يعمل">
-            <label for="security2">لا يعمل</label>
+
+            <input
+              type="radio"
+              id="security2"
+              name="face_id"
+              value="لا يعمل"
+            >
+
+            <label for="security2">
+              لا يعمل
+            </label>
+
           </div>
 
           <div class="choice">
-            <input type="radio" id="security3" name="face_id" value="غير متوفر">
-            <label for="security3">غير متوفر</label>
+
+            <input
+              type="radio"
+              id="security3"
+              name="face_id"
+              value="غير متوفر"
+            >
+
+            <label for="security3">
+              غير متوفر
+            </label>
+
           </div>
 
         </div>
 
       </div>
 
+
+      <!-- CAMERAS -->
+
       <div class="field">
 
-        <label class="label">الكاميرات</label>
+        <label class="label">
+          الكاميرات
+        </label>
 
         <div class="choice-grid">
 
           <div class="choice">
-            <input type="radio" id="camera1" name="cameras" value="تعمل" required>
-            <label for="camera1">تعمل</label>
+
+            <input
+              type="radio"
+              id="camera1"
+              name="cameras"
+              value="تعمل"
+              required
+            >
+
+            <label for="camera1">
+              تعمل
+            </label>
+
           </div>
 
           <div class="choice">
-            <input type="radio" id="camera2" name="cameras" value="بها مشكلة">
-            <label for="camera2">بها مشكلة</label>
+
+            <input
+              type="radio"
+              id="camera2"
+              name="cameras"
+              value="بها مشكلة"
+            >
+
+            <label for="camera2">
+              بها مشكلة
+            </label>
+
           </div>
 
           <div class="choice">
-            <input type="radio" id="camera3" name="cameras" value="لا تعمل">
-            <label for="camera3">لا تعمل</label>
+
+            <input
+              type="radio"
+              id="camera3"
+              name="cameras"
+              value="لا تعمل"
+            >
+
+            <label for="camera3">
+              لا تعمل
+            </label>
+
           </div>
 
         </div>
 
       </div>
 
+
+      <!-- CHARGING -->
+
       <div class="field">
 
-        <label class="label">الشحن</label>
+        <label class="label">
+          الشحن
+        </label>
 
         <div class="choice-grid">
 
           <div class="choice">
-            <input type="radio" id="charging1" name="charging" value="يعمل" required>
-            <label for="charging1">يعمل</label>
+
+            <input
+              type="radio"
+              id="charging1"
+              name="charging"
+              value="يعمل"
+              required
+            >
+
+            <label for="charging1">
+              يعمل
+            </label>
+
           </div>
 
           <div class="choice">
-            <input type="radio" id="charging2" name="charging" value="به مشكلة">
-            <label for="charging2">به مشكلة</label>
+
+            <input
+              type="radio"
+              id="charging2"
+              name="charging"
+              value="به مشكلة"
+            >
+
+            <label for="charging2">
+              به مشكلة
+            </label>
+
           </div>
 
           <div class="choice">
-            <input type="radio" id="charging3" name="charging" value="لا يعمل">
-            <label for="charging3">لا يعمل</label>
+
+            <input
+              type="radio"
+              id="charging3"
+              name="charging"
+              value="لا يعمل"
+            >
+
+            <label for="charging3">
+              لا يعمل
+            </label>
+
           </div>
 
         </div>
 
       </div>
 
+
+      <!-- REPLACED PARTS -->
+
       <div class="field">
 
-        <label class="label">القطع المبدلة</label>
+        <label class="label">
+          القطع المبدلة
+        </label>
 
         <div class="choice-grid">
 
           <div class="choice">
-            <input type="radio" id="parts1" name="replaced_parts" value="لا توجد" required>
-            <label for="parts1">لا توجد</label>
+
+            <input
+              type="checkbox"
+              id="partsNone"
+              name="replaced_parts"
+              value="لا توجد"
+            >
+
+            <label for="partsNone">
+              لا توجد
+            </label>
+
           </div>
 
           <div class="choice">
-            <input type="radio" id="parts2" name="replaced_parts" value="البطارية">
-            <label for="parts2">البطارية</label>
+
+            <input
+              type="checkbox"
+              id="partsBattery"
+              name="replaced_parts"
+              value="البطارية"
+            >
+
+            <label for="partsBattery">
+              البطارية
+            </label>
+
           </div>
 
           <div class="choice">
-            <input type="radio" id="parts3" name="replaced_parts" value="الشاشة">
-            <label for="parts3">الشاشة</label>
+
+            <input
+              type="checkbox"
+              id="partsScreen"
+              name="replaced_parts"
+              value="الشاشة"
+            >
+
+            <label for="partsScreen">
+              الشاشة
+            </label>
+
           </div>
 
           <div class="choice">
-            <input type="radio" id="parts4" name="replaced_parts" value="الكاميرات">
-            <label for="parts4">الكاميرات</label>
+
+            <input
+              type="checkbox"
+              id="partsCamera"
+              name="replaced_parts"
+              value="الكاميرات"
+            >
+
+            <label for="partsCamera">
+              الكاميرات
+            </label>
+
           </div>
 
           <div class="choice">
-            <input type="radio" id="parts5" name="replaced_parts" value="الهيكل">
-            <label for="parts5">الهيكل</label>
+
+            <input
+              type="checkbox"
+              id="partsBody"
+              name="replaced_parts"
+              value="الهيكل"
+            >
+
+            <label for="partsBody">
+              الهيكل
+            </label>
+
           </div>
 
           <div class="choice">
-            <input type="radio" id="parts6" name="replaced_parts" value="أكثر من قطعة">
-            <label for="parts6">أكثر من قطعة</label>
+
+            <input
+              type="checkbox"
+              id="partsSpeaker"
+              name="replaced_parts"
+              value="السماعة"
+            >
+
+            <label for="partsSpeaker">
+              السماعة
+            </label>
+
           </div>
 
+          <div class="choice">
+
+            <input
+              type="checkbox"
+              id="partsCharging"
+              name="replaced_parts"
+              value="منفذ الشحن"
+            >
+
+            <label for="partsCharging">
+              منفذ الشحن
+            </label>
+
+          </div>
+
+        </div>
+
+        <div class="price-help">
+          تقدر تختار أكثر من قطعة إذا كانت مستبدلة.
         </div>
 
       </div>
 
     </section>
 
+
     <!-- PRICE -->
 
     <section class="card">
 
-      <div class="card-title">السعر</div>
+      <div class="card-title">
+        السعر
+      </div>
 
       <div class="field">
 
-        <label class="label">سعر البيع</label>
+        <label class="label">
+          سعر البيع
+        </label>
 
         <div class="price-box">
 
           <input
             id="price"
             type="number"
-            min="50000"
+            min="1000"
             max="10000000"
             step="1000"
             inputmode="numeric"
@@ -831,34 +1328,58 @@
             required
           >
 
-          <span class="price-unit">د.ع</span>
+          <span class="price-unit">
+            د.ع
+          </span>
 
         </div>
 
         <div class="price-help">
-          السعر من 50,000 إلى 10,000,000 د.ع.
+          اكتب السعر بالدينار العراقي، مثال: 850000
         </div>
 
       </div>
 
     </section>
 
+
     <!-- PHOTOS -->
 
     <section class="card">
 
-      <div class="card-title">صور الجهاز</div>
+      <div class="card-title">
+        صور الجهاز
+      </div>
 
       <div class="photo-box">
 
         <div class="photo-icon">
 
-          <svg width="23" height="23" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" stroke-width="1.8"
-               stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            width="23"
+            height="23"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
 
-            <rect x="3" y="4" width="18" height="16" rx="3"/>
-            <circle cx="8.5" cy="9" r="1.5"/>
+            <rect
+              x="3"
+              y="4"
+              width="18"
+              height="16"
+              rx="3"
+            />
+
+            <circle
+              cx="8.5"
+              cy="9"
+              r="1.5"
+            />
+
             <path d="m21 15-4.5-4.5L7 20"/>
 
           </svg>
@@ -870,9 +1391,13 @@
         </div>
 
         <div class="photo-sub">
+
           الصور الحقيقية للجهاز مطلوبة قبل النشر.
+
           <br>
+
           الصور راح تنحفظ كاملة بدون قص.
+
         </div>
 
         <input
@@ -883,11 +1408,15 @@
           multiple
         >
 
-        <div class="photo-count" id="photoCount"></div>
+        <div
+          class="photo-count"
+          id="photoCount"
+        ></div>
 
       </div>
 
     </section>
+
 
     <!-- NOTES -->
 
@@ -913,6 +1442,7 @@
 
     </section>
 
+
     <!-- LOCATION -->
 
     <section class="card">
@@ -925,12 +1455,24 @@
 
         <div class="location-icon">
 
-          <svg width="20" height="20" viewBox="0 0 24 24"
-               fill="none" stroke="currentColor" stroke-width="1.8"
-               stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
 
             <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
-            <circle cx="12" cy="10" r="2.5"/>
+
+            <circle
+              cx="12"
+              cy="10"
+              r="2.5"
+            />
 
           </svg>
 
@@ -938,14 +1480,20 @@
 
         <div>
 
-          <strong>النجف</strong>
-          <span>نطاق البيع الحالي</span>
+          <strong>
+            النجف
+          </strong>
+
+          <span>
+            نطاق البيع الحالي
+          </span>
 
         </div>
 
       </div>
 
     </section>
+
 
     <button
       class="submit"
@@ -963,31 +1511,57 @@
 
 </div>
 
+
 <!-- BOTTOM NAV -->
 
 <nav class="bottom-nav">
 
-  <button class="nav-item" type="button" data-go="home.html">
+  <button
+    class="nav-item"
+    type="button"
+    data-go="home.html"
+  >
 
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"
-         stroke="currentColor" stroke-width="1.8"
-         stroke-linecap="round" stroke-linejoin="round">
+    <svg
+      class="nav-icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
 
       <path d="m3 10 9-7 9 7"/>
+
       <path d="M5 9v11h14V9"/>
+
       <path d="M9 20v-6h6v6"/>
 
     </svg>
 
-    <span class="nav-label">الرئيسية</span>
+    <span class="nav-label">
+      الرئيسية
+    </span>
 
   </button>
 
-  <button class="nav-item" type="button" data-go="auctions.html">
 
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"
-         stroke="currentColor" stroke-width="1.8"
-         stroke-linecap="round" stroke-linejoin="round">
+  <button
+    class="nav-item"
+    type="button"
+    data-go="auctions.html"
+  >
+
+    <svg
+      class="nav-icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
 
       <path d="M7 11h10"/>
       <path d="M9 7h6"/>
@@ -997,57 +1571,107 @@
 
     </svg>
 
-    <span class="nav-label">المزادات</span>
+    <span class="nav-label">
+      المزادات
+    </span>
 
   </button>
 
-  <button class="nav-item active" type="button">
 
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"
-         stroke="currentColor" stroke-width="1.8"
-         stroke-linecap="round" stroke-linejoin="round">
+  <button
+    class="nav-item active"
+    type="button"
+  >
+
+    <svg
+      class="nav-icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
 
       <path d="M12 5v14"/>
       <path d="M5 12h14"/>
 
     </svg>
 
-    <span class="nav-label">إضافة</span>
+    <span class="nav-label">
+      إضافة
+    </span>
 
   </button>
 
-  <button class="nav-item" type="button" data-go="favorites.html">
 
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"
-         stroke="currentColor" stroke-width="1.8"
-         stroke-linecap="round" stroke-linejoin="round">
+  <button
+    class="nav-item"
+    type="button"
+    data-go="favorites.html"
+  >
+
+    <svg
+      class="nav-icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
 
       <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
 
     </svg>
 
-    <span class="nav-label">المفضلة</span>
+    <span class="nav-label">
+      المفضلة
+    </span>
 
   </button>
 
-  <button class="nav-item" type="button" data-go="profile.html">
 
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"
-         stroke="currentColor" stroke-width="1.8"
-         stroke-linecap="round" stroke-linejoin="round">
+  <button
+    class="nav-item"
+    type="button"
+    data-go="profile.html"
+  >
 
-      <circle cx="12" cy="8" r="3.5"/>
+    <svg
+      class="nav-icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+
+      <circle
+        cx="12"
+        cy="8"
+        r="3.5"
+      />
+
       <path d="M5 21a7 7 0 0 1 14 0"/>
 
     </svg>
 
-    <span class="nav-label">حسابي</span>
+    <span class="nav-label">
+      حسابي
+    </span>
 
   </button>
 
 </nav>
 
-<div class="toast" id="toast"></div>
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
 
 <script type="module">
 
@@ -1481,6 +2105,16 @@ const photosInput =
 const photoCount =
   document.getElementById("photoCount");
 
+const replacedPartInputs =
+  Array.from(
+    document.querySelectorAll(
+      'input[name="replaced_parts"]'
+    )
+  );
+
+const replacedNoneInput =
+  document.getElementById("partsNone");
+
 
 /* ============================================================
    TOAST
@@ -1488,15 +2122,22 @@ const photoCount =
 
 function showToast(message){
 
-  toast.textContent = message;
+  toast.textContent =
+    message;
 
   toast.classList.add("show");
 
-  clearTimeout(window.__toastTimer);
+  clearTimeout(
+    window.__toastTimer
+  );
 
   window.__toastTimer =
     setTimeout(() => {
-      toast.classList.remove("show");
+
+      toast.classList.remove(
+        "show"
+      );
+
     },2600);
 
 }
@@ -1511,9 +2152,11 @@ function updateModels(){
   const brand =
     brandInput.value;
 
-  modelInput.innerHTML = "";
+  modelInput.innerHTML =
+    "";
 
-  modelInput.disabled = true;
+  modelInput.disabled =
+    true;
 
   modelStatus.textContent =
     "بعد اختيار الشركة راح تظهر موديلاتها.";
@@ -1555,7 +2198,8 @@ function updateModels(){
 
     }).join("");
 
-  modelInput.disabled = false;
+  modelInput.disabled =
+    false;
 
   modelStatus.textContent =
     `متوفر ${models.length} موديل للاختيار.`;
@@ -1592,17 +2236,22 @@ function updateBattery(){
 
   if(isApple){
 
-    batteryField.style.display = "block";
+    batteryField.style.display =
+      "block";
 
-    batteryInput.required = true;
+    batteryInput.required =
+      true;
 
   }else{
 
-    batteryField.style.display = "none";
+    batteryField.style.display =
+      "none";
 
-    batteryInput.required = false;
+    batteryInput.required =
+      false;
 
-    batteryInput.value = "";
+    batteryInput.value =
+      "";
 
   }
 
@@ -1616,30 +2265,92 @@ brandInput.addEventListener(
 
 
 /* ============================================================
+   REPLACED PARTS - MULTI SELECT
+============================================================ */
+
+replacedPartInputs.forEach(input => {
+
+  input.addEventListener(
+    "change",
+    () => {
+
+      /*
+       * لا توجد = اختيار منفرد
+       */
+
+      if(input === replacedNoneInput){
+
+        if(input.checked){
+
+          replacedPartInputs.forEach(other => {
+
+            if(other !== replacedNoneInput){
+
+              other.checked =
+                false;
+
+            }
+
+          });
+
+        }
+
+        return;
+      }
+
+
+      /*
+       * إذا اختار أي قطعة،
+       * نلغي "لا توجد"
+       */
+
+      if(input.checked){
+
+        replacedNoneInput.checked =
+          false;
+
+      }
+
+    }
+  );
+
+});
+
+
+/* ============================================================
    NAVIGATION
 ============================================================ */
 
 document
   .getElementById("backBtn")
-  .addEventListener("click",() => {
-    history.back();
-  });
+  .addEventListener(
+    "click",
+    () => {
+      history.back();
+    }
+  );
 
 
 document
   .querySelectorAll("[data-go]")
   .forEach(button => {
 
-    button.addEventListener("click",() => {
+    button.addEventListener(
+      "click",
+      () => {
 
-      const url =
-        button.dataset.go;
+        const url =
+          button.dataset.go;
 
-      if(url){
-        window.location.href = url;
+        if(url){
+
+          window.location.href =
+            url;
+
+        }
+
       }
-
-    });
+    );
 
   });
 
@@ -1648,30 +2359,39 @@ document
    PHOTO COUNT
 ============================================================ */
 
-photosInput.addEventListener("change",() => {
+photosInput.addEventListener(
+  "change",
+  () => {
 
-  const files =
-    Array.from(photosInput.files || []);
+    const files =
+      Array.from(
+        photosInput.files || []
+      );
 
-  const count =
-    files.length;
+    const count =
+      files.length;
 
-  if(!count){
+    if(!count){
 
-    photoCount.style.display = "none";
-    photoCount.textContent = "";
+      photoCount.style.display =
+        "none";
 
-    return;
+      photoCount.textContent =
+        "";
+
+      return;
+    }
+
+    photoCount.textContent =
+      count === 1
+        ? "تم اختيار صورة واحدة"
+        : `تم اختيار ${count} صور`;
+
+    photoCount.style.display =
+      "block";
+
   }
-
-  photoCount.textContent =
-    count === 1
-      ? "تم اختيار صورة واحدة"
-      : `تم اختيار ${count} صور`;
-
-  photoCount.style.display = "block";
-
-});
+);
 
 
 /* ============================================================
@@ -1686,7 +2406,10 @@ async function requireLogin(){
   } =
     await supabase.auth.getSession();
 
-  if(error || !data?.session){
+  if(
+    error ||
+    !data?.session
+  ){
 
     window.location.href =
       "index.html?login=1&returnTo=" +
@@ -1704,37 +2427,39 @@ async function requireLogin(){
    IMAGE UPLOAD
 ============================================================
 
-   مهم جداً:
-
-   لا يوجد هنا:
-   - Canvas
-   - Crop
-   - Resize
-   - تغيير أبعاد
-   - تحويل الصورة
-
-   الملف الأصلي نفسه ينرفع إلى Supabase.
-
+   الملف الأصلي نفسه ينرفع.
+   لا يوجد Crop أو Resize أو Canvas.
 ============================================================ */
 
 function getFileExtension(file){
 
   const originalName =
-    file.name?.split(".").pop()?.toLowerCase();
+    file.name
+      ?.split(".")
+      .pop()
+      ?.toLowerCase();
 
   if(
     originalName &&
-    /^[a-z0-9]+$/.test(originalName)
+    /^[a-z0-9]+$/.test(
+      originalName
+    )
   ){
 
     return originalName;
+
   }
 
   const mime =
-    file.type?.split("/").pop()?.toLowerCase();
+    file.type
+      ?.split("/")
+      .pop()
+      ?.toLowerCase();
 
   if(mime === "jpeg"){
+
     return "jpg";
+
   }
 
   return mime || "jpg";
@@ -1747,8 +2472,11 @@ async function uploadDeviceImages(
   files
 ){
 
-  const uploadedPaths = [];
-  const publicUrls = [];
+  const uploadedPaths =
+    [];
+
+  const publicUrls =
+    [];
 
   for(
     let i = 0;
@@ -1760,14 +2488,21 @@ async function uploadDeviceImages(
       files[i];
 
     if(
-      !file.type.startsWith("image/")
+      !file.type.startsWith(
+        "image/"
+      )
     ){
 
-      throw new Error("IMAGE_ONLY");
+      throw new Error(
+        "IMAGE_ONLY"
+      );
+
     }
 
     const extension =
-      getFileExtension(file);
+      getFileExtension(
+        file
+      );
 
     const uniqueName =
       `${Date.now()}-${crypto.randomUUID()}.${extension}`;
@@ -1798,10 +2533,15 @@ async function uploadDeviceImages(
         uploadError
       );
 
-      throw new Error("UPLOAD_FAILED");
+      throw new Error(
+        "UPLOAD_FAILED"
+      );
+
     }
 
-    uploadedPaths.push(path);
+    uploadedPaths.push(
+      path
+    );
 
     const {
       data
@@ -1809,11 +2549,16 @@ async function uploadDeviceImages(
       supabase
         .storage
         .from("device-images")
-        .getPublicUrl(path);
+        .getPublicUrl(
+          path
+        );
 
     if(!data?.publicUrl){
 
-      throw new Error("URL_FAILED");
+      throw new Error(
+        "URL_FAILED"
+      );
+
     }
 
     publicUrls.push(
@@ -1834,10 +2579,14 @@ async function uploadDeviceImages(
    REMOVE UPLOADED IMAGES
 ============================================================ */
 
-async function removeUploadedImages(paths){
+async function removeUploadedImages(
+  paths
+){
 
   if(!paths?.length){
+
     return;
+
   }
 
   try{
@@ -1845,7 +2594,9 @@ async function removeUploadedImages(paths){
     await supabase
       .storage
       .from("device-images")
-      .remove(paths);
+      .remove(
+        paths
+      );
 
   }catch(error){
 
@@ -1869,8 +2620,15 @@ async function saveDevice(){
     await requireLogin();
 
   if(!user){
+
     return;
+
   }
+
+
+  /* =========================
+     BASIC DATA
+  ========================= */
 
   const brand =
     brandInput.value.trim();
@@ -1890,12 +2648,19 @@ async function saveDevice(){
       .value
       .trim();
 
+
+  /* =========================
+     CONDITION
+  ========================= */
+
   const isApple =
     brand === "Apple";
 
   const battery =
     isApple
-      ? Number(batteryInput.value)
+      ? Number(
+          batteryInput.value
+        )
       : null;
 
   const bodyCondition =
@@ -1928,11 +2693,38 @@ async function saveDevice(){
         'input[name="charging"]:checked'
       )?.value || "";
 
+
+  /* =========================
+     REPLACED PARTS
+  ========================= */
+
   const replacedParts =
-    document
-      .querySelector(
+    Array.from(
+      document.querySelectorAll(
         'input[name="replaced_parts"]:checked'
-      )?.value || "";
+      )
+    )
+    .map(
+      input => input.value
+    );
+
+
+  /*
+   * نحول الاختيارات المتعددة
+   * إلى نص واحد متوافق مع
+   * الحقل الحالي في قاعدة البيانات.
+   *
+   * مثال:
+   * البطارية، الشاشة، منفذ الشحن
+   */
+
+  const replacedPartsValue =
+    replacedParts.join("، ");
+
+
+  /* =========================
+     PRICE
+  ========================= */
 
   const price =
     Number(
@@ -1941,11 +2733,21 @@ async function saveDevice(){
         .value
     );
 
+
+  /* =========================
+     NOTES
+  ========================= */
+
   const notes =
     document
       .getElementById("notes")
       .value
       .trim();
+
+
+  /* =========================
+     PHOTOS
+  ========================= */
 
   const photos =
     Array.from(
@@ -1953,32 +2755,60 @@ async function saveDevice(){
     );
 
 
-  /* VALIDATION */
+  /* ============================================================
+     VALIDATION
+  ============================================================ */
 
   if(!brand){
-    showToast("اختار شركة الجهاز");
+
+    showToast(
+      "اختار شركة الجهاز"
+    );
+
     return;
+
   }
+
 
   if(!model){
-    showToast("اختار موديل الجهاز");
+
+    showToast(
+      "اختار موديل الجهاز"
+    );
+
     return;
+
   }
+
 
   if(!storage){
-    showToast("اختار سعة الجهاز");
+
+    showToast(
+      "اختار سعة الجهاز"
+    );
+
     return;
+
   }
 
+
   if(!color){
-    showToast("اكتب لون الجهاز");
+
+    showToast(
+      "اكتب لون الجهاز"
+    );
+
     return;
+
   }
+
 
   if(isApple){
 
     if(
-      !Number.isInteger(battery) ||
+      !Number.isInteger(
+        battery
+      ) ||
       battery < 1 ||
       battery > 100
     ){
@@ -1988,52 +2818,92 @@ async function saveDevice(){
       );
 
       return;
+
     }
 
   }
 
+
   if(!bodyCondition){
-    showToast("اختار حالة الهيكل");
+
+    showToast(
+      "اختار حالة الهيكل"
+    );
+
     return;
+
   }
+
 
   if(!screenCondition){
-    showToast("اختار حالة الشاشة");
+
+    showToast(
+      "اختار حالة الشاشة"
+    );
+
     return;
+
   }
+
 
   if(!faceId){
-    showToast("اختار حالة Face ID أو البصمة");
+
+    showToast(
+      "اختار حالة Face ID أو البصمة"
+    );
+
     return;
+
   }
+
 
   if(!cameras){
-    showToast("اختار حالة الكاميرات");
+
+    showToast(
+      "اختار حالة الكاميرات"
+    );
+
     return;
+
   }
+
 
   if(!charging){
-    showToast("اختار حالة الشحن");
+
+    showToast(
+      "اختار حالة الشحن"
+    );
+
     return;
+
   }
 
-  if(!replacedParts){
-    showToast("اختار القطع المبدلة");
+
+  if(!replacedParts.length){
+
+    showToast(
+      "حدد إذا كانت توجد قطع مبدلة أو اختر لا توجد"
+    );
+
     return;
+
   }
+
 
   if(
     !Number.isInteger(price) ||
-    price < 50000 ||
+    price < 1000 ||
     price > 10000000
   ){
 
     showToast(
-      "السعر لازم يكون بين 50,000 و 10,000,000 د.ع"
+      "أدخل سعراً صحيحاً بين 1,000 و 10,000,000 د.ع"
     );
 
     return;
+
   }
+
 
   if(price % 1000 !== 0){
 
@@ -2042,7 +2912,9 @@ async function saveDevice(){
     );
 
     return;
+
   }
+
 
   if(photos.length === 0){
 
@@ -2051,7 +2923,9 @@ async function saveDevice(){
     );
 
     return;
+
   }
+
 
   if(photos.length > 10){
 
@@ -2060,7 +2934,9 @@ async function saveDevice(){
     );
 
     return;
+
   }
+
 
   if(notes.length > 300){
 
@@ -2069,12 +2945,16 @@ async function saveDevice(){
     );
 
     return;
+
   }
 
 
-  /* SUBMIT */
+  /* ============================================================
+     SUBMIT
+  ============================================================ */
 
-  submitBtn.disabled = true;
+  submitBtn.disabled =
+    true;
 
   submitBtn.textContent =
     "جاري رفع الصور...";
@@ -2088,14 +2968,15 @@ async function saveDevice(){
     user.user_metadata?.phone ||
     "";
 
-  let uploadedPaths = [];
+  let uploadedPaths =
+    [];
 
 
   try{
 
-    /*
-     * رفع الصور الأصلية مباشرة
-     */
+    /* =========================
+       UPLOAD IMAGES
+    ========================= */
 
     const uploadResult =
       await uploadDeviceImages(
@@ -2116,9 +2997,9 @@ async function saveDevice(){
       "جاري نشر الجهاز...";
 
 
-    /*
-     * حفظ الجهاز
-     */
+    /* =========================
+       INSERT DEVICE
+    ========================= */
 
     const {
       data,
@@ -2162,7 +3043,7 @@ async function saveDevice(){
             charging,
 
           replaced_parts:
-            replacedParts,
+            replacedPartsValue,
 
           price:
             price,
@@ -2193,6 +3074,10 @@ async function saveDevice(){
         .single();
 
 
+    /* =========================
+       INSERT ERROR
+    ========================= */
+
     if(error){
 
       console.error(
@@ -2208,14 +3093,20 @@ async function saveDevice(){
         "ما قدرنا نحفظ الجهاز حالياً"
       );
 
-      submitBtn.disabled = false;
+      submitBtn.disabled =
+        false;
 
       submitBtn.textContent =
         "نشر الجهاز";
 
       return;
+
     }
 
+
+    /* =========================
+       SUCCESS
+    ========================= */
 
     showToast(
       "تم نشر الجهاز بنجاح"
@@ -2226,7 +3117,9 @@ async function saveDevice(){
 
       window.location.href =
         "device.html?id=" +
-        encodeURIComponent(data.id);
+        encodeURIComponent(
+          data.id
+        );
 
     },900);
 
@@ -2238,19 +3131,24 @@ async function saveDevice(){
       error
     );
 
+
     await removeUploadedImages(
       uploadedPaths
     );
 
 
-    if(error.message === "IMAGE_ONLY"){
+    if(
+      error.message ===
+      "IMAGE_ONLY"
+    ){
 
       showToast(
         "كل الملفات لازم تكون صور"
       );
 
     }else if(
-      error.message === "UPLOAD_FAILED"
+      error.message ===
+      "UPLOAD_FAILED"
     ){
 
       showToast(
@@ -2258,7 +3156,8 @@ async function saveDevice(){
       );
 
     }else if(
-      error.message === "URL_FAILED"
+      error.message ===
+      "URL_FAILED"
     ){
 
       showToast(
@@ -2274,7 +3173,8 @@ async function saveDevice(){
     }
 
 
-    submitBtn.disabled = false;
+    submitBtn.disabled =
+      false;
 
     submitBtn.textContent =
       "نشر الجهاز";
