@@ -1200,9 +1200,7 @@ button{
 
 <body>
 
-
 <main class="page">
-
 
 <header class="header">
 
@@ -1271,9 +1269,7 @@ button{
 
       <div class="header-title">
 
-        <h1>
-          المفضلة
-        </h1>
+        <h1>المفضلة</h1>
 
         <p>
           الأجهزة التي حفظتها للرجوع إليها لاحقاً
@@ -1357,7 +1353,6 @@ button{
   </button>
 
 </section>
-
 
 </main>
 
@@ -1497,8 +1492,8 @@ button{
 
 
 <div
-class="toast"
-id="toast">
+  class="toast"
+  id="toast">
 </div>
 
 
@@ -1563,9 +1558,15 @@ function getFavoriteIds(){
       return [];
     }
 
-    return parsed
-      .map(String)
-      .filter(Boolean);
+    return [
+      ...new Set(
+        parsed
+          .map(
+            id => String(id).trim()
+          )
+          .filter(Boolean)
+      )
+    ];
 
   }catch(error){
 
@@ -1588,9 +1589,15 @@ function saveFavoriteIds(ids){
     localStorage.setItem(
       FAVORITES_KEY,
       JSON.stringify(
-        [...new Set(
-          ids.map(String)
-        )]
+        [
+          ...new Set(
+            ids
+              .map(
+                id => String(id).trim()
+              )
+              .filter(Boolean)
+          )
+        ]
       )
     );
 
@@ -1708,7 +1715,7 @@ function showToast(message){
         );
 
       },
-      2000
+      2200
     );
 
 }
@@ -1803,9 +1810,7 @@ function createDeviceCard(
     `${Math.min(index * .04,.35)}s`;
 
 
-  /* -------------------------
-     PHOTO
-  ------------------------- */
+  /* PHOTO */
 
   const photo =
     document.createElement("div");
@@ -1883,9 +1888,7 @@ function createDeviceCard(
   }
 
 
-  /* -------------------------
-     REMOVE
-  ------------------------- */
+  /* REMOVE */
 
   const removeButton =
     document.createElement("button");
@@ -1922,7 +1925,7 @@ function createDeviceCard(
 
   removeButton.addEventListener(
     "click",
-    async event => {
+    event => {
 
       event.stopPropagation();
 
@@ -1939,9 +1942,7 @@ function createDeviceCard(
   );
 
 
-  /* -------------------------
-     SALE TYPE
-  ------------------------- */
+  /* SALE TYPE */
 
   const saleType =
     document.createElement("span");
@@ -1960,9 +1961,7 @@ function createDeviceCard(
   );
 
 
-  /* -------------------------
-     INFO
-  ------------------------- */
+  /* INFO */
 
   const info =
     document.createElement("div");
@@ -1994,14 +1993,20 @@ function createDeviceCard(
     "device-details";
 
 
-  const storage =
-    device.storage ||
-    "غير محدد";
+  details.appendChild(
+    createDetailItem(
+      "التخزين",
+      device.storage || "غير محدد"
+    )
+  );
 
 
-  const color =
-    device.color ||
-    "غير محدد";
+  details.appendChild(
+    createDetailItem(
+      "اللون",
+      device.color || "غير محدد"
+    )
+  );
 
 
   let battery =
@@ -2019,20 +2024,6 @@ function createDeviceCard(
 
   }
 
-
-  details.appendChild(
-    createDetailItem(
-      "التخزين",
-      storage
-    )
-  );
-
-  details.appendChild(
-    createDetailItem(
-      "اللون",
-      color
-    )
-  );
 
   details.appendChild(
     createDetailItem(
@@ -2102,10 +2093,6 @@ function createDeviceCard(
   );
 
 
-  /* -------------------------
-     OPEN DEVICE
-  ------------------------- */
-
   card.addEventListener(
     "click",
     () => {
@@ -2130,9 +2117,7 @@ function createDeviceCard(
    SALE TYPE
 ===================================================== */
 
-function normalizeSaleType(
-  value
-){
+function normalizeSaleType(value){
 
   const type =
     String(
@@ -2157,6 +2142,97 @@ function normalizeSaleType(
 
 
 /* =====================================================
+   CLEAR CARDS
+===================================================== */
+
+function clearCards(){
+
+  devicesGrid
+    .querySelectorAll(
+      ".device-card"
+    )
+    .forEach(
+      card => card.remove()
+    );
+
+}
+
+
+/* =====================================================
+   LOAD ONE FAVORITE
+   الطريقة الجديدة:
+   كل ID ينفحص بشكل مستقل
+===================================================== */
+
+async function loadOneFavorite(id){
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabase
+        .from("devices")
+        .select(`
+          id,
+          created_at,
+          brand,
+          model,
+          storage,
+          color,
+          battery_health,
+          condition,
+          body_condition,
+          screen_condition,
+          face_id,
+          cameras,
+          charging,
+          replaced_parts,
+          price,
+          location,
+          sale_type,
+          seller_id,
+          seller_name,
+          images,
+          notes
+        `)
+        .eq(
+          "id",
+          id
+        )
+        .maybeSingle();
+
+
+    if(error){
+
+      console.error(
+        `Favorite device ${id} error:`,
+        error
+      );
+
+      return null;
+
+    }
+
+
+    return data || null;
+
+  }catch(error){
+
+    console.error(
+      `Favorite device ${id} exception:`,
+      error
+    );
+
+    return null;
+
+  }
+
+}
+
+
+/* =====================================================
    LOAD FAVORITES
 ===================================================== */
 
@@ -2164,20 +2240,16 @@ async function loadFavorites(){
 
   showLoading();
 
+  clearCards();
+
 
   const favoriteIds =
     getFavoriteIds();
 
 
-  if(!favoriteIds.length){
+  /* لا توجد مفضلة */
 
-    devicesGrid
-      .querySelectorAll(
-        ".device-card"
-      )
-      .forEach(
-        card => card.remove()
-      );
+  if(!favoriteIds.length){
 
     hideLoading();
 
@@ -2192,89 +2264,34 @@ async function loadFavorites(){
   }
 
 
-  const {
-    data,
-    error
-  } =
-    await supabase
-      .from("devices")
-      .select(`
-        id,
-        created_at,
-        brand,
-        model,
-        storage,
-        color,
-        battery_health,
-        condition,
-        body_condition,
-        screen_condition,
-        face_id,
-        cameras,
-        charging,
-        replaced_parts,
-        price,
-        location,
-        sale_type,
-        seller_id,
-        seller_name,
-        images,
-        notes
-      `)
-      .in(
-        "id",
-        favoriteIds
-      );
+  /*
+    نجلب كل جهاز محفوظ بشكل مستقل.
+    هذا يلغي الاعتماد على .in()
+  */
 
-
-  if(error){
-
-    console.error(
-      "FAVORITES LOAD ERROR:",
-      error
-    );
-
-    hideLoading();
-
-    devicesGrid
-      .querySelectorAll(
-        ".device-card"
+  const results =
+    await Promise.all(
+      favoriteIds.map(
+        id =>
+          loadOneFavorite(id)
       )
-      .forEach(
-        card => card.remove()
-      );
-
-    emptyState.style.display =
-      "flex";
-
-    headerCount.textContent =
-      "تعذر التحميل";
-
-    showToast(
-      "تعذر تحميل المفضلة"
     );
-
-    return;
-
-  }
-
-
-  const favorites =
-    (data || [])
-      .sort(
-        (a,b) =>
-          favoriteIds.indexOf(
-            String(a.id)
-          ) -
-          favoriteIds.indexOf(
-            String(b.id)
-          )
-      );
 
 
   /*
-    إذا جهاز انحذف من قاعدة البيانات،
-    ننظف رقمه من المفضلة تلقائياً.
+    نحذف النتائج الفارغة
+    ونبقي ترتيب الأجهزة نفس ترتيب الحفظ.
+  */
+
+  const favorites =
+    results.filter(
+      device =>
+        device !== null
+    );
+
+
+  /*
+    IDs الموجودة فعلياً في قاعدة البيانات
   */
 
   const existingIds =
@@ -2285,6 +2302,10 @@ async function loadFavorites(){
       )
     );
 
+
+  /*
+    تنظيف المفضلة من الأجهزة المحذوفة
+  */
 
   const cleanedIds =
     favoriteIds.filter(
@@ -2307,14 +2328,9 @@ async function loadFavorites(){
   }
 
 
-  devicesGrid
-    .querySelectorAll(
-      ".device-card"
-    )
-    .forEach(
-      card => card.remove()
-    );
-
+  /*
+    رسم الأجهزة
+  */
 
   favorites.forEach(
     (device,index) => {
@@ -2333,17 +2349,30 @@ async function loadFavorites(){
   hideLoading();
 
 
+  /*
+    لا توجد أجهزة فعلية
+  */
+
   if(!favorites.length){
 
     emptyState.style.display =
       "flex";
 
-  }else{
+    headerCount.textContent =
+      "0 جهاز";
 
-    emptyState.style.display =
-      "none";
+
+    showToast(
+      "الأجهزة المحفوظة غير متاحة حالياً"
+    );
+
+    return;
 
   }
+
+
+  emptyState.style.display =
+    "none";
 
 
   headerCount.textContent =
@@ -2360,9 +2389,7 @@ async function loadFavorites(){
    REMOVE FAVORITE
 ===================================================== */
 
-function removeFavorite(
-  deviceId
-){
+function removeFavorite(deviceId){
 
   if(
     deviceId === undefined ||
