@@ -19,13 +19,6 @@
   --primary-dark:#125A73;
   --primary-soft:#E8F3F6;
 
-  /* لون بطاقة الجهاز من نفس عائلة الهيدر */
-  --device-bg:#DCECEF;
-  --device-bg-2:#D4E8EC;
-  --device-ink:#173E4A;
-  --device-muted:#52727C;
-  --device-price:#125A73;
-
   --purple:#6F63C9;
   --purple-soft:#EEEAFE;
 
@@ -414,13 +407,13 @@ button{
 .filter{
   flex:0 0 auto;
 
-  height:36px;
+  height:42px;
 
   padding:
     0
-    13px;
+    15px;
 
-  border-radius:11px;
+  border-radius:12px;
 
   background:#fff;
 
@@ -429,7 +422,9 @@ button{
 
   color:#68717A;
 
-  font-size:9px;
+  /* ضعف الحجم السابق */
+  font-size:18px;
+
   font-weight:900;
 
   white-space:nowrap;
@@ -557,7 +552,8 @@ button{
 ===================================================== */
 
 .device-photo{
-  height:160px;
+  /* مساحة أكبر للصورة */
+  height:190px;
 
   background:#fff;
 
@@ -673,35 +669,40 @@ button{
 
 /* =====================================================
    DEVICE INFO
+   نفس لون الهيدر بالضبط
 ===================================================== */
 
 .device-info{
-  min-height:155px;
+
+  min-height:128px;
 
   padding:
-    13px
+    10px
     12px
-    12px;
+    10px;
 
   background:
     linear-gradient(
       145deg,
-      var(--device-bg) 0%,
-      var(--device-bg-2) 100%
+      #FFFFFF 0%,
+      #FAF9FF 48%,
+      #F0EDFF 100%
     );
 
-  color:var(--device-ink);
+  color:#17202A;
 }
 
 
-/* اسم الجهاز */
+/* =====================================================
+   DEVICE NAME
+===================================================== */
 
 .device-name{
   font-size:15px;
 
   font-weight:950;
 
-  line-height:1.35;
+  line-height:1.3;
 
   white-space:nowrap;
 
@@ -714,20 +715,18 @@ button{
 
 
 /* =====================================================
-   DETAILS
+   DEVICE DETAILS
 ===================================================== */
 
 .device-details{
-  margin-top:9px;
+  margin-top:6px;
 
   display:grid;
 
   grid-template-columns:
-    repeat(2,minmax(0,1fr));
+    repeat(3,minmax(0,1fr));
 
-  gap:
-    7px
-    9px;
+  gap:5px 8px;
 }
 
 .detail-item{
@@ -737,19 +736,17 @@ button{
 
   flex-direction:column;
 
-  gap:3px;
+  gap:2px;
 
-  padding:
-    5px
-    0;
+  padding:2px 0;
 }
 
 .detail-item span{
-  color:var(--device-muted);
+  color:#7C858D;
 
-  font-size:8px;
+  font-size:7px;
 
-  line-height:1.25;
+  line-height:1.2;
 
   font-weight:750;
 }
@@ -757,9 +754,9 @@ button{
 .detail-item strong{
   min-width:0;
 
-  color:var(--device-ink);
+  color:#17202A;
 
-  font-size:10px;
+  font-size:9px;
 
   line-height:1.25;
 
@@ -778,25 +775,27 @@ button{
 ===================================================== */
 
 .price-row{
-  margin-top:9px;
+  margin-top:6px;
 
-  padding-top:8px;
+  padding-top:5px;
 
   border-top:
     1px solid
-    rgba(23,62,74,.12);
+    rgba(23,32,42,.09);
 
   display:flex;
 
-  flex-direction:column;
+  align-items:center;
 
-  gap:3px;
+  justify-content:space-between;
+
+  gap:6px;
 }
 
 .price-label{
-  color:var(--device-muted);
+  color:#7C858D;
 
-  font-size:8px;
+  font-size:7px;
 
   line-height:1.2;
 
@@ -804,9 +803,9 @@ button{
 }
 
 .device-price{
-  color:var(--device-price);
+  color:#125A73;
 
-  font-size:15px;
+  font-size:14px;
 
   line-height:1.1;
 
@@ -1114,11 +1113,11 @@ button{
 @media(max-height:700px){
 
   .device-photo{
-    height:145px;
+    height:175px;
   }
 
   .device-info{
-    min-height:150px;
+    min-height:125px;
   }
 
 }
@@ -1126,13 +1125,17 @@ button{
 
 @media(max-width:360px){
 
+  .device-photo{
+    height:180px;
+  }
+
   .device-info{
-    min-height:151px;
+    min-height:126px;
 
     padding:
-      12px
+      9px
       10px
-      11px;
+      9px;
   }
 
   .device-name{
@@ -1148,7 +1151,7 @@ button{
   }
 
   .device-price{
-    font-size:14px;
+    font-size:13px;
   }
 
 }
@@ -1320,64 +1323,124 @@ button{
     class="filters"
     id="filters">
 
-    <button class="filter active" data-brand="all">
+    <button
+      class="filter active"
+      data-brand="all">
+
       الكل
+
     </button>
 
-    <button class="filter" data-brand="Apple">
+    <button
+      class="filter"
+      data-brand="Apple">
+
       iPhone
+
     </button>
 
-    <button class="filter" data-brand="Samsung">
+    <button
+      class="filter"
+      data-brand="Samsung">
+
       Samsung
+
     </button>
 
-    <button class="filter" data-brand="Xiaomi">
+    <button
+      class="filter"
+      data-brand="Xiaomi">
+
       Xiaomi
+
     </button>
 
-    <button class="filter" data-brand="Google">
+    <button
+      class="filter"
+      data-brand="Google">
+
       Google
+
     </button>
 
-    <button class="filter" data-brand="Huawei">
+    <button
+      class="filter"
+      data-brand="Huawei">
+
       Huawei
+
     </button>
 
-    <button class="filter" data-brand="OPPO">
+    <button
+      class="filter"
+      data-brand="OPPO">
+
       OPPO
+
     </button>
 
-    <button class="filter" data-brand="HONOR">
+    <button
+      class="filter"
+      data-brand="HONOR">
+
       HONOR
+
     </button>
 
-    <button class="filter" data-brand="OnePlus">
+    <button
+      class="filter"
+      data-brand="OnePlus">
+
       OnePlus
+
     </button>
 
-    <button class="filter" data-brand="realme">
+    <button
+      class="filter"
+      data-brand="realme">
+
       realme
+
     </button>
 
-    <button class="filter" data-brand="Motorola">
+    <button
+      class="filter"
+      data-brand="Motorola">
+
       Motorola
+
     </button>
 
-    <button class="filter" data-brand="Sony">
+    <button
+      class="filter"
+      data-brand="Sony">
+
       Sony
+
     </button>
 
-    <button class="filter" data-brand="Nokia">
+    <button
+      class="filter"
+      data-brand="Nokia">
+
       Nokia
+
     </button>
 
-    <button class="filter" data-brand="Tecno">
+    <button
+      class="filter"
+      data-brand="Tecno">
+
       Tecno
+
     </button>
 
-    <button class="filter" data-brand="Infinix">
+    <button
+      class="filter"
+      data-brand="Infinix">
+
       Infinix
+
     </button>
 
   </div>
@@ -1925,7 +1988,6 @@ function normalizeDevice(device){
       device.storage,
       device.color,
       device.battery_health,
-      device.charging,
       device.condition,
       device.body_condition,
       device.screen_condition,
@@ -2273,6 +2335,7 @@ function createDeviceCard(
 
   /* =================================================
      تفاصيل الجهاز
+     التخزين + اللون + البطارية فقط
   ================================================= */
 
   const details =
@@ -2307,11 +2370,6 @@ function createDeviceCard(
   }
 
 
-  const charging =
-    device.charging ||
-    "غير محدد";
-
-
   details.appendChild(
     createDetailItem(
       "التخزين",
@@ -2330,13 +2388,6 @@ function createDeviceCard(
     createDetailItem(
       "البطارية",
       battery
-    )
-  );
-
-  details.appendChild(
-    createDetailItem(
-      "الشحن",
-      charging
     )
   );
 
