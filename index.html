@@ -2,6 +2,7 @@
 <html lang="ar" dir="rtl">
 
 <head>
+
   <meta charset="UTF-8">
 
   <meta
@@ -45,18 +46,68 @@
 
   <link
     rel="manifest"
-    href="./manifest.json"
+    href="/manifest.json"
   >
 
   <title>MZAD PHONE - تسجيل الدخول</title>
 
 
-  <!--
-    إذا تم فتح index.html مباشرة بدون:
-    login=1
-    أو returnTo
-    نعتبره دخول للموقع الرئيسي ونذهب إلى home.html
-  -->
+  <!-- =========================
+       PWA SERVICE WORKER
+       يجب أن يعمل قبل التحويل
+  ========================== -->
+
+  <script>
+    (function () {
+
+      if (!("serviceWorker" in navigator)) {
+        return;
+      }
+
+      window.addEventListener(
+        "load",
+        function () {
+
+          navigator.serviceWorker
+            .register(
+              "/sw.js",
+              {
+                scope: "/"
+              }
+            )
+            .then(
+              function (registration) {
+
+                console.log(
+                  "MZAD PHONE PWA SERVICE WORKER REGISTERED:",
+                  registration.scope
+                );
+
+                registration.update();
+
+              }
+            )
+            .catch(
+              function (error) {
+
+                console.warn(
+                  "MZAD PHONE PWA SERVICE WORKER ERROR:",
+                  error
+                );
+
+              }
+            );
+
+        }
+      );
+
+    })();
+  </script>
+
+
+  <!-- =========================
+       تحويل الدخول
+  ========================== -->
 
   <script>
     (function () {
@@ -87,6 +138,10 @@
     })();
   </script>
 
+
+  <!-- =========================
+       FONT
+  ========================== -->
 
   <link
     href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
@@ -1055,52 +1110,6 @@
     import {
       supabase
     } from "./js/supabase.js";
-
-
-    /* =========================
-       PWA SERVICE WORKER
-       ========================== */
-
-    if (
-      "serviceWorker" in navigator
-    ) {
-
-      window.addEventListener(
-        "load",
-        () => {
-
-          navigator.serviceWorker
-            .register(
-              "./sw.js",
-              {
-                scope: "./"
-              }
-            )
-            .then(
-              registration => {
-
-                console.log(
-                  "PWA SERVICE WORKER REGISTERED:",
-                  registration.scope
-                );
-
-              }
-            )
-            .catch(
-              error => {
-
-                console.warn(
-                  "PWA SERVICE WORKER NOT AVAILABLE YET:",
-                  error
-                );
-
-              }
-            );
-
-        }
-      );
-
-    }
 
 
     /* =========================
