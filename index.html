@@ -3,10 +3,53 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="format-detection" content="telephone=no,email=no,address=no">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="format-detection"
+    content="telephone=no,email=no,address=no"
+  >
+
+  <!-- =========================
+       PWA
+  ========================== -->
+
+  <meta
+    name="theme-color"
+    content="#176B87"
+  >
+
+  <meta
+    name="mobile-web-app-capable"
+    content="yes"
+  >
+
+  <meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+  >
+
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="default"
+  >
+
+  <meta
+    name="apple-mobile-web-app-title"
+    content="MZAD PHONE"
+  >
+
+  <link
+    rel="manifest"
+    href="./manifest.json"
+  >
 
   <title>MZAD PHONE - تسجيل الدخول</title>
+
 
   <!--
     إذا تم فتح index.html مباشرة بدون:
@@ -14,58 +57,105 @@
     أو returnTo
     نعتبره دخول للموقع الرئيسي ونذهب إلى home.html
   -->
+
   <script>
     (function () {
-      const params = new URLSearchParams(window.location.search);
 
-      const hasReturnTo = !!params.get("returnTo");
-      const explicitLogin = params.get("login") === "1";
+      const params =
+        new URLSearchParams(
+          window.location.search
+        );
 
-      if (!hasReturnTo && !explicitLogin) {
-        window.location.replace("home.html");
+      const hasReturnTo =
+        !!params.get("returnTo");
+
+      const explicitLogin =
+        params.get("login") === "1";
+
+
+      if (
+        !hasReturnTo &&
+        !explicitLogin
+      ) {
+
+        window.location.replace(
+          "home.html"
+        );
+
       }
+
     })();
   </script>
+
 
   <link
     href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
   >
 
+
   <style>
+
     :root {
+
       --primary: #2495a0;
       --primary-dark: #197984;
+
       --dark: #172124;
       --muted: #7d898c;
+
       --border: #e1e7e8;
       --surface: #f7f9f9;
+
       --error: #c9684e;
+
     }
+
 
     * {
       box-sizing: border-box;
     }
 
+
     html,
     body {
+
       margin: 0;
       min-height: 100%;
+
     }
 
-    body {
-      min-height: 100vh;
-      padding: 22px 17px 28px;
 
-      font-family: "Cairo", sans-serif;
-      color: var(--dark);
+    body {
+
+      min-height: 100vh;
+
+      padding:
+        22px
+        17px
+        28px;
+
+      font-family:
+        "Cairo",
+        sans-serif;
+
+      color:
+        var(--dark);
+
 
       background:
+
         radial-gradient(
           circle at 100% 0%,
-          rgba(36, 149, 160, 0.08),
+          rgba(
+            36,
+            149,
+            160,
+            0.08
+          ),
           transparent 28%
         ),
+
         linear-gradient(
           145deg,
           #f8fbfb,
@@ -73,344 +163,740 @@
           #f6f9f9
         );
 
+
       overflow-x: hidden;
+
     }
+
 
     .page {
+
       width: 100%;
+
       max-width: 400px;
-      margin: 0 auto;
+
+      margin:
+        0 auto;
+
     }
+
 
     .brand {
+
       text-align: center;
-      margin: 8px 0 25px;
+
+      margin:
+        8px
+        0
+        25px;
+
 
       opacity: 0;
-      transform: translateY(-10px);
-      animation: enter 0.6s ease forwards;
+
+      transform:
+        translateY(-10px);
+
+      animation:
+        enter
+        0.6s
+        ease
+        forwards;
+
     }
+
 
     .brand-main {
-      font-family: Arial, sans-serif;
-      font-size: 40px;
-      line-height: 1;
-      font-weight: 900;
-      letter-spacing: -2px;
+
+      font-family:
+        Arial,
+        sans-serif;
+
+      font-size:
+        40px;
+
+      line-height:
+        1;
+
+      font-weight:
+        900;
+
+      letter-spacing:
+        -2px;
+
     }
+
 
     .brand-main span {
-      color: var(--primary);
+
+      color:
+        var(--primary);
+
     }
+
 
     .brand-sub {
-      margin-top: 5px;
 
-      font-family: Arial, sans-serif;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 5px;
+      margin-top:
+        5px;
 
-      color: var(--muted);
-      direction: ltr;
+      font-family:
+        Arial,
+        sans-serif;
+
+      font-size:
+        11px;
+
+      font-weight:
+        800;
+
+      letter-spacing:
+        5px;
+
+      color:
+        var(--muted);
+
+      direction:
+        ltr;
+
     }
+
 
     .heading {
-      margin-bottom: 19px;
 
-      opacity: 0;
-      transform: translateY(10px);
-      animation: enter 0.6s ease 0.08s forwards;
+      margin-bottom:
+        19px;
+
+      opacity:
+        0;
+
+      transform:
+        translateY(10px);
+
+      animation:
+        enter
+        0.6s
+        ease
+        0.08s
+        forwards;
+
     }
+
 
     .heading h1 {
-      margin: 0;
 
-      font-size: 27px;
-      line-height: 1.35;
-      font-weight: 800;
+      margin:
+        0;
+
+      font-size:
+        27px;
+
+      line-height:
+        1.35;
+
+      font-weight:
+        800;
+
     }
+
 
     .heading p {
-      margin: 5px 0 0;
 
-      font-size: 13px;
-      color: var(--muted);
-      font-weight: 500;
+      margin:
+        5px
+        0
+        0;
+
+      font-size:
+        13px;
+
+      color:
+        var(--muted);
+
+      font-weight:
+        500;
+
     }
+
 
     .card {
-      padding: 22px 20px 21px;
 
-      background: rgba(255, 255, 255, 0.97);
+      padding:
+        22px
+        20px
+        21px;
 
-      border: 1px solid #e5eaeb;
-      border-radius: 27px;
+      background:
+        rgba(
+          255,
+          255,
+          255,
+          0.97
+        );
+
+      border:
+        1px solid
+        #e5eaeb;
+
+      border-radius:
+        27px;
 
       box-shadow:
-        0 16px 42px rgba(23, 33, 36, 0.065),
-        0 2px 8px rgba(23, 33, 36, 0.025);
 
-      opacity: 0;
-      transform: translateY(12px);
-      animation: enter 0.65s ease 0.16s forwards;
+        0 16px 42px
+        rgba(
+          23,
+          33,
+          36,
+          0.065
+        ),
+
+        0 2px 8px
+        rgba(
+          23,
+          33,
+          36,
+          0.025
+        );
+
+
+      opacity:
+        0;
+
+      transform:
+        translateY(12px);
+
+      animation:
+        enter
+        0.65s
+        ease
+        0.16s
+        forwards;
+
     }
+
 
     .field-group {
-      margin-bottom: 15px;
+
+      margin-bottom:
+        15px;
+
     }
+
 
     .field-label {
-      display: block;
 
-      margin: 0 0 6px;
-      padding-right: 2px;
+      display:
+        block;
 
-      font-size: 12.5px;
-      font-weight: 700;
+      margin:
+        0
+        0
+        6px;
 
-      color: #465356;
+      padding-right:
+        2px;
+
+      font-size:
+        12.5px;
+
+      font-weight:
+        700;
+
+      color:
+        #465356;
+
     }
+
 
     .input-wrap {
-      position: relative;
+
+      position:
+        relative;
+
     }
+
 
     .input {
-      width: 100%;
-      height: 54px;
 
-      border: 1.5px solid var(--border);
-      border-radius: 16px;
+      width:
+        100%;
 
-      background: var(--surface);
-      color: var(--dark);
+      height:
+        54px;
 
-      padding: 0 15px;
+      border:
+        1.5px solid
+        var(--border);
 
-      font-family: "Cairo", sans-serif;
-      font-size: 15px;
+      border-radius:
+        16px;
 
-      outline: none;
+      background:
+        var(--surface);
+
+      color:
+        var(--dark);
+
+      padding:
+        0
+        15px;
+
+      font-family:
+        "Cairo",
+        sans-serif;
+
+      font-size:
+        15px;
+
+      outline:
+        none;
+
 
       transition:
-        border-color 0.18s ease,
-        box-shadow 0.18s ease,
-        background 0.18s ease;
+
+        border-color
+        0.18s
+        ease,
+
+        box-shadow
+        0.18s
+        ease,
+
+        background
+        0.18s
+        ease;
+
     }
+
 
     .input:focus {
-      background: #fff;
 
-      border-color: var(--primary);
+      background:
+        #fff;
+
+      border-color:
+        var(--primary);
 
       box-shadow:
-        0 0 0 3px rgba(36, 149, 160, 0.08);
+
+        0 0 0 3px
+        rgba(
+          36,
+          149,
+          160,
+          0.08
+        );
+
     }
+
 
     .input.invalid {
-      border-color: var(--error);
+
+      border-color:
+        var(--error);
 
       box-shadow:
-        0 0 0 3px rgba(201, 104, 78, 0.06);
+
+        0 0 0 3px
+        rgba(
+          201,
+          104,
+          78,
+          0.06
+        );
+
     }
+
 
     .email-input {
-      direction: ltr;
-      text-align: left;
+
+      direction:
+        ltr;
+
+      text-align:
+        left;
+
     }
+
 
     .password-input {
-      direction: ltr;
-      text-align: left;
-      padding-left: 58px;
+
+      direction:
+        ltr;
+
+      text-align:
+        left;
+
+      padding-left:
+        58px;
+
     }
+
 
     .toggle-password {
-      position: absolute;
 
-      left: 11px;
-      top: 50%;
+      position:
+        absolute;
 
-      transform: translateY(-50%);
+      left:
+        11px;
 
-      border: 0;
-      background: transparent;
+      top:
+        50%;
 
-      padding: 6px;
+      transform:
+        translateY(-50%);
 
-      color: #8b9699;
+      border:
+        0;
 
-      font-family: "Cairo", sans-serif;
-      font-size: 11px;
-      font-weight: 700;
+      background:
+        transparent;
 
-      cursor: pointer;
+      padding:
+        6px;
+
+      color:
+        #8b9699;
+
+      font-family:
+        "Cairo",
+        sans-serif;
+
+      font-size:
+        11px;
+
+      font-weight:
+        700;
+
+      cursor:
+        pointer;
+
     }
+
 
     .field-error {
-      display: none;
 
-      margin-top: 6px;
-      padding-right: 3px;
+      display:
+        none;
 
-      color: var(--error);
+      margin-top:
+        6px;
 
-      font-size: 11px;
-      font-weight: 600;
+      padding-right:
+        3px;
 
-      line-height: 1.5;
+      color:
+        var(--error);
+
+      font-size:
+        11px;
+
+      font-weight:
+        600;
+
+      line-height:
+        1.5;
+
     }
+
 
     .field-error.show {
-      display: block;
+
+      display:
+        block;
+
     }
+
 
     .forgot {
-      display: block;
 
-      margin-top: -4px;
-      margin-bottom: 16px;
+      display:
+        block;
 
-      color: var(--primary-dark);
+      margin-top:
+        -4px;
 
-      text-decoration: none;
+      margin-bottom:
+        16px;
 
-      font-size: 12px;
-      font-weight: 700;
+      color:
+        var(--primary-dark);
+
+      text-decoration:
+        none;
+
+      font-size:
+        12px;
+
+      font-weight:
+        700;
+
     }
+
 
     .login-btn {
-      width: 100%;
-      height: 57px;
 
-      border: 0;
-      border-radius: 17px;
+      width:
+        100%;
 
-      background: var(--primary);
-      color: #fff;
+      height:
+        57px;
 
-      font-family: "Cairo", sans-serif;
-      font-size: 15.5px;
-      font-weight: 800;
+      border:
+        0;
 
-      cursor: pointer;
+      border-radius:
+        17px;
+
+      background:
+        var(--primary);
+
+      color:
+        #fff;
+
+      font-family:
+        "Cairo",
+        sans-serif;
+
+      font-size:
+        15.5px;
+
+      font-weight:
+        800;
+
+      cursor:
+        pointer;
 
       box-shadow:
-        0 9px 20px rgba(36, 149, 160, 0.18);
+
+        0 9px 20px
+        rgba(
+          36,
+          149,
+          160,
+          0.18
+        );
+
 
       transition:
-        transform 0.18s ease,
-        background 0.18s ease;
+
+        transform
+        0.18s
+        ease,
+
+        background
+        0.18s
+        ease;
+
     }
+
 
     .login-btn:active {
-      transform: scale(0.985);
+
+      transform:
+        scale(0.985);
+
     }
+
 
     .login-btn:hover {
-      background: var(--primary-dark);
+
+      background:
+        var(--primary-dark);
+
     }
+
 
     .login-btn:disabled {
-      opacity: 0.65;
-      cursor: not-allowed;
+
+      opacity:
+        0.65;
+
+      cursor:
+        not-allowed;
+
     }
+
 
     .message {
-      margin-top: 10px;
 
-      text-align: center;
+      margin-top:
+        10px;
 
-      font-size: 11.5px;
-      font-weight: 600;
+      text-align:
+        center;
 
-      color: var(--error);
+      font-size:
+        11.5px;
 
-      line-height: 1.7;
+      font-weight:
+        600;
 
-      word-break: break-word;
+      color:
+        var(--error);
+
+      line-height:
+        1.7;
+
+      word-break:
+        break-word;
+
     }
+
 
     .message.success {
-      color: var(--primary-dark);
+
+      color:
+        var(--primary-dark);
+
     }
+
 
     .signup-link {
-      display: block;
 
-      margin-top: 17px;
+      display:
+        block;
 
-      text-align: center;
+      margin-top:
+        17px;
 
-      color: var(--primary-dark);
+      text-align:
+        center;
 
-      text-decoration: none;
+      color:
+        var(--primary-dark);
 
-      font-size: 13.5px;
-      font-weight: 700;
+      text-decoration:
+        none;
 
-      opacity: 0;
-      animation: enter 0.6s ease 0.28s forwards;
+      font-size:
+        13.5px;
+
+      font-weight:
+        700;
+
+
+      opacity:
+        0;
+
+      animation:
+        enter
+        0.6s
+        ease
+        0.28s
+        forwards;
+
     }
+
 
     .note {
-      margin-top: 12px;
 
-      text-align: center;
+      margin-top:
+        12px;
 
-      color: #a0a9ab;
+      text-align:
+        center;
 
-      font-size: 10.5px;
-      line-height: 1.7;
+      color:
+        #a0a9ab;
+
+      font-size:
+        10.5px;
+
+      line-height:
+        1.7;
+
     }
 
+
     @keyframes enter {
+
       from {
-        opacity: 0;
-        transform: translateY(10px);
+
+        opacity:
+          0;
+
+        transform:
+          translateY(10px);
+
       }
 
       to {
-        opacity: 1;
-        transform: translateY(0);
+
+        opacity:
+          1;
+
+        transform:
+          translateY(0);
+
       }
+
     }
+
 
     @media (max-width: 360px) {
 
       body {
-        padding-left: 13px;
-        padding-right: 13px;
+
+        padding-left:
+          13px;
+
+        padding-right:
+          13px;
+
       }
+
 
       .card {
-        padding: 20px 17px;
+
+        padding:
+          20px
+          17px;
+
       }
+
 
       .input {
-        height: 52px;
+
+        height:
+          52px;
+
       }
 
+
       .login-btn {
-        height: 55px;
+
+        height:
+          55px;
+
       }
+
     }
+
   </style>
+
 </head>
+
 
 <body>
 
   <main class="page">
 
+
     <header class="brand">
 
       <div class="brand-main">
+
         MZ<span>AD</span>
+
       </div>
 
+
       <div class="brand-sub">
+
         PHONE
+
       </div>
 
     </header>
@@ -419,11 +905,16 @@
     <section class="heading">
 
       <h1>
+
         تسجيل الدخول
+
       </h1>
 
+
       <p>
+
         سجّل دخولك للوصول إلى حسابك
+
       </p>
 
     </section>
@@ -431,14 +922,18 @@
 
     <section class="card">
 
+
       <div class="field-group">
 
         <label
           class="field-label"
           for="email"
         >
+
           البريد الإلكتروني
+
         </label>
+
 
         <input
           id="email"
@@ -449,6 +944,7 @@
           inputmode="email"
           spellcheck="false"
         >
+
 
         <div
           id="emailError"
@@ -464,10 +960,14 @@
           class="field-label"
           for="password"
         >
+
           كلمة المرور
+
         </label>
 
+
         <div class="input-wrap">
+
 
           <input
             id="password"
@@ -477,15 +977,20 @@
             maxlength="72"
           >
 
+
           <button
             type="button"
             class="toggle-password"
             id="togglePassword"
           >
+
             إظهار
+
           </button>
 
+
         </div>
+
 
         <div
           id="passwordError"
@@ -499,7 +1004,9 @@
         href="forgot.html"
         class="forgot"
       >
+
         نسيت كلمة المرور؟
+
       </a>
 
 
@@ -508,7 +1015,9 @@
         class="login-btn"
         type="button"
       >
+
         تسجيل الدخول
+
       </button>
 
 
@@ -517,6 +1026,7 @@
         class="message"
       ></div>
 
+
     </section>
 
 
@@ -524,20 +1034,73 @@
       href="signup.html"
       class="signup-link"
     >
+
       ليس لديك حساب؟ إنشاء حساب
+
     </a>
 
 
     <div class="note">
+
       تسجيل الدخول يتم بشكل آمن عبر حسابك.
+
     </div>
+
 
   </main>
 
 
   <script type="module">
 
-    import { supabase } from "./js/supabase.js";
+    import {
+      supabase
+    } from "./js/supabase.js";
+
+
+    /* =========================
+       PWA SERVICE WORKER
+       ========================== */
+
+    if (
+      "serviceWorker" in navigator
+    ) {
+
+      window.addEventListener(
+        "load",
+        () => {
+
+          navigator.serviceWorker
+            .register(
+              "./sw.js",
+              {
+                scope: "./"
+              }
+            )
+            .then(
+              registration => {
+
+                console.log(
+                  "PWA SERVICE WORKER REGISTERED:",
+                  registration.scope
+                );
+
+              }
+            )
+            .catch(
+              error => {
+
+                console.warn(
+                  "PWA SERVICE WORKER NOT AVAILABLE YET:",
+                  error
+                );
+
+              }
+            );
+
+        }
+      );
+
+    }
 
 
     /* =========================
@@ -545,25 +1108,45 @@
     ========================== */
 
     const email =
-      document.getElementById("email");
+      document.getElementById(
+        "email"
+      );
+
 
     const password =
-      document.getElementById("password");
+      document.getElementById(
+        "password"
+      );
+
 
     const loginBtn =
-      document.getElementById("loginBtn");
+      document.getElementById(
+        "loginBtn"
+      );
+
 
     const message =
-      document.getElementById("message");
+      document.getElementById(
+        "message"
+      );
+
 
     const emailError =
-      document.getElementById("emailError");
+      document.getElementById(
+        "emailError"
+      );
+
 
     const passwordError =
-      document.getElementById("passwordError");
+      document.getElementById(
+        "passwordError"
+      );
+
 
     const togglePassword =
-      document.getElementById("togglePassword");
+      document.getElementById(
+        "togglePassword"
+      );
 
 
     /* =========================
@@ -577,8 +1160,11 @@
           window.location.search
         );
 
+
       const returnTo =
-        params.get("returnTo");
+        params.get(
+          "returnTo"
+        );
 
 
       if (!returnTo) {
@@ -591,13 +1177,21 @@
       try {
 
         const decoded =
-          decodeURIComponent(returnTo);
+          decodeURIComponent(
+            returnTo
+          );
 
 
         if (
-          decoded.startsWith("http://") ||
-          decoded.startsWith("https://") ||
-          decoded.startsWith("//")
+          decoded.startsWith(
+            "http://"
+          ) ||
+          decoded.startsWith(
+            "https://"
+          ) ||
+          decoded.startsWith(
+            "//"
+          )
         ) {
 
           return "home.html";
@@ -636,36 +1230,72 @@
 
     function clearErrors() {
 
-      email.classList.remove("invalid");
-      password.classList.remove("invalid");
+      email.classList.remove(
+        "invalid"
+      );
 
-      emailError.textContent = "";
-      passwordError.textContent = "";
 
-      emailError.classList.remove("show");
-      passwordError.classList.remove("show");
+      password.classList.remove(
+        "invalid"
+      );
+
+
+      emailError.textContent =
+        "";
+
+
+      passwordError.textContent =
+        "";
+
+
+      emailError.classList.remove(
+        "show"
+      );
+
+
+      passwordError.classList.remove(
+        "show"
+      );
 
     }
 
 
-    function showEmailError(text) {
+    function showEmailError(
+      text
+    ) {
 
-      email.classList.add("invalid");
+      email.classList.add(
+        "invalid"
+      );
 
-      emailError.textContent = text;
 
-      emailError.classList.add("show");
+      emailError.textContent =
+        text;
+
+
+      emailError.classList.add(
+        "show"
+      );
 
     }
 
 
-    function showPasswordError(text) {
+    function showPasswordError(
+      text
+    ) {
 
-      password.classList.add("invalid");
+      password.classList.add(
+        "invalid"
+      );
 
-      passwordError.textContent = text;
 
-      passwordError.classList.add("show");
+      passwordError.textContent =
+        text;
+
+
+      passwordError.classList.add(
+        "show"
+      );
 
     }
 
@@ -678,16 +1308,23 @@
       "click",
       () => {
 
-        if (password.type === "password") {
+        if (
+          password.type ===
+          "password"
+        ) {
 
-          password.type = "text";
+          password.type =
+            "text";
+
 
           togglePassword.textContent =
             "إخفاء";
 
         } else {
 
-          password.type = "password";
+          password.type =
+            "password";
+
 
           togglePassword.textContent =
             "إظهار";
@@ -706,10 +1343,13 @@
 
       clearErrors();
 
+
       let valid = true;
+
 
       const emailValue =
         email.value.trim();
+
 
       const passwordValue =
         password.value;
@@ -720,6 +1360,7 @@
         showEmailError(
           "يرجى إدخال البريد الإلكتروني"
         );
+
 
         valid = false;
 
@@ -733,6 +1374,7 @@
           "يرجى إدخال بريد إلكتروني صحيح"
         );
 
+
         valid = false;
 
       }
@@ -743,6 +1385,7 @@
         showPasswordError(
           "يرجى إدخال كلمة المرور"
         );
+
 
         valid = false;
 
@@ -763,7 +1406,9 @@
       success = false
     ) {
 
-      message.textContent = text;
+      message.textContent =
+        text;
+
 
       message.classList.toggle(
         "success",
@@ -777,15 +1422,25 @@
        ترجمة أخطاء Supabase
     ========================== */
 
-    function getArabicLoginError(error) {
+    function getArabicLoginError(
+      error
+    ) {
 
       console.error(
         "SUPABASE LOGIN ERROR:",
         {
-          message: error?.message,
-          code: error?.code,
-          status: error?.status,
-          name: error?.name
+          message:
+            error?.message,
+
+          code:
+            error?.code,
+
+          status:
+            error?.status,
+
+          name:
+            error?.name
+
         }
       );
 
@@ -822,8 +1477,10 @@
       ) {
 
         return {
+
           message:
             "البريد الإلكتروني أو كلمة المرور غير صحيحة"
+
         };
 
       }
@@ -839,8 +1496,10 @@
       ) {
 
         return {
+
           message:
             "هذا البريد الإلكتروني غير مؤكد"
+
         };
 
       }
@@ -857,8 +1516,10 @@
       ) {
 
         return {
+
           message:
             "محاولات تسجيل الدخول كثيرة. انتظر قليلاً وحاول مرة أخرى."
+
         };
 
       }
@@ -877,16 +1538,20 @@
       ) {
 
         return {
+
           message:
             "تعذر الاتصال بالخادم. تأكد من الإنترنت وحاول مرة أخرى."
+
         };
 
       }
 
 
       return {
+
         message:
           "تعذر تسجيل الدخول. حاول مرة أخرى."
+
       };
 
     }
@@ -898,19 +1563,26 @@
 
     async function login() {
 
-      showMessage("");
+      showMessage(
+        ""
+      );
+
 
       clearErrors();
 
 
-      if (!validateForm()) {
+      if (
+        !validateForm()
+      ) {
 
         return;
 
       }
 
 
-      loginBtn.disabled = true;
+      loginBtn.disabled =
+        true;
+
 
       loginBtn.textContent =
         "جاري تسجيل الدخول...";
@@ -951,7 +1623,9 @@
         if (error) {
 
           const result =
-            getArabicLoginError(error);
+            getArabicLoginError(
+              error
+            );
 
 
           showMessage(
@@ -970,6 +1644,7 @@
             "لم يتم العثور على بيانات المستخدم."
           );
 
+
           return;
 
         }
@@ -980,6 +1655,7 @@
           showMessage(
             "تم التحقق من الحساب ولكن لم يتم إنشاء جلسة دخول."
           );
+
 
           return;
 
@@ -1009,7 +1685,9 @@
         );
 
 
-      } catch (err) {
+      } catch (
+        err
+      ) {
 
         console.error(
           "UNEXPECTED LOGIN ERROR:",
@@ -1021,10 +1699,12 @@
           "حدث خطأ غير متوقع. حاول مرة أخرى."
         );
 
+
       } finally {
 
         loginBtn.disabled =
           false;
+
 
         loginBtn.textContent =
           "تسجيل الدخول";
@@ -1048,7 +1728,10 @@
        Enter
     ========================== */
 
-    [email, password].forEach(
+    [
+      email,
+      password
+    ].forEach(
       input => {
 
         input.addEventListener(
@@ -1056,7 +1739,8 @@
           event => {
 
             if (
-              event.key === "Enter"
+              event.key ===
+              "Enter"
             ) {
 
               login();
@@ -1082,7 +1766,10 @@
           "invalid"
         );
 
-        emailError.textContent = "";
+
+        emailError.textContent =
+          "";
+
 
         emailError.classList.remove(
           "show"
@@ -1104,7 +1791,10 @@
           "invalid"
         );
 
-        passwordError.textContent = "";
+
+        passwordError.textContent =
+          "";
+
 
         passwordError.classList.remove(
           "show"
