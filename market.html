@@ -478,7 +478,6 @@ button{
 
 /* =====================================================
    ACTIVE COMPANY
-   بنفس روح Home — بدون البترولي
 ===================================================== */
 
 .filter.active{
@@ -735,7 +734,6 @@ button{
 
 /* =====================================================
    FAVORITE ACTIVE
-   واضح جداً عند الضغط
 ===================================================== */
 
 .favorite.active{
@@ -1816,6 +1814,10 @@ button{
 import { supabase } from "./js/supabase.js";
 
 
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
 const searchInput =
   document.getElementById("searchInput");
 
@@ -1864,6 +1866,153 @@ const sortBtn =
 const sortLabel =
   document.getElementById("sortLabel");
 
+
+/* =====================================================
+   FAVORITES
+   نفس المفتاح المستخدم في favorites.html
+===================================================== */
+
+const FAVORITES_KEY =
+  "mzad_phone_favorites";
+
+
+function getFavoriteIds(){
+
+  try{
+
+    const raw =
+      localStorage.getItem(
+        FAVORITES_KEY
+      );
+
+    if(!raw){
+      return [];
+    }
+
+    const parsed =
+      JSON.parse(raw);
+
+    if(!Array.isArray(parsed)){
+      return [];
+    }
+
+    return parsed
+      .map(String)
+      .filter(Boolean);
+
+  }catch(error){
+
+    console.error(
+      "FAVORITES READ ERROR:",
+      error
+    );
+
+    return [];
+
+  }
+
+}
+
+
+function saveFavoriteIds(ids){
+
+  try{
+
+    const cleanIds =
+      [...new Set(
+        ids
+          .map(String)
+          .filter(Boolean)
+      )];
+
+    localStorage.setItem(
+      FAVORITES_KEY,
+      JSON.stringify(cleanIds)
+    );
+
+  }catch(error){
+
+    console.error(
+      "FAVORITES SAVE ERROR:",
+      error
+    );
+
+  }
+
+}
+
+
+function isFavorite(deviceId){
+
+  if(
+    deviceId === undefined ||
+    deviceId === null
+  ){
+
+    return false;
+
+  }
+
+  return getFavoriteIds()
+    .includes(
+      String(deviceId)
+    );
+
+}
+
+
+function toggleFavorite(deviceId){
+
+  if(
+    deviceId === undefined ||
+    deviceId === null
+  ){
+
+    return false;
+
+  }
+
+  const id =
+    String(deviceId);
+
+  const currentIds =
+    getFavoriteIds();
+
+  const exists =
+    currentIds.includes(id);
+
+
+  if(exists){
+
+    const nextIds =
+      currentIds.filter(
+        favoriteId =>
+          favoriteId !== id
+      );
+
+    saveFavoriteIds(
+      nextIds
+    );
+
+    return false;
+
+  }
+
+
+  currentIds.push(id);
+
+  saveFavoriteIds(
+    currentIds
+  );
+
+  return true;
+
+}
+
+
+/* =====================================================
+   BRAND CONFIG
+===================================================== */
 
 const brandConfig = {
 
@@ -1945,6 +2094,10 @@ const brandConfig = {
 };
 
 
+/* =====================================================
+   BRAND ALIASES
+===================================================== */
+
 const brandAliases = {
 
   all:"all",
@@ -1981,12 +2134,20 @@ const brandAliases = {
 };
 
 
+/* =====================================================
+   STATE
+===================================================== */
+
 let devices = [];
 
 let selectedBrand = "all";
 
 let sortMode = "newest";
 
+
+/* =====================================================
+   URL
+===================================================== */
 
 const params =
   new URLSearchParams(
@@ -2026,6 +2187,10 @@ function updateURL(){
 }
 
 
+/* =====================================================
+   PRICE
+===================================================== */
+
 function formatPrice(price){
 
   const number =
@@ -2048,6 +2213,10 @@ function formatPrice(price){
 
 }
 
+
+/* =====================================================
+   IMAGES
+===================================================== */
 
 function getDeviceImages(value){
 
@@ -2086,6 +2255,10 @@ function getDeviceImages(value){
 
 }
 
+
+/* =====================================================
+   NORMALIZE
+===================================================== */
 
 function normalizeDevice(device){
 
@@ -2131,6 +2304,10 @@ function normalizeDevice(device){
 
 }
 
+
+/* =====================================================
+   LOAD DEVICES
+===================================================== */
 
 async function loadDevices(){
 
@@ -2209,6 +2386,10 @@ async function loadDevices(){
 }
 
 
+/* =====================================================
+   LOADING
+===================================================== */
+
 function showLoading(){
 
   loadingState.style.display =
@@ -2236,6 +2417,10 @@ function hideLoading(){
 
 }
 
+
+/* =====================================================
+   IMAGE ELEMENT
+===================================================== */
 
 function createImageElement(device){
 
@@ -2311,6 +2496,10 @@ function createImageElement(device){
 }
 
 
+/* =====================================================
+   DETAIL ITEM
+===================================================== */
+
 function createDetailItem(
   label,
   value
@@ -2350,6 +2539,10 @@ function createDetailItem(
 }
 
 
+/* =====================================================
+   DEVICE CARD
+===================================================== */
+
 function createDeviceCard(
   device,
   index
@@ -2375,6 +2568,10 @@ function createDeviceCard(
     createImageElement(device);
 
 
+  /* ===================================================
+     FAVORITE BUTTON
+  =================================================== */
+
   const favorite =
     document.createElement("button");
 
@@ -2388,6 +2585,21 @@ function createDeviceCard(
     "aria-label",
     "المفضلة"
   );
+
+
+  /*
+    إذا الجهاز موجود مسبقاً بالمفضلة
+    نخلي القلب مفعّل من البداية.
+  */
+
+  if(isFavorite(device.id)){
+
+    favorite.classList.add(
+      "active"
+    );
+
+  }
+
 
   favorite.innerHTML = `
 
@@ -2406,23 +2618,42 @@ function createDeviceCard(
 
   `;
 
+
+  /*
+    عند الضغط:
+    - إذا مو محفوظ → ينحفظ
+    - إذا محفوظ → ينحذف
+    - القلب يتغير فوراً
+  */
+
   favorite.addEventListener(
     "click",
     event => {
 
       event.stopPropagation();
 
+      const active =
+        toggleFavorite(
+          device.id
+        );
+
       favorite.classList.toggle(
-        "active"
+        "active",
+        active
       );
 
     }
   );
 
+
   photo.appendChild(
     favorite
   );
 
+
+  /* ===================================================
+     SALE TYPE
+  =================================================== */
 
   const saleType =
     document.createElement("span");
@@ -2439,6 +2670,10 @@ function createDeviceCard(
     saleType
   );
 
+
+  /* ===================================================
+     INFO
+  =================================================== */
 
   const info =
     document.createElement("div");
@@ -2462,6 +2697,10 @@ function createDeviceCard(
     .join(" ") ||
     "جهاز";
 
+
+  /* ===================================================
+     DETAILS
+  =================================================== */
 
   const details =
     document.createElement("div");
@@ -2516,6 +2755,10 @@ function createDeviceCard(
     )
   );
 
+
+  /* ===================================================
+     PRICE
+  =================================================== */
 
   const priceRow =
     document.createElement("div");
@@ -2577,6 +2820,10 @@ function createDeviceCard(
   );
 
 
+  /* ===================================================
+     CARD CLICK
+  =================================================== */
+
   card.addEventListener(
     "click",
     () => {
@@ -2596,6 +2843,10 @@ function createDeviceCard(
 
 }
 
+
+/* =====================================================
+   FILTER
+===================================================== */
 
 function getFilteredDevices(){
 
@@ -2656,6 +2907,10 @@ function getFilteredDevices(){
 }
 
 
+/* =====================================================
+   RENDER
+===================================================== */
+
 function renderDevices(){
 
   const result =
@@ -2700,6 +2955,10 @@ function renderDevices(){
 }
 
 
+/* =====================================================
+   HEADER COUNT
+===================================================== */
+
 function updateHeaderCount(count){
 
   if(count === 0){
@@ -2729,6 +2988,10 @@ function updateHeaderCount(count){
 }
 
 
+/* =====================================================
+   RESULTS TEXT
+===================================================== */
+
 function updateResultsText(count){
 
   if(count === 0){
@@ -2757,6 +3020,10 @@ function updateResultsText(count){
 
 }
 
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
 
 function updateEmptyState(count){
 
@@ -2810,6 +3077,10 @@ function updateEmptyState(count){
 }
 
 
+/* =====================================================
+   APPLY BRAND
+===================================================== */
+
 function applyBrand(){
 
   filters.forEach(
@@ -2836,6 +3107,10 @@ function applyBrand(){
 
 }
 
+
+/* =====================================================
+   BRAND FILTER CLICK
+===================================================== */
 
 filters.forEach(
   filter => {
@@ -2874,6 +3149,10 @@ filters.forEach(
 );
 
 
+/* =====================================================
+   SEARCH
+===================================================== */
+
 searchInput.addEventListener(
   "input",
   () => {
@@ -2883,6 +3162,10 @@ searchInput.addEventListener(
   }
 );
 
+
+/* =====================================================
+   CLEAR SEARCH
+===================================================== */
 
 clearSearch.addEventListener(
   "click",
@@ -2899,6 +3182,10 @@ clearSearch.addEventListener(
 );
 
 
+/* =====================================================
+   SEARCH BUTTON
+===================================================== */
+
 searchFocusBtn.addEventListener(
   "click",
   () => {
@@ -2908,6 +3195,10 @@ searchFocusBtn.addEventListener(
   }
 );
 
+
+/* =====================================================
+   SORT
+===================================================== */
 
 sortBtn.addEventListener(
   "click",
@@ -2945,6 +3236,10 @@ sortBtn.addEventListener(
 );
 
 
+/* =====================================================
+   BACK
+===================================================== */
+
 backBtn.addEventListener(
   "click",
   () => {
@@ -2968,6 +3263,10 @@ backBtn.addEventListener(
   }
 );
 
+
+/* =====================================================
+   BOTTOM NAV
+===================================================== */
 
 document
   .querySelectorAll(".nav-item")
@@ -2994,6 +3293,10 @@ document
     }
   );
 
+
+/* =====================================================
+   START
+===================================================== */
 
 applyBrand();
 
