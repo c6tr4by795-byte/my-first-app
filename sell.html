@@ -2274,10 +2274,6 @@ replacedPartInputs.forEach(input => {
     "change",
     () => {
 
-      /*
-       * لا توجد = اختيار منفرد
-       */
-
       if(input === replacedNoneInput){
 
         if(input.checked){
@@ -2297,12 +2293,6 @@ replacedPartInputs.forEach(input => {
 
         return;
       }
-
-
-      /*
-       * إذا اختار أي قطعة،
-       * نلغي "لا توجد"
-       */
 
       if(input.checked){
 
@@ -2424,14 +2414,332 @@ async function requireLogin(){
 
 
 /* ============================================================
-   IMAGE UPLOAD
+   IMAGE COMPRESSION
 ============================================================
 
-   الملف الأصلي نفسه ينرفع.
-   لا يوجد Crop أو Resize أو Canvas.
+   الصور تنضغط قبل الرفع حتى يكون النشر أسرع.
+
+   القواعد:
+   - لا يوجد Crop.
+   - لا تتغير نسبة الصورة.
+   - أقصى بُعد للصورة 1800px.
+   - JPEG بجودة 0.82.
+   - إذا كانت الصورة أصلاً صغيرة وخفيفة، نستخدمها
+     كما هي حتى ما نخسر جودة بدون داعي.
+============================================================ */
+
+const IMAGE_MAX_SIZE =
+  1800;
+
+const IMAGE_QUALITY =
+  0.82;
+
+const IMAGE_KEEP_ORIGINAL_UNDER =
+  1400 * 1024;
+
+
+function loadImage(file){
+
+  return new Promise(
+    (resolve,reject) => {
+
+      const objectUrl =
+        URL.createObjectURL(file);
+
+      const image =
+        new Image();
+
+      image.onload =
+        () => {
+
+          URL.revokeObjectURL(
+            objectUrl
+          );
+
+          resolve(image);
+
+        };
+
+      image.onerror =
+        () => {
+
+          URL.revokeObjectURL(
+            objectUrl
+          );
+
+          reject(
+            new Error(
+              "IMAGE_DECODE_FAILED"
+            )
+          );
+
+        };
+
+      image.src =
+        objectUrl;
+
+    }
+  );
+
+}
+
+
+function canvasToBlob(
+  canvas,
+  type,
+  quality
+){
+
+  return new Promise(
+    resolve => {
+
+      canvas.toBlob(
+        blob => {
+          resolve(blob);
+        },
+        type,
+        quality
+      );
+
+    }
+  );
+
+}
+
+
+async function compressImage(file){
+
+  /*
+   * إذا الصورة صغيرة أصلاً،
+   * لا نعيد ضغطها.
+   */
+
+  if(
+    file.size <=
+    IMAGE_KEEP_ORIGINAL_UNDER
+  ){
+
+    return file;
+
+  }
+
+
+  const image =
+    await loadImage(file);
+
+
+  let originalWidth =
+    image.naturalWidth ||
+    image.width;
+
+  let originalHeight =
+    image.naturalHeight ||
+    image.height;
+
+
+  if(
+    !originalWidth ||
+    !originalHeight
+  ){
+
+    return file;
+
+  }
+
+
+  /*
+   * الحفاظ على النسبة الأصلية.
+   */
+
+  const largestSide =
+    Math.max(
+      originalWidth,
+      originalHeight
+    );
+
+  let scale =
+    Math.min(
+      1,
+      IMAGE_MAX_SIZE /
+      largestSide
+    );
+
+
+  let targetWidth =
+    Math.max(
+      1,
+      Math.round(
+        originalWidth *
+        scale
+      )
+    );
+
+  let targetHeight =
+    Math.max(
+      1,
+      Math.round(
+        originalHeight *
+        scale
+      )
+    );
+
+
+  /*
+   * إذا أبعاد الصورة أقل من 1800
+   * ولكن حجمها كبير، نخلي الأبعاد نفسها
+   * ونضغط الجودة فقط.
+   */
+
+  if(
+    largestSide <=
+    IMAGE_MAX_SIZE
+  ){
+
+    targetWidth =
+      originalWidth;
+
+    targetHeight =
+      originalHeight;
+
+  }
+
+
+  const canvas =
+    document.createElement(
+      "canvas"
+    );
+
+  canvas.width =
+    targetWidth;
+
+  canvas.height =
+    targetHeight;
+
+
+  const context =
+    canvas.getContext(
+      "2d",
+      {
+        alpha:false
+      }
+    );
+
+
+  if(!context){
+
+    return file;
+
+  }
+
+
+  /*
+   * إعدادات رسم الصورة حتى تكون
+   * النتيجة واضحة بدون قص.
+   */
+
+  context.imageSmoothingEnabled =
+    true;
+
+  context.imageSmoothingQuality =
+    "high";
+
+
+  /*
+   * drawImage يرسم الصورة كاملة
+   * حسب العرض والارتفاع الجديدين.
+   * لا يوجد object-fit أو crop.
+   */
+
+  context.drawImage(
+    image,
+    0,
+    0,
+    targetWidth,
+    targetHeight
+  );
+
+
+  const blob =
+    await canvasToBlob(
+      canvas,
+      "image/jpeg",
+      IMAGE_QUALITY
+    );
+
+
+  if(!blob){
+
+    return file;
+
+  }
+
+
+  /*
+   * إذا الناتج صار أكبر من الملف الأصلي،
+   * نستخدم الملف الأصلي.
+   */
+
+  if(
+    blob.size >=
+    file.size
+  ){
+
+    return file;
+
+  }
+
+
+  const compressedFile =
+    new File(
+      [
+        blob
+      ],
+      `${file.name
+        .replace(/\.[^/.]+$/, "")}.jpg`,
+      {
+        type:"image/jpeg",
+        lastModified:Date.now()
+      }
+    );
+
+
+  return compressedFile;
+
+}
+
+
+/* ============================================================
+   IMAGE EXTENSION
 ============================================================ */
 
 function getFileExtension(file){
+
+  if(
+    file?.type ===
+    "image/jpeg"
+  ){
+
+    return "jpg";
+
+  }
+
+  if(
+    file?.type ===
+    "image/png"
+  ){
+
+    return "png";
+
+  }
+
+  if(
+    file?.type ===
+    "image/webp"
+  ){
+
+    return "webp";
+
+  }
 
   const originalName =
     file.name
@@ -2450,22 +2758,14 @@ function getFileExtension(file){
 
   }
 
-  const mime =
-    file.type
-      ?.split("/")
-      .pop()
-      ?.toLowerCase();
-
-  if(mime === "jpeg"){
-
-    return "jpg";
-
-  }
-
-  return mime || "jpg";
+  return "jpg";
 
 }
 
+
+/* ============================================================
+   IMAGE UPLOAD
+============================================================ */
 
 async function uploadDeviceImages(
   user,
@@ -2478,17 +2778,20 @@ async function uploadDeviceImages(
   const publicUrls =
     [];
 
+
   for(
     let i = 0;
     i < files.length;
     i++
   ){
 
-    const file =
+    const originalFile =
       files[i];
 
+
     if(
-      !file.type.startsWith(
+      !originalFile.type ||
+      !originalFile.type.startsWith(
         "image/"
       )
     ){
@@ -2499,16 +2802,60 @@ async function uploadDeviceImages(
 
     }
 
+
+    /*
+     * ضغط الصورة أولاً.
+     */
+
+    submitBtn.textContent =
+      `تجهيز الصورة ${i + 1} من ${files.length}...`;
+
+
+    let file;
+
+
+    try{
+
+      file =
+        await compressImage(
+          originalFile
+        );
+
+    }catch(compressionError){
+
+      console.warn(
+        "IMAGE COMPRESSION FALLBACK:",
+        compressionError
+      );
+
+      /*
+       * إذا المتصفح ما قدر يعالج الصورة،
+       * نرفع الأصل بدل ما نوقف العملية.
+       */
+
+      file =
+        originalFile;
+
+    }
+
+
     const extension =
       getFileExtension(
         file
       );
 
+
     const uniqueName =
       `${Date.now()}-${crypto.randomUUID()}.${extension}`;
 
+
     const path =
       `${user.id}/${uniqueName}`;
+
+
+    submitBtn.textContent =
+      `رفع الصورة ${i + 1} من ${files.length}...`;
+
 
     const {
       error:uploadError
@@ -2521,10 +2868,13 @@ async function uploadDeviceImages(
           file,
           {
             cacheControl:"31536000",
-            contentType:file.type,
+            contentType:
+              file.type ||
+              "image/jpeg",
             upsert:false
           }
         );
+
 
     if(uploadError){
 
@@ -2539,9 +2889,11 @@ async function uploadDeviceImages(
 
     }
 
+
     uploadedPaths.push(
       path
     );
+
 
     const {
       data
@@ -2553,6 +2905,7 @@ async function uploadDeviceImages(
           path
         );
 
+
     if(!data?.publicUrl){
 
       throw new Error(
@@ -2561,11 +2914,13 @@ async function uploadDeviceImages(
 
     }
 
+
     publicUrls.push(
       data.publicUrl
     );
 
   }
+
 
   return {
     uploadedPaths,
@@ -2708,15 +3063,6 @@ async function saveDevice(){
       input => input.value
     );
 
-
-  /*
-   * نحول الاختيارات المتعددة
-   * إلى نص واحد متوافق مع
-   * الحقل الحالي في قاعدة البيانات.
-   *
-   * مثال:
-   * البطارية، الشاشة، منفذ الشحن
-   */
 
   const replacedPartsValue =
     replacedParts.join("، ");
@@ -2957,7 +3303,7 @@ async function saveDevice(){
     true;
 
   submitBtn.textContent =
-    "جاري رفع الصور...";
+    "جاري تجهيز الصور...";
 
 
   const fullName =
@@ -2975,7 +3321,7 @@ async function saveDevice(){
   try{
 
     /* =========================
-       UPLOAD IMAGES
+       COMPRESS + UPLOAD IMAGES
     ========================= */
 
     const uploadResult =
@@ -2984,8 +3330,10 @@ async function saveDevice(){
         photos
       );
 
+
     uploadedPaths =
       uploadResult.uploadedPaths;
+
 
     const images =
       JSON.stringify(
@@ -3085,13 +3433,16 @@ async function saveDevice(){
         error
       );
 
+
       await removeUploadedImages(
         uploadedPaths
       );
 
+
       showToast(
         "ما قدرنا نحفظ الجهاز حالياً"
       );
+
 
       submitBtn.disabled =
         false;
@@ -3144,6 +3495,15 @@ async function saveDevice(){
 
       showToast(
         "كل الملفات لازم تكون صور"
+      );
+
+    }else if(
+      error.message ===
+      "IMAGE_DECODE_FAILED"
+    ){
+
+      showToast(
+        "تعذر قراءة إحدى الصور"
       );
 
     }else if(
