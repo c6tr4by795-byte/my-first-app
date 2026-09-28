@@ -548,6 +548,372 @@
 
 
     /* =========================
+       الإضافة الجديدة فقط
+       PHOTO MOTION ZONE
+    ========================= */
+
+    .photo-motion-zone{
+      height:56px;
+
+      margin-top:-20px;
+      margin-bottom:4px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      position:relative;
+
+      cursor:pointer;
+
+      outline:none;
+
+      user-select:none;
+
+      -webkit-tap-highlight-color:transparent;
+    }
+
+
+    .photo-motion-line{
+      width:76px;
+      height:2px;
+
+      position:relative;
+
+      border-radius:999px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(23,107,135,.16),
+          rgba(98,70,217,.20),
+          rgba(23,107,135,.16),
+          transparent
+        );
+
+      overflow:hidden;
+    }
+
+
+    .photo-motion-line::after{
+      content:"";
+
+      position:absolute;
+
+      top:0;
+      left:-30px;
+
+      width:30px;
+      height:2px;
+
+      border-radius:999px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(255,255,255,.95),
+          rgba(98,70,217,.72),
+          transparent
+        );
+
+      animation:
+        photoMotionLight
+        2.8s ease-in-out
+        infinite;
+    }
+
+
+    .photo-motion-dot{
+      width:5px;
+      height:5px;
+
+      position:absolute;
+
+      border-radius:50%;
+
+      background:var(--purple);
+
+      box-shadow:
+        0 0 0 4px rgba(98,70,217,.055),
+        0 0 12px rgba(98,70,217,.18);
+
+      animation:
+        photoMotionDot
+        3.2s ease-in-out
+        infinite;
+    }
+
+
+    @keyframes photoMotionLight{
+
+      0%{
+        transform:translateX(0);
+        opacity:0;
+      }
+
+      20%{
+        opacity:.75;
+      }
+
+      50%{
+        opacity:1;
+      }
+
+      80%{
+        opacity:.75;
+      }
+
+      100%{
+        transform:translateX(136px);
+        opacity:0;
+      }
+
+    }
+
+
+    @keyframes photoMotionDot{
+
+      0%,
+      100%{
+        transform:translateX(-32px);
+        opacity:.45;
+      }
+
+      50%{
+        transform:translateX(32px);
+        opacity:.95;
+      }
+
+    }
+
+
+    .photo-motion-zone:active{
+      transform:scale(.99);
+    }
+
+
+    .photo-motion-zone:focus-visible{
+      border-radius:12px;
+
+      box-shadow:
+        0 0 0 2px rgba(98,70,217,.12);
+    }
+
+
+    /* =========================
+       FULLSCREEN PHOTO VIEWER
+       إضافة جديدة فقط
+    ========================= */
+
+    .photo-viewer{
+      position:fixed;
+
+      inset:0;
+
+      z-index:200;
+
+      display:none;
+
+      background:rgba(8,10,14,.97);
+
+      touch-action:none;
+    }
+
+
+    .photo-viewer.open{
+      display:block;
+    }
+
+
+    .photo-viewer-top{
+      position:absolute;
+
+      top:0;
+      right:0;
+      left:0;
+
+      z-index:5;
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+
+      padding:
+        calc(env(safe-area-inset-top) + 14px)
+        15px
+        14px;
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(0,0,0,.45),
+          transparent
+        );
+    }
+
+
+    .photo-viewer-counter{
+      min-width:44px;
+      height:30px;
+
+      padding:0 10px;
+
+      border-radius:11px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      color:#fff;
+
+      background:rgba(255,255,255,.11);
+
+      font-size:11px;
+      font-weight:700;
+
+      direction:ltr;
+
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+
+
+    .photo-viewer-close{
+      width:40px;
+      height:40px;
+
+      border-radius:13px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      background:rgba(255,255,255,.11);
+
+      color:#fff;
+
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+
+
+    .photo-viewer-close svg{
+      width:20px;
+      height:20px;
+    }
+
+
+    .photo-viewer-stage{
+      position:absolute;
+
+      inset:0;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      padding:
+        75px
+        16px
+        30px;
+
+      overflow:hidden;
+    }
+
+
+    .photo-viewer-image{
+      max-width:100%;
+      max-height:100%;
+
+      width:auto;
+      height:auto;
+
+      display:block;
+
+      object-fit:contain;
+
+      user-select:none;
+      -webkit-user-drag:none;
+
+      transition:
+        opacity .18s ease,
+        transform .22s ease;
+
+      opacity:1;
+    }
+
+
+    .photo-viewer-image.changing{
+      opacity:.35;
+
+      transform:scale(.985);
+    }
+
+
+    .photo-viewer-arrow{
+      position:absolute;
+
+      top:50%;
+
+      transform:translateY(-50%);
+
+      z-index:6;
+
+      width:42px;
+      height:42px;
+
+      border-radius:50%;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      color:#fff;
+
+      background:rgba(255,255,255,.10);
+
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+
+
+    .photo-viewer-prev{
+      right:12px;
+    }
+
+
+    .photo-viewer-next{
+      left:12px;
+    }
+
+
+    .photo-viewer-arrow svg{
+      width:20px;
+      height:20px;
+    }
+
+
+    @media(max-width:360px){
+
+      .photo-viewer-arrow{
+        width:38px;
+        height:38px;
+      }
+
+      .photo-viewer-prev{
+        right:8px;
+      }
+
+      .photo-viewer-next{
+        left:8px;
+      }
+
+    }
+
+
+    /* =========================
        PRODUCT
     ========================= */
 
@@ -1773,6 +2139,110 @@
   </div>
 
 
+  <!-- =========================
+       PHOTO VIEWER
+       إضافة جديدة فقط
+  ========================= -->
+
+  <div
+    class="photo-viewer"
+    id="photoViewer"
+    aria-hidden="true"
+  >
+
+    <div class="photo-viewer-top">
+
+      <div
+        class="photo-viewer-counter"
+        id="photoViewerCounter"
+      >
+        1 / 1
+      </div>
+
+
+      <button
+        class="photo-viewer-close"
+        id="photoViewerClose"
+        aria-label="إغلاق"
+        type="button"
+      >
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M18 6L6 18"/>
+          <path d="M6 6l12 12"/>
+        </svg>
+
+      </button>
+
+    </div>
+
+
+    <div
+      class="photo-viewer-stage"
+      id="photoViewerStage"
+    >
+
+      <img
+        class="photo-viewer-image"
+        id="photoViewerImage"
+        alt=""
+        draggable="false"
+      />
+
+    </div>
+
+
+    <button
+      class="photo-viewer-arrow photo-viewer-prev"
+      id="photoViewerPrev"
+      aria-label="الصورة السابقة"
+      type="button"
+    >
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M14 18l-6-6 6-6"/>
+      </svg>
+
+    </button>
+
+
+    <button
+      class="photo-viewer-arrow photo-viewer-next"
+      id="photoViewerNext"
+      aria-label="الصورة التالية"
+      type="button"
+    >
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M10 18l6-6-6-6"/>
+      </svg>
+
+    </button>
+
+  </div>
+
+
   <div
     class="toast"
     id="toast"
@@ -1805,6 +2275,62 @@
     let device = null;
 
     let galleryTrack = null;
+
+
+    /* =========================
+       الإضافة الجديدة:
+       حالة عارض الصور
+    ========================= */
+
+    let viewerImages = [];
+
+    let viewerIndex = 0;
+
+    let viewerTouchStartX = 0;
+
+    let viewerTouchStartY = 0;
+
+
+    const photoViewer =
+      document.getElementById(
+        "photoViewer"
+      );
+
+
+    const photoViewerImage =
+      document.getElementById(
+        "photoViewerImage"
+      );
+
+
+    const photoViewerCounter =
+      document.getElementById(
+        "photoViewerCounter"
+      );
+
+
+    const photoViewerClose =
+      document.getElementById(
+        "photoViewerClose"
+      );
+
+
+    const photoViewerPrev =
+      document.getElementById(
+        "photoViewerPrev"
+      );
+
+
+    const photoViewerNext =
+      document.getElementById(
+        "photoViewerNext"
+      );
+
+
+    const photoViewerStage =
+      document.getElementById(
+        "photoViewerStage"
+      );
 
 
     /* =========================
@@ -2337,6 +2863,16 @@
           .filter(Boolean);
 
 
+      /*
+        الإضافة الجديدة فقط:
+        نحفظ نفس الصور حتى يستخدمها
+        عارض الصور.
+      */
+
+      viewerImages =
+        [...images];
+
+
       const brand =
         clean(device.brand) ||
         "هاتف";
@@ -2573,6 +3109,33 @@
           </div>
 
         </section>
+
+
+        <!-- =========================
+             الإضافة الجديدة فقط
+        ========================== -->
+
+        ${
+          images.length
+          ? `
+
+            <div
+              class="photo-motion-zone"
+              id="photoMotionZone"
+              role="button"
+              tabindex="0"
+              aria-label="فتح صور الجهاز"
+            >
+
+              <div class="photo-motion-line"></div>
+
+              <div class="photo-motion-dot"></div>
+
+            </div>
+
+          `
+          : ""
+        }
 
 
         <section class="product-head">
@@ -2951,6 +3514,8 @@
 
       setupGallery();
 
+      setupPhotoMotion();
+
       setupActions();
 
     }
@@ -3063,6 +3628,385 @@
       );
 
     }
+
+
+    /* =========================
+       الإضافة الجديدة فقط
+       PHOTO MOTION
+    ========================= */
+
+    function setupPhotoMotion(){
+
+      const zone =
+        document.getElementById(
+          "photoMotionZone"
+        );
+
+
+      if(!zone || !viewerImages.length){
+        return;
+      }
+
+
+      zone.addEventListener(
+        "click",
+        ()=>{
+          openPhotoViewer(0);
+        }
+      );
+
+
+      zone.addEventListener(
+        "keydown",
+        (event)=>{
+
+          if(
+            event.key === "Enter" ||
+            event.key === " "
+          ){
+
+            event.preventDefault();
+
+            openPhotoViewer(0);
+
+          }
+
+        }
+      );
+
+    }
+
+
+    /* =========================
+       الإضافة الجديدة فقط
+       PHOTO VIEWER
+    ========================= */
+
+    function openPhotoViewer(index){
+
+      if(!viewerImages.length){
+        return;
+      }
+
+
+      viewerIndex =
+        Math.max(
+          0,
+          Math.min(
+            index,
+            viewerImages.length - 1
+          )
+        );
+
+
+      updatePhotoViewer();
+
+
+      photoViewer.classList.add(
+        "open"
+      );
+
+
+      photoViewer.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+
+      document.body.style.overflow =
+        "hidden";
+
+    }
+
+
+    function closePhotoViewer(){
+
+      photoViewer.classList.remove(
+        "open"
+      );
+
+
+      photoViewer.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+
+      document.body.style.overflow =
+        "";
+
+    }
+
+
+    function updatePhotoViewer(){
+
+      const src =
+        viewerImages[viewerIndex];
+
+
+      if(!src){
+        return;
+      }
+
+
+      photoViewerImage.classList.add(
+        "changing"
+      );
+
+
+      setTimeout(()=>{
+
+        photoViewerImage.src =
+          src;
+
+
+        photoViewerImage.alt =
+          `${clean(device?.brand)} ${clean(device?.model)}`;
+
+
+        photoViewerCounter.textContent =
+          `${viewerIndex + 1} / ${viewerImages.length}`;
+
+
+        photoViewerImage.classList.remove(
+          "changing"
+        );
+
+      },90);
+
+
+      const showArrows =
+        viewerImages.length > 1;
+
+
+      photoViewerPrev.style.display =
+        showArrows
+          ? "flex"
+          : "none";
+
+
+      photoViewerNext.style.display =
+        showArrows
+          ? "flex"
+          : "none";
+
+    }
+
+
+    function nextPhoto(){
+
+      if(!viewerImages.length){
+        return;
+      }
+
+
+      if(
+        viewerIndex <
+        viewerImages.length - 1
+      ){
+
+        viewerIndex++;
+
+      }else{
+
+        viewerIndex = 0;
+
+      }
+
+
+      updatePhotoViewer();
+
+    }
+
+
+    function previousPhoto(){
+
+      if(!viewerImages.length){
+        return;
+      }
+
+
+      if(viewerIndex > 0){
+
+        viewerIndex--;
+
+      }else{
+
+        viewerIndex =
+          viewerImages.length - 1;
+
+      }
+
+
+      updatePhotoViewer();
+
+    }
+
+
+    photoViewerClose.addEventListener(
+      "click",
+      closePhotoViewer
+    );
+
+
+    photoViewerPrev.addEventListener(
+      "click",
+      (event)=>{
+
+        event.stopPropagation();
+
+        previousPhoto();
+
+      }
+    );
+
+
+    photoViewerNext.addEventListener(
+      "click",
+      (event)=>{
+
+        event.stopPropagation();
+
+        nextPhoto();
+
+      }
+    );
+
+
+    photoViewerStage.addEventListener(
+      "click",
+      (event)=>{
+
+        if(
+          event.target ===
+          photoViewerStage
+        ){
+
+          closePhotoViewer();
+
+        }
+
+      }
+    );
+
+
+    /* =========================
+       SWIPE
+    ========================= */
+
+    photoViewerStage.addEventListener(
+      "touchstart",
+      (event)=>{
+
+        const touch =
+          event.changedTouches[0];
+
+
+        viewerTouchStartX =
+          touch.clientX;
+
+
+        viewerTouchStartY =
+          touch.clientY;
+
+      },
+      {passive:true}
+    );
+
+
+    photoViewerStage.addEventListener(
+      "touchend",
+      (event)=>{
+
+        const touch =
+          event.changedTouches[0];
+
+
+        const deltaX =
+          touch.clientX -
+          viewerTouchStartX;
+
+
+        const deltaY =
+          touch.clientY -
+          viewerTouchStartY;
+
+
+        if(
+          Math.abs(deltaX) < 50
+        ){
+          return;
+        }
+
+
+        if(
+          Math.abs(deltaX) <
+          Math.abs(deltaY)
+        ){
+          return;
+        }
+
+
+        if(deltaX < 0){
+
+          nextPhoto();
+
+        }else{
+
+          previousPhoto();
+
+        }
+
+      },
+      {passive:true}
+    );
+
+
+    /* =========================
+       KEYBOARD
+    ========================= */
+
+    document.addEventListener(
+      "keydown",
+      (event)=>{
+
+        if(
+          !photoViewer.classList.contains(
+            "open"
+          )
+        ){
+          return;
+        }
+
+
+        if(
+          event.key === "Escape"
+        ){
+
+          closePhotoViewer();
+
+        }
+
+
+        if(
+          event.key === "ArrowLeft"
+        ){
+
+          nextPhoto();
+
+        }
+
+
+        if(
+          event.key === "ArrowRight"
+        ){
+
+          previousPhoto();
+
+        }
+
+      }
+    );
 
 
     /* =========================
