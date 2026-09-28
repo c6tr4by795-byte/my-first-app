@@ -17,8 +17,14 @@
 
   --primary:#176B87;
   --primary-dark:#125A73;
-  --primary-card:#145F78;
   --primary-soft:#E8F3F6;
+
+  /* لون بطاقة الجهاز من نفس عائلة الهيدر */
+  --device-bg:#DCECEF;
+  --device-bg-2:#D4E8EC;
+  --device-ink:#173E4A;
+  --device-muted:#52727C;
+  --device-price:#125A73;
 
   --purple:#6F63C9;
   --purple-soft:#EEEAFE;
@@ -80,7 +86,6 @@ button{
 .header{
   margin-inline:-14px;
 
-  /* الهيدر صار أعلى وأقصر */
   padding:
     7px
     14px
@@ -668,13 +673,10 @@ button{
 
 /* =====================================================
    DEVICE INFO
-   البترولي الأغمق بدل البنفسجي
 ===================================================== */
 
 .device-info{
-
-  /* أكبر حتى التفاصيل تتنفس */
-  min-height:112px;
+  min-height:155px;
 
   padding:
     13px
@@ -684,18 +686,17 @@ button{
   background:
     linear-gradient(
       145deg,
-      #145F78 0%,
-      #12566D 100%
+      var(--device-bg) 0%,
+      var(--device-bg-2) 100%
     );
 
-  color:#fff;
+  color:var(--device-ink);
 }
 
 
 /* اسم الجهاز */
 
 .device-name{
-
   font-size:15px;
 
   font-weight:950;
@@ -712,57 +713,57 @@ button{
 }
 
 
-/* السعة واللون */
+/* =====================================================
+   DETAILS
+===================================================== */
 
-.device-sub{
+.device-details{
+  margin-top:9px;
 
-  margin-top:6px;
+  display:grid;
 
-  font-size:10px;
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
 
-  font-weight:700;
-
-  color:
-    rgba(255,255,255,.84);
-
-  line-height:1.35;
-
-  white-space:nowrap;
-
-  overflow:hidden;
-
-  text-overflow:ellipsis;
+  gap:
+    7px
+    9px;
 }
 
-
-/* معلومات البطارية والسعر */
-
-.device-meta{
-
-  margin-top:11px;
+.detail-item{
+  min-width:0;
 
   display:flex;
 
-  align-items:flex-end;
+  flex-direction:column;
 
-  justify-content:space-between;
+  gap:3px;
 
-  gap:8px;
+  padding:
+    5px
+    0;
 }
 
+.detail-item span{
+  color:var(--device-muted);
 
-/* البطارية */
+  font-size:8px;
 
-.battery{
+  line-height:1.25;
 
+  font-weight:750;
+}
+
+.detail-item strong{
   min-width:0;
 
-  font-size:9px;
+  color:var(--device-ink);
 
-  font-weight:700;
+  font-size:10px;
 
-  color:
-    rgba(255,255,255,.88);
+  line-height:1.25;
+
+  font-weight:950;
 
   white-space:nowrap;
 
@@ -772,24 +773,48 @@ button{
 }
 
 
-/* السعر */
+/* =====================================================
+   PRICE
+===================================================== */
+
+.price-row{
+  margin-top:9px;
+
+  padding-top:8px;
+
+  border-top:
+    1px solid
+    rgba(23,62,74,.12);
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:3px;
+}
+
+.price-label{
+  color:var(--device-muted);
+
+  font-size:8px;
+
+  line-height:1.2;
+
+  font-weight:750;
+}
 
 .device-price{
+  color:var(--device-price);
 
-  font-size:14px;
+  font-size:15px;
 
-  line-height:1;
+  line-height:1.1;
 
   font-weight:950;
-
-  color:#FFFFFF;
 
   white-space:nowrap;
 
   letter-spacing:-.025em;
-
-  text-shadow:
-    0 1px 1px rgba(0,0,0,.08);
 }
 
 
@@ -1093,7 +1118,37 @@ button{
   }
 
   .device-info{
-    min-height:105px;
+    min-height:150px;
+  }
+
+}
+
+
+@media(max-width:360px){
+
+  .device-info{
+    min-height:151px;
+
+    padding:
+      12px
+      10px
+      11px;
+  }
+
+  .device-name{
+    font-size:14px;
+  }
+
+  .detail-item span{
+    font-size:7px;
+  }
+
+  .detail-item strong{
+    font-size:9px;
+  }
+
+  .device-price{
+    font-size:14px;
   }
 
 }
@@ -1265,124 +1320,64 @@ button{
     class="filters"
     id="filters">
 
-    <button
-      class="filter active"
-      data-brand="all">
-
+    <button class="filter active" data-brand="all">
       الكل
-
     </button>
 
-    <button
-      class="filter"
-      data-brand="Apple">
-
+    <button class="filter" data-brand="Apple">
       iPhone
-
     </button>
 
-    <button
-      class="filter"
-      data-brand="Samsung">
-
+    <button class="filter" data-brand="Samsung">
       Samsung
-
     </button>
 
-    <button
-      class="filter"
-      data-brand="Xiaomi">
-
+    <button class="filter" data-brand="Xiaomi">
       Xiaomi
-
     </button>
 
-    <button
-      class="filter"
-      data-brand="Google">
-
+    <button class="filter" data-brand="Google">
       Google
-
     </button>
 
-    <button
-      class="filter"
-      data-brand="Huawei">
-
+    <button class="filter" data-brand="Huawei">
       Huawei
-
     </button>
 
-    <button
-      class="filter"
-      data-brand="OPPO">
-
+    <button class="filter" data-brand="OPPO">
       OPPO
-
     </button>
 
-    <button
-      class="filter"
-      data-brand="HONOR">
-
+    <button class="filter" data-brand="HONOR">
       HONOR
-
     </button>
 
-    <button
-      class="filter"
-      data-brand="OnePlus">
-
+    <button class="filter" data-brand="OnePlus">
       OnePlus
-
     </button>
 
-    <button
-      class="filter"
-      data-brand="realme">
-
+    <button class="filter" data-brand="realme">
       realme
-
     </button>
 
-    <button
-      class="filter"
-      data-brand="Motorola">
-
+    <button class="filter" data-brand="Motorola">
       Motorola
-
     </button>
 
-    <button
-      class="filter"
-      data-brand="Sony">
-
+    <button class="filter" data-brand="Sony">
       Sony
-
     </button>
 
-    <button
-      class="filter"
-      data-brand="Nokia">
-
+    <button class="filter" data-brand="Nokia">
       Nokia
-
     </button>
 
-    <button
-      class="filter"
-      data-brand="Tecno">
-
+    <button class="filter" data-brand="Tecno">
       Tecno
-
     </button>
 
-    <button
-      class="filter"
-      data-brand="Infinix">
-
+    <button class="filter" data-brand="Infinix">
       Infinix
-
     </button>
 
   </div>
@@ -1929,6 +1924,8 @@ function normalizeDevice(device){
       device.model,
       device.storage,
       device.color,
+      device.battery_health,
+      device.charging,
       device.condition,
       device.body_condition,
       device.screen_condition,
@@ -2122,6 +2119,45 @@ function createImageElement(device){
 }
 
 
+function createDetailItem(
+  label,
+  value
+){
+
+  const item =
+    document.createElement("div");
+
+  item.className =
+    "detail-item";
+
+
+  const labelElement =
+    document.createElement("span");
+
+  labelElement.textContent =
+    label;
+
+
+  const valueElement =
+    document.createElement("strong");
+
+  valueElement.textContent =
+    value || "غير محدد";
+
+
+  item.appendChild(
+    labelElement
+  );
+
+  item.appendChild(
+    valueElement
+  );
+
+  return item;
+
+}
+
+
 function createDeviceCard(
   device,
   index
@@ -2235,35 +2271,29 @@ function createDeviceCard(
     "جهاز";
 
 
-  const sub =
+  /* =================================================
+     تفاصيل الجهاز
+  ================================================= */
+
+  const details =
     document.createElement("div");
 
-  sub.className =
-    "device-sub";
-
-  sub.textContent =
-    [
-      device.storage,
-      device.color
-    ]
-    .filter(Boolean)
-    .join(" · ") ||
-    "تفاصيل الجهاز";
+  details.className =
+    "device-details";
 
 
-  const meta =
-    document.createElement("div");
-
-  meta.className =
-    "device-meta";
+  const storage =
+    device.storage ||
+    "غير محدد";
 
 
-  const battery =
-    document.createElement("span");
+  const color =
+    device.color ||
+    "غير محدد";
 
-  battery.className =
-    "battery";
 
+  let battery =
+    "غير محددة";
 
   if(
     device.battery_health !== null &&
@@ -2271,24 +2301,69 @@ function createDeviceCard(
     device.battery_health !== ""
   ){
 
-    battery.textContent =
-      `بطارية ${device.battery_health}%`;
-
-  }else if(device.condition){
-
-    battery.textContent =
-      device.condition;
-
-  }else{
-
-    battery.textContent =
-      "حالة الجهاز";
+    battery =
+      `${device.battery_health}%`;
 
   }
 
 
-  const price =
+  const charging =
+    device.charging ||
+    "غير محدد";
+
+
+  details.appendChild(
+    createDetailItem(
+      "التخزين",
+      storage
+    )
+  );
+
+  details.appendChild(
+    createDetailItem(
+      "اللون",
+      color
+    )
+  );
+
+  details.appendChild(
+    createDetailItem(
+      "البطارية",
+      battery
+    )
+  );
+
+  details.appendChild(
+    createDetailItem(
+      "الشحن",
+      charging
+    )
+  );
+
+
+  /* =================================================
+     السعر
+  ================================================= */
+
+  const priceRow =
+    document.createElement("div");
+
+  priceRow.className =
+    "price-row";
+
+
+  const priceLabel =
     document.createElement("span");
+
+  priceLabel.className =
+    "price-label";
+
+  priceLabel.textContent =
+    "السعر";
+
+
+  const price =
+    document.createElement("strong");
 
   price.className =
     "device-price";
@@ -2299,25 +2374,27 @@ function createDeviceCard(
     );
 
 
-  meta.appendChild(
-    battery
+  priceRow.appendChild(
+    priceLabel
   );
 
-  meta.appendChild(
+  priceRow.appendChild(
     price
   );
+
 
   info.appendChild(
     name
   );
 
   info.appendChild(
-    sub
+    details
   );
 
   info.appendChild(
-    meta
+    priceRow
   );
+
 
   card.appendChild(
     photo
