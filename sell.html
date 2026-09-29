@@ -15,6 +15,10 @@
       -webkit-tap-highlight-color:transparent;
     }
 
+    html{
+      scroll-behavior:auto;
+    }
+
     body{
       margin:0;
       background:#F7F8FA;
@@ -54,7 +58,6 @@
           #176B87 58%,
           #6246D9 100%
         );
-      border-bottom:0;
       position:sticky;
       top:0;
       z-index:20;
@@ -145,7 +148,7 @@
     }
 
     /* =========================
-       EARTHY SECTION TITLES
+       SECTION TITLES
     ========================= */
 
     .card-title{
@@ -278,9 +281,9 @@
 
     .choice label{
       min-height:48px;
-      border:1px solid #E0E4E8;
+      border:1px solid #E1E4E8;
       border-radius:14px;
-      background:#F9FAFB;
+      background:#F3F5F7;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -289,14 +292,18 @@
       font-size:12px;
       font-weight:700;
       color:#475467;
-      transition:.2s;
+      transition:.18s;
       cursor:pointer;
     }
 
+    .choice label:active{
+      transform:scale(.98);
+    }
+
     .choice input:checked + label{
-      border-color:#176B87;
-      background:#E8F3F6;
-      color:#176B87;
+      border-color:#D7DBE0;
+      background:#ECEFF2;
+      color:#17202A;
     }
 
     /* =========================
@@ -326,7 +333,7 @@
       margin-top:6px;
       color:#667085;
       font-size:10px;
-      line-height:1.7;
+      line-height:1.8;
     }
 
     /* =========================
@@ -336,7 +343,7 @@
     .photo-box{
       border:1.5px dashed #C9CED6;
       border-radius:18px;
-      min-height:145px;
+      min-height:165px;
       display:flex;
       flex-direction:column;
       align-items:center;
@@ -344,11 +351,17 @@
       text-align:center;
       background:#FAFBFC;
       padding:18px;
+      cursor:pointer;
+      transition:.18s;
+    }
+
+    .photo-box:active{
+      transform:scale(.99);
     }
 
     .photo-icon{
-      width:48px;
-      height:48px;
+      width:50px;
+      height:50px;
       border-radius:15px;
       background:#E8F3F6;
       color:#176B87;
@@ -370,22 +383,76 @@
       line-height:1.7;
     }
 
-    .photo-input{
-      margin-top:12px;
-      width:100%;
-      height:auto;
-      padding:0;
+    .photo-add-button{
+      margin-top:13px;
+      min-width:145px;
+      height:42px;
       border:0;
-      background:transparent;
-      font-size:11px;
+      border-radius:13px;
+      background:#176B87;
+      color:#fff;
+      font-size:12px;
+      font-weight:800;
+      padding:0 18px;
+      box-shadow:0 7px 16px rgba(23,107,135,.14);
+    }
+
+    .photo-input{
+      display:none;
     }
 
     .photo-count{
-      margin-top:9px;
+      margin-top:10px;
       font-size:11px;
       color:#176B87;
       font-weight:700;
       display:none;
+    }
+
+    .photo-preview{
+      width:100%;
+      display:none;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+      margin-top:13px;
+    }
+
+    .photo-preview.show{
+      display:grid;
+    }
+
+    .preview-item{
+      position:relative;
+      width:100%;
+      aspect-ratio:1/1;
+      border-radius:13px;
+      overflow:hidden;
+      background:#F1F2F4;
+      border:1px solid #E3E6EA;
+    }
+
+    .preview-item img{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:cover;
+    }
+
+    .preview-number{
+      position:absolute;
+      right:6px;
+      top:6px;
+      min-width:22px;
+      height:22px;
+      padding:0 5px;
+      border-radius:8px;
+      background:rgba(23,32,42,.72);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:9px;
+      font-weight:800;
     }
 
     /* =========================
@@ -544,6 +611,10 @@
         grid-template-columns:1fr;
       }
 
+      .photo-preview{
+        grid-template-columns:repeat(3,1fr);
+      }
+
     }
   </style>
 </head>
@@ -614,67 +685,24 @@
               اختر الشركة
             </option>
 
-            <option value="Apple">
-              Apple
-            </option>
-
-            <option value="Samsung">
-              Samsung
-            </option>
-
-            <option value="Xiaomi">
-              Xiaomi
-            </option>
-
-            <option value="Google">
-              Google
-            </option>
-
-            <option value="Huawei">
-              Huawei
-            </option>
-
-            <option value="OPPO">
-              OPPO
-            </option>
-
-            <option value="HONOR">
-              HONOR
-            </option>
-
-            <option value="OnePlus">
-              OnePlus
-            </option>
-
-            <option value="realme">
-              realme
-            </option>
-
-            <option value="Motorola">
-              Motorola
-            </option>
-
-            <option value="Sony">
-              Sony
-            </option>
-
-            <option value="Nokia">
-              Nokia
-            </option>
-
-            <option value="Tecno">
-              Tecno
-            </option>
-
-            <option value="Infinix">
-              Infinix
-            </option>
+            <option value="Apple">Apple</option>
+            <option value="Samsung">Samsung</option>
+            <option value="Xiaomi">Xiaomi</option>
+            <option value="Google">Google</option>
+            <option value="Huawei">Huawei</option>
+            <option value="OPPO">OPPO</option>
+            <option value="HONOR">HONOR</option>
+            <option value="OnePlus">OnePlus</option>
+            <option value="realme">realme</option>
+            <option value="Motorola">Motorola</option>
+            <option value="Sony">Sony</option>
+            <option value="Nokia">Nokia</option>
+            <option value="Tecno">Tecno</option>
+            <option value="Infinix">Infinix</option>
 
           </select>
 
-          <span class="select-arrow">
-            ⌄
-          </span>
+          <span class="select-arrow">⌄</span>
 
         </div>
 
@@ -696,9 +724,7 @@
 
           </select>
 
-          <span class="select-arrow">
-            ⌄
-          </span>
+          <span class="select-arrow">⌄</span>
 
         </div>
 
@@ -720,39 +746,17 @@
 
             <select id="storage" required>
 
-              <option value="">
-                السعة
-              </option>
-
-              <option value="32GB">
-                32GB
-              </option>
-
-              <option value="64GB">
-                64GB
-              </option>
-
-              <option value="128GB">
-                128GB
-              </option>
-
-              <option value="256GB">
-                256GB
-              </option>
-
-              <option value="512GB">
-                512GB
-              </option>
-
-              <option value="1TB">
-                1TB
-              </option>
+              <option value="">السعة</option>
+              <option value="32GB">32GB</option>
+              <option value="64GB">64GB</option>
+              <option value="128GB">128GB</option>
+              <option value="256GB">256GB</option>
+              <option value="512GB">512GB</option>
+              <option value="1TB">1TB</option>
 
             </select>
 
-            <span class="select-arrow">
-              ⌄
-            </span>
+            <span class="select-arrow">⌄</span>
 
           </div>
 
@@ -787,7 +791,6 @@
       <div class="card-title">
         حالة الجهاز
       </div>
-
 
       <!-- BATTERY -->
 
@@ -836,64 +839,23 @@
         <div class="choice-grid">
 
           <div class="choice">
-
-            <input
-              type="radio"
-              id="body1"
-              name="body_condition"
-              value="ممتاز"
-              required
-            >
-
-            <label for="body1">
-              ممتاز
-            </label>
-
+            <input type="radio" id="body1" name="body_condition" value="ممتاز" required>
+            <label for="body1">ممتاز</label>
           </div>
 
           <div class="choice">
-
-            <input
-              type="radio"
-              id="body2"
-              name="body_condition"
-              value="جيد جداً"
-            >
-
-            <label for="body2">
-              جيد جداً
-            </label>
-
+            <input type="radio" id="body2" name="body_condition" value="جيد جداً">
+            <label for="body2">جيد جداً</label>
           </div>
 
           <div class="choice">
-
-            <input
-              type="radio"
-              id="body3"
-              name="body_condition"
-              value="جيد"
-            >
-
-            <label for="body3">
-              جيد
-            </label>
-
+            <input type="radio" id="body3" name="body_condition" value="جيد">
+            <label for="body3">جيد</label>
           </div>
 
           <div class="choice">
-
-            <input
-              type="radio"
-              id="body4"
-              name="body_condition"
-              value="مبدل"
-            >
-
-            <label for="body4">
-              مبدل
-            </label>
-
+            <input type="radio" id="body4" name="body_condition" value="مبدل">
+            <label for="body4">مبدل</label>
           </div>
 
         </div>
@@ -912,79 +874,28 @@
         <div class="choice-grid">
 
           <div class="choice">
-
-            <input
-              type="radio"
-              id="screen1"
-              name="screen_condition"
-              value="ممتازة"
-              required
-            >
-
-            <label for="screen1">
-              ممتازة
-            </label>
-
+            <input type="radio" id="screen1" name="screen_condition" value="ممتازة" required>
+            <label for="screen1">ممتازة</label>
           </div>
 
           <div class="choice">
-
-            <input
-              type="radio"
-              id="screen2"
-              name="screen_condition"
-              value="جيدة جداً"
-            >
-
-            <label for="screen2">
-              جيدة جداً
-            </label>
-
+            <input type="radio" id="screen2" name="screen_condition" value="جيدة جداً">
+            <label for="screen2">جيدة جداً</label>
           </div>
 
           <div class="choice">
-
-            <input
-              type="radio"
-              id="screen3"
-              name="screen_condition"
-              value="جيدة"
-            >
-
-            <label for="screen3">
-              جيدة
-            </label>
-
+            <input type="radio" id="screen3" name="screen_condition" value="جيدة">
+            <label for="screen3">جيدة</label>
           </div>
 
           <div class="choice">
-
-            <input
-              type="radio"
-              id="screen4"
-              name="screen_condition"
-              value="بها خدوش"
-            >
-
-            <label for="screen4">
-              بها خدوش
-            </label>
-
+            <input type="radio" id="screen4" name="screen_condition" value="بها خدوش">
+            <label for="screen4">بها خدوش</label>
           </div>
 
           <div class="choice">
-
-            <input
-              type="radio"
-              id="screen5"
-              name="screen_condition"
-              value="مبدلة"
-            >
-
-            <label for="screen5">
-              مبدلة
-            </label>
-
+            <input type="radio" id="screen5" name="screen_condition" value="مبدلة">
+            <label for="screen5">مبدلة</label>
           </div>
 
         </div>
@@ -1003,49 +914,18 @@
         <div class="choice-grid">
 
           <div class="choice">
-
-            <input
-              type="radio"
-              id="security1"
-              name="face_id"
-              value="يعمل"
-              required
-            >
-
-            <label for="security1">
-              يعمل
-            </label>
-
+            <input type="radio" id="security1" name="face_id" value="يعمل" required>
+            <label for="security1">يعمل</label>
           </div>
 
           <div class="choice">
-
-            <input
-              type="radio"
-              id="security2"
-              name="face_id"
-              value="لا يعمل"
-            >
-
-            <label for="security2">
-              لا يعمل
-            </label>
-
+            <input type="radio" id="security2" name="face_id" value="لا يعمل">
+            <label for="security2">لا يعمل</label>
           </div>
 
           <div class="choice">
-
-            <input
-              type="radio"
-              id="security3"
-              name="face_id"
-              value="غير متوفر"
-            >
-
-            <label for="security3">
-              غير متوفر
-            </label>
-
+            <input type="radio" id="security3" name="face_id" value="غير متوفر">
+            <label for="security3">غير متوفر</label>
           </div>
 
         </div>
@@ -1064,49 +944,18 @@
         <div class="choice-grid">
 
           <div class="choice">
-
-            <input
-              type="radio"
-              id="camera1"
-              name="cameras"
-              value="تعمل"
-              required
-            >
-
-            <label for="camera1">
-              تعمل
-            </label>
-
+            <input type="radio" id="camera1" name="cameras" value="تعمل" required>
+            <label for="camera1">تعمل</label>
           </div>
 
           <div class="choice">
-
-            <input
-              type="radio"
-              id="camera2"
-              name="cameras"
-              value="بها مشكلة"
-            >
-
-            <label for="camera2">
-              بها مشكلة
-            </label>
-
+            <input type="radio" id="camera2" name="cameras" value="بها مشكلة">
+            <label for="camera2">بها مشكلة</label>
           </div>
 
           <div class="choice">
-
-            <input
-              type="radio"
-              id="camera3"
-              name="cameras"
-              value="لا تعمل"
-            >
-
-            <label for="camera3">
-              لا تعمل
-            </label>
-
+            <input type="radio" id="camera3" name="cameras" value="لا تعمل">
+            <label for="camera3">لا تعمل</label>
           </div>
 
         </div>
@@ -1125,49 +974,18 @@
         <div class="choice-grid">
 
           <div class="choice">
-
-            <input
-              type="radio"
-              id="charging1"
-              name="charging"
-              value="يعمل"
-              required
-            >
-
-            <label for="charging1">
-              يعمل
-            </label>
-
+            <input type="radio" id="charging1" name="charging" value="يعمل" required>
+            <label for="charging1">يعمل</label>
           </div>
 
           <div class="choice">
-
-            <input
-              type="radio"
-              id="charging2"
-              name="charging"
-              value="به مشكلة"
-            >
-
-            <label for="charging2">
-              به مشكلة
-            </label>
-
+            <input type="radio" id="charging2" name="charging" value="به مشكلة">
+            <label for="charging2">به مشكلة</label>
           </div>
 
           <div class="choice">
-
-            <input
-              type="radio"
-              id="charging3"
-              name="charging"
-              value="لا يعمل"
-            >
-
-            <label for="charging3">
-              لا يعمل
-            </label>
-
+            <input type="radio" id="charging3" name="charging" value="لا يعمل">
+            <label for="charging3">لا يعمل</label>
           </div>
 
         </div>
@@ -1186,108 +1004,83 @@
         <div class="choice-grid">
 
           <div class="choice">
-
             <input
               type="checkbox"
               id="partsNone"
               name="replaced_parts"
               value="لا توجد"
             >
-
-            <label for="partsNone">
-              لا توجد
-            </label>
-
+            <label for="partsNone">لا توجد</label>
           </div>
 
           <div class="choice">
-
             <input
               type="checkbox"
               id="partsBattery"
               name="replaced_parts"
               value="البطارية"
             >
-
-            <label for="partsBattery">
-              البطارية
-            </label>
-
+            <label for="partsBattery">البطارية</label>
           </div>
 
           <div class="choice">
-
             <input
               type="checkbox"
               id="partsScreen"
               name="replaced_parts"
               value="الشاشة"
             >
-
-            <label for="partsScreen">
-              الشاشة
-            </label>
-
+            <label for="partsScreen">الشاشة</label>
           </div>
 
           <div class="choice">
-
             <input
               type="checkbox"
               id="partsCamera"
               name="replaced_parts"
               value="الكاميرات"
             >
-
-            <label for="partsCamera">
-              الكاميرات
-            </label>
-
+            <label for="partsCamera">الكاميرات</label>
           </div>
 
           <div class="choice">
-
             <input
               type="checkbox"
               id="partsBody"
               name="replaced_parts"
               value="الهيكل"
             >
-
-            <label for="partsBody">
-              الهيكل
-            </label>
-
+            <label for="partsBody">الهيكل</label>
           </div>
 
           <div class="choice">
+            <input
+              type="checkbox"
+              id="partsBack"
+              name="replaced_parts"
+              value="ظهر الهاتف"
+            >
+            <label for="partsBack">ظهر الهاتف</label>
+          </div>
 
+          <div class="choice">
             <input
               type="checkbox"
               id="partsSpeaker"
               name="replaced_parts"
               value="السماعة"
             >
-
-            <label for="partsSpeaker">
-              السماعة
-            </label>
-
+            <label for="partsSpeaker">السماعة</label>
           </div>
 
           <div class="choice">
-
             <input
               type="checkbox"
               id="partsCharging"
               name="replaced_parts"
               value="منفذ الشحن"
             >
-
-            <label for="partsCharging">
-              منفذ الشحن
-            </label>
-
+            <label for="partsCharging">منفذ الشحن</label>
           </div>
 
         </div>
@@ -1320,8 +1113,8 @@
           <input
             id="price"
             type="number"
-            min="1000"
-            max="10000000"
+            min="20000"
+            max="5000000"
             step="1000"
             inputmode="numeric"
             placeholder="مثال: 850000"
@@ -1335,7 +1128,9 @@
         </div>
 
         <div class="price-help">
-          اكتب السعر بالدينار العراقي، مثال: 850000
+          أدخل السعر بالدينار العراقي.
+          <br>
+          يبدأ السعر من <strong>20 ألف د.ع</strong> ويصل إلى <strong>5 ملايين د.ع</strong>.
         </div>
 
       </div>
@@ -1351,7 +1146,10 @@
         صور الجهاز
       </div>
 
-      <div class="photo-box">
+      <div
+        class="photo-box"
+        id="photoBox"
+      >
 
         <div class="photo-icon">
 
@@ -1391,14 +1189,18 @@
         </div>
 
         <div class="photo-sub">
-
           الصور الحقيقية للجهاز مطلوبة قبل النشر.
-
           <br>
-
           الصور راح تنحفظ كاملة بدون قص.
-
         </div>
+
+        <button
+          class="photo-add-button"
+          id="photoAddButton"
+          type="button"
+        >
+          إضافة الصور
+        </button>
 
         <input
           id="photos"
@@ -1411,6 +1213,11 @@
         <div
           class="photo-count"
           id="photoCount"
+        ></div>
+
+        <div
+          class="photo-preview"
+          id="photoPreview"
         ></div>
 
       </div>
@@ -1533,9 +1340,7 @@
     >
 
       <path d="m3 10 9-7 9 7"/>
-
       <path d="M5 9v11h14V9"/>
-
       <path d="M9 20v-6h6v6"/>
 
     </svg>
@@ -2102,8 +1907,17 @@ const batteryInput =
 const photosInput =
   document.getElementById("photos");
 
+const photoBox =
+  document.getElementById("photoBox");
+
+const photoAddButton =
+  document.getElementById("photoAddButton");
+
 const photoCount =
   document.getElementById("photoCount");
+
+const photoPreview =
+  document.getElementById("photoPreview");
 
 const replacedPartInputs =
   Array.from(
@@ -2114,6 +1928,37 @@ const replacedPartInputs =
 
 const replacedNoneInput =
   document.getElementById("partsNone");
+
+
+/* ============================================================
+   PAGE RESET / SCROLL
+============================================================ */
+
+if("scrollRestoration" in history){
+  history.scrollRestoration = "manual";
+}
+
+function resetPageScroll(){
+  window.scrollTo({
+    top:0,
+    left:0,
+    behavior:"auto"
+  });
+}
+
+window.addEventListener(
+  "pageshow",
+  () => {
+    resetPageScroll();
+  }
+);
+
+window.addEventListener(
+  "load",
+  () => {
+    resetPageScroll();
+  }
+);
 
 
 /* ============================================================
@@ -2316,7 +2161,11 @@ document
   .addEventListener(
     "click",
     () => {
+
+      resetPageScroll();
+
       history.back();
+
     }
   );
 
@@ -2346,41 +2195,196 @@ document
 
 
 /* ============================================================
-   PHOTO COUNT
+   PHOTO PICKER
 ============================================================ */
+
+photoAddButton.addEventListener(
+  "click",
+  event => {
+
+    event.stopPropagation();
+
+    photosInput.click();
+
+  }
+);
+
+
+photoBox.addEventListener(
+  "click",
+  event => {
+
+    if(
+      event.target ===
+      photoAddButton
+    ){
+
+      return;
+
+    }
+
+    photosInput.click();
+
+  }
+);
+
+
+/* ============================================================
+   PHOTO PREVIEW
+============================================================ */
+
+function clearPhotoPreview(){
+
+  photoPreview.innerHTML =
+    "";
+
+  photoPreview.classList.remove(
+    "show"
+  );
+
+}
+
+
+function updatePhotoPreview(){
+
+  clearPhotoPreview();
+
+  const files =
+    Array.from(
+      photosInput.files || []
+    );
+
+  const count =
+    files.length;
+
+  if(!count){
+
+    photoCount.style.display =
+      "none";
+
+    photoCount.textContent =
+      "";
+
+    return;
+
+  }
+
+
+  if(count === 1){
+
+    photoCount.textContent =
+      "تم اختيار صورة واحدة";
+
+  }else{
+
+    photoCount.textContent =
+      `تم اختيار ${count} صور`;
+
+  }
+
+  photoCount.style.display =
+    "block";
+
+
+  files
+    .slice(0,10)
+    .forEach(
+      (file,index) => {
+
+        if(
+          !file.type ||
+          !file.type.startsWith(
+            "image/"
+          )
+        ){
+
+          return;
+
+        }
+
+
+        const item =
+          document.createElement(
+            "div"
+          );
+
+        item.className =
+          "preview-item";
+
+
+        const image =
+          document.createElement(
+            "img"
+          );
+
+        const number =
+          document.createElement(
+            "div"
+          );
+
+        number.className =
+          "preview-number";
+
+        number.textContent =
+          String(index + 1).padStart(
+            2,
+            "0"
+          );
+
+
+        const objectUrl =
+          URL.createObjectURL(
+            file
+          );
+
+
+        image.onload =
+          () => {
+
+            URL.revokeObjectURL(
+              objectUrl
+            );
+
+          };
+
+
+        image.src =
+          objectUrl;
+
+        image.alt =
+          `صورة الجهاز ${index + 1}`;
+
+
+        item.appendChild(
+          image
+        );
+
+        item.appendChild(
+          number
+        );
+
+        photoPreview.appendChild(
+          item
+        );
+
+      }
+    );
+
+
+  if(photoPreview.children.length){
+
+    photoPreview.classList.add(
+      "show"
+    );
+
+  }
+
+}
+
 
 photosInput.addEventListener(
   "change",
-  () => {
-
-    const files =
-      Array.from(
-        photosInput.files || []
-      );
-
-    const count =
-      files.length;
-
-    if(!count){
-
-      photoCount.style.display =
-        "none";
-
-      photoCount.textContent =
-        "";
-
-      return;
-    }
-
-    photoCount.textContent =
-      count === 1
-        ? "تم اختيار صورة واحدة"
-        : `تم اختيار ${count} صور`;
-
-    photoCount.style.display =
-      "block";
-
-  }
+  updatePhotoPreview
 );
 
 
@@ -2406,6 +2410,7 @@ async function requireLogin(){
       encodeURIComponent("sell.html");
 
     return null;
+
   }
 
   return data.session.user;
@@ -2415,17 +2420,6 @@ async function requireLogin(){
 
 /* ============================================================
    IMAGE COMPRESSION
-============================================================
-
-   الصور تنضغط قبل الرفع حتى يكون النشر أسرع.
-
-   القواعد:
-   - لا يوجد Crop.
-   - لا تتغير نسبة الصورة.
-   - أقصى بُعد للصورة 1800px.
-   - JPEG بجودة 0.82.
-   - إذا كانت الصورة أصلاً صغيرة وخفيفة، نستخدمها
-     كما هي حتى ما نخسر جودة بدون داعي.
 ============================================================ */
 
 const IMAGE_MAX_SIZE =
@@ -2509,11 +2503,6 @@ function canvasToBlob(
 
 async function compressImage(file){
 
-  /*
-   * إذا الصورة صغيرة أصلاً،
-   * لا نعيد ضغطها.
-   */
-
   if(
     file.size <=
     IMAGE_KEEP_ORIGINAL_UNDER
@@ -2547,10 +2536,6 @@ async function compressImage(file){
   }
 
 
-  /*
-   * الحفاظ على النسبة الأصلية.
-   */
-
   const largestSide =
     Math.max(
       originalWidth,
@@ -2583,12 +2568,6 @@ async function compressImage(file){
       )
     );
 
-
-  /*
-   * إذا أبعاد الصورة أقل من 1800
-   * ولكن حجمها كبير، نخلي الأبعاد نفسها
-   * ونضغط الجودة فقط.
-   */
 
   if(
     largestSide <=
@@ -2632,23 +2611,12 @@ async function compressImage(file){
   }
 
 
-  /*
-   * إعدادات رسم الصورة حتى تكون
-   * النتيجة واضحة بدون قص.
-   */
-
   context.imageSmoothingEnabled =
     true;
 
   context.imageSmoothingQuality =
     "high";
 
-
-  /*
-   * drawImage يرسم الصورة كاملة
-   * حسب العرض والارتفاع الجديدين.
-   * لا يوجد object-fit أو crop.
-   */
 
   context.drawImage(
     image,
@@ -2673,11 +2641,6 @@ async function compressImage(file){
 
   }
 
-
-  /*
-   * إذا الناتج صار أكبر من الملف الأصلي،
-   * نستخدم الملف الأصلي.
-   */
 
   if(
     blob.size >=
@@ -2803,10 +2766,6 @@ async function uploadDeviceImages(
     }
 
 
-    /*
-     * ضغط الصورة أولاً.
-     */
-
     submitBtn.textContent =
       `تجهيز الصورة ${i + 1} من ${files.length}...`;
 
@@ -2827,11 +2786,6 @@ async function uploadDeviceImages(
         "IMAGE COMPRESSION FALLBACK:",
         compressionError
       );
-
-      /*
-       * إذا المتصفح ما قدر يعالج الصورة،
-       * نرفع الأصل بدل ما نوقف العملية.
-       */
 
       file =
         originalFile;
@@ -2966,6 +2920,79 @@ async function removeUploadedImages(
 
 
 /* ============================================================
+   RESET FORM AFTER RETURN
+============================================================ */
+
+function resetSellForm(){
+
+  const formControls =
+    document.querySelectorAll(
+      "input, select, textarea"
+    );
+
+  formControls.forEach(
+    element => {
+
+      if(
+        element.type ===
+        "radio" ||
+        element.type ===
+        "checkbox"
+      ){
+
+        element.checked =
+          false;
+
+      }else{
+
+        element.value =
+          "";
+
+      }
+
+    }
+  );
+
+
+  modelInput.innerHTML =
+    '<option value="">اختار الشركة أولاً</option>';
+
+  modelInput.disabled =
+    true;
+
+  modelStatus.textContent =
+    "بعد اختيار الشركة راح تظهر موديلاتها.";
+
+
+  batteryField.style.display =
+    "none";
+
+  batteryInput.required =
+    false;
+
+
+  clearPhotoPreview();
+
+  photoCount.textContent =
+    "";
+
+  photoCount.style.display =
+    "none";
+
+
+  submitBtn.disabled =
+    false;
+
+  submitBtn.textContent =
+    "نشر الجهاز";
+
+
+  resetPageScroll();
+
+}
+
+
+/* ============================================================
    SAVE DEVICE
 ============================================================ */
 
@@ -2980,10 +3007,6 @@ async function saveDevice(){
 
   }
 
-
-  /* =========================
-     BASIC DATA
-  ========================= */
 
   const brand =
     brandInput.value.trim();
@@ -3003,10 +3026,6 @@ async function saveDevice(){
       .value
       .trim();
 
-
-  /* =========================
-     CONDITION
-  ========================= */
 
   const isApple =
     brand === "Apple";
@@ -3049,10 +3068,6 @@ async function saveDevice(){
       )?.value || "";
 
 
-  /* =========================
-     REPLACED PARTS
-  ========================= */
-
   const replacedParts =
     Array.from(
       document.querySelectorAll(
@@ -3068,10 +3083,6 @@ async function saveDevice(){
     replacedParts.join("، ");
 
 
-  /* =========================
-     PRICE
-  ========================= */
-
   const price =
     Number(
       document
@@ -3080,20 +3091,12 @@ async function saveDevice(){
     );
 
 
-  /* =========================
-     NOTES
-  ========================= */
-
   const notes =
     document
       .getElementById("notes")
       .value
       .trim();
 
-
-  /* =========================
-     PHOTOS
-  ========================= */
 
   const photos =
     Array.from(
@@ -3236,14 +3239,38 @@ async function saveDevice(){
   }
 
 
+  /* =========================
+     PRICE LIMITS
+  ========================= */
+
   if(
-    !Number.isInteger(price) ||
-    price < 1000 ||
-    price > 10000000
+    !Number.isInteger(price)
   ){
 
     showToast(
-      "أدخل سعراً صحيحاً بين 1,000 و 10,000,000 د.ع"
+      "أدخل سعراً صحيحاً"
+    );
+
+    return;
+
+  }
+
+
+  if(price < 20000){
+
+    showToast(
+      "السعر المدخل أقل من الحد الأدنى المسموح به: 20 ألف د.ع"
+    );
+
+    return;
+
+  }
+
+
+  if(price > 5000000){
+
+    showToast(
+      "السعر المدخل يتجاوز الحد الأعلى المسموح به: 5 ملايين د.ع"
     );
 
     return;
@@ -3464,6 +3491,17 @@ async function saveDevice(){
     );
 
 
+    /*
+     * نخلي الصفحة ترجع نظيفة إذا
+     * رجع المستخدم إليها لاحقاً.
+     */
+
+    sessionStorage.setItem(
+      "mzad_sell_reset",
+      "1"
+    );
+
+
     setTimeout(() => {
 
       window.location.href =
@@ -3540,6 +3578,25 @@ async function saveDevice(){
       "نشر الجهاز";
 
   }
+
+}
+
+
+/* ============================================================
+   RESET FLAG
+============================================================ */
+
+if(
+  sessionStorage.getItem(
+    "mzad_sell_reset"
+  ) === "1"
+){
+
+  sessionStorage.removeItem(
+    "mzad_sell_reset"
+  );
+
+  resetSellForm();
 
 }
 
