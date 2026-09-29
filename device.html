@@ -194,7 +194,6 @@
 
 
     @keyframes headerWave{
-
       0%{
         transform:
           translateX(-5px)
@@ -208,12 +207,10 @@
           rotate(5deg)
           scale(1.08);
       }
-
     }
 
 
     @keyframes headerWaveReverse{
-
       0%{
         transform:
           translateX(10px)
@@ -227,7 +224,6 @@
           rotate(-5deg)
           scale(1.08);
       }
-
     }
 
 
@@ -317,7 +313,7 @@
     ========================= */
 
     main{
-      padding:0 16px 0;
+      padding:0 16px;
     }
 
 
@@ -331,14 +327,7 @@
       margin-right:-16px;
       margin-left:-16px;
 
-      margin-bottom:0;
-
       background:#fff;
-
-      border:0;
-      border-radius:0;
-
-      box-shadow:none;
 
       overflow:hidden;
     }
@@ -366,7 +355,6 @@
       overflow-x:auto;
 
       scroll-snap-type:x mandatory;
-
       scroll-behavior:smooth;
 
       scrollbar-width:none;
@@ -388,15 +376,13 @@
       min-width:100%;
       height:100%;
 
+      position:relative;
+
       display:flex;
       align-items:center;
       justify-content:center;
 
       scroll-snap-align:center;
-
-      padding:0;
-
-      background:#f1f2f4;
 
       overflow:hidden;
 
@@ -404,16 +390,66 @@
 
       user-select:none;
       -webkit-user-select:none;
+
+      background:#eef0f2;
+    }
+
+
+    /* الخلفية الضبابية للصورة */
+
+    .gallery-slide::before{
+      content:"";
+
+      position:absolute;
+
+      inset:-28px;
+
+      background-image:var(--photo-bg);
+
+      background-position:center;
+      background-size:cover;
+      background-repeat:no-repeat;
+
+      filter:blur(24px);
+
+      transform:scale(1.08);
+
+      opacity:.34;
+
+      z-index:0;
+    }
+
+
+    .gallery-slide::after{
+      content:"";
+
+      position:absolute;
+
+      inset:0;
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.08),
+          rgba(255,255,255,.18)
+        );
+
+      z-index:1;
+
+      pointer-events:none;
     }
 
 
     .gallery-slide img{
+      position:relative;
+      z-index:2;
+
       width:100%;
       height:100%;
 
       display:block;
 
-      object-fit:cover;
+      object-fit:contain;
       object-position:center;
 
       user-select:none;
@@ -473,7 +509,7 @@
 
 
     /* =========================
-       PHOTO COUNTER
+       COUNTER
     ========================= */
 
     .gallery-counter{
@@ -525,8 +561,6 @@
 
       transform:translateX(-50%);
 
-      height:auto;
-
       display:flex;
       align-items:center;
       justify-content:center;
@@ -572,13 +606,12 @@
 
     /* =========================
        PHOTO HINT
-       ملاحظة صغيرة تحت الصورة
     ========================= */
 
     .photo-hint{
-      min-height:38px;
+      min-height:42px;
 
-      padding:8px 4px 6px;
+      padding:9px 12px;
 
       display:flex;
       align-items:center;
@@ -586,14 +619,17 @@
 
       text-align:center;
 
-      color:#8b95a0;
+      color:#657681;
 
       font-size:10px;
-      font-weight:600;
+      font-weight:700;
 
       line-height:1.6;
 
-      background:#fff;
+      background:#f4f8fa;
+
+      border-top:1px solid #e8eef1;
+      border-bottom:1px solid #e8eef1;
 
       user-select:none;
       pointer-events:none;
@@ -603,21 +639,29 @@
     .photo-hint::before{
       content:"";
 
-      width:4px;
-      height:4px;
+      width:17px;
+      height:17px;
 
-      margin-left:6px;
+      margin-left:7px;
 
-      border-radius:50%;
+      border-radius:6px;
 
-      background:#b7bec5;
+      background-color:#e3f0f4;
 
-      flex:0 0 4px;
+      border:1px solid #cfe4ea;
+
+      flex:0 0 17px;
+
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%23176b87' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 10v6M12 7h.01'/%3E%3C/svg%3E");
+
+      background-repeat:no-repeat;
+      background-position:center;
+      background-size:11px 11px;
     }
 
 
     /* =========================
-       FULLSCREEN PHOTO VIEWER
+       FULLSCREEN VIEWER
     ========================= */
 
     .photo-viewer{
@@ -762,7 +806,6 @@
 
     .photo-viewer-image.changing{
       opacity:.35;
-
       transform:scale(.985);
     }
 
@@ -807,24 +850,6 @@
     .photo-viewer-arrow svg{
       width:20px;
       height:20px;
-    }
-
-
-    @media(max-width:360px){
-
-      .photo-viewer-arrow{
-        width:38px;
-        height:38px;
-      }
-
-      .photo-viewer-prev{
-        right:8px;
-      }
-
-      .photo-viewer-next{
-        left:8px;
-      }
-
     }
 
 
@@ -966,11 +991,8 @@
       font-size:11px;
       font-weight:800;
 
-      letter-spacing:.5px;
-
       opacity:.70;
 
-      direction:rtl;
       text-align:right;
     }
 
@@ -1021,14 +1043,11 @@
       font-weight:800;
 
       white-space:nowrap;
-
-      box-shadow:
-        0 3px 9px rgba(98,70,217,.06);
     }
 
 
     /* =========================
-       DETAILS INTRO
+       INTRO
     ========================= */
 
     .details-intro{
@@ -1110,7 +1129,6 @@
 
     .intro-arrow{
       color:#8a96a1;
-
       display:flex;
     }
 
@@ -1122,7 +1140,7 @@
 
 
     /* =========================
-       SECTION
+       SECTIONS
     ========================= */
 
     .section{
@@ -1172,7 +1190,7 @@
 
       border:1px solid var(--line);
 
-      background:var(--surface);
+      background:#fff;
 
       display:flex;
       align-items:center;
@@ -1199,10 +1217,10 @@
         linear-gradient(
           145deg,
           #fff,
-          #f6f3ff
+          #f7fafb
         );
 
-      border-color:#e7e2fa;
+      border-color:#e5eaed;
     }
 
 
@@ -1239,9 +1257,11 @@
     }
 
 
+    /* لا يوجد بنفسجي في أيقونات المواصفات */
+
     .spec-card:nth-child(3n+2) .spec-icon{
-      color:var(--purple);
-      background:var(--purple-soft);
+      color:var(--primary);
+      background:var(--surface-2);
     }
 
 
@@ -1582,7 +1602,7 @@
 
 
     /* =========================
-       BOTTOM ACTIONS
+       ACTIONS
     ========================= */
 
     .action-wrap{
@@ -1737,11 +1757,9 @@
 
 
     @keyframes spin{
-
       to{
         transform:rotate(360deg);
       }
-
     }
 
 
@@ -1887,9 +1905,21 @@
 
 
       .photo-hint{
-        min-height:36px;
-        padding:7px 4px 5px;
+        min-height:38px;
+
+        padding:7px 8px;
+
         font-size:9px;
+      }
+
+
+      .photo-hint::before{
+        width:16px;
+        height:16px;
+
+        flex-basis:16px;
+
+        margin-left:6px;
       }
 
 
@@ -1986,7 +2016,7 @@
 
 
     /* =========================
-       TABLET / LARGER PHONE
+       LARGER PHONE
     ========================= */
 
     @media(min-width:600px){
@@ -2014,7 +2044,6 @@
           id="backBtn"
           aria-label="رجوع"
         >
-
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -2025,7 +2054,6 @@
           >
             <path d="M15 18l-6-6 6-6"/>
           </svg>
-
         </button>
 
       </div>
@@ -2051,7 +2079,6 @@
           id="shareBtn"
           aria-label="مشاركة"
         >
-
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -2065,7 +2092,6 @@
             <circle cx="18" cy="19" r="2.5"/>
             <path d="M8.2 10.8l7.5-4.3M8.2 13.2l7.5 4.3"/>
           </svg>
-
         </button>
 
       </div>
@@ -2116,7 +2142,6 @@
         aria-label="إغلاق"
         type="button"
       >
-
         <svg
           viewBox="0 0 24 24"
           fill="none"
@@ -2128,7 +2153,6 @@
           <path d="M18 6L6 18"/>
           <path d="M6 6l12 12"/>
         </svg>
-
       </button>
 
     </div>
@@ -2155,7 +2179,6 @@
       aria-label="الصورة السابقة"
       type="button"
     >
-
       <svg
         viewBox="0 0 24 24"
         fill="none"
@@ -2166,7 +2189,6 @@
       >
         <path d="M14 18l-6-6 6-6"/>
       </svg>
-
     </button>
 
 
@@ -2176,7 +2198,6 @@
       aria-label="الصورة التالية"
       type="button"
     >
-
       <svg
         viewBox="0 0 24 24"
         fill="none"
@@ -2187,7 +2208,6 @@
       >
         <path d="M10 18l6-6-6-6"/>
       </svg>
-
     </button>
 
   </div>
@@ -2290,14 +2310,12 @@
     const icons = {
 
       image: `
-        <svg
-          viewBox="0 0 24 24"
+        <svg viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           stroke-width="1.7"
           stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+          stroke-linejoin="round">
           <rect x="3" y="4" width="18" height="16" rx="3"/>
           <circle cx="8.5" cy="9" r="1.5"/>
           <path d="M21 15l-4.5-4.5L8 19"/>
@@ -2306,14 +2324,12 @@
 
 
       storage: `
-        <svg
-          viewBox="0 0 24 24"
+        <svg viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           stroke-width="1.7"
           stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+          stroke-linejoin="round">
           <path d="M6 4h12l2 4v11H4V8l2-4z"/>
           <path d="M4 8h16M9 12h6"/>
         </svg>
@@ -2321,14 +2337,12 @@
 
 
       color: `
-        <svg
-          viewBox="0 0 24 24"
+        <svg viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           stroke-width="1.7"
           stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+          stroke-linejoin="round">
           <path d="M12 3a9 9 0 1 0 0 18h1.5a2 2 0 0 0 0-4H12a2 2 0 0 1 0-4h3a6 6 0 0 0 0-12h-3z"/>
           <circle cx="7.5" cy="9" r="1"/>
           <circle cx="11" cy="6.5" r="1"/>
@@ -2338,14 +2352,12 @@
 
 
       battery: `
-        <svg
-          viewBox="0 0 24 24"
+        <svg viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           stroke-width="1.7"
           stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+          stroke-linejoin="round">
           <rect x="3" y="7" width="17" height="10" rx="2"/>
           <path d="M20 10h2v4h-2M7 10v4M10 10v4M13 10v4"/>
         </svg>
@@ -2353,14 +2365,12 @@
 
 
       location: `
-        <svg
-          viewBox="0 0 24 24"
+        <svg viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           stroke-width="1.7"
           stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+          stroke-linejoin="round">
           <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"/>
           <circle cx="12" cy="10" r="2.5"/>
         </svg>
@@ -2368,14 +2378,12 @@
 
 
       phone: `
-        <svg
-          viewBox="0 0 24 24"
+        <svg viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           stroke-width="1.7"
           stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+          stroke-linejoin="round">
           <rect x="7" y="2.5" width="10" height="19" rx="2"/>
           <path d="M10 5h4M11 18.5h2"/>
         </svg>
@@ -2383,14 +2391,12 @@
 
 
       info: `
-        <svg
-          viewBox="0 0 24 24"
+        <svg viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           stroke-width="1.8"
           stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+          stroke-linejoin="round">
           <circle cx="12" cy="12" r="9"/>
           <path d="M12 10v6M12 7h.01"/>
         </svg>
@@ -2398,14 +2404,12 @@
 
 
       shield: `
-        <svg
-          viewBox="0 0 24 24"
+        <svg viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           stroke-width="1.7"
           stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+          stroke-linejoin="round">
           <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z"/>
           <path d="M9 12l2 2 4-4"/>
         </svg>
@@ -2413,38 +2417,31 @@
 
 
       heart: `
-        <svg
-          viewBox="0 0 24 24"
+        <svg viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           stroke-width="1.8"
           stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+          stroke-linejoin="round">
           <path d="M20.8 8.9c0 5.1-8.8 10.1-8.8 10.1S3.2 14 3.2 8.9A4.7 4.7 0 0 1 12 6.4a4.7 4.7 0 0 1 8.8 2.5z"/>
         </svg>
       `,
 
 
       heartFill: `
-        <svg
-          viewBox="0 0 24 24"
-          fill="currentColor"
-        >
+        <svg viewBox="0 0 24 24" fill="currentColor">
           <path d="M20.8 8.9c0 5.1-8.8 10.1-8.8 10.1S3.2 14 3.2 8.9A4.7 4.7 0 0 1 12 6.4a4.7 4.7 0 0 1 8.8 2.5z"/>
         </svg>
       `,
 
 
       cart: `
-        <svg
-          viewBox="0 0 24 24"
+        <svg viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           stroke-width="1.8"
           stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+          stroke-linejoin="round">
           <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 1.9-1.5L20 8H6"/>
           <circle cx="10" cy="19" r="1.4"/>
           <circle cx="17" cy="19" r="1.4"/>
@@ -2453,14 +2450,12 @@
 
 
       alert: `
-        <svg
-          viewBox="0 0 24 24"
+        <svg viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           stroke-width="1.8"
           stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+          stroke-linejoin="round">
           <path d="M12 3l9 17H3L12 3z"/>
           <path d="M12 9v5M12 17h.01"/>
         </svg>
@@ -2578,9 +2573,7 @@
         value.startsWith("data:") ||
         value.startsWith("blob:")
       ){
-
         return value;
-
       }
 
       const { data } =
@@ -2731,7 +2724,7 @@
 
 
     /* =========================
-       FETCH
+       LOAD DEVICE
     ========================= */
 
     async function loadDevice(){
@@ -2791,14 +2784,10 @@
 
 
     /* =========================
-       RENDER
+       RENDER DEVICE
     ========================= */
 
     function renderDevice(){
-
-      /*
-        الحد الأقصى 6 صور فقط.
-      */
 
       const images =
         parseImages(device.images)
@@ -2997,6 +2986,7 @@
                     <div
                       class="gallery-slide"
                       data-index="${index}"
+                      style="--photo-bg:url('${escapeHTML(src)}')"
                     >
 
                       <img
@@ -3109,11 +3099,8 @@
               ? `
 
                 <span class="chip">
-
                   ${icons.storage}
-
                   ${escapeHTML(device.storage)}
-
                 </span>
 
               `
@@ -3126,11 +3113,8 @@
               ? `
 
                 <span class="chip">
-
                   ${icons.color}
-
                   ${escapeHTML(device.color)}
-
                 </span>
 
               `
@@ -3589,10 +3573,6 @@
       );
 
 
-      /* =========================
-         TOUCH DETECTION
-      ========================= */
-
       galleryTrack.addEventListener(
         "touchstart",
         (event)=>{
@@ -3603,7 +3583,9 @@
           galleryTouchStartX =
             event.touches[0]?.clientX || 0;
 
-          restartGalleryAutoplay();
+          clearInterval(
+            galleryAutoPlayTimer
+          );
 
         },
         {passive:true}
@@ -3638,31 +3620,28 @@
       galleryTrack.addEventListener(
         "touchend",
         ()=>{
-          restartGalleryAutoplay();
 
           setTimeout(()=>{
-            galleryTouchMoved = false;
-          },80);
+
+            galleryTouchMoved =
+              false;
+
+          },120);
+
+
+          restartGalleryAutoplay();
+
         },
         {passive:true}
       );
 
-
-      /* =========================
-         CLICK IMAGE
-      ========================= */
 
       galleryTrack.addEventListener(
         "click",
         (event)=>{
 
           if(galleryTouchMoved){
-
-            galleryTouchMoved =
-              false;
-
             return;
-
           }
 
 
@@ -3695,23 +3674,6 @@
         }
       );
 
-
-      /* =========================
-         POINTER
-      ========================= */
-
-      galleryTrack.addEventListener(
-        "pointerdown",
-        ()=>{
-          restartGalleryAutoplay();
-        },
-        {passive:true}
-      );
-
-
-      /* =========================
-         AUTOPLAY
-      ========================= */
 
       function goToSlide(index){
 
@@ -3761,7 +3723,7 @@
             }
 
 
-            let current =
+            const current =
               Math.round(
                 galleryTrack.scrollLeft /
                 width
@@ -4058,7 +4020,7 @@
 
 
     /* =========================
-       SWIPE VIEWER
+       VIEWER SWIPE
     ========================= */
 
     photoViewerStage.addEventListener(
@@ -4115,13 +4077,9 @@
 
 
         if(deltaX < 0){
-
           nextPhoto();
-
         }else{
-
           previousPhoto();
-
         }
 
       },
@@ -4376,7 +4334,7 @@
             title,
 
             text:
-              `شوف هذا الجهاز على MZAD PHONE`,
+              "شوف هذا الجهاز على MZAD PHONE",
 
             url
 
