@@ -361,7 +361,15 @@
 
       overscroll-behavior-x:contain;
 
-      touch-action:pan-x;
+      /*
+        مهم:
+        نخلي المتصفح يتعامل طبيعي ويا
+        السحب العمودي للصفحة،
+        والسحب الأفقي للصور.
+      */
+      touch-action:pan-x pan-y;
+
+      -webkit-overflow-scrolling:touch;
     }
 
 
@@ -391,53 +399,18 @@
       user-select:none;
       -webkit-user-select:none;
 
-      background:#eef0f2;
+      /*
+        بدون أي ضبابية.
+      */
+      background:#f1f2f4;
     }
 
 
-    /* الخلفية الضبابية للصورة */
-
-    .gallery-slide::before{
-      content:"";
-
-      position:absolute;
-
-      inset:-28px;
-
-      background-image:var(--photo-bg);
-
-      background-position:center;
-      background-size:cover;
-      background-repeat:no-repeat;
-
-      filter:blur(24px);
-
-      transform:scale(1.08);
-
-      opacity:.34;
-
-      z-index:0;
-    }
-
-
-    .gallery-slide::after{
-      content:"";
-
-      position:absolute;
-
-      inset:0;
-
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,255,255,.08),
-          rgba(255,255,255,.18)
-        );
-
-      z-index:1;
-
-      pointer-events:none;
-    }
+    /*
+      تم حذف الخلفية الضبابية بالكامل.
+      لا ::before
+      ولا ::after
+    */
 
 
     .gallery-slide img{
@@ -449,12 +422,19 @@
 
       display:block;
 
+      /*
+        الصورة كاملة بدون قص.
+      */
       object-fit:contain;
       object-position:center;
 
       user-select:none;
       -webkit-user-drag:none;
 
+      /*
+        نخلي أحداث اللمس على الـ slide
+        حتى نقدر نميز الضغط عن السحب.
+      */
       pointer-events:none;
     }
 
@@ -779,6 +759,8 @@
         30px;
 
       overflow:hidden;
+
+      touch-action:none;
     }
 
 
@@ -795,6 +777,8 @@
 
       user-select:none;
       -webkit-user-drag:none;
+
+      pointer-events:none;
 
       transition:
         opacity .18s ease,
@@ -1256,8 +1240,6 @@
         0 4px 10px rgba(24,44,49,.045);
     }
 
-
-    /* لا يوجد بنفسجي في أيقونات المواصفات */
 
     .spec-card:nth-child(3n+2) .spec-icon{
       color:var(--primary);
@@ -2256,9 +2238,22 @@
 
     let galleryAutoPlayTimer = null;
 
+    /*
+      هذا المتغير يبقى true طوال فترة السحب،
+      وبعدها يتحول false بعد انتهاء اللمسة.
+    */
     let galleryTouchMoved = false;
 
     let galleryTouchStartX = 0;
+
+    let galleryTouchStartY = 0;
+
+    let galleryTouchActive = false;
+
+    /*
+      يمنع click الذي يجي مباشرة بعد السحب.
+    */
+    let suppressGalleryClickUntil = 0;
 
 
     const photoViewer =
@@ -2986,7 +2981,6 @@
                     <div
                       class="gallery-slide"
                       data-index="${index}"
-                      style="--photo-bg:url('${escapeHTML(src)}')"
                     >
 
                       <img
@@ -3481,7 +3475,8 @@
 
     /* =========================
        GALLERY
-       AUTOPLAY 5 SECONDS
+       5 SECOND AUTOPLAY
+       TOUCH SAFE
     ========================= */
 
     function setupGallery(){
@@ -3573,15 +3568,33 @@
       );
 
 
+      /*
+        بداية اللمسة.
+      */
       galleryTrack.addEventListener(
         "touchstart",
         (event)=>{
+
+          const touch =
+            event.touches[0];
+
+          if(!touch){
+            return;
+          }
+
+
+          galleryTouchActive =
+            true;
 
           galleryTouchMoved =
             false;
 
           galleryTouchStartX =
-            event.touches[0]?.clientX || 0;
+            touch.clientX;
+
+          galleryTouchStartY =
+            touch.clientY;
+
 
           clearInterval(
             galleryAutoPlayTimer
@@ -3592,19 +3605,43 @@
       );
 
 
+      /*
+        نحدد هل المستخدم يسحب فعلاً.
+      */
       galleryTrack.addEventListener(
         "touchmove",
         (event)=>{
 
-          const currentX =
-            event.touches[0]?.clientX || 0;
+          if(!galleryTouchActive){
+            return;
+          }
 
 
+          const touch =
+            event.touches[0];
+
+          if(!touch){
+            return;
+          }
+
+
+          const deltaX =
+            touch.clientX -
+            galleryTouchStartX;
+
+
+          const deltaY =
+            touch.clientY -
+            galleryTouchStartY;
+
+
+          /*
+            أي حركة واضحة تعتبر سحب.
+            سواء أفقي أو عمودي.
+          */
           if(
-            Math.abs(
-              currentX -
-              galleryTouchStartX
-            ) > 8
+            Math.abs(deltaX) > 8 ||
+            Math.abs(deltaY) > 8
           ){
 
             galleryTouchMoved =
@@ -3617,16 +3654,23 @@
       );
 
 
+      /*
+        نهاية اللمسة.
+      */
       galleryTrack.addEventListener(
         "touchend",
         ()=>{
 
-          setTimeout(()=>{
+          if(galleryTouchMoved){
 
-            galleryTouchMoved =
-              false;
+            suppressGalleryClickUntil =
+              Date.now() + 650;
 
-          },120);
+          }
+
+
+          galleryTouchActive =
+            false;
 
 
           restartGalleryAutoplay();
@@ -3636,12 +3680,60 @@
       );
 
 
+      /*
+        إذا انتهت اللمسة خارج المنطقة.
+      */
+      galleryTrack.addEventListener(
+        "touchcancel",
+        ()=>{
+
+          if(galleryTouchMoved){
+
+            suppressGalleryClickUntil =
+              Date.now() + 650;
+
+          }
+
+
+          galleryTouchActive =
+            false;
+
+
+          restartGalleryAutoplay();
+
+        },
+        {passive:true}
+      );
+
+
+      /*
+        الضغط العادي فقط يفتح الصورة.
+        السحب لا يفتحها.
+      */
       galleryTrack.addEventListener(
         "click",
         (event)=>{
 
-          if(galleryTouchMoved){
+          if(
+            Date.now() <
+            suppressGalleryClickUntil
+          ){
+
+            event.preventDefault();
+            event.stopPropagation();
+
             return;
+
+          }
+
+
+          if(galleryTouchMoved){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            return;
+
           }
 
 
@@ -3715,6 +3807,14 @@
         galleryAutoPlayTimer =
           setInterval(()=>{
 
+            /*
+              لا تغير الصورة أثناء لمس المستخدم.
+            */
+            if(galleryTouchActive){
+              return;
+            }
+
+
             const width =
               galleryTrack.clientWidth;
 
@@ -3751,6 +3851,11 @@
         clearInterval(
           galleryAutoPlayTimer
         );
+
+
+        if(total <= 1){
+          return;
+        }
 
 
         galleryAutoPlayTimer =
