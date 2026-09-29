@@ -12,7 +12,27 @@
 
 <meta
   name="theme-color"
-  content="#f7f8fa"
+  content="#176b87"
+>
+
+<meta
+  name="mobile-web-app-capable"
+  content="yes"
+>
+
+<meta
+  name="apple-mobile-web-app-capable"
+  content="yes"
+>
+
+<meta
+  name="apple-mobile-web-app-status-bar-style"
+  content="default"
+>
+
+<meta
+  name="apple-mobile-web-app-title"
+  content="MZAD PHONE"
 >
 
 <link
@@ -23,17 +43,23 @@
 <title>MZAD PHONE — الرئيسية</title>
 
 
-<!-- SERVICE WORKER -->
+<!-- ================================
+     SERVICE WORKER / PWA
+================================ -->
 
 <script>
+(function () {
 
-if ("serviceWorker" in navigator) {
+  if (!("serviceWorker" in navigator)) {
+    return;
+  }
 
   window.addEventListener("load", function () {
 
     navigator.serviceWorker
       .register("/sw.js", {
-        scope: "/"
+        scope: "/",
+        updateViaCache: "none"
       })
       .then(function (registration) {
 
@@ -56,8 +82,7 @@ if ("serviceWorker" in navigator) {
 
   });
 
-}
-
+})();
 </script>
 
 
@@ -376,9 +401,6 @@ white-space:nowrap
 color:var(--primary-dark)
 }
 
-
-/* AUCTION */
-
 .auction-shell{
 position:relative;
 width:100%;
@@ -569,9 +591,6 @@ border-radius:999px;
 background:var(--purple)
 }
 
-
-/* ACTION CARDS */
-
 .actions-grid{
 display:grid;
 grid-template-columns:repeat(3,1fr);
@@ -659,9 +678,6 @@ font-size:10px;
 color:var(--muted);
 margin-top:2px
 }
-
-
-/* DEVICES */
 
 .featured-devices-track{
 scroll-behavior:smooth;
@@ -824,9 +840,6 @@ padding:5px 7px;
 border-radius:8px
 }
 
-
-/* TRUST */
-
 .trust-card{
 display:grid;
 grid-template-columns:repeat(3,1fr);
@@ -862,9 +875,6 @@ font-size:8px;
 color:var(--muted);
 margin-top:2px
 }
-
-
-/* BOTTOM NAV */
 
 .bottom-wrap{
 position:fixed;
@@ -927,9 +937,6 @@ width:22px;
 height:22px
 }
 
-
-/* TOAST */
-
 .toast{
 position:fixed;
 left:50%;
@@ -954,9 +961,6 @@ text-align:center
 opacity:1;
 transform:translateX(-50%) translateY(0)
 }
-
-
-/* REVEAL */
 
 .reveal{
 opacity:0;
@@ -1053,7 +1057,6 @@ stroke-linejoin="round"
 
 </div>
 
-
 <button
 class="location-box"
 id="locationBtn"
@@ -1086,7 +1089,6 @@ stroke-width="2"
 </span>
 
 </div>
-
 
 <svg
 width="21"
@@ -1135,7 +1137,6 @@ r="7"
 
 </svg>
 
-
 <input
 id="searchInput"
 class="search"
@@ -1145,7 +1146,6 @@ inputmode="search"
 placeholder='ابحث عن جهاز، مثل "iPhone 15 Pro"'
 aria-label="البحث عن جهاز"
 >
-
 
 <button
 id="searchClear"
@@ -1190,12 +1190,10 @@ href="market.html"
 
 </div>
 
-
 <div
 class="horizontal"
 id="categories"
 >
-
 
 <button
 class="category active"
@@ -1517,7 +1515,6 @@ href="auctions.html"
 
 </div>
 
-
 <div class="auction-shell">
 
 <div
@@ -1542,7 +1539,6 @@ data-go="auctions.html"
 
 </div>
 
-
 <div class="auction-copy">
 
 <p class="auction-kicker">
@@ -1556,7 +1552,6 @@ data-go="auctions.html"
 <p class="auction-desc">
 عند نشر أول جهاز بالمزاد، سيظهر هنا مع صورته الحقيقية والسعر الحالي والوقت المتبقي بشكل مباشر.
 </p>
-
 
 <div class="auction-bottom">
 
@@ -1584,7 +1579,6 @@ r="9"
 بيانات حيّة من قاعدة البيانات
 
 </div>
-
 
 <button
 class="auction-cta"
@@ -1653,10 +1647,7 @@ type="button"
 </article>
 
 
-<article
-class="auction-card"
-aria-hidden="true"
->
+<article class="auction-card" aria-hidden="true">
 
 <div class="auction-top">
 
@@ -1690,10 +1681,7 @@ aria-hidden="true"
 بيانات حيّة من قاعدة البيانات
 </div>
 
-<button
-class="auction-cta"
-type="button"
->
+<button class="auction-cta" type="button">
 قريباً
 </button>
 
@@ -1704,10 +1692,7 @@ type="button"
 </article>
 
 
-<article
-class="auction-card"
-aria-hidden="true"
->
+<article class="auction-card" aria-hidden="true">
 
 <div class="auction-top">
 
@@ -1741,10 +1726,7 @@ aria-hidden="true"
 بيانات حيّة من قاعدة البيانات
 </div>
 
-<button
-class="auction-cta"
-type="button"
->
+<button class="auction-cta" type="button">
 قريباً
 </button>
 
@@ -1755,10 +1737,7 @@ type="button"
 </article>
 
 
-<article
-class="auction-card"
-aria-hidden="true"
->
+<article class="auction-card" aria-hidden="true">
 
 <div class="auction-top">
 
@@ -1792,10 +1771,7 @@ aria-hidden="true"
 بيانات حيّة من قاعدة البيانات
 </div>
 
-<button
-class="auction-cta"
-type="button"
->
+<button class="auction-cta" type="button">
 قريباً
 </button>
 
@@ -1806,10 +1782,7 @@ type="button"
 </article>
 
 
-<article
-class="auction-card"
-aria-hidden="true"
->
+<article class="auction-card" aria-hidden="true">
 
 <div class="auction-top">
 
@@ -1843,10 +1816,7 @@ aria-hidden="true"
 بيانات حيّة من قاعدة البيانات
 </div>
 
-<button
-class="auction-cta"
-type="button"
->
+<button class="auction-cta" type="button">
 قريباً
 </button>
 
@@ -1857,10 +1827,7 @@ type="button"
 </article>
 
 
-<article
-class="auction-card"
-aria-hidden="true"
->
+<article class="auction-card" aria-hidden="true">
 
 <div class="auction-top">
 
@@ -1894,10 +1861,7 @@ aria-hidden="true"
 بيانات حيّة من قاعدة البيانات
 </div>
 
-<button
-class="auction-cta"
-type="button"
->
+<button class="auction-cta" type="button">
 قريباً
 </button>
 
@@ -1930,7 +1894,6 @@ type="button"
 <section class="section reveal d4">
 
 <div class="actions-grid">
-
 
 <button
 class="action-card"
@@ -2061,9 +2024,7 @@ stroke-width="1.9"
 
 <section class="section reveal d5">
 
-<div
-class="section-head"
->
+<div class="section-head">
 
 <h2 class="section-title">
 أجهزة مميزة
@@ -2084,13 +2045,8 @@ class="horizontal featured-devices-track"
 id="featuredDevicesTrack"
 >
 
-
-<!-- 1 -->
-
-<article
-class="device-card"
-data-device-id="design-1"
->
+<!-- الجهاز 1 -->
+<article class="device-card" data-device-id="design-1">
 
 <div class="device-image">
 
@@ -2134,9 +2090,7 @@ stroke-linejoin="round"
 
 <div class="device-row">
 
-<span class="device-price">
-—
-</span>
+<span class="device-price">—</span>
 
 <span class="device-type">
 بيع مباشر
@@ -2149,12 +2103,8 @@ stroke-linejoin="round"
 </article>
 
 
-<!-- 2 -->
-
-<article
-class="device-card"
-data-device-id="design-2"
->
+<!-- الجهاز 2 -->
+<article class="device-card" data-device-id="design-2">
 
 <div class="device-image">
 
@@ -2198,9 +2148,7 @@ stroke-linejoin="round"
 
 <div class="device-row">
 
-<span class="device-price">
-—
-</span>
+<span class="device-price">—</span>
 
 <span class="device-type">
 مزاد
@@ -2213,12 +2161,8 @@ stroke-linejoin="round"
 </article>
 
 
-<!-- 3 -->
-
-<article
-class="device-card"
-data-device-id="design-3"
->
+<!-- الجهاز 3 -->
+<article class="device-card" data-device-id="design-3">
 
 <div class="device-image">
 
@@ -2262,9 +2206,7 @@ stroke-linejoin="round"
 
 <div class="device-row">
 
-<span class="device-price">
-—
-</span>
+<span class="device-price">—</span>
 
 <span class="device-type">
 قريباً
@@ -2277,12 +2219,8 @@ stroke-linejoin="round"
 </article>
 
 
-<!-- 4 -->
-
-<article
-class="device-card"
-data-device-id="design-4"
->
+<!-- الجهاز 4 -->
+<article class="device-card" data-device-id="design-4">
 
 <div class="device-image">
 
@@ -2326,9 +2264,7 @@ stroke-linejoin="round"
 
 <div class="device-row">
 
-<span class="device-price">
-—
-</span>
+<span class="device-price">—</span>
 
 <span class="device-type">
 قريباً
@@ -2341,12 +2277,8 @@ stroke-linejoin="round"
 </article>
 
 
-<!-- 5 -->
-
-<article
-class="device-card"
-data-device-id="design-5"
->
+<!-- الجهاز 5 -->
+<article class="device-card" data-device-id="design-5">
 
 <div class="device-image">
 
@@ -2390,9 +2322,7 @@ stroke-linejoin="round"
 
 <div class="device-row">
 
-<span class="device-price">
-—
-</span>
+<span class="device-price">—</span>
 
 <span class="device-type">
 قريباً
@@ -2405,12 +2335,8 @@ stroke-linejoin="round"
 </article>
 
 
-<!-- 6 -->
-
-<article
-class="device-card"
-data-device-id="design-6"
->
+<!-- الجهاز 6 -->
+<article class="device-card" data-device-id="design-6">
 
 <div class="device-image">
 
@@ -2454,9 +2380,7 @@ stroke-linejoin="round"
 
 <div class="device-row">
 
-<span class="device-price">
-—
-</span>
+<span class="device-price">—</span>
 
 <span class="device-type">
 بيع مباشر
@@ -2469,12 +2393,8 @@ stroke-linejoin="round"
 </article>
 
 
-<!-- 7 -->
-
-<article
-class="device-card"
-data-device-id="design-7"
->
+<!-- الجهاز 7 -->
+<article class="device-card" data-device-id="design-7">
 
 <div class="device-image">
 
@@ -2518,9 +2438,7 @@ stroke-linejoin="round"
 
 <div class="device-row">
 
-<span class="device-price">
-—
-</span>
+<span class="device-price">—</span>
 
 <span class="device-type">
 قريباً
@@ -2533,12 +2451,8 @@ stroke-linejoin="round"
 </article>
 
 
-<!-- 8 -->
-
-<article
-class="device-card"
-data-device-id="design-8"
->
+<!-- الجهاز 8 -->
+<article class="device-card" data-device-id="design-8">
 
 <div class="device-image">
 
@@ -2582,9 +2496,7 @@ stroke-linejoin="round"
 
 <div class="device-row">
 
-<span class="device-price">
-—
-</span>
+<span class="device-price">—</span>
 
 <span class="device-type">
 مزاد
@@ -2597,12 +2509,8 @@ stroke-linejoin="round"
 </article>
 
 
-<!-- 9 -->
-
-<article
-class="device-card"
-data-device-id="design-9"
->
+<!-- الجهاز 9 -->
+<article class="device-card" data-device-id="design-9">
 
 <div class="device-image">
 
@@ -2646,9 +2554,7 @@ stroke-linejoin="round"
 
 <div class="device-row">
 
-<span class="device-price">
-—
-</span>
+<span class="device-price">—</span>
 
 <span class="device-type">
 قريباً
@@ -2661,12 +2567,8 @@ stroke-linejoin="round"
 </article>
 
 
-<!-- 10 -->
-
-<article
-class="device-card"
-data-device-id="design-10"
->
+<!-- الجهاز 10 -->
+<article class="device-card" data-device-id="design-10">
 
 <div class="device-image">
 
@@ -2710,9 +2612,7 @@ stroke-linejoin="round"
 
 <div class="device-row">
 
-<span class="device-price">
-—
-</span>
+<span class="device-price">—</span>
 
 <span class="device-type">
 بيع مباشر
@@ -2725,12 +2625,8 @@ stroke-linejoin="round"
 </article>
 
 
-<!-- 11 -->
-
-<article
-class="device-card"
-data-device-id="design-11"
->
+<!-- الجهاز 11 -->
+<article class="device-card" data-device-id="design-11">
 
 <div class="device-image">
 
@@ -2774,9 +2670,7 @@ stroke-linejoin="round"
 
 <div class="device-row">
 
-<span class="device-price">
-—
-</span>
+<span class="device-price">—</span>
 
 <span class="device-type">
 قريباً
@@ -2789,12 +2683,8 @@ stroke-linejoin="round"
 </article>
 
 
-<!-- 12 -->
-
-<article
-class="device-card"
-data-device-id="design-12"
->
+<!-- الجهاز 12 -->
+<article class="device-card" data-device-id="design-12">
 
 <div class="device-image">
 
@@ -2838,9 +2728,7 @@ stroke-linejoin="round"
 
 <div class="device-row">
 
-<span class="device-price">
-—
-</span>
+<span class="device-price">—</span>
 
 <span class="device-type">
 مزاد
@@ -2853,12 +2741,8 @@ stroke-linejoin="round"
 </article>
 
 
-<!-- 13 -->
-
-<article
-class="device-card"
-data-device-id="design-13"
->
+<!-- الجهاز 13 -->
+<article class="device-card" data-device-id="design-13">
 
 <div class="device-image">
 
@@ -2902,9 +2786,7 @@ stroke-linejoin="round"
 
 <div class="device-row">
 
-<span class="device-price">
-—
-</span>
+<span class="device-price">—</span>
 
 <span class="device-type">
 قريباً
@@ -2917,12 +2799,8 @@ stroke-linejoin="round"
 </article>
 
 
-<!-- 14 -->
-
-<article
-class="device-card"
-data-device-id="design-14"
->
+<!-- الجهاز 14 -->
+<article class="device-card" data-device-id="design-14">
 
 <div class="device-image">
 
@@ -2966,9 +2844,7 @@ stroke-linejoin="round"
 
 <div class="device-row">
 
-<span class="device-price">
-—
-</span>
+<span class="device-price">—</span>
 
 <span class="device-type">
 بيع مباشر
@@ -2981,12 +2857,8 @@ stroke-linejoin="round"
 </article>
 
 
-<!-- 15 -->
-
-<article
-class="device-card"
-data-device-id="design-15"
->
+<!-- الجهاز 15 -->
+<article class="device-card" data-device-id="design-15">
 
 <div class="device-image">
 
@@ -3030,9 +2902,7 @@ stroke-linejoin="round"
 
 <div class="device-row">
 
-<span class="device-price">
-—
-</span>
+<span class="device-price">—</span>
 
 <span class="device-type">
 قريباً
@@ -3044,7 +2914,6 @@ stroke-linejoin="round"
 
 </article>
 
-
 </div>
 
 </section>
@@ -3053,7 +2922,6 @@ stroke-linejoin="round"
 <section class="section reveal d5">
 
 <div class="trust-card">
-
 
 <div class="trust-item">
 
@@ -3153,7 +3021,6 @@ r="4"
 
 </div>
 
-
 </div>
 
 </section>
@@ -3164,7 +3031,6 @@ r="4"
 <div class="bottom-wrap">
 
 <nav class="bottom-nav">
-
 
 <button
 class="nav-item active"
@@ -3308,7 +3174,6 @@ r="3.5"
 
 </button>
 
-
 </nav>
 
 </div>
@@ -3326,10 +3191,6 @@ import {
   supabase
 } from "./js/supabase.js";
 
-
-/* ================================
-   ELEMENTS
-================================ */
 
 const toast =
 document.getElementById("toast");
@@ -3371,10 +3232,6 @@ document.getElementById("featuredDevicesTrack");
 let toastTimer;
 
 
-/* ================================
-   TOAST
-================================ */
-
 function showToast(message){
 
 toast.textContent =
@@ -3393,10 +3250,6 @@ toast.classList.remove("show");
 
 }
 
-
-/* ================================
-   AUTH
-================================ */
 
 const LOGIN_PAGE =
 "index.html?login=1";
@@ -3490,10 +3343,6 @@ url;
 }
 
 
-/* ================================
-   NAVIGATION
-================================ */
-
 function bindNavigation(){
 
 document
@@ -3515,11 +3364,6 @@ return;
 
 }
 
-
-/*
-  بطاقة الجهاز المميزة:
-  الضغط عليها يفتح التفاصيل.
-*/
 
 if(
 el.classList.contains("device-card")
@@ -3583,10 +3427,6 @@ go(url);
 
 }
 
-
-/* ================================
-   SEARCH
-================================ */
 
 function bindSearch(){
 
@@ -3657,10 +3497,6 @@ go(
 }
 
 
-/* ================================
-   CATEGORIES
-================================ */
-
 function bindCategories(){
 
 categories.forEach(button=>{
@@ -3703,10 +3539,6 @@ go(button.dataset.go);
 
 }
 
-
-/* ================================
-   AUCTION SLIDER
-================================ */
 
 function bindAuctionCarousel(){
 
@@ -3974,10 +3806,6 @@ startAuto();
 }
 
 
-/* ================================
-   FEATURED DEVICES
-================================ */
-
 function bindFeaturedDevicesCarousel(){
 
 if(!featuredDevicesTrack)return;
@@ -4172,10 +4000,6 @@ restartFeaturedTimer();
 }
 
 
-/* ================================
-   FAVORITES
-================================ */
-
 document
 .querySelectorAll("[data-favorite]")
 .forEach(button=>{
@@ -4229,10 +4053,6 @@ showToast(
 });
 
 
-/* ================================
-   HEADER BUTTONS
-================================ */
-
 locationBtn.addEventListener(
 "click",
 ()=>{
@@ -4255,10 +4075,6 @@ showToast(
 });
 
 
-/* ================================
-   AUCTION BUTTON
-================================ */
-
 viewAuctionsBtn.addEventListener(
 "click",
 ()=>{
@@ -4269,10 +4085,6 @@ go(
 
 });
 
-
-/* ================================
-   START APP
-================================ */
 
 bindNavigation();
 
@@ -4287,4 +4099,5 @@ bindFeaturedDevicesCarousel();
 </script>
 
 </body>
+
 </html>
