@@ -3365,9 +3365,24 @@ return;
 }
 
 
+/*
+==================================================
+منع فتح الجهاز بعد السحب الأفقي
+==================================================
+*/
+
 if(
 el.classList.contains("device-card")
 ){
+
+if(
+Date.now() <
+suppressDeviceClickUntil
+){
+
+return;
+
+}
 
 const deviceId =
 el.dataset.deviceId;
@@ -3824,7 +3839,20 @@ let current = 0;
 
 let timer = null;
 
+
+/*
+==================================================
+إصلاح مشكلة السحب مقابل الضغط
+==================================================
+*/
+
 let touchStarted = false;
+let touchMoved = false;
+
+let touchStartX = 0;
+let touchStartY = 0;
+
+let suppressDeviceClickUntil = 0;
 
 let scrollTimer = null;
 
@@ -3924,12 +3952,30 @@ true
 }
 
 
+/*
+==================================================
+بداية اللمس
+==================================================
+*/
+
 featuredDevicesTrack.addEventListener(
 "touchstart",
-()=>{
+event=>{
+
+const touch =
+event.touches[0];
 
 touchStarted =
 true;
+
+touchMoved =
+false;
+
+touchStartX =
+touch.clientX;
+
+touchStartY =
+touch.clientY;
 
 clearInterval(timer);
 
@@ -3940,11 +3986,65 @@ passive:true
 );
 
 
+/*
+==================================================
+نهاية اللمس
+==================================================
+*/
+
 featuredDevicesTrack.addEventListener(
 "touchend",
-()=>{
+event=>{
 
 if(!touchStarted)return;
+
+
+const touch =
+event.changedTouches[0];
+
+
+const deltaX =
+Math.abs(
+touch.clientX -
+touchStartX
+);
+
+
+const deltaY =
+Math.abs(
+touch.clientY -
+touchStartY
+);
+
+
+/*
+إذا تحرك الإصبع أكثر من 8px
+فهذا سحب وليس ضغطة.
+*/
+
+if(
+deltaX > 8 ||
+deltaY > 8
+){
+
+touchMoved =
+true;
+
+}
+
+
+/*
+نمنع click الناتج عن السحب
+لفترة قصيرة.
+*/
+
+if(touchMoved){
+
+suppressDeviceClickUntil =
+Date.now() + 450;
+
+}
+
 
 touchStarted =
 false;
@@ -3960,6 +4060,9 @@ detectCurrent();
 
 restartFeaturedTimer();
 
+touchMoved =
+false;
+
 },250);
 
 },
@@ -3968,6 +4071,35 @@ passive:true
 }
 );
 
+
+/*
+==================================================
+إذا انقطع اللمس
+==================================================
+*/
+
+featuredDevicesTrack.addEventListener(
+"touchcancel",
+()=>{
+
+touchStarted =
+false;
+
+touchMoved =
+false;
+
+},
+{
+passive:true
+}
+);
+
+
+/*
+==================================================
+متابعة التمرير
+==================================================
+*/
 
 featuredDevicesTrack.addEventListener(
 "scroll",
@@ -3999,6 +4131,12 @@ restartFeaturedTimer();
 
 }
 
+
+/*
+==================================================
+المفضلة
+==================================================
+*/
 
 document
 .querySelectorAll("[data-favorite]")
