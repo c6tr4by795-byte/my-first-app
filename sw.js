@@ -60,7 +60,6 @@ self.addEventListener("fetch", event => {
     return;
   }
 
-
   event.respondWith(
 
     fetch(request)
@@ -72,8 +71,7 @@ self.addEventListener("fetch", event => {
           response.type === "basic"
         ) {
 
-          const responseClone =
-            response.clone();
+          const responseClone = response.clone();
 
           caches.open(CACHE_NAME)
             .then(cache => {
@@ -98,9 +96,7 @@ self.addEventListener("fetch", event => {
               return cachedResponse;
             }
 
-            return caches.match(
-              "./index.html"
-            );
+            return caches.match("./index.html");
 
           });
 
