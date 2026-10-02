@@ -56,34 +56,21 @@
       top:0;
       z-index:30;
       overflow:hidden;
-      background:#ffffff;
-      border-bottom:1px solid #E8EBEF;
-      box-shadow:0 6px 22px rgba(23,32,42,.06);
+
+      background:linear-gradient(
+        145deg,
+        #fff 0%,
+        #f5f2ff 45%,
+        #e6e1ff 100%
+      );
+
+      border-radius:0 0 24px 24px;
+      border-bottom:1px solid #E6E9ED;
+
+      box-shadow:
+        0 10px 26px rgba(23,32,42,.06);
+
       isolation:isolate;
-    }
-
-    .topbar::before{
-      content:"";
-      position:absolute;
-      width:190px;
-      height:190px;
-      left:-105px;
-      top:-128px;
-      border-radius:50%;
-      background:rgba(50,184,196,.11);
-      pointer-events:none;
-    }
-
-    .topbar::after{
-      content:"";
-      position:absolute;
-      width:150px;
-      height:150px;
-      right:-75px;
-      bottom:-105px;
-      border-radius:50%;
-      background:rgba(233,29,79,.08);
-      pointer-events:none;
     }
 
     .top-side{
@@ -189,6 +176,7 @@
       .header-title{
         font-size:16px;
       }
+
       .header-logo,
       .back,
       .header-status,
@@ -365,7 +353,7 @@
       height:1px;
     }
 
-     .choice label{
+    .choice label{
       min-height:54px;
       border:1px solid #E1E4E8;
       border-radius:14px;
@@ -761,8 +749,6 @@
       اختار معلومات جهازك من القوائم حتى يظهر الإعلان بشكل مرتب وموحّد.
     </p>
 
-    <!-- DEVICE -->
-
     <section class="card">
 
       <div class="card-title">
@@ -882,15 +868,11 @@
     </section>
 
 
-    <!-- CONDITION -->
-
     <section class="card">
 
       <div class="card-title">
         حالة الجهاز
       </div>
-
-      <!-- BATTERY -->
 
       <div
         class="field"
@@ -925,9 +907,6 @@
 
       </div>
 
-
-      <!-- BODY -->
-
       <div class="field">
 
         <label class="label">
@@ -959,9 +938,6 @@
         </div>
 
       </div>
-
-
-      <!-- SCREEN -->
 
       <div class="field">
 
@@ -1000,9 +976,6 @@
 
       </div>
 
-
-      <!-- FACE ID -->
-
       <div class="field">
 
         <label class="label">
@@ -1029,9 +1002,6 @@
         </div>
 
       </div>
-
-
-      <!-- CAMERAS -->
 
       <div class="field">
 
@@ -1060,9 +1030,6 @@
 
       </div>
 
-
-      <!-- CHARGING -->
-
       <div class="field">
 
         <label class="label">
@@ -1089,9 +1056,6 @@
         </div>
 
       </div>
-
-
-      <!-- REPLACED PARTS -->
 
       <div class="field">
 
@@ -1192,8 +1156,6 @@
     </section>
 
 
-    <!-- PRICE -->
-
     <section class="card">
 
       <div class="card-title">
@@ -1235,8 +1197,6 @@
 
     </section>
 
-
-    <!-- PHOTOS -->
 
     <section class="card">
 
@@ -1323,8 +1283,6 @@
     </section>
 
 
-    <!-- NOTES -->
-
     <section class="card">
 
       <div class="card-title">
@@ -1347,8 +1305,6 @@
 
     </section>
 
-
-    <!-- LOCATION -->
 
     <section class="card">
 
@@ -1416,8 +1372,6 @@
 
 </div>
 
-
-<!-- BOTTOM NAV -->
 
 <nav class="bottom-nav">
 
@@ -1580,10 +1534,6 @@
 
 import { supabase } from "./js/supabase.js";
 
-
-/* ============================================================
-   DEVICE CATALOG
-============================================================ */
 
 const DEVICE_CATALOG = {
 
@@ -1977,10 +1927,6 @@ const DEVICE_CATALOG = {
 };
 
 
-/* ============================================================
-   ELEMENTS
-============================================================ */
-
 const toast =
   document.getElementById("toast");
 
@@ -2028,10 +1974,6 @@ const replacedNoneInput =
   document.getElementById("partsNone");
 
 
-/* ============================================================
-   PAGE RESET / SCROLL
-============================================================ */
-
 if("scrollRestoration" in history){
   history.scrollRestoration = "manual";
 }
@@ -2059,10 +2001,6 @@ window.addEventListener(
 );
 
 
-/* ============================================================
-   TOAST
-============================================================ */
-
 function showToast(message){
 
   toast.textContent =
@@ -2085,10 +2023,6 @@ function showToast(message){
 
 }
 
-
-/* ============================================================
-   MODELS
-============================================================ */
 
 function updateModels(){
 
@@ -2168,10 +2102,6 @@ brandInput.addEventListener(
 );
 
 
-/* ============================================================
-   APPLE BATTERY
-============================================================ */
-
 function updateBattery(){
 
   const isApple =
@@ -2206,10 +2136,6 @@ brandInput.addEventListener(
   updateBattery
 );
 
-
-/* ============================================================
-   REPLACED PARTS - MULTI SELECT
-============================================================ */
 
 replacedPartInputs.forEach(input => {
 
@@ -2250,10 +2176,6 @@ replacedPartInputs.forEach(input => {
 });
 
 
-/* ============================================================
-   NAVIGATION
-============================================================ */
-
 document
   .getElementById("backBtn")
   .addEventListener(
@@ -2292,10 +2214,6 @@ document
   });
 
 
-/* ============================================================
-   PHOTO PICKER
-============================================================ */
-
 photoAddButton.addEventListener(
   "click",
   event => {
@@ -2326,10 +2244,6 @@ photoBox.addEventListener(
   }
 );
 
-
-/* ============================================================
-   PHOTO PREVIEW
-============================================================ */
 
 function clearPhotoPreview(){
 
@@ -2486,10 +2400,6 @@ photosInput.addEventListener(
 );
 
 
-/* ============================================================
-   LOGIN
-============================================================ */
-
 async function requireLogin(){
 
   const {
@@ -2515,10 +2425,6 @@ async function requireLogin(){
 
 }
 
-
-/* ============================================================
-   IMAGE COMPRESSION
-============================================================ */
 
 const IMAGE_MAX_SIZE =
   1800;
@@ -2769,10 +2675,6 @@ async function compressImage(file){
 }
 
 
-/* ============================================================
-   IMAGE EXTENSION
-============================================================ */
-
 function getFileExtension(file){
 
   if(
@@ -2823,10 +2725,6 @@ function getFileExtension(file){
 
 }
 
-
-/* ============================================================
-   IMAGE UPLOAD
-============================================================ */
 
 async function uploadDeviceImages(
   user,
@@ -2982,10 +2880,6 @@ async function uploadDeviceImages(
 }
 
 
-/* ============================================================
-   REMOVE UPLOADED IMAGES
-============================================================ */
-
 async function removeUploadedImages(
   paths
 ){
@@ -3016,10 +2910,6 @@ async function removeUploadedImages(
 
 }
 
-
-/* ============================================================
-   RESET FORM AFTER RETURN
-============================================================ */
 
 function resetSellForm(){
 
@@ -3089,10 +2979,6 @@ function resetSellForm(){
 
 }
 
-
-/* ============================================================
-   SAVE DEVICE
-============================================================ */
 
 async function saveDevice(){
 
@@ -3201,10 +3087,6 @@ async function saveDevice(){
       photosInput.files || []
     );
 
-
-  /* ============================================================
-     VALIDATION
-  ============================================================ */
 
   if(!brand){
 
@@ -3337,10 +3219,6 @@ async function saveDevice(){
   }
 
 
-  /* =========================
-     PRICE LIMITS
-  ========================= */
-
   if(
     !Number.isInteger(price)
   ){
@@ -3420,10 +3298,6 @@ async function saveDevice(){
   }
 
 
-  /* ============================================================
-     SUBMIT
-  ============================================================ */
-
   submitBtn.disabled =
     true;
 
@@ -3445,10 +3319,6 @@ async function saveDevice(){
 
   try{
 
-    /* =========================
-       COMPRESS + UPLOAD IMAGES
-    ========================= */
-
     const uploadResult =
       await uploadDeviceImages(
         user,
@@ -3469,10 +3339,6 @@ async function saveDevice(){
     submitBtn.textContent =
       "جاري نشر الجهاز...";
 
-
-    /* =========================
-       INSERT DEVICE
-    ========================= */
 
     const {
       data,
@@ -3547,10 +3413,6 @@ async function saveDevice(){
         .single();
 
 
-    /* =========================
-       INSERT ERROR
-    ========================= */
-
     if(error){
 
       console.error(
@@ -3580,19 +3442,10 @@ async function saveDevice(){
     }
 
 
-    /* =========================
-       SUCCESS
-    ========================= */
-
     showToast(
       "تم نشر الجهاز بنجاح"
     );
 
-
-    /*
-     * نخلي الصفحة ترجع نظيفة إذا
-     * رجع المستخدم إليها لاحقاً.
-     */
 
     sessionStorage.setItem(
       "mzad_sell_reset",
@@ -3680,10 +3533,6 @@ async function saveDevice(){
 }
 
 
-/* ============================================================
-   RESET FLAG
-============================================================ */
-
 if(
   sessionStorage.getItem(
     "mzad_sell_reset"
@@ -3698,10 +3547,6 @@ if(
 
 }
 
-
-/* ============================================================
-   SUBMIT
-============================================================ */
 
 submitBtn.addEventListener(
   "click",
