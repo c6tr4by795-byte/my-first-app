@@ -1025,6 +1025,88 @@ document
 
 
 /* =====================================================
+   CALM ACCOUNT LAYOUT
+===================================================== */
+
+const accountMain = document.querySelector(".page");
+const oldSection = document.querySelector(".section");
+
+if(accountMain && oldSection){
+
+  const profileCard = document.querySelector(".profile-card");
+  const ratingBox = document.querySelector(".rating-box");
+  const oldStats = document.querySelector(".stats");
+
+  if(ratingBox){
+    ratingBox.style.display = "none";
+  }
+
+  if(oldStats){
+    oldStats.style.display = "none";
+  }
+
+  const firstHeading = oldSection.querySelector(".section-title-row");
+  if(firstHeading){
+    firstHeading.innerHTML =
+      '<h2 class="section-heading">إدارة حسابك</h2>';
+  }
+
+  const supportSection = document.createElement("section");
+  supportSection.className = "section";
+  supportSection.innerHTML = `
+    <h2 class="section-heading">المساعدة والدعم</h2>
+    <div class="menu-card">
+      <button class="menu-item calm-support" type="button">
+        <span class="menu-icon">?</span>
+        <span class="menu-copy">
+          <span class="menu-title">مركز المساعدة</span>
+          <span class="menu-sub">إجابات سريعة على الأسئلة الشائعة</span>
+        </span>
+        <span class="menu-arrow">‹</span>
+      </button>
+      <button class="menu-item calm-contact" type="button">
+        <span class="menu-icon">i</span>
+        <span class="menu-copy">
+          <span class="menu-title">تواصل معنا</span>
+          <span class="menu-sub">نحن موجودين لمساعدتك</span>
+        </span>
+        <span class="menu-arrow">‹</span>
+      </button>
+      <button class="menu-item calm-terms" type="button">
+        <span class="menu-icon">✓</span>
+        <span class="menu-copy">
+          <span class="menu-title">الشروط والأحكام</span>
+          <span class="menu-sub">قواعد استخدام منصة مزاد فون</span>
+        </span>
+        <span class="menu-arrow">‹</span>
+      </button>
+      <button class="menu-item calm-about" type="button">
+        <span class="menu-icon">i</span>
+        <span class="menu-copy">
+          <span class="menu-title">من نحن</span>
+          <span class="menu-sub">تعرف أكثر على MZAD PHONE</span>
+        </span>
+        <span class="menu-arrow">‹</span>
+      </button>
+    </div>
+  `;
+
+  oldSection.insertAdjacentElement("afterend", supportSection);
+
+  const logout = document.getElementById("logoutBtn");
+  if(logout){
+    supportSection.insertAdjacentElement("afterend", logout);
+  }
+
+  document.querySelectorAll(".calm-support,.calm-contact,.calm-terms,.calm-about")
+    .forEach(button => {
+      button.addEventListener("click", () => {
+        showToast("هذا القسم راح يتفعل قريباً.");
+      });
+    });
+}
+
+/* =====================================================
    START
 ===================================================== */
 
