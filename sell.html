@@ -333,8 +333,19 @@
 
     .choice-grid{
       display:grid;
-      grid-template-columns:1fr 1fr;
       gap:10px;
+    }
+
+    .choice-grid.two{
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .choice-grid.three{
+      grid-template-columns:repeat(3,minmax(0,1fr));
+    }
+
+    .choice-grid.replaced-parts{
+      grid-template-columns:repeat(2,minmax(0,1fr));
     }
 
     .choice{
@@ -362,7 +373,11 @@
       font-size:14px;
       font-weight:700;
       color:#475467;
-      transition:.18s;
+      transition:
+        background .18s ease,
+        border-color .18s ease,
+        color .18s ease,
+        box-shadow .18s ease;
       cursor:pointer;
     }
 
@@ -371,9 +386,10 @@
     }
 
     .choice input:checked + label{
-      border-color:#D7DBE0;
-      background:#ECEFF2;
-      color:#17202A;
+      border-color:#32B8C4;
+      background:#DDF4F6;
+      color:#176B87;
+      box-shadow:0 6px 14px rgba(50,184,196,.12);
     }
 
     /* =========================
@@ -903,7 +919,7 @@
           حالة الهيكل
         </label>
 
-        <div class="choice-grid">
+        <div class="choice-grid two">
 
           <div class="choice">
             <input type="radio" id="body1" name="body_condition" value="ممتاز" required>
@@ -913,11 +929,6 @@
           <div class="choice">
             <input type="radio" id="body3" name="body_condition" value="جيد">
             <label for="body3">جيد</label>
-          </div>
-
-          <div class="choice">
-            <input type="radio" id="body4" name="body_condition" value="مبدل">
-            <label for="body4">مبدل</label>
           </div>
 
         </div>
@@ -930,7 +941,7 @@
           حالة الشاشة
         </label>
 
-        <div class="choice-grid">
+        <div class="choice-grid three">
 
           <div class="choice">
             <input type="radio" id="screen1" name="screen_condition" value="ممتازة" required>
@@ -947,11 +958,6 @@
             <label for="screen4">بها خدوش</label>
           </div>
 
-          <div class="choice">
-            <input type="radio" id="screen5" name="screen_condition" value="مبدلة">
-            <label for="screen5">مبدلة</label>
-          </div>
-
         </div>
 
       </div>
@@ -962,7 +968,7 @@
           Face ID / البصمة
         </label>
 
-        <div class="choice-grid">
+        <div class="choice-grid three">
 
           <div class="choice">
             <input type="radio" id="security1" name="face_id" value="يعمل" required>
@@ -989,7 +995,7 @@
           الكاميرات
         </label>
 
-        <div class="choice-grid">
+        <div class="choice-grid three">
 
           <div class="choice">
             <input type="radio" id="camera1" name="cameras" value="تعمل" required>
@@ -1016,7 +1022,7 @@
           الشحن
         </label>
 
-        <div class="choice-grid">
+        <div class="choice-grid three">
 
           <div class="choice">
             <input type="radio" id="charging1" name="charging" value="يعمل" required>
@@ -1043,7 +1049,7 @@
           القطع المبدلة
         </label>
 
-        <div class="choice-grid">
+        <div class="choice-grid replaced-parts">
 
           <div class="choice">
             <input
@@ -1395,7 +1401,6 @@
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="1.8"
       stroke-linecap="round"
       stroke-linejoin="round"
     >
