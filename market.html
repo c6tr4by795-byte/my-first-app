@@ -452,6 +452,10 @@
 
     .device-card{
       position:relative;
+
+      /* Performance: لا نرسم تفاصيل البطاقات البعيدة عن الشاشة إلا عند الحاجة */
+      content-visibility:auto;
+      contain-intrinsic-size:350px;
       overflow:hidden;
 
       min-width:0;
@@ -1535,6 +1539,7 @@
     let selectedBrand = "all";
 
     let searchTerm = "";
+    let searchDebounceTimer = null;
 
     let sortMode = "newest";
 
@@ -2110,15 +2115,9 @@
               condition,
               body_condition,
               screen_condition,
-              face_id,
-              cameras,
-              charging,
-              replaced_parts,
               price,
               location,
               sale_type,
-              seller_id,
-              seller_name,
               images,
               notes
             `)
@@ -2144,24 +2143,6 @@
 
           return;
         }
-
-
-        console.log(
-          "MZAD PHONE - DEVICES:",
-          data
-        );
-
-        console.log(
-          "MZAD PHONE - DEVICE COUNT:",
-          data?.length || 0
-        );
-
-        console.log(
-          "MZAD PHONE - BRANDS:",
-          (data || []).map(
-            item => item.brand
-          )
-        );
 
 
         devices =
@@ -2502,8 +2483,12 @@
       card.className =
         "device-card";
 
-      card.style.animationDelay =
-        `${Math.min(index,8) * 35}ms`;
+      if(index < 12){
+        card.style.animationDelay =
+          `${index * 35}ms`;
+      }else{
+        card.style.animation = "none";
+      }
 
 
       const images =
@@ -2769,100 +2754,72 @@
     const FAVORITES_KEY =
       "mzad_phone_favorites";
 
+    let favoritesCache = new Set();
 
-    function getFavorites(){
+    function loadFavoritesCache(){
 
       try{
 
         const saved =
-          localStorage.getItem(
-            FAVORITES_KEY
-          );
+          localStorage.getItem(FAVORITES_KEY);
 
         if(!saved){
-          return [];
+          favoritesCache = new Set();
+          return;
         }
 
-        const parsed =
-          JSON.parse(saved);
+        const parsed = JSON.parse(saved);
 
-        return Array.isArray(parsed)
-          ? parsed.map(String)
-          : [];
+        favoritesCache = new Set(
+          Array.isArray(parsed)
+            ? parsed.map(String)
+            : []
+        );
 
       }catch(error){
 
-        return [];
+        favoritesCache = new Set();
 
       }
 
     }
 
-
-    function saveFavorites(ids){
+    function saveFavorites(){
 
       localStorage.setItem(
         FAVORITES_KEY,
-        JSON.stringify(ids)
+        JSON.stringify(
+          Array.from(favoritesCache)
+        )
       );
 
     }
-
 
     function isFavorite(id){
 
-      return getFavorites()
-        .includes(String(id));
+      return favoritesCache.has(String(id));
 
     }
 
+    function toggleFavorite(id,button){
 
-    function toggleFavorite(
-      id,
-      button
-    ){
+      const stringId = String(id);
 
-      const stringId =
-        String(id);
+      if(favoritesCache.has(stringId)){
 
-      let favorites =
-        getFavorites();
+        favoritesCache.delete(stringId);
 
+        button.classList.remove("active");
 
-      if(
-        favorites.includes(
-          stringId
-        )
-      ){
+      }else{
 
-        favorites =
-          favorites.filter(
-            item =>
-              item !== stringId
-          );
+        favoritesCache.add(stringId);
 
-        button.classList.remove(
-          "active"
-        );
+        button.classList.add("active");
 
       }
 
-      else{
-
-        favorites.push(
-          stringId
-        );
-
-        button.classList.add(
-          "active"
-        );
-
-      }
-
-
-      saveFavorites(
-        favorites
-      );
+      saveFavorites();
 
     }
 
@@ -2948,7 +2905,12 @@
         searchTerm =
           event.target.value || "";
 
-        render();
+        clearTimeout(searchDebounceTimer);
+
+        searchDebounceTimer = setTimeout(
+          render,
+          180
+        );
 
       }
     );
@@ -3323,6 +3285,7 @@
        START
     ========================================== */
 
+    loadFavoritesCache();
     updateFilters();
 
     loadDevices();
