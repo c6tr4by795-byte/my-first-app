@@ -960,7 +960,6 @@
 
     .nav-item{
       min-width:0;
-
       height:57px;
 
       display:flex;
@@ -970,16 +969,16 @@
       gap:4px;
 
       color:#89919a;
-
       background:transparent;
-
       border-radius:14px;
-
       text-decoration:none;
-
       cursor:pointer;
 
-      transition:.2s ease;
+      transition:
+        transform .18s ease,
+        color .18s ease,
+        background .18s ease,
+        box-shadow .18s ease;
     }
 
     .nav-item svg{
@@ -992,15 +991,65 @@
       font-weight:850;
     }
 
+    .nav-item:active{
+      transform:scale(.94);
+    }
+
     .nav-item.active{
       color:var(--primary);
-
       background:
         linear-gradient(
           145deg,
           #edf6f8,
           #e5f1f4
         );
+    }
+
+    /* زر البيع — بارز وطافي عن شريط التنقل */
+    .nav-item.sell-nav{
+      position:relative;
+      z-index:3;
+      height:72px;
+      margin-top:-25px;
+      align-self:center;
+      justify-self:center;
+
+      width:68px;
+      padding:7px 5px 6px;
+
+      gap:3px;
+
+      border-radius:22px;
+
+      color:#fff;
+
+      background:
+        linear-gradient(
+          145deg,
+          #176B87 0%,
+          #5C48C9 100%
+        );
+
+      border:4px solid rgba(255,255,255,.96);
+
+      box-shadow:
+        0 10px 24px rgba(92,72,201,.24),
+        0 4px 10px rgba(23,107,135,.13);
+    }
+
+    .nav-item.sell-nav svg{
+      width:27px;
+      height:27px;
+      stroke-width:2.2;
+    }
+
+    .nav-item.sell-nav span{
+      font-size:9px;
+      font-weight:950;
+    }
+
+    .nav-item.sell-nav:active{
+      transform:translateY(2px) scale(.95);
     }
 
     /* =========================
@@ -1416,7 +1465,7 @@
 
 
       <a
-        class="nav-item"
+        class="nav-item sell-nav"
         href="sell.html"
       >
         <svg
