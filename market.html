@@ -452,20 +452,18 @@
 
     .device-card{
       position:relative;
-
-      /* Performance: لا نرسم تفاصيل البطاقات البعيدة عن الشاشة إلا عند الحاجة */
       content-visibility:auto;
       contain-intrinsic-size:350px;
       overflow:hidden;
-
       min-width:0;
 
       background:#fff;
 
-      border:1px solid rgba(230,233,237,.9);
+      border:1px solid #E3E8EC;
       border-radius:19px;
 
-      box-shadow:var(--shadow);
+      box-shadow:
+        0 8px 22px rgba(23,32,42,.055);
 
       cursor:pointer;
 
@@ -475,6 +473,38 @@
       transition:
         transform .2s ease,
         box-shadow .2s ease;
+    }
+
+    .device-card::after{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      top:152px;
+      height:3px;
+      background:#32B8C4;
+      opacity:.9;
+      z-index:2;
+    }
+
+    .device-card.brand-apple::after{
+      background:#20262D;
+    }
+
+    .device-card.brand-samsung::after{
+      background:#1479C9;
+    }
+
+    .device-card.brand-xiaomi::after{
+      background:#F36C21;
+    }
+
+    .device-card.brand-huawei::after{
+      background:#D9002B;
+    }
+
+    .device-card.brand-google::after{
+      background:#4285F4;
     }
 
     .device-card:active{
@@ -494,27 +524,19 @@
 
     .device-photo-wrap{
       position:relative;
-
       width:100%;
       height:152px;
-
       overflow:hidden;
-
       background:#f0f1f3;
     }
 
     .device-photo{
       width:100%;
       height:100%;
-
       display:block;
-
       object-fit:cover;
-
       background:#f0f1f3;
-
-      transition:
-        transform .35s ease;
+      transition:transform .35s ease;
     }
 
     .device-card:active .device-photo{
@@ -524,7 +546,6 @@
     .photo-placeholder{
       width:100%;
       height:100%;
-
       display:flex;
       align-items:center;
       justify-content:center;
@@ -532,11 +553,11 @@
       background:
         linear-gradient(
           145deg,
-          #f1f2f4,
-          #e8eaed
+          #F1F3F4,
+          #E7EBEE
         );
 
-      color:#8a939d;
+      color:#8A939D;
     }
 
     .photo-placeholder svg{
@@ -559,9 +580,8 @@
 
       border-radius:11px;
 
-      background:rgba(255,255,255,.9);
-
-      color:#6e7781;
+      background:rgba(255,255,255,.92);
+      color:#6E7781;
 
       border:1px solid rgba(255,255,255,.95);
 
@@ -569,7 +589,6 @@
         0 6px 15px rgba(0,0,0,.09);
 
       cursor:pointer;
-
       z-index:4;
     }
 
@@ -587,14 +606,14 @@
       background:
         linear-gradient(
           145deg,
-          #6246d9 0%,
-          #5147b8 100%
+          #176B87,
+          #32B8C4
         );
 
       box-shadow:
-        0 7px 17px rgba(98,70,217,.32);
+        0 7px 17px rgba(23,107,135,.25);
 
-      border:1px solid rgba(98,70,217,.45);
+      border:1px solid rgba(23,107,135,.35);
     }
 
     .favorite.active svg{
@@ -608,22 +627,16 @@
       right:9px;
 
       max-width:95px;
-
       padding:6px 8px;
-
       border-radius:9px;
 
-      background:
-        linear-gradient(
-          145deg,
-          #FAF9FF 0%,
-          #F0EDFF 100%
-        );
+      background:rgba(255,255,255,.94);
+      color:#176B87;
 
-      color:#51477D;
+      border:1px solid rgba(23,107,135,.10);
 
       box-shadow:
-        0 5px 12px rgba(81,71,125,.08);
+        0 5px 12px rgba(23,107,135,.08);
 
       font-size:8px;
       line-height:1;
@@ -641,14 +654,13 @@
     ========================== */
 
     .device-info{
-      padding:9px 10px 9px;
+      padding:10px 10px 9px;
 
       background:
         linear-gradient(
-          145deg,
-          #FAF9FF 0%,
-          #F6F3FF 45%,
-          #EEEAFE 100%
+          180deg,
+          #FFFFFF 0%,
+          #FBFCFD 100%
         );
     }
 
@@ -717,7 +729,7 @@
       grid-template-columns:repeat(3,minmax(0,1fr));
       gap:6px;
 
-      margin-top:7px;
+      margin-top:8px;
     }
 
     .details-grid.no-battery{
@@ -728,16 +740,56 @@
       grid-template-columns:repeat(3,minmax(0,1fr));
     }
 
+    .details-grid.has-battery .detail-item:first-child strong{
+      font-size:10.5px;
+    }
+
     .detail-item{
       min-width:0;
+      padding:8px 6px 7px;
 
-      padding:7px 6px;
+      background:#F8FAFB;
 
-      background:rgba(255,255,255,.55);
+      border-radius:11px;
 
-      border-radius:9px;
+      border:1px solid #E4EAED;
 
-      border:1px solid rgba(255,255,255,.75);
+      box-shadow:
+        0 3px 9px rgba(23,32,42,.025);
+
+      position:relative;
+      overflow:hidden;
+    }
+
+    .detail-item::before{
+      content:"";
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      height:3px;
+      background:#32B8C4;
+      opacity:.9;
+    }
+
+    .brand-apple .detail-item::before{
+      background:#20262D;
+    }
+
+    .brand-samsung .detail-item::before{
+      background:#1479C9;
+    }
+
+    .brand-xiaomi .detail-item::before{
+      background:#F36C21;
+    }
+
+    .brand-huawei .detail-item::before{
+      background:#D9002B;
+    }
+
+    .brand-google .detail-item::before{
+      background:#4285F4;
     }
 
     .detail-item span{
@@ -747,7 +799,7 @@
 
       font-size:8px;
       line-height:1.2;
-      font-weight:750;
+      font-weight:800;
 
       white-space:nowrap;
       overflow:hidden;
@@ -768,8 +820,8 @@
       font-weight:950;
 
       white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+      overflow:visible;
+      text-overflow:clip;
     }
 
     .price-row{
@@ -781,7 +833,7 @@
       margin-top:7px;
       padding-top:6px;
 
-      border-top:1px solid rgba(81,71,125,.10);
+      border-top:1px solid #E6EBEE;
     }
 
     .price-label{
@@ -793,7 +845,7 @@
     .price{
       min-width:0;
 
-      color:#51477D;
+      color:#176B87;
 
       font-size:14px;
       line-height:1.2;
@@ -2510,8 +2562,17 @@
       const card =
         document.createElement("article");
 
+      const brandClass =
+        {
+          Apple:"brand-apple",
+          Samsung:"brand-samsung",
+          Xiaomi:"brand-xiaomi",
+          Huawei:"brand-huawei",
+          Google:"brand-google"
+        }[normalizeBrand(device.brand)] || "brand-default";
+
       card.className =
-        "device-card";
+        "device-card " + brandClass;
 
       if(index < 12){
         card.style.animationDelay =
