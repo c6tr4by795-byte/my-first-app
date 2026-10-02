@@ -21,7 +21,9 @@
 
     body{
       margin:0;
-      background:#F7F8FA;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(50,184,196,.07), transparent 24%),
+        linear-gradient(180deg,#FBFCFD 0%,#F5F7F9 100%);
       color:#17202A;
       font-family:"Cairo",sans-serif;
     }
@@ -47,7 +49,7 @@
     ========================= */
 
     .topbar{
-      height:84px;
+      height:92px;
       padding:0 16px;
       display:flex;
       align-items:center;
@@ -57,18 +59,12 @@
       z-index:30;
       overflow:hidden;
 
-      background:linear-gradient(
-        145deg,
-        #fff 0%,
-        #f5f2ff 45%,
-        #e6e1ff 100%
-      );
-
-      border-radius:0 0 24px 24px;
-      border-bottom:1px solid #E6E9ED;
+      background:rgba(255,255,255,.94);
+      border-radius:0 0 28px 28px;
+      border-bottom:1px solid #EEF1F4;
 
       box-shadow:
-        0 10px 26px rgba(23,32,42,.06);
+        0 8px 28px rgba(23,32,42,.055);
 
       isolation:isolate;
     }
@@ -85,11 +81,11 @@
     }
 
     .back{
-      width:44px;
-      height:44px;
-      border:1px solid #E2E6EA;
-      background:#F8FAFB;
-      border-radius:15px;
+      width:46px;
+      height:46px;
+      border:1px solid #E3E8EC;
+      background:#F7FAFB;
+      border-radius:16px;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -136,13 +132,33 @@
       pointer-events:none;
     }
 
-    .header-logo{
-      color:#17202A;
-      font-size:23px;
+    .brand-mark{
+      min-width:82px;
+      height:42px;
+      padding:0 12px;
+      border-radius:15px;
+      background:linear-gradient(135deg,#0D7890,#32B8C4);
+      color:#fff;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 7px 18px rgba(23,107,135,.16);
+      line-height:1;
+    }
+
+    .brand-main{
+      font-size:18px;
+      font-weight:950;
+      letter-spacing:-.7px;
+    }
+
+    .brand-mini{
+      margin-top:3px;
+      font-size:6px;
       font-weight:900;
-      letter-spacing:-1.1px;
-      line-height:.95;
-      white-space:nowrap;
+      letter-spacing:2.6px;
+      opacity:.9;
     }
 
     .header-copy{
@@ -153,12 +169,12 @@
     }
 
     .header-subtitle{
-      margin-top:3px;
-      font-size:6.5px;
-      font-weight:900;
-      letter-spacing:2.6px;
-      color:#8A96A1;
-      direction:ltr;
+      margin-top:5px;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:0;
+      color:#344054;
+      direction:rtl;
       text-align:center;
       white-space:nowrap;
     }
@@ -173,13 +189,17 @@
         font-size:16px;
       }
 
-      .header-logo{
-        font-size:21px;
+      .brand-mark{
+        min-width:76px;
+        height:40px;
+      }
+
+      .brand-main{
+        font-size:17px;
       }
 
       .header-subtitle{
-        font-size:6px;
-        letter-spacing:2.4px;
+        font-size:11px;
       }
     }
 
@@ -188,29 +208,117 @@
     ========================= */
 
     .content{
-      padding:20px 16px 0;
+      padding:18px 14px 0;
+    }
+
+    .hero-intro{
+      padding:4px 4px 18px;
+    }
+
+    .hero-badge{
+      width:max-content;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:7px 11px;
+      border-radius:999px;
+      background:#EAF7F8;
+      color:#176B87;
+      border:1px solid #D8EEF1;
+      font-size:11px;
+      font-weight:800;
+      margin-bottom:11px;
+    }
+
+    .hero-dot{
+      width:7px;
+      height:7px;
+      border-radius:50%;
+      background:#32B8C4;
+      box-shadow:0 0 0 4px rgba(50,184,196,.12);
     }
 
     .page-title{
-      font-size:23px;
-      font-weight:800;
+      font-size:29px;
+      line-height:1.2;
+      font-weight:900;
+      letter-spacing:-.6px;
       margin:0;
+      color:#101828;
     }
 
     .page-subtitle{
-      margin:6px 0 20px;
+      margin:7px 0 17px;
       color:#667085;
-      font-size:15px;
+      font-size:14px;
       line-height:1.8;
+      max-width:390px;
+    }
+
+    .flow-progress{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:5px;
+      padding:11px 12px;
+      background:#fff;
+      border:1px solid #E9EDF0;
+      border-radius:18px;
+      box-shadow:0 6px 18px rgba(23,32,42,.045);
+    }
+
+    .progress-step{
+      min-width:48px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+      color:#98A2B3;
+    }
+
+    .progress-step span{
+      width:25px;
+      height:25px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#F2F4F7;
+      color:#667085;
+      font-size:10px;
+      font-weight:900;
+    }
+
+    .progress-step b{
+      font-size:9px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .progress-step.active{
+      color:#176B87;
+    }
+
+    .progress-step.active span{
+      background:#DDF4F6;
+      color:#176B87;
+      border:1px solid #BFE8ED;
+    }
+
+    .flow-progress i{
+      height:1px;
+      flex:1;
+      min-width:8px;
+      background:#E4E7EC;
     }
 
     .card{
       background:#fff;
-      border:1px solid #E6E9ED;
-      border-radius:22px;
-      padding:18px;
+      border:1px solid #E8ECEF;
+      border-radius:24px;
+      padding:17px;
       margin-bottom:14px;
-      box-shadow:0 8px 24px rgba(23,32,42,.04);
+      box-shadow:0 9px 26px rgba(23,32,42,.05);
     }
 
     /* =========================
@@ -218,31 +326,39 @@
     ========================= */
 
     .card-title{
-      font-size:21px;
-      font-weight:800;
-      margin-bottom:15px;
-      color:#4F463D;
+      font-size:18px;
+      font-weight:900;
+      margin-bottom:16px;
+      color:#182230;
       display:flex;
       align-items:center;
-      gap:9px;
+      gap:10px;
     }
 
     .card-title::before{
-      content:"";
-      width:4px;
-      height:18px;
-      border-radius:999px;
-      background:#B7A58F;
-      flex-shrink:0;
+      counter-increment:section;
+      content:counter(section);
+      width:31px;
+      height:31px;
+      border-radius:11px;
+      background:#EAF7F8;
+      color:#176B87;
+      border:1px solid #D7EEF1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex:0 0 31px;
+      font-size:11px;
+      font-weight:900;
     }
 
     .field{
-      margin-bottom:18px;
-      padding:15px;
-      border:1px solid #E7EAEE;
-      border-radius:18px;
-      background:#FFFFFF;
-      box-shadow:0 5px 16px rgba(24,32,42,.045);
+      margin-bottom:15px;
+      padding:0;
+      border:0;
+      border-radius:0;
+      background:transparent;
+      box-shadow:none;
     }
 
     .field:last-child{
@@ -389,7 +505,7 @@
 
     .choice label{
       min-height:58px;
-      border:1px solid #E1E5EA;
+      border:1px solid #E3E8EC;
       border-radius:16px;
       background:#F8FAFB;
       display:flex;
@@ -615,10 +731,10 @@
 
     .submit{
       width:100%;
-      height:58px;
+      height:60px;
       border:0;
-      border-radius:18px;
-      background:#176B87;
+      border-radius:19px;
+      background:linear-gradient(135deg,#0D7890,#32B8C4);
       color:#fff;
       font-weight:800;
       font-size:16px;
@@ -678,15 +794,15 @@
     .bottom-nav{
       position:fixed;
       left:50%;
-      bottom:12px;
+      bottom:10px;
       transform:translateX(-50%);
-      width:calc(100% - 24px);
+      width:calc(100% - 20px);
       max-width:496px;
-      height:70px;
-      background:rgba(255,255,255,.96);
-      backdrop-filter:blur(14px);
-      border:1px solid #E6E9ED;
-      border-radius:22px;
+      height:74px;
+      background:rgba(255,255,255,.97);
+      backdrop-filter:blur(18px);
+      border:1px solid #E8ECEF;
+      border-radius:25px;
       display:grid;
       grid-template-columns:repeat(5,1fr);
       padding:7px;
@@ -707,8 +823,9 @@
     }
 
     .nav-item.active{
-      background:#E8F3F6;
+      background:#E7F6F8;
       color:#176B87;
+      box-shadow:inset 0 0 0 1px #D9EEF1;
     }
 
     .nav-icon{
@@ -718,7 +835,11 @@
 
     .nav-label{
       font-size:10px;
-      font-weight:700;
+      font-weight:800;
+    }
+
+    .content{
+      counter-reset:section;
     }
 
     @media(max-width:360px){
@@ -761,13 +882,14 @@
 
     <div class="header-center">
 
-      <div class="header-logo">
-        MZAD
+      <div class="brand-mark">
+        <span class="brand-main">MZAD</span>
+        <span class="brand-mini">PHONE</span>
       </div>
 
       <div class="header-copy">
         <div class="header-subtitle">
-          PHONE
+          بيع جهازك
         </div>
       </div>
 
@@ -777,13 +899,42 @@
 
   <main class="content">
 
-    <h1 class="page-title">
-      بيع جهاز
-    </h1>
+    <div class="hero-intro">
+      <div class="hero-badge">
+        <span class="hero-dot"></span>
+        إعلان جديد
+      </div>
 
-    <p class="page-subtitle">
-      اختار معلومات جهازك من القوائم حتى يظهر الإعلان بشكل مرتب وموحّد.
-    </p>
+      <h1 class="page-title">
+        بيع جهازك بسهولة
+      </h1>
+
+      <p class="page-subtitle">
+        كم معلومة بسيطة ونجهزلك إعلان مرتب وجاهز للنشر.
+      </p>
+
+      <div class="flow-progress" aria-label="خطوات إضافة الجهاز">
+        <div class="progress-step active">
+          <span>1</span>
+          <b>الجهاز</b>
+        </div>
+        <i></i>
+        <div class="progress-step">
+          <span>2</span>
+          <b>الحالة</b>
+        </div>
+        <i></i>
+        <div class="progress-step">
+          <span>3</span>
+          <b>السعر</b>
+        </div>
+        <i></i>
+        <div class="progress-step">
+          <span>4</span>
+          <b>النشر</b>
+        </div>
+      </div>
+    </div>
 
     <section class="card">
 
