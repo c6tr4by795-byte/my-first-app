@@ -919,77 +919,87 @@
     }
 
     /* =========================
-       BOTTOM NAV
+       FLOATING BOTTOM NAV
     ========================== */
 
-    .bottom-nav{
+    .bottom-wrap{
       position:fixed;
-
-      left:50%;
+      left:0;
+      right:0;
       bottom:0;
-
-      transform:translateX(-50%);
-
-      width:100%;
-      max-width:760px;
-
       z-index:50;
 
       padding:
         8px
-        10px
+        12px
         calc(8px + env(safe-area-inset-bottom));
 
-      background:
-        rgba(255,255,255,.94);
-
-      backdrop-filter:blur(18px);
-      -webkit-backdrop-filter:blur(18px);
-
-      border-top:1px solid rgba(230,233,237,.95);
-
-      box-shadow:
-        0 -8px 25px rgba(24,32,42,.07);
+      pointer-events:none;
     }
 
-    .nav-inner{
+    .bottom-nav{
+      width:min(100%,520px);
+      margin:0 auto;
+
+      min-height:67px;
+      padding:6px;
+
+      border-radius:22px;
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.97),
+          rgba(232,243,246,.97)
+        );
+
+      border:1px solid rgba(23,107,135,.12);
+
+      box-shadow:
+        0 16px 36px rgba(23,107,135,.16);
+
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+
       display:grid;
       grid-template-columns:repeat(5,1fr);
-      gap:5px;
+      gap:4px;
+
+      pointer-events:auto;
     }
 
     .nav-item{
       min-width:0;
-
-      height:57px;
+      min-height:55px;
 
       display:flex;
       flex-direction:column;
       align-items:center;
       justify-content:center;
-      gap:4px;
+      gap:3px;
 
-      color:#89919a;
+      border-radius:16px;
 
+      color:#7b8794;
       background:transparent;
 
-      border-radius:14px;
-
       text-decoration:none;
-
-      cursor:pointer;
 
       transition:.2s ease;
     }
 
+    .nav-item:active{
+      transform:scale(.95);
+    }
+
     .nav-item svg{
-      width:21px;
-      height:21px;
+      width:22px;
+      height:22px;
     }
 
     .nav-item span{
       font-size:9px;
-      font-weight:850;
+      font-weight:900;
     }
 
     .nav-item.active{
@@ -998,8 +1008,8 @@
       background:
         linear-gradient(
           145deg,
-          #edf6f8,
-          #e5f1f4
+          #e8f3f6,
+          #dceef2
         );
     }
 
@@ -1368,6 +1378,7 @@
 
 
   <!-- BOTTOM NAV -->
+  <div class="bottom-wrap">
   <nav class="bottom-nav">
 
     <div class="nav-inner">
@@ -1477,6 +1488,7 @@
     </div>
 
   </nav>
+  </div>
 
 
   <!-- SUPABASE -->
