@@ -24,42 +24,6 @@
 
 <title>MZAD PHONE — الرئيسية</title>
 
-<script>
-(function(){
-
-  if(!("serviceWorker" in navigator)) return;
-
-  window.addEventListener("load",function(){
-
-    navigator.serviceWorker
-      .register("/sw.js",{
-        scope:"/",
-        updateViaCache:"none"
-      })
-      .then(function(registration){
-
-        console.log(
-          "MZAD PHONE SERVICE WORKER REGISTERED:",
-          registration.scope
-        );
-
-        registration.update();
-
-      })
-      .catch(function(error){
-
-        console.warn(
-          "MZAD PHONE SERVICE WORKER ERROR:",
-          error
-        );
-
-      });
-
-  });
-
-})();
-</script>
-
 <style>
 
 :root{
@@ -73,7 +37,6 @@
   --primary-dark:#125a73;
   --primary-soft:#e8f3f6;
   --purple:#6246d9;
-  --shadow:0 14px 34px rgba(24,44,49,.08);
   --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 
@@ -121,9 +84,9 @@ a{
   color:inherit;
 }
 
-/* =========================================
+/* ================================
    PAGE
-========================================= */
+================================ */
 
 .page{
   width:min(100%,520px);
@@ -132,12 +95,12 @@ a{
   padding:
     0
     14px
-    calc(92px + var(--safe-bottom));
+    calc(82px + var(--safe-bottom));
 }
 
-/* =========================================
+/* ================================
    HEADER
-========================================= */
+================================ */
 
 header{
   margin-inline:-14px;
@@ -162,7 +125,8 @@ header{
     24px;
 
   border-bottom:
-    1px solid var(--line);
+    1px solid
+    var(--line);
 
   box-shadow:
     0 10px 26px rgba(23,32,42,.06);
@@ -294,7 +258,7 @@ header{
 
   border:
     1px solid
-    var(--line);
+    #9edfe3;
 
   border-radius:15px;
 
@@ -320,7 +284,7 @@ header{
 }
 
 .search:focus{
-  border-color:#acdfe2;
+  border-color:#8bd3d9;
 
   box-shadow:
     0 12px 28px rgba(33,152,164,.10);
@@ -370,9 +334,9 @@ header{
   pointer-events:auto;
 }
 
-/* =========================================
+/* ================================
    SECTIONS
-========================================= */
+================================ */
 
 .section{
   margin-top:20px;
@@ -383,7 +347,7 @@ header{
   align-items:center;
   justify-content:space-between;
 
-  margin-bottom:11px;
+  margin-bottom:10px;
 
   padding:0 2px;
 }
@@ -406,9 +370,9 @@ header{
   font-weight:800;
 }
 
-/* =========================================
+/* ================================
    CATEGORIES
-========================================= */
+================================ */
 
 .horizontal{
   display:flex;
@@ -425,8 +389,6 @@ header{
   scrollbar-width:none;
 
   scroll-snap-type:x proximity;
-
-  touch-action:auto;
 
   -webkit-overflow-scrolling:touch;
 }
@@ -553,9 +515,9 @@ header{
   color:var(--primary-dark);
 }
 
-/* =========================================
+/* ================================
    AUCTIONS
-========================================= */
+================================ */
 
 .auction-shell{
   position:relative;
@@ -588,8 +550,6 @@ header{
   overscroll-behavior-x:contain;
 
   -webkit-overflow-scrolling:touch;
-
-  touch-action:auto;
 }
 
 .auction-track::-webkit-scrollbar{
@@ -642,17 +602,12 @@ header{
 
   transition:
     transform .35s ease,
-    opacity .35s ease,
-    box-shadow .35s ease;
+    opacity .35s ease;
 }
 
 .auction-card.is-current{
   transform:scale(1);
-
   opacity:1;
-
-  box-shadow:
-    0 16px 34px rgba(24,76,81,.19);
 }
 
 .auction-card:before,
@@ -833,9 +788,6 @@ header{
 
   font-weight:900;
 
-  box-shadow:
-    0 8px 20px rgba(0,0,0,.11);
-
   white-space:nowrap;
 }
 
@@ -860,8 +812,6 @@ header{
   background:#ccd8d8;
 
   transition:.2s ease;
-
-  cursor:pointer;
 }
 
 .dot.active{
@@ -872,9 +822,9 @@ header{
   background:var(--purple);
 }
 
-/* =========================================
-   ACTION CARDS
-========================================= */
+/* ================================
+   ACTIONS
+================================ */
 
 .actions-grid{
   display:grid;
@@ -919,28 +869,6 @@ header{
 
   box-shadow:
     0 12px 28px rgba(98,70,217,.09);
-
-  transition:.2s ease;
-}
-
-.action-card:nth-child(2){
-  background:
-    linear-gradient(
-      145deg,
-      #fff 0%,
-      #f7f4ff 45%,
-      #ece8ff 100%
-    );
-}
-
-.action-card:nth-child(3){
-  background:
-    linear-gradient(
-      145deg,
-      #fff 0%,
-      #faf9ff 50%,
-      #f1efff 100%
-    );
 }
 
 .action-card:before{
@@ -959,26 +887,6 @@ header{
 
   background:
     rgba(98,70,217,.08);
-}
-
-.action-card:after{
-  content:"";
-
-  position:absolute;
-
-  width:8px;
-  height:8px;
-
-  border-radius:2px;
-
-  bottom:18px;
-
-  left:18px;
-
-  background:
-    rgba(98,70,217,.12);
-
-  transform:rotate(18deg);
 }
 
 .action-icon{
@@ -1012,29 +920,27 @@ header{
   margin-top:2px;
 }
 
-/* =========================================
+/* ================================
    DEVICE CARDS
-========================================= */
+================================ */
 
 .featured-devices-track{
   display:flex;
 
-  gap:12px;
+  gap:10px;
 
   overflow-x:auto;
 
   padding:
     2px
     2px
-    4px;
+    5px;
 
   scrollbar-width:none;
 
   scroll-behavior:smooth;
 
   scroll-snap-type:x mandatory;
-
-  touch-action:auto;
 
   overscroll-behavior-x:contain;
 
@@ -1048,9 +954,9 @@ header{
 .featured-devices-track .device-card{
   flex:
     0 0
-    178px;
+    168px;
 
-  height:292px;
+  height:286px;
 
   display:flex;
 
@@ -1073,24 +979,15 @@ header{
 
   cursor:pointer;
 
-  transition:
-    transform .2s ease,
-    box-shadow .2s ease;
-}
-
-.featured-devices-track .device-card:active{
-  transform:scale(.985);
-
-  box-shadow:
-    0 6px 16px rgba(23,32,42,.08);
+  position:relative;
 }
 
 .featured-devices-track .device-image{
-  height:156px;
+  height:142px;
 
   flex:
     0 0
-    156px;
+    142px;
 
   display:block;
 
@@ -1117,8 +1014,7 @@ header{
 
   opacity:0;
 
-  transition:
-    opacity .18s ease;
+  transition:opacity .18s ease;
 
   background:#f3f5f6;
 }
@@ -1137,9 +1033,9 @@ header{
   overflow:hidden;
 
   padding:
+    10px
     11px
-    12px
-    12px;
+    10px;
 
   background:#fff;
 }
@@ -1153,9 +1049,9 @@ header{
 
   font-weight:900;
 
-  line-height:1.35;
+  line-height:1.3;
 
-  min-height:38px;
+  min-height:36px;
 
   display:-webkit-box;
 
@@ -1166,22 +1062,18 @@ header{
   overflow:hidden;
 }
 
-/* تفاصيل الجهاز بشكل مرتب */
-
 .featured-devices-track .device-meta{
-  margin-top:7px;
+  margin-top:6px;
 
   color:#68747c;
 
-  font-size:10.5px;
+  font-size:10px;
 
-  line-height:1.6;
+  line-height:1.55;
 
   font-weight:750;
 
-  white-space:normal;
-
-  overflow:hidden;
+  min-height:30px;
 
   display:-webkit-box;
 
@@ -1189,15 +1081,15 @@ header{
 
   -webkit-box-orient:vertical;
 
-  min-height:34px;
+  overflow:hidden;
 }
 
 .featured-devices-track .device-time{
-  margin-top:4px;
+  margin-top:3px;
 
   color:#9aa3aa;
 
-  font-size:9px;
+  font-size:8.5px;
 
   font-weight:700;
 
@@ -1217,11 +1109,11 @@ header{
 
   justify-content:space-between;
 
-  gap:8px;
+  gap:6px;
 
-  margin-top:8px;
+  margin-top:7px;
 
-  padding-top:8px;
+  padding-top:7px;
 
   border-top:
     1px solid
@@ -1231,7 +1123,7 @@ header{
 .featured-devices-track .device-price{
   color:#176b87;
 
-  font-size:13.5px;
+  font-size:12.5px;
 
   font-weight:950;
 
@@ -1243,13 +1135,13 @@ header{
 
   background:#eaf6f8;
 
-  font-size:9.5px;
+  font-size:8.5px;
 
   padding:
     5px
-    7px;
+    6px;
 
-  border-radius:9px;
+  border-radius:8px;
 
   white-space:nowrap;
 }
@@ -1257,14 +1149,12 @@ header{
 .featured-devices-track .favorite-btn{
   position:absolute;
 
-  top:9px;
+  top:8px;
 
-  inset-inline-start:9px;
+  inset-inline-start:8px;
 
-  inset-inline-end:auto;
-
-  width:38px;
-  height:38px;
+  width:36px;
+  height:36px;
 
   border-radius:50%;
 
@@ -1277,8 +1167,6 @@ header{
   background:
     rgba(255,255,255,.97);
 
-  border:0;
-
   color:#7b7f84;
 
   box-shadow:
@@ -1288,23 +1176,17 @@ header{
 }
 
 .featured-devices-track .favorite-btn svg{
-  width:20px;
-  height:20px;
-}
-
-.featured-devices-track .favorite-btn:active{
-  transform:scale(.88);
+  width:19px;
+  height:19px;
 }
 
 .featured-devices-track .favorite-btn.active{
   color:#6246d9;
-
-  background:#fff;
 }
 
-/* =========================================
+/* ================================
    TRUST CARD
-========================================= */
+================================ */
 
 .trust-card{
   display:grid;
@@ -1312,11 +1194,11 @@ header{
   grid-template-columns:
     repeat(3,1fr);
 
-  gap:5px;
+  gap:2px;
 
   padding:
-    10px
-    8px;
+    8px
+    7px;
 
   background:#fff;
 
@@ -1326,23 +1208,33 @@ header{
 
   border-radius:18px;
 
-  margin-top:4px;
+  margin-top:2px;
+
+  min-height:112px;
 }
 
 .trust-item{
   text-align:center;
 
   min-width:0;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
 }
 
 .trust-icon{
-  width:30px;
-  height:30px;
+  width:29px;
+  height:29px;
 
   margin:
     0
     auto
-    4px;
+    3px;
 
   border-radius:10px;
 
@@ -1361,25 +1253,25 @@ header{
 
   font-weight:900;
 
-  line-height:1.3;
+  line-height:1.25;
 }
 
 .trust-copy{
-  font-size:8.5px;
+  font-size:8px;
 
   color:var(--muted);
 
-  margin-top:2px;
+  margin-top:1px;
 
-  line-height:1.4;
+  line-height:1.3;
 
   white-space:nowrap;
 }
 
-/* =========================================
+/* ================================
    BOTTOM NAV
-   ينزل شوي للأسفل
-========================================= */
+   فقط نزلة خفيفة
+================================ */
 
 .bottom-wrap{
   position:fixed;
@@ -1387,7 +1279,7 @@ header{
   left:0;
   right:0;
 
-  bottom:-20px;
+  bottom:-7px;
 
   width:100%;
 
@@ -1465,8 +1357,6 @@ header{
 
   gap:3px;
 
-  border:0;
-
   border-radius:15px;
 
   background:transparent;
@@ -1474,15 +1364,6 @@ header{
   color:#7E8992;
 
   text-decoration:none;
-
-  transition:
-    transform .16s ease,
-    background .16s ease,
-    color .16s ease;
-}
-
-.bottom-nav .nav-item:active{
-  transform:scale(.96);
 }
 
 .bottom-nav .nav-item.active{
@@ -1546,9 +1427,9 @@ header{
   height:20px !important;
 }
 
-/* =========================================
+/* ================================
    TOAST
-========================================= */
+================================ */
 
 .toast{
   position:fixed;
@@ -1556,7 +1437,7 @@ header{
   left:50%;
 
   bottom:
-    calc(94px + env(safe-area-inset-bottom,0px));
+    calc(88px + env(safe-area-inset-bottom,0px));
 
   transform:
     translateX(-50%)
@@ -1579,7 +1460,8 @@ header{
 
   font-weight:800;
 
-  box-shadow:var(--shadow);
+  box-shadow:
+    0 14px 34px rgba(24,44,49,.12);
 
   opacity:0;
 
@@ -1600,59 +1482,14 @@ header{
     translateY(0);
 }
 
-/* =========================================
-   REVEAL
-========================================= */
-
-.reveal{
-  opacity:0;
-
-  transform:translateY(9px);
-
-  animation:
-    reveal
-    .55s
-    cubic-bezier(.2,.7,.2,1)
-    forwards;
-}
-
-.d1{
-  animation-delay:.04s;
-}
-
-.d2{
-  animation-delay:.09s;
-}
-
-.d3{
-  animation-delay:.14s;
-}
-
-.d4{
-  animation-delay:.19s;
-}
-
-.d5{
-  animation-delay:.24s;
-}
-
-@keyframes reveal{
-
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-
-}
-
-/* =========================================
-   SMALL SCREEN
-========================================= */
+/* ================================
+   RESPONSIVE
+================================ */
 
 @media(max-width:360px){
 
   .bottom-wrap{
-    bottom:-18px;
+    bottom:-6px;
 
     padding-left:8px;
     padding-right:8px;
@@ -1681,19 +1518,6 @@ header{
 
 }
 
-@media(min-width:700px){
-
-  .page{
-    padding-inline:18px;
-  }
-
-  .bottom-wrap{
-    padding-left:18px;
-    padding-right:18px;
-  }
-
-}
-
 </style>
 
 </head>
@@ -1702,7 +1526,7 @@ header{
 
 <main class="page">
 
-<header class="reveal">
+<header>
 
 <div class="topbar">
 
@@ -1710,13 +1534,9 @@ header{
 
 <div class="brand-mini">
 
-<strong>
-MZAD
-</strong>
+<strong>MZAD</strong>
 
-<span>
-PHONE
-</span>
+<span>PHONE</span>
 
 </div>
 
@@ -1805,7 +1625,7 @@ r="2.5"
 </div>
 
 <div
-class="search-wrap reveal d1"
+class="search-wrap"
 id="searchWrap"
 >
 
@@ -1863,11 +1683,11 @@ stroke-width="1.9"
 </header>
 
 
-<!-- =====================================
+<!-- ================================
      CATEGORIES
-===================================== -->
+================================ -->
 
-<section class="section reveal d2">
+<section class="section">
 
 <div class="section-head">
 
@@ -2219,11 +2039,11 @@ Infinix
 </section>
 
 
-<!-- =====================================
+<!-- ================================
      AUCTIONS
-===================================== -->
+================================ -->
 
-<section class="section reveal d3">
+<section class="section">
 
 <div class="section-head">
 
@@ -2249,7 +2069,6 @@ id="auctionTrack"
 
 <article
 class="auction-card is-current"
-data-go="market.html"
 >
 
 <div class="auction-top">
@@ -2259,7 +2078,7 @@ data-go="market.html"
 </span>
 
 <span class="auction-state">
-المحتوى الفعلي سيظهر تلقائياً
+صفحة 1 من 7
 </span>
 
 </div>
@@ -2307,10 +2126,9 @@ r="9"
 
 <button
 class="auction-cta"
-id="viewAuctionsBtn"
 type="button"
 >
-استكشف المزادات
+قريباً
 </button>
 
 </div>
@@ -2320,10 +2138,7 @@ type="button"
 </article>
 
 
-<article
-class="auction-card"
-aria-hidden="true"
->
+<article class="auction-card">
 
 <div class="auction-top">
 
@@ -2357,10 +2172,7 @@ aria-hidden="true"
 بيانات حيّة من قاعدة البيانات
 </div>
 
-<button
-class="auction-cta"
-type="button"
->
+<button class="auction-cta" type="button">
 قريباً
 </button>
 
@@ -2371,10 +2183,7 @@ type="button"
 </article>
 
 
-<article
-class="auction-card"
-aria-hidden="true"
->
+<article class="auction-card">
 
 <div class="auction-top">
 
@@ -2408,10 +2217,7 @@ aria-hidden="true"
 بيانات حيّة من قاعدة البيانات
 </div>
 
-<button
-class="auction-cta"
-type="button"
->
+<button class="auction-cta" type="button">
 قريباً
 </button>
 
@@ -2422,10 +2228,7 @@ type="button"
 </article>
 
 
-<article
-class="auction-card"
-aria-hidden="true"
->
+<article class="auction-card">
 
 <div class="auction-top">
 
@@ -2459,10 +2262,7 @@ aria-hidden="true"
 بيانات حيّة من قاعدة البيانات
 </div>
 
-<button
-class="auction-cta"
-type="button"
->
+<button class="auction-cta" type="button">
 قريباً
 </button>
 
@@ -2473,10 +2273,7 @@ type="button"
 </article>
 
 
-<article
-class="auction-card"
-aria-hidden="true"
->
+<article class="auction-card">
 
 <div class="auction-top">
 
@@ -2510,10 +2307,7 @@ aria-hidden="true"
 بيانات حيّة من قاعدة البيانات
 </div>
 
-<button
-class="auction-cta"
-type="button"
->
+<button class="auction-cta" type="button">
 قريباً
 </button>
 
@@ -2524,10 +2318,7 @@ type="button"
 </article>
 
 
-<article
-class="auction-card"
-aria-hidden="true"
->
+<article class="auction-card">
 
 <div class="auction-top">
 
@@ -2561,10 +2352,7 @@ aria-hidden="true"
 بيانات حيّة من قاعدة البيانات
 </div>
 
-<button
-class="auction-cta"
-type="button"
->
+<button class="auction-cta" type="button">
 قريباً
 </button>
 
@@ -2575,10 +2363,7 @@ type="button"
 </article>
 
 
-<article
-class="auction-card"
-aria-hidden="true"
->
+<article class="auction-card">
 
 <div class="auction-top">
 
@@ -2612,10 +2397,7 @@ aria-hidden="true"
 بيانات حيّة من قاعدة البيانات
 </div>
 
-<button
-class="auction-cta"
-type="button"
->
+<button class="auction-cta" type="button">
 قريباً
 </button>
 
@@ -2644,11 +2426,11 @@ type="button"
 </section>
 
 
-<!-- =====================================
+<!-- ================================
      ACTIONS
-===================================== -->
+================================ -->
 
-<section class="section reveal d4">
+<section class="section">
 
 <div class="actions-grid">
 
@@ -2672,7 +2454,6 @@ stroke-width="1.9"
 <path d="M9 7h6"/>
 <path d="M6 15h12"/>
 <path d="M5 19h14"/>
-<path d="m8 4 3-2 1 2 4-1 2 2"/>
 
 </svg>
 
@@ -2779,11 +2560,11 @@ stroke-width="1.9"
 </section>
 
 
-<!-- =====================================
-     FEATURED DEVICES
-===================================== -->
+<!-- ================================
+     FEATURED
+================================ -->
 
-<section class="section reveal d5">
+<section class="section">
 
 <div class="section-head">
 
@@ -2803,18 +2584,16 @@ href="market.html"
 <div
 class="featured-devices-track"
 id="featuredDevicesTrack"
->
-
-</div>
+></div>
 
 </section>
 
 
-<!-- =====================================
-     LATEST DEVICES
-===================================== -->
+<!-- ================================
+     LATEST
+================================ -->
 
-<section class="section reveal d5">
+<section class="section">
 
 <div class="section-head">
 
@@ -2834,18 +2613,16 @@ href="market.html"
 <div
 class="featured-devices-track"
 id="latestDevicesTrack"
->
-
-</div>
+></div>
 
 </section>
 
 
-<!-- =====================================
+<!-- ================================
      TRUST
-===================================== -->
+================================ -->
 
-<section class="section reveal d5">
+<section class="section">
 
 <div class="trust-card">
 
@@ -2955,9 +2732,9 @@ r="4"
 </main>
 
 
-<!-- =====================================
+<!-- ================================
      BOTTOM NAV
-===================================== -->
+================================ -->
 
 <div class="bottom-wrap">
 
@@ -3151,64 +2928,49 @@ const locationBtn =
 const notificationBtn =
   document.getElementById("notificationBtn");
 
-const viewAuctionsBtn =
-  document.getElementById("viewAuctionsBtn");
+const auctionTrack =
+  document.getElementById("auctionTrack");
 
 const categories = [
   ...document.querySelectorAll(".category")
 ];
 
-const auctionTrack =
-  document.getElementById("auctionTrack");
-
 const dots = [
   ...document.querySelectorAll(".dot")
 ];
 
-const featuredDevicesTrack =
-  document.getElementById(
-    "featuredDevicesTrack"
-  );
-
 let toastTimer;
 
 
-/* =========================================
+/* ================================
    TOAST
-========================================= */
+================================ */
 
 function showToast(message){
 
   toast.textContent =
     message;
 
-  toast.classList.add(
-    "show"
-  );
+  toast.classList.add("show");
 
   clearTimeout(
     toastTimer
   );
 
   toastTimer =
-    setTimeout(()=>{
-
-      toast.classList.remove(
-        "show"
-      );
-
-    },2200);
+    setTimeout(
+      ()=>{
+        toast.classList.remove("show");
+      },
+      2200
+    );
 
 }
 
 
-/* =========================================
+/* ================================
    AUTH
-========================================= */
-
-const LOGIN_PAGE =
-  "index.html?login=1";
-
+================================ */
 
 async function isLoggedIn(){
 
@@ -3220,11 +2982,10 @@ async function isLoggedIn(){
     } =
       await supabase.auth.getSession();
 
-
     if(error){
 
       console.error(
-        "Supabase session error:",
+        "SESSION ERROR:",
         error
       );
 
@@ -3232,13 +2993,12 @@ async function isLoggedIn(){
 
     }
 
-
     return !!data?.session;
 
   }catch(error){
 
     console.error(
-      "Auth check failed:",
+      "AUTH ERROR:",
       error
     );
 
@@ -3264,7 +3024,6 @@ async function requireAuth(url){
   const loggedIn =
     await isLoggedIn();
 
-
   if(loggedIn){
 
     window.location.href =
@@ -3274,23 +3033,21 @@ async function requireAuth(url){
 
   }
 
-
   savePendingAction(
     url
   );
-
 
   showToast(
     "سجّل دخولك أو أنشئ حساباً أولاً"
   );
 
-
-  setTimeout(()=>{
-
-    window.location.href =
-      `${LOGIN_PAGE}&returnTo=${encodeURIComponent(url)}`;
-
-  },450);
+  setTimeout(
+    ()=>{
+      window.location.href =
+        `index.html?login=1&returnTo=${encodeURIComponent(url)}`;
+    },
+    450
+  );
 
 }
 
@@ -3303,88 +3060,298 @@ function go(url){
 }
 
 
-/* =========================================
+/* ================================
    NAVIGATION
-========================================= */
+================================ */
 
 function bindNavigation(){
 
   document
     .querySelectorAll("[data-go]")
-    .forEach(el=>{
+    .forEach(
+      element=>{
 
-      if(
-        el.classList.contains("device-card") ||
-        el.classList.contains("auction-card")
-      ){
+        element.addEventListener(
+          "click",
+          async event=>{
 
-        return;
+            event.preventDefault();
+
+            const url =
+              element.dataset.go;
+
+            if(!url)return;
+
+            const protectedPaths = [
+              "sell.html",
+              "sell-auction.html",
+              "favorites.html",
+              "profile.html"
+            ];
+
+            const path =
+              url.split("?")[0];
+
+            const needsAuth =
+              protectedPaths.includes(
+                path
+              );
+
+            if(needsAuth){
+
+              await requireAuth(
+                url
+              );
+
+              return;
+
+            }
+
+            go(url);
+
+          }
+        );
 
       }
-
-
-      el.addEventListener(
-        "click",
-        async event=>{
-
-          event.preventDefault();
-
-
-          if(
-            el.classList.contains("category")
-          ){
-
-            return;
-
-          }
-
-
-          const url =
-            el.dataset.go;
-
-
-          if(!url)return;
-
-
-          const protectedPaths = [
-            "sell.html",
-            "sell-auction.html",
-            "favorites.html",
-            "profile.html"
-          ];
-
-
-          const needsAuth =
-            protectedPaths.some(
-              path =>
-                url.split("?")[0] === path
-            );
-
-
-          if(needsAuth){
-
-            await requireAuth(
-              url
-            );
-
-            return;
-
-          }
-
-
-          go(url);
-
-        }
-      );
-
-    });
+    );
 
 }
 
 
-/* =========================================
-   SEARCH
-========================================= */
+/* ================================
+   SEARCH NORMALIZATION
+================================ */
+
+function normalizeArabicSearch(value){
+
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFKC")
+
+    /* أ / إ / آ / ٱ */
+    .replace(/[أإآٱ]/g,"ا")
+
+    /* ة */
+    .replace(/ة/g,"ه")
+
+    /* ى */
+    .replace(/ى/g,"ي")
+
+    /* ي / ئ */
+    .replace(/ئ/g,"ي")
+
+    /* ؤ */
+    .replace(/ؤ/g,"و")
+
+    /* ـ */
+    .replace(/ـ/g,"")
+
+    /* إزالة التشكيل */
+    .replace(
+      /[\u064B-\u065F\u0670]/g,
+      ""
+    )
+
+    /* مسافات زائدة */
+    .replace(/\s+/g," ")
+
+    .trim();
+
+}
+
+
+/*
+  نحول أسماء الشركات الشائعة بالعربي
+  إلى الاسم الإنكليزي القياسي.
+*/
+
+function arabicBrandAliases(value){
+
+  let text =
+    normalizeArabicSearch(
+      value
+    );
+
+  const aliases = [
+
+    [
+      /ايفون/g,
+      "iphone"
+    ],
+
+    [
+      /ايفن/g,
+      "iphone"
+    ],
+
+    [
+      /ابل/g,
+      "apple"
+    ],
+
+    [
+      /سامسونج/g,
+      "samsung"
+    ],
+
+    [
+      /سامسنك/g,
+      "samsung"
+    ],
+
+    [
+      /جوجل/g,
+      "google"
+    ],
+
+    [
+      /قوقل/g,
+      "google"
+    ],
+
+    [
+      /هواوي/g,
+      "huawei"
+    ],
+
+    [
+      /شاومي/g,
+      "xiaomi"
+    ],
+
+    [
+      /شياومي/g,
+      "xiaomi"
+    ],
+
+    [
+      /ون بلس/g,
+      "oneplus"
+    ],
+
+    [
+      /اوبو/g,
+      "oppo"
+    ],
+
+    [
+      /هونر/g,
+      "honor"
+    ],
+
+    [
+      /ريلمي/g,
+      "realme"
+    ],
+
+    [
+      /موتورولا/g,
+      "motorola"
+    ],
+
+    [
+      /نوكيا/g,
+      "nokia"
+    ],
+
+    [
+      /سوني/g,
+      "sony"
+    ],
+
+    [
+      /تكنو/g,
+      "tecno"
+    ],
+
+    [
+      /انفنكس/g,
+      "infinix"
+    ]
+
+  ];
+
+
+  aliases.forEach(
+    ([pattern,replacement])=>{
+      text =
+        text.replace(
+          pattern,
+          replacement
+        );
+    }
+  );
+
+
+  return text;
+
+}
+
+
+function buildSearchVariants(value){
+
+  const raw =
+    String(value || "")
+      .trim();
+
+  if(!raw){
+
+    return [];
+
+  }
+
+  const normalized =
+    normalizeArabicSearch(
+      raw
+    );
+
+  const branded =
+    arabicBrandAliases(
+      raw
+    );
+
+  const variants = [
+    raw,
+    normalized,
+    branded
+  ];
+
+
+  /*
+    نضيف النسخة التي تحول الأرقام
+    العربية إلى أرقام إنكليزية.
+  */
+
+  const englishDigits =
+    branded.replace(
+      /[٠-٩]/g,
+      digit =>
+        String(
+          "٠١٢٣٤٥٦٧٨٩".indexOf(
+            digit
+          )
+        )
+    );
+
+
+  variants.push(
+    englishDigits
+  );
+
+
+  return [
+    ...new Set(
+      variants
+        .map(
+          value =>
+            value.trim()
+        )
+        .filter(Boolean)
+    )
+  ];
+
+}
+
 
 function bindSearch(){
 
@@ -3407,14 +3374,12 @@ function bindSearch(){
   searchClear.addEventListener(
     "click",
     ()=>{
-
       searchInput.value =
         "";
 
       sync();
 
       searchInput.focus();
-
     }
   );
 
@@ -3430,7 +3395,6 @@ function bindSearch(){
         return;
 
       }
-
 
       event.preventDefault();
 
@@ -3450,9 +3414,16 @@ function bindSearch(){
       }
 
 
+      const variants =
+        buildSearchVariants(
+          query
+        );
+
+
       /*
-        نخزن البحث أيضاً حتى تبقى القيمة
-        متاحة إذا احتاجتها صفحة السوق.
+        نخزن البحث الأصلي والمطبع.
+        market.html راح يستخدم هذه القيم
+        عند تعديل البحث هناك.
       */
 
       sessionStorage.setItem(
@@ -3460,15 +3431,23 @@ function bindSearch(){
         query
       );
 
+      sessionStorage.setItem(
+        "mzad_search_variants",
+        JSON.stringify(
+          variants
+        )
+      );
 
-      /*
-        نرسل البحث داخل الرابط.
-        market.html سيتم تعديله بالخطوة
-        القادمة حتى يقرأه ويطبق الفلترة.
-      */
+
+      const normalized =
+        variants[2] ||
+        variants[1] ||
+        variants[0] ||
+        query;
+
 
       go(
-        `market.html?search=${encodeURIComponent(query)}`
+        `market.html?search=${encodeURIComponent(query)}&search_normalized=${encodeURIComponent(normalized)}`
       );
 
     }
@@ -3477,9 +3456,9 @@ function bindSearch(){
 }
 
 
-/* =========================================
+/* ================================
    CATEGORIES
-========================================= */
+================================ */
 
 function bindCategories(){
 
@@ -3497,35 +3476,18 @@ function bindCategories(){
               )
           );
 
-
           button.classList.add(
             "active"
           );
 
-
-          const label =
-            button
-              .querySelector(
-                ".category-name"
-              )
-              ?.textContent
-              ?.trim()
-            ||
-            "التصنيف";
-
-
-          showToast(
-            `تم اختيار ${label}`
+          setTimeout(
+            ()=>{
+              go(
+                button.dataset.go
+              );
+            },
+            100
           );
-
-
-          setTimeout(()=>{
-
-            go(
-              button.dataset.go
-            );
-
-          },120);
 
         }
       );
@@ -3536,9 +3498,9 @@ function bindCategories(){
 }
 
 
-/* =========================================
+/* ================================
    AUCTION CAROUSEL
-========================================= */
+================================ */
 
 function bindAuctionCarousel(){
 
@@ -3558,16 +3520,6 @@ function bindAuctionCarousel(){
   let current = 0;
 
   let timer = null;
-
-  let touchStarted = false;
-
-  let touchMoved = false;
-
-  let touchStartX = 0;
-
-  let touchStartY = 0;
-
-  let suppressClickUntil = 0;
 
 
   function goToAuction(index){
@@ -3600,14 +3552,6 @@ function bindAuctionCarousel(){
           i === current
         );
 
-
-        item.setAttribute(
-          "aria-hidden",
-          i === current
-            ? "false"
-            : "true"
-        );
-
       }
     );
 
@@ -3626,215 +3570,38 @@ function bindAuctionCarousel(){
   }
 
 
-  function restartAuctionTimer(){
+  function restartTimer(){
 
     clearInterval(
       timer
     );
 
-
     timer =
-      setInterval(()=>{
-
-        goToAuction(
-          current + 1
-        );
-
-      },5000);
+      setInterval(
+        ()=>{
+          goToAuction(
+            current + 1
+          );
+        },
+        5000
+      );
 
   }
 
 
-  auctionTrack.addEventListener(
-    "touchstart",
-    event=>{
+  cards.forEach(
+    card=>{
 
-      const touch =
-        event.touches[0];
-
-
-      touchStarted = true;
-
-      touchMoved = false;
-
-      touchStartX =
-        touch.clientX;
-
-      touchStartY =
-        touch.clientY;
-
-      clearInterval(
-        timer
+      card.addEventListener(
+        "click",
+        ()=>{
+          go(
+            "auctions.html"
+          );
+        }
       );
 
-    },
-    {
-      passive:true
     }
-  );
-
-
-  auctionTrack.addEventListener(
-    "touchmove",
-    event=>{
-
-      if(!touchStarted)return;
-
-
-      const touch =
-        event.touches[0];
-
-
-      const dx =
-        Math.abs(
-          touch.clientX -
-          touchStartX
-        );
-
-
-      const dy =
-        Math.abs(
-          touch.clientY -
-          touchStartY
-        );
-
-
-      if(
-        dx > 8 ||
-        dy > 8
-      ){
-
-        touchMoved = true;
-
-      }
-
-    },
-    {
-      passive:true
-    }
-  );
-
-
-  auctionTrack.addEventListener(
-    "touchend",
-    event=>{
-
-      if(!touchStarted)return;
-
-
-      const touch =
-        event.changedTouches[0];
-
-
-      const dx =
-        Math.abs(
-          touch.clientX -
-          touchStartX
-        );
-
-
-      const dy =
-        Math.abs(
-          touch.clientY -
-          touchStartY
-        );
-
-
-      if(
-        dx > 8 ||
-        dy > 8
-      ){
-
-        touchMoved = true;
-
-      }
-
-
-      if(touchMoved){
-
-        suppressClickUntil =
-          Date.now() + 700;
-
-      }
-
-
-      touchStarted = false;
-
-      restartAuctionTimer();
-
-    },
-    {
-      passive:true
-    }
-  );
-
-
-  auctionTrack.addEventListener(
-    "touchcancel",
-    ()=>{
-
-      touchStarted = false;
-
-      touchMoved = false;
-
-      restartAuctionTimer();
-
-    },
-    {
-      passive:true
-    }
-  );
-
-
-  auctionTrack.addEventListener(
-    "click",
-    event=>{
-
-      const button =
-        event.target.closest(
-          ".auction-cta"
-        );
-
-
-      const card =
-        event.target.closest(
-          ".auction-card"
-        );
-
-
-      if(!card)return;
-
-
-      if(
-        touchMoved ||
-        Date.now() <
-        suppressClickUntil
-      ){
-
-        event.preventDefault();
-
-        event.stopPropagation();
-
-        return;
-
-      }
-
-
-      if(button){
-
-        event.preventDefault();
-
-        event.stopPropagation();
-
-      }
-
-
-      go(
-        "auctions.html"
-      );
-
-    },
-    true
   );
 
 
@@ -3853,7 +3620,7 @@ function bindAuctionCarousel(){
             index
           );
 
-          restartAuctionTimer();
+          restartTimer();
 
         }
       );
@@ -3864,14 +3631,30 @@ function bindAuctionCarousel(){
 
   goToAuction(0);
 
-  restartAuctionTimer();
+  restartTimer();
 
 }
 
 
-/* =========================================
-   DEVICE DATA
-========================================= */
+/* ================================
+   DEVICE HELPERS
+================================ */
+
+function normalizeText(value){
+
+  if(
+    value === null ||
+    value === undefined
+  ){
+
+    return "";
+
+  }
+
+  return String(value).trim();
+
+}
+
 
 function getDeviceImages(images){
 
@@ -3880,9 +3663,7 @@ function getDeviceImages(images){
 
   if(Array.isArray(images)){
 
-    return images.filter(
-      Boolean
-    );
+    return images.filter(Boolean);
 
   }
 
@@ -3892,7 +3673,6 @@ function getDeviceImages(images){
     const value =
       images.trim();
 
-
     if(!value)return [];
 
 
@@ -3900,7 +3680,6 @@ function getDeviceImages(images){
 
       const parsed =
         JSON.parse(value);
-
 
       if(Array.isArray(parsed)){
 
@@ -3913,9 +3692,7 @@ function getDeviceImages(images){
     }catch(error){}
 
 
-    return [
-      value
-    ];
+    return [value];
 
   }
 
@@ -3928,7 +3705,6 @@ function getDeviceImages(images){
 function getDeviceImageUrl(path){
 
   if(!path)return "";
-
 
   const value =
     String(path).trim();
@@ -3987,7 +3763,7 @@ function formatDeviceTime(value){
 
   if(!value){
 
-    return "الآن";
+    return "نُشر الآن";
 
   }
 
@@ -4002,7 +3778,7 @@ function formatDeviceTime(value){
     )
   ){
 
-    return "الآن";
+    return "نُشر الآن";
 
   }
 
@@ -4105,73 +3881,55 @@ function formatDeviceTime(value){
 }
 
 
-/* =========================================
-   DEVICE DETAILS
-========================================= */
-
-function normalizeText(value){
-
-  if(
-    value === null ||
-    value === undefined
-  ){
-
-    return "";
-
-  }
-
-
-  return String(value)
-    .trim();
-
-}
-
+/* ================================
+   DEVICE META
+================================ */
 
 function buildDeviceMeta(device){
 
   const parts = [];
 
 
-  const storage =
+  if(
     normalizeText(
       device.storage
+    )
+  ){
+
+    parts.push(
+      normalizeText(
+        device.storage
+      )
     );
 
+  }
 
-  const color =
+
+  if(
     normalizeText(
       device.color
+    )
+  ){
+
+    parts.push(
+      normalizeText(
+        device.color
+      )
     );
 
+  }
 
-  const location =
+
+  if(
     normalizeText(
       device.location
-    );
-
-
-  if(storage){
+    )
+  ){
 
     parts.push(
-      storage
-    );
-
-  }
-
-
-  if(color){
-
-    parts.push(
-      color
-    );
-
-  }
-
-
-  if(location){
-
-    parts.push(
-      location
+      normalizeText(
+        device.location
+      )
     );
 
   }
@@ -4184,9 +3942,47 @@ function buildDeviceMeta(device){
 }
 
 
-/* =========================================
+/* ================================
    FEATURED SCORE
-========================================= */
+================================ */
+
+function storageToNumber(value){
+
+  const text =
+    normalizeText(
+      value
+    )
+    .toUpperCase();
+
+
+  const match =
+    text.match(
+      /(\d+(?:\.\d+)?)\s*(TB|GB)/
+    );
+
+
+  if(!match)return 0;
+
+
+  const number =
+    Number(
+      match[1]
+    );
+
+
+  if(!Number.isFinite(number)){
+
+    return 0;
+
+  }
+
+
+  return match[2] === "TB"
+    ? number * 1024
+    : number;
+
+}
+
 
 function scoreFeaturedDevice(device){
 
@@ -4200,7 +3996,7 @@ function scoreFeaturedDevice(device){
 
 
   /*
-    صور حقيقية متعددة = نقطة قوة
+    الصور الواضحة والمتعددة
   */
 
   if(images.length >= 2){
@@ -4218,7 +4014,7 @@ function scoreFeaturedDevice(device){
 
 
   /*
-    البطارية العالية تعطي أفضلية
+    البطارية
   */
 
   const battery =
@@ -4250,7 +4046,7 @@ function scoreFeaturedDevice(device){
 
 
   /*
-    حالة الجهاز
+    الحالة
   */
 
   const condition =
@@ -4321,10 +4117,11 @@ function scoreFeaturedDevice(device){
 
 
   /*
-    بيانات كاملة = جهاز أوضح وأقوى للعرض
+    اكتمال البيانات
   */
 
   const completeness = [
+
     device.brand,
     device.model,
     device.storage,
@@ -4335,12 +4132,11 @@ function scoreFeaturedDevice(device){
     device.screen_condition,
     device.body_condition,
     device.notes
-  ]
-  .filter(
+
+  ].filter(
     value =>
       normalizeText(value)
-  )
-  .length;
+  ).length;
 
 
   if(completeness >= 7){
@@ -4358,22 +4154,20 @@ function scoreFeaturedDevice(device){
 
 
   /*
-    الموديلات الحديثة / السعات الكبيرة
-    تحصل على أفضلية بسيطة فقط،
-    بدون اعتبارها وحدها سبباً كافياً.
+    سعة تخزين كبيرة
   */
 
-  const storageText =
+  const storage =
     storageToNumber(
       device.storage
     );
 
 
-  if(storageText >= 512){
+  if(storage >= 512){
 
     score += 2;
 
-  }else if(storageText >= 256){
+  }else if(storage >= 256){
 
     score += 1;
 
@@ -4385,59 +4179,9 @@ function scoreFeaturedDevice(device){
 }
 
 
-function storageToNumber(value){
-
-  const text =
-    normalizeText(
-      value
-    )
-    .toUpperCase();
-
-
-  if(!text)return 0;
-
-
-  const match =
-    text.match(
-      /(\d+(?:\.\d+)?)\s*(TB|GB)/
-    );
-
-
-  if(!match)return 0;
-
-
-  const number =
-    Number(
-      match[1]
-    );
-
-
-  if(
-    !Number.isFinite(number)
-  ){
-
-    return 0;
-
-  }
-
-
-  if(
-    match[2] === "TB"
-  ){
-
-    return number * 1024;
-
-  }
-
-
-  return number;
-
-}
-
-
-/* =========================================
-   CREATE DEVICE CARD
-========================================= */
+/* ================================
+   CREATE CARD
+================================ */
 
 function createDeviceCard(device){
 
@@ -4485,7 +4229,6 @@ function createDeviceCard(device){
     img.src =
       imageUrl;
 
-
     img.alt =
       [
         device.brand,
@@ -4494,14 +4237,11 @@ function createDeviceCard(device){
       .filter(Boolean)
       .join(" ");
 
-
     img.loading =
       "lazy";
 
-
     img.decoding =
       "async";
-
 
     img.draggable =
       false;
@@ -4509,23 +4249,10 @@ function createDeviceCard(device){
 
     img.addEventListener(
       "load",
-      async ()=>{
-
-        try{
-
-          if(img.decode){
-
-            await img.decode();
-
-          }
-
-        }catch(error){}
-
-
+      ()=>{
         img.classList.add(
           "is-ready"
         );
-
       },
       {
         once:true
@@ -4536,23 +4263,18 @@ function createDeviceCard(device){
     img.addEventListener(
       "error",
       ()=>{
-
         img.remove();
-
 
         const empty =
           document.createElement(
             "span"
           );
 
-
         empty.textContent =
           "لا توجد صورة";
 
-
         empty.style.cssText =
           "width:100%;height:100%;display:grid;place-items:center;color:#9aa3aa;font-size:11px;font-weight:800;";
-
 
         image.prepend(
           empty
@@ -4588,14 +4310,11 @@ function createDeviceCard(device){
         "span"
       );
 
-
     empty.textContent =
       "لا توجد صورة";
 
-
     empty.style.cssText =
       "width:100%;height:100%;display:grid;place-items:center;color:#9aa3aa;font-size:11px;font-weight:800;";
-
 
     image.appendChild(
       empty
@@ -4609,23 +4328,30 @@ function createDeviceCard(device){
       "button"
     );
 
-
   favorite.className =
     "favorite-btn";
 
-
   favorite.type =
     "button";
-
 
   favorite.setAttribute(
     "aria-label",
     "إضافة إلى المفضلة"
   );
 
-
   favorite.innerHTML =
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/></svg>';
+    `
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
+    </svg>
+    `;
 
 
   favorite.addEventListener(
@@ -4679,7 +4405,6 @@ function createDeviceCard(device){
       "div"
     );
 
-
   body.className =
     "device-body";
 
@@ -4689,10 +4414,8 @@ function createDeviceCard(device){
       "h3"
     );
 
-
   title.className =
     "device-title";
-
 
   title.textContent =
     [
@@ -4710,10 +4433,8 @@ function createDeviceCard(device){
       "div"
     );
 
-
   meta.className =
     "device-meta";
-
 
   meta.textContent =
     buildDeviceMeta(
@@ -4728,10 +4449,8 @@ function createDeviceCard(device){
       "div"
     );
 
-
   time.className =
     "device-time";
-
 
   time.textContent =
     formatDeviceTime(
@@ -4744,7 +4463,6 @@ function createDeviceCard(device){
       "div"
     );
 
-
   row.className =
     "device-row";
 
@@ -4754,10 +4472,8 @@ function createDeviceCard(device){
       "span"
     );
 
-
   price.className =
     "device-price";
-
 
   price.textContent =
     formatDevicePrice(
@@ -4770,10 +4486,8 @@ function createDeviceCard(device){
       "span"
     );
 
-
   type.className =
     "device-type";
-
 
   type.textContent =
     String(
@@ -4810,23 +4524,52 @@ function createDeviceCard(device){
 }
 
 
-/* =========================================
+/* ================================
    RENDER FEATURED
-========================================= */
+================================ */
 
 function renderFeaturedDevices(devices){
 
-  if(!featuredDevicesTrack)return;
+  const track =
+    document.getElementById(
+      "featuredDevicesTrack"
+    );
 
 
-  featuredDevicesTrack.innerHTML =
+  if(!track)return;
+
+
+  track.innerHTML =
     "";
 
 
   if(!devices.length){
 
-    featuredDevicesTrack.innerHTML =
-      '<article class="device-card" style="flex-basis:100%"><div class="device-body" style="display:grid;place-items:center;text-align:center"><h3 class="device-title">لا توجد أجهزة مميزة حالياً</h3><div class="device-meta">ستظهر الأجهزة المميزة هنا تلقائياً</div></div></article>';
+    track.innerHTML =
+      `
+      <article
+        class="device-card"
+        style="flex-basis:100%;"
+      >
+        <div
+          class="device-body"
+          style="
+            display:grid;
+            place-items:center;
+            text-align:center;
+          "
+        >
+          <h3 class="device-title">
+            لا توجد أجهزة مميزة حالياً
+          </h3>
+
+          <div class="device-meta">
+            ستظهر الأجهزة المميزة هنا تلقائياً
+          </div>
+
+        </div>
+      </article>
+      `;
 
     return;
 
@@ -4835,27 +4578,25 @@ function renderFeaturedDevices(devices){
 
   devices.forEach(
     device=>{
-
-      featuredDevicesTrack.appendChild(
+      track.appendChild(
         createDeviceCard(
           device
         )
       );
-
     }
   );
 
 
-  bindFeaturedRail(
-    featuredDevicesTrack
+  bindDeviceRail(
+    track
   );
 
 }
 
 
-/* =========================================
+/* ================================
    RENDER LATEST
-========================================= */
+================================ */
 
 function renderLatestDevices(devices){
 
@@ -4875,7 +4616,30 @@ function renderLatestDevices(devices){
   if(!devices.length){
 
     track.innerHTML =
-      '<article class="device-card" style="flex-basis:100%"><div class="device-body" style="display:grid;place-items:center;text-align:center"><h3 class="device-title">لا توجد أجهزة أحدث حالياً</h3><div class="device-meta">عند نشر أجهزة جديدة ستظهر هنا</div></div></article>';
+      `
+      <article
+        class="device-card"
+        style="flex-basis:100%;"
+      >
+        <div
+          class="device-body"
+          style="
+            display:grid;
+            place-items:center;
+            text-align:center;
+          "
+        >
+          <h3 class="device-title">
+            لا توجد أجهزة أحدث حالياً
+          </h3>
+
+          <div class="device-meta">
+            عند نشر جهاز جديد سيظهر هنا
+          </div>
+
+        </div>
+      </article>
+      `;
 
     return;
 
@@ -4884,32 +4648,27 @@ function renderLatestDevices(devices){
 
   devices.forEach(
     device=>{
-
       track.appendChild(
         createDeviceCard(
           device
         )
       );
-
     }
   );
 
 
-  bindFeaturedRail(
+  bindDeviceRail(
     track
   );
 
 }
 
 
-/* =========================================
+/* ================================
    LOAD DEVICES
-========================================= */
+================================ */
 
 async function loadFeaturedDevices(){
-
-  if(!featuredDevicesTrack)return;
-
 
   try{
 
@@ -4962,34 +4721,7 @@ async function loadFeaturedDevices(){
 
 
     /*
-      ---------------------------------------
-      أحدث الأجهزة
-      ---------------------------------------
-
-      نعتمد على created_at.
-      الأحدث أولاً.
-
-      لكن نترك الأجهزة التي اخترناها
-      للمميزة خارج هذه المجموعة حتى لا
-      يتكرر نفس الجهاز بالقسمين.
-    */
-
-    const sortedNewest =
-      [...devices]
-        .sort(
-          (a,b)=>
-            new Date(b.created_at || 0) -
-            new Date(a.created_at || 0)
-        );
-
-
-    /*
-      ---------------------------------------
-      أجهزة مميزة
-      ---------------------------------------
-
-      نحسب درجة تميز لكل جهاز.
-      الترتيب هنا ليس مجرد وقت النشر.
+      نرتب الأجهزة حسب درجة التميز.
     */
 
     const featuredCandidates =
@@ -5033,28 +4765,37 @@ async function loadFeaturedDevices(){
 
 
     /*
-      نختار المميزين.
-      حتى الجهاز الذي درجته عادية لا
-      يدخل إلا إذا احتجنا ملء القسم.
+      لا نريد كل الأجهزة تصير "مميزة".
+      فقط الأجهزة التي عندها درجة تميز
+      حقيقية.
+
+      الحد الأعلى 4 أجهزة حتى يبقى
+      قسم الأحدث مستقل.
     */
 
-    const featuredCount =
-      Math.min(
-        6,
-        featuredCandidates.length
-      );
-
-
-    const featuredDevices =
+    const qualifiedFeatured =
       featuredCandidates
+        .filter(
+          item =>
+            item.score >= 5
+        )
         .slice(
           0,
-          featuredCount
+          4
         )
         .map(
           item =>
             item.device
         );
+
+
+    /*
+      إذا ماكو أجهزة وصلت لدرجة التميز،
+      ما نخلي أجهزة عشوائية تدخل للمميزة.
+    */
+
+    const featuredDevices =
+      qualifiedFeatured;
 
 
     const featuredIds =
@@ -5067,16 +4808,22 @@ async function loadFeaturedDevices(){
 
 
     /*
-      ---------------------------------------
-      أحدث الأجهزة
-      ---------------------------------------
-
-      نأخذ الأحدث من الأجهزة التي لم
-      تدخل قسم المميزة.
+      الأحدث دائماً حسب created_at.
+      ونستبعد فقط الأجهزة الموجودة
+      في المميزة حتى ما يتكرر الجهاز.
     */
 
     const latestDevices =
-      sortedNewest
+      [...devices]
+        .sort(
+          (a,b)=>
+            new Date(
+              b.created_at || 0
+            ) -
+            new Date(
+              a.created_at || 0
+            )
+        )
         .filter(
           device =>
             !featuredIds.has(
@@ -5111,11 +4858,11 @@ async function loadFeaturedDevices(){
 }
 
 
-/* =========================================
+/* ================================
    DEVICE RAIL
-========================================= */
+================================ */
 
-function bindFeaturedRail(track){
+function bindDeviceRail(track){
 
   if(!track)return;
 
@@ -5169,7 +4916,7 @@ function bindFeaturedRail(track){
   }
 
 
-  function restartDeviceTimer(){
+  function restartTimer(){
 
     clearInterval(
       timer
@@ -5177,26 +4924,14 @@ function bindFeaturedRail(track){
 
 
     timer =
-      setInterval(()=>{
-
-        current++;
-
-
-        if(
-          current >=
-          cards.length
-        ){
-
-          current = 0;
-
-        }
-
-
-        goToDevice(
-          current
-        );
-
-      },10000);
+      setInterval(
+        ()=>{
+          goToDevice(
+            current + 1
+          );
+        },
+        10000
+      );
 
   }
 
@@ -5208,19 +4943,15 @@ function bindFeaturedRail(track){
       const touch =
         event.touches[0];
 
-
       touchStarted = true;
 
       touchMoved = false;
 
-
       touchStartX =
         touch.clientX;
 
-
       touchStartY =
         touch.clientY;
-
 
       clearInterval(
         timer
@@ -5319,8 +5050,7 @@ function bindFeaturedRail(track){
 
       touchStarted = false;
 
-
-      restartDeviceTimer();
+      restartTimer();
 
     },
     {
@@ -5332,13 +5062,11 @@ function bindFeaturedRail(track){
   track.addEventListener(
     "touchcancel",
     ()=>{
-
       touchStarted = false;
 
       touchMoved = false;
 
-      restartDeviceTimer();
-
+      restartTimer();
     },
     {
       passive:true
@@ -5350,13 +5078,15 @@ function bindFeaturedRail(track){
     "click",
     event=>{
 
-      const favorite =
+      if(
         event.target.closest(
           ".favorite-btn"
-        );
+        )
+      ){
 
+        return;
 
-      if(favorite)return;
+      }
 
 
       const card =
@@ -5401,62 +5131,42 @@ function bindFeaturedRail(track){
 
   goToDevice(0);
 
-  restartDeviceTimer();
+  restartTimer();
 
 }
 
 
-/* =========================================
+/* ================================
    LOCATION
-========================================= */
+================================ */
 
 locationBtn.addEventListener(
   "click",
   ()=>{
-
     showToast(
       "الموقع الافتراضي حالياً: النجف"
     );
-
   }
 );
 
 
-/* =========================================
+/* ================================
    NOTIFICATIONS
-========================================= */
+================================ */
 
 notificationBtn.addEventListener(
   "click",
   ()=>{
-
     showToast(
       "لا توجد إشعارات جديدة"
     );
-
   }
 );
 
 
-/* =========================================
-   AUCTIONS BUTTON
-========================================= */
-
-viewAuctionsBtn.addEventListener(
-  "click",
-  ()=>{
-
-    go(
-      "auctions.html"
-    );
-
-  }
-);
-
-
-/* =========================================
+/* ================================
    START
-========================================= */
+================================ */
 
 bindNavigation();
 
