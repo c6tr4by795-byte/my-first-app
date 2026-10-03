@@ -1121,19 +1121,30 @@ padding-inline:18px
 .bottom-nav .add-button svg{width:20px!important;height:20px!important}
 @media(max-width:360px){.bottom-wrap{padding-inline:8px}.bottom-nav{border-radius:18px}.bottom-nav .nav-item{min-height:50px;border-radius:14px}.bottom-nav .nav-item svg,.bottom-nav .nav-icon{width:19px;height:19px;flex-basis:19px}.bottom-nav .nav-item>span:not(.add-button){font-size:8px}}
 
+/* Show the real photo completely — no forced crop or white framing */
+.featured-devices-track .device-card{
+  height:auto;
+  min-height:274px;
+}
+
 .featured-devices-track .device-image{
+  height:auto;
+  min-height:145px;
+  flex:0 0 auto;
   overflow:hidden;
+  background:#fff;
 }
 
 .featured-devices-track .device-image img{
   width:100%;
-  height:100%;
+  height:auto;
+  max-width:100%;
+  display:block;
   object-fit:contain;
   object-position:center;
-  display:block;
   opacity:0;
   transition:opacity .18s ease;
-  background:#fff;
+  background:transparent;
 }
 
 .featured-devices-track .device-image img.is-ready{
@@ -3154,6 +3165,22 @@ function renderFeaturedDevices(devices){
             await img.decode();
           }
         }catch(error){}
+
+        /* Match the image box to the actual photo ratio */
+        if(img.naturalWidth && img.naturalHeight){
+
+          const cardWidth = img.parentElement.clientWidth || 178;
+
+          img.parentElement.style.height =
+            Math.max(
+              145,
+              Math.round(
+                cardWidth *
+                (img.naturalHeight / img.naturalWidth)
+              )
+            ) + "px";
+
+        }
 
         img.classList.add("is-ready");
 
