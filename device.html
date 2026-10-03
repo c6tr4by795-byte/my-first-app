@@ -337,9 +337,9 @@
       position:relative;
 
       width:100%;
-      height:300px;
-      min-height:280px;
-      max-height:540px;
+      height:430px;
+      min-height:430px;
+      max-height:430px;
 
       background:#f1f2f4;
 
@@ -2014,7 +2014,11 @@
 
     }
 
-  </style>
+  
+    @media (max-width:420px){
+      .gallery{height:400px;min-height:400px;max-height:400px}
+    }
+</style>
 </head>
 
 
@@ -3496,77 +3500,14 @@
       }
 
       /*
-        خلي ارتفاع معرض الصور يتبع نسبة الصور الحقيقية.
-        الهدف: الصورة تبين كاملة وواضحة بدون قص،
-        مع ارتفاع موحّد حتى ما تقفز الصفحة بين صورة وصورة.
+        إطار ثابت ومضغوط حتى تبقى هوية الجهاز والسعر
+        ظاهرين مباشرة بدون قص الصورة.
       */
       const gallery =
         galleryTrack.closest(".gallery");
 
-      function fitGalleryToImages(){
-
-        if(!gallery){
-          return;
-        }
-
-        const trackWidth =
-          galleryTrack.clientWidth ||
-          gallery.clientWidth ||
-          0;
-
-        if(!trackWidth){
-          return;
-        }
-
-        const images =
-          [...galleryTrack.querySelectorAll("img")]
-            .filter(img =>
-              img.complete &&
-              img.naturalWidth > 0 &&
-              img.naturalHeight > 0
-            );
-
-        if(!images.length){
-          return;
-        }
-
-        let targetHeight = 300;
-
-        for(const img of images){
-
-          const ratio =
-            img.naturalWidth /
-            img.naturalHeight;
-
-          if(!ratio){
-            continue;
-          }
-
-          const naturalHeight =
-            trackWidth / ratio;
-
-          targetHeight =
-            Math.max(
-              targetHeight,
-              naturalHeight
-            );
-
-        }
-
-        targetHeight =
-          Math.round(
-            Math.max(
-              280,
-              Math.min(
-                540,
-                targetHeight
-              )
-            )
-          );
-
-        gallery.style.height =
-          targetHeight + "px";
-
+      if(gallery){
+        gallery.style.height = "430px";
       }
 
       galleryTrack
