@@ -2315,6 +2315,32 @@ id="featuredDevicesTrack"
 
 <section class="section reveal d5">
 
+<div class="section-head">
+
+<h2 class="section-title">
+أحدث الأجهزة
+</h2>
+
+<a
+class="section-link"
+href="market.html"
+>
+عرض الكل
+</a>
+
+</div>
+
+<div
+class="featured-devices-track"
+id="latestDevicesTrack"
+>
+
+</div>
+
+</section>
+
+<section class="section reveal d5">
+
 <div class="trust-card">
 
 <div class="trust-item">
@@ -3433,6 +3459,37 @@ function renderFeaturedDevices(devices){
 }
 
 
+function renderLatestDevices(devices){
+
+  const track =
+    document.getElementById("latestDevicesTrack");
+
+  if(!track)return;
+
+  track.innerHTML = "";
+
+  if(!devices.length){
+
+    track.innerHTML =
+      '<article class="device-card" style="flex-basis:100%"><div class="device-body" style="display:grid;place-items:center;text-align:center"><h3 class="device-title">لا توجد أجهزة أحدث حالياً</h3><div class="device-meta">ستظهر الأجهزة الجديدة هنا تلقائياً</div></div></article>';
+
+    return;
+
+  }
+
+  devices.forEach(device=>{
+
+    track.appendChild(
+      createFeaturedDeviceCard(device)
+    );
+
+  });
+
+  bindFeaturedRail(track);
+
+}
+
+
 async function loadFeaturedDevices(){
 
   if(!featuredDevicesTrack)return;
@@ -3468,7 +3525,9 @@ async function loadFeaturedDevices(){
 
     }
 
-    renderFeaturedDevices(data || []);
+    renderFeaturedDevices((data || []).slice(0,6));
+
+    renderLatestDevices((data || []).slice(6,12));
 
   }catch(error){
 
@@ -3482,12 +3541,12 @@ async function loadFeaturedDevices(){
 }
 
 
-function bindFeaturedDevicesCarousel(){
+function bindFeaturedRail(track){
 
-  if(!featuredDevicesTrack)return;
+  if(!track)return;
 
   const cards = [
-    ...featuredDevicesTrack.querySelectorAll(".device-card")
+    ...track.querySelectorAll(".device-card")
   ];
 
   if(cards.length < 2)return;
@@ -3508,10 +3567,10 @@ function bindFeaturedDevicesCarousel(){
 
     const card = cards[current];
 
-    featuredDevicesTrack.scrollTo({
+    track.scrollTo({
       left:
         card.offsetLeft -
-        featuredDevicesTrack.offsetLeft,
+        track.offsetLeft,
       behavior:"smooth"
     });
 
@@ -3535,7 +3594,7 @@ function bindFeaturedDevicesCarousel(){
 
   }
 
-  featuredDevicesTrack.addEventListener(
+  track.addEventListener(
     "touchstart",
     event=>{
 
@@ -3553,7 +3612,7 @@ function bindFeaturedDevicesCarousel(){
     {passive:true}
   );
 
-  featuredDevicesTrack.addEventListener(
+  track.addEventListener(
     "touchmove",
     event=>{
 
@@ -3572,7 +3631,7 @@ function bindFeaturedDevicesCarousel(){
     {passive:true}
   );
 
-  featuredDevicesTrack.addEventListener(
+  track.addEventListener(
     "touchend",
     event=>{
 
@@ -3599,7 +3658,7 @@ function bindFeaturedDevicesCarousel(){
     {passive:true}
   );
 
-  featuredDevicesTrack.addEventListener(
+  track.addEventListener(
     "touchcancel",
     ()=>{
 
@@ -3612,7 +3671,7 @@ function bindFeaturedDevicesCarousel(){
     {passive:true}
   );
 
-  featuredDevicesTrack.addEventListener(
+  track.addEventListener(
     "click",
     event=>{
 
