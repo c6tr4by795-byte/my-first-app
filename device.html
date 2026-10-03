@@ -337,9 +337,7 @@
       position:relative;
 
       width:100%;
-      height:430px;
-      min-height:430px;
-      max-height:430px;
+      height:400px;
 
       background:#f1f2f4;
 
@@ -363,15 +361,7 @@
 
       overscroll-behavior-x:contain;
 
-      /*
-        مهم:
-        نخلي المتصفح يتعامل طبيعي ويا
-        السحب العمودي للصفحة،
-        والسحب الأفقي للصور.
-      */
-      touch-action:pan-x pan-y;
-
-      -webkit-overflow-scrolling:touch;
+      touch-action:pan-x;
     }
 
 
@@ -401,45 +391,70 @@
       user-select:none;
       -webkit-user-select:none;
 
-      /*
-        بدون أي ضبابية.
-      */
-      background:#f1f2f4;
+      background:#eef0f2;
     }
 
 
-    /*
-      تم حذف الخلفية الضبابية بالكامل.
-      لا ::before
-      ولا ::after
-    */
+    /* الخلفية الضبابية للصورة */
+
+    .gallery-slide::before{
+      content:"";
+
+      position:absolute;
+
+      inset:-28px;
+
+      background-image:var(--photo-bg);
+
+      background-position:center;
+      background-size:cover;
+      background-repeat:no-repeat;
+
+      filter:blur(24px);
+
+      transform:scale(1.08);
+
+      opacity:.34;
+
+      z-index:0;
+    }
+
+
+    .gallery-slide::after{
+      content:"";
+
+      position:absolute;
+
+      inset:0;
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.08),
+          rgba(255,255,255,.18)
+        );
+
+      z-index:1;
+
+      pointer-events:none;
+    }
 
 
     .gallery-slide img{
       position:relative;
       z-index:2;
 
-      width:auto;
-      height:auto;
-      max-width:100%;
-      max-height:100%;
+      width:100%;
+      height:100%;
 
       display:block;
 
-      /*
-        عرض الصورة الطبيعي مع احتواء كامل.
-        لا قص ولا تمديد ولا تكبير غير ضروري.
-      */
       object-fit:contain;
       object-position:center;
 
       user-select:none;
       -webkit-user-drag:none;
 
-      /*
-        نخلي أحداث اللمس على الـ slide
-        حتى نقدر نميز الضغط عن السحب.
-      */
       pointer-events:none;
     }
 
@@ -764,8 +779,6 @@
         30px;
 
       overflow:hidden;
-
-      touch-action:none;
     }
 
 
@@ -782,8 +795,6 @@
 
       user-select:none;
       -webkit-user-drag:none;
-
-      pointer-events:none;
 
       transition:
         opacity .18s ease,
@@ -1245,6 +1256,8 @@
         0 4px 10px rgba(24,44,49,.045);
     }
 
+
+    /* لا يوجد بنفسجي في أيقونات المواصفات */
 
     .spec-card:nth-child(3n+2) .spec-icon{
       color:var(--primary);
@@ -2014,11 +2027,7 @@
 
     }
 
-  
-    @media (max-width:420px){
-      .gallery{height:400px;min-height:400px;max-height:400px}
-    }
-</style>
+  </style>
 </head>
 
 
@@ -2247,22 +2256,9 @@
 
     let galleryAutoPlayTimer = null;
 
-    /*
-      هذا المتغير يبقى true طوال فترة السحب،
-      وبعدها يتحول false بعد انتهاء اللمسة.
-    */
     let galleryTouchMoved = false;
 
     let galleryTouchStartX = 0;
-
-    let galleryTouchStartY = 0;
-
-    let galleryTouchActive = false;
-
-    /*
-      يمنع click الذي يجي مباشرة بعد السحب.
-    */
-    let suppressGalleryClickUntil = 0;
 
 
     const photoViewer =
@@ -2990,6 +2986,7 @@
                     <div
                       class="gallery-slide"
                       data-index="${index}"
+                      style="--photo-bg:url('${escapeHTML(src)}')"
                     >
 
                       <img
@@ -3484,8 +3481,7 @@
 
     /* =========================
        GALLERY
-       5 SECOND AUTOPLAY
-       TOUCH SAFE
+       AUTOPLAY 5 SECONDS
     ========================= */
 
     function setupGallery(){
@@ -3498,38 +3494,6 @@
       if(!galleryTrack){
         return;
       }
-
-      /*
-        إطار ثابت ومضغوط حتى تبقى هوية الجهاز والسعر
-        ظاهرين مباشرة بدون قص الصورة.
-      */
-      const gallery =
-        galleryTrack.closest(".gallery");
-
-      if(gallery){
-        gallery.style.height = "430px";
-      }
-
-      galleryTrack
-        .querySelectorAll("img")
-        .forEach(img=>{
-
-          img.addEventListener(
-            "load",
-            fitGalleryToImages,
-            {once:true}
-          );
-
-        });
-
-      requestAnimationFrame(
-        fitGalleryToImages
-      );
-
-      window.addEventListener(
-        "resize",
-        fitGalleryToImages
-      );
 
 
       const counter =
@@ -3609,33 +3573,15 @@
       );
 
 
-      /*
-        بداية اللمسة.
-      */
       galleryTrack.addEventListener(
         "touchstart",
         (event)=>{
-
-          const touch =
-            event.touches[0];
-
-          if(!touch){
-            return;
-          }
-
-
-          galleryTouchActive =
-            true;
 
           galleryTouchMoved =
             false;
 
           galleryTouchStartX =
-            touch.clientX;
-
-          galleryTouchStartY =
-            touch.clientY;
-
+            event.touches[0]?.clientX || 0;
 
           clearInterval(
             galleryAutoPlayTimer
@@ -3646,43 +3592,19 @@
       );
 
 
-      /*
-        نحدد هل المستخدم يسحب فعلاً.
-      */
       galleryTrack.addEventListener(
         "touchmove",
         (event)=>{
 
-          if(!galleryTouchActive){
-            return;
-          }
+          const currentX =
+            event.touches[0]?.clientX || 0;
 
 
-          const touch =
-            event.touches[0];
-
-          if(!touch){
-            return;
-          }
-
-
-          const deltaX =
-            touch.clientX -
-            galleryTouchStartX;
-
-
-          const deltaY =
-            touch.clientY -
-            galleryTouchStartY;
-
-
-          /*
-            أي حركة واضحة تعتبر سحب.
-            سواء أفقي أو عمودي.
-          */
           if(
-            Math.abs(deltaX) > 8 ||
-            Math.abs(deltaY) > 8
+            Math.abs(
+              currentX -
+              galleryTouchStartX
+            ) > 8
           ){
 
             galleryTouchMoved =
@@ -3695,23 +3617,16 @@
       );
 
 
-      /*
-        نهاية اللمسة.
-      */
       galleryTrack.addEventListener(
         "touchend",
         ()=>{
 
-          if(galleryTouchMoved){
+          setTimeout(()=>{
 
-            suppressGalleryClickUntil =
-              Date.now() + 650;
+            galleryTouchMoved =
+              false;
 
-          }
-
-
-          galleryTouchActive =
-            false;
+          },120);
 
 
           restartGalleryAutoplay();
@@ -3721,60 +3636,12 @@
       );
 
 
-      /*
-        إذا انتهت اللمسة خارج المنطقة.
-      */
-      galleryTrack.addEventListener(
-        "touchcancel",
-        ()=>{
-
-          if(galleryTouchMoved){
-
-            suppressGalleryClickUntil =
-              Date.now() + 650;
-
-          }
-
-
-          galleryTouchActive =
-            false;
-
-
-          restartGalleryAutoplay();
-
-        },
-        {passive:true}
-      );
-
-
-      /*
-        الضغط العادي فقط يفتح الصورة.
-        السحب لا يفتحها.
-      */
       galleryTrack.addEventListener(
         "click",
         (event)=>{
 
-          if(
-            Date.now() <
-            suppressGalleryClickUntil
-          ){
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            return;
-
-          }
-
-
           if(galleryTouchMoved){
-
-            event.preventDefault();
-            event.stopPropagation();
-
             return;
-
           }
 
 
@@ -3848,14 +3715,6 @@
         galleryAutoPlayTimer =
           setInterval(()=>{
 
-            /*
-              لا تغير الصورة أثناء لمس المستخدم.
-            */
-            if(galleryTouchActive){
-              return;
-            }
-
-
             const width =
               galleryTrack.clientWidth;
 
@@ -3892,11 +3751,6 @@
         clearInterval(
           galleryAutoPlayTimer
         );
-
-
-        if(total <= 1){
-          return;
-        }
 
 
         galleryAutoPlayTimer =
