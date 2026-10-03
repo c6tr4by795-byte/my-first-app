@@ -338,6 +338,8 @@
 
       width:100%;
       height:300px;
+      min-height:280px;
+      max-height:540px;
 
       background:#f1f2f4;
 
@@ -417,13 +419,16 @@
       position:relative;
       z-index:2;
 
-      width:100%;
-      height:100%;
+      width:auto;
+      height:auto;
+      max-width:100%;
+      max-height:100%;
 
       display:block;
 
       /*
-        الصورة كاملة بدون قص.
+        عرض الصورة الطبيعي مع احتواء كامل.
+        لا قص ولا تمديد ولا تكبير غير ضروري.
       */
       object-fit:contain;
       object-position:center;
@@ -3489,6 +3494,101 @@
       if(!galleryTrack){
         return;
       }
+
+      /*
+        خلي ارتفاع معرض الصور يتبع نسبة الصور الحقيقية.
+        الهدف: الصورة تبين كاملة وواضحة بدون قص،
+        مع ارتفاع موحّد حتى ما تقفز الصفحة بين صورة وصورة.
+      */
+      const gallery =
+        galleryTrack.closest(".gallery");
+
+      function fitGalleryToImages(){
+
+        if(!gallery){
+          return;
+        }
+
+        const trackWidth =
+          galleryTrack.clientWidth ||
+          gallery.clientWidth ||
+          0;
+
+        if(!trackWidth){
+          return;
+        }
+
+        const images =
+          [...galleryTrack.querySelectorAll("img")]
+            .filter(img =>
+              img.complete &&
+              img.naturalWidth > 0 &&
+              img.naturalHeight > 0
+            );
+
+        if(!images.length){
+          return;
+        }
+
+        let targetHeight = 300;
+
+        for(const img of images){
+
+          const ratio =
+            img.naturalWidth /
+            img.naturalHeight;
+
+          if(!ratio){
+            continue;
+          }
+
+          const naturalHeight =
+            trackWidth / ratio;
+
+          targetHeight =
+            Math.max(
+              targetHeight,
+              naturalHeight
+            );
+
+        }
+
+        targetHeight =
+          Math.round(
+            Math.max(
+              280,
+              Math.min(
+                540,
+                targetHeight
+              )
+            )
+          );
+
+        gallery.style.height =
+          targetHeight + "px";
+
+      }
+
+      galleryTrack
+        .querySelectorAll("img")
+        .forEach(img=>{
+
+          img.addEventListener(
+            "load",
+            fitGalleryToImages,
+            {once:true}
+          );
+
+        });
+
+      requestAnimationFrame(
+        fitGalleryToImages
+      );
+
+      window.addEventListener(
+        "resize",
+        fitGalleryToImages
+      );
 
 
       const counter =
