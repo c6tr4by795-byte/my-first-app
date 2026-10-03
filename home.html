@@ -31,18 +31,18 @@
 <title>MZAD PHONE — الرئيسية</title>
 
 <script>
-(function () {
+(function(){
 
-  if (!("serviceWorker" in navigator)) return;
+  if(!("serviceWorker" in navigator)) return;
 
-  window.addEventListener("load", function () {
+  window.addEventListener("load",function(){
 
     navigator.serviceWorker
-      .register("/sw.js", {
-        scope: "/",
-        updateViaCache: "none"
+      .register("/sw.js",{
+        scope:"/",
+        updateViaCache:"none"
       })
-      .then(function (registration) {
+      .then(function(registration){
 
         console.log(
           "MZAD PHONE SERVICE WORKER REGISTERED:",
@@ -52,7 +52,7 @@
         registration.update();
 
       })
-      .catch(function (error) {
+      .catch(function(error){
 
         console.warn(
           "MZAD PHONE SERVICE WORKER ERROR:",
@@ -79,8 +79,6 @@
   --primary-dark:#125a73;
   --primary-soft:#e8f3f6;
   --purple:#6246d9;
-  --purple-soft:#e5e0ff;
-  --success:#159a72;
   --shadow:0 14px 34px rgba(24,44,49,.08);
   --safe-bottom:env(safe-area-inset-bottom,0px);
 }
@@ -129,6 +127,10 @@ a{
   color:inherit;
 }
 
+/* =========================================
+   PAGE
+========================================= */
+
 .page{
   width:min(100%,520px);
   margin:0 auto;
@@ -138,13 +140,14 @@ a{
     calc(102px + var(--safe-bottom));
 }
 
-/* =========================
+/* =========================================
    HEADER
-========================= */
+========================================= */
 
 header{
   margin-inline:-14px;
   padding:0 14px 14px;
+
   background:
     linear-gradient(
       145deg,
@@ -152,9 +155,12 @@ header{
       #f5f2ff 45%,
       #e6e1ff 100%
     );
+
   border-radius:0 0 24px 24px;
   border-bottom:1px solid var(--line);
-  box-shadow:0 10px 26px rgba(23,32,42,.06);
+
+  box-shadow:
+    0 10px 26px rgba(23,32,42,.06);
 }
 
 .topbar{
@@ -207,11 +213,16 @@ header{
   height:34px;
   display:grid;
   place-items:center;
+
   border:1px solid #d8d0f5;
   border-radius:12px;
+
   background:#fff;
   color:var(--primary);
-  box-shadow:0 7px 18px rgba(23,32,42,.045);
+
+  box-shadow:
+    0 7px 18px rgba(23,32,42,.045);
+
   flex:0 0 auto;
 }
 
@@ -244,12 +255,17 @@ header{
 .search{
   width:100%;
   height:45px;
+
   border:1px solid var(--line);
   border-radius:15px;
+
   background:#fff;
+
   padding:0 44px 0 42px;
+
   outline:none;
   color:var(--ink);
+
   box-shadow:
     0 8px 22px rgba(18,57,62,.09),
     0 5px 20px rgba(109,92,231,.13);
@@ -261,7 +277,9 @@ header{
 
 .search:focus{
   border-color:#acdfe2;
-  box-shadow:0 12px 28px rgba(33,152,164,.10);
+
+  box-shadow:
+    0 12px 28px rgba(33,152,164,.10);
 }
 
 .search-icon{
@@ -279,10 +297,13 @@ header{
   inset-inline-start:10px;
   top:50%;
   transform:translateY(-50%);
+
   opacity:0;
   pointer-events:none;
+
   width:33px;
   height:33px;
+
   border-radius:11px;
   background:var(--surface-2);
 }
@@ -292,9 +313,9 @@ header{
   pointer-events:auto;
 }
 
-/* =========================
+/* =========================================
    SECTIONS
-========================= */
+========================================= */
 
 .section{
   margin-top:20px;
@@ -304,12 +325,14 @@ header{
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   margin-bottom:11px;
   padding:0 2px;
 }
 
 .section-title{
   margin:0;
+
   font-size:19px;
   letter-spacing:-.03em;
   font-weight:900;
@@ -321,18 +344,24 @@ header{
   font-weight:800;
 }
 
-/* =========================
+/* =========================================
    CATEGORIES
-========================= */
+========================================= */
 
 .horizontal{
   display:flex;
   gap:12px;
+
   overflow-x:auto;
+
   padding:2px 2px 4px;
+
   scrollbar-width:none;
+
   scroll-snap-type:x proximity;
+
   touch-action:auto;
+
   -webkit-overflow-scrolling:touch;
 }
 
@@ -343,50 +372,72 @@ header{
 .category{
   width:64px;
   flex:0 0 64px;
+
   display:flex;
   flex-direction:column;
   align-items:center;
+
   gap:5px;
+
   scroll-snap-align:start;
 }
 
 .category-icon{
   width:52px;
   height:52px;
+
   display:grid;
   place-items:center;
+
   border-radius:15px;
-  background:linear-gradient(
-    145deg,
-    #fff 0%,
-    #f4f1ff 100%
-  );
+
+  background:
+    linear-gradient(
+      145deg,
+      #fff 0%,
+      #f4f1ff 100%
+    );
+
   border:1px solid #ddd8f8;
-  box-shadow:0 8px 18px rgba(98,70,217,.09);
+
+  box-shadow:
+    0 8px 18px rgba(98,70,217,.09);
+
   color:#29393e;
+
   position:relative;
   overflow:hidden;
 }
 
 .category-icon:before{
   content:"";
+
   position:absolute;
+
   width:7px;
   height:7px;
+
   border-radius:50%;
+
   top:6px;
   inset-inline-end:7px;
+
   background:rgba(98,70,217,.10);
 }
 
 .category-icon:after{
   content:"";
+
   position:absolute;
+
   width:6px;
   height:6px;
+
   border-radius:2px;
+
   bottom:7px;
   inset-inline-start:7px;
+
   background:rgba(23,107,135,.10);
 }
 
@@ -397,12 +448,17 @@ header{
 
 .category.active .category-icon{
   border-color:#8977e9;
-  background:linear-gradient(
-    145deg,
-    #f7f5ff 0%,
-    #e8e3ff 100%
-  );
-  box-shadow:0 10px 22px rgba(98,70,217,.20);
+
+  background:
+    linear-gradient(
+      145deg,
+      #f7f5ff 0%,
+      #e8e3ff 100%
+    );
+
+  box-shadow:
+    0 10px 22px rgba(98,70,217,.20);
+
   color:var(--primary-dark);
 }
 
@@ -417,9 +473,9 @@ header{
   color:var(--primary-dark);
 }
 
-/* =========================
+/* =========================================
    AUCTIONS
-========================= */
+========================================= */
 
 .auction-shell{
   position:relative;
@@ -430,14 +486,23 @@ header{
 .auction-track{
   display:flex;
   gap:12px;
+
   width:100%;
+
   overflow-x:auto;
+
   padding:1px 2px 6px;
+
   scroll-snap-type:x mandatory;
+
   scrollbar-width:none;
+
   scroll-behavior:smooth;
+
   overscroll-behavior-x:contain;
+
   -webkit-overflow-scrolling:touch;
+
   touch-action:auto;
 }
 
@@ -448,27 +513,41 @@ header{
 .auction-card{
   flex:0 0 100%;
   width:100%;
+
   height:188px;
   min-height:166px;
+
   border-radius:22px;
+
   overflow:hidden;
+
   position:relative;
+
   scroll-snap-align:center;
   scroll-snap-stop:always;
-  background:linear-gradient(
-    145deg,
-    #243b80 0%,
-    #4d43a8 55%,
-    #7c3aed 100%
-  );
-  box-shadow:0 16px 34px rgba(76,67,168,.18);
+
+  background:
+    linear-gradient(
+      145deg,
+      #243b80 0%,
+      #4d43a8 55%,
+      #7c3aed 100%
+    );
+
+  box-shadow:
+    0 16px 34px rgba(76,67,168,.18);
+
   color:#fff;
+
   display:flex;
   flex-direction:column;
   justify-content:space-between;
+
   isolation:isolate;
+
   transform:scale(.985);
   opacity:.86;
+
   transition:
     transform .35s ease,
     opacity .35s ease,
@@ -478,21 +557,28 @@ header{
 .auction-card.is-current{
   transform:scale(1);
   opacity:1;
-  box-shadow:0 16px 34px rgba(24,76,81,.19);
+
+  box-shadow:
+    0 16px 34px rgba(24,76,81,.19);
 }
 
 .auction-card:before,
 .auction-card:after{
   content:"";
+
   position:absolute;
+
   border-radius:50%;
+
   background:rgba(255,255,255,.06);
+
   z-index:-1;
 }
 
 .auction-card:before{
   width:240px;
   height:240px;
+
   inset-inline-start:-88px;
   top:-104px;
 }
@@ -500,6 +586,7 @@ header{
 .auction-card:after{
   width:220px;
   height:220px;
+
   inset-inline-end:-92px;
   bottom:-118px;
 }
@@ -508,19 +595,28 @@ header{
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   gap:10px;
+
   padding:11px 13px 0;
 }
 
 .auction-badge{
   display:inline-flex;
   align-items:center;
+
   gap:7px;
+
   min-height:26px;
+
   padding:0 9px;
+
   border-radius:999px;
+
   background:rgba(255,255,255,.13);
+
   border:1px solid rgba(255,255,255,.16);
+
   font-size:10px;
   font-weight:900;
 }
@@ -528,6 +624,7 @@ header{
 .auction-state{
   font-size:10px;
   font-weight:800;
+
   color:rgba(255,255,255,.73);
 }
 
@@ -537,25 +634,34 @@ header{
 
 .auction-kicker{
   margin:0 0 4px;
+
   font-size:11px;
   font-weight:700;
+
   color:rgba(255,255,255,.73);
 }
 
 .auction-title{
   margin:0;
+
   font-size:18px;
   line-height:1.12;
+
   letter-spacing:-.035em;
+
   font-weight:950;
+
   max-width:260px;
 }
 
 .auction-desc{
   margin:5px 0 0;
+
   font-size:10px;
   line-height:1.7;
+
   color:rgba(255,255,255,.79);
+
   max-width:270px;
 }
 
@@ -563,132 +669,184 @@ header{
   display:flex;
   align-items:flex-end;
   justify-content:space-between;
+
   gap:10px;
+
   margin-top:8px;
 }
 
 .auction-note{
   display:flex;
   align-items:center;
+
   gap:7px;
+
   font-size:11px;
   font-weight:800;
+
   color:rgba(255,255,255,.88);
 }
 
 .auction-cta{
   height:39px;
+
   padding:0 12px;
+
   border-radius:13px;
+
   background:#fff;
+
   color:#243b80;
+
   font-size:11px;
   font-weight:900;
-  box-shadow:0 8px 20px rgba(0,0,0,.11);
+
+  box-shadow:
+    0 8px 20px rgba(0,0,0,.11);
+
   white-space:nowrap;
 }
 
 .auction-dots{
   display:flex;
+
   justify-content:center;
   align-items:center;
+
   gap:6px;
+
   margin-top:8px;
 }
 
 .dot{
   width:6px;
   height:6px;
+
   border-radius:50%;
+
   background:#ccd8d8;
+
   transition:.2s ease;
+
   cursor:pointer;
 }
 
 .dot.active{
   width:19px;
+
   border-radius:999px;
+
   background:var(--purple);
 }
 
-/* =========================
-   ACTIONS
-========================= */
+/* =========================================
+   ACTION CARDS
+========================================= */
 
 .actions-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+
+  grid-template-columns:
+    repeat(3,1fr);
+
   gap:9px;
 }
 
 .action-card{
   position:relative;
   overflow:hidden;
+
   min-height:105px;
+
   border-radius:18px;
+
   border:1px solid #ddd8f8;
+
   padding:13px 10px 12px;
+
   display:flex;
   flex-direction:column;
   justify-content:space-between;
-  background:linear-gradient(
-    145deg,
-    #fff 0%,
-    #f4f1ff 48%,
-    #e7e1ff 100%
-  );
-  box-shadow:0 12px 28px rgba(98,70,217,.09);
+
+  background:
+    linear-gradient(
+      145deg,
+      #fff 0%,
+      #f4f1ff 48%,
+      #e7e1ff 100%
+    );
+
+  box-shadow:
+    0 12px 28px rgba(98,70,217,.09);
+
   transition:.2s ease;
 }
 
 .action-card:nth-child(2){
-  background:linear-gradient(
-    145deg,
-    #fff 0%,
-    #f7f4ff 45%,
-    #ece8ff 100%
-  );
+  background:
+    linear-gradient(
+      145deg,
+      #fff 0%,
+      #f7f4ff 45%,
+      #ece8ff 100%
+    );
 }
 
 .action-card:nth-child(3){
-  background:linear-gradient(
-    145deg,
-    #fff 0%,
-    #faf9ff 50%,
-    #f1efff 100%
-  );
+  background:
+    linear-gradient(
+      145deg,
+      #fff 0%,
+      #faf9ff 50%,
+      #f1efff 100%
+    );
 }
 
 .action-card:before{
   content:"";
+
   position:absolute;
+
   width:72px;
   height:72px;
+
   border-radius:50%;
+
   top:-30px;
   right:-24px;
+
   background:rgba(98,70,217,.08);
 }
 
 .action-card:after{
   content:"";
+
   position:absolute;
+
   width:8px;
   height:8px;
+
   border-radius:2px;
+
   bottom:18px;
   left:18px;
+
   background:rgba(98,70,217,.12);
+
   transform:rotate(18deg);
 }
 
 .action-icon{
   width:36px;
   height:36px;
+
   border-radius:12px;
+
   display:grid;
   place-items:center;
+
   background:var(--primary-soft);
+
   color:var(--primary-dark);
 }
 
@@ -703,20 +861,28 @@ header{
   margin-top:2px;
 }
 
-/* =========================
-   DEVICE RAIL
-========================= */
+/* =========================================
+   DEVICE CARDS
+========================================= */
 
 .featured-devices-track{
   display:flex;
   gap:12px;
+
   overflow-x:auto;
+
   padding:2px 2px 4px;
+
   scrollbar-width:none;
+
   scroll-behavior:smooth;
+
   scroll-snap-type:x mandatory;
+
   touch-action:auto;
+
   overscroll-behavior-x:contain;
+
   -webkit-overflow-scrolling:touch;
 }
 
@@ -726,16 +892,27 @@ header{
 
 .featured-devices-track .device-card{
   flex:0 0 178px;
+
   height:292px;
+
   display:flex;
   flex-direction:column;
+
   border:1px solid #dfe4e8;
+
   border-radius:18px;
+
   background:#fff;
+
   overflow:hidden;
-  box-shadow:0 8px 20px rgba(23,32,42,.08);
+
+  box-shadow:
+    0 8px 20px rgba(23,32,42,.08);
+
   scroll-snap-align:start;
+
   cursor:pointer;
+
   transition:
     transform .2s ease,
     box-shadow .2s ease;
@@ -743,27 +920,39 @@ header{
 
 .featured-devices-track .device-card:active{
   transform:scale(.985);
-  box-shadow:0 6px 16px rgba(23,32,42,.08);
+
+  box-shadow:
+    0 6px 16px rgba(23,32,42,.08);
 }
 
 .featured-devices-track .device-image{
   height:156px;
   flex:0 0 156px;
+
   display:block;
+
   position:relative;
+
   overflow:hidden;
+
   background:#f3f5f6;
+
   border-bottom:1px solid #e5e8eb;
 }
 
 .featured-devices-track .device-image img{
   width:100%;
   height:100%;
+
   display:block;
+
   object-fit:cover;
   object-position:center;
+
   opacity:0;
+
   transition:opacity .18s ease;
+
   background:#f3f5f6;
 }
 
@@ -773,10 +962,15 @@ header{
 
 .featured-devices-track .device-body{
   position:relative;
+
   flex:1;
+
   min-height:0;
+
   overflow:hidden;
+
   padding:11px 12px 12px;
+
   background:#fff;
 }
 
@@ -787,74 +981,115 @@ header{
 
 .featured-devices-track .device-title{
   margin:0;
+
   color:#17202a;
+
   font-size:14px;
   font-weight:900;
+
   line-height:1.35;
+
   min-height:38px;
+
   display:-webkit-box;
+
   -webkit-line-clamp:2;
   -webkit-box-orient:vertical;
+
   overflow:hidden;
 }
 
 .featured-devices-track .device-meta{
   margin-top:6px;
+
   color:#737c84;
+
   font-size:10.5px;
+
   line-height:1.5;
+
   white-space:nowrap;
+
   overflow:hidden;
+
   text-overflow:ellipsis;
 }
 
 .featured-devices-track .device-time{
   margin-top:3px;
+
   color:#9aa3aa;
+
   font-size:9px;
+
   font-weight:700;
+
   line-height:1.3;
 }
 
 .featured-devices-track .device-row{
   display:flex;
+
   align-items:center;
+
   justify-content:space-between;
+
   gap:8px;
+
   margin-top:9px;
+
   padding-top:9px;
+
   border-top:1px solid #edf0f2;
 }
 
 .featured-devices-track .device-price{
   color:#176b87;
+
   font-size:13.5px;
+
   font-weight:950;
 }
 
 .featured-devices-track .device-type{
   color:#176b87;
+
   background:#eaf6f8;
+
   font-size:9.5px;
+
   padding:5px 7px;
+
   border-radius:9px;
 }
 
 .featured-devices-track .favorite-btn{
   position:absolute;
+
   top:9px;
+
   inset-inline-start:9px;
   inset-inline-end:auto;
+
   width:38px;
   height:38px;
+
   border-radius:50%;
+
   display:grid;
   place-items:center;
+
   padding:0;
+
   background:rgba(255,255,255,.97);
+
   border:0;
+
   color:#7b7f84;
-  box-shadow:0 5px 13px rgba(23,32,42,.11);
+
+  box-shadow:
+    0 5px 13px rgba(23,32,42,.11);
+
   z-index:10;
 }
 
@@ -872,17 +1107,24 @@ header{
   background:#fff;
 }
 
-/* =========================
+/* =========================================
    TRUST
-========================= */
+========================================= */
 
 .trust-card{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+
+  grid-template-columns:
+    repeat(3,1fr);
+
   gap:8px;
+
   padding:8px 10px;
+
   background:#fff;
+
   border:1px solid var(--line);
+
   border-radius:18px;
 }
 
@@ -893,11 +1135,16 @@ header{
 .trust-icon{
   width:26px;
   height:26px;
+
   margin:0 auto 4px;
+
   border-radius:10px;
+
   background:var(--surface-2);
+
   display:grid;
   place-items:center;
+
   color:#466066;
 }
 
@@ -912,42 +1159,54 @@ header{
   margin-top:2px;
 }
 
-/* =========================
-   BOTTOM NAV
-   النسخة الوحيدة
-========================= */
+/* =========================================
+   BOTTOM NAVIGATION
+   نسخة واحدة فقط — Fixed حقيقي
+========================================= */
 
 .bottom-wrap{
   position:fixed;
+
   left:0;
   right:0;
   bottom:0;
+
   width:100%;
+
   padding:
     7px
     10px
     calc(7px + env(safe-area-inset-bottom,0px));
+
   z-index:100;
+
   pointer-events:none;
 }
 
 .bottom-nav{
   position:relative;
+
   width:min(100%,520px);
+
   margin:0 auto;
 
   min-height:64px;
+
   padding:5px;
 
   display:block;
 
   border-radius:20px;
+
   background:rgba(255,255,255,.97);
+
   border:1px solid #E7ECEF;
 
-  box-shadow:0 10px 28px rgba(23,32,42,.10);
+  box-shadow:
+    0 10px 28px rgba(23,32,42,.10);
 
   backdrop-filter:blur(18px);
+
   -webkit-backdrop-filter:blur(18px);
 
   pointer-events:auto;
@@ -955,27 +1214,40 @@ header{
 
 .bottom-nav .bottom-inner{
   width:100%;
+
   display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
+
+  grid-template-columns:
+    repeat(5,minmax(0,1fr));
+
   gap:3px;
+
   align-items:center;
 }
 
 .bottom-nav .nav-item{
   min-width:0;
+
   min-height:52px;
+
   padding:4px 2px;
 
   display:flex;
+
   flex-direction:column;
+
   align-items:center;
+
   justify-content:center;
+
   gap:3px;
 
   border:0;
+
   border-radius:15px;
 
   background:transparent;
+
   color:#7E8992;
 
   text-decoration:none;
@@ -992,27 +1264,35 @@ header{
 
 .bottom-nav .nav-item.active{
   color:#176B87;
+
   background:#EAF6F8;
 }
 
 .bottom-nav .nav-icon{
   width:20px;
   height:20px;
+
   flex:0 0 20px;
+
   color:currentColor;
 }
 
 .bottom-nav .nav-item>span:not(.add-button){
   margin:0;
+
   font-size:8.5px;
+
   line-height:1;
+
   font-weight:900;
+
   white-space:nowrap;
 }
 
 .bottom-nav .add-button{
   width:38px !important;
   height:38px !important;
+
   flex:0 0 38px;
 
   border-radius:13px !important;
@@ -1020,15 +1300,17 @@ header{
   display:grid !important;
   place-items:center;
 
-  background:linear-gradient(
-    145deg,
-    #176B87,
-    #32B8C4
-  ) !important;
+  background:
+    linear-gradient(
+      145deg,
+      #176B87,
+      #32B8C4
+    ) !important;
 
   color:#fff !important;
 
-  box-shadow:0 6px 14px rgba(23,107,135,.18);
+  box-shadow:
+    0 6px 14px rgba(23,107,135,.18);
 }
 
 .bottom-nav .add-button svg{
@@ -1036,34 +1318,45 @@ header{
   height:20px !important;
 }
 
-/* =========================
+/* =========================================
    TOAST
-========================= */
+========================================= */
 
 .toast{
   position:fixed;
+
   left:50%;
+
   bottom:
     calc(94px + env(safe-area-inset-bottom,0px));
-  transform:translateX(-50%) translateY(16px);
 
-  max-width:calc(100% - 40px);
+  transform:
+    translateX(-50%)
+    translateY(16px);
+
+  max-width:
+    calc(100% - 40px);
 
   padding:10px 14px;
+
   border-radius:13px;
 
   background:#1e2c30;
+
   color:#fff;
 
   font-size:11px;
+
   font-weight:800;
 
   box-shadow:var(--shadow);
 
   opacity:0;
+
   pointer-events:none;
 
   transition:.25s ease;
+
   z-index:120;
 
   text-align:center;
@@ -1071,17 +1364,26 @@ header{
 
 .toast.show{
   opacity:1;
-  transform:translateX(-50%) translateY(0);
+
+  transform:
+    translateX(-50%)
+    translateY(0);
 }
 
-/* =========================
+/* =========================================
    REVEAL
-========================= */
+========================================= */
 
 .reveal{
   opacity:0;
+
   transform:translateY(9px);
-  animation:reveal .55s cubic-bezier(.2,.7,.2,1) forwards;
+
+  animation:
+    reveal
+    .55s
+    cubic-bezier(.2,.7,.2,1)
+    forwards;
 }
 
 .d1{
@@ -1113,9 +1415,9 @@ header{
 
 }
 
-/* =========================
-   SMALL SCREENS
-========================= */
+/* =========================================
+   SMALL SCREEN
+========================================= */
 
 @media(max-width:360px){
 
@@ -1319,9 +1621,9 @@ stroke-width="1.9"
 
 </header>
 
-<!-- =========================
+<!-- =====================================
      CATEGORIES
-========================= -->
+===================================== -->
 
 <section class="section reveal d2">
 
@@ -1659,9 +1961,9 @@ Infinix
 
 </section>
 
-<!-- =========================
+<!-- =====================================
      AUCTIONS
-========================= -->
+===================================== -->
 
 <section class="section reveal d3">
 
@@ -2078,9 +2380,9 @@ type="button"
 
 </section>
 
-<!-- =========================
+<!-- =====================================
      ACTIONS
-========================= -->
+===================================== -->
 
 <section class="section reveal d4">
 
@@ -2210,9 +2512,9 @@ stroke-width="1.9"
 
 </section>
 
-<!-- =========================
-     FEATURED
-========================= -->
+<!-- =====================================
+     FEATURED DEVICES
+===================================== -->
 
 <section class="section reveal d5">
 
@@ -2240,9 +2542,9 @@ id="featuredDevicesTrack"
 
 </section>
 
-<!-- =========================
-     LATEST
-========================= -->
+<!-- =====================================
+     LATEST DEVICES
+===================================== -->
 
 <section class="section reveal d5">
 
@@ -2270,9 +2572,9 @@ id="latestDevicesTrack"
 
 </section>
 
-<!-- =========================
+<!-- =====================================
      TRUST
-========================= -->
+===================================== -->
 
 <section class="section reveal d5">
 
@@ -2380,9 +2682,9 @@ r="4"
 
 </main>
 
-<!-- =========================
-     BOTTOM NAVIGATION
-========================= -->
+<!-- =====================================
+     BOTTOM NAV
+===================================== -->
 
 <div class="bottom-wrap">
 
@@ -2548,39 +2850,39 @@ import {
 
 
 const toast =
-document.getElementById("toast");
+  document.getElementById("toast");
 
 const searchInput =
-document.getElementById("searchInput");
+  document.getElementById("searchInput");
 
 const searchWrap =
-document.getElementById("searchWrap");
+  document.getElementById("searchWrap");
 
 const searchClear =
-document.getElementById("searchClear");
+  document.getElementById("searchClear");
 
 const locationBtn =
-document.getElementById("locationBtn");
+  document.getElementById("locationBtn");
 
 const notificationBtn =
-document.getElementById("notificationBtn");
+  document.getElementById("notificationBtn");
 
 const viewAuctionsBtn =
-document.getElementById("viewAuctionsBtn");
+  document.getElementById("viewAuctionsBtn");
 
 const categories = [
   ...document.querySelectorAll(".category")
 ];
 
 const auctionTrack =
-document.getElementById("auctionTrack");
+  document.getElementById("auctionTrack");
 
 const dots = [
   ...document.querySelectorAll(".dot")
 ];
 
 const featuredDevicesTrack =
-document.getElementById("featuredDevicesTrack");
+  document.getElementById("featuredDevicesTrack");
 
 let toastTimer;
 
@@ -2591,18 +2893,25 @@ let toastTimer;
 
 function showToast(message){
 
-  toast.textContent = message;
+  toast.textContent =
+    message;
 
-  toast.classList.add("show");
+  toast.classList.add(
+    "show"
+  );
 
-  clearTimeout(toastTimer);
+  clearTimeout(
+    toastTimer
+  );
 
   toastTimer =
-  setTimeout(()=>{
+    setTimeout(()=>{
 
-    toast.classList.remove("show");
+      toast.classList.remove(
+        "show"
+      );
 
-  },2200);
+    },2200);
 
 }
 
@@ -2612,7 +2921,7 @@ function showToast(message){
 ========================================= */
 
 const LOGIN_PAGE =
-"index.html?login=1";
+  "index.html?login=1";
 
 
 async function isLoggedIn(){
@@ -2623,7 +2932,8 @@ async function isLoggedIn(){
       data,
       error
     } =
-    await supabase.auth.getSession();
+      await supabase.auth.getSession();
+
 
     if(error){
 
@@ -2635,6 +2945,7 @@ async function isLoggedIn(){
       return false;
 
     }
+
 
     return !!data?.session;
 
@@ -2665,20 +2976,23 @@ function savePendingAction(url){
 async function requireAuth(url){
 
   const loggedIn =
-  await isLoggedIn();
+    await isLoggedIn();
 
 
   if(loggedIn){
 
     window.location.href =
-    url;
+      url;
 
     return;
 
   }
 
 
-  savePendingAction(url);
+  savePendingAction(
+    url
+  );
+
 
   showToast(
     "سجّل دخولك أو أنشئ حساباً أولاً"
@@ -2688,7 +3002,7 @@ async function requireAuth(url){
   setTimeout(()=>{
 
     window.location.href =
-    `${LOGIN_PAGE}&returnTo=${encodeURIComponent(url)}`;
+      `${LOGIN_PAGE}&returnTo=${encodeURIComponent(url)}`;
 
   },450);
 
@@ -2698,7 +3012,7 @@ async function requireAuth(url){
 function go(url){
 
   window.location.href =
-  url;
+    url;
 
 }
 
@@ -2710,72 +3024,74 @@ function go(url){
 function bindNavigation(){
 
   document
-  .querySelectorAll("[data-go]")
-  .forEach(el=>{
+    .querySelectorAll("[data-go]")
+    .forEach(el=>{
 
-    if(
-      el.classList.contains("device-card") ||
-      el.classList.contains("auction-card")
-    ){
+      if(
+        el.classList.contains("device-card") ||
+        el.classList.contains("auction-card")
+      ){
 
-      return;
-
-    }
-
-
-    el.addEventListener(
-      "click",
-      async event=>{
-
-        event.preventDefault();
-
-
-        if(
-          el.classList.contains("category")
-        ){
-
-          return;
-
-        }
-
-
-        const url =
-        el.dataset.go;
-
-
-        if(!url)return;
-
-
-        const protectedPaths = [
-          "sell.html",
-          "sell-auction.html",
-          "favorites.html",
-          "profile.html"
-        ];
-
-
-        const needsAuth =
-        protectedPaths.some(
-          path =>
-          url.split("?")[0] === path
-        );
-
-
-        if(needsAuth){
-
-          await requireAuth(url);
-
-          return;
-
-        }
-
-
-        go(url);
+        return;
 
       }
-    );
 
-  });
+
+      el.addEventListener(
+        "click",
+        async event=>{
+
+          event.preventDefault();
+
+
+          if(
+            el.classList.contains("category")
+          ){
+
+            return;
+
+          }
+
+
+          const url =
+            el.dataset.go;
+
+
+          if(!url)return;
+
+
+          const protectedPaths = [
+            "sell.html",
+            "sell-auction.html",
+            "favorites.html",
+            "profile.html"
+          ];
+
+
+          const needsAuth =
+            protectedPaths.some(
+              path =>
+                url.split("?")[0] === path
+            );
+
+
+          if(needsAuth){
+
+            await requireAuth(
+              url
+            );
+
+            return;
+
+          }
+
+
+          go(url);
+
+        }
+      );
+
+    });
 
 }
 
@@ -2806,7 +3122,8 @@ function bindSearch(){
     "click",
     ()=>{
 
-      searchInput.value = "";
+      searchInput.value =
+        "";
 
       sync();
 
@@ -2820,11 +3137,13 @@ function bindSearch(){
     "keydown",
     event=>{
 
-      if(event.key !== "Enter")return;
+      if(
+        event.key !== "Enter"
+      )return;
 
 
       const query =
-      searchInput.value.trim();
+        searchInput.value.trim();
 
 
       if(!query){
@@ -2860,44 +3179,55 @@ function bindSearch(){
 
 function bindCategories(){
 
-  categories.forEach(button=>{
+  categories.forEach(
+    button=>{
 
-    button.addEventListener(
-      "click",
-      ()=>{
+      button.addEventListener(
+        "click",
+        ()=>{
 
-        categories.forEach(item =>
-          item.classList.remove("active")
-        );
-
-
-        button.classList.add("active");
-
-
-        const label =
-        button
-        .querySelector(".category-name")
-        ?.textContent
-        ?.trim()
-        ||
-        "التصنيف";
+          categories.forEach(
+            item =>
+              item.classList.remove(
+                "active"
+              )
+          );
 
 
-        showToast(
-          `تم اختيار ${label}`
-        );
+          button.classList.add(
+            "active"
+          );
 
 
-        setTimeout(()=>{
+          const label =
+            button
+              .querySelector(
+                ".category-name"
+              )
+              ?.textContent
+              ?.trim()
+            ||
+            "التصنيف";
 
-          go(button.dataset.go);
 
-        },120);
+          showToast(
+            `تم اختيار ${label}`
+          );
 
-      }
-    );
 
-  });
+          setTimeout(()=>{
+
+            go(
+              button.dataset.go
+            );
+
+          },120);
+
+        }
+      );
+
+    }
+  );
 
 }
 
@@ -2912,7 +3242,9 @@ function bindAuctionCarousel(){
 
 
   const cards = [
-    ...auctionTrack.querySelectorAll(".auction-card")
+    ...auctionTrack.querySelectorAll(
+      ".auction-card"
+    )
   ];
 
 
@@ -2920,12 +3252,15 @@ function bindAuctionCarousel(){
 
 
   let current = 0;
+
   let timer = null;
 
   let touchStarted = false;
+
   let touchMoved = false;
 
   let touchStartX = 0;
+
   let touchStartY = 0;
 
   let suppressClickUntil = 0;
@@ -2934,19 +3269,19 @@ function bindAuctionCarousel(){
   function goToAuction(index){
 
     current =
-    (index + cards.length) %
-    cards.length;
+      (index + cards.length) %
+      cards.length;
 
 
     const card =
-    cards[current];
+      cards[current];
 
 
     auctionTrack.scrollTo({
 
       left:
-      card.offsetLeft -
-      auctionTrack.offsetLeft,
+        card.offsetLeft -
+        auctionTrack.offsetLeft,
 
       behavior:"smooth"
 
@@ -2961,11 +3296,12 @@ function bindAuctionCarousel(){
           i === current
         );
 
+
         item.setAttribute(
           "aria-hidden",
           i === current
-          ? "false"
-          : "true"
+            ? "false"
+            : "true"
         );
 
       }
@@ -2988,17 +3324,19 @@ function bindAuctionCarousel(){
 
   function restartAuctionTimer(){
 
-    clearInterval(timer);
+    clearInterval(
+      timer
+    );
 
 
     timer =
-    setInterval(()=>{
+      setInterval(()=>{
 
-      goToAuction(
-        current + 1
-      );
+        goToAuction(
+          current + 1
+        );
 
-    },5000);
+      },5000);
 
   }
 
@@ -3008,18 +3346,21 @@ function bindAuctionCarousel(){
     event=>{
 
       const touch =
-      event.touches[0];
+        event.touches[0];
 
       touchStarted = true;
+
       touchMoved = false;
 
       touchStartX =
-      touch.clientX;
+        touch.clientX;
 
       touchStartY =
-      touch.clientY;
+        touch.clientY;
 
-      clearInterval(timer);
+      clearInterval(
+        timer
+      );
 
     },
     {
@@ -3036,21 +3377,21 @@ function bindAuctionCarousel(){
 
 
       const touch =
-      event.touches[0];
+        event.touches[0];
 
 
       const dx =
-      Math.abs(
-        touch.clientX -
-        touchStartX
-      );
+        Math.abs(
+          touch.clientX -
+          touchStartX
+        );
 
 
       const dy =
-      Math.abs(
-        touch.clientY -
-        touchStartY
-      );
+        Math.abs(
+          touch.clientY -
+          touchStartY
+        );
 
 
       if(
@@ -3077,21 +3418,21 @@ function bindAuctionCarousel(){
 
 
       const touch =
-      event.changedTouches[0];
+        event.changedTouches[0];
 
 
       const dx =
-      Math.abs(
-        touch.clientX -
-        touchStartX
-      );
+        Math.abs(
+          touch.clientX -
+          touchStartX
+        );
 
 
       const dy =
-      Math.abs(
-        touch.clientY -
-        touchStartY
-      );
+        Math.abs(
+          touch.clientY -
+          touchStartY
+        );
 
 
       if(
@@ -3107,7 +3448,7 @@ function bindAuctionCarousel(){
       if(touchMoved){
 
         suppressClickUntil =
-        Date.now() + 700;
+          Date.now() + 700;
 
       }
 
@@ -3128,6 +3469,7 @@ function bindAuctionCarousel(){
     ()=>{
 
       touchStarted = false;
+
       touchMoved = false;
 
       restartAuctionTimer();
@@ -3144,11 +3486,15 @@ function bindAuctionCarousel(){
     event=>{
 
       const button =
-      event.target.closest(".auction-cta");
+        event.target.closest(
+          ".auction-cta"
+        );
 
 
       const card =
-      event.target.closest(".auction-card");
+        event.target.closest(
+          ".auction-card"
+        );
 
 
       if(!card)return;
@@ -3156,7 +3502,8 @@ function bindAuctionCarousel(){
 
       if(
         touchMoved ||
-        Date.now() < suppressClickUntil
+        Date.now() <
+        suppressClickUntil
       ){
 
         event.preventDefault();
@@ -3175,7 +3522,9 @@ function bindAuctionCarousel(){
       }
 
 
-      go("auctions.html");
+      go(
+        "auctions.html"
+      );
 
     },
     true
@@ -3190,9 +3539,13 @@ function bindAuctionCarousel(){
         event=>{
 
           event.preventDefault();
+
           event.stopPropagation();
 
-          goToAuction(index);
+          goToAuction(
+            index
+          );
+
           restartAuctionTimer();
 
         }
@@ -3203,44 +3556,62 @@ function bindAuctionCarousel(){
 
 
   goToAuction(0);
+
   restartAuctionTimer();
 
 }
 
 
 /* =========================================
-   FEATURED DEVICES
+   DEVICE DATA
 ========================================= */
 
 function getFeaturedDeviceImages(images){
 
   if(!images)return [];
 
+
   if(Array.isArray(images)){
-    return images.filter(Boolean);
+
+    return images.filter(
+      Boolean
+    );
+
   }
+
 
   if(typeof images === "string"){
 
     const value =
-    images.trim();
+      images.trim();
+
 
     if(!value)return [];
+
 
     try{
 
       const parsed =
-      JSON.parse(value);
+        JSON.parse(value);
+
 
       if(Array.isArray(parsed)){
-        return parsed.filter(Boolean);
+
+        return parsed.filter(
+          Boolean
+        );
+
       }
 
     }catch(error){}
 
-    return [value];
+
+    return [
+      value
+    ];
 
   }
+
 
   return [];
 
@@ -3251,8 +3622,10 @@ function getFeaturedImageUrl(path){
 
   if(!path)return "";
 
+
   const value =
-  String(path).trim();
+    String(path).trim();
+
 
   if(
     value.startsWith("http://") ||
@@ -3264,11 +3637,17 @@ function getFeaturedImageUrl(path){
 
   }
 
-  const { data } =
-  supabase
-    .storage
-    .from("device-images")
-    .getPublicUrl(value);
+
+  const {
+    data
+  } =
+    supabase
+      .storage
+      .from("device-images")
+      .getPublicUrl(
+        value
+      );
+
 
   return data?.publicUrl || "";
 
@@ -3278,14 +3657,21 @@ function getFeaturedImageUrl(path){
 function formatFeaturedPrice(price){
 
   const number =
-  Number(price);
+    Number(price);
+
 
   if(!Number.isFinite(number)){
+
     return "السعر غير محدد";
+
   }
 
-  return new Intl.NumberFormat("en-US")
-    .format(number) + " د.ع";
+
+  return new Intl.NumberFormat(
+    "en-US"
+  )
+  .format(number)
+  + " د.ع";
 
 }
 
@@ -3294,32 +3680,60 @@ function formatFeaturedTime(value){
 
   if(!value)return "الآن";
 
-  const date =
-  new Date(value);
 
-  if(Number.isNaN(date.getTime())){
+  const date =
+    new Date(value);
+
+
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
+
     return "الآن";
+
   }
 
+
   const seconds =
-  Math.max(
-    0,
-    Math.floor(
-      (Date.now() - date.getTime()) / 1000
-    )
-  );
+    Math.max(
+      0,
+      Math.floor(
+        (
+          Date.now() -
+          date.getTime()
+        ) / 1000
+      )
+    );
 
 
   if(seconds < 60){
+
     return "الآن";
+
   }
 
 
   const minutes =
-  Math.floor(seconds / 60);
+    Math.floor(
+      seconds / 60
+    );
 
 
   if(minutes < 60){
+
+    if(minutes === 1){
+      return "منذ دقيقة";
+    }
+
+    if(minutes === 2){
+      return "منذ دقيقتين";
+    }
+
+    if(minutes < 11){
+      return `منذ ${minutes} دقائق`;
+    }
 
     return `منذ ${minutes} دقيقة`;
 
@@ -3327,10 +3741,24 @@ function formatFeaturedTime(value){
 
 
   const hours =
-  Math.floor(minutes / 60);
+    Math.floor(
+      minutes / 60
+    );
 
 
   if(hours < 24){
+
+    if(hours === 1){
+      return "منذ ساعة";
+    }
+
+    if(hours === 2){
+      return "منذ ساعتين";
+    }
+
+    if(hours < 11){
+      return `منذ ${hours} ساعات`;
+    }
 
     return `منذ ${hours} ساعة`;
 
@@ -3338,10 +3766,24 @@ function formatFeaturedTime(value){
 
 
   const days =
-  Math.floor(hours / 24);
+    Math.floor(
+      hours / 24
+    );
 
 
   if(days < 7){
+
+    if(days === 1){
+      return "منذ يوم";
+    }
+
+    if(days === 2){
+      return "منذ يومين";
+    }
+
+    if(days < 11){
+      return `منذ ${days} أيام`;
+    }
 
     return `منذ ${days} يوم`;
 
@@ -3359,61 +3801,76 @@ function formatFeaturedTime(value){
 }
 
 
+/* =========================================
+   CREATE DEVICE CARD
+========================================= */
+
 function createFeaturedDeviceCard(device){
 
   const card =
-  document.createElement("article");
+    document.createElement(
+      "article"
+    );
 
   card.className =
-  "device-card";
+    "device-card";
 
   card.dataset.deviceId =
-  device.id;
+    device.id;
 
 
   const image =
-  document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
   image.className =
-  "device-image";
+    "device-image";
 
 
   const images =
-  getFeaturedDeviceImages(
-    device.images
-  );
+    getFeaturedDeviceImages(
+      device.images
+    );
 
 
   const imageUrl =
-  getFeaturedImageUrl(
-    images[0]
-  );
+    getFeaturedImageUrl(
+      images[0]
+    );
 
 
   if(imageUrl){
 
     const img =
-    document.createElement("img");
+      document.createElement(
+        "img"
+      );
+
 
     img.src =
-    imageUrl;
+      imageUrl;
+
 
     img.alt =
-    [
-      device.brand,
-      device.model
-    ]
-    .filter(Boolean)
-    .join(" ");
+      [
+        device.brand,
+        device.model
+      ]
+      .filter(Boolean)
+      .join(" ");
+
 
     img.loading =
-    "eager";
+      "eager";
+
 
     img.decoding =
-    "async";
+      "async";
+
 
     img.draggable =
-    false;
+      false;
 
 
     img.addEventListener(
@@ -3446,13 +3903,20 @@ function createFeaturedDeviceCard(device){
 
         img.remove();
 
+
         const empty =
-        document.createElement("span");
+          document.createElement(
+            "span"
+          );
+
 
         empty.textContent =
-        "لا توجد صورة";
+          "لا توجد صورة";
 
-        image.prepend(empty);
+
+        image.prepend(
+          empty
+        );
 
       },
       {
@@ -3461,7 +3925,9 @@ function createFeaturedDeviceCard(device){
     );
 
 
-    image.appendChild(img);
+    image.appendChild(
+      img
+    );
 
 
     if(
@@ -3478,24 +3944,37 @@ function createFeaturedDeviceCard(device){
   }else{
 
     const empty =
-    document.createElement("span");
+      document.createElement(
+        "span"
+      );
+
 
     empty.textContent =
-    "لا توجد صورة";
+      "لا توجد صورة";
 
-    image.appendChild(empty);
+
+    image.appendChild(
+      empty
+    );
 
   }
 
 
+  /* FAVORITE */
+
   const favorite =
-  document.createElement("button");
+    document.createElement(
+      "button"
+    );
+
 
   favorite.className =
-  "favorite-btn";
+    "favorite-btn";
+
 
   favorite.type =
-  "button";
+    "button";
+
 
   favorite.setAttribute(
     "aria-label",
@@ -3504,7 +3983,7 @@ function createFeaturedDeviceCard(device){
 
 
   favorite.innerHTML =
-  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/></svg>';
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/></svg>';
 
 
   favorite.addEventListener(
@@ -3512,11 +3991,12 @@ function createFeaturedDeviceCard(device){
     async event=>{
 
       event.preventDefault();
+
       event.stopPropagation();
 
 
       const loggedIn =
-      await isLoggedIn();
+        await isLoggedIn();
 
 
       if(!loggedIn){
@@ -3536,7 +4016,9 @@ function createFeaturedDeviceCard(device){
 
 
       showToast(
-        favorite.classList.contains("active")
+        favorite.classList.contains(
+          "active"
+        )
         ? "تمت إضافة الجهاز إلى المفضلة"
         : "تمت إزالة الجهاز من المفضلة"
       );
@@ -3550,84 +4032,112 @@ function createFeaturedDeviceCard(device){
   );
 
 
+  /* BODY */
+
   const body =
-  document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   body.className =
-  "device-body";
+    "device-body";
 
 
   const title =
-  document.createElement("h3");
+    document.createElement(
+      "h3"
+    );
+
 
   title.className =
-  "device-title";
+    "device-title";
+
 
   title.textContent =
-  [
-    device.brand,
-    device.model
-  ]
-  .filter(Boolean)
-  .join(" ")
-  ||
-  "جهاز";
+    [
+      device.brand,
+      device.model
+    ]
+    .filter(Boolean)
+    .join(" ")
+    ||
+    "جهاز";
 
 
   const meta =
-  document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   meta.className =
-  "device-meta";
+    "device-meta";
+
 
   meta.textContent =
-  [
-    device.storage,
-    device.color,
-    device.location
-  ]
-  .filter(Boolean)
-  .join(" • ")
-  ||
-  "تفاصيل الجهاز";
+    [
+      device.storage,
+      device.color,
+      device.location
+    ]
+    .filter(Boolean)
+    .join(" • ")
+    ||
+    "تفاصيل الجهاز";
 
 
   const time =
-  document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   time.className =
-  "device-time";
+    "device-time";
+
 
   time.textContent =
-  formatFeaturedTime(
-    device.created_at
-  );
+    formatFeaturedTime(
+      device.created_at
+    );
 
 
   const row =
-  document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   row.className =
-  "device-row";
+    "device-row";
 
 
   const price =
-  document.createElement("span");
+    document.createElement(
+      "span"
+    );
+
 
   price.className =
-  "device-price";
+    "device-price";
+
 
   price.textContent =
-  formatFeaturedPrice(
-    device.price
-  );
+    formatFeaturedPrice(
+      device.price
+    );
 
 
   const type =
-  document.createElement("span");
+    document.createElement(
+      "span"
+    );
+
 
   type.className =
-  "device-type";
+    "device-type";
+
 
   type.textContent =
     String(
@@ -3635,8 +4145,8 @@ function createFeaturedDeviceCard(device){
     )
     .toLowerCase()
     .includes("auction")
-    ? "مزاد"
-    : "بيع مباشر";
+      ? "مزاد"
+      : "بيع مباشر";
 
 
   row.append(
@@ -3664,19 +4174,23 @@ function createFeaturedDeviceCard(device){
 }
 
 
+/* =========================================
+   RENDER FEATURED
+========================================= */
+
 function renderFeaturedDevices(devices){
 
   if(!featuredDevicesTrack)return;
 
 
   featuredDevicesTrack.innerHTML =
-  "";
+    "";
 
 
   if(!devices.length){
 
     featuredDevicesTrack.innerHTML =
-    '<article class="device-card" style="flex-basis:100%"><div class="device-body" style="display:grid;place-items:center;text-align:center"><h3 class="device-title">لا توجد أجهزة منشورة حالياً</h3><div class="device-meta">أول ما ينضاف جهاز راح يظهر هنا</div></div></article>';
+      '<article class="device-card" style="flex-basis:100%"><div class="device-body" style="display:grid;place-items:center;text-align:center"><h3 class="device-title">لا توجد أجهزة منشورة حالياً</h3><div class="device-meta">أول ما ينضاف جهاز راح يظهر هنا</div></div></article>';
 
     return;
 
@@ -3687,37 +4201,45 @@ function renderFeaturedDevices(devices){
     device=>{
 
       featuredDevicesTrack.appendChild(
-        createFeaturedDeviceCard(device)
+        createFeaturedDeviceCard(
+          device
+        )
       );
 
     }
   );
 
 
-  bindFeaturedDevicesCarousel();
+  bindFeaturedRail(
+    featuredDevicesTrack
+  );
 
 }
 
 
+/* =========================================
+   RENDER LATEST
+========================================= */
+
 function renderLatestDevices(devices){
 
   const track =
-  document.getElementById(
-    "latestDevicesTrack"
-  );
+    document.getElementById(
+      "latestDevicesTrack"
+    );
 
 
   if(!track)return;
 
 
   track.innerHTML =
-  "";
+    "";
 
 
   if(!devices.length){
 
     track.innerHTML =
-    '<article class="device-card" style="flex-basis:100%"><div class="device-body" style="display:grid;place-items:center;text-align:center"><h3 class="device-title">لا توجد أجهزة أحدث حالياً</h3><div class="device-meta">ستظهر الأجهزة الجديدة هنا تلقائياً</div></div></article>';
+      '<article class="device-card" style="flex-basis:100%"><div class="device-body" style="display:grid;place-items:center;text-align:center"><h3 class="device-title">لا توجد أجهزة أحدث حالياً</h3><div class="device-meta">ستظهر الأجهزة الجديدة هنا تلقائياً</div></div></article>';
 
     return;
 
@@ -3728,17 +4250,25 @@ function renderLatestDevices(devices){
     device=>{
 
       track.appendChild(
-        createFeaturedDeviceCard(device)
+        createFeaturedDeviceCard(
+          device
+        )
       );
 
     }
   );
 
 
-  bindFeaturedRail(track);
+  bindFeaturedRail(
+    track
+  );
 
 }
 
+
+/* =========================================
+   LOAD DEVICES
+========================================= */
 
 async function loadFeaturedDevices(){
 
@@ -3751,27 +4281,27 @@ async function loadFeaturedDevices(){
       data,
       error
     } =
-    await supabase
-      .from("devices")
-      .select(`
-        id,
-        created_at,
-        brand,
-        model,
-        storage,
-        color,
-        price,
-        location,
-        sale_type,
-        images
-      `)
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      )
-      .limit(12);
+      await supabase
+        .from("devices")
+        .select(`
+          id,
+          created_at,
+          brand,
+          model,
+          storage,
+          color,
+          price,
+          location,
+          sale_type,
+          images
+        `)
+        .order(
+          "created_at",
+          {
+            ascending:false
+          }
+        )
+        .limit(12);
 
 
     if(error){
@@ -3787,16 +4317,43 @@ async function loadFeaturedDevices(){
 
 
     const devices =
-    data || [];
+      data || [];
+
+
+    /*
+      أجهزة مميزة:
+      أحدث 6 أجهزة موجودة.
+    */
+
+    const featuredDevices =
+      devices.slice(
+        0,
+        6
+      );
+
+
+    /*
+      أحدث الأجهزة:
+      أحدث 6 أجهزة موجودة أيضاً.
+
+      هذا يمنع القسم من الظهور فارغاً
+      عندما يكون عدد الأجهزة أقل من 7.
+    */
+
+    const latestDevices =
+      devices.slice(
+        0,
+        6
+      );
 
 
     renderFeaturedDevices(
-      devices.slice(0,6)
+      featuredDevices
     );
 
 
     renderLatestDevices(
-      devices.slice(6,12)
+      latestDevices
     );
 
 
@@ -3813,20 +4370,8 @@ async function loadFeaturedDevices(){
 
 
 /* =========================================
-   FEATURED RAIL
+   DEVICE RAIL
 ========================================= */
-
-function bindFeaturedDevicesCarousel(){
-
-  const track =
-  document.getElementById(
-    "featuredDevicesTrack"
-  );
-
-  bindFeaturedRail(track);
-
-}
-
 
 function bindFeaturedRail(track){
 
@@ -3844,12 +4389,15 @@ function bindFeaturedRail(track){
 
 
   let current = 0;
+
   let timer = null;
 
   let touchStarted = false;
+
   let touchMoved = false;
 
   let touchStartX = 0;
+
   let touchStartY = 0;
 
   let suppressClickUntil = 0;
@@ -3863,7 +4411,7 @@ function bindFeaturedRail(track){
 
 
     const card =
-    cards[current];
+      cards[current];
 
 
     track.scrollTo({
@@ -3881,30 +4429,32 @@ function bindFeaturedRail(track){
 
   function restartDeviceTimer(){
 
-    clearInterval(timer);
+    clearInterval(
+      timer
+    );
 
 
     timer =
-    setInterval(()=>{
+      setInterval(()=>{
 
-      current++;
-
-
-      if(
-        current >=
-        cards.length
-      ){
-
-        current = 0;
-
-      }
+        current++;
 
 
-      goToDevice(
-        current
-      );
+        if(
+          current >=
+          cards.length
+        ){
 
-    },10000);
+          current = 0;
+
+        }
+
+
+        goToDevice(
+          current
+        );
+
+      },10000);
 
   }
 
@@ -3914,18 +4464,25 @@ function bindFeaturedRail(track){
     event=>{
 
       const touch =
-      event.touches[0];
+        event.touches[0];
+
 
       touchStarted = true;
+
       touchMoved = false;
 
+
       touchStartX =
-      touch.clientX;
+        touch.clientX;
+
 
       touchStartY =
-      touch.clientY;
+        touch.clientY;
 
-      clearInterval(timer);
+
+      clearInterval(
+        timer
+      );
 
     },
     {
@@ -3942,21 +4499,21 @@ function bindFeaturedRail(track){
 
 
       const touch =
-      event.touches[0];
+        event.touches[0];
 
 
       const dx =
-      Math.abs(
-        touch.clientX -
-        touchStartX
-      );
+        Math.abs(
+          touch.clientX -
+          touchStartX
+        );
 
 
       const dy =
-      Math.abs(
-        touch.clientY -
-        touchStartY
-      );
+        Math.abs(
+          touch.clientY -
+          touchStartY
+        );
 
 
       if(
@@ -3983,21 +4540,21 @@ function bindFeaturedRail(track){
 
 
       const touch =
-      event.changedTouches[0];
+        event.changedTouches[0];
 
 
       const dx =
-      Math.abs(
-        touch.clientX -
-        touchStartX
-      );
+        Math.abs(
+          touch.clientX -
+          touchStartX
+        );
 
 
       const dy =
-      Math.abs(
-        touch.clientY -
-        touchStartY
-      );
+        Math.abs(
+          touch.clientY -
+          touchStartY
+        );
 
 
       if(
@@ -4013,12 +4570,13 @@ function bindFeaturedRail(track){
       if(touchMoved){
 
         suppressClickUntil =
-        Date.now() + 700;
+          Date.now() + 700;
 
       }
 
 
       touchStarted = false;
+
 
       restartDeviceTimer();
 
@@ -4034,6 +4592,7 @@ function bindFeaturedRail(track){
     ()=>{
 
       touchStarted = false;
+
       touchMoved = false;
 
       restartDeviceTimer();
@@ -4050,18 +4609,18 @@ function bindFeaturedRail(track){
     event=>{
 
       const favorite =
-      event.target.closest(
-        ".favorite-btn"
-      );
+        event.target.closest(
+          ".favorite-btn"
+        );
 
 
       if(favorite)return;
 
 
       const card =
-      event.target.closest(
-        ".device-card"
-      );
+        event.target.closest(
+          ".device-card"
+        );
 
 
       if(!card)return;
@@ -4074,6 +4633,7 @@ function bindFeaturedRail(track){
       ){
 
         event.preventDefault();
+
         event.stopPropagation();
 
         return;
@@ -4082,7 +4642,7 @@ function bindFeaturedRail(track){
 
 
       const deviceId =
-      card.dataset.deviceId;
+        card.dataset.deviceId;
 
 
       if(!deviceId)return;
@@ -4109,56 +4669,61 @@ function bindFeaturedRail(track){
 ========================================= */
 
 document
-.querySelectorAll("[data-favorite]")
-.forEach(button=>{
+  .querySelectorAll(
+    "[data-favorite]"
+  )
+  .forEach(
+    button=>{
 
-  button.addEventListener(
-    "click",
-    async event=>{
+      button.addEventListener(
+        "click",
+        async event=>{
 
-      event.preventDefault();
-      event.stopPropagation();
+          event.preventDefault();
 
-
-      const loggedIn =
-      await isLoggedIn();
-
-
-      if(!loggedIn){
-
-        await requireAuth(
-          "favorites.html"
-        );
-
-        return;
-
-      }
+          event.stopPropagation();
 
 
-      const active =
-      button.classList.toggle(
-        "active"
+          const loggedIn =
+            await isLoggedIn();
+
+
+          if(!loggedIn){
+
+            await requireAuth(
+              "favorites.html"
+            );
+
+            return;
+
+          }
+
+
+          const active =
+            button.classList.toggle(
+              "active"
+            );
+
+
+          if(active){
+
+            showToast(
+              "تمت إضافة الجهاز إلى المفضلة"
+            );
+
+          }else{
+
+            showToast(
+              "تمت إزالة الجهاز من المفضلة"
+            );
+
+          }
+
+        }
       );
-
-
-      if(active){
-
-        showToast(
-          "تمت إضافة الجهاز إلى المفضلة"
-        );
-
-      }else{
-
-        showToast(
-          "تمت إزالة الجهاز من المفضلة"
-        );
-
-      }
 
     }
   );
-
-});
 
 
 /* =========================================
@@ -4201,7 +4766,9 @@ viewAuctionsBtn.addEventListener(
   "click",
   ()=>{
 
-    go("auctions.html");
+    go(
+      "auctions.html"
+    );
 
   }
 );
