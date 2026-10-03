@@ -1222,6 +1222,28 @@ padding-inline:18px
   height:38px;
 }
 
+.featured-more-label{
+  margin:16px 2px 9px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#176b87;
+  font-size:12px;
+  font-weight:900;
+}
+
+.featured-more-label:before{
+  content:"";
+  width:5px;
+  height:18px;
+  border-radius:5px;
+  background:#32b8c4;
+}
+
+.featured-more-track{
+  margin-top:0;
+}
+
 </style>
 
 </head>
@@ -2271,6 +2293,17 @@ id="featuredDevicesTrack"
 
 </div>
 
+<div class="featured-more-label">
+  <span>المزيد من الأجهزة المميزة</span>
+</div>
+
+<div
+class="featured-devices-track featured-more-track"
+id="featuredMoreDevicesTrack"
+>
+
+</div>
+
 </section>
 
 <section class="section reveal d5">
@@ -3197,6 +3230,13 @@ function renderFeaturedDevices(devices){
 
   featuredDevicesTrack.innerHTML = "";
 
+  const moreTrack =
+    document.getElementById("featuredMoreDevicesTrack");
+
+  if(moreTrack){
+    moreTrack.innerHTML = "";
+  }
+
   if(!devices.length){
 
     featuredDevicesTrack.innerHTML =
@@ -3206,7 +3246,8 @@ function renderFeaturedDevices(devices){
 
   }
 
-  devices.slice(0,6).forEach(device=>{
+  devices.slice(0,3).forEach(device=>{
+
 
     const card = document.createElement("article");
 
@@ -3338,6 +3379,103 @@ function renderFeaturedDevices(devices){
     featuredDevicesTrack.appendChild(card);
 
   });
+
+  if(moreTrack){
+
+    devices.slice(3,6).forEach(device=>{
+
+      const clone = document.createElement("article");
+
+      clone.className = "device-card";
+      clone.dataset.deviceId = device.id;
+
+      const image = document.createElement("div");
+      image.className = "device-image";
+
+      const images = getFeaturedDeviceImages(device.images);
+      const imageUrl = getFeaturedImageUrl(images[0]);
+
+      if(imageUrl){
+
+        const img = document.createElement("img");
+
+        img.src = imageUrl;
+        img.alt = [device.brand,device.model].filter(Boolean).join(" ");
+        img.loading = "eager";
+        img.decoding = "async";
+        img.draggable = false;
+
+        img.addEventListener("load", async ()=>{
+
+          try{
+            if(img.decode){
+              await img.decode();
+            }
+          }catch(error){}
+
+          img.classList.add("is-ready");
+
+        }, {once:true});
+
+        image.appendChild(img);
+
+      }else{
+
+        const empty = document.createElement("span");
+        empty.textContent = "لا توجد صورة";
+        image.appendChild(empty);
+
+      }
+
+      const favorite = document.createElement("button");
+
+      favorite.className = "favorite-btn";
+      favorite.type = "button";
+      favorite.setAttribute("aria-label","إضافة إلى المفضلة");
+
+      favorite.innerHTML =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/></svg>';
+
+      image.appendChild(favorite);
+
+      const body = document.createElement("div");
+      body.className = "device-body";
+
+      const title = document.createElement("h3");
+      title.className = "device-title";
+      title.textContent =
+        [device.brand,device.model].filter(Boolean).join(" ") || "جهاز";
+
+      const meta = document.createElement("div");
+      meta.className = "device-meta";
+      meta.textContent =
+        [device.storage,device.color,device.location]
+          .filter(Boolean)
+          .join(" • ") || "تفاصيل الجهاز";
+
+      const row = document.createElement("div");
+      row.className = "device-row";
+
+      const price = document.createElement("span");
+      price.className = "device-price";
+      price.textContent = formatFeaturedPrice(device.price);
+
+      const type = document.createElement("span");
+      type.className = "device-type";
+      type.textContent =
+        String(device.sale_type || "").toLowerCase().includes("auction")
+        ? "مزاد"
+        : "بيع مباشر";
+
+      row.append(price,type);
+      body.append(title,meta,row);
+      clone.append(image,body);
+
+      moreTrack.appendChild(clone);
+
+    });
+
+  }
 
   bindFeaturedDevicesCarousel();
 
