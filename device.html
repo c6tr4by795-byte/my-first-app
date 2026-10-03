@@ -2745,21 +2745,59 @@
 
       try{
 
-        const { data,error } =
+        /*
+          تحميل الجهاز بشكل مرن:
+          بعض سجلات Supabase قد ترجع نتيجة فارغة بدل
+          خطأ واضح مع single()، لذلك نستخدم maybeSingle()
+          ونحاول مرة ثانية بطلب محدود قبل إظهار شاشة الخطأ.
+        */
+        let data = null;
+        let error = null;
+
+        const first =
           await supabase
             .from("devices")
             .select("*")
             .eq("id",deviceId)
-            .single();
+            .maybeSingle();
+
+        data = first.data;
+        error = first.error;
 
         if(error){
-          throw error;
+
+          const retry =
+            await supabase
+              .from("devices")
+              .select("*")
+              .eq("id",String(deviceId))
+              .limit(1)
+              .maybeSingle();
+
+          data = retry.data;
+          error = retry.error;
+
+        }
+
+        if(error){
+
+          console.error(
+            "DEVICE QUERY ERROR:",
+            error
+          );
+
+          renderError(
+            "تعذر تحميل بيانات الجهاز"
+          );
+
+          return;
+
         }
 
         if(!data){
 
           renderError(
-            "الجهاز غير موجود"
+            "الجهاز غير موجود أو لم يعد متاحاً"
           );
 
           return;
@@ -2769,6 +2807,11 @@
         device =
           data;
 
+        /*
+          البيانات صارت جاهزة أولاً.
+          بعدها فقط نرسم الصورة وباقي التفاصيل،
+          حتى أي مشكلة بالصور ما تخفي معلومات الجهاز.
+        */
         renderDevice();
 
       }catch(error){
