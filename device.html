@@ -314,7 +314,18 @@
 
     main{
       padding:0 16px;
+      display:flex;
+      flex-direction:column;
     }
+
+
+    /* السعر ومعلومات الجهاز تبقى فوق الصورة */
+    .product-head{order:1;}
+    .price-card{order:2;}
+    .gallery-card{order:3;}
+    .details-intro{order:4;}
+    .section{order:5;}
+    .action-wrap{order:6;}
 
 
     /* =========================
@@ -397,46 +408,10 @@
 
     /* الخلفية الضبابية للصورة */
 
-    .gallery-slide::before{
-      content:"";
-
-      position:absolute;
-
-      inset:-28px;
-
-      background-image:var(--photo-bg);
-
-      background-position:center;
-      background-size:cover;
-      background-repeat:no-repeat;
-
-      filter:blur(24px);
-
-      transform:scale(1.08);
-
-      opacity:.34;
-
-      z-index:0;
-    }
-
-
+    /* بدون تغويش أو طبقات على الصورة */
+    .gallery-slide::before,
     .gallery-slide::after{
-      content:"";
-
-      position:absolute;
-
-      inset:0;
-
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,255,255,.08),
-          rgba(255,255,255,.18)
-        );
-
-      z-index:1;
-
-      pointer-events:none;
+      display:none;
     }
 
 
