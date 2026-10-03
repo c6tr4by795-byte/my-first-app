@@ -884,7 +884,7 @@ position:fixed;
 left:0;
 right:0;
 bottom:0;
-padding:8px 12px calc(8px + var(--safe-bottom));
+padding:2px 12px calc(2px + var(--safe-bottom));
 z-index:50;
 pointer-events:none
 }
@@ -1222,28 +1222,36 @@ padding-inline:18px
   height:38px;
 }
 
-.featured-more-label{
-  margin:16px 2px 9px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  color:#176b87;
-  font-size:12px;
-  font-weight:900;
+/* All featured devices stay in one automatic marketplace rail. */
+
+.featured-devices-track .device-title{
+  font-size:14px;
+  line-height:1.35;
+  min-height:38px;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
 }
 
-.featured-more-label:before{
-  content:"";
-  width:5px;
-  height:18px;
-  border-radius:5px;
-  background:#32b8c4;
+.featured-devices-track .device-meta{
+  margin-top:6px;
+  font-size:10.5px;
+  line-height:1.5;
 }
 
-.featured-more-track{
-  margin-top:0;
+.featured-devices-track .device-row{
+  margin-top:9px;
+  padding-top:9px;
 }
 
+.featured-devices-track .device-price{
+  font-size:13.5px;
+}
+
+.featured-devices-track .device-type{
+  font-size:9.5px;
+}
 </style>
 
 </head>
@@ -2293,17 +2301,6 @@ id="featuredDevicesTrack"
 
 </div>
 
-<div class="featured-more-label">
-  <span>المزيد من الأجهزة المميزة</span>
-</div>
-
-<div
-class="featured-devices-track featured-more-track"
-id="featuredMoreDevicesTrack"
->
-
-</div>
-
 </section>
 
 <section class="section reveal d5">
@@ -3224,258 +3221,157 @@ function formatFeaturedPrice(price){
 }
 
 
+function createFeaturedDeviceCard(device){
+
+  const card = document.createElement("article");
+  card.className = "device-card";
+  card.dataset.deviceId = device.id;
+
+  const image = document.createElement("div");
+  image.className = "device-image";
+
+  const images = getFeaturedDeviceImages(device.images);
+  const imageUrl = getFeaturedImageUrl(images[0]);
+
+  if(imageUrl){
+
+    const img = document.createElement("img");
+
+    img.src = imageUrl;
+    img.alt = [device.brand,device.model].filter(Boolean).join(" ");
+    img.loading = "eager";
+    img.decoding = "async";
+    img.draggable = false;
+
+    img.addEventListener("load", async ()=>{
+
+      try{
+        if(img.decode) await img.decode();
+      }catch(error){}
+
+      img.classList.add("is-ready");
+
+    }, {once:true});
+
+    img.addEventListener("error", ()=>{
+
+      img.remove();
+
+      const empty = document.createElement("span");
+      empty.textContent = "لا توجد صورة";
+      image.prepend(empty);
+
+    }, {once:true});
+
+    image.appendChild(img);
+
+    if(img.complete && img.naturalWidth > 0){
+      img.classList.add("is-ready");
+    }
+
+  }else{
+
+    const empty = document.createElement("span");
+    empty.textContent = "لا توجد صورة";
+    image.appendChild(empty);
+
+  }
+
+  const favorite = document.createElement("button");
+
+  favorite.className = "favorite-btn";
+  favorite.type = "button";
+  favorite.setAttribute("aria-label","إضافة إلى المفضلة");
+
+  favorite.innerHTML =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/></svg>';
+
+  favorite.addEventListener("click", async event=>{
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const loggedIn = await isLoggedIn();
+
+    if(!loggedIn){
+
+      await requireAuth("favorites.html");
+      return;
+
+    }
+
+    favorite.classList.toggle("active");
+
+    showToast(
+      favorite.classList.contains("active")
+      ? "تمت إضافة الجهاز إلى المفضلة"
+      : "تمت إزالة الجهاز من المفضلة"
+    );
+
+  });
+
+  image.appendChild(favorite);
+
+  const body = document.createElement("div");
+  body.className = "device-body";
+
+  const title = document.createElement("h3");
+  title.className = "device-title";
+  title.textContent =
+    [device.brand,device.model].filter(Boolean).join(" ") || "جهاز";
+
+  const meta = document.createElement("div");
+  meta.className = "device-meta";
+  meta.textContent =
+    [device.storage,device.color,device.location]
+      .filter(Boolean)
+      .join(" • ") || "تفاصيل الجهاز";
+
+  const row = document.createElement("div");
+  row.className = "device-row";
+
+  const price = document.createElement("span");
+  price.className = "device-price";
+  price.textContent = formatFeaturedPrice(device.price);
+
+  const type = document.createElement("span");
+  type.className = "device-type";
+  type.textContent =
+    String(device.sale_type || "").toLowerCase().includes("auction")
+    ? "مزاد"
+    : "بيع مباشر";
+
+  row.append(price,type);
+  body.append(title,meta,row);
+  card.append(image,body);
+
+  return card;
+
+}
+
+
 function renderFeaturedDevices(devices){
 
   if(!featuredDevicesTrack)return;
 
   featuredDevicesTrack.innerHTML = "";
 
-  const moreTrack =
-    document.getElementById("featuredMoreDevicesTrack");
-
-  if(moreTrack){
-    moreTrack.innerHTML = "";
-  }
-
   if(!devices.length){
 
     featuredDevicesTrack.innerHTML =
-      '<article class="device-card" style="flex-basis:100%"><div class="device-body" style="display:grid;place-items:center;text-align:center"><h3 class="device-title">لا توجد أجهزة منشورة حالياً</h3><div class="device-meta">أول ما ينضاف جهاز راح يظهر هنا</div></div></article>';
+      '<article class="device-card" style="flex-basis:100%"><div class="device-body" style="display:grid;place-items:center;text-align:center"><h3 class="device-title">لا توجد أجهزة منشورة حالياً</h3><div class="device-meta">أول ما ينضاف جهاز راح يظهر هنا</div></article>';
 
     return;
 
   }
 
-  devices.slice(0,3).forEach(device=>{
+  devices.forEach(device=>{
 
-
-    const card = document.createElement("article");
-
-    card.className = "device-card";
-    card.dataset.deviceId = device.id;
-
-    const image = document.createElement("div");
-    image.className = "device-image";
-
-    const images = getFeaturedDeviceImages(device.images);
-    const imageUrl = getFeaturedImageUrl(images[0]);
-
-    if(imageUrl){
-
-      const img = document.createElement("img");
-
-      img.src = imageUrl;
-      img.alt = [device.brand,device.model].filter(Boolean).join(" ");
-      img.loading = "eager";
-      img.decoding = "async";
-      img.draggable = false;
-
-      img.addEventListener("load", async ()=>{
-
-        try{
-          if(img.decode){
-            await img.decode();
-          }
-        }catch(error){}
-
-        img.classList.add("is-ready");
-
-      }, {once:true});
-
-      img.addEventListener("error", ()=>{
-
-        img.remove();
-
-        const empty = document.createElement("span");
-        empty.textContent = "لا توجد صورة";
-        image.prepend(empty);
-
-      }, {once:true});
-
-      image.appendChild(img);
-
-      if(img.complete && img.naturalWidth > 0){
-        img.classList.add("is-ready");
-      }
-
-    }else{
-
-      const empty = document.createElement("span");
-
-      empty.textContent = "لا توجد صورة";
-
-      image.appendChild(empty);
-
-    }
-
-    const favorite = document.createElement("button");
-
-    favorite.className = "favorite-btn";
-    favorite.type = "button";
-    favorite.setAttribute("aria-label","إضافة إلى المفضلة");
-
-    favorite.innerHTML =
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/></svg>';
-
-    favorite.addEventListener("click", async event=>{
-
-      event.preventDefault();
-      event.stopPropagation();
-
-      const loggedIn = await isLoggedIn();
-
-      if(!loggedIn){
-
-        await requireAuth("favorites.html");
-
-        return;
-
-      }
-
-      favorite.classList.toggle("active");
-
-      showToast(
-        favorite.classList.contains("active")
-        ? "تمت إضافة الجهاز إلى المفضلة"
-        : "تمت إزالة الجهاز من المفضلة"
-      );
-
-    });
-
-    image.appendChild(favorite);
-
-    const body = document.createElement("div");
-    body.className = "device-body";
-
-    const title = document.createElement("h3");
-    title.className = "device-title";
-    title.textContent =
-      [device.brand,device.model].filter(Boolean).join(" ") || "جهاز";
-
-    const meta = document.createElement("div");
-    meta.className = "device-meta";
-    meta.textContent =
-      [device.storage,device.color,device.location]
-        .filter(Boolean)
-        .join(" • ") || "تفاصيل الجهاز";
-
-    const row = document.createElement("div");
-    row.className = "device-row";
-
-    const price = document.createElement("span");
-    price.className = "device-price";
-    price.textContent = formatFeaturedPrice(device.price);
-
-    const type = document.createElement("span");
-    type.className = "device-type";
-    type.textContent =
-      String(device.sale_type || "").toLowerCase().includes("auction")
-      ? "مزاد"
-      : "بيع مباشر";
-
-    row.append(price,type);
-    body.append(title,meta,row);
-    card.append(image,body);
-    featuredDevicesTrack.appendChild(card);
+    featuredDevicesTrack.appendChild(
+      createFeaturedDeviceCard(device)
+    );
 
   });
-
-  if(moreTrack){
-
-    devices.slice(3,6).forEach(device=>{
-
-      const clone = document.createElement("article");
-
-      clone.className = "device-card";
-      clone.dataset.deviceId = device.id;
-
-      const image = document.createElement("div");
-      image.className = "device-image";
-
-      const images = getFeaturedDeviceImages(device.images);
-      const imageUrl = getFeaturedImageUrl(images[0]);
-
-      if(imageUrl){
-
-        const img = document.createElement("img");
-
-        img.src = imageUrl;
-        img.alt = [device.brand,device.model].filter(Boolean).join(" ");
-        img.loading = "eager";
-        img.decoding = "async";
-        img.draggable = false;
-
-        img.addEventListener("load", async ()=>{
-
-          try{
-            if(img.decode){
-              await img.decode();
-            }
-          }catch(error){}
-
-          img.classList.add("is-ready");
-
-        }, {once:true});
-
-        image.appendChild(img);
-
-      }else{
-
-        const empty = document.createElement("span");
-        empty.textContent = "لا توجد صورة";
-        image.appendChild(empty);
-
-      }
-
-      const favorite = document.createElement("button");
-
-      favorite.className = "favorite-btn";
-      favorite.type = "button";
-      favorite.setAttribute("aria-label","إضافة إلى المفضلة");
-
-      favorite.innerHTML =
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/></svg>';
-
-      image.appendChild(favorite);
-
-      const body = document.createElement("div");
-      body.className = "device-body";
-
-      const title = document.createElement("h3");
-      title.className = "device-title";
-      title.textContent =
-        [device.brand,device.model].filter(Boolean).join(" ") || "جهاز";
-
-      const meta = document.createElement("div");
-      meta.className = "device-meta";
-      meta.textContent =
-        [device.storage,device.color,device.location]
-          .filter(Boolean)
-          .join(" • ") || "تفاصيل الجهاز";
-
-      const row = document.createElement("div");
-      row.className = "device-row";
-
-      const price = document.createElement("span");
-      price.className = "device-price";
-      price.textContent = formatFeaturedPrice(device.price);
-
-      const type = document.createElement("span");
-      type.className = "device-type";
-      type.textContent =
-        String(device.sale_type || "").toLowerCase().includes("auction")
-        ? "مزاد"
-        : "بيع مباشر";
-
-      row.append(price,type);
-      body.append(title,meta,row);
-      clone.append(image,body);
-
-      moreTrack.appendChild(clone);
-
-    });
-
-  }
 
   bindFeaturedDevicesCarousel();
 
@@ -3504,7 +3400,7 @@ async function loadFeaturedDevices(){
           images
         `)
         .order("created_at",{ascending:false})
-        .limit(6);
+        .limit(50);
 
     if(error){
 
