@@ -11,7 +11,7 @@
 <title>MZAD PHONE — تفاصيل المزاد</title>
 <style>
 :root{
-  --bg:#f7f8fa; --surface:#fff; --surface-2:#eef3f7; --ink:#17202a; --muted:#667085; --line:#e6e9ed;
+  --bg:#f7f8fa; --ink:#17202a; --muted:#667085; --line:#e6e9ed;
   --primary:#176b87; --primary-dark:#125a73; --primary-soft:#e8f3f6; --purple:#6246d9; --edge:#ddd8f8;
   --ok:#1e8a5a; --hot:#e8590c; --gold:#b9791a; --safe-bottom:env(safe-area-inset-bottom,0px);
 }
@@ -22,7 +22,7 @@ body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
 :focus-visible{outline:3px solid var(--purple);outline-offset:2px}
-.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(120px + var(--safe-bottom))}
+.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(165px + var(--safe-bottom))}
 
 /* header */
 header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg,#fff 0%,#f5f2ff 45%,#e6e1ff 100%);
@@ -57,28 +57,6 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 .chip.ver{background:#fff;border:1px solid #9edfe3}
 .chip svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
-/* auction clock card */
-.clock{position:relative;isolation:isolate;overflow:hidden;margin-top:14px;padding:12px 13px 14px;border-radius:22px;color:#fff;
-  background:linear-gradient(145deg,#243b80 0%,#4d43a8 55%,#7c3aed 100%);box-shadow:0 16px 34px rgba(76,67,168,.18)}
-.clock:before,.clock:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.06);z-index:-1}
-.clock:before{width:240px;height:240px;inset-inline-start:-88px;top:-120px}
-.clock:after{width:220px;height:220px;inset-inline-end:-92px;bottom:-128px}
-.clock-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.badge{display:inline-flex;align-items:center;gap:7px;min-height:26px;padding:0 9px;border-radius:999px;background:rgba(255,255,255,.13);
-  border:1px solid rgba(255,255,255,.16);font-size:10px;font-weight:900}
-.badge:before{content:"";width:7px;height:7px;border-radius:50%;background:#5eead4}
-.clock.ended .badge:before{background:#cbd5e1}
-.state{font-size:10px;font-weight:800;color:rgba(255,255,255,.73)}
-.digits{direction:ltr;display:flex;justify-content:center;align-items:center;gap:7px;margin-top:14px;font-variant-numeric:tabular-nums}
-.unit{min-width:80px;text-align:center;padding:9px 0 7px;border-radius:16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14)}
-.unit b{display:block;font-size:40px;line-height:1.05;font-weight:950;letter-spacing:-.02em}
-.unit span{font-size:9px;font-weight:800;color:rgba(255,255,255,.7)}
-.sep{font-size:26px;font-weight:900;opacity:.45}
-.clock.hot .unit b{color:#ffd2b8}
-.clock.hot .unit:last-child{animation:blink 1s steps(1) infinite}
-@keyframes blink{50%{background:rgba(232,89,12,.28)}}
-.clock-note{margin:12px 0 0;font-size:10px;line-height:1.7;color:rgba(255,255,255,.79);text-align:center}
-
 /* cards */
 .card{position:relative;overflow:hidden;margin-top:12px;padding:14px;border-radius:18px;border:1px solid var(--edge);
   background:linear-gradient(145deg,#fff 0%,#f4f1ff 48%,#e7e1ff 100%);box-shadow:0 12px 28px rgba(98,70,217,.09)}
@@ -99,15 +77,6 @@ th{width:42%;color:var(--muted);font-weight:700}
 tr:last-child th,tr:last-child td{border-bottom:0}
 td.good{color:var(--ok)}
 
-.bids{list-style:none;margin:0;padding:0}
-.bids li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #edf0f2}
-.bids li:last-child{border-bottom:0}
-.who{display:flex;flex-direction:column;font-size:13px;font-weight:900;line-height:1.35}
-.who span{font-size:9px;font-weight:700;color:#9aa3aa}
-.bids b{font-size:12.5px;font-weight:950;font-variant-numeric:tabular-nums;color:var(--primary)}
-.bids li.lead b{color:var(--gold)}
-.bids li.lead .who:after{content:"الأعلى";align-self:flex-start;margin-top:2px;font-size:8.5px;padding:2px 7px;border-radius:8px;background:#fdf3e1;color:var(--gold)}
-
 .seller{display:flex;align-items:center;gap:11px}
 .avatar{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:18px;font-weight:950;color:#fff;
   background:linear-gradient(145deg,#176b87,#32b8c4)}
@@ -115,30 +84,74 @@ td.good{color:var(--ok)}
 .seller b{font-size:13px;font-weight:900}
 .seller span{display:block;font-size:10px;font-weight:700;color:var(--muted)}
 
-/* bid bar: fixed 15,000 + round pulsing button */
-.bar-wrap{position:fixed;inset-inline:0;bottom:-7px;z-index:100;padding:7px 10px calc(7px + var(--safe-bottom));pointer-events:none}
-.bar{width:min(100%,520px);margin:0 auto;padding:10px 16px;min-height:62px;border-radius:22px;background:rgba(255,255,255,.97);border:1px solid #e7ecef;
-  box-shadow:0 10px 28px rgba(23,32,42,.10);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);pointer-events:auto;
-  display:flex;align-items:center;justify-content:space-between;gap:12px}
-.next .label{display:block}
-.next b{display:block;font-size:19px;font-weight:950;color:var(--primary);letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.25}
-.next b small{font-size:10px;font-weight:800;color:var(--muted);margin-inline-start:3px}
-.step-tag{display:inline-block;margin-top:2px;padding:2px 8px;border-radius:8px;background:var(--primary-soft);color:var(--primary-dark);font-size:9px;font-weight:900}
-.bid-btn{position:relative;flex:0 0 auto;width:72px;height:72px;margin-top:-30px;border-radius:50%;border:4px solid #fff;color:#fff;
-  font-size:14px;font-weight:950;background:linear-gradient(145deg,#176b87,#32b8c4);box-shadow:0 10px 22px rgba(23,107,135,.38);
+/* ================= DOCK: مؤقت + مزايدين + مزايدة ================= */
+.dock-wrap{position:fixed;inset-inline:0;bottom:-7px;z-index:100;padding:7px 10px calc(7px + var(--safe-bottom));pointer-events:none}
+.dock{position:relative;isolation:isolate;overflow:hidden;width:min(100%,520px);margin:0 auto;border-radius:24px;color:#fff;
+  background:linear-gradient(145deg,#243b80 0%,#4d43a8 55%,#7c3aed 100%);box-shadow:0 16px 34px rgba(76,67,168,.38);pointer-events:auto}
+.dock:before,.dock:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.06);z-index:-1}
+.dock:before{width:220px;height:220px;inset-inline-start:-90px;top:-110px}
+.dock:after{width:200px;height:200px;inset-inline-end:-80px;bottom:-110px}
+
+.live{display:flex;align-items:center;gap:10px;width:100%;padding:9px 13px;background:rgba(255,255,255,.09);
+  border-bottom:1px solid rgba(255,255,255,.12);text-align:start}
+.stack{display:flex;flex:0 0 auto;min-width:24px}
+.av{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:950;color:#fff;
+  border:2px solid #4d43a8;margin-inline-start:-9px}
+.av:first-child{margin-inline-start:0}
+.ticker{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:11px;font-weight:800}
+.ticker b{font-weight:950}
+.ticker.swap>span{display:block;animation:slide .45s ease}
+@keyframes slide{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.livetag{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:900;color:rgba(255,255,255,.8);flex:0 0 auto}
+.livetag:before{content:"";width:7px;height:7px;border-radius:50%;background:#5eead4}
+.chev{width:16px;height:16px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s}
+.live[aria-expanded="true"] .chev{transform:rotate(180deg)}
+
+.panel{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.panel.open{max-height:230px;overflow-y:auto}
+.panel h3{margin:0;padding:10px 14px 2px;font-size:10px;font-weight:900;color:rgba(255,255,255,.7)}
+.panel ul{list-style:none;margin:0;padding:0 0 4px}
+.panel li{display:flex;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.1)}
+.panel li:last-child{border-bottom:0}
+.panel .who{flex:1;min-width:0;font-size:12px;font-weight:900;line-height:1.35}
+.panel .who span{display:block;font-size:9px;font-weight:700;color:rgba(255,255,255,.65)}
+.panel li b{font-size:12px;font-weight:950;font-variant-numeric:tabular-nums}
+.panel li.lead b{color:#ffd78a}
+.panel li.lead .who:after{content:"الأعلى";display:inline-block;margin-top:2px;padding:1px 7px;border-radius:8px;background:rgba(255,215,138,.2);color:#ffd78a;font-size:8.5px}
+
+.main{display:flex;align-items:center;gap:10px;padding:10px 13px 12px}
+.nextbox{flex:1;min-width:0}
+.nextbox .l{display:block;font-size:9px;font-weight:800;color:rgba(255,255,255,.72)}
+.nextbox b{display:block;font-size:17px;font-weight:950;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.3;white-space:nowrap}
+.nextbox b small{font-size:9px;font-weight:800;opacity:.75;margin-inline-start:3px}
+.nextbox em{display:inline-block;margin-top:1px;padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.14);font-style:normal;font-size:9px;font-weight:900}
+
+.time{flex:0 0 auto;text-align:center}
+.time .l{display:block;font-size:9px;font-weight:800;color:rgba(255,255,255,.72);margin-bottom:2px}
+.tdig{direction:ltr;display:flex;align-items:center;gap:2px;padding:5px 9px;border-radius:13px;background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.16);font-size:19px;font-weight:950;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.tdig i{font-style:normal;opacity:.5}
+.dock.hot .tdig{color:#ffd2b8;background:rgba(232,89,12,.28)}
+.dock.hot .tdig i{animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:.1}}
+.dock.ended .tdig{opacity:.7}
+
+.bid-btn{position:relative;flex:0 0 auto;width:64px;height:64px;border-radius:50%;border:3px solid rgba(255,255,255,.92);color:#fff;
+  font-size:14px;font-weight:950;background:linear-gradient(145deg,#176b87,#32b8c4);box-shadow:0 8px 18px rgba(8,30,50,.35);
   -webkit-tap-highlight-color:transparent}
-.bid-btn:after{content:"";position:absolute;inset:-4px;border-radius:50%;border:3px solid #32b8c4;opacity:0;pointer-events:none}
+.bid-btn:after{content:"";position:absolute;inset:-3px;border-radius:50%;border:3px solid #5eead4;opacity:0;pointer-events:none}
 .bid-btn.pulse{animation:press .45s ease}
 .bid-btn.pulse:after{animation:ring .65s ease-out}
 @keyframes press{0%{transform:scale(1)}35%{transform:scale(.86)}70%{transform:scale(1.1)}100%{transform:scale(1)}}
-@keyframes ring{0%{opacity:.85;transform:scale(1)}100%{opacity:0;transform:scale(1.9)}}
-.bid-btn:disabled{opacity:.5;cursor:not-allowed;background:#9aa7ad;box-shadow:none}
+@keyframes ring{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.55)}}
+.bid-btn:disabled{opacity:.55;cursor:not-allowed;background:#7f8a99;box-shadow:none}
+
 @media (prefers-reduced-motion:reduce){
-  .bid-btn.pulse,.bid-btn.pulse:after,.price.bump,.clock.hot .unit:last-child{animation:none}
-  .dot,.toast{transition:none}
+  .bid-btn.pulse,.bid-btn.pulse:after,.price.bump,.ticker.swap>span,.dock.hot .tdig i{animation:none}
+  .dot,.toast,.panel,.chev{transition:none}
 }
 
-.toast{position:fixed;left:50%;bottom:calc(104px + var(--safe-bottom));transform:translateX(-50%) translateY(16px);max-width:calc(100% - 40px);
+.toast{position:fixed;left:50%;bottom:calc(150px + var(--safe-bottom));transform:translateX(-50%) translateY(16px);max-width:calc(100% - 40px);
   padding:10px 14px;border-radius:13px;background:#1e2c30;color:#fff;font-size:11px;font-weight:800;box-shadow:0 14px 34px rgba(24,44,49,.12);
   opacity:0;pointer-events:none;transition:.25s ease;z-index:120;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -166,16 +179,6 @@ td.good{color:var(--ok)}
   <span class="chip" id="cond"></span>
 </div>
 
-<section class="clock" id="clock">
-  <div class="clock-top"><span class="badge" id="badge">مزاد مستمر</span><span class="state" id="endLabel">الوقت المتبقي</span></div>
-  <div class="digits" role="timer">
-    <div class="unit"><b id="hh">00</b><span>ساعة</span></div><span class="sep">:</span>
-    <div class="unit"><b id="mm">00</b><span>دقيقة</span></div><span class="sep">:</span>
-    <div class="unit"><b id="ss">00</b><span>ثانية</span></div>
-  </div>
-  <p class="clock-note">أي مزايدة بآخر 30 ثانية تمدد المزاد دقيقة إضافية</p>
-</section>
-
 <section class="card">
   <div class="price-row">
     <div><span class="label">السعر الحالي</span><div class="price" id="priceBox"><span id="price"></span><small>د.ع</small></div></div>
@@ -185,27 +188,43 @@ td.good{color:var(--ok)}
 </section>
 
 <section class="card plain"><h2>مواصفات الجهاز</h2><table id="specs"></table></section>
-<section class="card plain"><h2>آخر المزايدات</h2><ul class="bids" id="bids"></ul></section>
 <section class="card plain"><h2>البائع</h2>
   <div class="seller"><div class="avatar" id="sAv"></div><p><b id="sName"></b><span id="sInfo"></span></p></div>
 </section>
 
 </main>
 
-<div class="bar-wrap">
-  <div class="bar">
-    <div class="next">
-      <span class="label">مزايدتك القادمة</span>
-      <b><span id="next"></span><small>د.ع</small></b>
-      <span class="step-tag" id="stepTag"></span>
+<div class="dock-wrap">
+  <div class="dock" id="dock">
+    <button class="live" id="liveRow" type="button" aria-expanded="false" aria-controls="panel">
+      <span class="stack" id="stack"></span>
+      <span class="ticker" id="ticker"><span id="tickText"></span></span>
+      <span class="livetag">مباشر</span>
+      <svg class="chev" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>
+    </button>
+    <div class="panel" id="panel" role="region" aria-label="المزايدون">
+      <h3 id="panelHead"></h3>
+      <ul id="bidders"></ul>
     </div>
-    <button class="bid-btn" id="bid" type="button" aria-label="زايد الآن">زايد</button>
+    <div class="main">
+      <div class="nextbox">
+        <span class="l">مزايدتك القادمة</span>
+        <b><span id="next"></span><small>د.ع</small></b>
+        <em id="stepTag"></em>
+      </div>
+      <div class="time" role="timer">
+        <span class="l" id="endLabel">الوقت المتبقي</span>
+        <div class="tdig"><span id="hh">00</span><i>:</i><span id="mm">00</span><i>:</i><span id="ss">00</span></div>
+      </div>
+      <button class="bid-btn" id="bid" type="button" aria-label="زايد الآن">زايد</button>
+    </div>
   </div>
 </div>
 <div class="toast" id="toast" role="status"></div>
 
 <script>
 /* بيانات تجريبية: استبدلها ببيانات Supabase */
+const DEMO_LIVE=true; /* مزايدين وهميين لتجربة الحركة. خليها false عند الربط الحقيقي */
 const auction={
   title:'iPhone 15 Pro Max', sub:'256GB • Natural Titanium • النجف', condition:'نظيف جداً',
   price:1150000, step:15000, endsAt:Date.now()+(42*60+18)*1000, bidCount:17,
@@ -215,7 +234,7 @@ const auction={
     {n:'مصطفى',a:1120000,t:Date.now()-11*60e3},{n:'حسين',a:1105000,t:Date.now()-26*60e3}],
   seller:{name:'أبو حيدر للموبايلات',rating:4.9,sales:23}
 };
-const EXT_WINDOW=30, EXT_BY=60;
+const EXT_WINDOW=30, EXT_BY=60, ME='أنت';
 const $=id=>document.getElementById(id);
 const fmt=n=>Number(n).toLocaleString('en-US');
 let ended=false, locked=false, toastT;
@@ -230,49 +249,82 @@ $('slides').addEventListener('scroll',e=>{
   [...$('dots').children].forEach((d,k)=>d.classList.toggle('active',k===i));
 },{passive:true});
 
-/* render */
-const ago=t=>{const m=Math.max(1,Math.round((Date.now()-t)/6e4));return m<60?`منذ ${m} دقيقة`:`منذ ${Math.round(m/60)} ساعة`};
+/* helpers */
+const colors=['#176b87','#6246d9','#e8590c','#1e8a5a','#b9791a','#c2255c'];
+const colorOf=n=>n===ME?'#32b8c4':colors[[...n].reduce((s,c)=>s+c.charCodeAt(0),0)%colors.length];
+const av=n=>`<span class="av" style="background:${colorOf(n)}">${n[0]}</span>`;
+const ago=t=>{const m=Math.round((Date.now()-t)/6e4);return m<1?'الآن':m<60?`منذ ${m} دقيقة`:`منذ ${Math.round(m/60)} ساعة`};
 const next=()=>auction.price+auction.step;
-function render(){
+const bidders=()=>[...new Set(auction.bids.map(b=>b.n))];
+
+/* render */
+function renderBody(){
   $('name').textContent=auction.title; $('sub').textContent=auction.sub; $('cond').textContent=auction.condition;
   $('price').textContent=fmt(auction.price); $('count').textContent=auction.bidCount;
   $('note').textContent=`كل مزايدة ثابتة ${fmt(auction.step)} د.ع، والمزايدة القادمة ${fmt(next())} د.ع`;
-  $('next').textContent=fmt(next()); $('stepTag').textContent=`+${fmt(auction.step)} د.ع`;
   $('specs').innerHTML=auction.specs.map(([k,v,g])=>`<tr><th>${k}</th><td class="${g?'good':''}">${v}</td></tr>`).join('');
-  $('bids').innerHTML=auction.bids.slice(0,5).map((b,i)=>`<li class="${i?'':'lead'}"><span class="who">${b.n}<span>${ago(b.t)}</span></span><b>${fmt(b.a)} د.ع</b></li>`).join('');
   const s=auction.seller; $('sAv').textContent=s.name.trim()[0]; $('sName').textContent=s.name;
   $('sInfo').textContent=`تقييم ${s.rating} من 5 • ${s.sales} عملية بيع`;
 }
+function renderDock(animate){
+  $('next').textContent=fmt(next()); $('stepTag').textContent=`+${fmt(auction.step)} د.ع`;
+  $('stack').innerHTML=bidders().slice(0,3).map(av).join('');
+  const top=auction.bids[0];
+  $('tickText').innerHTML=ended?`الفائز: <b>${top.n}</b> بمبلغ ${fmt(top.a)} د.ع`:`<b>${top.n}</b> زايد ${fmt(top.a)} د.ع • ${ago(top.t)}`;
+  if(animate){const t=$('ticker');t.classList.remove('swap');void t.offsetWidth;t.classList.add('swap')}
+  $('panelHead').textContent=`المزايدون (${bidders().length})`;
+  $('bidders').innerHTML=auction.bids.slice(0,8).map((b,i)=>
+    `<li class="${i?'':'lead'}">${av(b.n)}<span class="who">${b.n}<span>${ago(b.t)}</span></span><b>${fmt(b.a)} د.ع</b></li>`).join('');
+}
+$('liveRow').onclick=e=>{
+  const open=$('panel').classList.toggle('open');
+  e.currentTarget.setAttribute('aria-expanded',open);
+};
 
 /* timer */
 function tick(){
   const left=Math.max(0,Math.ceil((auction.endsAt-Date.now())/1000)), p=n=>String(n).padStart(2,'0');
   $('hh').textContent=p(Math.floor(left/3600)); $('mm').textContent=p(Math.floor(left%3600/60)); $('ss').textContent=p(left%60);
-  $('clock').classList.toggle('hot',left>0&&left<=300);
+  $('dock').classList.toggle('hot',left>0&&left<=300);
   if(left===0&&!ended)finish();
 }
 function finish(){
-  ended=true; $('clock').classList.add('ended');
-  $('badge').textContent='انتهى المزاد'; $('endLabel').textContent='الفائز: '+auction.bids[0].n;
-  $('bid').disabled=true; $('bid').textContent='انتهى';
+  ended=true; $('dock').classList.add('ended');
+  $('endLabel').textContent='انتهى المزاد'; $('bid').disabled=true; $('bid').textContent='انتهى';
+  renderDock(true);
 }
 
-/* bidding: fixed step only */
-function pulse(){
-  const b=$('bid'); b.classList.remove('pulse'); void b.offsetWidth; b.classList.add('pulse');
+/* bidding: خطوة ثابتة فقط */
+function registerBid(name){
+  const n=next(), extended=(auction.endsAt-Date.now())/1000<=EXT_WINDOW;
+  auction.price=n; auction.bidCount++; auction.bids.unshift({n:name,a:n,t:Date.now()});
+  if(extended)auction.endsAt+=EXT_BY*1000;
+  renderBody(); renderDock(true); tick();
+  const pb=$('priceBox'); pb.classList.remove('bump'); void pb.offsetWidth; pb.classList.add('bump');
+  return extended;
 }
 $('bid').onclick=()=>{
   if(ended||locked)return;
   locked=true; setTimeout(()=>locked=false,700); /* يمنع الضغط المزدوج بالغلط */
-  pulse();
-  /* عند الربط مع Supabase: نفّذ المزايدة بدالة على السيرفر (RPC) تتحقق من الوقت والسعر */
-  const n=next();
-  auction.price=n; auction.bidCount++; auction.bids.unshift({n:'أنت',a:n,t:Date.now()});
-  let msg='تمت المزايدة بنجاح';
-  if((auction.endsAt-Date.now())/1000<=EXT_WINDOW){auction.endsAt+=EXT_BY*1000;msg+=' وتمدد المزاد دقيقة'}
-  render(); tick(); toast(msg);
-  const pb=$('priceBox'); pb.classList.remove('bump'); void pb.offsetWidth; pb.classList.add('bump');
+  const b=$('bid'); b.classList.remove('pulse'); void b.offsetWidth; b.classList.add('pulse');
+  if(auction.bids[0].n===ME){toast('أنت صاحب أعلى مزايدة حالياً');return}
+  /* عند الربط مع Supabase: نفّذ المزايدة بدالة على السيرفر (RPC) تتحقق من الوقت والسعر والمزايد */
+  toast(registerBid(ME)?'تمت المزايدة وتمدد المزاد دقيقة':'تمت المزايدة بنجاح');
 };
+
+/* محاكاة مزايدين مباشرين للتجربة فقط */
+if(DEMO_LIVE){
+  const names=['علي','زهراء','مصطفى','حسين','نور','كرار'];
+  (function loop(){
+    setTimeout(()=>{
+      if(!ended){
+        const cand=names.filter(n=>n!==auction.bids[0].n);
+        registerBid(cand[Math.floor(Math.random()*cand.length)]);
+      }
+      loop();
+    },14000+Math.random()*8000);
+  })();
+}
 
 $('fav').onclick=e=>{
   const b=e.currentTarget,on=b.getAttribute('aria-pressed')!=='true';
@@ -282,7 +334,7 @@ $('fav').onclick=e=>{
 $('back').onclick=()=>history.length>1?history.back():location.href='auctions.html';
 function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2200)}
 
-render(); tick(); setInterval(tick,1000);
+renderBody(); renderDock(false); tick(); setInterval(tick,1000);
 </script>
 </body>
 </html>
