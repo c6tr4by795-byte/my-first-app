@@ -2,37 +2,61 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
+  >
+
   <meta name="theme-color" content="#f7f8fa">
-  <title>MZAD PHONE — السوق</title>
+
+  <title>MZAD PHONE - السوق</title>
 
   <style>
+
     :root{
       --bg:#f7f8fa;
-      --surface:#fff;
+      --surface:#ffffff;
+      --surface-2:#eef3f7;
+
       --ink:#17202a;
       --muted:#667085;
       --line:#e6e9ed;
+
       --primary:#176b87;
       --primary-dark:#125a73;
       --primary-soft:#e8f3f6;
+
       --purple:#6246d9;
+      --purple-dark:#5147b8;
       --purple-soft:#e5e0ff;
+
+      --pale:#e6e3f6;
+      --pale-dark:#d8d3ee;
+      --pale-text:#51477d;
+
+      --shadow:0 10px 28px rgba(24,32,42,.07);
+
       --safe:env(safe-area-inset-bottom,0px);
     }
 
+
     *{
       box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
     }
 
-    html{
-      scroll-behavior:smooth;
-    }
 
+    html,
     body{
       margin:0;
+      padding:0;
+      width:100%;
+      min-height:100%;
+
       background:var(--bg);
       color:var(--ink);
+
       font-family:
         -apple-system,
         BlinkMacSystemFont,
@@ -42,8 +66,18 @@
         Tahoma,
         Arial,
         sans-serif;
+
       -webkit-font-smoothing:antialiased;
     }
+
+
+    body{
+      overflow-x:hidden;
+
+      padding-bottom:
+        calc(88px + env(safe-area-inset-bottom,0px));
+    }
+
 
     button,
     input,
@@ -51,1276 +85,2711 @@
       font:inherit;
     }
 
+
     button{
       border:0;
-      background:none;
-      color:inherit;
+      outline:0;
       cursor:pointer;
     }
 
+
     a{
-      text-decoration:none;
       color:inherit;
+      text-decoration:none;
     }
+
 
     .page{
-      width:min(100%,520px);
-      margin:auto;
-      padding:0 14px calc(98px + var(--safe));
+      width:100%;
+      max-width:760px;
+      margin:0 auto;
     }
 
-    /* =========================
-       HEADER
-    ========================= */
 
-    header{
-      margin-inline:-14px;
-      padding:0 14px 14px;
+    /* =========================================
+       HEADER — التصميم القديم
+    ========================================== */
+
+    .top-header{
+      position:relative;
+      overflow:hidden;
+
+      padding:
+        calc(10px + env(safe-area-inset-top))
+        18px
+        11px;
+
       background:
         linear-gradient(
           145deg,
           #fff 0%,
-          #f5f2ff 48%,
+          #f5f2ff 45%,
           #e6e1ff 100%
         );
-      border-bottom:1px solid var(--line);
-      border-radius:0 0 25px 25px;
-      box-shadow:0 10px 26px rgba(23,32,42,.06);
+
+      border-radius:
+        0 0 22px 22px;
+
+      border-bottom:
+        1px solid var(--line);
+
+      box-shadow:
+        0 10px 26px rgba(23,32,42,.06);
     }
 
-    .topbar{
-      height:62px;
+
+    .top-header::before{
+      content:"";
+
+      position:absolute;
+
+      width:210px;
+      height:210px;
+
+      top:-120px;
+      left:-80px;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(23,107,135,.12) 0%,
+          rgba(23,107,135,0) 70%
+        );
+
+      pointer-events:none;
+
+      animation:
+        headerFloat
+        7s ease-in-out
+        infinite alternate;
+    }
+
+
+    .top-header::after{
+      content:"";
+
+      position:absolute;
+
+      width:240px;
+      height:240px;
+
+      right:-100px;
+      bottom:-170px;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(98,70,217,.13) 0%,
+          rgba(98,70,217,0) 70%
+        );
+
+      pointer-events:none;
+
+      animation:
+        headerFloat2
+        8s ease-in-out
+        infinite alternate;
+    }
+
+
+    @keyframes headerFloat{
+
+      from{
+        transform:
+          translate3d(0,0,0);
+      }
+
+      to{
+        transform:
+          translate3d(25px,10px,0);
+      }
+
+    }
+
+
+    @keyframes headerFloat2{
+
+      from{
+        transform:
+          translate3d(0,0,0);
+      }
+
+      to{
+        transform:
+          translate3d(-20px,-8px,0);
+      }
+
+    }
+
+
+    .header-inner{
+      position:relative;
+      z-index:2;
+    }
+
+
+    .header-row{
       display:flex;
       align-items:center;
       justify-content:space-between;
+
+      gap:12px;
     }
 
-    .back{
-      width:40px;
-      height:40px;
-      border-radius:13px;
-      background:#fff;
-      border:1px solid #dfe4e8;
-      display:grid;
-      place-items:center;
-      color:var(--primary);
-      box-shadow:0 6px 15px rgba(23,32,42,.05);
+
+    .back-btn{
+      width:43px;
+      height:43px;
+
+      flex:0 0 43px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      border-radius:14px;
+
+      background:
+        rgba(255,255,255,.72);
+
+      border:
+        1px solid rgba(255,255,255,.8);
+
+      box-shadow:
+        0 7px 18px rgba(24,32,42,.07);
+
+      color:var(--ink);
+
+      cursor:pointer;
     }
 
-    .titlebox{
-      text-align:center;
+
+    .back-btn svg{
+      width:21px;
+      height:21px;
     }
 
-    .titlebox h1{
+
+    .header-title-wrap{
+      flex:1;
+      text-align:right;
+    }
+
+
+    .header-title{
       margin:0;
-      font-size:20px;
+
+      font-size:21px;
+      line-height:1.2;
       font-weight:950;
+
+      letter-spacing:-.5px;
     }
 
-    .titlebox p{
+
+    .header-subtitle{
       margin:3px 0 0;
-      color:#8b96a3;
-      font-size:9px;
-      font-weight:800;
+
+      color:var(--muted);
+
+      font-size:11px;
+      font-weight:700;
+      line-height:1.5;
     }
 
-    .top-spacer{
-      width:40px;
-    }
 
-    /* =========================
-       SEARCH
-    ========================= */
+    /* =========================================
+       SEARCH — التصميم القديم
+    ========================================== */
 
     .search-wrap{
       position:relative;
+      margin-top:10px;
     }
 
-    .search{
+
+    .search-box{
       width:100%;
       height:48px;
-      border:1.5px solid #9edfe4;
-      border-radius:17px;
+
+      display:flex;
+      align-items:center;
+
+      gap:10px;
+
+      padding:
+        0 15px;
+
       background:#fff;
-      padding:0 46px 0 44px;
+
+      border:
+        1px solid rgba(230,233,237,.9);
+
+      border-radius:17px;
+
+      box-shadow:
+        0 9px 25px rgba(24,32,42,.06);
+
+      position:relative;
+    }
+
+
+    .search-box svg{
+      width:20px;
+      height:20px;
+
+      flex:0 0 20px;
+
+      color:#7a8490;
+    }
+
+
+    .search-box input{
+      width:100%;
+      height:100%;
+
+      border:0;
       outline:0;
+
+      background:transparent;
+
       color:var(--ink);
-      box-shadow:0 8px 22px rgba(23,107,135,.07);
+
+      font-size:14px;
+      font-weight:700;
+
+      text-align:right;
     }
 
-    .search:focus{
-      border-color:#63cbd2;
-      box-shadow:0 10px 25px rgba(23,107,135,.11);
+
+    .search-box input::placeholder{
+      color:#98a0aa;
     }
 
-    .search-icon{
-      position:absolute;
-      right:15px;
-      top:50%;
-      transform:translateY(-50%);
-      width:22px;
-      height:22px;
-      pointer-events:none;
-    }
 
     .search-clear{
       position:absolute;
+
       left:9px;
       top:50%;
+
       transform:translateY(-50%);
+
       width:32px;
       height:32px;
-      border-radius:10px;
-      background:#f0f3f5;
+
       display:none;
-      place-items:center;
+
+      align-items:center;
+      justify-content:center;
+
+      border-radius:10px;
+
+      background:#f0f3f5;
+
+      color:#65717c;
+
+      z-index:3;
     }
 
-    .search-wrap.has-value .search-clear{
-      display:grid;
+
+    .search-wrap.has-value
+    .search-clear{
+      display:flex;
     }
 
-    /* =========================
-       TOOLBAR
-    ========================= */
+
+    /* =========================================
+       CONTENT — التصميم القديم
+    ========================================== */
+
+    .content{
+      padding:
+        10px 14px 18px;
+    }
+
+
+    .section-head{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+
+      gap:12px;
+
+      margin:
+        0 3px 9px;
+    }
+
+
+    .section-title-wrap{
+      min-width:0;
+    }
+
+
+    .section-title{
+      margin:0;
+
+      font-size:19px;
+      line-height:1.3;
+
+      font-weight:950;
+
+      letter-spacing:-.25px;
+    }
+
+
+    .section-subtitle{
+      margin:4px 0 0;
+
+      color:var(--muted);
+
+      font-size:11px;
+      font-weight:700;
+
+      line-height:1.45;
+    }
+
+
+    .count-label{
+      flex:0 0 auto;
+
+      padding:
+        7px 10px;
+
+      background:
+        var(--purple-soft);
+
+      color:
+        var(--pale-text);
+
+      border-radius:10px;
+
+      font-size:10px;
+      font-weight:900;
+    }
+
+
+    /* =========================================
+       FILTERS — التصميم القديم
+    ========================================== */
+
+    .filters{
+      display:flex;
+
+      gap:8px;
+
+      overflow-x:auto;
+
+      scrollbar-width:none;
+
+      padding:
+        1px 2px 5px;
+
+      margin-bottom:9px;
+    }
+
+
+    .filters::-webkit-scrollbar{
+      display:none;
+    }
+
+
+    .filter{
+      height:36px;
+
+      flex:0 0 auto;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      padding:
+        0 13px;
+
+      border-radius:11px;
+
+      background:#fff;
+
+      color:#59636e;
+
+      border:
+        1px solid #e4e7eb;
+
+      box-shadow:
+        0 4px 12px rgba(24,32,42,.035);
+
+      font-size:12px;
+      font-weight:850;
+
+      cursor:pointer;
+
+      transition:
+        .2s ease;
+    }
+
+
+    .filter.active{
+      background:
+        linear-gradient(
+          145deg,
+          #6246d9 0%,
+          #5147b8 100%
+        );
+
+      color:#fff;
+
+      border-color:#6246d9;
+
+      box-shadow:
+        0 7px 17px
+        rgba(98,70,217,.25);
+    }
+
+
+    /* =========================================
+       SORT — التصميم القديم
+    ========================================== */
 
     .toolbar{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:8px;
-      margin-top:14px;
+
+      gap:10px;
+
+      margin:
+        0 2px 9px;
     }
 
-    .count{
+
+    .results-label{
+      color:#77808a;
+
       font-size:11px;
-      font-weight:900;
-      color:#6e7b86;
+      font-weight:750;
     }
 
-    .sort{
-      height:37px;
-      padding:0 11px;
-      border:1px solid var(--line);
-      border-radius:12px;
-      background:#fff;
-      color:#394750;
-      font-size:10px;
-      font-weight:900;
-      outline:0;
-    }
 
-    /* =========================
-       FILTER CHIPS
-    ========================= */
+    .sort-btn{
+      height:35px;
 
-    .chips{
-      display:flex;
-      gap:8px;
-      overflow:auto;
-      scrollbar-width:none;
-      padding:2px 1px 3px;
-      margin-top:13px;
-    }
-
-    .chips::-webkit-scrollbar{
-      display:none;
-    }
-
-    .chip{
-      flex:0 0 auto;
-      height:34px;
-      padding:0 13px;
-      border:1px solid #ddd8f8;
-      border-radius:12px;
-      background:#fff;
-      color:#5d6670;
-      font-size:10px;
-      font-weight:900;
-    }
-
-    .chip.active{
-      background:var(--purple-soft);
-      border-color:#b9adf2;
-      color:#5141b1;
-    }
-
-    /* =========================
-       SECTION
-    ========================= */
-
-    .section-head{
       display:flex;
       align-items:center;
-      justify-content:space-between;
-      margin:19px 2px 10px;
-    }
 
-    .section-head h2{
-      margin:0;
-      font-size:18px;
-      font-weight:950;
-    }
+      gap:7px;
 
-    .empty{
-      padding:35px 18px;
-      text-align:center;
+      padding:
+        0 11px;
+
+      border-radius:11px;
+
       background:#fff;
-      border:1px solid var(--line);
-      border-radius:20px;
-      color:var(--muted);
-      font-size:12px;
-      font-weight:800;
-    }
 
-    /* =========================
-       DEVICE GRID
-    ========================= */
+      color:#5e6873;
 
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:11px;
-    }
+      border:
+        1px solid #e4e7eb;
 
-    .card{
-      position:relative;
-      overflow:hidden;
-      background:#fff;
-      border:1px solid #ddd8f8;
-      border-radius:19px;
-      box-shadow:0 9px 22px rgba(98,70,217,.08);
+      font-size:11px;
+      font-weight:850;
+
+      box-shadow:
+        0 4px 12px rgba(24,32,42,.035);
+
       cursor:pointer;
     }
 
-    .photo{
-      height:145px;
-      background:#f1f2f4;
+
+    .sort-btn svg{
+      width:15px;
+      height:15px;
+    }
+
+
+    /* =========================================
+       GRID — التصميم القديم
+    ========================================== */
+
+    .devices-grid{
+      display:grid;
+
+      grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+      gap:9px;
+    }
+
+
+    /* =========================================
+       DEVICE CARD — التصميم القديم
+    ========================================== */
+
+    .device-card{
       position:relative;
-      display:grid;
-      place-items:center;
+
+      content-visibility:auto;
+
+      contain-intrinsic-size:
+        350px;
+
       overflow:hidden;
+
+      min-width:0;
+
+      background:#fff;
+
+      border:
+        1px solid #E3E8EC;
+
+      border-radius:19px;
+
+      box-shadow:
+        0 8px 22px
+        rgba(23,32,42,.055);
+
+      cursor:pointer;
+
+      animation:
+        cardIn .38s ease both;
+
+      transition:
+        transform .2s ease,
+        box-shadow .2s ease;
     }
 
-    /*
-      الصورة تظهر كاملة بدون قص أو تمديد
-    */
 
-    .photo img{
-      width:100%;
-      height:100%;
-      object-fit:contain;
-      display:block;
-    }
+    .device-card::after{
+      content:"";
 
-    .no-photo{
-      font-size:10px;
-      color:#9aa3ad;
-      font-weight:900;
-    }
-
-    .fav{
       position:absolute;
-      top:9px;
-      left:9px;
-      width:33px;
-      height:33px;
-      border-radius:11px;
-      background:rgba(255,255,255,.93);
-      display:grid;
-      place-items:center;
-      color:#65717c;
-      box-shadow:0 5px 14px rgba(0,0,0,.08);
+
+      left:0;
+      right:0;
+
+      top:160px;
+
+      height:3px;
+
+      background:#32B8C4;
+
+      opacity:.9;
+
       z-index:2;
     }
 
-    .fav.active{
-      color:#6246d9;
-      background:#f0edff;
+
+    .device-card.brand-apple::after,
+    .device-card.brand-samsung::after,
+    .device-card.brand-xiaomi::after,
+    .device-card.brand-huawei::after,
+    .device-card.brand-google::after{
+      background:#32B8C4;
     }
 
-    .sale-badge{
+
+    .device-card:active{
+      transform:
+        scale(.985);
+    }
+
+
+    @keyframes cardIn{
+
+      from{
+        opacity:0;
+        transform:
+          translateY(8px);
+      }
+
+      to{
+        opacity:1;
+        transform:
+          translateY(0);
+      }
+
+    }
+
+
+    .device-photo-wrap{
+      position:relative;
+
+      width:100%;
+      height:160px;
+
+      overflow:hidden;
+
+      background:#f0f1f3;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+
+    /*
+      الصورة تظهر كاملة بدون قص أو تمديد.
+      هذا هو التغيير الخاص بالصور فقط.
+    */
+
+    .device-photo{
+      width:100%;
+      height:100%;
+
+      display:block;
+
+      object-fit:contain;
+
+      background:#f0f1f3;
+
+      transition:
+        transform .35s ease,
+        filter .25s ease;
+
+      filter:
+        saturate(.82);
+    }
+
+
+    .device-photo-wrap::after{
+      content:"";
+
       position:absolute;
-      top:9px;
-      right:9px;
-      padding:6px 8px;
-      border-radius:9px;
-      background:rgba(255,255,255,.93);
-      color:#5141b1;
-      font-size:8px;
-      font-weight:950;
-      box-shadow:0 5px 14px rgba(0,0,0,.06);
-    }
 
-    .body{
-      padding:10px 10px 11px;
+      inset:0;
+
+      pointer-events:none;
+
       background:
         linear-gradient(
           180deg,
-          #f7f4ff 0%,
-          #ece7ff 100%
+          rgba(255,255,255,.04),
+          rgba(255,255,255,0)
         );
-      min-height:132px;
+
+      z-index:1;
     }
 
-    .name{
-      margin:0;
-      color:#29215f;
-      font-size:13px;
-      font-weight:950;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+
+    .device-photo-wrap
+    .sale-type,
+    .device-photo-wrap
+    .favorite{
+      z-index:4;
     }
 
-    .specs{
+
+    .device-card:active
+    .device-photo{
+      transform:
+        scale(1.02);
+    }
+
+
+    .photo-placeholder{
+      width:100%;
+      height:100%;
+
       display:flex;
-      flex-wrap:wrap;
-      gap:4px;
-      margin-top:6px;
+
+      align-items:center;
+      justify-content:center;
+
+      background:
+        linear-gradient(
+          145deg,
+          #F1F3F4,
+          #E7EBEE
+        );
+
+      color:#8A939D;
     }
 
-    .spec{
-      padding:4px 6px;
-      border-radius:7px;
-      background:#fff8;
-      border:1px solid #ddd8f0;
-      color:#59616b;
-      font-size:8px;
-      font-weight:900;
+
+    .photo-placeholder svg{
+      width:35px;
+      height:35px;
+
+      opacity:.55;
     }
 
-    .location{
-      margin-top:7px;
-      color:#69717b;
+
+    .favorite{
+      position:absolute;
+
+      top:9px;
+      left:9px;
+
+      width:34px;
+      height:34px;
+
+      display:flex;
+
+      align-items:center;
+      justify-content:center;
+
+      border-radius:11px;
+
+      background:
+        rgba(255,255,255,.92);
+
+      color:#6E7781;
+
+      border:
+        1px solid
+        rgba(255,255,255,.95);
+
+      box-shadow:
+        0 6px 15px
+        rgba(0,0,0,.09);
+
+      cursor:pointer;
+
+      z-index:4;
+    }
+
+
+    .favorite svg{
+      width:18px;
+      height:18px;
+
+      fill:none;
+
+      stroke:
+        currentColor;
+
+      stroke-width:2;
+    }
+
+
+    .favorite.active{
+      color:#fff;
+
+      background:
+        linear-gradient(
+          145deg,
+          #176B87,
+          #32B8C4
+        );
+
+      box-shadow:
+        0 7px 17px
+        rgba(23,107,135,.25);
+
+      border:
+        1px solid
+        rgba(23,107,135,.35);
+    }
+
+
+    .favorite.active svg{
+      fill:#fff;
+      stroke:#fff;
+    }
+
+
+    .sale-type{
+      position:absolute;
+
+      top:9px;
+      right:9px;
+
+      max-width:95px;
+
+      padding:
+        6px 8px;
+
+      border-radius:9px;
+
+      background:
+        rgba(255,255,255,.94);
+
+      color:#176B87;
+
+      border:
+        1px solid
+        rgba(23,107,135,.10);
+
+      box-shadow:
+        0 5px 12px
+        rgba(23,107,135,.08);
+
       font-size:8px;
-      font-weight:800;
+      line-height:1;
+      font-weight:950;
+
       white-space:nowrap;
+
       overflow:hidden;
+
+      text-overflow:ellipsis;
+
+      z-index:3;
+    }
+
+
+    /* =========================================
+       DEVICE INFO — التصميم القديم
+    ========================================== */
+
+    .device-info{
+      padding:
+        10px 11px 10px;
+
+      background:
+        linear-gradient(
+          180deg,
+          #FFFFFF 0%,
+          #FBFCFD 100%
+        );
+    }
+
+
+    .device-name{
+      min-width:0;
+
+      margin:0;
+
+      color:#17202A;
+
+      font-size:14px;
+
+      line-height:1.35;
+
+      font-weight:950;
+
+      white-space:nowrap;
+
+      overflow:hidden;
+
       text-overflow:ellipsis;
     }
+
+
+    .device-location{
+      display:flex;
+
+      align-items:center;
+
+      gap:4px;
+
+      margin-top:2px;
+
+      color:#7b8490;
+
+      font-size:9px;
+
+      font-weight:750;
+
+      white-space:nowrap;
+
+      overflow:hidden;
+
+      text-overflow:ellipsis;
+    }
+
+
+    .device-location svg{
+      width:11px;
+      height:11px;
+
+      flex:
+        0 0 11px;
+    }
+
 
     .published-time{
       display:flex;
+
       align-items:center;
-      margin-top:3px;
+
+      margin-top:1px;
+
       color:#9aa1aa;
+
       font-size:8px;
+
       line-height:1.3;
+
       font-weight:700;
+
       white-space:nowrap;
+
       overflow:hidden;
+
       text-overflow:ellipsis;
     }
 
-    .bottom-row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:7px;
+
+    .details-grid{
+      display:grid;
+
+      grid-template-columns:
+        repeat(3,minmax(0,1fr));
+
+      gap:6px;
+
       margin-top:8px;
     }
 
-    .price{
-      font-size:12px;
-      font-weight:950;
-      color:var(--ink);
+
+    .details-grid.no-battery{
+      grid-template-columns:
+        repeat(2,minmax(0,1fr));
     }
 
-    .type{
-      font-size:8px;
-      font-weight:950;
-      color:#5141b1;
-      background:#e6e1ff;
-      padding:5px 7px;
-      border-radius:8px;
+
+    .details-grid.has-battery{
+      grid-template-columns:
+        repeat(3,minmax(0,1fr));
     }
 
-    /* =========================
-       BOTTOM NAV
-    ========================= */
 
-    .bottom-wrap{
-      position:fixed;
+    .details-grid.has-battery
+    .detail-item:first-child
+    strong{
+      font-size:10.5px;
+    }
+
+
+    .detail-item{
+      min-width:0;
+
+      padding:
+        8px 6px 7px;
+
+      background:#F8FAFB;
+
+      border-radius:11px;
+
+      border:
+        1px solid #E4EAED;
+
+      box-shadow:
+        0 3px 9px
+        rgba(23,32,42,.025);
+
+      position:relative;
+
+      overflow:hidden;
+    }
+
+
+    .detail-item::before{
+      content:"";
+
+      position:absolute;
+
+      top:0;
       left:0;
       right:0;
-      bottom:0;
-      padding:
-        7px
-        10px
-        calc(7px + var(--safe));
-      z-index:100;
-      pointer-events:none;
-      transition:transform .18s ease;
+
+      height:3px;
+
+      background:#32B8C4;
+
+      opacity:.9;
     }
 
-    .bottom-nav{
-      position:relative;
-      width:min(100%,520px);
-      margin:auto;
-      min-height:64px;
-      padding:5px;
-      border-radius:20px;
-      background:rgba(255,255,255,.97);
-      border:1px solid #e7ecef;
-      box-shadow:0 10px 28px rgba(23,32,42,.10);
-      backdrop-filter:blur(18px);
-      -webkit-backdrop-filter:blur(18px);
-      display:block;
-      pointer-events:auto;
+
+    .brand-apple
+    .detail-item::before,
+    .brand-samsung
+    .detail-item::before,
+    .brand-xiaomi
+    .detail-item::before,
+    .brand-huawei
+    .detail-item::before,
+    .brand-google
+    .detail-item::before{
+      background:#32B8C4;
     }
+
+
+    .detail-item span{
+      display:block;
+
+      color:#7C858D;
+
+      font-size:8px;
+
+      line-height:1.2;
+
+      font-weight:800;
+
+      white-space:nowrap;
+
+      overflow:hidden;
+
+      text-overflow:ellipsis;
+    }
+
+
+    .detail-item strong{
+      display:block;
+
+      min-width:0;
+
+      margin-top:3px;
+
+      color:#17202A;
+
+      font-size:11px;
+
+      line-height:1.25;
+
+      font-weight:950;
+
+      white-space:nowrap;
+
+      overflow:visible;
+
+      text-overflow:clip;
+    }
+
+
+    .price-row{
+      display:flex;
+
+      align-items:center;
+
+      justify-content:space-between;
+
+      gap:8px;
+
+      margin-top:7px;
+
+      padding-top:6px;
+
+      border-top:
+        1px solid #E6EBEE;
+    }
+
+
+    .price-label{
+      color:#858d96;
+
+      font-size:8px;
+
+      font-weight:800;
+    }
+
+
+    .price{
+      min-width:0;
+
+      color:#176B87;
+
+      font-size:14px;
+
+      line-height:1.2;
+
+      font-weight:950;
+
+      white-space:nowrap;
+
+      overflow:hidden;
+
+      text-overflow:ellipsis;
+    }
+
+
+    /* =========================================
+       STATES — التصميم القديم
+    ========================================== */
+
+    .state{
+      width:100%;
+
+      padding:
+        40px 20px;
+
+      display:flex;
+
+      flex-direction:column;
+
+      align-items:center;
+
+      justify-content:center;
+
+      text-align:center;
+
+      background:#fff;
+
+      border:
+        1px solid var(--line);
+
+      border-radius:20px;
+
+      box-shadow:
+        0 8px 22px
+        rgba(24,32,42,.045);
+    }
+
+
+    .state-icon{
+      width:56px;
+      height:56px;
+
+      display:flex;
+
+      align-items:center;
+      justify-content:center;
+
+      border-radius:17px;
+
+      background:
+        var(--purple-soft);
+
+      color:
+        var(--pale-text);
+
+      margin-bottom:13px;
+    }
+
+
+    .state-icon svg{
+      width:27px;
+      height:27px;
+    }
+
+
+    .state-title{
+      margin:0;
+
+      font-size:15px;
+
+      font-weight:950;
+    }
+
+
+    .state-text{
+      margin:
+        6px 0 0;
+
+      color:var(--muted);
+
+      font-size:11px;
+
+      line-height:1.6;
+
+      font-weight:700;
+    }
+
+
+    .retry-btn{
+      margin-top:14px;
+
+      height:40px;
+
+      padding:
+        0 17px;
+
+      border-radius:12px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #176b87,
+          #125a73
+        );
+
+      color:#fff;
+
+      font-size:11px;
+
+      font-weight:900;
+
+      cursor:pointer;
+    }
+
+
+    .loading{
+      width:100%;
+
+      display:grid;
+
+      grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+      gap:12px;
+    }
+
+
+    .skeleton{
+      height:300px;
+
+      border-radius:19px;
+
+      background:
+        linear-gradient(
+          90deg,
+          #eef0f2 25%,
+          #f7f8f9 37%,
+          #eef0f2 63%
+        );
+
+      background-size:
+        400% 100%;
+
+      animation:
+        loading 1.25s ease infinite;
+    }
+
+
+    @keyframes loading{
+
+      0%{
+        background-position:
+          100% 0;
+      }
+
+      100%{
+        background-position:
+          -100% 0;
+      }
+
+    }
+
+
+    /* =========================================
+       BOTTOM NAV — التصميم القديم
+    ========================================== */
+
+    .bottom-wrap{
+      position:fixed !important;
+
+      left:0 !important;
+      right:0 !important;
+      bottom:0 !important;
+
+      width:100% !important;
+
+      padding:
+        7px 10px
+        calc(
+          7px +
+          env(safe-area-inset-bottom,0px)
+        ) !important;
+
+      z-index:9999 !important;
+
+      pointer-events:none !important;
+
+      transition:
+        transform .18s ease;
+    }
+
+
+    .bottom-nav{
+      position:relative !important;
+
+      left:auto !important;
+      right:auto !important;
+      top:auto !important;
+      bottom:auto !important;
+
+      width:
+        min(100%,520px) !important;
+
+      max-width:
+        520px !important;
+
+      height:auto !important;
+
+      min-height:
+        64px !important;
+
+      margin:
+        0 auto !important;
+
+      padding:
+        5px !important;
+
+      display:block !important;
+
+      transform:none !important;
+
+      border-radius:
+        20px !important;
+
+      background:
+        rgba(255,255,255,.97) !important;
+
+      border:
+        1px solid #E7ECEF !important;
+
+      box-shadow:
+        0 10px 28px
+        rgba(23,32,42,.10) !important;
+
+      backdrop-filter:
+        blur(18px);
+
+      -webkit-backdrop-filter:
+        blur(18px);
+
+      pointer-events:
+        auto !important;
+    }
+
 
     .bottom-inner{
       width:100%;
+
       display:grid;
-      grid-template-columns:repeat(5,minmax(0,1fr));
+
+      grid-template-columns:
+        repeat(5,minmax(0,1fr));
+
       gap:3px;
+
       align-items:center;
     }
+
 
     .nav-item{
+      min-width:0;
+
       min-height:52px;
+
+      padding:
+        4px 2px;
+
       display:flex;
+
       flex-direction:column;
+
       align-items:center;
+
       justify-content:center;
+
       gap:3px;
+
+      border:0;
+
       border-radius:15px;
-      color:#7f8c94;
+
+      background:transparent;
+
+      color:#7E8992;
+
+      text-decoration:none;
+
+      transition:
+        transform .16s ease,
+        background .16s ease,
+        color .16s ease;
     }
+
+
+    .nav-item:active{
+      transform:
+        scale(.96);
+    }
+
 
     .nav-item.active{
-      color:var(--primary-dark);
-      background:var(--primary-soft);
+      color:#176B87;
+
+      background:
+        #EAF6F8;
     }
 
-    .nav-label{
-      font-size:9px;
-      font-weight:900;
-    }
 
     .nav-icon{
-      width:21px;
-      height:21px;
+      width:20px !important;
+      height:20px !important;
+
+      flex:
+        0 0 20px;
+
+      color:currentColor;
     }
+
+
+    .nav-item > span{
+      margin:0;
+
+      font-size:8.5px;
+
+      line-height:1;
+
+      font-weight:900;
+
+      white-space:nowrap;
+    }
+
+
+    .add-button{
+      width:38px !important;
+      height:38px !important;
+
+      flex:
+        0 0 38px;
+
+      border-radius:
+        13px !important;
+
+      display:grid !important;
+
+      place-items:center;
+
+      background:
+        linear-gradient(
+          145deg,
+          #176B87,
+          #32B8C4
+        ) !important;
+
+      color:#fff !important;
+
+      box-shadow:
+        0 6px 14px
+        rgba(23,107,135,.18);
+    }
+
+
+    .add-button svg{
+      width:20px !important;
+      height:20px !important;
+    }
+
+
+    /* =========================================
+       KEYBOARD MODE — التغيير الجديد فقط
+    ========================================== */
 
     body.keyboard-open .bottom-wrap{
-      transform:translateY(120%);
-      pointer-events:none;
+      transform:
+        translateY(120%);
+
+      pointer-events:none !important;
     }
 
-    /* =========================
+
+    /* =========================================
        TOAST
-    ========================= */
+    ========================================== */
 
     .toast{
       position:fixed;
+
       left:50%;
       bottom:92px;
-      transform:translateX(-50%) translateY(14px);
+
+      transform:
+        translateX(-50%)
+        translateY(14px);
+
       opacity:0;
+
       pointer-events:none;
+
       z-index:200;
-      max-width:calc(100% - 40px);
-      padding:10px 14px;
+
+      max-width:
+        calc(100% - 40px);
+
+      padding:
+        10px 14px;
+
       border-radius:13px;
+
       background:#1e2c30;
+
       color:#fff;
+
       font-size:11px;
       font-weight:800;
+
       text-align:center;
+
       transition:.22s ease;
     }
 
+
     .toast.show{
       opacity:1;
-      transform:translateX(-50%) translateY(0);
+
+      transform:
+        translateX(-50%)
+        translateY(0);
     }
 
-    @media(min-width:700px){
 
-      .page{
-        padding-inline:18px;
+    /* =========================================
+       SMALL PHONES
+    ========================================== */
+
+    @media(max-width:360px){
+
+      .content{
+        padding-left:10px;
+        padding-right:10px;
       }
+
+
+      .devices-grid{
+        gap:9px;
+      }
+
+
+      .device-photo-wrap{
+        height:158px;
+      }
+
+
+      .device-card::after{
+        top:158px;
+      }
+
+
+      .device-info{
+        padding:
+          8px 8px 9px;
+      }
+
+
+      .device-name{
+        font-size:13px;
+      }
+
+
+      .details-grid{
+        gap:5px;
+      }
+
+
+      .detail-item{
+        padding:
+          6px 4px;
+      }
+
+
+      .detail-item span{
+        font-size:7px;
+      }
+
+
+      .detail-item strong{
+        font-size:10px;
+      }
+
+
+      .price{
+        font-size:13px;
+      }
+
 
       .bottom-wrap{
-        padding-inline:18px;
+        padding-left:8px !important;
+        padding-right:8px !important;
+      }
+
+
+      .bottom-nav{
+        border-radius:
+          18px !important;
+      }
+
+
+      .nav-item{
+        min-height:
+          50px;
+
+        border-radius:
+          14px;
+      }
+
+
+      .nav-icon{
+        width:19px !important;
+        height:19px !important;
+
+        flex-basis:19px;
+      }
+
+
+      .nav-item > span{
+        font-size:8px;
       }
 
     }
+
+
+    @media(min-width:600px){
+
+      .devices-grid{
+        grid-template-columns:
+          repeat(3,minmax(0,1fr));
+      }
+
+
+      .loading{
+        grid-template-columns:
+          repeat(3,minmax(0,1fr));
+      }
+
+    }
+
   </style>
 </head>
 
+
 <body>
 
-<main class="page">
 
-  <header>
+  <div class="page">
 
-    <div class="topbar">
 
-      <button
-        class="back"
-        id="backBtn"
-        type="button"
-        aria-label="رجوع"
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.9"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+    <!-- =====================================
+         HEADER
+    ====================================== -->
+
+    <header class="top-header">
+
+      <div class="header-inner">
+
+
+        <div class="header-row">
+
+
+          <button
+            class="back-btn"
+            id="backBtn"
+            type="button"
+            aria-label="رجوع"
+          >
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+
+          </button>
+
+
+          <div class="header-title-wrap">
+
+            <h1 class="header-title">
+              السوق
+            </h1>
+
+
+            <p class="header-subtitle">
+              أهلاً وسهلاً بيك في سوق مزاد فون
+            </p>
+
+          </div>
+
+
+        </div>
+
+
+        <div
+          class="search-wrap"
+          id="searchWrap"
         >
-          <path d="m15 18-6-6 6-6"/>
-        </svg>
-      </button>
 
-      <div class="titlebox">
-        <h1>السوق</h1>
-        <p>MZAD PHONE</p>
+
+          <label class="search-box">
+
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="11" cy="11" r="7"/>
+              <path d="M20 20l-4-4"/>
+            </svg>
+
+
+            <input
+              id="searchInput"
+              type="search"
+              autocomplete="off"
+              inputmode="search"
+              placeholder='ابحث عن جهاز، مثل "iPhone 15 Pro"'
+            >
+
+
+            <button
+              id="searchClear"
+              class="search-clear"
+              type="button"
+              aria-label="مسح البحث"
+            >
+
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+              >
+                <path d="M7 7l10 10M17 7 7 17"/>
+              </svg>
+
+            </button>
+
+
+          </label>
+
+
+        </div>
+
+
       </div>
 
-      <span class="top-spacer"></span>
-
-    </div>
+    </header>
 
 
-    <div
-      class="search-wrap"
-      id="searchWrap"
-    >
+    <!-- =====================================
+         CONTENT
+    ====================================== -->
 
-      <svg
-        class="search-icon"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.9"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <circle cx="11" cy="11" r="7"/>
-        <path d="m20 20-4-4"/>
-      </svg>
+    <main class="content">
 
-      <input
-        id="searchInput"
-        class="search"
-        type="search"
-        autocomplete="off"
-        inputmode="search"
-        placeholder='ابحث عن جهاز، مثل "iPhone 15 Pro"'
-      >
 
-      <button
-        id="searchClear"
-        class="search-clear"
-        type="button"
-        aria-label="مسح البحث"
-      >
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.9"
+      <div class="section-head">
+
+
+        <div class="section-title-wrap">
+
+
+          <h2
+            class="section-title"
+            id="sectionTitle"
+          >
+            كل الأجهزة
+          </h2>
+
+
+          <p
+            class="section-subtitle"
+            id="sectionSubtitle"
+          >
+            جميع الأجهزة المعروضة حالياً
+          </p>
+
+
+        </div>
+
+
+        <div
+          class="count-label"
+          id="countLabel"
         >
-          <path d="M7 7l10 10M17 7 7 17"/>
-        </svg>
-      </button>
-
-    </div>
+          0 جهاز
+        </div>
 
 
-    <div class="toolbar">
+      </div>
 
-      <span
-        class="count"
-        id="resultCount"
+
+      <!-- BRAND FILTERS -->
+
+      <div
+        class="filters"
+        id="brandFilters"
       >
-        جاري تحميل الأجهزة...
-      </span>
-
-      <select
-        class="sort"
-        id="sortSelect"
-        aria-label="ترتيب الأجهزة"
-      >
-        <option value="newest">الأحدث</option>
-        <option value="price-low">السعر: الأقل</option>
-        <option value="price-high">السعر: الأعلى</option>
-      </select>
-
-    </div>
 
 
-    <div
-      class="chips"
-      id="chips"
-    >
-
-      <button
-        class="chip active"
-        data-brand="all"
-        type="button"
-      >
-        الكل
-      </button>
-
-      <button
-        class="chip"
-        data-brand="apple"
-        type="button"
-      >
-        iPhone
-      </button>
-
-      <button
-        class="chip"
-        data-brand="samsung"
-        type="button"
-      >
-        Samsung
-      </button>
-
-      <button
-        class="chip"
-        data-brand="xiaomi"
-        type="button"
-      >
-        Xiaomi
-      </button>
-
-      <button
-        class="chip"
-        data-brand="huawei"
-        type="button"
-      >
-        Huawei
-      </button>
-
-      <button
-        class="chip"
-        data-brand="oppo"
-        type="button"
-      >
-        OPPO
-      </button>
-
-      <button
-        class="chip"
-        data-brand="honor"
-        type="button"
-      >
-        HONOR
-      </button>
-
-      <button
-        class="chip"
-        data-brand="tecno"
-        type="button"
-      >
-        Tecno
-      </button>
-
-    </div>
-
-  </header>
-
-
-  <section>
-
-    <div class="section-head">
-      <h2>الأجهزة</h2>
-    </div>
-
-    <div
-      class="grid"
-      id="deviceGrid"
-    ></div>
-
-    <div
-      class="empty"
-      id="emptyState"
-      style="display:none"
-    >
-      ماكو أجهزة مطابقة للبحث حالياً.
-    </div>
-
-  </section>
-
-</main>
-
-
-<div class="bottom-wrap">
-
-  <nav
-    class="bottom-nav"
-    aria-label="التنقل الرئيسي"
-  >
-
-    <div class="bottom-inner">
-
-      <button
-        class="nav-item"
-        data-go="home.html"
-        type="button"
-      >
-        <svg
-          class="nav-icon"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
+        <button
+          class="filter"
+          data-brand="all"
+          type="button"
         >
-          <path d="m4 10 8-6 8 6v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-9Z"/>
-        </svg>
-        <span class="nav-label">الرئيسية</span>
-      </button>
+          الكل
+        </button>
 
 
-      <button
-        class="nav-item"
-        data-go="auctions.html"
-        type="button"
-      >
-        <svg
-          class="nav-icon"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
+        <button
+          class="filter"
+          data-brand="Apple"
+          type="button"
         >
-          <path d="m7 11 7.5-7.5 3 3L10 14"/>
-          <path d="m5 13 6 6M4 20h16"/>
-        </svg>
-        <span class="nav-label">المزادات</span>
-      </button>
+          iPhone
+        </button>
 
 
-      <button
-        class="nav-item"
-        data-go="sell.html"
-        type="button"
-      >
-        <svg
-          class="nav-icon"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
+        <button
+          class="filter"
+          data-brand="Samsung"
+          type="button"
         >
-          <path d="M12 5v14M5 12h14"/>
-        </svg>
-        <span class="nav-label">إضافة</span>
-      </button>
+          Samsung
+        </button>
 
 
-      <button
-        class="nav-item"
-        data-go="favorites.html"
-        type="button"
-      >
-        <svg
-          class="nav-icon"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
+        <button
+          class="filter"
+          data-brand="Xiaomi"
+          type="button"
         >
-          <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
-        </svg>
-        <span class="nav-label">المفضلة</span>
-      </button>
+          Xiaomi
+        </button>
 
 
-      <button
-        class="nav-item"
-        data-go="profile.html"
-        type="button"
-      >
-        <svg
-          class="nav-icon"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
+        <button
+          class="filter"
+          data-brand="Google"
+          type="button"
         >
-          <circle cx="12" cy="8" r="3.5"/>
-          <path d="M5 21a7 7 0 0 1 14 0"/>
-        </svg>
-        <span class="nav-label">حسابي</span>
-      </button>
-
-    </div>
-
-  </nav>
-
-</div>
+          Google
+        </button>
 
 
-<div
-  class="toast"
-  id="toast"
-></div>
+        <button
+          class="filter"
+          data-brand="Huawei"
+          type="button"
+        >
+          Huawei
+        </button>
 
 
-<script type="module">
-
-  import {
-    supabase
-  } from "./js/supabase.js?v=market-final-2";
-
-
-  /* =========================
-     ELEMENTS
-  ========================== */
-
-  const searchInput =
-    document.getElementById("searchInput");
-
-  const searchWrap =
-    document.getElementById("searchWrap");
-
-  const searchClear =
-    document.getElementById("searchClear");
-
-  const deviceGrid =
-    document.getElementById("deviceGrid");
-
-  const emptyState =
-    document.getElementById("emptyState");
-
-  const resultCount =
-    document.getElementById("resultCount");
-
-  const sortSelect =
-    document.getElementById("sortSelect");
-
-  const toast =
-    document.getElementById("toast");
+        <button
+          class="filter"
+          data-brand="OPPO"
+          type="button"
+        >
+          OPPO
+        </button>
 
 
-  let devices = [];
-
-  let selectedBrand = "all";
-
-  let toastTimer;
-
-
-  /* =========================
-     ARABIC SEARCH ALIASES
-  ========================== */
-
-  const SEARCH_ALIASES = [
-
-    ["ايفون","iphone"],
-    ["آيفون","iphone"],
-    ["اىفون","iphone"],
-    ["اي فون","iphone"],
-
-    ["ابل","apple"],
-
-    ["سامسونج","samsung"],
-    ["سامسنغ","samsung"],
-
-    ["شاومي","xiaomi"],
-    ["شياومي","xiaomi"],
-
-    ["هواوي","huawei"],
-
-    ["اوبو","oppo"],
-    ["أوبو","oppo"],
-
-    ["هونر","honor"],
-
-    ["ون بلس","oneplus"],
-    ["ونبلس","oneplus"],
-
-    ["ريلمي","realme"],
-
-    ["موتورولا","motorola"],
-
-    ["سوني","sony"],
-
-    ["نوكيا","nokia"],
-
-    ["تكنو","tecno"],
-
-    ["انفنكس","infinix"],
-    ["إنفنكس","infinix"],
-
-    ["جوجل","google"],
-
-    ["بيكسل","pixel"],
-
-    ["ريدمي","redmi"],
-
-    ["بوكو","poco"],
-
-    ["برو","pro"],
-    ["ماكس","max"],
-
-    ["بلس","plus"],
-    ["بلاس","plus"],
-
-    ["الترا","ultra"],
-    ["ألترا","ultra"],
-
-    ["ميني","mini"],
-
-    ["فولد","fold"],
-
-    ["فليب","flip"],
-
-    ["نوت","note"],
-
-    ["اس","s"],
-    ["إس","s"]
-
-  ];
+        <button
+          class="filter"
+          data-brand="HONOR"
+          type="button"
+        >
+          HONOR
+        </button>
 
 
-  /* =========================
-     NORMALIZE ARABIC
-  ========================== */
+        <button
+          class="filter"
+          data-brand="OnePlus"
+          type="button"
+        >
+          OnePlus
+        </button>
 
-  function normalizeSearchText(value){
 
-    return String(value ?? "")
-      .toLowerCase()
+        <button
+          class="filter"
+          data-brand="realme"
+          type="button"
+        >
+          realme
+        </button>
+
+
+        <button
+          class="filter"
+          data-brand="Motorola"
+          type="button"
+        >
+          Motorola
+        </button>
+
+
+        <button
+          class="filter"
+          data-brand="Sony"
+          type="button"
+        >
+          Sony
+        </button>
+
+
+        <button
+          class="filter"
+          data-brand="Nokia"
+          type="button"
+        >
+          Nokia
+        </button>
+
+
+        <button
+          class="filter"
+          data-brand="Tecno"
+          type="button"
+        >
+          Tecno
+        </button>
+
+
+        <button
+          class="filter"
+          data-brand="Infinix"
+          type="button"
+        >
+          Infinix
+        </button>
+
+
+      </div>
+
+
+      <!-- TOOLBAR -->
+
+      <div class="toolbar">
+
+
+        <span
+          class="results-label"
+          id="resultsLabel"
+        >
+          جاري تحميل الأجهزة...
+        </span>
+
+
+        <button
+          class="sort-btn"
+          id="sortBtn"
+          type="button"
+        >
+
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M8 6h13"/>
+            <path d="M8 12h10"/>
+            <path d="M8 18h7"/>
+            <path d="M3 6h.01"/>
+            <path d="M3 12h.01"/>
+            <path d="M3 18h.01"/>
+          </svg>
+
+
+          <span id="sortText">
+            الأحدث
+          </span>
+
+
+        </button>
+
+
+      </div>
+
+
+      <!-- LOADING -->
+
+      <div
+        class="loading"
+        id="loadingState"
+      >
+
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+
+      </div>
+
+
+      <!-- DEVICES -->
+
+      <div
+        class="devices-grid"
+        id="devicesGrid"
+        style="display:none;"
+      ></div>
+
+
+      <!-- EMPTY / ERROR -->
+
+      <div
+        id="stateContainer"
+        style="display:none;"
+      ></div>
+
+
+    </main>
+
+
+  </div>
+
+
+  <!-- =====================================
+       BOTTOM NAV
+  ====================================== -->
+
+  <div class="bottom-wrap">
+
+
+    <nav class="bottom-nav">
+
+
+      <div class="bottom-inner">
+
+
+        <a
+          class="nav-item"
+          href="home.html"
+        >
+
+          <svg
+            class="nav-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+          >
+            <path d="m3 10 9-7 9 7"/>
+            <path d="M5 9v11h14V9"/>
+            <path d="M9 20v-6h6v6"/>
+          </svg>
+
+          <span>
+            الرئيسية
+          </span>
+
+        </a>
+
+
+        <a
+          class="nav-item active"
+          href="market.html"
+        >
+
+          <svg
+            class="nav-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+          >
+            <rect
+              x="4"
+              y="4"
+              width="16"
+              height="16"
+              rx="3"
+            />
+
+            <path d="M8 9h8"/>
+            <path d="M8 13h8"/>
+            <path d="M8 17h5"/>
+          </svg>
+
+          <span>
+            الأجهزة
+          </span>
+
+        </a>
+
+
+        <a
+          class="nav-item"
+          href="sell.html"
+        >
+
+          <span class="add-button">
+
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 5v14"/>
+              <path d="M5 12h14"/>
+            </svg>
+
+          </span>
+
+
+          <span>
+            إضافة
+          </span>
+
+        </a>
+
+
+        <a
+          class="nav-item"
+          href="favorites.html"
+        >
+
+          <svg
+            class="nav-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+          >
+            <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
+          </svg>
+
+          <span>
+            المفضلة
+          </span>
+
+        </a>
+
+
+        <a
+          class="nav-item"
+          href="profile.html"
+        >
+
+          <svg
+            class="nav-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+          >
+            <circle
+              cx="12"
+              cy="8"
+              r="3"
+            />
+
+            <path
+              d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5"
+            />
+          </svg>
+
+          <span>
+            حسابي
+          </span>
+
+        </a>
+
+
+      </div>
+
+
+    </nav>
+
+
+  </div>
+
+
+  <!-- TOAST -->
+
+  <div
+    class="toast"
+    id="toast"
+  ></div>
+
+
+  <!-- =====================================
+       SUPABASE
+  ====================================== -->
+
+  <script type="module">
+
+
+    import {
+      supabase
+    }
+    from "./js/supabase.js?v=market-final-2";
+
+
+    /* =========================================
+       ELEMENTS
+    ========================================== */
+
+    const searchInput =
+      document.getElementById(
+        "searchInput"
+      );
+
+
+    const searchWrap =
+      document.getElementById(
+        "searchWrap"
+      );
+
+
+    const searchClear =
+      document.getElementById(
+        "searchClear"
+      );
+
+
+    const brandFilters =
+      document.getElementById(
+        "brandFilters"
+      );
+
+
+    const devicesGrid =
+      document.getElementById(
+        "devicesGrid"
+      );
+
+
+    const loadingState =
+      document.getElementById(
+        "loadingState"
+      );
+
+
+    const stateContainer =
+      document.getElementById(
+        "stateContainer"
+      );
+
+
+    const sectionTitle =
+      document.getElementById(
+        "sectionTitle"
+      );
+
+
+    const sectionSubtitle =
+      document.getElementById(
+        "sectionSubtitle"
+      );
+
+
+    const countLabel =
+      document.getElementById(
+        "countLabel"
+      );
+
+
+    const resultsLabel =
+      document.getElementById(
+        "resultsLabel"
+      );
+
+
+    const sortBtn =
+      document.getElementById(
+        "sortBtn"
+      );
+
+
+    const sortText =
+      document.getElementById(
+        "sortText"
+      );
+
+
+    const toast =
+      document.getElementById(
+        "toast"
+      );
+
+
+    /* =========================================
+       STATE
+    ========================================== */
+
+    let devices = [];
+
+    let selectedBrand =
+      "all";
+
+    let searchTerm =
+      "";
+
+    let searchDebounceTimer =
+      null;
+
+    let sortMode =
+      "newest";
+
+    let toastTimer = null;
+
+
+    /* =========================================
+       URL BRAND
+    ========================================== */
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+
+    const rawBrand =
+      (
+        params.get("brand") ||
+        "all"
+      )
       .trim()
-      .replace(/[أإآ]/g,"ا")
-      .replace(/ى/g,"ي")
-      .replace(/ة/g,"ه")
-      .replace(/ؤ/g,"و")
-      .replace(/ئ/g,"ي")
-      .replace(/ـ/g,"")
-      .replace(/[\u064B-\u065F]/g,"")
-      .replace(/\s+/g," ");
+      .toLowerCase();
 
-  }
 
+    const brandAliases = {
 
-  /* =========================
-     EXPAND SEARCH
-  ========================== */
+      all:"all",
 
-  function expandSearchQuery(value){
+      apple:"Apple",
+      iphone:"Apple",
+      "i-phone":"Apple",
 
-    let text =
-      normalizeSearchText(value);
+      samsung:"Samsung",
 
-    for(
-      const [arabic,english]
-      of SEARCH_ALIASES
-    ){
+      xiaomi:"Xiaomi",
+      redmi:"Xiaomi",
+      poco:"Xiaomi",
 
-      text =
-        text.replaceAll(
-          normalizeSearchText(arabic),
-          english
-        );
+      google:"Google",
+      pixel:"Google",
 
-    }
+      huawei:"Huawei",
 
-    return text;
+      oppo:"OPPO",
 
-  }
+      honor:"HONOR",
 
-
-  /* =========================
-     SEARCH TOKENS
-  ========================== */
-
-  function getSearchTokens(value){
-
-    return expandSearchQuery(value)
-      .split(/\s+/)
-      .map(token => token.trim())
-      .filter(Boolean);
-
-  }
-
-
-  /* =========================
-     HTML ESCAPE
-  ========================== */
-
-  function escapeHtml(value){
-
-    return String(value ?? "")
-      .replace(
-        /[&<>"']/g,
-        m => ({
-          "&":"&amp;",
-          "<":"&lt;",
-          ">":"&gt;",
-          '"':"&quot;",
-          "'":"&#039;"
-        }[m])
-      );
-
-  }
-
-
-  function escapeAttribute(value){
-
-    return escapeHtml(value);
-
-  }
-
-
-  /* =========================
-     PRICE
-  ========================== */
-
-  function formatPrice(value){
-
-    const n = Number(value);
-
-    return Number.isFinite(n)
-      ? n.toLocaleString("en-US") + " د.ع"
-      : "—";
-
-  }
-
-
-  /* =========================
-     PUBLISHED TIME
-  ========================== */
-
-  function formatPublishedTime(dateValue){
-
-    const time =
-      new Date(dateValue).getTime();
-
-    if(!Number.isFinite(time)){
-      return "";
-    }
-
-    const diff =
-      Math.max(
-        0,
-        Date.now() - time
-      );
-
-    const min =
-      Math.floor(diff / 60000);
-
-
-    if(min < 1){
-      return "نُشر الآن";
-    }
-
-
-    if(min < 60){
-
-      return `نُشر منذ ${min} ${
-        min === 1
-          ? "دقيقة"
-          : "دقائق"
-      }`;
-
-    }
-
-
-    const h =
-      Math.floor(min / 60);
-
-
-    if(h < 24){
-
-      return `نُشر منذ ${h} ${
-        h === 1
-          ? "ساعة"
-          : "ساعات"
-      }`;
-
-    }
-
-
-    const d =
-      Math.floor(h / 24);
-
-
-    if(d < 7){
-
-      return `نُشر منذ ${d} ${
-        d === 1
-          ? "يوم"
-          : "أيام"
-      }`;
-
-    }
-
-
-    return new Date(
-      dateValue
-    ).toLocaleDateString(
-      "ar-IQ",
-      {
-        day:"numeric",
-        month:"short"
-      }
-    );
-
-  }
-
-
-  /* =========================
-     TOAST
-  ========================== */
-
-  function showToast(message){
-
-    toast.textContent = message;
-
-    toast.classList.add("show");
-
-    clearTimeout(toastTimer);
-
-    toastTimer =
-      setTimeout(
-        () =>
-          toast.classList.remove("show"),
-        2200
-      );
-
-  }
-
-
-  /* =========================
-     BRAND
-  ========================== */
-
-  function brandKey(value){
-
-    const b =
-      normalizeSearchText(value);
-
-    const map = {
-
-      apple:"apple",
-      iphone:"apple",
-
-      samsung:"samsung",
-
-      xiaomi:"xiaomi",
-
-      huawei:"huawei",
-
-      oppo:"oppo",
-
-      honor:"honor",
-
-      tecno:"tecno",
-
-      google:"google",
-
-      oneplus:"oneplus",
+      oneplus:"OnePlus",
 
       realme:"realme",
 
-      motorola:"motorola",
+      motorola:"Motorola",
 
-      sony:"sony",
+      sony:"Sony",
 
-      nokia:"nokia",
+      nokia:"Nokia",
 
-      infinix:"infinix"
+      tecno:"Tecno",
 
-    };
-
-    return map[b] || b;
-
-  }
-
-
-  /* =========================
-     NORMALIZE DEVICE
-  ========================== */
-
-  function normalizeDevice(device){
-
-    const normalizedBrand =
-      brandKey(device.brand);
-
-
-    const searchText = [
-
-      device.brand,
-
-      normalizedBrand,
-
-      device.model,
-
-      device.storage,
-
-      device.color,
-
-      device.battery_health,
-
-      device.condition,
-
-      device.body_condition,
-
-      device.screen_condition,
-
-      device.location,
-
-      device.sale_type,
-
-      device.notes
-
-    ]
-    .filter(
-      v => String(v ?? "").trim()
-    )
-    .join(" ");
-
-
-    return {
-
-      ...device,
-
-      _brandKey:
-        normalizedBrand,
-
-      _searchText:
-        normalizeSearchText(searchText)
-        + " "
-        + expandSearchQuery(searchText)
+      infinix:"Infinix"
 
     };
 
-  }
+
+    selectedBrand =
+      brandAliases[rawBrand] ||
+      "all";
 
 
-  /* =========================
-     IMAGE
-  ========================== */
+    /* =========================================
+       BRAND NORMALIZATION
+    ========================================== */
 
-  function getFirstImageValue(value){
+    function normalizeBrand(value){
 
-    if(Array.isArray(value)){
+      const original =
+        String(value ?? "")
+        .trim();
 
-      return value.length
-        ? value[0]
-        : "";
+
+      if(!original){
+        return "";
+      }
+
+
+      const lower =
+        original.toLowerCase();
+
+
+      const map = {
+
+        apple:"Apple",
+        iphone:"Apple",
+        "i-phone":"Apple",
+
+        samsung:"Samsung",
+
+        xiaomi:"Xiaomi",
+        redmi:"Xiaomi",
+        poco:"Xiaomi",
+
+        google:"Google",
+        pixel:"Google",
+
+        huawei:"Huawei",
+
+        oppo:"OPPO",
+
+        honor:"HONOR",
+
+        oneplus:"OnePlus",
+
+        realme:"realme",
+
+        motorola:"Motorola",
+
+        sony:"Sony",
+
+        nokia:"Nokia",
+
+        tecno:"Tecno",
+
+        infinix:"Infinix"
+
+      };
+
+
+      return (
+        map[lower] ||
+        original
+      );
 
     }
 
 
-    if(typeof value === "string"){
+    /* =========================================
+       SEARCH NORMALIZATION
+    ========================================== */
 
-      const text =
-        value.trim();
+    function normalizeSearchText(value){
+
+      return String(value ?? "")
+
+        .toLowerCase()
+
+        .trim()
+
+        .replace(
+          /[أإآ]/g,
+          "ا"
+        )
+
+        .replace(
+          /ى/g,
+          "ي"
+        )
+
+        .replace(
+          /ة/g,
+          "ه"
+        )
+
+        .replace(
+          /ؤ/g,
+          "و"
+        )
+
+        .replace(
+          /ئ/g,
+          "ي"
+        )
+
+        .replace(
+          /ـ/g,
+          ""
+        )
+
+        .replace(
+          /[\u064B-\u065F\u0670]/g,
+          ""
+        )
+
+        .replace(
+          /\s+/g,
+          " "
+        )
+
+        .trim();
+
+    }
+
+
+    /* =========================================
+       SEARCH ALIASES
+    ========================================== */
+
+    const SEARCH_PHRASE_ALIASES = [
+
+      ["اي فون","iphone"],
+      ["آي فون","iphone"],
+      ["أي فون","iphone"],
+      ["اى فون","iphone"],
+
+      ["ايفون","iphone"],
+      ["آيفون","iphone"],
+      ["أيفون","iphone"],
+      ["اىفون","iphone"],
+
+      ["ابل","apple"],
+      ["آبل","apple"],
+
+      ["سامسونج","samsung"],
+      ["سامسنغ","samsung"],
+      ["سامسونك","samsung"],
+
+      ["شاومي","xiaomi"],
+      ["شياومي","xiaomi"],
+      ["شومي","xiaomi"],
+
+      ["هواوي","huawei"],
+      ["هواوى","huawei"],
+
+      ["اوبو","oppo"],
+      ["أوبو","oppo"],
+
+      ["هونر","honor"],
+
+      ["ون بلس","oneplus"],
+      ["ونبلس","oneplus"],
+
+      ["ريلمي","realme"],
+      ["ريلمى","realme"],
+
+      ["موتورولا","motorola"],
+
+      ["سوني","sony"],
+
+      ["نوكيا","nokia"],
+
+      ["تكنو","tecno"],
+
+      ["انفنكس","infinix"],
+      ["إنفنكس","infinix"],
+      ["انفينيكس","infinix"],
+
+      ["جوجل","google"],
+      ["غوغل","google"],
+
+      ["بيكسل","pixel"],
+
+      ["ريدمي","redmi"],
+
+      ["بوكو","poco"],
+
+      ["برو ماكس","pro max"],
+      ["بروماكس","pro max"],
+
+      ["برو","pro"],
+
+      ["ماكس","max"],
+
+      ["بلس","plus"],
+      ["بلاس","plus"],
+
+      ["الترا","ultra"],
+      ["ألترا","ultra"],
+
+      ["ميني","mini"],
+
+      ["فولد","fold"],
+
+      ["فليب","flip"],
+
+      ["نوت","note"],
+
+      ["باد","pad"],
+
+      ["تاب","tab"],
+
+      ["ميت","mate"],
+
+      ["ايج","edge"],
+      ["إيدج","edge"],
+
+      ["اس","s"],
+      ["إس","s"],
+
+      ["زد فولد","z fold"],
+      ["زد فليب","z flip"],
+      ["زد","z"]
+
+    ];
+
+
+    const SEARCH_WORD_ALIASES = {
+
+      "ايفون":"iphone",
+      "آيفون":"iphone",
+      "أيفون":"iphone",
+
+      "ابل":"apple",
+      "آبل":"apple",
+
+      "سامسونج":"samsung",
+      "سامسنغ":"samsung",
+      "سامسونك":"samsung",
+
+      "شاومي":"xiaomi",
+      "شياومي":"xiaomi",
+
+      "هواوي":"huawei",
+
+      "اوبو":"oppo",
+      "أوبو":"oppo",
+
+      "هونر":"honor",
+
+      "ريلمي":"realme",
+
+      "موتورولا":"motorola",
+
+      "سوني":"sony",
+
+      "نوكيا":"nokia",
+
+      "تكنو":"tecno",
+
+      "انفنكس":"infinix",
+      "إنفنكس":"infinix",
+
+      "جوجل":"google",
+      "غوغل":"google",
+
+      "بيكسل":"pixel",
+
+      "ريدمي":"redmi",
+
+      "بوكو":"poco",
+
+      "برو":"pro",
+
+      "ماكس":"max",
+
+      "بلس":"plus",
+      "بلاس":"plus",
+
+      "الترا":"ultra",
+      "ألترا":"ultra",
+
+      "ميني":"mini",
+
+      "فولد":"fold",
+      "فليب":"flip",
+
+      "نوت":"note",
+
+      "ميت":"mate",
+
+      "ايج":"edge",
+      "إيدج":"edge",
+
+      "اس":"s",
+      "إس":"s",
+
+      "زد":"z"
+
+    };
+
+
+    function expandSearchQuery(value){
+
+      let text =
+        normalizeSearchText(
+          value
+        );
 
 
       if(!text){
@@ -1328,404 +2797,1435 @@
       }
 
 
-      if(
-        (text.startsWith("[") && text.endsWith("]"))
-        ||
-        (text.startsWith("{") && text.endsWith("}"))
+      const phrases =
+        [
+          ...SEARCH_PHRASE_ALIASES
+        ]
+        .sort(
+          (a,b) =>
+            normalizeSearchText(
+              b[0]
+            ).length
+            -
+            normalizeSearchText(
+              a[0]
+            ).length
+        );
+
+
+      for(
+        const [from,to]
+        of phrases
       ){
+
+        const normalizedFrom =
+          normalizeSearchText(
+            from
+          );
+
+
+        const normalizedTo =
+          normalizeSearchText(
+            to
+          );
+
+
+        text =
+          text
+          .split(
+            normalizedFrom
+          )
+          .join(
+            normalizedTo
+          );
+
+      }
+
+
+      const tokens =
+        text
+        .split(/\s+/)
+        .filter(Boolean);
+
+
+      const expandedTokens =
+        tokens.map(
+          token => {
+
+            const clean =
+              normalizeSearchText(
+                token
+              );
+
+
+            return (
+              SEARCH_WORD_ALIASES[
+                clean
+              ] ||
+              clean
+            );
+
+          }
+        );
+
+
+      return expandedTokens.join(" ");
+
+    }
+
+
+    function getSearchTokens(value){
+
+      return expandSearchQuery(
+        value
+      )
+      .split(/\s+/)
+      .map(
+        token =>
+          token.trim()
+      )
+      .filter(Boolean);
+
+    }
+
+
+    function deviceMatchesSearch(
+      device,
+      query
+    ){
+
+      const normalized =
+        normalizeSearchText(
+          query
+        );
+
+
+      if(!normalized){
+        return true;
+      }
+
+
+      const expanded =
+        expandSearchQuery(
+          normalized
+        );
+
+
+      const queryTokens =
+        expanded
+        .split(/\s+/)
+        .filter(Boolean);
+
+
+      if(!queryTokens.length){
+        return true;
+      }
+
+
+      const searchText =
+        device._searchText ||
+        "";
+
+
+      const compactSearchText =
+        searchText.replace(
+          /\s+/g,
+          ""
+        );
+
+
+      return queryTokens.every(
+        token => {
+
+          const cleanToken =
+            normalizeSearchText(
+              token
+            );
+
+
+          if(!cleanToken){
+            return true;
+          }
+
+
+          if(
+            searchText.includes(
+              cleanToken
+            )
+          ){
+            return true;
+          }
+
+
+          if(
+            cleanToken.length >= 2 &&
+            compactSearchText.includes(
+              cleanToken.replace(
+                /\s+/g,
+                ""
+              )
+            )
+          ){
+            return true;
+          }
+
+
+          return false;
+
+        }
+      );
+
+    }
+
+
+    /* =========================================
+       IMAGE PARSER
+    ========================================== */
+
+    function getDeviceImages(
+      images
+    ){
+
+      if(!images){
+        return [];
+      }
+
+
+      if(
+        Array.isArray(images)
+      ){
+
+        return images.filter(
+          Boolean
+        );
+
+      }
+
+
+      if(
+        typeof images === "string"
+      ){
+
+        const value =
+          images.trim();
+
+
+        if(!value){
+          return [];
+        }
+
 
         try{
 
           const parsed =
-            JSON.parse(text);
+            JSON.parse(
+              value
+            );
 
 
-          if(Array.isArray(parsed)){
+          if(
+            Array.isArray(parsed)
+          ){
 
-            return parsed.length
-              ? parsed[0]
-              : "";
+            return parsed.filter(
+              Boolean
+            );
 
           }
 
 
           if(
-            parsed
-            &&
+            parsed &&
             typeof parsed === "object"
           ){
 
-            return (
-              parsed.url
-              ||
-              parsed.path
-              ||
-              parsed.publicUrl
-              ||
-              ""
-            );
+            const image =
+              parsed.url ||
+              parsed.path ||
+              parsed.publicUrl ||
+              "";
+
+
+            return image
+              ? [image]
+              : [];
 
           }
 
-        }catch{}
+        }catch(error){
+
+          /* normal string */
+
+        }
+
+
+        return [value];
 
       }
 
 
-      return text;
+      if(
+        images &&
+        typeof images === "object"
+      ){
+
+        const image =
+          images.url ||
+          images.path ||
+          images.publicUrl ||
+          "";
+
+
+        return image
+          ? [image]
+          : [];
+
+      }
+
+
+      return [];
 
     }
 
 
-    if(
-      value
-      &&
-      typeof value === "object"
+    /* =========================================
+       STORAGE IMAGE URL
+    ========================================== */
+
+    function getImageUrl(
+      path
     ){
 
-      return (
-        value.url
-        ||
-        value.path
-        ||
-        value.publicUrl
-        ||
-        ""
-      );
-
-    }
+      if(!path){
+        return "";
+      }
 
 
-    return "";
-
-  }
-
-
-  function imageUrl(device){
-
-    const first =
-      getFirstImageValue(
-        device.images
-      );
+      const value =
+        String(path).trim();
 
 
-    if(
-      typeof first !== "string"
-      ||
-      !first.trim()
-    ){
+      if(
+        value.startsWith(
+          "http://"
+        ) ||
+        value.startsWith(
+          "https://"
+        ) ||
+        value.startsWith(
+          "data:"
+        )
+      ){
 
-      return "";
+        return value;
 
-    }
-
-
-    let path =
-      first.trim();
-
-
-    /*
-      إذا الصورة رابط كامل
-    */
-
-    if(
-      /^https?:\/\//i.test(path)
-    ){
-
-      return path;
-
-    }
+      }
 
 
-    /*
-      تنظيف بداية المسار
-    */
-
-    path =
-      path.replace(/^\/+/, "");
-
-
-    /*
-      منع تكرار اسم الـBucket
-    */
-
-    path =
-      path.replace(
-        /^device-images\//i,
-        ""
-      );
-
-
-    /*
-      تحويل مسار Storage إلى Public URL
-    */
-
-    try{
-
-      const {
-        data
-      } =
-        supabase
-          .storage
-          .from("device-images")
-          .getPublicUrl(path);
-
-
-      return (
-        data?.publicUrl
-        ||
-        ""
-      );
-
-    }catch(error){
-
-      console.error(
-        "IMAGE URL ERROR:",
-        error
-      );
-
-      return "";
-
-    }
-
-  }
-
-
-  /* =========================
-     FAVORITES
-  ========================== */
-
-  function isFavorite(id){
-
-    try{
-
-      return JSON.parse(
-        localStorage.getItem(
-          "mzad_favorites"
-        ) || "[]"
-      )
-      .map(String)
-      .includes(String(id));
-
-    }catch{
-
-      return false;
-
-    }
-
-  }
-
-
-  function toggleFavorite(id,event){
-
-    event.stopPropagation();
-
-    let list = [];
-
-
-    try{
-
-      list =
-        JSON.parse(
-          localStorage.getItem(
-            "mzad_favorites"
-          ) || "[]"
+      let cleanPath =
+        value.replace(
+          /^\/+/,
+          ""
         );
 
-    }catch{}
+
+      cleanPath =
+        cleanPath.replace(
+          /^device-images\//i,
+          ""
+        );
 
 
-    const key =
-      String(id);
+      try{
+
+        const {
+          data
+        } =
+          supabase
+          .storage
+          .from(
+            "device-images"
+          )
+          .getPublicUrl(
+            cleanPath
+          );
 
 
-    const i =
-      list
-        .map(String)
-        .indexOf(key);
+        return (
+          data?.publicUrl ||
+          ""
+        );
+
+      }catch(error){
+
+        console.error(
+          "IMAGE URL ERROR:",
+          error
+        );
 
 
-    if(i >= 0){
+        return "";
 
-      list.splice(i,1);
+      }
 
-      showToast(
-        "تمت الإزالة من المفضلة"
-      );
+    }
 
-    }else{
 
-      list.push(id);
+    /* =========================================
+       PRICE
+    ========================================== */
 
-      showToast(
-        "تمت الإضافة إلى المفضلة"
+    function formatPrice(
+      price
+    ){
+
+      const number =
+        Number(price);
+
+
+      if(
+        !Number.isFinite(
+          number
+        )
+      ){
+
+        return "السعر غير محدد";
+
+      }
+
+
+      return (
+        new Intl.NumberFormat(
+          "en-US"
+        )
+        .format(number)
+        +
+        " د.ع"
       );
 
     }
 
 
-    localStorage.setItem(
-      "mzad_favorites",
-      JSON.stringify(list)
-    );
+    /* =========================================
+       PUBLICATION TIME
+    ========================================== */
+
+    function formatPublishedTime(
+      value
+    ){
+
+      const date =
+        new Date(value);
 
 
-    render();
+      if(
+        Number.isNaN(
+          date.getTime()
+        )
+      ){
 
-  }
+        return "";
 
-
-  /* =========================
-     DEVICE CARD
-  ========================== */
-
-  function card(device){
-
-    const img =
-      imageUrl(device);
-
-    const fav =
-      isFavorite(device.id);
+      }
 
 
-    const specs = [
-
-      device.storage &&
-        String(device.storage),
-
-      device.color &&
-        String(device.color)
-
-    ].filter(Boolean);
+      const now =
+        Date.now();
 
 
-    return `
+      const diff =
+        Math.max(
+          0,
+          now -
+          date.getTime()
+        );
 
-      <article
-        class="card"
-        data-id="${escapeAttribute(device.id)}"
-      >
 
-        <div class="photo">
+      const minute =
+        60 * 1000;
+
+      const hour =
+        60 * minute;
+
+      const day =
+        24 * hour;
+
+      const week =
+        7 * day;
+
+      const month =
+        30 * day;
+
+      const year =
+        365 * day;
+
+
+      if(
+        diff < minute
+      ){
+
+        return "نُشر الآن";
+
+      }
+
+
+      if(
+        diff < hour
+      ){
+
+        const n =
+          Math.floor(
+            diff / minute
+          );
+
+
+        if(n === 1){
+          return "نُشر منذ دقيقة";
+        }
+
+
+        if(n === 2){
+          return "نُشر منذ دقيقتين";
+        }
+
+
+        if(n < 11){
+          return `نُشر منذ ${n} دقائق`;
+        }
+
+
+        return `نُشر منذ ${n} دقيقة`;
+
+      }
+
+
+      if(
+        diff < day
+      ){
+
+        const n =
+          Math.floor(
+            diff / hour
+          );
+
+
+        if(n === 1){
+          return "نُشر منذ ساعة";
+        }
+
+
+        if(n === 2){
+          return "نُشر منذ ساعتين";
+        }
+
+
+        if(n < 11){
+          return `نُشر منذ ${n} ساعات`;
+        }
+
+
+        return `نُشر منذ ${n} ساعة`;
+
+      }
+
+
+      if(
+        diff < week
+      ){
+
+        const n =
+          Math.floor(
+            diff / day
+          );
+
+
+        if(n === 1){
+          return "نُشر منذ يوم";
+        }
+
+
+        if(n === 2){
+          return "نُشر منذ يومين";
+        }
+
+
+        if(n < 11){
+          return `نُشر منذ ${n} أيام`;
+        }
+
+
+        return `نُشر منذ ${n} يوم`;
+
+      }
+
+
+      if(
+        diff < month
+      ){
+
+        const n =
+          Math.floor(
+            diff / week
+          );
+
+
+        if(n === 1){
+          return "نُشر منذ أسبوع";
+        }
+
+
+        if(n === 2){
+          return "نُشر منذ أسبوعين";
+        }
+
+
+        if(n < 11){
+          return `نُشر منذ ${n} أسابيع`;
+        }
+
+
+        return `نُشر منذ ${n} أسبوع`;
+
+      }
+
+
+      if(
+        diff < year
+      ){
+
+        const n =
+          Math.floor(
+            diff / month
+          );
+
+
+        if(n === 1){
+          return "نُشر منذ شهر";
+        }
+
+
+        if(n === 2){
+          return "نُشر منذ شهرين";
+        }
+
+
+        if(n < 11){
+          return `نُشر منذ ${n} أشهر`;
+        }
+
+
+        return `نُشر منذ ${n} شهر`;
+
+      }
+
+
+      const n =
+        Math.floor(
+          diff / year
+        );
+
+
+      if(n === 1){
+        return "نُشر منذ سنة";
+      }
+
+
+      if(n === 2){
+        return "نُشر منذ سنتين";
+      }
+
+
+      if(n < 11){
+        return `نُشر منذ ${n} سنوات`;
+      }
+
+
+      return `نُشر منذ ${n} سنة`;
+
+    }
+
+
+    /* =========================================
+       TOAST
+    ========================================== */
+
+    function showToast(
+      message
+    ){
+
+      if(!toast){
+        return;
+      }
+
+
+      toast.textContent =
+        message;
+
+
+      toast.classList.add(
+        "show"
+      );
+
+
+      clearTimeout(
+        toastTimer
+      );
+
+
+      toastTimer =
+        setTimeout(
+          () => {
+
+            toast.classList.remove(
+              "show"
+            );
+
+          },
+          2200
+        );
+
+    }
+
+
+    /* =========================================
+       NORMALIZE DEVICE
+    ========================================== */
+
+    function normalizeDevice(
+      device
+    ){
+
+      const images =
+        getDeviceImages(
+          device.images
+        );
+
+
+      const normalizedBrand =
+        normalizeBrand(
+          device.brand
+        );
+
+
+      const searchText =
+        [
+
+          device.brand,
+
+          normalizedBrand,
+
+          device.model,
+
+          device.storage,
+
+          device.color,
+
+          device.battery_health,
+
+          device.condition,
+
+          device.body_condition,
+
+          device.screen_condition,
+
+          device.location,
+
+          device.sale_type,
+
+          device.notes
+
+        ]
+        .filter(
+          value =>
+            value !== null &&
+            value !== undefined
+        )
+        .join(" ");
+
+
+      return {
+
+        ...device,
+
+        _brand:
+          normalizedBrand,
+
+        _brandKey:
+          normalizeSearchText(
+            normalizedBrand
+          ),
+
+        _images:
+          images,
+
+        _saleType:
+          String(
+            device.sale_type ||
+            ""
+          )
+          .trim()
+          .toLowerCase(),
+
+        _searchText:
+          normalizeSearchText(
+            searchText
+          )
+          +
+          " "
+          +
+          expandSearchQuery(
+            searchText
+          )
+
+      };
+
+    }
+
+
+    /* =========================================
+       LOAD DEVICES
+    ========================================== */
+
+    async function loadDevices(){
+
+      showLoading();
+
+
+      try{
+
+        const {
+          data,
+          error
+        } =
+          await supabase
+          .from("devices")
+          .select(`
+            id,
+            created_at,
+            brand,
+            model,
+            storage,
+            color,
+            battery_health,
+            condition,
+            body_condition,
+            screen_condition,
+            price,
+            location,
+            sale_type,
+            images,
+            notes
+          `)
+          .order(
+            "created_at",
+            {
+              ascending:false
+            }
+          );
+
+
+        if(error){
+
+          console.error(
+            "SUPABASE DEVICES ERROR:",
+            error
+          );
+
+
+          showError(
+            "تعذر تحميل الأجهزة",
+            "صار خطأ أثناء الاتصال بقاعدة البيانات."
+          );
+
+
+          return;
+
+        }
+
+
+        devices =
+          (data || [])
+          .map(
+            normalizeDevice
+          );
+
+
+        hideLoading();
+
+
+        render();
+
+      }catch(error){
+
+        console.error(
+          "LOAD DEVICES ERROR:",
+          error
+        );
+
+
+        showError(
+          "تعذر تحميل الأجهزة",
+          "تأكد من الاتصال بالإنترنت وحاول مرة ثانية."
+        );
+
+      }
+
+    }
+
+
+    /* =========================================
+       FILTER DEVICES
+    ========================================== */
+
+    function getFilteredDevices(){
+
+      const normalizedSearch =
+        searchTerm.trim();
+
+
+      let result =
+        devices.filter(
+          device => {
+
+
+            const brandMatch =
+              selectedBrand === "all" ||
+              device._brand ===
+              normalizeBrand(
+                selectedBrand
+              );
+
+
+            const searchMatch =
+              !normalizedSearch ||
+              deviceMatchesSearch(
+                device,
+                normalizedSearch
+              );
+
+
+            return (
+              brandMatch &&
+              searchMatch
+            );
+
+          }
+        );
+
+
+      /* SORT */
+
+      if(
+        sortMode === "low"
+      ){
+
+        result.sort(
+          (a,b) =>
+            Number(
+              a.price || 0
+            )
+            -
+            Number(
+              b.price || 0
+            )
+        );
+
+      }
+
+
+      else if(
+        sortMode === "high"
+      ){
+
+        result.sort(
+          (a,b) =>
+            Number(
+              b.price || 0
+            )
+            -
+            Number(
+              a.price || 0
+            )
+        );
+
+      }
+
+
+      else{
+
+        result.sort(
+          (a,b) =>
+            new Date(
+              b.created_at || 0
+            )
+            -
+            new Date(
+              a.created_at || 0
+            )
+        );
+
+      }
+
+
+      return result;
+
+    }
+
+
+    /* =========================================
+       RENDER
+    ========================================== */
+
+    function render(){
+
+      const filtered =
+        getFilteredDevices();
+
+
+      updateHeader(
+        filtered.length
+      );
+
+
+      updateFilters();
+
+
+      devicesGrid.innerHTML =
+        "";
+
+      stateContainer.innerHTML =
+        "";
+
+
+      if(
+        !filtered.length
+      ){
+
+        devicesGrid.style.display =
+          "none";
+
+
+        stateContainer.style.display =
+          "block";
+
+
+        let title =
+          "ماكو أجهزة حالياً";
+
+
+        let text =
+          "ما لقينا أجهزة تطابق البحث أو الفلتر المحدد.";
+
+
+        if(
+          selectedBrand !== "all"
+        ){
+
+          const brandName =
+            getBrandDisplayName(
+              selectedBrand
+            );
+
+
+          title =
+            `ماكو أجهزة ${brandName} حالياً`;
+
+
+          text =
+            "جرّب تختار شركة ثانية أو شيل الفلتر.";
+
+        }
+
+
+        else if(
+          searchTerm
+        ){
+
+          title =
+            "ماكو نتائج";
+
+
+          text =
+            "جرّب كلمة بحث ثانية أو شيل البحث.";
+
+        }
+
+
+        stateContainer.innerHTML =
+          createEmptyState(
+            title,
+            text
+          );
+
+
+        resultsLabel.textContent =
+          "لا توجد نتائج";
+
+
+        return;
+
+      }
+
+
+      stateContainer.style.display =
+        "none";
+
+
+      devicesGrid.style.display =
+        "grid";
+
+
+      resultsLabel.textContent =
+        `${filtered.length} جهاز`;
+
+
+      filtered.forEach(
+        (device,index) => {
+
+          devicesGrid.appendChild(
+            createDeviceCard(
+              device,
+              index
+            )
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =========================================
+       HEADER
+    ========================================== */
+
+    function updateHeader(
+      count
+    ){
+
+      countLabel.textContent =
+        `${count} جهاز`;
+
+
+      if(
+        selectedBrand === "all"
+      ){
+
+        sectionTitle.textContent =
+          "كل الأجهزة";
+
+
+        sectionSubtitle.textContent =
+          "جميع الأجهزة المعروضة حالياً";
+
+      }
+
+
+      else{
+
+        const brandName =
+          getBrandDisplayName(
+            selectedBrand
+          );
+
+
+        sectionTitle.textContent =
+          `أجهزة ${brandName}`;
+
+
+        sectionSubtitle.textContent =
+          `تصفح أجهزة ${brandName} المعروضة للبيع والمزادات`;
+
+      }
+
+    }
+
+
+    /* =========================================
+       BRAND DISPLAY NAME
+    ========================================== */
+
+    function getBrandDisplayName(
+      brand
+    ){
+
+      const map = {
+
+        Apple:"iPhone",
+
+        Samsung:"Samsung",
+
+        Xiaomi:"Xiaomi",
+
+        Google:"Google",
+
+        Huawei:"Huawei",
+
+        OPPO:"OPPO",
+
+        HONOR:"HONOR",
+
+        OnePlus:"OnePlus",
+
+        realme:"realme",
+
+        Motorola:"Motorola",
+
+        Sony:"Sony",
+
+        Nokia:"Nokia",
+
+        Tecno:"Tecno",
+
+        Infinix:"Infinix"
+
+      };
+
+
+      return (
+        map[brand] ||
+        brand
+      );
+
+    }
+
+
+    /* =========================================
+       UPDATE FILTERS
+    ========================================== */
+
+    function updateFilters(){
+
+      const buttons =
+        brandFilters.querySelectorAll(
+          ".filter"
+        );
+
+
+      buttons.forEach(
+        button => {
+
+
+          const buttonBrand =
+            button.dataset.brand;
+
+
+          const active =
+            normalizeBrand(
+              buttonBrand
+            )
+            ===
+            normalizeBrand(
+              selectedBrand
+            );
+
+
+          button.classList.toggle(
+            "active",
+            active
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =========================================
+       DEVICE CARD
+    ========================================== */
+
+    function createDeviceCard(
+      device,
+      index
+    ){
+
+      const card =
+        document.createElement(
+          "article"
+        );
+
+
+      const brandClass =
+        {
+
+          Apple:
+            "brand-apple",
+
+          Samsung:
+            "brand-samsung",
+
+          Xiaomi:
+            "brand-xiaomi",
+
+          Huawei:
+            "brand-huawei",
+
+          Google:
+            "brand-google"
+
+        }[
+          normalizeBrand(
+            device.brand
+          )
+        ]
+        ||
+        "brand-default";
+
+
+      card.className =
+        "device-card " +
+        brandClass;
+
+
+      if(
+        index < 12
+      ){
+
+        card.style.animationDelay =
+          `${index * 35}ms`;
+
+      }
+      else{
+
+        card.style.animation =
+          "none";
+
+      }
+
+
+      const images =
+        device._images ||
+        [];
+
+
+      const imageUrl =
+        images.length
+          ? getImageUrl(
+              images[0]
+            )
+          : "";
+
+
+      const saleType =
+        device._saleType ===
+        "auction"
+
+          ? "مزاد"
+
+          : "بيع مباشر";
+
+
+      const favorite =
+        isFavorite(
+          device.id
+        );
+
+
+      card.innerHTML = `
+
+        <div class="device-photo-wrap">
 
           ${
-            img
+            imageUrl
 
               ? `
 
                 <img
-                  src="${escapeAttribute(img)}"
-                  alt="${escapeAttribute(device.brand || "جهاز")} ${escapeAttribute(device.model || "")}"
+                  class="device-photo"
+
+                  src="${escapeAttribute(
+                    imageUrl
+                  )}"
+
+                  alt="${escapeAttribute(
+                    `${device.brand || ""} ${device.model || ""}`
+                  )}"
+
                   loading="lazy"
-                  onerror="this.style.display='none';this.parentElement.querySelector('.image-fallback').style.display='block';"
+
+                  onerror="
+                    this.style.display='none';
+                    this.nextElementSibling.style.display='flex';
+                  "
                 >
 
-                <span
-                  class="no-photo image-fallback"
-                  style="display:none"
+
+                <div
+                  class="photo-placeholder"
+                  style="display:none;"
                 >
-                  لا توجد صورة
-                </span>
 
-              `
-
-              : `
-
-                <span class="no-photo">
-                  لا توجد صورة
-                </span>
-
-              `
-          }
-
-
-          <button
-            class="fav ${fav ? "active" : ""}"
-            type="button"
-            data-fav="${escapeAttribute(device.id)}"
-            aria-label="المفضلة"
-          >
-
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="${fav ? "currentColor" : "none"}"
-              stroke="currentColor"
-              stroke-width="1.8"
-            >
-
-              <path
-                d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"
-              />
-
-            </svg>
-
-          </button>
-
-
-          <span class="sale-badge">
-
-            ${
-              device.sale_type === "auction"
-              ||
-              device.sale_type === "مزاد"
-
-                ? "مزاد"
-
-                : "بيع مباشر"
-
-            }
-
-          </span>
-
-        </div>
-
-
-        <div class="body">
-
-          <h3 class="name">
-
-            ${
-              escapeHtml(
-                [
-                  device.brand,
-                  device.model
-                ]
-                .filter(Boolean)
-                .join(" ")
-                ||
-                "جهاز"
-              )
-            }
-
-          </h3>
-
-
-          ${
-            specs.length
-
-              ? `
-
-                <div class="specs">
-
-                  ${
-                    specs
-                      .map(
-                        s =>
-                          `<span class="spec">
-                            ${escapeHtml(s)}
-                          </span>`
-                      )
-                      .join("")
-                  }
+                  ${imageIcon()}
 
                 </div>
 
               `
 
-              : ""
+              : `
+
+                <div
+                  class="photo-placeholder"
+                >
+
+                  ${imageIcon()}
+
+                </div>
+
+              `
           }
+
+
+          <div class="sale-type">
+
+            ${escapeHtml(
+              saleType
+            )}
+
+          </div>
+
+
+          <button
+            class="favorite ${
+              favorite
+                ? "active"
+                : ""
+            }"
+
+            type="button"
+
+            aria-label="المفضلة"
+
+            data-favorite-id="${escapeAttribute(
+              device.id
+            )}"
+          >
+
+            ${heartIcon()}
+
+          </button>
+
+
+        </div>
+
+
+        <div class="device-info">
+
+
+          <h3 class="device-name">
+
+            ${escapeHtml(
+              [
+                device.brand,
+                device.model
+              ]
+              .filter(Boolean)
+              .join(" ")
+              ||
+              "جهاز"
+            )}
+
+          </h3>
 
 
           ${
@@ -1733,11 +4233,19 @@
 
               ? `
 
-                <div class="location">
+                <div
+                  class="device-location"
+                >
 
-                  ${escapeHtml(
-                    device.location
-                  )}
+                  ${locationIcon()}
+
+                  <span>
+
+                    ${escapeHtml(
+                      device.location
+                    )}
+
+                  </span>
 
                 </div>
 
@@ -1754,7 +4262,10 @@
 
                 <div
                   class="published-time"
-                  data-created-at="${escapeAttribute(device.created_at)}"
+
+                  data-created-at="${escapeAttribute(
+                    device.created_at
+                  )}"
                 >
 
                   ${escapeHtml(
@@ -1771,406 +4282,399 @@
           }
 
 
-          <div class="bottom-row">
+          <div
+            class="details-grid ${
+              device._brand === "Apple" &&
+              device.battery_health !== null &&
+              device.battery_health !== undefined &&
+              String(
+                device.battery_health
+              ).trim() !== ""
 
-            <span class="price">
+                ? "has-battery"
 
-              ${formatPrice(device.price)}
+                : "no-battery"
+            }"
+          >
 
-            </span>
+
+            <div class="detail-item">
+
+              <span>
+                السعة
+              </span>
+
+              <strong>
+
+                ${escapeHtml(
+                  device.storage ||
+                  "-"
+                )}
+
+              </strong>
+
+            </div>
 
 
-            <span class="type">
+            <div class="detail-item">
 
-              ${
-                device.sale_type === "auction"
-                ||
-                device.sale_type === "مزاد"
+              <span>
+                اللون
+              </span>
 
-                  ? "مزاد"
+              <strong>
 
-                  : "مباشر"
-              }
+                ${escapeHtml(
+                  device.color ||
+                  "-"
+                )}
 
-            </span>
+              </strong>
+
+            </div>
+
+
+            ${
+              device._brand === "Apple" &&
+              device.battery_health !== null &&
+              device.battery_health !== undefined &&
+              String(
+                device.battery_health
+              ).trim() !== ""
+
+                ? `
+
+                  <div
+                    class="detail-item"
+                  >
+
+                    <span>
+                      البطارية
+                    </span>
+
+                    <strong>
+
+                      ${escapeHtml(
+                        String(
+                          device.battery_health
+                        ) +
+                        "%"
+                      )}
+
+                    </strong>
+
+                  </div>
+
+                `
+
+                : ""
+            }
+
 
           </div>
 
+
+          <div class="price-row">
+
+            <span class="price-label">
+              السعر
+            </span>
+
+
+            <strong class="price">
+
+              ${escapeHtml(
+                formatPrice(
+                  device.price
+                )
+              )}
+
+            </strong>
+
+          </div>
+
+
         </div>
 
-      </article>
-
-    `;
-
-  }
+      `;
 
 
-  /* =========================
-     FILTER
-  ========================== */
+      /* CARD CLICK */
 
-  function getFilteredDevices(){
+      card.addEventListener(
+        "click",
+        event => {
 
-    const tokens =
-      getSearchTokens(
-        searchInput.value
-      );
-
-
-    return devices
-
-      .filter(device => {
-
-        const brandMatch =
-          selectedBrand === "all"
-          ||
-          device._brandKey === selectedBrand;
-
-
-        const searchMatch =
-          !tokens.length
-          ||
-          tokens.every(
-            token =>
-              device._searchText
-                .includes(token)
-          );
-
-
-        return (
-          brandMatch
-          &&
-          searchMatch
-        );
-
-      })
-
-
-      .sort((a,b) => {
-
-        if(
-          sortSelect.value ===
-          "price-low"
-        ){
-
-          return (
-            Number(a.price || 0)
-            -
-            Number(b.price || 0)
-          );
-
-        }
-
-
-        if(
-          sortSelect.value ===
-          "price-high"
-        ){
-
-          return (
-            Number(b.price || 0)
-            -
-            Number(a.price || 0)
-          );
-
-        }
-
-
-        return (
-          new Date(
-            b.created_at || 0
-          )
-          -
-          new Date(
-            a.created_at || 0
-          )
-        );
-
-      });
-
-  }
-
-
-  /* =========================
-     RENDER
-  ========================== */
-
-  function render(){
-
-    const list =
-      getFilteredDevices();
-
-
-    resultCount.textContent =
-      `${list.length} ${
-        list.length === 1
-          ? "جهاز"
-          : "أجهزة"
-      }`;
-
-
-    emptyState.style.display =
-      list.length
-        ? "none"
-        : "block";
-
-
-    deviceGrid.innerHTML =
-      list
-        .map(card)
-        .join("");
-
-
-    deviceGrid
-      .querySelectorAll(
-        "[data-fav]"
-      )
-      .forEach(btn => {
-
-        btn.addEventListener(
-          "click",
-          e =>
-            toggleFavorite(
-              btn.dataset.fav,
-              e
+          if(
+            event.target.closest(
+              ".favorite"
             )
-        );
+          ){
 
-      });
-
-
-    deviceGrid
-      .querySelectorAll(".card")
-      .forEach(c => {
-
-        c.addEventListener(
-          "click",
-          () => {
-
-            location.href =
-              `device.html?id=${encodeURIComponent(
-                c.dataset.id
-              )}`;
+            return;
 
           }
+
+
+          window.location.href =
+            `device.html?id=${encodeURIComponent(
+              device.id
+            )}`;
+
+        }
+      );
+
+
+      /* FAVORITE CLICK */
+
+      const favoriteButton =
+        card.querySelector(
+          ".favorite"
         );
 
-      });
 
-  }
+      favoriteButton.addEventListener(
+        "click",
+        event => {
 
-
-  /* =========================
-     LOAD DEVICES
-  ========================== */
-
-  async function loadDevices(){
-
-    resultCount.textContent =
-      "جاري تحميل الأجهزة...";
+          event.stopPropagation();
 
 
-    const {
-      data,
-      error
-    } = await supabase
-
-      .from("devices")
-
-      .select("*")
-
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      );
-
-
-    if(error){
-
-      console.error(error);
-
-      resultCount.textContent =
-        "تعذر تحميل الأجهزة";
-
-      emptyState.style.display =
-        "block";
-
-      return;
-
-    }
-
-
-    devices =
-      (data || [])
-        .map(normalizeDevice);
-
-
-    render();
-
-  }
-
-
-  /* =========================
-     INCOMING SEARCH
-  ========================== */
-
-  function readIncomingSearch(){
-
-    const params =
-      new URLSearchParams(
-        location.search
-      );
-
-
-    const q =
-      params.get("search")
-      ||
-      sessionStorage.getItem(
-        "mzad_search_query"
-      )
-      ||
-      "";
-
-
-    if(q){
-
-      searchInput.value =
-        q;
-
-      sessionStorage.removeItem(
-        "mzad_search_query"
-      );
-
-      searchWrap.classList.add(
-        "has-value"
-      );
-
-    }
-
-
-    const brand =
-      params.get("brand");
-
-
-    if(
-      brand &&
-      brand !== "all"
-    ){
-
-      selectedBrand =
-        brandKey(brand);
-
-
-      document
-        .querySelectorAll(".chip")
-        .forEach(c => {
-
-          c.classList.toggle(
-            "active",
-            c.dataset.brand ===
-            brand
+          toggleFavorite(
+            device.id,
+            favoriteButton
           );
 
-        });
+        }
+      );
+
+
+      return card;
 
     }
 
-  }
+
+    /* =========================================
+       FAVORITES
+    ========================================== */
+
+    const FAVORITES_KEY =
+      "mzad_phone_favorites";
 
 
-  /* =========================
-     BACK BUTTON
-  ========================== */
+    let favoritesCache =
+      new Set();
 
-  document
-    .getElementById("backBtn")
-    .addEventListener(
-      "click",
-      () => {
 
-        if(
-          history.length > 1
-        ){
+    function loadFavoritesCache(){
 
-          history.back();
+      try{
 
-        }else{
+        const saved =
+          localStorage.getItem(
+            FAVORITES_KEY
+          );
 
-          location.href =
-            "home.html";
+
+        if(!saved){
+
+          favoritesCache =
+            new Set();
+
+          return;
 
         }
+
+
+        const parsed =
+          JSON.parse(
+            saved
+          );
+
+
+        favoritesCache =
+          new Set(
+            Array.isArray(parsed)
+              ? parsed.map(String)
+              : []
+          );
+
+      }catch(error){
+
+        favoritesCache =
+          new Set();
+
+      }
+
+    }
+
+
+    function saveFavorites(){
+
+      localStorage.setItem(
+        FAVORITES_KEY,
+
+        JSON.stringify(
+          Array.from(
+            favoritesCache
+          )
+        )
+      );
+
+    }
+
+
+    function isFavorite(
+      id
+    ){
+
+      return favoritesCache.has(
+        String(id)
+      );
+
+    }
+
+
+    function toggleFavorite(
+      id,
+      button
+    ){
+
+      const stringId =
+        String(id);
+
+
+      if(
+        favoritesCache.has(
+          stringId
+        )
+      ){
+
+        favoritesCache.delete(
+          stringId
+        );
+
+
+        button.classList.remove(
+          "active"
+        );
+
+
+        showToast(
+          "تمت الإزالة من المفضلة"
+        );
+
+      }
+
+
+      else{
+
+        favoritesCache.add(
+          stringId
+        );
+
+
+        button.classList.add(
+          "active"
+        );
+
+
+        showToast(
+          "تمت الإضافة إلى المفضلة"
+        );
+
+      }
+
+
+      saveFavorites();
+
+    }
+
+
+    /* =========================================
+       BRAND BUTTONS
+    ========================================== */
+
+    brandFilters.addEventListener(
+      "click",
+      event => {
+
+
+        const button =
+          event.target.closest(
+            ".filter"
+          );
+
+
+        if(!button){
+          return;
+        }
+
+
+        selectedBrand =
+          normalizeBrand(
+            button.dataset.brand
+          );
+
+
+        const newUrl =
+          new URL(
+            window.location.href
+          );
+
+
+        if(
+          selectedBrand === "all"
+        ){
+
+          newUrl.searchParams.delete(
+            "brand"
+          );
+
+        }
+
+
+        else{
+
+          const urlBrand =
+            selectedBrand === "Apple"
+
+              ? "iphone"
+
+              : selectedBrand.toLowerCase();
+
+
+          newUrl.searchParams.set(
+            "brand",
+            urlBrand
+          );
+
+        }
+
+
+        window.history.replaceState(
+          {},
+          "",
+          newUrl
+        );
+
+
+        render();
 
       }
     );
 
 
-  /* =========================
-     NAVIGATION
-  ========================== */
+    /* =========================================
+       SEARCH
+    ========================================== */
 
-  document
-    .querySelectorAll(".nav-item")
-    .forEach(button => {
+    function applySearch(){
 
-      button.addEventListener(
-        "click",
-        () => {
+      searchTerm =
+        searchInput.value ||
+        "";
 
-          location.href =
-            button.dataset.go;
-
-        }
-      );
-
-    });
-
-
-  /* =========================
-     BRAND FILTER
-  ========================== */
-
-  document
-    .querySelectorAll(".chip")
-    .forEach(chip => {
-
-      chip.addEventListener(
-        "click",
-        () => {
-
-          selectedBrand =
-            chip.dataset.brand;
-
-
-          document
-            .querySelectorAll(".chip")
-            .forEach(c => {
-
-              c.classList.toggle(
-                "active",
-                c === chip
-              );
-
-            });
-
-
-          render();
-
-        }
-      );
-
-    });
-
-
-  /* =========================
-     SEARCH INPUT
-  ========================== */
-
-  searchInput.addEventListener(
-    "input",
-    () => {
 
       searchWrap.classList.toggle(
         "has-value",
@@ -2178,130 +4682,689 @@
       );
 
 
-      render();
+      clearTimeout(
+        searchDebounceTimer
+      );
+
+
+      searchDebounceTimer =
+        setTimeout(
+          render,
+          80
+        );
 
     }
-  );
 
 
-  searchInput.addEventListener(
-    "keydown",
-    event => {
+    searchInput.addEventListener(
+      "input",
+      applySearch
+    );
 
-      if(
-        event.key === "Enter"
-      ){
+
+    searchInput.addEventListener(
+      "keydown",
+      event => {
+
+        if(
+          event.key === "Enter"
+        ){
+
+          applySearch();
+
+        }
+
+      }
+    );
+
+
+    /* =========================================
+       CLEAR SEARCH
+    ========================================== */
+
+    searchClear.addEventListener(
+      "click",
+      event => {
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+
+        searchInput.value =
+          "";
+
+        searchTerm =
+          "";
+
+
+        searchWrap.classList.remove(
+          "has-value"
+        );
+
+
+        render();
+
+
+        searchInput.focus();
+
+      }
+    );
+
+
+    /* =========================================
+       SORT
+    ========================================== */
+
+    sortBtn.addEventListener(
+      "click",
+      () => {
+
+
+        if(
+          sortMode === "newest"
+        ){
+
+          sortMode =
+            "low";
+
+
+          sortText.textContent =
+            "الأرخص";
+
+        }
+
+
+        else if(
+          sortMode === "low"
+        ){
+
+          sortMode =
+            "high";
+
+
+          sortText.textContent =
+            "الأعلى سعراً";
+
+        }
+
+
+        else{
+
+          sortMode =
+            "newest";
+
+
+          sortText.textContent =
+            "الأحدث";
+
+        }
+
 
         render();
 
       }
+    );
+
+
+    /* =========================================
+       LOADING
+    ========================================== */
+
+    function showLoading(){
+
+      loadingState.style.display =
+        "grid";
+
+
+      devicesGrid.style.display =
+        "none";
+
+
+      stateContainer.style.display =
+        "none";
+
+
+      resultsLabel.textContent =
+        "جاري تحميل الأجهزة...";
 
     }
-  );
 
 
-  /* =========================
-     CLEAR SEARCH
-  ========================== */
+    function hideLoading(){
 
-  searchClear.addEventListener(
-    "click",
-    () => {
+      loadingState.style.display =
+        "none";
 
-      searchInput.value =
+    }
+
+
+    /* =========================================
+       ERROR
+    ========================================== */
+
+    function showError(
+      title,
+      text
+    ){
+
+      loadingState.style.display =
+        "none";
+
+
+      devicesGrid.style.display =
+        "none";
+
+
+      stateContainer.style.display =
+        "block";
+
+
+      stateContainer.innerHTML = `
+
+        <div class="state">
+
+
+          <div class="state-icon">
+
+            ${alertIcon()}
+
+          </div>
+
+
+          <h3 class="state-title">
+
+            ${escapeHtml(
+              title
+            )}
+
+          </h3>
+
+
+          <p class="state-text">
+
+            ${escapeHtml(
+              text
+            )}
+
+          </p>
+
+
+          <button
+            class="retry-btn"
+            type="button"
+            onclick="location.reload()"
+          >
+
+            إعادة المحاولة
+
+          </button>
+
+
+        </div>
+
+      `;
+
+
+      resultsLabel.textContent =
+        "تعذر تحميل الأجهزة";
+
+    }
+
+
+    /* =========================================
+       EMPTY STATE
+    ========================================== */
+
+    function createEmptyState(
+      title,
+      text
+    ){
+
+      return `
+
+        <div class="state">
+
+
+          <div class="state-icon">
+
+            ${searchEmptyIcon()}
+
+          </div>
+
+
+          <h3 class="state-title">
+
+            ${escapeHtml(
+              title
+            )}
+
+          </h3>
+
+
+          <p class="state-text">
+
+            ${escapeHtml(
+              text
+            )}
+
+          </p>
+
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* =========================================
+       HTML ESCAPE
+    ========================================== */
+
+    function escapeHtml(
+      value
+    ){
+
+      return String(
+        value ?? ""
+      )
+
+      .replaceAll(
+        "&",
+        "&amp;"
+      )
+
+      .replaceAll(
+        "<",
+        "&lt;"
+      )
+
+      .replaceAll(
+        ">",
+        "&gt;"
+      )
+
+      .replaceAll(
+        '"',
+        "&quot;"
+      )
+
+      .replaceAll(
+        "'",
+        "&#039;"
+      );
+
+    }
+
+
+    function escapeAttribute(
+      value
+    ){
+
+      return escapeHtml(
+        value
+      );
+
+    }
+
+
+    /* =========================================
+       ICONS
+    ========================================== */
+
+    function heartIcon(){
+
+      return `
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+
+          <path
+            d="M20.8 8.7c0 5.4-8.8 10.3-8.8 10.3S3.2 14.1 3.2 8.7A4.7 4.7 0 0 1 12 6.2a4.7 4.7 0 0 1 8.8 2.5Z"
+          />
+
+        </svg>
+
+      `;
+
+    }
+
+
+    function imageIcon(){
+
+      return `
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+
+          <rect
+            x="3"
+            y="4"
+            width="18"
+            height="16"
+            rx="2"
+          />
+
+          <circle
+            cx="8.5"
+            cy="9"
+            r="1.5"
+          />
+
+          <path
+            d="M21 15l-5-5L5 20"
+          />
+
+        </svg>
+
+      `;
+
+    }
+
+
+    function locationIcon(){
+
+      return `
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+
+          <path
+            d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"
+          />
+
+          <circle
+            cx="12"
+            cy="10"
+            r="2.5"
+          />
+
+        </svg>
+
+      `;
+
+    }
+
+
+    function searchEmptyIcon(){
+
+      return `
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+
+          <circle
+            cx="11"
+            cy="11"
+            r="6.5"
+          />
+
+          <path
+            d="M16 16l4 4"
+          />
+
+          <path
+            d="M8.5 11h5"
+          />
+
+        </svg>
+
+      `;
+
+    }
+
+
+    function alertIcon(){
+
+      return `
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+
+          <circle
+            cx="12"
+            cy="12"
+            r="9"
+          />
+
+          <path
+            d="M12 8v5"
+          />
+
+          <path
+            d="M12 16.5h.01"
+          />
+
+        </svg>
+
+      `;
+
+    }
+
+
+    /* =========================================
+       INCOMING SEARCH
+    ========================================== */
+
+    function readIncomingSearch(){
+
+      const incomingParams =
+        new URLSearchParams(
+          window.location.search
+        );
+
+
+      const incomingSearch =
+        incomingParams.get(
+          "search"
+        )
+        ||
+        sessionStorage.getItem(
+          "mzad_search_query"
+        )
+        ||
         "";
 
-      searchWrap.classList.remove(
-        "has-value"
-      );
 
-      render();
+      if(
+        incomingSearch
+      ){
 
-      searchInput.focus();
-
-    }
-  );
+        searchInput.value =
+          incomingSearch;
 
 
-  /* =========================
-     SORT
-  ========================== */
-
-  sortSelect.addEventListener(
-    "change",
-    render
-  );
+        searchTerm =
+          incomingSearch;
 
 
-  /* =========================
-     KEYBOARD MODE
-  ========================== */
-
-  searchInput.addEventListener(
-    "focus",
-    () => {
-
-      document.body.classList.add(
-        "keyboard-open"
-      );
-
-    }
-  );
+        searchWrap.classList.add(
+          "has-value"
+        );
 
 
-  searchInput.addEventListener(
-    "blur",
-    () => {
+        sessionStorage.removeItem(
+          "mzad_search_query"
+        );
 
-      setTimeout(
-        () => {
+      }
 
-          document.body.classList.remove(
-            "keyboard-open"
+
+      const incomingBrand =
+        incomingParams.get(
+          "brand"
+        );
+
+
+      if(
+        incomingBrand &&
+        incomingBrand !== "all"
+      ){
+
+        selectedBrand =
+          brandAliases[
+            String(
+              incomingBrand
+            )
+            .trim()
+            .toLowerCase()
+          ]
+          ||
+          normalizeBrand(
+            incomingBrand
           );
 
-        },
-        150
+      }
+
+    }
+
+
+    /* =========================================
+       BACK BUTTON
+    ========================================== */
+
+    document
+      .getElementById(
+        "backBtn"
+      )
+      .addEventListener(
+        "click",
+        () => {
+
+          if(
+            history.length > 1
+          ){
+
+            history.back();
+
+          }else{
+
+            window.location.href =
+              "home.html";
+
+          }
+
+        }
+      );
+
+
+    /* =========================================
+       KEYBOARD MODE
+    ========================================== */
+
+    searchInput.addEventListener(
+      "focus",
+      () => {
+
+        document.body.classList.add(
+          "keyboard-open"
+        );
+
+      }
+    );
+
+
+    searchInput.addEventListener(
+      "blur",
+      () => {
+
+        setTimeout(
+          () => {
+
+            document.body.classList.remove(
+              "keyboard-open"
+            );
+
+          },
+          150
+        );
+
+      }
+    );
+
+
+    /* =========================================
+       LIVE PUBLICATION TIME
+    ========================================== */
+
+    function refreshPublishedTimes(){
+
+      const elements =
+        document.querySelectorAll(
+          ".published-time[data-created-at]"
+        );
+
+
+      elements.forEach(
+        element => {
+
+          const createdAt =
+            element.dataset.createdAt;
+
+
+          element.textContent =
+            formatPublishedTime(
+              createdAt
+            );
+
+        }
       );
 
     }
-  );
 
 
-  /* =========================
-     LIVE PUBLICATION TIME
-  ========================== */
-
-  setInterval(
-    () => {
-
-      document
-        .querySelectorAll(
-          ".published-time[data-created-at]"
-        )
-        .forEach(el => {
-
-          el.textContent =
-            formatPublishedTime(
-              el.dataset.createdAt
-            );
-
-        });
-
-    },
-    60000
-  );
+    setInterval(
+      refreshPublishedTimes,
+      60 * 1000
+    );
 
 
-  /* =========================
-     START
-  ========================== */
+    /* =========================================
+       START
+    ========================================== */
 
-  readIncomingSearch();
+    loadFavoritesCache();
 
-  loadDevices();
+    readIncomingSearch();
 
-</script>
+    updateFilters();
+
+    loadDevices();
+
+
+  </script>
+
 
 </body>
 </html>
