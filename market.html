@@ -302,10 +302,14 @@
       overflow:hidden;
     }
 
+    /*
+      الصورة تظهر كاملة بدون قص أو تمديد
+    */
+
     .photo img{
       width:100%;
       height:100%;
-      object-fit:cover;
+      object-fit:contain;
       display:block;
     }
 
@@ -500,12 +504,6 @@
       height:21px;
     }
 
-    /*
-      فقط أثناء ظهور كيبورد البحث:
-      الشريط ينزل بالكامل.
-      عند إغلاق الكيبورد يرجع لمكانه الطبيعي.
-    */
-
     body.keyboard-open .bottom-wrap{
       transform:translateY(120%);
       pointer-events:none;
@@ -557,10 +555,6 @@
 
 <main class="page">
 
-  <!-- =========================
-       HEADER
-  ========================== -->
-
   <header>
 
     <div class="topbar">
@@ -595,8 +589,6 @@
     </div>
 
 
-    <!-- SEARCH -->
-
     <div
       class="search-wrap"
       id="searchWrap"
@@ -630,7 +622,6 @@
         type="button"
         aria-label="مسح البحث"
       >
-
         <svg
           width="15"
           height="15"
@@ -641,13 +632,10 @@
         >
           <path d="M7 7l10 10M17 7 7 17"/>
         </svg>
-
       </button>
 
     </div>
 
-
-    <!-- TOOLBAR -->
 
     <div class="toolbar">
 
@@ -663,25 +651,13 @@
         id="sortSelect"
         aria-label="ترتيب الأجهزة"
       >
-
-        <option value="newest">
-          الأحدث
-        </option>
-
-        <option value="price-low">
-          السعر: الأقل
-        </option>
-
-        <option value="price-high">
-          السعر: الأعلى
-        </option>
-
+        <option value="newest">الأحدث</option>
+        <option value="price-low">السعر: الأقل</option>
+        <option value="price-high">السعر: الأعلى</option>
       </select>
 
     </div>
 
-
-    <!-- FILTERS -->
 
     <div
       class="chips"
@@ -757,10 +733,6 @@
   </header>
 
 
-  <!-- =========================
-       DEVICES
-  ========================== -->
-
   <section>
 
     <div class="section-head">
@@ -785,10 +757,6 @@
 </main>
 
 
-<!-- =========================
-     BOTTOM NAV
-========================== -->
-
 <div class="bottom-wrap">
 
   <nav
@@ -803,7 +771,6 @@
         data-go="home.html"
         type="button"
       >
-
         <svg
           class="nav-icon"
           viewBox="0 0 24 24"
@@ -813,11 +780,7 @@
         >
           <path d="m4 10 8-6 8 6v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-9Z"/>
         </svg>
-
-        <span class="nav-label">
-          الرئيسية
-        </span>
-
+        <span class="nav-label">الرئيسية</span>
       </button>
 
 
@@ -826,7 +789,6 @@
         data-go="auctions.html"
         type="button"
       >
-
         <svg
           class="nav-icon"
           viewBox="0 0 24 24"
@@ -837,11 +799,7 @@
           <path d="m7 11 7.5-7.5 3 3L10 14"/>
           <path d="m5 13 6 6M4 20h16"/>
         </svg>
-
-        <span class="nav-label">
-          المزادات
-        </span>
-
+        <span class="nav-label">المزادات</span>
       </button>
 
 
@@ -850,7 +808,6 @@
         data-go="sell.html"
         type="button"
       >
-
         <svg
           class="nav-icon"
           viewBox="0 0 24 24"
@@ -860,11 +817,7 @@
         >
           <path d="M12 5v14M5 12h14"/>
         </svg>
-
-        <span class="nav-label">
-          إضافة
-        </span>
-
+        <span class="nav-label">إضافة</span>
       </button>
 
 
@@ -873,7 +826,6 @@
         data-go="favorites.html"
         type="button"
       >
-
         <svg
           class="nav-icon"
           viewBox="0 0 24 24"
@@ -883,11 +835,7 @@
         >
           <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
         </svg>
-
-        <span class="nav-label">
-          المفضلة
-        </span>
-
+        <span class="nav-label">المفضلة</span>
       </button>
 
 
@@ -896,7 +844,6 @@
         data-go="profile.html"
         type="button"
       >
-
         <svg
           class="nav-icon"
           viewBox="0 0 24 24"
@@ -907,11 +854,7 @@
           <circle cx="12" cy="8" r="3.5"/>
           <path d="M5 21a7 7 0 0 1 14 0"/>
         </svg>
-
-        <span class="nav-label">
-          حسابي
-        </span>
-
+        <span class="nav-label">حسابي</span>
       </button>
 
     </div>
@@ -1365,10 +1308,6 @@
 
   function getFirstImageValue(value){
 
-    /*
-      إذا images عبارة عن Array
-    */
-
     if(Array.isArray(value)){
 
       return value.length
@@ -1377,10 +1316,6 @@
 
     }
 
-
-    /*
-      إذا images عبارة عن String
-    */
 
     if(typeof value === "string"){
 
@@ -1392,12 +1327,6 @@
         return "";
       }
 
-
-      /*
-        دعم JSON String مثل:
-
-        ["image1.jpg","image2.jpg"]
-      */
 
       if(
         (text.startsWith("[") && text.endsWith("]"))
@@ -1448,10 +1377,6 @@
     }
 
 
-    /*
-      إذا images عبارة عن Object
-    */
-
     if(
       value
       &&
@@ -1500,9 +1425,7 @@
 
 
     /*
-      إذا الصورة رابط كامل:
-      https://...
-      نخليه مثل ما هو.
+      إذا الصورة رابط كامل
     */
 
     if(
@@ -1523,8 +1446,7 @@
 
 
     /*
-      إذا المسار يحتوي اسم الـBucket
-      نمنع التكرار.
+      منع تكرار اسم الـBucket
     */
 
     path =
@@ -1535,8 +1457,7 @@
 
 
     /*
-      تحويل مسار Storage
-      إلى Public URL
+      تحويل مسار Storage إلى Public URL
     */
 
     try{
@@ -2314,7 +2235,6 @@
 
   /* =========================
      KEYBOARD MODE
-     ONLY SEARCH
   ========================== */
 
   searchInput.addEventListener(
