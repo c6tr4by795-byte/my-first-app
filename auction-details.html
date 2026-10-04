@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
+
   <meta charset="UTF-8">
 
   <meta
@@ -13,27 +15,26 @@
   <style>
 
     :root{
-      --petrol:#176b87;
-      --petrol-dark:#12586f;
 
+      --petrol:#176b87;
       --purple:#6246d9;
-      --purple-soft:#eeebfb;
-      --purple-text:#51477d;
 
       --bg:#f7f8fa;
       --white:#ffffff;
 
       --text:#182028;
       --muted:#89919a;
-      --line:#e8ecef;
+
+      --line:#e7ecef;
 
       --green:#27966a;
       --green-soft:#eaf7f1;
 
-      --red:#d95757;
-      --red-soft:#fceeee;
+      --purple-soft:#eeebfb;
+      --purple-text:#51477d;
 
       --safe-bottom:env(safe-area-inset-bottom,0px);
+
     }
 
 
@@ -45,12 +46,15 @@
 
     html,
     body{
+
       margin:0;
       padding:0;
+
       width:100%;
       min-height:100%;
 
       background:var(--bg);
+
       color:var(--text);
 
       font-family:
@@ -62,6 +66,7 @@
         Tahoma,
         Arial,
         sans-serif;
+
     }
 
 
@@ -70,20 +75,26 @@
     }
 
 
-    button,
-    input{
-      font:inherit;
-    }
-
-
     button{
+      font:inherit;
       border:0;
       outline:0;
       cursor:pointer;
     }
 
 
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+
+    /* =====================================
+       PAGE
+    ===================================== */
+
     .page{
+
       width:min(100%,520px);
 
       margin:0 auto;
@@ -91,105 +102,186 @@
       padding:
         0
         14px
-        calc(92px + var(--safe-bottom));
+        calc(90px + var(--safe-bottom));
+
     }
 
 
     /* =====================================
        HEADER
+       نفس هيدر المزادات
     ===================================== */
 
     .top-header{
 
-      margin:
-        0
-        -14px;
+      position:relative;
+
+      overflow:hidden;
+
+      width:100%;
+
+      min-height:205px;
+
+      margin:0 -14px;
+
+      width:calc(100% + 28px);
 
       padding:
-        calc(10px + env(safe-area-inset-top,0px))
+        calc(20px + env(safe-area-inset-top,0px))
         14px
-        13px;
+        22px;
 
-      color:#fff;
+      display:flex;
+      align-items:center;
 
-      background:
-        linear-gradient(
-          135deg,
-          #176b87 0%,
-          #356fa8 45%,
-          #6246d9 100%
-        );
+      background:#f7f8fa;
 
       border-radius:
         0
         0
-        25px
-        25px;
+        30px
+        30px;
 
-      box-shadow:
-        0 8px 24px rgba(23,32,42,.10);
+      border-bottom:
+        1px solid
+        rgba(220,226,231,.65);
+
+    }
+
+
+    /* الإضاءة الخفيفة الموجودة بهيدر المزادات */
+
+    .top-header::before{
+
+      content:"";
+
+      position:absolute;
+
+      width:280px;
+      height:230px;
+
+      left:-80px;
+      top:-100px;
+
+      border-radius:50%;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(50,184,196,.13) 0%,
+          rgba(50,184,196,.05) 40%,
+          transparent 72%
+        );
+
+      pointer-events:none;
+
+    }
+
+
+    .top-header::after{
+
+      content:"";
+
+      position:absolute;
+
+      width:280px;
+      height:210px;
+
+      right:-80px;
+      bottom:-100px;
+
+      border-radius:50%;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(98,70,217,.12) 0%,
+          rgba(98,70,217,.05) 42%,
+          transparent 74%
+        );
+
+      pointer-events:none;
+
     }
 
 
     .header-row{
 
-      min-height:46px;
+      position:relative;
+
+      z-index:2;
+
+      width:100%;
 
       display:flex;
+
       align-items:center;
 
-      gap:10px;
+      justify-content:space-between;
+
+      gap:12px;
+
     }
 
 
+    /* زر الرجوع */
+
     .back-btn{
 
-      width:40px;
-      height:40px;
+      width:74px;
+      height:74px;
 
-      flex:0 0 40px;
+      min-width:74px;
 
       display:flex;
       align-items:center;
       justify-content:center;
 
-      border-radius:13px;
+      border-radius:24px;
 
-      color:#fff;
+      background:#ffffff;
 
-      background:
-        rgba(255,255,255,.14);
+      color:#1d252c;
+
+      box-shadow:
+        0 6px 20px
+        rgba(25,35,45,.035);
 
       border:
         1px solid
-        rgba(255,255,255,.14);
+        rgba(226,231,235,.7);
 
       transition:
-        transform .18s ease,
-        background .18s ease;
+        transform .18s ease;
+
     }
 
 
     .back-btn:active{
 
-      transform:scale(.94);
+      transform:scale(.95);
 
-      background:
-        rgba(255,255,255,.22);
     }
 
 
     .back-btn svg{
 
-      width:19px;
-      height:19px;
+      width:31px;
+      height:31px;
+
     }
 
 
+    /* النص */
+
     .header-content{
 
-      min-width:0;
       flex:1;
+
+      min-width:0;
+
+      text-align:right;
+
     }
 
 
@@ -197,55 +289,71 @@
 
       margin:0;
 
-      font-size:21px;
-      line-height:1.2;
+      color:#171d23;
+
+      font-size:35px;
+
+      line-height:1.15;
 
       font-weight:950;
 
-      letter-spacing:-.35px;
+      letter-spacing:-1px;
+
     }
 
 
     .header-subtitle{
 
-      margin-top:3px;
+      margin-top:7px;
 
-      color:
-        rgba(255,255,255,.78);
+      color:#89919a;
 
-      font-size:10px;
-      line-height:1.3;
+      font-size:16px;
 
-      font-weight:750;
+      line-height:1.35;
+
+      font-weight:800;
+
+      white-space:nowrap;
+
     }
 
 
+    /* أيقونة المزاد */
+
     .header-icon{
 
-      width:42px;
-      height:42px;
+      width:74px;
+      height:74px;
 
-      flex:0 0 42px;
+      min-width:74px;
 
       display:flex;
       align-items:center;
       justify-content:center;
 
-      border-radius:14px;
+      border-radius:24px;
 
-      background:
-        rgba(255,255,255,.13);
+      background:#ffffff;
+
+      color:var(--petrol);
+
+      box-shadow:
+        0 6px 20px
+        rgba(25,35,45,.035);
 
       border:
         1px solid
-        rgba(255,255,255,.12);
+        rgba(226,231,235,.7);
+
     }
 
 
     .header-icon svg{
 
-      width:21px;
-      height:21px;
+      width:38px;
+      height:38px;
+
     }
 
 
@@ -258,6 +366,7 @@
       position:relative;
 
       width:100%;
+
       height:300px;
 
       margin-top:14px;
@@ -270,7 +379,8 @@
 
       box-shadow:
         0 7px 24px
-        rgba(23,32,42,.07);
+        rgba(23,32,42,.06);
+
     }
 
 
@@ -285,12 +395,14 @@
         transform .3s ease;
 
       touch-action:pan-x;
+
     }
 
 
     .gallery-slide{
 
       min-width:100%;
+
       width:100%;
       height:100%;
 
@@ -299,21 +411,23 @@
       justify-content:center;
 
       background:#f0f1f3;
+
     }
 
 
     .gallery-slide img{
 
-      display:block;
-
       width:100%;
       height:100%;
+
+      display:block;
 
       object-fit:cover;
 
       user-select:none;
 
       -webkit-user-drag:none;
+
     }
 
 
@@ -341,10 +455,11 @@
       color:#fff;
 
       font-size:9px;
+
       font-weight:900;
 
       backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
+
     }
 
 
@@ -370,7 +485,7 @@
       color:#fff;
 
       backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
+
     }
 
 
@@ -378,6 +493,7 @@
 
       width:17px;
       height:17px;
+
     }
 
 
@@ -395,6 +511,7 @@
       font-weight:750;
 
       text-align:right;
+
     }
 
 
@@ -412,7 +529,6 @@
 
       justify-content:space-between;
 
-      gap:10px;
     }
 
 
@@ -439,6 +555,7 @@
       font-size:9px;
 
       font-weight:900;
+
     }
 
 
@@ -450,6 +567,7 @@
       border-radius:50%;
 
       background:var(--green);
+
     }
 
 
@@ -460,6 +578,7 @@
       font-size:8px;
 
       font-weight:800;
+
     }
 
 
@@ -471,8 +590,7 @@
 
       margin-top:9px;
 
-      padding:
-        15px;
+      padding:15px;
 
       background:#fff;
 
@@ -485,6 +603,7 @@
       box-shadow:
         0 6px 20px
         rgba(23,32,42,.05);
+
     }
 
 
@@ -497,6 +616,7 @@
       justify-content:space-between;
 
       gap:12px;
+
     }
 
 
@@ -505,6 +625,7 @@
       min-width:0;
 
       flex:1;
+
     }
 
 
@@ -517,6 +638,7 @@
       font-size:9px;
 
       font-weight:900;
+
     }
 
 
@@ -527,6 +649,8 @@
         0
         0;
 
+      color:#182028;
+
       font-size:21px;
 
       line-height:1.15;
@@ -534,6 +658,7 @@
       font-weight:950;
 
       letter-spacing:-.4px;
+
     }
 
 
@@ -546,6 +671,7 @@
       flex-wrap:wrap;
 
       gap:5px;
+
     }
 
 
@@ -570,6 +696,7 @@
       font-size:8px;
 
       font-weight:850;
+
     }
 
 
@@ -587,6 +714,7 @@
       background:var(--green-soft);
 
       border-radius:12px;
+
     }
 
 
@@ -601,6 +729,7 @@
       line-height:1;
 
       font-weight:950;
+
     }
 
 
@@ -615,11 +744,12 @@
       font-size:7px;
 
       font-weight:800;
+
     }
 
 
     /* =====================================
-       DETAILS
+       DETAILS BUTTON
     ===================================== */
 
     .details-toggle{
@@ -648,6 +778,7 @@
       color:var(--text);
 
       text-align:right;
+
     }
 
 
@@ -658,6 +789,7 @@
       align-items:center;
 
       gap:8px;
+
     }
 
 
@@ -676,6 +808,7 @@
       background:var(--purple-soft);
 
       color:var(--purple-text);
+
     }
 
 
@@ -683,6 +816,7 @@
 
       width:15px;
       height:15px;
+
     }
 
 
@@ -693,6 +827,7 @@
       font-size:11px;
 
       font-weight:950;
+
     }
 
 
@@ -707,6 +842,7 @@
       font-size:7px;
 
       font-weight:700;
+
     }
 
 
@@ -719,6 +855,7 @@
 
       transition:
         transform .2s ease;
+
     }
 
 
@@ -726,14 +863,20 @@
     .details-chevron{
 
       transform:rotate(180deg);
+
     }
 
+
+    /* =====================================
+       FULL DEVICE DETAILS
+    ===================================== */
 
     .details-panel{
 
       display:none;
 
       margin-top:11px;
+
     }
 
 
@@ -743,19 +886,28 @@
 
       animation:
         detailsIn .2s ease;
+
     }
 
 
     @keyframes detailsIn{
 
       from{
+
         opacity:0;
-        transform:translateY(-4px);
+
+        transform:
+          translateY(-4px);
+
       }
 
       to{
+
         opacity:1;
-        transform:translateY(0);
+
+        transform:
+          translateY(0);
+
       }
 
     }
@@ -772,6 +924,7 @@
         );
 
       gap:7px;
+
     }
 
 
@@ -779,8 +932,7 @@
 
       min-height:59px;
 
-      padding:
-        9px;
+      padding:9px;
 
       background:#f8f9fa;
 
@@ -789,6 +941,7 @@
         #edf0f2;
 
       border-radius:12px;
+
     }
 
 
@@ -801,6 +954,7 @@
       font-size:7px;
 
       font-weight:800;
+
     }
 
 
@@ -817,6 +971,7 @@
       line-height:1.4;
 
       font-weight:900;
+
     }
 
 
@@ -824,8 +979,7 @@
 
       margin-top:7px;
 
-      padding:
-        10px;
+      padding:10px;
 
       background:#f8f9fa;
 
@@ -834,6 +988,7 @@
         #edf0f2;
 
       border-radius:12px;
+
     }
 
 
@@ -844,6 +999,7 @@
       font-size:7px;
 
       font-weight:800;
+
     }
 
 
@@ -858,358 +1014,7 @@
       line-height:1.65;
 
       font-weight:750;
-    }
 
-
-    /* =====================================
-       AUCTION INFO
-       بدون عنوان "معلومات المزاد"
-    ===================================== */
-
-    .auction-card{
-
-      margin-top:10px;
-
-      padding:
-        15px;
-
-      background:#fff;
-
-      border:
-        1px solid
-        var(--line);
-
-      border-radius:22px;
-
-      box-shadow:
-        0 7px 22px
-        rgba(23,32,42,.055);
-    }
-
-
-    .auction-price-row{
-
-      display:flex;
-
-      align-items:flex-end;
-
-      justify-content:space-between;
-
-      gap:12px;
-    }
-
-
-    .price-label{
-
-      display:block;
-
-      color:#9299a1;
-
-      font-size:8px;
-
-      font-weight:800;
-    }
-
-
-    .current-price{
-
-      margin-top:2px;
-
-      color:var(--purple-text);
-
-      font-size:26px;
-
-      line-height:1.1;
-
-      font-weight:950;
-
-      letter-spacing:-.6px;
-    }
-
-
-    .currency{
-
-      font-size:9px;
-
-      font-weight:900;
-    }
-
-
-    .bid-count{
-
-      text-align:left;
-    }
-
-
-    .bid-count-number{
-
-      display:block;
-
-      color:#303840;
-
-      font-size:17px;
-
-      line-height:1;
-
-      font-weight:950;
-    }
-
-
-    .bid-count-label{
-
-      display:block;
-
-      margin-top:3px;
-
-      color:#9aa1a9;
-
-      font-size:7px;
-
-      font-weight:750;
-    }
-
-
-    /* =====================================
-       TIMER
-    ===================================== */
-
-    .timer-box{
-
-      margin-top:12px;
-
-      padding:
-        11px;
-
-      border-radius:14px;
-
-      background:#f7f5fd;
-
-      border:
-        1px solid
-        #ebe7f8;
-    }
-
-
-    .timer-title{
-
-      color:#8278a6;
-
-      font-size:8px;
-
-      font-weight:850;
-
-      text-align:center;
-    }
-
-
-    .timer{
-
-      margin-top:5px;
-
-      display:flex;
-
-      align-items:center;
-
-      justify-content:center;
-
-      gap:5px;
-
-      direction:ltr;
-    }
-
-
-    .time-part{
-
-      min-width:49px;
-
-      padding:
-        6px
-        4px;
-
-      border-radius:9px;
-
-      background:#fff;
-
-      border:
-        1px solid
-        #e9e5f5;
-
-      text-align:center;
-    }
-
-
-    .time-number{
-
-      display:block;
-
-      color:var(--purple-text);
-
-      font-size:17px;
-
-      line-height:1;
-
-      font-weight:950;
-    }
-
-
-    .time-label{
-
-      display:block;
-
-      margin-top:3px;
-
-      color:#aaa3c1;
-
-      font-size:6px;
-
-      font-weight:800;
-    }
-
-
-    .time-colon{
-
-      color:#a49dbd;
-
-      font-size:13px;
-
-      font-weight:950;
-    }
-
-
-    .end-time{
-
-      margin-top:7px;
-
-      color:#999fa7;
-
-      font-size:7px;
-
-      font-weight:750;
-
-      text-align:center;
-    }
-
-
-    /* =====================================
-       NEXT BID
-    ===================================== */
-
-    .next-bid{
-
-      margin-top:9px;
-
-      min-height:45px;
-
-      padding:
-        0
-        11px;
-
-      display:flex;
-
-      align-items:center;
-
-      justify-content:space-between;
-
-      gap:10px;
-
-      background:#f8f9fa;
-
-      border:
-        1px solid
-        #edf0f2;
-
-      border-radius:12px;
-    }
-
-
-    .next-bid-label{
-
-      color:#9299a1;
-
-      font-size:8px;
-
-      font-weight:800;
-    }
-
-
-    .next-bid-value{
-
-      color:#353d45;
-
-      font-size:11px;
-
-      font-weight:950;
-    }
-
-
-    /* =====================================
-       BID BUTTON
-    ===================================== */
-
-    .bid-button{
-
-      width:100%;
-
-      min-height:51px;
-
-      margin-top:10px;
-
-      display:flex;
-
-      align-items:center;
-
-      justify-content:center;
-
-      gap:8px;
-
-      border-radius:14px;
-
-      background:var(--petrol);
-
-      color:#fff;
-
-      font-size:13px;
-
-      font-weight:950;
-
-      box-shadow:
-        0 8px 19px
-        rgba(23,107,135,.16);
-
-      transition:
-        transform .16s ease,
-        background .16s ease;
-    }
-
-
-    .bid-button:active{
-
-      transform:scale(.98);
-
-      background:var(--petrol-dark);
-    }
-
-
-    .bid-button svg{
-
-      width:18px;
-      height:18px;
-    }
-
-
-    .login-hint{
-
-      margin-top:7px;
-
-      color:#a0a6ad;
-
-      font-size:7px;
-
-      line-height:1.5;
-
-      font-weight:750;
-
-      text-align:center;
     }
 
 
@@ -1244,12 +1049,14 @@
       box-shadow:
         0 5px 16px
         rgba(23,32,42,.035);
+
     }
 
 
     .seller-info{
 
       min-width:0;
+
     }
 
 
@@ -1260,6 +1067,7 @@
       font-size:7px;
 
       font-weight:800;
+
     }
 
 
@@ -1272,6 +1080,7 @@
       font-size:11px;
 
       font-weight:950;
+
     }
 
 
@@ -1284,6 +1093,7 @@
       font-size:7px;
 
       font-weight:750;
+
     }
 
 
@@ -1304,6 +1114,7 @@
       font-weight:900;
 
       white-space:nowrap;
+
     }
 
 
@@ -1324,14 +1135,12 @@
       padding:
         6px
         10px
-        calc(
-          6px +
-          var(--safe-bottom)
-        );
+        6px;
 
       z-index:100;
 
       pointer-events:none;
+
     }
 
 
@@ -1360,11 +1169,8 @@
         0 9px 25px
         rgba(23,32,42,.10);
 
-      backdrop-filter:blur(18px);
-
-      -webkit-backdrop-filter:blur(18px);
-
       pointer-events:auto;
+
     }
 
 
@@ -1383,6 +1189,7 @@
       gap:2px;
 
       align-items:center;
+
     }
 
 
@@ -1404,16 +1211,6 @@
 
       color:#8f979f;
 
-      transition:
-        background .18s ease,
-        color .18s ease,
-        transform .18s ease;
-    }
-
-
-    .nav-item:active{
-
-      transform:scale(.95);
     }
 
 
@@ -1422,6 +1219,7 @@
       background:#f0f5f7;
 
       color:var(--petrol);
+
     }
 
 
@@ -1429,6 +1227,7 @@
 
       width:19px;
       height:19px;
+
     }
 
 
@@ -1439,11 +1238,12 @@
       line-height:1;
 
       font-weight:850;
+
     }
 
 
     /* =====================================
-       VIEWER
+       FULLSCREEN VIEWER
     ===================================== */
 
     .viewer{
@@ -1460,12 +1260,14 @@
       justify-content:center;
 
       background:#090b0d;
+
     }
 
 
     .viewer.show{
 
       display:flex;
+
     }
 
 
@@ -1480,6 +1282,7 @@
         transform .25s ease;
 
       touch-action:pan-x;
+
     }
 
 
@@ -1494,6 +1297,7 @@
 
       align-items:center;
       justify-content:center;
+
     }
 
 
@@ -1507,6 +1311,7 @@
       user-select:none;
 
       -webkit-user-drag:none;
+
     }
 
 
@@ -1539,9 +1344,6 @@
 
       z-index:10;
 
-      backdrop-filter:blur(10px);
-
-      -webkit-backdrop-filter:blur(10px);
     }
 
 
@@ -1549,6 +1351,7 @@
 
       width:20px;
       height:20px;
+
     }
 
 
@@ -1592,264 +1395,12 @@
       font-weight:900;
 
       z-index:10;
+
     }
 
 
     /* =====================================
-       BID MODAL
-    ===================================== */
-
-    .modal-backdrop{
-
-      position:fixed;
-
-      inset:0;
-
-      z-index:900;
-
-      display:none;
-
-      align-items:flex-end;
-      justify-content:center;
-
-      padding:12px;
-
-      background:
-        rgba(11,16,20,.48);
-
-      backdrop-filter:blur(5px);
-
-      -webkit-backdrop-filter:blur(5px);
-    }
-
-
-    .modal-backdrop.show{
-
-      display:flex;
-    }
-
-
-    .bid-modal{
-
-      width:min(100%,500px);
-
-      padding:20px;
-
-      background:#fff;
-
-      border-radius:25px;
-
-      box-shadow:
-        0 20px 60px
-        rgba(0,0,0,.20);
-    }
-
-
-    .modal-handle{
-
-      width:38px;
-      height:4px;
-
-      margin:
-        0
-        auto
-        17px;
-
-      border-radius:10px;
-
-      background:#dfe3e6;
-    }
-
-
-    .modal-title{
-
-      margin:0;
-
-      font-size:18px;
-
-      font-weight:950;
-    }
-
-
-    .modal-subtitle{
-
-      margin-top:6px;
-
-      color:#8e969e;
-
-      font-size:10px;
-
-      line-height:1.7;
-
-      font-weight:700;
-    }
-
-
-    .deposit-box{
-
-      margin-top:15px;
-
-      padding:14px;
-
-      border-radius:15px;
-
-      background:#f7f5fd;
-
-      border:
-        1px solid
-        #ebe7f8;
-    }
-
-
-    .deposit-row{
-
-      display:flex;
-
-      align-items:center;
-
-      justify-content:space-between;
-
-      gap:10px;
-    }
-
-
-    .deposit-label{
-
-      color:#81789f;
-
-      font-size:9px;
-
-      font-weight:800;
-    }
-
-
-    .deposit-value{
-
-      color:var(--purple-text);
-
-      font-size:16px;
-
-      font-weight:950;
-    }
-
-
-    .deposit-note{
-
-      margin-top:9px;
-
-      color:#777e87;
-
-      font-size:9px;
-
-      line-height:1.8;
-
-      font-weight:700;
-    }
-
-
-    .rules{
-
-      margin-top:13px;
-    }
-
-
-    .rule{
-
-      display:flex;
-
-      align-items:flex-start;
-
-      gap:8px;
-
-      margin-top:8px;
-
-      color:#626b74;
-
-      font-size:9px;
-
-      line-height:1.7;
-
-      font-weight:750;
-    }
-
-
-    .rule:first-child{
-
-      margin-top:0;
-    }
-
-
-    .rule-icon{
-
-      width:19px;
-      height:19px;
-
-      min-width:19px;
-
-      display:flex;
-
-      align-items:center;
-      justify-content:center;
-
-      border-radius:7px;
-
-      background:#f1f3f5;
-
-      color:#69727b;
-    }
-
-
-    .rule-icon svg{
-
-      width:11px;
-      height:11px;
-    }
-
-
-    .modal-actions{
-
-      display:grid;
-
-      grid-template-columns:
-        1fr
-        1fr;
-
-      gap:8px;
-
-      margin-top:17px;
-    }
-
-
-    .modal-btn{
-
-      min-height:48px;
-
-      border-radius:14px;
-
-      font-size:11px;
-
-      font-weight:950;
-    }
-
-
-    .modal-cancel{
-
-      background:#f2f4f5;
-
-      color:#69717a;
-    }
-
-
-    .modal-confirm{
-
-      background:var(--petrol);
-
-      color:#fff;
-    }
-
-
-    /* =====================================
-       SMALL DEVICES
+       MOBILE
     ===================================== */
 
     @media(max-width:380px){
@@ -1859,11 +1410,8 @@
         padding-left:12px;
         padding-right:12px;
 
-        padding-bottom:
-          calc(
-            90px +
-            var(--safe-bottom)
-          );
+        padding-bottom:90px;
+
       }
 
 
@@ -1871,12 +1419,53 @@
 
         margin-left:-12px;
         margin-right:-12px;
+
+        width:calc(100% + 24px);
+
+        min-height:190px;
+
       }
 
 
       .header-title{
 
-        font-size:20px;
+        font-size:28px;
+
+      }
+
+
+      .header-subtitle{
+
+        font-size:13px;
+
+      }
+
+
+      .back-btn,
+      .header-icon{
+
+        width:62px;
+        min-width:62px;
+        height:62px;
+
+        border-radius:21px;
+
+      }
+
+
+      .back-btn svg{
+
+        width:27px;
+        height:27px;
+
+      }
+
+
+      .header-icon svg{
+
+        width:32px;
+        height:32px;
+
       }
 
 
@@ -1884,30 +1473,19 @@
 
         height:270px;
 
-        border-radius:22px;
       }
 
 
       .device-name{
 
         font-size:20px;
-      }
 
-
-      .current-price{
-
-        font-size:24px;
-      }
-
-
-      .time-part{
-
-        min-width:46px;
       }
 
     }
 
   </style>
+
 </head>
 
 
@@ -1917,19 +1495,22 @@
   <main class="page">
 
 
-    <!-- =================================
+    <!-- =====================================
          HEADER
-    ================================== -->
+    ====================================== -->
 
     <header class="top-header">
 
       <div class="header-row">
 
 
+        <!-- السهم -->
+
         <button
           class="back-btn"
           id="backBtn"
           type="button"
+          aria-label="رجوع"
         >
 
           <svg
@@ -1941,12 +1522,16 @@
             stroke-linejoin="round"
           >
 
-            <path d="M15 18l-6-6 6-6"/>
+            <path d="M8 12h13"/>
+
+            <path d="M16 6l6 6-6 6"/>
 
           </svg>
 
         </button>
 
+
+        <!-- العنوان -->
 
         <div class="header-content">
 
@@ -1961,6 +1546,8 @@
         </div>
 
 
+        <!-- أيقونة المزاد -->
+
         <div class="header-icon">
 
           <svg
@@ -1973,22 +1560,26 @@
           >
 
             <path d="M6 3h12"/>
+
             <path d="M6 21h12"/>
+
             <path d="M8 3v4l4 5-4 5v4"/>
+
             <path d="M16 3v4l-4 5 4 5v4"/>
 
           </svg>
 
         </div>
 
+
       </div>
 
     </header>
 
 
-    <!-- =================================
+    <!-- =====================================
          GALLERY
-    ================================== -->
+    ====================================== -->
 
     <section
       class="gallery"
@@ -2025,8 +1616,11 @@
         >
 
           <path d="M8 3H5a2 2 0 0 0-2 2v3"/>
+
           <path d="M16 3h3a2 2 0 0 1 2 2v3"/>
+
           <path d="M21 16v3a2 2 0 0 1-2 2h-3"/>
+
           <path d="M3 16v3a2 2 0 0 0 2 2h3"/>
 
         </svg>
@@ -2041,9 +1635,9 @@
     </div>
 
 
-    <!-- =================================
+    <!-- =====================================
          STATUS
-    ================================== -->
+    ====================================== -->
 
     <div class="auction-status">
 
@@ -2063,9 +1657,9 @@
     </div>
 
 
-    <!-- =================================
+    <!-- =====================================
          DEVICE
-    ================================== -->
+    ====================================== -->
 
     <section class="device-card">
 
@@ -2104,7 +1698,7 @@
         </div>
 
 
-        <!-- iPhone فقط -->
+        <!-- البطارية تظهر للـ iPhone فقط -->
 
         <div class="battery-box">
 
@@ -2122,7 +1716,9 @@
       </div>
 
 
-      <!-- DETAILS BUTTON -->
+      <!-- =====================================
+           DETAILS BUTTON
+      ====================================== -->
 
       <button
         class="details-toggle"
@@ -2154,7 +1750,9 @@
               />
 
               <path d="M8 7h8"/>
+
               <path d="M8 11h8"/>
+
               <path d="M8 15h5"/>
 
             </svg>
@@ -2196,7 +1794,9 @@
       </button>
 
 
-      <!-- FULL DETAILS -->
+      <!-- =====================================
+           DETAILS
+      ====================================== -->
 
       <div
         class="details-panel"
@@ -2330,195 +1930,13 @@
 
       </div>
 
-    </section>
-
-
-    <!-- =================================
-         AUCTION
-    ================================== -->
-
-    <section class="auction-card">
-
-
-      <div class="auction-price-row">
-
-
-        <div>
-
-          <span class="price-label">
-            السعر الحالي
-          </span>
-
-
-          <div class="current-price">
-
-            <span id="currentPrice">
-              1,250,000
-            </span>
-
-            <span class="currency">
-              د.ع
-            </span>
-
-          </div>
-
-        </div>
-
-
-        <div class="bid-count">
-
-          <span
-            class="bid-count-number"
-            id="bidCount"
-          >
-            12
-          </span>
-
-          <span class="bid-count-label">
-            مزايدة
-          </span>
-
-        </div>
-
-
-      </div>
-
-
-      <!-- TIMER -->
-
-      <div class="timer-box">
-
-
-        <div class="timer-title">
-          الوقت المتبقي
-        </div>
-
-
-        <div class="timer">
-
-
-          <div class="time-part">
-
-            <span
-              class="time-number"
-              id="hours"
-            >
-              00
-            </span>
-
-            <span class="time-label">
-              ساعة
-            </span>
-
-          </div>
-
-
-          <span class="time-colon">
-            :
-          </span>
-
-
-          <div class="time-part">
-
-            <span
-              class="time-number"
-              id="minutes"
-            >
-              40
-            </span>
-
-            <span class="time-label">
-              دقيقة
-            </span>
-
-          </div>
-
-
-          <span class="time-colon">
-            :
-          </span>
-
-
-          <div class="time-part">
-
-            <span
-              class="time-number"
-              id="seconds"
-            >
-              33
-            </span>
-
-            <span class="time-label">
-              ثانية
-            </span>
-
-          </div>
-
-
-        </div>
-
-
-        <div class="end-time">
-          ينتهي اليوم الساعة 11:42 صباحاً
-        </div>
-
-
-      </div>
-
-
-      <!-- NEXT BID -->
-
-      <div class="next-bid">
-
-        <span class="next-bid-label">
-          الزيادة التالية
-        </span>
-
-        <span class="next-bid-value">
-          1,275,000 د.ع
-        </span>
-
-      </div>
-
-
-      <!-- BID BUTTON -->
-
-      <button
-        class="bid-button"
-        id="bidButton"
-        type="button"
-      >
-
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-
-          <path d="M12 20V4"/>
-          <path d="M6 10l6-6 6 6"/>
-
-        </svg>
-
-        زايد الآن
-
-      </button>
-
-
-      <div class="login-hint">
-        تحتاج تسجيل الدخول للمشاركة في المزاد
-      </div>
-
 
     </section>
 
 
-    <!-- =================================
+    <!-- =====================================
          SELLER
-    ================================== -->
+    ====================================== -->
 
     <section class="seller-card">
 
@@ -2553,9 +1971,9 @@
   </main>
 
 
-  <!-- =================================
+  <!-- =====================================
        BOTTOM NAV
-  ================================== -->
+  ====================================== -->
 
   <div class="bottom-wrap">
 
@@ -2579,7 +1997,9 @@
           >
 
             <path d="M3 10.5L12 3l9 7.5"/>
+
             <path d="M5 9.5V21h14V9.5"/>
+
             <path d="M9 21v-6h6v6"/>
 
           </svg>
@@ -2637,8 +2057,11 @@
           >
 
             <path d="M6 3h12"/>
+
             <path d="M6 21h12"/>
+
             <path d="M8 3v4l4 5-4 5v4"/>
+
             <path d="M16 3v4l-4 5 4 5v4"/>
 
           </svg>
@@ -2713,9 +2136,9 @@
   </div>
 
 
-  <!-- =================================
+  <!-- =====================================
        FULLSCREEN VIEWER
-  ================================== -->
+  ====================================== -->
 
   <div
     class="viewer"
@@ -2739,6 +2162,7 @@
       >
 
         <path d="M18 6L6 18"/>
+
         <path d="M6 6l12 12"/>
 
       </svg>
@@ -2763,210 +2187,11 @@
   </div>
 
 
-  <!-- =================================
-       BID MODAL
-  ================================== -->
-
-  <div
-    class="modal-backdrop"
-    id="bidModal"
-  >
-
-
-    <div class="bid-modal">
-
-
-      <div class="modal-handle"></div>
-
-
-      <h3 class="modal-title">
-        المشاركة في المزاد
-      </h3>
-
-
-      <div class="modal-subtitle">
-        قبل أول مزايدة، تحتاج تفعيل مشاركتك عن طريق تأمين
-        قابل للاسترجاع لمنع المزايدات الوهمية.
-      </div>
-
-
-      <div class="deposit-box">
-
-
-        <div class="deposit-row">
-
-          <span class="deposit-label">
-            مبلغ التأمين
-          </span>
-
-          <span class="deposit-value">
-            5,000 د.ع
-          </span>
-
-        </div>
-
-
-        <div class="deposit-note">
-          هذا المبلغ ليس رسماً للمزاد، وإنما تأمين مشاركة
-          يُسترجع حسب شروط المزاد.
-        </div>
-
-
-      </div>
-
-
-      <div class="rules">
-
-
-        <div class="rule">
-
-          <span class="rule-icon">
-
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-
-              <path d="M20 6L9 17l-5-5"/>
-
-            </svg>
-
-          </span>
-
-          <span>
-            بعد دفع التأمين يرسل طلبك إلى الإدارة للمراجعة.
-          </span>
-
-        </div>
-
-
-        <div class="rule">
-
-          <span class="rule-icon">
-
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-
-              <path d="M12 3v18"/>
-              <path d="M7 8l5-5 5 5"/>
-
-            </svg>
-
-          </span>
-
-          <span>
-            بعد الموافقة تقدر تبدأ بالمزايدة مباشرة.
-          </span>
-
-        </div>
-
-
-        <div class="rule">
-
-          <span class="rule-icon">
-
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-
-              <circle
-                cx="12"
-                cy="12"
-                r="9"
-              />
-
-              <path d="M12 7v5l3 2"/>
-
-            </svg>
-
-          </span>
-
-          <span>
-            إذا ما فزت بالمزاد يرجع لك التأمين بعد انتهاء المزاد.
-          </span>
-
-        </div>
-
-
-        <div class="rule">
-
-          <span class="rule-icon">
-
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-
-              <path d="M12 3l9 4.5v5.5c0 4.5-3 7-9 8-6-1-9-3.5-9-8V7.5L12 3Z"/>
-
-            </svg>
-
-          </span>
-
-          <span>
-            إذا فزت، يبقى التأمين ضماناً إلى إكمال عملية البيع،
-            وبعدها يُسترجع حسب الشروط.
-          </span>
-
-        </div>
-
-
-      </div>
-
-
-      <div class="modal-actions">
-
-
-        <button
-          class="modal-btn modal-cancel"
-          id="modalCancel"
-          type="button"
-        >
-          إلغاء
-        </button>
-
-
-        <button
-          class="modal-btn modal-confirm"
-          id="modalConfirm"
-          type="button"
-        >
-          متابعة
-        </button>
-
-
-      </div>
-
-
-    </div>
-
-  </div>
-
-
   <script>
 
     /* =====================================
        DEMO DATA
-    ===================================== */
+    ====================================== */
 
     const auctionData = {
 
@@ -2979,17 +2204,6 @@
       color:"Titanium Black",
 
       batteryHealth:97,
-
-      currentPrice:1250000,
-
-      bidIncrement:25000,
-
-      bidCount:12,
-
-      endTime:
-        Date.now() +
-        (40 * 60 * 1000) +
-        33000,
 
       images:[
 
@@ -3148,7 +2362,7 @@
 
       }else{
 
-        galleryIndex = 0;
+        galleryIndex=0;
 
       }
 
@@ -3190,7 +2404,7 @@
         touchStartY =
           touch.clientY;
 
-        touchMoved = false;
+        touchMoved=false;
 
       },
       {passive:true}
@@ -3213,11 +2427,11 @@
           touchStartY;
 
         if(
-          Math.abs(dx) > 8 ||
-          Math.abs(dy) > 8
+          Math.abs(dx)>8 ||
+          Math.abs(dy)>8
         ){
 
-          touchMoved = true;
+          touchMoved=true;
 
         }
 
@@ -3238,10 +2452,10 @@
           touchStartX;
 
         if(
-          Math.abs(dx) > 45
+          Math.abs(dx)>45
         ){
 
-          if(dx < 0){
+          if(dx<0){
 
             nextGallery();
 
@@ -3264,7 +2478,7 @@
 
         if(touchMoved){
 
-          touchMoved = false;
+          touchMoved=false;
 
           return;
 
@@ -3318,9 +2532,9 @@
       );
 
 
-    let viewerIndex = 0;
+    let viewerIndex=0;
 
-    let viewerStartX = 0;
+    let viewerStartX=0;
 
 
     function openViewer(
@@ -3328,7 +2542,8 @@
       index
     ){
 
-      viewerIndex = index;
+      viewerIndex=index;
+
 
       viewerTrack.innerHTML =
         images
@@ -3354,13 +2569,10 @@
           .join("");
 
 
-      viewer.classList.add(
-        "show"
-      );
+      viewer.classList.add("show");
 
 
-      document.body.style.overflow =
-        "hidden";
+      document.body.style.overflow="hidden";
 
 
       updateViewer();
@@ -3382,12 +2594,9 @@
 
     function closeViewer(){
 
-      viewer.classList.remove(
-        "show"
-      );
+      viewer.classList.remove("show");
 
-      document.body.style.overflow =
-        "";
+      document.body.style.overflow="";
 
     }
 
@@ -3422,8 +2631,9 @@
           event.changedTouches[0].clientX -
           viewerStartX;
 
+
         if(
-          Math.abs(dx) < 45
+          Math.abs(dx)<45
         ){
 
           return;
@@ -3431,11 +2641,11 @@
         }
 
 
-        if(dx < 0){
+        if(dx<0){
 
           if(
             viewerIndex <
-            auctionData.images.length - 1
+            auctionData.images.length-1
           ){
 
             viewerIndex++;
@@ -3445,7 +2655,7 @@
         }else{
 
           if(
-            viewerIndex > 0
+            viewerIndex>0
           ){
 
             viewerIndex--;
@@ -3467,233 +2677,12 @@
       function(event){
 
         if(
-          event.key === "Escape"
+          event.key==="Escape"
         ){
 
           closeViewer();
 
         }
-
-      }
-    );
-
-
-    /* =====================================
-       TIMER
-    ===================================== */
-
-    const hoursElement =
-      document.getElementById(
-        "hours"
-      );
-
-    const minutesElement =
-      document.getElementById(
-        "minutes"
-      );
-
-    const secondsElement =
-      document.getElementById(
-        "seconds"
-      );
-
-
-    function updateTimer(){
-
-      const remaining =
-        Math.max(
-          0,
-          auctionData.endTime -
-          Date.now()
-        );
-
-
-      const totalSeconds =
-        Math.floor(
-          remaining / 1000
-        );
-
-
-      const hours =
-        Math.floor(
-          totalSeconds / 3600
-        );
-
-
-      const minutes =
-        Math.floor(
-          (totalSeconds % 3600) / 60
-        );
-
-
-      const seconds =
-        totalSeconds % 60;
-
-
-      hoursElement.textContent =
-        String(hours)
-          .padStart(2,"0");
-
-
-      minutesElement.textContent =
-        String(minutes)
-          .padStart(2,"0");
-
-
-      secondsElement.textContent =
-        String(seconds)
-          .padStart(2,"0");
-
-
-      if(
-        totalSeconds <= 0
-      ){
-
-        const badge =
-          document.querySelector(
-            ".status-badge"
-          );
-
-
-        badge.innerHTML = `
-
-          <span class="status-dot"></span>
-
-          انتهى المزاد
-
-        `;
-
-
-        badge.style.background =
-          "var(--red-soft)";
-
-
-        badge.style.color =
-          "var(--red)";
-
-
-        document
-          .getElementById(
-            "bidButton"
-          )
-          .disabled = true;
-
-
-        document
-          .getElementById(
-            "bidButton"
-          )
-          .style.opacity = ".5";
-
-
-        document
-          .getElementById(
-            "bidButton"
-          )
-          .textContent =
-          "انتهى المزاد";
-
-      }
-
-    }
-
-
-    updateTimer();
-
-
-    setInterval(
-      updateTimer,
-      1000
-    );
-
-
-    /* =====================================
-       BID MODAL
-    ===================================== */
-
-    const bidButton =
-      document.getElementById(
-        "bidButton"
-      );
-
-    const bidModal =
-      document.getElementById(
-        "bidModal"
-      );
-
-    const modalCancel =
-      document.getElementById(
-        "modalCancel"
-      );
-
-    const modalConfirm =
-      document.getElementById(
-        "modalConfirm"
-      );
-
-
-    bidButton.addEventListener(
-      "click",
-      function(){
-
-        if(
-          bidButton.disabled
-        ){
-
-          return;
-
-        }
-
-        bidModal.classList.add(
-          "show"
-        );
-
-      }
-    );
-
-
-    modalCancel.addEventListener(
-      "click",
-      function(){
-
-        bidModal.classList.remove(
-          "show"
-        );
-
-      }
-    );
-
-
-    bidModal.addEventListener(
-      "click",
-      function(event){
-
-        if(
-          event.target ===
-          bidModal
-        ){
-
-          bidModal.classList.remove(
-            "show"
-          );
-
-        }
-
-      }
-    );
-
-
-    modalConfirm.addEventListener(
-      "click",
-      function(){
-
-        bidModal.classList.remove(
-          "show"
-        );
-
-        alert(
-          "تم استلام طلب المشاركة. سيتم ربط الدفع وموافقة الإدارة في المرحلة القادمة."
-        );
 
       }
     );
@@ -3706,6 +2695,7 @@
     renderGallery();
 
   </script>
+
 
 </body>
 </html>
