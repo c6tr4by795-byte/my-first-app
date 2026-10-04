@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-
   <meta charset="UTF-8">
 
   <meta
@@ -15,48 +13,41 @@
   <style>
 
     :root{
-
-      --petrol:#176b87;
+      --primary:#176b87;
+      --turquoise:#32B8C4;
       --purple:#6246d9;
 
       --bg:#f7f8fa;
-      --white:#ffffff;
+      --card:#ffffff;
 
-      --text:#182028;
-      --muted:#89919a;
+      --text:#171d23;
+      --muted:#8b939c;
+      --line:#e6eaee;
 
-      --line:#e7ecef;
-
-      --green:#27966a;
-      --green-soft:#eaf7f1;
-
-      --purple-soft:#eeebfb;
-      --purple-text:#51477d;
+      --success:#23845a;
+      --warning:#b47712;
 
       --safe-bottom:env(safe-area-inset-bottom,0px);
-
     }
-
 
     *{
       box-sizing:border-box;
       -webkit-tap-highlight-color:transparent;
     }
 
-
-    html,
-    body{
-
-      margin:0;
-      padding:0;
-
+    html{
       width:100%;
       min-height:100%;
-
       background:var(--bg);
+      scroll-behavior:smooth;
+    }
 
+    body{
+      width:100%;
+      min-height:100vh;
+      margin:0;
+      background:var(--bg);
       color:var(--text);
-
       font-family:
         -apple-system,
         BlinkMacSystemFont,
@@ -67,21 +58,19 @@
         Arial,
         sans-serif;
 
-    }
-
-
-    body{
       overflow-x:hidden;
+      padding-bottom:100px;
     }
 
+    button,
+    a{
+      font:inherit;
+    }
 
     button{
-      font:inherit;
       border:0;
-      outline:0;
       cursor:pointer;
     }
-
 
     a{
       color:inherit;
@@ -89,47 +78,25 @@
     }
 
 
-    /* =====================================
-       PAGE
-    ===================================== */
-
-    .page{
-
-      width:min(100%,520px);
-
-      margin:0 auto;
-
-      padding:
-        0
-        14px
-        calc(90px + var(--safe-bottom));
-
-    }
-
-
-    /* =====================================
+    /* =========================================
        HEADER
-       نفس هيدر المزادات
-    ===================================== */
+    ========================================= */
 
     .top-header{
-
       position:relative;
-
       overflow:hidden;
 
-      width:100%;
-
-      min-height:205px;
-
-      margin:0 -14px;
-
       width:calc(100% + 28px);
+      margin-right:-14px;
+      margin-left:-14px;
+
+      height:112px;
+      min-height:112px;
 
       padding:
-        calc(20px + env(safe-area-inset-top,0px))
+        calc(12px + env(safe-area-inset-top,0px))
         14px
-        22px;
+        14px;
 
       display:flex;
       align-items:center;
@@ -139,991 +106,776 @@
       border-radius:
         0
         0
-        30px
-        30px;
+        28px
+        28px;
 
       border-bottom:
-        1px solid
-        rgba(220,226,231,.65);
-
+        1px solid rgba(220,226,231,.55);
     }
-
-
-    /* الإضاءة الخفيفة الموجودة بهيدر المزادات */
 
     .top-header::before{
-
       content:"";
 
       position:absolute;
 
-      width:280px;
-      height:230px;
+      width:210px;
+      height:110px;
 
       left:-80px;
-      top:-100px;
+      top:-55px;
 
       border-radius:50%;
 
       background:
         radial-gradient(
           circle,
-          rgba(50,184,196,.13) 0%,
-          rgba(50,184,196,.05) 40%,
-          transparent 72%
+          rgba(50,184,196,.12),
+          rgba(50,184,196,0) 70%
         );
 
       pointer-events:none;
-
     }
 
-
     .top-header::after{
-
       content:"";
 
       position:absolute;
 
-      width:280px;
-      height:210px;
+      width:220px;
+      height:110px;
 
-      right:-80px;
-      bottom:-100px;
+      right:-85px;
+      bottom:-65px;
 
       border-radius:50%;
 
       background:
         radial-gradient(
           circle,
-          rgba(98,70,217,.12) 0%,
-          rgba(98,70,217,.05) 42%,
-          transparent 74%
+          rgba(98,70,217,.10),
+          rgba(98,70,217,0) 70%
         );
 
       pointer-events:none;
-
     }
 
-
     .header-row{
-
       position:relative;
-
       z-index:2;
 
       width:100%;
 
       display:flex;
-
       align-items:center;
-
       justify-content:space-between;
 
-      gap:12px;
-
+      gap:9px;
     }
 
-
-    /* زر الرجوع */
-
     .back-btn{
-
-      width:74px;
-      height:74px;
-
-      min-width:74px;
+      width:52px;
+      min-width:52px;
+      height:52px;
 
       display:flex;
       align-items:center;
       justify-content:center;
 
-      border-radius:24px;
+      border-radius:17px;
 
-      background:#ffffff;
+      background:#fff;
 
       color:#1d252c;
 
-      box-shadow:
-        0 6px 20px
-        rgba(25,35,45,.035);
-
       border:
         1px solid
-        rgba(226,231,235,.7);
+        rgba(226,231,235,.80);
+
+      box-shadow:
+        0 4px 14px
+        rgba(25,35,45,.035);
 
       transition:
-        transform .18s ease;
-
+        transform .16s ease,
+        box-shadow .16s ease;
     }
-
 
     .back-btn:active{
-
-      transform:scale(.95);
-
+      transform:scale(.94);
+      box-shadow:
+        0 2px 8px
+        rgba(25,35,45,.04);
     }
-
 
     .back-btn svg{
-
-      width:31px;
-      height:31px;
-
+      width:23px;
+      height:23px;
     }
-
-
-    /* النص */
 
     .header-content{
-
       flex:1;
-
       min-width:0;
-
       text-align:right;
-
     }
 
-
     .header-title{
-
       margin:0;
 
       color:#171d23;
 
-      font-size:35px;
-
-      line-height:1.15;
+      font-size:24px;
+      line-height:1.05;
 
       font-weight:950;
 
-      letter-spacing:-1px;
-
+      letter-spacing:-.6px;
     }
 
-
     .header-subtitle{
-
-      margin-top:7px;
+      margin-top:5px;
 
       color:#89919a;
 
-      font-size:16px;
-
-      line-height:1.35;
+      font-size:10px;
+      line-height:1.25;
 
       font-weight:800;
 
       white-space:nowrap;
-
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
-
-    /* أيقونة المزاد */
-
     .header-icon{
-
-      width:74px;
-      height:74px;
-
-      min-width:74px;
+      width:52px;
+      min-width:52px;
+      height:52px;
 
       display:flex;
       align-items:center;
       justify-content:center;
 
-      border-radius:24px;
+      border-radius:17px;
 
-      background:#ffffff;
+      background:#fff;
 
-      color:var(--petrol);
-
-      box-shadow:
-        0 6px 20px
-        rgba(25,35,45,.035);
+      color:var(--primary);
 
       border:
         1px solid
-        rgba(226,231,235,.7);
+        rgba(226,231,235,.80);
 
+      box-shadow:
+        0 4px 14px
+        rgba(25,35,45,.035);
     }
-
 
     .header-icon svg{
-
-      width:38px;
-      height:38px;
-
+      width:28px;
+      height:28px;
     }
 
 
-    /* =====================================
-       GALLERY
-    ===================================== */
+    /* =========================================
+       PAGE
+    ========================================= */
+
+    .page{
+      width:min(100%,520px);
+
+      margin:0 auto;
+
+      padding:
+        0
+        14px
+        calc(94px + var(--safe-bottom));
+    }
+
+
+    /* =========================================
+       PHOTO GALLERY
+    ========================================= */
 
     .gallery{
-
       position:relative;
 
-      width:100%;
+      width:calc(100% + 28px);
+
+      margin-right:-14px;
+      margin-left:-14px;
+
+      margin-top:10px;
 
       height:300px;
 
-      margin-top:14px;
+      background:#f1f2f4;
 
       overflow:hidden;
 
-      border-radius:24px;
+      user-select:none;
 
-      background:#f0f1f3;
-
-      box-shadow:
-        0 7px 24px
-        rgba(23,32,42,.06);
-
+      touch-action:pan-y;
     }
 
-
     .gallery-track{
-
       width:100%;
       height:100%;
 
       display:flex;
 
       transition:
-        transform .3s ease;
+        transform .34s cubic-bezier(.22,.61,.36,1);
 
-      touch-action:pan-x;
-
+      will-change:transform;
     }
-
 
     .gallery-slide{
-
-      min-width:100%;
+      flex:0 0 100%;
 
       width:100%;
       height:100%;
+
+      position:relative;
 
       display:flex;
       align-items:center;
       justify-content:center;
 
-      background:#f0f1f3;
+      background:#f1f2f4;
 
+      overflow:hidden;
     }
-
 
     .gallery-slide img{
+      display:block;
 
       width:100%;
       height:100%;
 
-      display:block;
-
-      object-fit:cover;
+      object-fit:contain;
 
       user-select:none;
-
       -webkit-user-drag:none;
 
+      pointer-events:none;
     }
 
-
-    .gallery-counter{
-
+    .gallery-top-actions{
       position:absolute;
 
-      left:11px;
-      bottom:11px;
+      top:12px;
+      left:12px;
+      right:12px;
 
-      min-width:48px;
-      height:29px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
 
-      padding:0 9px;
+      z-index:10;
+
+      pointer-events:none;
+    }
+
+    .gallery-count{
+      min-width:58px;
+      height:30px;
+
+      padding:0 10px;
 
       display:flex;
       align-items:center;
       justify-content:center;
 
-      border-radius:10px;
+      border-radius:12px;
 
       background:
-        rgba(18,24,29,.66);
+        rgba(255,255,255,.92);
 
-      color:#fff;
+      color:#252b31;
 
-      font-size:9px;
-
+      font-size:10px;
       font-weight:900;
 
-      backdrop-filter:blur(10px);
+      box-shadow:
+        0 4px 15px
+        rgba(20,25,30,.07);
 
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
     }
 
-
     .gallery-fullscreen{
-
-      position:absolute;
-
-      right:11px;
-      bottom:11px;
-
-      width:34px;
-      height:34px;
+      width:38px;
+      height:38px;
 
       display:flex;
       align-items:center;
       justify-content:center;
+
+      border-radius:13px;
+
+      background:
+        rgba(255,255,255,.94);
+
+      color:#20272d;
+
+      box-shadow:
+        0 4px 15px
+        rgba(20,25,30,.07);
+
+      pointer-events:auto;
+
+      transition:
+        transform .15s ease;
+    }
+
+    .gallery-fullscreen:active{
+      transform:scale(.92);
+    }
+
+    .gallery-fullscreen svg{
+      width:19px;
+      height:19px;
+    }
+
+    .gallery-hint{
+      position:absolute;
+
+      left:50%;
+      bottom:12px;
+
+      transform:translateX(-50%);
+
+      white-space:nowrap;
+
+      padding:
+        7px
+        12px;
 
       border-radius:11px;
 
       background:
-        rgba(18,24,29,.66);
+        rgba(20,25,30,.58);
 
       color:#fff;
 
-      backdrop-filter:blur(10px);
+      font-size:9px;
+      font-weight:800;
 
+      z-index:10;
+
+      pointer-events:none;
+
+      opacity:.88;
     }
 
 
-    .gallery-fullscreen svg{
-
-      width:17px;
-      height:17px;
-
-    }
-
-
-    .gallery-note{
-
-      margin:
-        7px
-        3px
-        0;
-
-      color:#9da4ab;
-
-      font-size:8px;
-
-      font-weight:750;
-
-      text-align:right;
-
-    }
-
-
-    /* =====================================
+    /* =========================================
        STATUS
-    ===================================== */
+    ========================================= */
 
     .auction-status{
-
-      margin-top:12px;
-
       display:flex;
-
       align-items:center;
-
       justify-content:space-between;
 
+      gap:10px;
+
+      margin-top:16px;
+      margin-bottom:12px;
     }
 
-
     .status-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
 
       min-height:30px;
 
-      display:inline-flex;
-
-      align-items:center;
-
-      gap:6px;
-
       padding:
         0
-        10px;
+        11px;
 
-      border-radius:10px;
+      border-radius:11px;
 
-      background:var(--green-soft);
+      background:#eaf7f1;
 
-      color:var(--green);
+      color:var(--success);
 
-      font-size:9px;
-
+      font-size:10px;
       font-weight:900;
-
     }
 
-
     .status-dot{
-
       width:7px;
       height:7px;
 
       border-radius:50%;
 
-      background:var(--green);
-
+      background:#35a46e;
     }
 
+    .status-text{
+      color:#9aa1a9;
 
-    .ending-label{
-
-      color:#a0a6ad;
-
-      font-size:8px;
-
+      font-size:10px;
       font-weight:800;
-
     }
 
 
-    /* =====================================
+    /* =========================================
        DEVICE CARD
-    ===================================== */
+    ========================================= */
 
     .device-card{
-
-      margin-top:9px;
-
-      padding:15px;
-
       background:#fff;
 
       border:
         1px solid
-        var(--line);
+        rgba(225,230,234,.9);
 
-      border-radius:22px;
+      border-radius:24px;
+
+      padding:17px;
 
       box-shadow:
-        0 6px 20px
-        rgba(23,32,42,.05);
-
+        0 7px 25px
+        rgba(23,32,42,.045);
     }
 
-
-    .device-top{
-
+    .device-heading{
       display:flex;
-
-      align-items:center;
-
+      align-items:flex-start;
       justify-content:space-between;
 
       gap:12px;
 
+      margin-bottom:15px;
     }
 
-
-    .device-info{
-
+    .device-title-wrap{
       min-width:0;
-
       flex:1;
-
     }
-
 
     .device-brand{
+      margin:0 0 4px;
 
-      margin:0;
+      color:var(--primary);
 
-      color:#8d959d;
-
-      font-size:9px;
-
-      font-weight:900;
-
+      font-size:10px;
+      font-weight:950;
     }
 
+    .device-title{
+      margin:0;
 
-    .device-name{
+      color:#151b20;
 
-      margin:
-        2px
-        0
-        0;
-
-      color:#182028;
-
-      font-size:21px;
-
+      font-size:22px;
       line-height:1.15;
 
       font-weight:950;
 
-      letter-spacing:-.4px;
-
+      letter-spacing:-.5px;
     }
 
-
-    .device-meta{
-
+    .device-basic{
       margin-top:7px;
 
-      display:flex;
-
-      flex-wrap:wrap;
-
-      gap:5px;
-
-    }
-
-
-    .meta-pill{
-
-      min-height:25px;
-
-      display:inline-flex;
-
-      align-items:center;
-
-      padding:
-        0
-        8px;
-
-      border-radius:9px;
-
-      background:#f4f5f6;
-
-      color:#626b73;
-
-      font-size:8px;
-
-      font-weight:850;
-
-    }
-
-
-    .battery-box{
-
-      width:68px;
-      min-width:68px;
-
-      padding:
-        8px
-        6px;
-
-      text-align:center;
-
-      background:var(--green-soft);
-
-      border-radius:12px;
-
-    }
-
-
-    .battery-number{
-
-      display:block;
-
-      color:var(--green);
-
-      font-size:17px;
-
-      line-height:1;
-
-      font-weight:950;
-
-    }
-
-
-    .battery-label{
-
-      display:block;
-
-      margin-top:4px;
-
-      color:#6f907f;
-
-      font-size:7px;
-
-      font-weight:800;
-
-    }
-
-
-    /* =====================================
-       DETAILS BUTTON
-    ===================================== */
-
-    .details-toggle{
-
-      width:100%;
-
-      margin-top:13px;
-
-      padding:
-        12px
-        0
-        0;
-
-      display:flex;
-
-      align-items:center;
-
-      justify-content:space-between;
-
-      background:transparent;
-
-      border-top:
-        1px solid
-        var(--line);
-
-      color:var(--text);
-
-      text-align:right;
-
-    }
-
-
-    .details-toggle-content{
-
-      display:flex;
-
-      align-items:center;
-
-      gap:8px;
-
-    }
-
-
-    .details-toggle-icon{
-
-      width:30px;
-      height:30px;
-
-      display:flex;
-
-      align-items:center;
-      justify-content:center;
-
-      border-radius:9px;
-
-      background:var(--purple-soft);
-
-      color:var(--purple-text);
-
-    }
-
-
-    .details-toggle-icon svg{
-
-      width:15px;
-      height:15px;
-
-    }
-
-
-    .details-toggle-title{
-
-      display:block;
+      color:#8b939c;
 
       font-size:11px;
+      line-height:1.5;
+
+      font-weight:750;
+    }
+
+    .device-price-mini{
+      flex-shrink:0;
+
+      min-width:90px;
+
+      padding:10px 9px;
+
+      border-radius:15px;
+
+      background:#f0eef9;
+
+      text-align:center;
+    }
+
+    .device-price-mini span{
+      display:block;
+
+      color:#8c84a9;
+
+      font-size:8px;
+      font-weight:800;
+
+      margin-bottom:3px;
+    }
+
+    .device-price-mini strong{
+      display:block;
+
+      color:#51477d;
+
+      font-size:13px;
+      font-weight:950;
+    }
+
+
+    /* =========================================
+       DETAILS
+    ========================================= */
+
+    .section-title{
+      margin:20px 0 10px;
+
+      color:#1a2127;
+
+      font-size:15px;
 
       font-weight:950;
 
+      letter-spacing:-.2px;
     }
-
-
-    .details-toggle-sub{
-
-      display:block;
-
-      margin-top:2px;
-
-      color:#9ba2a9;
-
-      font-size:7px;
-
-      font-weight:700;
-
-    }
-
-
-    .details-chevron{
-
-      width:17px;
-      height:17px;
-
-      color:#9aa1a9;
-
-      transition:
-        transform .2s ease;
-
-    }
-
-
-    .details-toggle.open
-    .details-chevron{
-
-      transform:rotate(180deg);
-
-    }
-
-
-    /* =====================================
-       FULL DEVICE DETAILS
-    ===================================== */
-
-    .details-panel{
-
-      display:none;
-
-      margin-top:11px;
-
-    }
-
-
-    .details-panel.show{
-
-      display:block;
-
-      animation:
-        detailsIn .2s ease;
-
-    }
-
-
-    @keyframes detailsIn{
-
-      from{
-
-        opacity:0;
-
-        transform:
-          translateY(-4px);
-
-      }
-
-      to{
-
-        opacity:1;
-
-        transform:
-          translateY(0);
-
-      }
-
-    }
-
 
     .details-grid{
-
       display:grid;
 
       grid-template-columns:
-        repeat(
-          2,
-          minmax(0,1fr)
-        );
+        repeat(2,minmax(0,1fr));
 
-      gap:7px;
-
+      gap:9px;
     }
 
-
     .detail-item{
+      min-height:66px;
 
-      min-height:59px;
+      padding:11px;
 
-      padding:9px;
+      border-radius:16px;
 
       background:#f8f9fa;
 
       border:
         1px solid
         #edf0f2;
-
-      border-radius:12px;
-
     }
-
 
     .detail-label{
-
-      display:block;
-
-      color:#9ba2a9;
-
-      font-size:7px;
-
-      font-weight:800;
-
-    }
-
-
-    .detail-value{
-
-      display:block;
-
-      margin-top:4px;
-
-      color:#384149;
+      color:#9aa1a8;
 
       font-size:9px;
 
-      line-height:1.4;
+      font-weight:800;
+
+      margin-bottom:5px;
+    }
+
+    .detail-value{
+      color:#252c32;
+
+      font-size:11px;
 
       font-weight:900;
 
+      line-height:1.35;
     }
 
 
-    .notes-box{
+    /* =========================================
+       CONDITION
+    ========================================= */
 
-      margin-top:7px;
+    .condition-list{
+      display:flex;
 
-      padding:10px;
+      flex-direction:column;
+
+      gap:8px;
+    }
+
+    .condition-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+
+      min-height:48px;
+
+      padding:
+        0
+        12px;
+
+      border-radius:14px;
 
       background:#f8f9fa;
 
       border:
         1px solid
         #edf0f2;
-
-      border-radius:12px;
-
     }
 
+    .condition-row span:first-child{
+      color:#929aa2;
 
-    .notes-title{
-
-      color:#9ba2a9;
-
-      font-size:7px;
+      font-size:10px;
 
       font-weight:800;
+    }
 
+    .condition-row strong{
+      color:#252c32;
+
+      font-size:10px;
+
+      font-weight:900;
     }
 
 
-    .notes-text{
+    /* =========================================
+       REPLACED PARTS
+    ========================================= */
 
-      margin-top:4px;
+    .parts-box{
+      padding:12px;
 
-      color:#3d454d;
+      border-radius:16px;
 
-      font-size:9px;
+      background:#f8f9fa;
 
-      line-height:1.65;
+      border:
+        1px solid
+        #edf0f2;
+    }
 
-      font-weight:750;
+    .parts-text{
+      color:#2c343b;
 
+      font-size:11px;
+
+      line-height:1.6;
+
+      font-weight:800;
     }
 
 
-    /* =====================================
+    /* =========================================
+       NOTES
+    ========================================= */
+
+    .notes-box{
+      padding:13px;
+
+      border-radius:16px;
+
+      background:#f8f9fa;
+
+      border:
+        1px solid
+        #edf0f2;
+    }
+
+    .notes-box p{
+      margin:0;
+
+      color:#59626a;
+
+      font-size:11px;
+
+      line-height:1.75;
+
+      font-weight:700;
+    }
+
+
+    /* =========================================
        SELLER
-    ===================================== */
+    ========================================= */
 
     .seller-card{
+      margin-top:18px;
 
-      margin-top:10px;
-
-      padding:
-        13px
-        15px;
+      padding:14px;
 
       display:flex;
-
       align-items:center;
-
       justify-content:space-between;
 
-      gap:10px;
+      gap:12px;
 
       background:#fff;
 
       border:
         1px solid
-        var(--line);
+        rgba(225,230,234,.9);
 
-      border-radius:18px;
+      border-radius:20px;
 
       box-shadow:
-        0 5px 16px
+        0 6px 20px
         rgba(23,32,42,.035);
-
     }
 
-
-    .seller-info{
-
+    .seller-main{
       min-width:0;
-
+      flex:1;
     }
-
-
-    .seller-label{
-
-      color:#a0a6ad;
-
-      font-size:7px;
-
-      font-weight:800;
-
-    }
-
 
     .seller-name{
+      margin:0;
 
-      margin-top:2px;
+      color:#20272d;
 
-      color:#303840;
-
-      font-size:11px;
+      font-size:13px;
 
       font-weight:950;
-
     }
 
+    .seller-location{
+      margin-top:4px;
+
+      color:#9199a1;
+
+      font-size:9px;
+
+      font-weight:800;
+    }
+
+    .seller-member{
+      margin-top:4px;
+
+      color:var(--primary);
+
+      font-size:9px;
+
+      font-weight:850;
+    }
 
     .seller-status{
+      flex-shrink:0;
 
-      margin-top:2px;
+      padding:8px 10px;
 
-      color:#969da5;
+      border-radius:11px;
 
-      font-size:7px;
+      background:#f4f5f6;
 
-      font-weight:750;
+      color:#8b939b;
 
-    }
-
-
-    .seller-new{
-
-      padding:
-        6px
-        8px;
-
-      border-radius:8px;
-
-      background:#f3f5f6;
-
-      color:#7c848c;
-
-      font-size:7px;
+      font-size:9px;
 
       font-weight:900;
-
-      white-space:nowrap;
-
     }
 
 
-    /* =====================================
+    /* =========================================
        BOTTOM NAV
-    ===================================== */
+    ========================================= */
 
     .bottom-wrap{
-
       position:fixed;
 
       left:0;
@@ -1140,21 +892,18 @@
       z-index:100;
 
       pointer-events:none;
-
     }
 
-
     .bottom-nav{
-
       position:relative;
 
       width:min(100%,520px);
 
-      min-height:62px;
+      min-height:64px;
 
       margin:0 auto;
 
-      padding:4px;
+      padding:5px;
 
       border-radius:20px;
 
@@ -1166,331 +915,284 @@
         #e7ecef;
 
       box-shadow:
-        0 9px 25px
+        0 10px 28px
         rgba(23,32,42,.10);
 
-      pointer-events:auto;
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
 
+      pointer-events:auto;
     }
 
-
     .bottom-inner{
-
       width:100%;
 
       display:grid;
 
       grid-template-columns:
-        repeat(
-          5,
-          minmax(0,1fr)
-        );
+        repeat(5,minmax(0,1fr));
 
-      gap:2px;
+      gap:3px;
 
       align-items:center;
-
     }
 
+    .bottom-item{
+      min-width:0;
 
-    .nav-item{
-
-      min-height:50px;
+      height:53px;
 
       display:flex;
-
       flex-direction:column;
 
       align-items:center;
-
       justify-content:center;
 
       gap:3px;
 
-      border-radius:14px;
+      border-radius:15px;
 
-      color:#8f979f;
+      color:#8e969e;
 
+      transition:
+        background .16s ease,
+        color .16s ease,
+        transform .16s ease;
     }
 
-
-    .nav-item.active{
-
-      background:#f0f5f7;
-
-      color:var(--petrol);
-
+    .bottom-item svg{
+      width:20px;
+      height:20px;
     }
 
-
-    .nav-item svg{
-
-      width:19px;
-      height:19px;
-
-    }
-
-
-    .nav-item span{
-
-      font-size:7px;
-
-      line-height:1;
+    .bottom-item span{
+      font-size:8px;
 
       font-weight:850;
+    }
 
+    .bottom-item.active{
+      background:#f0f6f8;
+
+      color:var(--primary);
+    }
+
+    .bottom-item:active{
+      transform:scale(.94);
     }
 
 
-    /* =====================================
+    /* =========================================
        FULLSCREEN VIEWER
-    ===================================== */
+    ========================================= */
 
     .viewer{
-
       position:fixed;
 
       inset:0;
 
-      z-index:1000;
+      z-index:500;
 
       display:none;
 
-      align-items:center;
-      justify-content:center;
+      background:
+        rgba(8,12,16,.97);
 
-      background:#090b0d;
-
+      touch-action:none;
     }
 
-
-    .viewer.show{
-
-      display:flex;
-
+    .viewer.is-open{
+      display:block;
     }
-
 
     .viewer-track{
-
       width:100%;
       height:100%;
 
       display:flex;
 
       transition:
-        transform .25s ease;
-
-      touch-action:pan-x;
-
+        transform .30s cubic-bezier(.22,.61,.36,1);
     }
 
-
     .viewer-slide{
-
-      min-width:100%;
+      flex:0 0 100%;
 
       width:100%;
       height:100%;
 
       display:flex;
-
       align-items:center;
       justify-content:center;
 
+      padding:50px 12px 70px;
+
+      overflow:hidden;
     }
 
-
     .viewer-slide img{
+      max-width:100%;
+      max-height:100%;
 
-      width:100%;
-      height:100%;
+      width:auto;
+      height:auto;
 
       object-fit:contain;
 
       user-select:none;
-
       -webkit-user-drag:none;
 
+      pointer-events:none;
     }
 
-
     .viewer-close{
-
       position:absolute;
 
       top:
         calc(
-          13px +
+          14px +
           env(safe-area-inset-top,0px)
         );
 
-      right:13px;
+      right:14px;
 
-      width:40px;
-      height:40px;
+      width:42px;
+      height:42px;
 
       display:flex;
-
       align-items:center;
       justify-content:center;
 
-      border-radius:13px;
+      border-radius:14px;
 
       background:
         rgba(255,255,255,.12);
 
       color:#fff;
 
-      z-index:10;
+      border:
+        1px solid
+        rgba(255,255,255,.13);
 
+      z-index:20;
     }
-
 
     .viewer-close svg{
-
-      width:20px;
-      height:20px;
-
+      width:21px;
+      height:21px;
     }
 
-
     .viewer-counter{
-
       position:absolute;
-
-      top:
-        calc(
-          17px +
-          env(safe-area-inset-top,0px)
-        );
 
       left:50%;
 
-      transform:
-        translateX(-50%);
+      top:
+        calc(
+          18px +
+          env(safe-area-inset-top,0px)
+        );
 
-      min-width:55px;
+      transform:translateX(-50%);
 
-      height:29px;
+      min-width:60px;
+      height:30px;
 
       display:flex;
-
       align-items:center;
       justify-content:center;
 
-      padding:
-        0
-        10px;
+      padding:0 10px;
 
-      border-radius:10px;
+      border-radius:11px;
 
       background:
-        rgba(255,255,255,.12);
+        rgba(255,255,255,.10);
 
       color:#fff;
 
-      font-size:9px;
+      font-size:10px;
 
       font-weight:900;
 
-      z-index:10;
-
+      z-index:20;
     }
 
 
-    /* =====================================
-       MOBILE
-    ===================================== */
+    /* =========================================
+       RESPONSIVE
+    ========================================= */
 
-    @media(max-width:380px){
-
-      .page{
-
-        padding-left:12px;
-        padding-right:12px;
-
-        padding-bottom:90px;
-
-      }
-
+    @media (max-width:380px){
 
       .top-header{
+        width:calc(100% + 24px);
 
         margin-left:-12px;
         margin-right:-12px;
 
-        width:calc(100% + 24px);
-
-        min-height:190px;
-
+        height:106px;
+        min-height:106px;
       }
-
 
       .header-title{
-
-        font-size:28px;
-
+        font-size:22px;
       }
-
 
       .header-subtitle{
-
-        font-size:13px;
-
+        font-size:9px;
       }
-
 
       .back-btn,
       .header-icon{
+        width:48px;
+        min-width:48px;
+        height:48px;
 
-        width:62px;
-        min-width:62px;
-        height:62px;
-
-        border-radius:21px;
-
+        border-radius:16px;
       }
-
 
       .back-btn svg{
-
-        width:27px;
-        height:27px;
-
+        width:22px;
+        height:22px;
       }
-
 
       .header-icon svg{
-
-        width:32px;
-        height:32px;
-
+        width:26px;
+        height:26px;
       }
-
 
       .gallery{
-
         height:270px;
-
       }
 
-
-      .device-name{
-
+      .device-title{
         font-size:20px;
+      }
 
+      .device-price-mini{
+        min-width:82px;
+      }
+
+      .device-price-mini strong{
+        font-size:12px;
+      }
+
+    }
+
+    @media (min-height:700px) and (min-width:600px){
+
+      .gallery{
+        height:380px;
       }
 
     }
 
   </style>
-
 </head>
 
 
 <body>
-
 
   <main class="page">
 
@@ -1502,9 +1204,6 @@
     <header class="top-header">
 
       <div class="header-row">
-
-
-        <!-- السهم -->
 
         <button
           class="back-btn"
@@ -1521,17 +1220,11 @@
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-
-            <path d="M8 12h13"/>
-
-            <path d="M16 6l6 6-6 6"/>
-
+            <path d="M15 18l-6-6 6-6"/>
           </svg>
 
         </button>
 
-
-        <!-- العنوان -->
 
         <div class="header-content">
 
@@ -1540,13 +1233,11 @@
           </h1>
 
           <div class="header-subtitle">
-            شوف الجهاز بالكامل قبل لا تزايد
+            تفاصيل الجهاز قبل المزايدة
           </div>
 
         </div>
 
-
-        <!-- أيقونة المزاد -->
 
         <div class="header-icon">
 
@@ -1558,19 +1249,11 @@
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-
-            <path d="M6 3h12"/>
-
-            <path d="M6 21h12"/>
-
-            <path d="M8 3v4l4 5-4 5v4"/>
-
-            <path d="M16 3v4l-4 5 4 5v4"/>
-
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 7v5l3 2"/>
           </svg>
 
         </div>
-
 
       </div>
 
@@ -1592,54 +1275,54 @@
       ></div>
 
 
-      <div
-        class="gallery-counter"
-        id="galleryCounter"
-      >
-        01 / 04
+      <div class="gallery-top-actions">
+
+        <div
+          class="gallery-count"
+          id="galleryCount"
+        >
+          01 / 01
+        </div>
+
+
+        <button
+          class="gallery-fullscreen"
+          id="fullscreenBtn"
+          type="button"
+          aria-label="عرض الصورة كاملة"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M8 3H5a2 2 0 0 0-2 2v3"/>
+            <path d="M16 3h3a2 2 0 0 1 2 2v3"/>
+            <path d="M21 16v3a2 2 0 0 1-2 2h-3"/>
+            <path d="M3 16v3a2 2 0 0 0 2 2h3"/>
+          </svg>
+
+        </button>
+
       </div>
 
 
-      <button
-        class="gallery-fullscreen"
-        id="galleryFullscreen"
-        type="button"
-      >
-
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-
-          <path d="M8 3H5a2 2 0 0 0-2 2v3"/>
-
-          <path d="M16 3h3a2 2 0 0 1 2 2v3"/>
-
-          <path d="M21 16v3a2 2 0 0 1-2 2h-3"/>
-
-          <path d="M3 16v3a2 2 0 0 0 2 2h3"/>
-
-        </svg>
-
-      </button>
+      <div class="gallery-hint">
+        اضغط مطولاً لعرض الصورة كاملة
+      </div>
 
     </section>
-
-
-    <div class="gallery-note">
-      اضغط على الصورة لعرضها كاملة
-    </div>
 
 
     <!-- =====================================
          STATUS
     ====================================== -->
 
-    <div class="auction-status">
+    <section class="auction-status">
 
       <div class="status-badge">
 
@@ -1649,12 +1332,14 @@
 
       </div>
 
-
-      <div class="ending-label">
-        ينتهي قريباً
+      <div
+        class="status-text"
+        id="statusText"
+      >
+        التفاصيل قبل المزايدة
       </div>
 
-    </div>
+    </section>
 
 
     <!-- =====================================
@@ -1663,273 +1348,292 @@
 
     <section class="device-card">
 
+      <div class="device-heading">
 
-      <div class="device-top">
+        <div class="device-title-wrap">
 
-
-        <div class="device-info">
-
-          <p class="device-brand">
+          <p
+            class="device-brand"
+            id="deviceBrand"
+          >
             Apple
           </p>
 
-
-          <h2 class="device-name">
-            iPhone 16 Pro
+          <h2
+            class="device-title"
+            id="deviceTitle"
+          >
+            iPhone 16 Pro Max
           </h2>
 
-
-          <div class="device-meta">
-
-            <span class="meta-pill">
-              256GB
-            </span>
-
-            <span class="meta-pill">
-              Titanium Black
-            </span>
-
-            <span class="meta-pill">
-              نظيف
-            </span>
-
+          <div
+            class="device-basic"
+            id="deviceBasic"
+          >
+            256GB · Black Titanium
           </div>
 
         </div>
 
 
-        <!-- البطارية تظهر للـ iPhone فقط -->
+        <div class="device-price-mini">
 
-        <div class="battery-box">
-
-          <span class="battery-number">
-            97%
+          <span>
+            السعر الحالي
           </span>
 
-          <span class="battery-label">
-            صحة البطارية
-          </span>
+          <strong id="currentPrice">
+            1,250,000 د.ع
+          </strong>
 
         </div>
-
 
       </div>
 
 
-      <!-- =====================================
-           DETAILS BUTTON
-      ====================================== -->
+      <!-- DETAILS -->
 
-      <button
-        class="details-toggle"
-        id="detailsToggle"
-        type="button"
-      >
+      <h3 class="section-title">
+        تفاصيل الجهاز
+      </h3>
 
 
-        <span class="details-toggle-content">
+      <div class="details-grid">
 
+        <div class="detail-item">
 
-          <span class="details-toggle-icon">
-
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-
-              <rect
-                x="4"
-                y="3"
-                width="16"
-                height="18"
-                rx="2"
-              />
-
-              <path d="M8 7h8"/>
-
-              <path d="M8 11h8"/>
-
-              <path d="M8 15h5"/>
-
-            </svg>
-
-          </span>
-
-
-          <span>
-
-            <span class="details-toggle-title">
-              تفاصيل الجهاز
-            </span>
-
-            <span class="details-toggle-sub">
-              كل المعلومات المهمة قبل المزايدة
-            </span>
-
-          </span>
-
-
-        </span>
-
-
-        <svg
-          class="details-chevron"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-
-          <path d="M6 9l6 6 6-6"/>
-
-        </svg>
-
-
-      </button>
-
-
-      <!-- =====================================
-           DETAILS
-      ====================================== -->
-
-      <div
-        class="details-panel"
-        id="detailsPanel"
-      >
-
-
-        <div class="details-grid">
-
-
-          <div class="detail-item">
-
-            <span class="detail-label">
-              حالة الجهاز
-            </span>
-
-            <span class="detail-value">
-              نظيف
-            </span>
-
+          <div class="detail-label">
+            الشركة
           </div>
 
-
-          <div class="detail-item">
-
-            <span class="detail-label">
-              حالة الشاشة
-            </span>
-
-            <span class="detail-value">
-              نظيفة
-            </span>
-
+          <div
+            class="detail-value"
+            id="detailBrand"
+          >
+            Apple
           </div>
-
-
-          <div class="detail-item">
-
-            <span class="detail-label">
-              حالة الجسم
-            </span>
-
-            <span class="detail-value">
-              نظيف
-            </span>
-
-          </div>
-
-
-          <div class="detail-item">
-
-            <span class="detail-label">
-              القطع المستبدلة
-            </span>
-
-            <span class="detail-value">
-              لا توجد قطع مستبدلة
-            </span>
-
-          </div>
-
-
-          <div class="detail-item">
-
-            <span class="detail-label">
-              Face ID
-            </span>
-
-            <span class="detail-value">
-              يعمل
-            </span>
-
-          </div>
-
-
-          <div class="detail-item">
-
-            <span class="detail-label">
-              الكاميرات
-            </span>
-
-            <span class="detail-value">
-              تعمل
-            </span>
-
-          </div>
-
-
-          <div class="detail-item">
-
-            <span class="detail-label">
-              الشحن
-            </span>
-
-            <span class="detail-value">
-              يعمل
-            </span>
-
-          </div>
-
-
-          <div class="detail-item">
-
-            <span class="detail-label">
-              الشبكة
-            </span>
-
-            <span class="detail-value">
-              تعمل
-            </span>
-
-          </div>
-
 
         </div>
 
+
+        <div class="detail-item">
+
+          <div class="detail-label">
+            الموديل
+          </div>
+
+          <div
+            class="detail-value"
+            id="detailModel"
+          >
+            iPhone 16 Pro Max
+          </div>
+
+        </div>
+
+
+        <div class="detail-item">
+
+          <div class="detail-label">
+            السعة
+          </div>
+
+          <div
+            class="detail-value"
+            id="detailStorage"
+          >
+            256GB
+          </div>
+
+        </div>
+
+
+        <div class="detail-item">
+
+          <div class="detail-label">
+            اللون
+          </div>
+
+          <div
+            class="detail-value"
+            id="detailColor"
+          >
+            Black Titanium
+          </div>
+
+        </div>
+
+
+        <div
+          class="detail-item"
+          id="batteryItem"
+        >
+
+          <div class="detail-label">
+            البطارية
+          </div>
+
+          <div
+            class="detail-value"
+            id="detailBattery"
+          >
+            100%
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- CONDITION -->
+
+      <h3 class="section-title">
+        حالة الجهاز
+      </h3>
+
+
+      <div class="condition-list">
+
+        <div class="condition-row">
+
+          <span>
+            حالة الجهاز
+          </span>
+
+          <strong id="deviceCondition">
+            نظيف
+          </strong>
+
+        </div>
+
+
+        <div class="condition-row">
+
+          <span>
+            حالة الشاشة
+          </span>
+
+          <strong id="screenCondition">
+            نظيفة
+          </strong>
+
+        </div>
+
+
+        <div class="condition-row">
+
+          <span>
+            حالة الجسم
+          </span>
+
+          <strong id="bodyCondition">
+            نظيف
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- CHECKS -->
+
+      <h3 class="section-title">
+        فحص الجهاز
+      </h3>
+
+
+      <div class="condition-list">
+
+        <div class="condition-row">
+
+          <span>
+            Face ID / Touch ID
+          </span>
+
+          <strong id="faceId">
+            يعمل
+          </strong>
+
+        </div>
+
+
+        <div class="condition-row">
+
+          <span>
+            الكاميرات
+          </span>
+
+          <strong id="cameras">
+            تعمل
+          </strong>
+
+        </div>
+
+
+        <div class="condition-row">
+
+          <span>
+            الشحن
+          </span>
+
+          <strong id="charging">
+            يعمل
+          </strong>
+
+        </div>
+
+
+        <div class="condition-row">
+
+          <span>
+            الشبكة
+          </span>
+
+          <strong id="network">
+            تعمل
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- REPLACED PARTS -->
+
+      <h3 class="section-title">
+        القطع المستبدلة
+      </h3>
+
+
+      <div class="parts-box">
+
+        <div
+          class="parts-text"
+          id="replacedParts"
+        >
+          لا توجد قطع مستبدلة
+        </div>
+
+      </div>
+
+
+      <!-- NOTES -->
+
+      <div id="notesSection">
+
+        <h3 class="section-title">
+          ملاحظات البائع
+        </h3>
 
         <div class="notes-box">
 
-          <div class="notes-title">
-            ملاحظات البائع
-          </div>
-
-          <div class="notes-text">
-            الجهاز نظيف جداً والاستخدام شخصي،
-            وما بيه أي مشكلة حسب إفادة البائع.
-          </div>
+          <p id="notes">
+            الجهاز بحالة جيدة وجميع الوظائف تعمل بشكل طبيعي.
+          </p>
 
         </div>
 
-
       </div>
-
 
     </section>
 
@@ -1940,30 +1644,32 @@
 
     <section class="seller-card">
 
+      <div class="seller-main">
 
-      <div class="seller-info">
-
-        <div class="seller-label">
-          البائع
-        </div>
-
-
-        <div class="seller-name">
+        <p
+          class="seller-name"
+          id="sellerName"
+        >
           مستخدم جديد
+        </p>
+
+        <div
+          class="seller-location"
+          id="sellerLocation"
+        >
+          النجف
         </div>
 
-
-        <div class="seller-status">
+        <div class="seller-member">
           عضو في MZAD PHONE
         </div>
 
       </div>
 
 
-      <div class="seller-new">
+      <div class="seller-status">
         مستخدم جديد
       </div>
-
 
     </section>
 
@@ -1981,9 +1687,8 @@
 
       <div class="bottom-inner">
 
-
         <a
-          class="nav-item"
+          class="bottom-item"
           href="home.html"
         >
 
@@ -1995,13 +1700,9 @@
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-
-            <path d="M3 10.5L12 3l9 7.5"/>
-
-            <path d="M5 9.5V21h14V9.5"/>
-
-            <path d="M9 21v-6h6v6"/>
-
+            <path d="m3 10 9-7 9 7"/>
+            <path d="M5 9v11h14V9"/>
+            <path d="M9 20v-6h6v6"/>
           </svg>
 
           <span>
@@ -2012,7 +1713,7 @@
 
 
         <a
-          class="nav-item"
+          class="bottom-item"
           href="market.html"
         >
 
@@ -2024,15 +1725,8 @@
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-
-            <circle
-              cx="10.5"
-              cy="10.5"
-              r="6.5"
-            />
-
-            <path d="M16 16l5 5"/>
-
+            <circle cx="11" cy="11" r="7"/>
+            <path d="m20 20-4-4"/>
           </svg>
 
           <span>
@@ -2043,7 +1737,7 @@
 
 
         <a
-          class="nav-item active"
+          class="bottom-item active"
           href="auctions.html"
         >
 
@@ -2055,15 +1749,11 @@
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-
-            <path d="M6 3h12"/>
-
+            <path d="M7 3h10"/>
+            <path d="M8 3v4l4 5 4-5V3"/>
+            <path d="M12 12v3"/>
+            <path d="M8 18h8"/>
             <path d="M6 21h12"/>
-
-            <path d="M8 3v4l4 5-4 5v4"/>
-
-            <path d="M16 3v4l-4 5 4 5v4"/>
-
           </svg>
 
           <span>
@@ -2074,7 +1764,7 @@
 
 
         <a
-          class="nav-item"
+          class="bottom-item"
           href="favorites.html"
         >
 
@@ -2086,9 +1776,7 @@
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-
-            <path d="M20.8 8.6c0 5.2-8.8 10.4-8.8 10.4S3.2 13.8 3.2 8.6A4.6 4.6 0 0 1 12 6.3a4.6 4.6 0 0 1 8.8 2.3Z"/>
-
+            <path d="M20.8 8.6c0 5.5-8.8 10.4-8.8 10.4S3.2 14.1 3.2 8.6A4.6 4.6 0 0 1 12 6.2a4.6 4.6 0 0 1 8.8 2.4Z"/>
           </svg>
 
           <span>
@@ -2099,7 +1787,7 @@
 
 
         <a
-          class="nav-item"
+          class="bottom-item"
           href="profile.html"
         >
 
@@ -2111,15 +1799,8 @@
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-
-            <circle
-              cx="12"
-              cy="8"
-              r="4"
-            />
-
-            <path d="M4 21c.8-4 3.4-6 8-6s7.2 2 8 6"/>
-
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 21a8 8 0 0 1 16 0"/>
           </svg>
 
           <span>
@@ -2127,7 +1808,6 @@
           </span>
 
         </a>
-
 
       </div>
 
@@ -2143,13 +1823,14 @@
   <div
     class="viewer"
     id="viewer"
+    aria-hidden="true"
   >
-
 
     <button
       class="viewer-close"
       id="viewerClose"
       type="button"
+      aria-label="إغلاق"
     >
 
       <svg
@@ -2160,11 +1841,8 @@
         stroke-linecap="round"
         stroke-linejoin="round"
       >
-
-        <path d="M18 6L6 18"/>
-
-        <path d="M6 6l12 12"/>
-
+        <path d="M18 6 6 18"/>
+        <path d="m6 6 12 12"/>
       </svg>
 
     </button>
@@ -2174,7 +1852,7 @@
       class="viewer-counter"
       id="viewerCounter"
     >
-      01 / 04
+      01 / 01
     </div>
 
 
@@ -2183,156 +1861,438 @@
       id="viewerTrack"
     ></div>
 
-
   </div>
 
 
   <script>
 
-    /* =====================================
-       DEMO DATA
-    ====================================== */
+    /* =========================================
+       DEMO AUCTION DATA
+    ========================================= */
 
     const auctionData = {
 
-      brand:"Apple",
+      id:
+        new URLSearchParams(
+          window.location.search
+        ).get("id") || "demo",
 
-      model:"iPhone 16 Pro",
+      brand:
+        "Apple",
 
-      storage:"256GB",
+      model:
+        "iPhone 16 Pro Max",
 
-      color:"Titanium Black",
+      storage:
+        "256GB",
 
-      batteryHealth:97,
+      color:
+        "Black Titanium",
+
+      battery_health:
+        "100%",
+
+      price:
+        1250000,
+
+      condition:
+        "نظيف",
+
+      screen_condition:
+        "نظيفة",
+
+      body_condition:
+        "نظيف",
+
+      face_id:
+        "يعمل",
+
+      cameras:
+        "تعمل",
+
+      charging:
+        "يعمل",
+
+      network:
+        "تعمل",
+
+      replaced_parts:
+        "لا توجد قطع مستبدلة",
+
+      location:
+        "النجف",
+
+      seller_name:
+        "مستخدم جديد",
+
+      notes:
+        "الجهاز بحالة جيدة وجميع الوظائف تعمل بشكل طبيعي.",
 
       images:[
-
-        "https://images.unsplash.com/photo-1592286927505-2fdc2a5b6b8a?auto=format&fit=crop&w=1200&q=85",
-
-        "https://images.unsplash.com/photo-1603899122634-f086ca5f5ddd?auto=format&fit=crop&w=1200&q=85",
-
-        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1200&q=85",
-
-        "https://images.unsplash.com/photo-1556656793-08538906a9f8?auto=format&fit=crop&w=1200&q=85"
-
+        "https://images.unsplash.com/photo-1592286927505-2fd5d1e8b7f4?auto=format&fit=crop&w=1200&q=90"
       ]
 
     };
 
 
-    /* =====================================
-       BACK
-    ===================================== */
+    /* =========================================
+       ELEMENTS
+    ========================================= */
 
-    document
-      .getElementById("backBtn")
-      .addEventListener(
-        "click",
-        function(){
+    const gallery =
+      document.getElementById("gallery");
 
-          if(
-            window.history.length > 1
-          ){
+    const galleryTrack =
+      document.getElementById("galleryTrack");
 
-            window.history.back();
+    const galleryCount =
+      document.getElementById("galleryCount");
 
-          }else{
+    const fullscreenBtn =
+      document.getElementById("fullscreenBtn");
 
-            window.location.href =
-              "auctions.html";
+    const viewer =
+      document.getElementById("viewer");
 
-          }
+    const viewerTrack =
+      document.getElementById("viewerTrack");
+
+    const viewerCounter =
+      document.getElementById("viewerCounter");
+
+    const viewerClose =
+      document.getElementById("viewerClose");
+
+    const backBtn =
+      document.getElementById("backBtn");
+
+
+    /* =========================================
+       BACK BUTTON
+    ========================================= */
+
+    backBtn.addEventListener(
+      "click",
+      function(event){
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        if(
+          window.history.length > 1
+        ){
+
+          window.history.back();
+
+        }else{
+
+          window.location.href =
+            "auctions.html";
 
         }
-      );
-
-
-    /* =====================================
-       DETAILS
-    ===================================== */
-
-    const detailsToggle =
-      document.getElementById(
-        "detailsToggle"
-      );
-
-    const detailsPanel =
-      document.getElementById(
-        "detailsPanel"
-      );
-
-
-    detailsToggle.addEventListener(
-      "click",
-      function(){
-
-        const open =
-          detailsPanel.classList.toggle(
-            "show"
-          );
-
-        detailsToggle.classList.toggle(
-          "open",
-          open
-        );
 
       }
     );
 
 
-    /* =====================================
-       GALLERY
-    ===================================== */
+    /* =========================================
+       FORMAT PRICE
+    ========================================= */
 
-    const galleryTrack =
-      document.getElementById(
-        "galleryTrack"
+    function formatPrice(value){
+
+      const number =
+        Number(value) || 0;
+
+      return (
+        number.toLocaleString("en-US")
+        + " د.ع"
       );
 
-    const galleryCounter =
-      document.getElementById(
-        "galleryCounter"
-      );
+    }
 
-    const gallery =
-      document.getElementById(
-        "gallery"
-      );
 
+    /* =========================================
+       LOAD DEVICE DATA
+    ========================================= */
+
+    function renderDevice(){
+
+      document.getElementById(
+        "deviceBrand"
+      ).textContent =
+        auctionData.brand || "—";
+
+      document.getElementById(
+        "deviceTitle"
+      ).textContent =
+        auctionData.model || "جهاز";
+
+      document.getElementById(
+        "deviceBasic"
+      ).textContent =
+        [
+          auctionData.storage,
+          auctionData.color
+        ]
+        .filter(Boolean)
+        .join(" · ");
+
+      document.getElementById(
+        "currentPrice"
+      ).textContent =
+        formatPrice(
+          auctionData.price
+        );
+
+
+      document.getElementById(
+        "detailBrand"
+      ).textContent =
+        auctionData.brand || "—";
+
+      document.getElementById(
+        "detailModel"
+      ).textContent =
+        auctionData.model || "—";
+
+      document.getElementById(
+        "detailStorage"
+      ).textContent =
+        auctionData.storage || "—";
+
+      document.getElementById(
+        "detailColor"
+      ).textContent =
+        auctionData.color || "—";
+
+
+      /*
+        البطارية تظهر فقط للآيفون
+      */
+
+      const brand =
+        String(
+          auctionData.brand || ""
+        ).toLowerCase();
+
+      const isIphone =
+        brand.includes("apple") ||
+        brand.includes("iphone") ||
+        brand.includes("آيفون") ||
+        brand.includes("ايفون");
+
+      const batteryItem =
+        document.getElementById(
+          "batteryItem"
+        );
+
+      if(isIphone){
+
+        batteryItem.style.display =
+          "";
+
+        document.getElementById(
+          "detailBattery"
+        ).textContent =
+          auctionData.battery_health || "—";
+
+      }else{
+
+        batteryItem.style.display =
+          "none";
+
+      }
+
+
+      document.getElementById(
+        "deviceCondition"
+      ).textContent =
+        auctionData.condition || "—";
+
+      document.getElementById(
+        "screenCondition"
+      ).textContent =
+        auctionData.screen_condition || "—";
+
+      document.getElementById(
+        "bodyCondition"
+      ).textContent =
+        auctionData.body_condition || "—";
+
+      document.getElementById(
+        "faceId"
+      ).textContent =
+        auctionData.face_id || "—";
+
+      document.getElementById(
+        "cameras"
+      ).textContent =
+        auctionData.cameras || "—";
+
+      document.getElementById(
+        "charging"
+      ).textContent =
+        auctionData.charging || "—";
+
+      document.getElementById(
+        "network"
+      ).textContent =
+        auctionData.network || "—";
+
+      document.getElementById(
+        "replacedParts"
+      ).textContent =
+        auctionData.replaced_parts ||
+        "لا توجد قطع مستبدلة";
+
+
+      const notes =
+        String(
+          auctionData.notes || ""
+        ).trim();
+
+      const notesSection =
+        document.getElementById(
+          "notesSection"
+        );
+
+      if(notes){
+
+        document.getElementById(
+          "notes"
+        ).textContent =
+          notes;
+
+        notesSection.style.display =
+          "";
+
+      }else{
+
+        notesSection.style.display =
+          "none";
+
+      }
+
+
+      document.getElementById(
+        "sellerName"
+      ).textContent =
+        auctionData.seller_name ||
+        "مستخدم جديد";
+
+      document.getElementById(
+        "sellerLocation"
+      ).textContent =
+        auctionData.location ||
+        "العراق";
+
+    }
+
+
+    /* =========================================
+       NORMALIZE IMAGES
+    ========================================= */
+
+    function normalizeImages(){
+
+      let images =
+        auctionData.images;
+
+      if(!Array.isArray(images)){
+
+        images = [];
+
+      }
+
+      images =
+        images
+          .map(
+            item => {
+
+              if(
+                typeof item ===
+                "string"
+              ){
+
+                return item.trim();
+
+              }
+
+              if(
+                item &&
+                typeof item ===
+                "object"
+              ){
+
+                return (
+                  item.url ||
+                  item.path ||
+                  item.publicUrl ||
+                  ""
+                );
+
+              }
+
+              return "";
+
+            }
+          )
+          .filter(Boolean);
+
+
+      if(!images.length){
+
+        images = [
+          "https://images.unsplash.com/photo-1592286927505-2fd5d1e8b7f4?auto=format&fit=crop&w=1200&q=90"
+        ];
+
+      }
+
+      return images;
+
+    }
+
+
+    const images =
+      normalizeImages();
+
+
+    /* =========================================
+       GALLERY STATE
+    ========================================= */
 
     let galleryIndex = 0;
 
-    let touchStartX = 0;
+    let viewerIndex = 0;
 
-    let touchStartY = 0;
 
-    let touchMoved = false;
-
+    /* =========================================
+       RENDER MAIN GALLERY
+    ========================================= */
 
     function renderGallery(){
 
       galleryTrack.innerHTML =
-        auctionData.images
+        images
           .map(
-            function(image){
-
-              return `
-
-                <div class="gallery-slide">
-
-                  <img
-                    src="${image}"
-                    alt="${auctionData.model}"
-                    draggable="false"
-                  >
-
-                </div>
-
-              `;
-
-            }
+            (src,index) => `
+              <div
+                class="gallery-slide"
+                data-index="${index}"
+              >
+                <img
+                  src="${escapeHtml(src)}"
+                  alt="${escapeHtml(
+                    auctionData.model || "جهاز"
+                  )}"
+                  draggable="false"
+                >
+              </div>
+            `
           )
           .join("");
+
 
       updateGallery();
 
@@ -2342,29 +2302,24 @@
     function updateGallery(){
 
       galleryTrack.style.transform =
-        `translateX(${galleryIndex * 100}%)`;
+        `translateX(${-galleryIndex * 100}%)`;
 
-
-      galleryCounter.textContent =
-        `${String(galleryIndex + 1).padStart(2,"0")} / ${String(auctionData.images.length).padStart(2,"0")}`;
+      galleryCount.textContent =
+        `${String(galleryIndex + 1).padStart(2,"0")} / ${String(images.length).padStart(2,"0")}`;
 
     }
 
 
     function nextGallery(){
 
-      if(
-        galleryIndex <
-        auctionData.images.length - 1
-      ){
-
-        galleryIndex++;
-
-      }else{
-
-        galleryIndex=0;
-
+      if(images.length <= 1){
+        return;
       }
+
+      galleryIndex =
+        (
+          galleryIndex + 1
+        ) % images.length;
 
       updateGallery();
 
@@ -2373,27 +2328,44 @@
 
     function prevGallery(){
 
-      if(
-        galleryIndex > 0
-      ){
-
-        galleryIndex--;
-
-      }else{
-
-        galleryIndex =
-          auctionData.images.length - 1;
-
+      if(images.length <= 1){
+        return;
       }
+
+      galleryIndex =
+        (
+          galleryIndex - 1 + images.length
+        ) % images.length;
 
       updateGallery();
 
     }
 
 
+    /* =========================================
+       MAIN GALLERY TOUCH
+       مهم جداً:
+       اللمسة السريعة لا تفتح الصورة
+       الضغط المطول 350ms يفتحها
+    ========================================= */
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    let touchMoved = false;
+
+    let longPressTimer = null;
+
+    let longPressTriggered = false;
+
+
     gallery.addEventListener(
       "touchstart",
       function(event){
+
+        if(!event.touches.length){
+          return;
+        }
 
         const touch =
           event.touches[0];
@@ -2404,16 +2376,53 @@
         touchStartY =
           touch.clientY;
 
-        touchMoved=false;
+        touchMoved = false;
+
+        longPressTriggered = false;
+
+
+        clearTimeout(
+          longPressTimer
+        );
+
+
+        /*
+          لازم يبقى ضاغط 350ms
+        */
+
+        longPressTimer =
+          setTimeout(
+            function(){
+
+              if(!touchMoved){
+
+                longPressTriggered =
+                  true;
+
+                openViewer(
+                  galleryIndex
+                );
+
+              }
+
+            },
+            350
+          );
 
       },
-      {passive:true}
+      {
+        passive:true
+      }
     );
 
 
     gallery.addEventListener(
       "touchmove",
       function(event){
+
+        if(!event.touches.length){
+          return;
+        }
 
         const touch =
           event.touches[0];
@@ -2426,23 +2435,48 @@
           touch.clientY -
           touchStartY;
 
+
+        /*
+          أي حركة أكثر من 8px
+          تلغي الضغط المطول
+        */
+
         if(
-          Math.abs(dx)>8 ||
-          Math.abs(dy)>8
+          Math.abs(dx) > 8 ||
+          Math.abs(dy) > 8
         ){
 
-          touchMoved=true;
+          touchMoved = true;
+
+          clearTimeout(
+            longPressTimer
+          );
 
         }
 
       },
-      {passive:true}
+      {
+        passive:true
+      }
     );
 
 
     gallery.addEventListener(
       "touchend",
       function(event){
+
+        clearTimeout(
+          longPressTimer
+        );
+
+
+        if(
+          !event.changedTouches.length
+        ){
+
+          return;
+
+        }
 
         const touch =
           event.changedTouches[0];
@@ -2451,11 +2485,16 @@
           touch.clientX -
           touchStartX;
 
+
+        /*
+          إذا صار Swipe
+        */
+
         if(
-          Math.abs(dx)>45
+          Math.abs(dx) > 45
         ){
 
-          if(dx<0){
+          if(dx < 0){
 
             nextGallery();
 
@@ -2468,24 +2507,59 @@
         }
 
       },
-      {passive:true}
+      {
+        passive:true
+      }
     );
 
 
     gallery.addEventListener(
-      "click",
+      "touchcancel",
       function(){
 
-        if(touchMoved){
+        clearTimeout(
+          longPressTimer
+        );
 
-          touchMoved=false;
+        touchMoved = true;
 
-          return;
+      },
+      {
+        passive:true
+      }
+    );
 
-        }
+
+    /*
+      مهم:
+      ما نفتح الصورة من click العادي.
+      حتى اللمسة السريعة ما تسبب فتح.
+    */
+
+    gallery.addEventListener(
+      "click",
+      function(event){
+
+        event.preventDefault();
+        event.stopPropagation();
+
+      }
+    );
+
+
+    /* =========================================
+       FULLSCREEN BUTTON
+       يفتح مباشرة لأنه زر مقصود
+    ========================================= */
+
+    fullscreenBtn.addEventListener(
+      "click",
+      function(event){
+
+        event.preventDefault();
+        event.stopPropagation();
 
         openViewer(
-          auctionData.images,
           galleryIndex
         );
 
@@ -2493,191 +2567,141 @@
     );
 
 
-    document
-      .getElementById(
-        "galleryFullscreen"
-      )
-      .addEventListener(
-        "click",
-        function(event){
+    /* =========================================
+       OPEN VIEWER
+    ========================================= */
 
-          event.stopPropagation();
+    function openViewer(index){
 
-          openViewer(
-            auctionData.images,
-            galleryIndex
-          );
-
-        }
-      );
-
-
-    /* =====================================
-       VIEWER
-    ===================================== */
-
-    const viewer =
-      document.getElementById(
-        "viewer"
-      );
-
-    const viewerTrack =
-      document.getElementById(
-        "viewerTrack"
-      );
-
-    const viewerCounter =
-      document.getElementById(
-        "viewerCounter"
-      );
-
-
-    let viewerIndex=0;
-
-    let viewerStartX=0;
-
-
-    function openViewer(
-      images,
-      index
-    ){
-
-      viewerIndex=index;
+      viewerIndex =
+        Math.max(
+          0,
+          Math.min(
+            index,
+            images.length - 1
+          )
+        );
 
 
       viewerTrack.innerHTML =
         images
           .map(
-            function(image){
+            (src) => `
+              <div class="viewer-slide">
 
-              return `
+                <img
+                  src="${escapeHtml(src)}"
+                  alt=""
+                  draggable="false"
+                >
 
-                <div class="viewer-slide">
-
-                  <img
-                    src="${image}"
-                    alt="${auctionData.model}"
-                    draggable="false"
-                  >
-
-                </div>
-
-              `;
-
-            }
+              </div>
+            `
           )
           .join("");
 
 
-      viewer.classList.add("show");
+      viewer.classList.add(
+        "is-open"
+      );
 
+      viewer.setAttribute(
+        "aria-hidden",
+        "false"
+      );
 
-      document.body.style.overflow="hidden";
-
+      document.body.style.overflow =
+        "hidden";
 
       updateViewer();
 
     }
 
 
+    /* =========================================
+       UPDATE VIEWER
+    ========================================= */
+
     function updateViewer(){
 
       viewerTrack.style.transform =
-        `translateX(${viewerIndex * 100}%)`;
-
+        `translateX(${-viewerIndex * 100}%)`;
 
       viewerCounter.textContent =
-        `${String(viewerIndex + 1).padStart(2,"0")} / ${String(auctionData.images.length).padStart(2,"0")}`;
+        `${String(viewerIndex + 1).padStart(2,"0")} / ${String(images.length).padStart(2,"0")}`;
 
     }
 
+
+    function nextViewer(){
+
+      if(images.length <= 1){
+        return;
+      }
+
+      viewerIndex =
+        (
+          viewerIndex + 1
+        ) % images.length;
+
+      updateViewer();
+
+    }
+
+
+    function prevViewer(){
+
+      if(images.length <= 1){
+        return;
+      }
+
+      viewerIndex =
+        (
+          viewerIndex - 1 + images.length
+        ) % images.length;
+
+      updateViewer();
+
+    }
+
+
+    /* =========================================
+       CLOSE VIEWER
+    ========================================= */
 
     function closeViewer(){
 
-      viewer.classList.remove("show");
+      viewer.classList.remove(
+        "is-open"
+      );
 
-      document.body.style.overflow="";
+      viewer.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+      document.body.style.overflow =
+        "";
 
     }
 
 
-    document
-      .getElementById(
-        "viewerClose"
-      )
-      .addEventListener(
-        "click",
-        closeViewer
-      );
+    viewerClose.addEventListener(
+      "click",
+      function(){
 
+        closeViewer();
 
-    viewer.addEventListener(
-      "touchstart",
-      function(event){
-
-        viewerStartX =
-          event.touches[0].clientX;
-
-      },
-      {passive:true}
+      }
     );
 
 
     viewer.addEventListener(
-      "touchend",
-      function(event){
-
-        const dx =
-          event.changedTouches[0].clientX -
-          viewerStartX;
-
-
-        if(
-          Math.abs(dx)<45
-        ){
-
-          return;
-
-        }
-
-
-        if(dx<0){
-
-          if(
-            viewerIndex <
-            auctionData.images.length-1
-          ){
-
-            viewerIndex++;
-
-          }
-
-        }else{
-
-          if(
-            viewerIndex>0
-          ){
-
-            viewerIndex--;
-
-          }
-
-        }
-
-
-        updateViewer();
-
-      },
-      {passive:true}
-    );
-
-
-    document.addEventListener(
-      "keydown",
+      "click",
       function(event){
 
         if(
-          event.key==="Escape"
+          event.target === viewer
         ){
 
           closeViewer();
@@ -2688,14 +2712,210 @@
     );
 
 
-    /* =====================================
-       START
-    ===================================== */
+    /* =========================================
+       VIEWER SWIPE
+    ========================================= */
+
+    let viewerTouchStartX = 0;
+    let viewerTouchStartY = 0;
+
+    let viewerTouchMoved = false;
+
+
+    viewerTrack.addEventListener(
+      "touchstart",
+      function(event){
+
+        if(!event.touches.length){
+          return;
+        }
+
+        const touch =
+          event.touches[0];
+
+        viewerTouchStartX =
+          touch.clientX;
+
+        viewerTouchStartY =
+          touch.clientY;
+
+        viewerTouchMoved = false;
+
+      },
+      {
+        passive:true
+      }
+    );
+
+
+    viewerTrack.addEventListener(
+      "touchmove",
+      function(event){
+
+        if(!event.touches.length){
+          return;
+        }
+
+        const touch =
+          event.touches[0];
+
+        const dx =
+          touch.clientX -
+          viewerTouchStartX;
+
+        const dy =
+          touch.clientY -
+          viewerTouchStartY;
+
+
+        if(
+          Math.abs(dx) > 8 ||
+          Math.abs(dy) > 8
+        ){
+
+          viewerTouchMoved = true;
+
+        }
+
+      },
+      {
+        passive:true
+      }
+    );
+
+
+    viewerTrack.addEventListener(
+      "touchend",
+      function(event){
+
+        if(
+          !event.changedTouches.length
+        ){
+
+          return;
+
+        }
+
+        const touch =
+          event.changedTouches[0];
+
+        const dx =
+          touch.clientX -
+          viewerTouchStartX;
+
+
+        if(
+          Math.abs(dx) > 45
+        ){
+
+          if(dx < 0){
+
+            nextViewer();
+
+          }else{
+
+            prevViewer();
+
+          }
+
+        }
+
+      },
+      {
+        passive:true
+      }
+    );
+
+
+    /* =========================================
+       KEYBOARD
+    ========================================= */
+
+    document.addEventListener(
+      "keydown",
+      function(event){
+
+        if(
+          !viewer.classList.contains(
+            "is-open"
+          )
+        ){
+
+          return;
+
+        }
+
+
+        if(
+          event.key === "Escape"
+        ){
+
+          closeViewer();
+
+        }
+
+
+        if(
+          event.key === "ArrowLeft"
+        ){
+
+          nextViewer();
+
+        }
+
+
+        if(
+          event.key === "ArrowRight"
+        ){
+
+          prevViewer();
+
+        }
+
+      }
+    );
+
+
+    /* =========================================
+       ESCAPE HTML
+    ========================================= */
+
+    function escapeHtml(value){
+
+      return String(value ?? "")
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
+
+
+    /* =========================================
+       INIT
+    ========================================= */
+
+    renderDevice();
 
     renderGallery();
 
   </script>
-
 
 </body>
 </html>
