@@ -20,10 +20,9 @@ html{scroll-behavior:smooth}
 body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-button,input{font:inherit}
-button{border:0;background:none;color:inherit;cursor:pointer}
+button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
 :focus-visible{outline:3px solid var(--purple);outline-offset:2px}
-.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(104px + var(--safe-bottom))}
+.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(120px + var(--safe-bottom))}
 
 /* header */
 header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg,#fff 0%,#f5f2ff 45%,#e6e1ff 100%);
@@ -76,9 +75,8 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 .unit span{font-size:9px;font-weight:800;color:rgba(255,255,255,.7)}
 .sep{font-size:26px;font-weight:900;opacity:.45}
 .clock.hot .unit b{color:#ffd2b8}
-.clock.hot .unit:last-child{animation:pulse 1s steps(1) infinite}
-@keyframes pulse{50%{background:rgba(232,89,12,.28)}}
-@media (prefers-reduced-motion:reduce){.clock.hot .unit:last-child{animation:none}.dot{transition:none}.toast{transition:none}}
+.clock.hot .unit:last-child{animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{background:rgba(232,89,12,.28)}}
 .clock-note{margin:12px 0 0;font-size:10px;line-height:1.7;color:rgba(255,255,255,.79);text-align:center}
 
 /* cards */
@@ -92,6 +90,8 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 .price small{font-size:12px;font-weight:800;color:var(--muted);margin-inline-start:4px}
 .count{font-size:20px;font-weight:950;text-align:end}
 .note{margin:9px 0 0;font-size:10px;font-weight:700;color:var(--muted);line-height:1.7}
+.price.bump{animation:bump .4s ease}
+@keyframes bump{40%{transform:scale(1.06)}}
 
 table{width:100%;border-collapse:collapse}
 th,td{text-align:start;padding:9px 0;border-bottom:1px solid #edf0f2;font-size:12px;font-weight:800}
@@ -115,25 +115,30 @@ td.good{color:var(--ok)}
 .seller b{font-size:13px;font-weight:900}
 .seller span{display:block;font-size:10px;font-weight:700;color:var(--muted)}
 
-/* bid bar (same floating style as bottom nav) */
+/* bid bar: fixed 15,000 + round pulsing button */
 .bar-wrap{position:fixed;inset-inline:0;bottom:-7px;z-index:100;padding:7px 10px calc(7px + var(--safe-bottom));pointer-events:none}
-.bar{width:min(100%,520px);margin:0 auto;padding:7px;border-radius:20px;background:rgba(255,255,255,.97);border:1px solid #e7ecef;
-  box-shadow:0 10px 28px rgba(23,32,42,.10);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);pointer-events:auto}
-.bar-row{display:flex;gap:8px}
-.stepper{flex:1;display:flex;align-items:center;min-width:0;border:1px solid var(--edge);border-radius:14px;background:#faf9ff;overflow:hidden}
-.stepper:focus-within{border-color:var(--purple)}
-.stepper button{width:40px;align-self:stretch;font-size:20px;font-weight:900;color:var(--primary)}
-.stepper input{flex:1;min-width:0;border:0;background:transparent;text-align:center;direction:ltr;font-size:15px;font-weight:950;color:var(--ink);
-  font-variant-numeric:tabular-nums}
-.stepper input:focus-visible{outline:none}
-.go{flex:0 0 auto;height:46px;padding:0 20px;border-radius:14px;color:#fff;font-size:13px;font-weight:950;
-  background:linear-gradient(145deg,#176b87,#32b8c4);box-shadow:0 6px 14px rgba(23,107,135,.18)}
-.go:active{transform:scale(.97)}
-.go:disabled,.stepper.off{opacity:.5;cursor:not-allowed}
-.err{margin:0;padding:0 6px;font-size:10px;font-weight:800;color:var(--hot);min-height:0}
-.err:not(:empty){margin-top:5px}
+.bar{width:min(100%,520px);margin:0 auto;padding:10px 16px;min-height:62px;border-radius:22px;background:rgba(255,255,255,.97);border:1px solid #e7ecef;
+  box-shadow:0 10px 28px rgba(23,32,42,.10);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);pointer-events:auto;
+  display:flex;align-items:center;justify-content:space-between;gap:12px}
+.next .label{display:block}
+.next b{display:block;font-size:19px;font-weight:950;color:var(--primary);letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.25}
+.next b small{font-size:10px;font-weight:800;color:var(--muted);margin-inline-start:3px}
+.step-tag{display:inline-block;margin-top:2px;padding:2px 8px;border-radius:8px;background:var(--primary-soft);color:var(--primary-dark);font-size:9px;font-weight:900}
+.bid-btn{position:relative;flex:0 0 auto;width:72px;height:72px;margin-top:-30px;border-radius:50%;border:4px solid #fff;color:#fff;
+  font-size:14px;font-weight:950;background:linear-gradient(145deg,#176b87,#32b8c4);box-shadow:0 10px 22px rgba(23,107,135,.38);
+  -webkit-tap-highlight-color:transparent}
+.bid-btn:after{content:"";position:absolute;inset:-4px;border-radius:50%;border:3px solid #32b8c4;opacity:0;pointer-events:none}
+.bid-btn.pulse{animation:press .45s ease}
+.bid-btn.pulse:after{animation:ring .65s ease-out}
+@keyframes press{0%{transform:scale(1)}35%{transform:scale(.86)}70%{transform:scale(1.1)}100%{transform:scale(1)}}
+@keyframes ring{0%{opacity:.85;transform:scale(1)}100%{opacity:0;transform:scale(1.9)}}
+.bid-btn:disabled{opacity:.5;cursor:not-allowed;background:#9aa7ad;box-shadow:none}
+@media (prefers-reduced-motion:reduce){
+  .bid-btn.pulse,.bid-btn.pulse:after,.price.bump,.clock.hot .unit:last-child{animation:none}
+  .dot,.toast{transition:none}
+}
 
-.toast{position:fixed;left:50%;bottom:calc(96px + var(--safe-bottom));transform:translateX(-50%) translateY(16px);max-width:calc(100% - 40px);
+.toast{position:fixed;left:50%;bottom:calc(104px + var(--safe-bottom));transform:translateX(-50%) translateY(16px);max-width:calc(100% - 40px);
   padding:10px 14px;border-radius:13px;background:#1e2c30;color:#fff;font-size:11px;font-weight:800;box-shadow:0 14px 34px rgba(24,44,49,.12);
   opacity:0;pointer-events:none;transition:.25s ease;z-index:120;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -173,7 +178,7 @@ td.good{color:var(--ok)}
 
 <section class="card">
   <div class="price-row">
-    <div><span class="label">السعر الحالي</span><div class="price"><span id="price"></span><small>د.ع</small></div></div>
+    <div><span class="label">السعر الحالي</span><div class="price" id="priceBox"><span id="price"></span><small>د.ع</small></div></div>
     <div><span class="label">المزايدات</span><div class="count" id="count"></div></div>
   </div>
   <p class="note" id="note"></p>
@@ -189,15 +194,12 @@ td.good{color:var(--ok)}
 
 <div class="bar-wrap">
   <div class="bar">
-    <div class="bar-row">
-      <div class="stepper" id="stepper">
-        <button type="button" id="plus" aria-label="زيادة المبلغ">+</button>
-        <input id="amount" inputmode="numeric" autocomplete="off" aria-label="مبلغ مزايدتك بالدينار العراقي">
-        <button type="button" id="minus" aria-label="تقليل المبلغ">−</button>
-      </div>
-      <button class="go" id="go" type="button">زايد الآن</button>
+    <div class="next">
+      <span class="label">مزايدتك القادمة</span>
+      <b><span id="next"></span><small>د.ع</small></b>
+      <span class="step-tag" id="stepTag"></span>
     </div>
-    <p class="err" id="err" role="alert"></p>
+    <button class="bid-btn" id="bid" type="button" aria-label="زايد الآن">زايد</button>
   </div>
 </div>
 <div class="toast" id="toast" role="status"></div>
@@ -206,17 +208,17 @@ td.good{color:var(--ok)}
 /* بيانات تجريبية: استبدلها ببيانات Supabase */
 const auction={
   title:'iPhone 15 Pro Max', sub:'256GB • Natural Titanium • النجف', condition:'نظيف جداً',
-  price:1150000, step:10000, endsAt:Date.now()+(42*60+18)*1000, bidCount:17,
+  price:1150000, step:15000, endsAt:Date.now()+(42*60+18)*1000, bidCount:17,
   specs:[['الجهاز','iPhone 15 Pro Max'],['السعة','256GB'],['البطارية','91%'],['اللون','Natural Titanium'],['الشاشة','أصلية'],
     ['Face ID','يعمل',1],['الكاميرات','تعمل',1],['الهيكل','نظيف'],['فك أو تبديل قطع','لا يوجد']],
-  bids:[{n:'علي',a:1150000,t:Date.now()-60e3},{n:'زهراء',a:1140000,t:Date.now()-4*60e3},
-    {n:'مصطفى',a:1120000,t:Date.now()-11*60e3},{n:'حسين',a:1100000,t:Date.now()-26*60e3}],
+  bids:[{n:'علي',a:1150000,t:Date.now()-60e3},{n:'زهراء',a:1135000,t:Date.now()-4*60e3},
+    {n:'مصطفى',a:1120000,t:Date.now()-11*60e3},{n:'حسين',a:1105000,t:Date.now()-26*60e3}],
   seller:{name:'أبو حيدر للموبايلات',rating:4.9,sales:23}
 };
 const EXT_WINDOW=30, EXT_BY=60;
 const $=id=>document.getElementById(id);
 const fmt=n=>Number(n).toLocaleString('en-US');
-let ended=false, toastT;
+let ended=false, locked=false, toastT;
 
 /* gallery */
 const pal=[['#243b80','#7c3aed'],['#176b87','#32b8c4'],['#4d43a8','#9b8cf0']];
@@ -230,10 +232,12 @@ $('slides').addEventListener('scroll',e=>{
 
 /* render */
 const ago=t=>{const m=Math.max(1,Math.round((Date.now()-t)/6e4));return m<60?`منذ ${m} دقيقة`:`منذ ${Math.round(m/60)} ساعة`};
+const next=()=>auction.price+auction.step;
 function render(){
   $('name').textContent=auction.title; $('sub').textContent=auction.sub; $('cond').textContent=auction.condition;
   $('price').textContent=fmt(auction.price); $('count').textContent=auction.bidCount;
-  $('note').textContent=`الحد الأدنى للمزايدة ${fmt(auction.step)} د.ع، وأقل مبلغ مقبول الآن ${fmt(auction.price+auction.step)} د.ع`;
+  $('note').textContent=`كل مزايدة ثابتة ${fmt(auction.step)} د.ع، والمزايدة القادمة ${fmt(next())} د.ع`;
+  $('next').textContent=fmt(next()); $('stepTag').textContent=`+${fmt(auction.step)} د.ع`;
   $('specs').innerHTML=auction.specs.map(([k,v,g])=>`<tr><th>${k}</th><td class="${g?'good':''}">${v}</td></tr>`).join('');
   $('bids').innerHTML=auction.bids.slice(0,5).map((b,i)=>`<li class="${i?'':'lead'}"><span class="who">${b.n}<span>${ago(b.t)}</span></span><b>${fmt(b.a)} د.ع</b></li>`).join('');
   const s=auction.seller; $('sAv').textContent=s.name.trim()[0]; $('sName').textContent=s.name;
@@ -250,25 +254,24 @@ function tick(){
 function finish(){
   ended=true; $('clock').classList.add('ended');
   $('badge').textContent='انتهى المزاد'; $('endLabel').textContent='الفائز: '+auction.bids[0].n;
-  $('go').disabled=true; $('go').textContent='انتهى'; $('stepper').classList.add('off'); $('amount').disabled=true;
+  $('bid').disabled=true; $('bid').textContent='انتهى';
 }
 
-/* bidding */
-const min=()=>auction.price+auction.step;
-const val=()=>parseInt($('amount').value.replace(/[^\d]/g,''),10)||0;
-const setAmt=n=>{$('amount').value=fmt(n);$('err').textContent=''};
-$('plus').onclick=()=>setAmt(Math.max(val(),min())+auction.step);
-$('minus').onclick=()=>setAmt(Math.max(min(),val()-auction.step));
-$('amount').addEventListener('input',e=>{const n=val();e.target.value=n?fmt(n):''});
-$('go').onclick=()=>{
-  if(ended)return;
-  const n=val();
-  if(n<min()){$('err').textContent=`المبلغ أقل من الحد الأدنى، أدخل ${fmt(min())} د.ع أو أكثر`;return}
+/* bidding: fixed step only */
+function pulse(){
+  const b=$('bid'); b.classList.remove('pulse'); void b.offsetWidth; b.classList.add('pulse');
+}
+$('bid').onclick=()=>{
+  if(ended||locked)return;
+  locked=true; setTimeout(()=>locked=false,700); /* يمنع الضغط المزدوج بالغلط */
+  pulse();
   /* عند الربط مع Supabase: نفّذ المزايدة بدالة على السيرفر (RPC) تتحقق من الوقت والسعر */
+  const n=next();
   auction.price=n; auction.bidCount++; auction.bids.unshift({n:'أنت',a:n,t:Date.now()});
   let msg='تمت المزايدة بنجاح';
   if((auction.endsAt-Date.now())/1000<=EXT_WINDOW){auction.endsAt+=EXT_BY*1000;msg+=' وتمدد المزاد دقيقة'}
-  render(); setAmt(min()); tick(); toast(msg);
+  render(); tick(); toast(msg);
+  const pb=$('priceBox'); pb.classList.remove('bump'); void pb.offsetWidth; pb.classList.add('bump');
 };
 
 $('fav').onclick=e=>{
@@ -279,7 +282,7 @@ $('fav').onclick=e=>{
 $('back').onclick=()=>history.length>1?history.back():location.href='auctions.html';
 function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2200)}
 
-render(); setAmt(min()); tick(); setInterval(tick,1000);
+render(); tick(); setInterval(tick,1000);
 </script>
 </body>
 </html>
