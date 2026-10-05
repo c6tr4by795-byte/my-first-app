@@ -61,16 +61,35 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 /* ADS */
 .ad-track{display:flex;gap:12px;width:100%;overflow-x:auto;padding:1px 2px 6px;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
 .ad-track::-webkit-scrollbar{display:none}
-.ad-card{flex:0 0 100%;min-height:150px;padding:14px;border-radius:22px;border:1px solid #ddd8f8;scroll-snap-align:center;scroll-snap-stop:always;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;gap:10px;background:radial-gradient(circle at 100% 0,rgba(98,70,217,.14),transparent 55%),linear-gradient(145deg,#fff 0%,#f6f3ff 55%,#ece7ff 100%);box-shadow:0 12px 28px rgba(98,70,217,.10)}
+.ad-card{position:relative;isolation:isolate;overflow:hidden;flex:0 0 100%;height:188px;min-height:166px;padding:12px 14px;border-radius:22px;border:1px solid #ddd8f8;scroll-snap-align:center;scroll-snap-stop:always;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;gap:8px;background:radial-gradient(circle at 0 0,rgba(98,70,217,.14),transparent 55%),linear-gradient(145deg,#fff 0%,#f6f3ff 55%,#ece7ff 100%);box-shadow:0 12px 28px rgba(98,70,217,.10)}
+.ad-copy{max-width:58%;display:flex;flex-direction:column;gap:6px;position:relative;z-index:1}
 .ad-top{display:flex;align-items:center;gap:8px}
 .ad-badge{padding:3px 9px;border-radius:999px;background:#fff;border:1px solid #ddd8f8;color:#4a34b8;font-size:9px;font-weight:900}
 .ad-kicker{font-size:10px;font-weight:800;color:var(--muted)}
-.ad-title{margin:0;font-size:19px;font-weight:950;line-height:1.25;letter-spacing:-.03em}
-.ad-text{margin:5px 0 0;font-size:11px;font-weight:700;line-height:1.7;color:var(--muted);max-width:280px}
-.ad-cta{align-self:flex-start;padding:9px 16px;border-radius:12px;color:#fff;font-size:11px;font-weight:900;background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 6px 14px rgba(98,70,217,.25)}
+.ad-title{margin:0;font-size:17px;font-weight:950;line-height:1.25;letter-spacing:-.03em}
+.ad-text{margin:0;font-size:10.5px;font-weight:700;line-height:1.6;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ad-cta{align-self:flex-start;position:relative;z-index:1;padding:8px 14px;border-radius:12px;color:#fff;font-size:11px;font-weight:900;background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 6px 14px rgba(98,70,217,.25)}
 .ad-dots{display:flex;justify-content:center;gap:6px;margin-top:6px}
 .ad-dot{width:6px;height:6px;border-radius:50%;background:#d6d2ea;transition:.2s ease}
 .ad-dot.active{width:19px;border-radius:999px;background:var(--purple)}
+
+/* AD ART (رسوم متحركة) */
+.ad-art{position:absolute;inset-block:0;inset-inline-end:0;width:44%;pointer-events:none;z-index:0}
+.ad-art svg{width:100%;height:100%;display:block}
+.ad-art svg *{transform-box:fill-box;transform-origin:center}
+.ad-art svg .grow{transform-origin:50% 100%}
+.ad-art .float{animation:adfloat 3.2s ease-in-out infinite}
+.ad-art .rise{animation:adrise 2.6s ease-in infinite}
+.ad-art .grow{animation:adgrow 2.4s ease-in-out infinite}
+.ad-art .twk{animation:adtwk 1.8s ease-in-out infinite}
+.ad-art .ring{animation:adring 2.8s ease-out infinite}
+.ad-art .pop{animation:adpop 3s ease-in-out infinite}
+@keyframes adfloat{50%{transform:translateY(-6px)}}
+@keyframes adrise{0%{opacity:0;transform:translateY(14px) scale(.8)}20%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0;transform:translateY(-26px)}}
+@keyframes adgrow{0%,100%{transform:scaleY(.45)}50%{transform:scaleY(1)}}
+@keyframes adtwk{0%,100%{opacity:.2;transform:scale(.6)}50%{opacity:1;transform:scale(1)}}
+@keyframes adring{0%{opacity:.55;transform:scale(.5)}100%{opacity:0;transform:scale(1.7)}}
+@keyframes adpop{0%,12%{opacity:0;transform:scale(.3)}22%,85%{opacity:1;transform:none}100%{opacity:0;transform:scale(.3)}}
 
 /* ACTIONS */
 .actions-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
@@ -123,7 +142,7 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 @media(max-width:360px){.bottom-wrap{bottom:-6px;padding-left:8px;padding-right:8px}.bottom-nav{border-radius:18px}.nav-item{min-height:50px;border-radius:14px}.nav-icon{width:19px;height:19px;flex-basis:19px}.nav-item>span:not(.add-button){font-size:8px}}
-@media(prefers-reduced-motion:reduce){.live-dot{animation:none}.ad-dot,.toast{transition:none}}
+@media(prefers-reduced-motion:reduce){.live-dot{animation:none}.ad-dot,.toast{transition:none}.ad-art svg *{animation:none!important}}
 </style>
 </head>
 <body>
@@ -368,11 +387,36 @@ function bindCategories(){
 }
 
 /* ================================
-   ADS — عدّل القائمة، أو اجلبها لاحقاً من جدول ads
+   ADS — الرسوم + القائمة (عدّلها، أو اجلبها لاحقاً من جدول ads)
 ================================ */
+const ART = {
+  auction: `<svg viewBox="0 0 150 188" aria-hidden="true"><defs><linearGradient id="ga1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6246d9"/><stop offset="1" stop-color="#8b6cf0"/></linearGradient></defs>
+<circle cx="84" cy="96" r="58" fill="#6246d9" opacity=".09"/>
+<circle class="ring" cx="84" cy="96" r="40" fill="none" stroke="#6246d9" stroke-width="2"/>
+<circle class="ring" style="animation-delay:1.4s" cx="84" cy="96" r="40" fill="none" stroke="#6246d9" stroke-width="2"/>
+<g class="float"><rect x="56" y="36" width="56" height="100" rx="12" fill="#1d2430"/><rect x="60" y="40" width="48" height="92" rx="9" fill="url(#ga1)"/><rect x="76" y="43" width="16" height="4.5" rx="2.2" fill="#0c0f11"/>
+<rect x="68" y="58" width="32" height="6" rx="3" fill="#fff" opacity=".85"/><rect x="68" y="68" width="20" height="5" rx="2.5" fill="#fff" opacity=".5"/>
+<rect class="grow" x="68" y="98" width="8" height="26" rx="3" fill="#fff" opacity=".9"/><rect class="grow" style="animation-delay:.3s" x="80" y="88" width="8" height="36" rx="3" fill="#fff" opacity=".9"/><rect class="grow" style="animation-delay:.6s" x="92" y="76" width="8" height="48" rx="3" fill="#fff"/></g>
+<g class="rise"><rect x="100" y="52" width="48" height="20" rx="10" fill="#fff" stroke="#ddd8f8"/><text x="124" y="66" text-anchor="middle" font-size="10" font-weight="900" fill="#4a34b8">+15,000</text></g>
+<g class="rise" style="animation-delay:1.3s"><rect x="4" y="104" width="48" height="20" rx="10" fill="#fff" stroke="#ddd8f8"/><text x="28" y="118" text-anchor="middle" font-size="10" font-weight="900" fill="#4a34b8">+15,000</text></g>
+<path class="twk" d="M24 40l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#8b6cf0"/><path class="twk" style="animation-delay:.9s" d="M126 128l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z" fill="#e0a64a"/></svg>`,
+
+  promo: `<svg viewBox="0 0 150 188" aria-hidden="true"><defs><linearGradient id="ga2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#176b87"/><stop offset="1" stop-color="#32b8c4"/></linearGradient></defs>
+<circle cx="84" cy="96" r="58" fill="#176b87" opacity=".08"/>
+<circle class="ring" cx="84" cy="96" r="40" fill="none" stroke="#176b87" stroke-width="2"/>
+<circle class="ring" style="animation-delay:1.4s" cx="84" cy="96" r="40" fill="none" stroke="#176b87" stroke-width="2"/>
+<g class="float"><rect x="56" y="36" width="56" height="100" rx="12" fill="#1d2430"/><rect x="60" y="40" width="48" height="92" rx="9" fill="url(#ga2)"/><rect x="76" y="43" width="16" height="4.5" rx="2.2" fill="#0c0f11"/>
+<rect x="66" y="58" width="36" height="30" rx="6" fill="#fff" opacity=".9"/><rect x="66" y="94" width="36" height="5" rx="2.5" fill="#fff" opacity=".7"/><rect x="66" y="104" width="24" height="5" rx="2.5" fill="#fff" opacity=".45"/></g>
+<g class="float" style="animation-delay:.5s"><circle cx="112" cy="42" r="14" fill="#f5b83d"/><path d="M112 34l2.4 5 5.6.8-4 3.9 1 5.5-5-2.6-5 2.6 1-5.5-4-3.9 5.6-.8z" fill="#fff"/></g>
+<g class="pop"><circle cx="28" cy="70" r="11" fill="#6246d9"/><text x="28" y="74.5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff">ع</text></g>
+<g class="pop" style="animation-delay:1s"><circle cx="24" cy="128" r="11" fill="#e8590c"/><text x="24" y="132.5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff">ز</text></g>
+<g class="pop" style="animation-delay:2s"><circle cx="126" cy="116" r="11" fill="#1e8a5a"/><text x="126" y="120.5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff">م</text></g>
+<path class="twk" d="M130 74l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z" fill="#8b6cf0"/></svg>`
+};
+
 const ADS = [
-  { kicker:"مزاد", title:"بيع جهازك بالمزاد", text:"ابدأ مزادك الأول وخلي السوق يحدد السعر.", cta:"ابدأ مزادك", go:"sell-auction.html" },
-  { kicker:"إعلان مميز", title:"إعلانك يطلع أول النتائج", text:"اعرض جهازك بإعلان مميز ووصّل لمشترين أكثر.", cta:"أضف جهازك", go:"sell.html" }
+  { art:"auction", kicker:"مزاد", title:"بيع جهازك بالمزاد", text:"ابدأ مزادك الأول وخلي السوق يحدد السعر.", cta:"ابدأ مزادك", go:"sell-auction.html" },
+  { art:"promo", kicker:"إعلان مميز", title:"إعلانك يطلع أول النتائج", text:"اعرض جهازك بإعلان مميز ووصّل لمشترين أكثر.", cta:"أضف جهازك", go:"sell.html" }
 ];
 
 function renderAds(){
@@ -381,8 +425,12 @@ function renderAds(){
 
   track.innerHTML = ADS.map(a => `
     <article class="ad-card" data-go="${esc(a.go)}" role="link" tabindex="0">
-      <div class="ad-top"><span class="ad-badge">إعلان</span><span class="ad-kicker">${esc(a.kicker)}</span></div>
-      <div><h3 class="ad-title">${esc(a.title)}</h3><p class="ad-text">${esc(a.text)}</p></div>
+      <div class="ad-art">${ART[a.art] || ""}</div>
+      <div class="ad-copy">
+        <div class="ad-top"><span class="ad-badge">إعلان</span><span class="ad-kicker">${esc(a.kicker)}</span></div>
+        <h3 class="ad-title">${esc(a.title)}</h3>
+        <p class="ad-text">${esc(a.text)}</p>
+      </div>
       <span class="ad-cta">${esc(a.cta)}</span>
     </article>`).join("");
   sec.hidden = false;
