@@ -9,964 +9,177 @@
 <title>MZAD PHONE — بيع مزاد</title>
 
 <style>
+/* ============ المتغيرات ============ */
 :root{
-  --bg:#f9f8fd;
-  --ink:#17202a;
-  --muted:#6b7280;
-  --line:#ece8fb;
-  --primary:#176b87;
-  --purple:#6246d9;
-  --purple-dark:#4a34b8;
-  --purple-soft:#f3f0ff;
-  --edge:#ddd8f8;
-  --hot:#e8590c;
-  --ok:#1e8a5a;
+  --bg:#f9f8fd;--ink:#17202a;--muted:#6b7280;--line:#ece8fb;
+  --primary:#176b87;--purple:#6246d9;--purple-dark:#4a34b8;--purple-soft:#f3f0ff;
+  --edge:#ddd8f8;--hot:#e8590c;--ok:#1e8a5a;
   --safe-bottom:env(safe-area-inset-bottom,0px)
 }
 
+/* ============ الأساسيات ============ */
 *{box-sizing:border-box}
-
 html{scroll-behavior:smooth}
-
-body{
-  margin:0;
-  min-height:100dvh;
-  background:var(--bg);
-  color:var(--ink);
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
-  -webkit-font-smoothing:antialiased
-}
+  -webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{border:0;background:none;cursor:pointer}
+a{text-decoration:none;color:inherit}
+:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
+.page{width:min(100%,520px);margin:auto;padding:0 14px calc(96px + var(--safe-bottom));overflow-x:clip}
 
-button,input,select,textarea{
-  font:inherit;
-  color:inherit
-}
-
-button{
-  border:0;
-  background:none;
-  cursor:pointer
-}
-
-a{
-  text-decoration:none;
-  color:inherit
-}
-
-:focus-visible{
-  outline:3px solid var(--purple);
-  outline-offset:2px
-}
-
-.page{
-  width:min(100%,520px);
-  margin:auto;
-  padding:0 14px calc(96px + var(--safe-bottom));
-  overflow-x:clip
-}
-
-header{
-  margin-inline:-14px;
-  padding:0 14px 16px;
-  background:linear-gradient(145deg,#fff,#f7f5ff 55%,#ece8ff);
-  border-radius:0 0 24px 24px;
-  border-bottom:1px solid var(--line);
-  box-shadow:0 10px 26px #17202a0d
-}
-
-.topbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:12px 2px 0
-}
-
-.brand-mini{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  line-height:.9
-}
-
-.brand-mini strong{
-  font-size:16px;
-  letter-spacing:-.03em
-}
-
-.brand-mini span{
-  font-size:7px;
-  font-weight:800;
-  letter-spacing:.15em;
-  color:#8a96a3;
-  margin-top:3px
-}
-
-.icon-btn{
-  width:39px;
-  height:34px;
-  display:grid;
-  place-items:center;
-  border:1px solid var(--edge);
-  border-radius:12px;
-  background:#fff;
-  color:var(--purple);
-  box-shadow:0 7px 18px #17202a0b
-}
-
-.icon-btn svg{
-  width:20px;
-  height:20px;
-  fill:none;
-  stroke:currentColor;
-  stroke-width:1.9;
-  stroke-linecap:round;
-  stroke-linejoin:round
-}
-
+/* ============ الهيدر ============ */
+header{margin-inline:-14px;padding:0 14px 16px;background:linear-gradient(145deg,#fff,#f7f5ff 55%,#ece8ff);
+  border-radius:0 0 24px 24px;border-bottom:1px solid var(--line);box-shadow:0 10px 26px #17202a0d}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 2px 0}
+.brand-mini{display:flex;flex-direction:column;align-items:center;line-height:.9}
+.brand-mini strong{font-size:16px;letter-spacing:-.03em}
+.brand-mini span{font-size:7px;font-weight:800;letter-spacing:.15em;color:#8a96a3;margin-top:3px}
+.icon-btn{width:39px;height:34px;display:grid;place-items:center;border:1px solid var(--edge);border-radius:12px;
+  background:#fff;color:var(--purple);box-shadow:0 7px 18px #17202a0b}
+.icon-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .spacer{width:39px}
-
-.head-copy{
-  margin:14px 2px 12px
-}
-
-.head-copy h1{
-  margin:0;
-  font-size:22px;
-  font-weight:950;
-  letter-spacing:-.035em
-}
-
-.head-copy p{
-  margin:3px 0 0;
-  font-size:11px;
-  font-weight:700;
-  color:var(--muted)
-}
-
-.progress{
-  height:8px;
-  border-radius:99px;
-  background:#e4defa;
-  overflow:hidden
-}
-
-.progress i{
-  display:block;
-  height:100%;
-  width:0;
-  border-radius:99px;
-  background:linear-gradient(90deg,#8b6cf0,#6246d9);
-  transition:width .5s
-}
-
-.p-label{
-  display:flex;
-  justify-content:space-between;
-  margin-top:6px;
-  font-size:10px;
-  font-weight:800;
-  color:var(--muted)
-}
-
-form{
-  margin-top:14px
-}
-
-.card{
-  margin-top:12px;
-  padding:14px;
-  border-radius:20px;
-  background:#fff;
-  border:1px solid var(--edge);
-  box-shadow:0 10px 24px -10px #6246d938
-}
-
-.reveal{
-  opacity:0;
-  transform:translateY(16px);
-  transition:.5s
-}
-
-.reveal.shown{
-  opacity:1;
-  transform:none
-}
-
-.card.invalid{
-  border-color:var(--hot);
-  animation:shake .4s
-}
-
-@keyframes shake{
-  20%,60%{transform:translateX(-6px)}
-  40%,80%{transform:translateX(6px)}
-}
-
-.c-head{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:12px
-}
-
-.num{
-  width:28px;
-  height:28px;
-  flex:0 0 28px;
-  border-radius:10px;
-  display:grid;
-  place-items:center;
-  color:#fff;
-  font-size:13px;
-  font-weight:950;
-  background:linear-gradient(145deg,#6246d9,#8b6cf0);
-  box-shadow:0 5px 12px #6246d947
-}
-
-.c-head h2{
-  margin:0;
-  font-size:16px;
-  font-weight:950;
-  letter-spacing:-.02em
-}
-
-.c-head p{
-  margin:1px 0 0;
-  font-size:10px;
-  font-weight:700;
-  color:var(--muted)
-}
-
-.err{
-  margin:8px 2px 0;
-  font-size:11px;
-  font-weight:800;
-  color:var(--hot)
-}
-
-.field{
-  margin-top:12px
-}
-
-.field:first-of-type{
-  margin-top:0
-}
-
-.lbl{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:6px;
-  font-size:11px;
-  font-weight:900;
-  color:#374151
-}
-
-.lbl small{
-  font-weight:700;
-  color:#9ca3af
-}
-
-.in,
-.sel,
-.ta{
-  width:100%;
-  border:1.5px solid #e4defa;
-  border-radius:14px;
-  background:#fff;
-  padding:0 14px;
-  outline:none;
-  transition:.2s;
-  font-weight:700
-}
-
-.in,
-.sel{
-  height:46px
-}
-
-.ta{
-  min-height:92px;
-  padding:12px 14px;
-  resize:vertical;
-  line-height:1.7
-}
-
-.in:focus,
-.sel:focus,
-.ta:focus{
-  border-color:#a99cf0;
-  box-shadow:0 0 0 4px #6246d91a
-}
-
-.in::placeholder,
-.ta::placeholder{
-  color:#a8b0bb;
-  font-weight:600
-}
-
-.sel{
-  appearance:none;
-  background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236246d9' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat 14px center
-}
-
-.sel:disabled{
-  background-color:#f7f7fa;
-  color:#9ca3af;
-  cursor:not-allowed;
-  opacity:.85
-}
-
-.row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px
-}
-
-.money{
-  position:relative
-}
-
-.money .in{
-  padding-inline-start:14px;
-  padding-inline-end:60px;
-  font-size:18px;
-  font-weight:950;
-  direction:ltr;
-  text-align:right;
-  font-variant-numeric:tabular-nums
-}
-
-.money span{
-  position:absolute;
-  inset-inline-start:14px;
-  top:50%;
-  transform:translateY(-50%);
-  font-size:11px;
-  font-weight:900;
-  color:var(--muted);
-  pointer-events:none
-}
-
-.count{
-  text-align:end;
-  margin-top:4px;
-  font-size:10px;
-  font-weight:700;
-  color:#9ca3af
-}
-
-.chips{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px
-}
-
-.chip{
-  position:relative
-}
-
-.chip input{
-  position:absolute;
-  opacity:0;
-  inset:0;
-  width:100%;
-  height:100%;
-  margin:0;
-  cursor:pointer
-}
-
-.chip span{
-  display:block;
-  padding:9px 14px;
-  border-radius:999px;
-  background:#fff;
-  border:1.5px solid var(--line);
-  font-size:11.5px;
-  font-weight:800;
-  color:#4b5563;
-  transition:.2s
-}
-
-.chip input:checked+span{
-  background:var(--purple-soft);
-  border-color:var(--purple);
-  color:var(--purple-dark);
-  font-weight:950;
-  animation:pop .3s
-}
-
-@keyframes pop{
-  50%{transform:scale(1.08)}
-}
-
-.photos{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:9px
-}
-
-.add,
-.thumb{
-  position:relative;
-  aspect-ratio:1;
-  border-radius:16px;
-  overflow:hidden
-}
-
-.add{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-  border:2px dashed #c9bff7;
-  background:var(--purple-soft);
-  color:var(--purple-dark);
-  font-size:10.5px;
-  font-weight:900
-}
-
-.add svg{
-  width:26px;
-  height:26px;
-  fill:none;
-  stroke:currentColor;
-  stroke-width:1.8
-}
-
-.thumb{
-  border:1px solid var(--edge)
-}
-
-.thumb img{
-  width:100%;
-  height:100%;
-  object-fit:cover
-}
-
-.thumb .x{
-  position:absolute;
-  top:5px;
-  inset-inline-start:5px;
-  width:26px;
-  height:26px;
-  border-radius:50%;
-  background:#fffffff5;
-  display:grid;
-  place-items:center;
-  color:#6b7280;
-  box-shadow:0 4px 10px #0002
-}
-
-.thumb .x svg{
-  width:13px;
-  height:13px;
-  fill:none;
-  stroke:currentColor;
-  stroke-width:2.4
-}
-
-.thumb .cv{
-  position:absolute;
-  bottom:5px;
-  inset-inline:5px;
-  padding:2px 0;
-  border-radius:8px;
-  background:var(--purple);
-  color:#fff;
-  text-align:center;
-  font-size:9px;
-  font-weight:900
-}
-
-.hint{
-  margin:8px 2px 0;
-  font-size:10px;
-  font-weight:700;
-  color:var(--muted)
-}
-
-.bat{
-  display:flex;
-  align-items:center;
-  gap:12px
-}
-
-.bat output{
-  min-width:58px;
-  padding:6px 0;
-  border-radius:12px;
-  background:var(--purple-soft);
-  color:var(--purple-dark);
-  text-align:center;
-  font-size:15px;
-  font-weight:950;
-  direction:ltr
-}
-
-input[type=range]{
-  flex:1;
-  -webkit-appearance:none;
-  height:8px;
-  border-radius:99px;
-  background:linear-gradient(
-    to left,
-    #6246d9 var(--p,75%),
-    #e4defa var(--p,75%)
-  )
-}
-
-input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;
-  width:26px;
-  height:26px;
-  border-radius:50%;
-  background:#fff;
-  border:4px solid var(--purple);
-  box-shadow:0 4px 10px #6246d959
-}
-
-.sw{
-  position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  padding:11px 2px;
-  border-bottom:1px solid #f1eefb;
-  cursor:pointer;
-  font-size:12.5px;
-  font-weight:800
-}
-
-.sw:last-of-type{
-  border-bottom:0
-}
-
-.sw input{
-  position:absolute;
-  opacity:0
-}
-
-.sw i{
-  width:44px;
-  height:26px;
-  border-radius:99px;
-  background:#d9d6e8;
-  position:relative;
-  flex:0 0 auto
-}
-
-.sw i:after{
-  content:"";
-  position:absolute;
-  top:3px;
-  inset-inline-start:3px;
-  width:20px;
-  height:20px;
-  border-radius:50%;
-  background:#fff;
-  box-shadow:0 2px 6px #0003;
-  transition:.25s
-}
-
-.sw input:checked+i{
-  background:var(--ok)
-}
-
-.sw input:checked+i:after{
-  transform:translateX(-18px)
-}
-
-.sw.warn input:checked+i{
-  background:var(--hot)
-}
-
-.fold{
-  display:grid;
-  grid-template-rows:0fr;
-  transition:grid-template-rows .35s
-}
-
-.fold.open{
-  grid-template-rows:1fr
-}
-
-.fold>div{
-  overflow:hidden
-}
-
-.fold .ta{
-  margin-top:10px
-}
-
-.sub-t{
-  margin:16px 2px 8px;
-  font-size:11px;
-  font-weight:900;
-  color:#374151
-}
-
-.info{
-  margin-top:12px;
-  padding:12px;
-  border-radius:14px;
-  background:var(--purple-soft);
-  border:1px solid #e4defa;
-  font-size:11px;
-  font-weight:700;
-  line-height:1.8;
-  color:#4b5563
-}
-
-.info b{
-  color:var(--purple-dark);
-  font-weight:950
-}
-
-.end{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-top:10px;
-  font-size:11px;
-  font-weight:800;
-  color:var(--muted)
-}
-
-.end svg{
-  width:16px;
-  height:16px;
-  fill:none;
-  stroke:var(--purple);
-  stroke-width:2
-}
-
-.end b{
-  color:var(--ink)
-}
-
-.a-card{
-  display:flex;
-  gap:12px;
-  margin-top:10px;
-  padding:10px;
-  border-radius:20px;
-  background:#fff;
-  border:1px solid var(--line);
-  box-shadow:0 8px 20px #6246d914
-}
-
-.a-img{
-  position:relative;
-  flex:0 0 108px;
-  height:132px;
-  border-radius:15px;
-  overflow:hidden;
-  display:grid;
-  place-items:center;
-  background:linear-gradient(145deg,#fff,#f1edff);
-  border:1px solid var(--line)
-}
-
-.a-img img{
-  width:100%;
-  height:100%;
-  object-fit:cover
-}
-
-.a-img svg{
-  height:74%;
-  width:auto
-}
-
-.pill{
-  position:absolute;
-  bottom:6px;
-  inset-inline:6px;
-  padding:3px 0;
-  border-radius:9px;
-  background:#fffffff5;
-  color:var(--purple-dark);
-  text-align:center;
-  font-size:10.5px;
-  font-weight:950
-}
-
-.a-body{
-  flex:1;
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between
-}
-
-.a-title{
-  margin:0;
-  font-size:14.5px;
-  font-weight:900;
-  line-height:1.3
-}
-
-.a-meta{
-  margin-top:3px;
-  font-size:10px;
-  font-weight:750;
-  color:var(--muted);
-  line-height:1.5
-}
-
-.tags{
-  display:flex;
-  gap:6px;
-  margin-top:6px;
-  flex-wrap:wrap
-}
-
-.tag{
-  padding:3px 8px;
-  border-radius:8px;
-  background:var(--purple-soft);
-  color:var(--purple-dark);
-  font-size:9px;
-  font-weight:900
-}
-
-.a-foot{
-  margin-top:8px;
-  padding-top:8px;
-  border-top:1px solid #f1eefb
-}
-
-.a-foot .lb{
-  display:block;
-  font-size:9px;
-  font-weight:800;
-  color:var(--muted)
-}
-
-.a-price{
-  font-size:16px;
-  font-weight:950;
-  color:var(--purple-dark)
-}
-
-.agree{
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  margin-top:14px;
-  padding:12px;
-  border-radius:16px;
-  background:#fff;
-  border:1px solid var(--line);
-  font-size:11.5px;
-  font-weight:800;
-  line-height:1.7;
-  cursor:pointer
-}
-
-.agree.invalid{
-  border-color:var(--hot);
-  animation:shake .4s
-}
-
-.agree input{
-  width:20px;
-  height:20px;
-  margin:2px 0 0;
-  accent-color:var(--purple)
-}
-
-.submit{
-  width:100%;
-  height:56px;
-  margin-top:14px;
-  border-radius:18px;
-  color:#fff;
-  font-size:16px;
-  font-weight:950;
-  background:linear-gradient(145deg,#6246d9,#8b6cf0);
-  box-shadow:0 12px 26px #6246d959
-}
-
-.submit:disabled{
-  opacity:.75
-}
-
-.submit .spin{
-  display:none;
-  width:20px;
-  height:20px;
-  border-radius:50%;
-  border:3px solid #ffffff66;
-  border-top-color:#fff;
-  animation:rot .7s linear infinite;
-  margin:auto
-}
-
-.submit.busy .t{
-  display:none
-}
-
-.submit.busy .spin{
-  display:block
-}
-
-@keyframes rot{
-  to{transform:rotate(360deg)}
-}
-
-.done{
-  position:fixed;
-  inset:0;
-  z-index:200;
-  display:none;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:14px;
-  background:#f9f8fdf7;
-  text-align:center;
-  padding:24px
-}
-
-.done.show{
-  display:flex
-}
-
-.done svg{
-  width:110px;
-  height:110px
-}
-
-.done circle{
-  fill:none;
-  stroke:#e4defa;
-  stroke-width:6
-}
-
-.done .ring{
-  stroke:var(--purple);
-  stroke-dasharray:289;
-  stroke-dashoffset:0
-}
-
-.done .tick{
-  fill:none;
-  stroke:var(--ok);
-  stroke-width:7;
-  stroke-linecap:round;
-  stroke-linejoin:round
-}
-
-.done h2{
-  margin:0;
-  font-size:22px;
-  font-weight:950
-}
-
-.done p{
-  margin:0;
-  font-size:12px;
-  font-weight:700;
-  color:var(--muted)
-}
-
-.bottom-wrap{
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:-7px;
-  width:100%;
-  padding:7px 10px calc(7px + var(--safe-bottom));
-  z-index:100;
-  pointer-events:none
-}
-
-.bottom-nav{
-  width:min(100%,520px);
-  margin:auto;
-  min-height:64px;
-  padding:5px;
-  border-radius:20px;
-  background:#fffffff7;
-  border:1px solid #e7ecef;
-  box-shadow:0 10px 28px #17202a1a;
-  backdrop-filter:blur(18px);
-  pointer-events:auto;
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:3px
-}
-
-.nav-item{
-  min-height:52px;
-  padding:4px 2px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:3px;
-  border-radius:15px;
-  color:#7e8992
-}
-
-.nav-icon{
-  width:20px;
-  height:20px;
-  fill:none;
-  stroke:currentColor;
-  stroke-width:1.7
-}
-
-.nav-item>span:not(.add-button){
-  font-size:8.5px;
-  font-weight:900
-}
-
-.add-button{
-  width:38px;
-  height:38px;
-  border-radius:13px;
-  display:grid;
-  place-items:center;
-  color:#fff;
-  background:linear-gradient(145deg,#176b87,#32b8c4)
-}
-
-.add-button svg{
-  width:20px;
-  height:20px;
-  fill:none;
-  stroke:currentColor;
-  stroke-width:2
-}
-
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:calc(88px + var(--safe-bottom));
-  transform:translateX(-50%) translateY(16px);
-  max-width:calc(100% - 40px);
-  padding:10px 14px;
-  border-radius:13px;
-  background:#1e2c30;
-  color:#fff;
-  font-size:11px;
-  font-weight:800;
-  opacity:0;
-  pointer-events:none;
-  transition:.25s;
-  z-index:150;
-  text-align:center
-}
-
-.toast.show{
-  opacity:1;
-  transform:translateX(-50%)
-}
+.head-copy{margin:14px 2px 12px}
+.head-copy h1{margin:0;font-size:22px;font-weight:950;letter-spacing:-.035em}
+.head-copy p{margin:3px 0 0;font-size:11px;font-weight:700;color:var(--muted)}
+.progress{height:8px;border-radius:99px;background:#e4defa;overflow:hidden}
+.progress i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#8b6cf0,#6246d9);transition:width .5s}
+.p-label{display:flex;justify-content:space-between;margin-top:6px;font-size:10px;font-weight:800;color:var(--muted)}
+
+/* ============ البطاقات ============ */
+form{margin-top:14px}
+.card{margin-top:12px;padding:14px;border-radius:20px;background:#fff;border:1px solid var(--edge);box-shadow:0 10px 24px -10px #6246d938}
+.reveal{opacity:0;transform:translateY(16px);transition:.5s}
+.reveal.shown{opacity:1;transform:none}
+.card.invalid{border-color:var(--hot);animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.c-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.num{width:28px;height:28px;flex:0 0 28px;border-radius:10px;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:950;
+  background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 5px 12px #6246d947}
+.c-head h2{margin:0;font-size:16px;font-weight:950;letter-spacing:-.02em}
+.c-head p{margin:1px 0 0;font-size:10px;font-weight:700;color:var(--muted)}
+.err{margin:8px 2px 0;font-size:11px;font-weight:800;color:var(--hot)}
+
+/* ============ الحقول ============ */
+.field{margin-top:12px}
+.field:first-of-type{margin-top:0}
+.lbl{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;font-size:11px;font-weight:900;color:#374151}
+.lbl small{font-weight:700;color:#9ca3af}
+.in,.sel,.ta{width:100%;border:1.5px solid #e4defa;border-radius:14px;background:#fff;padding:0 14px;outline:none;transition:.2s;font-weight:700}
+.in,.sel{height:46px}
+.ta{min-height:92px;padding:12px 14px;resize:vertical;line-height:1.7}
+.in:focus,.sel:focus,.ta:focus{border-color:#a99cf0;box-shadow:0 0 0 4px #6246d91a}
+.in::placeholder,.ta::placeholder{color:#a8b0bb;font-weight:600}
+.sel{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236246d9' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat 14px center}
+.sel:disabled{background-color:#f7f7fa;color:#9ca3af;cursor:not-allowed;opacity:.85}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.money{position:relative}
+.money .in{padding-inline-start:14px;padding-inline-end:60px;font-size:18px;font-weight:950;direction:ltr;text-align:right;font-variant-numeric:tabular-nums}
+.money span{position:absolute;inset-inline-start:14px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:900;color:var(--muted);pointer-events:none}
+.count{text-align:end;margin-top:4px;font-size:10px;font-weight:700;color:#9ca3af}
+
+/* ============ الخيارات (chips) ============ */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.chip span{display:block;padding:9px 14px;border-radius:999px;background:#fff;border:1.5px solid var(--line);font-size:11.5px;font-weight:800;color:#4b5563;transition:.2s}
+.chip input:checked+span{background:var(--purple-soft);border-color:var(--purple);color:var(--purple-dark);font-weight:950;animation:pop .3s}
+@keyframes pop{50%{transform:scale(1.08)}}
+
+/* ============ الصور ============ */
+.photos{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.add,.thumb{position:relative;aspect-ratio:1;border-radius:16px;overflow:hidden}
+.add{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:2px dashed #c9bff7;
+  background:var(--purple-soft);color:var(--purple-dark);font-size:10.5px;font-weight:900}
+.add svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.8}
+.thumb{border:1px solid var(--edge)}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.thumb .x{position:absolute;top:5px;inset-inline-start:5px;width:26px;height:26px;border-radius:50%;background:#fffffff5;
+  display:grid;place-items:center;color:#6b7280;box-shadow:0 4px 10px #0002}
+.thumb .cv{position:absolute;bottom:5px;inset-inline:5px;padding:2px 0;border-radius:8px;background:var(--purple);color:#fff;text-align:center;font-size:9px;font-weight:900}
+.hint{margin:8px 2px 0;font-size:10px;font-weight:700;color:var(--muted)}
+
+/* ============ البطارية والمفاتيح ============ */
+.bat{display:flex;align-items:center;gap:12px}
+.bat output{min-width:58px;padding:6px 0;border-radius:12px;background:var(--purple-soft);color:var(--purple-dark);text-align:center;font-size:15px;font-weight:950;direction:ltr}
+input[type=range]{flex:1;-webkit-appearance:none;height:8px;border-radius:99px;
+  background:linear-gradient(to left,#6246d9 var(--p,75%),#e4defa var(--p,75%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#fff;border:4px solid var(--purple);box-shadow:0 4px 10px #6246d959}
+.sw{position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 2px;border-bottom:1px solid #f1eefb;cursor:pointer;font-size:12.5px;font-weight:800}
+.sw:last-of-type{border-bottom:0}
+.sw input{position:absolute;opacity:0}
+.sw i{width:44px;height:26px;border-radius:99px;background:#d9d6e8;position:relative;flex:0 0 auto}
+.sw i:after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 2px 6px #0003;transition:.25s}
+.sw input:checked+i{background:var(--ok)}
+.sw input:checked+i:after{transform:translateX(-18px)}
+.sw.warn input:checked+i{background:var(--hot)}
+.fold{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s}
+.fold.open{grid-template-rows:1fr}
+.fold>div{overflow:hidden}
+.fold .ta{margin-top:10px}
+.sub-t{margin:16px 2px 8px;font-size:11px;font-weight:900;color:#374151}
+
+/* ============ معلومات المزاد ============ */
+.info{margin-top:12px;padding:12px;border-radius:14px;background:var(--purple-soft);border:1px solid #e4defa;font-size:11px;font-weight:700;line-height:1.8;color:#4b5563}
+.info b{color:var(--purple-dark);font-weight:950}
+.end{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:11px;font-weight:800;color:var(--muted)}
+.end svg{width:16px;height:16px;fill:none;stroke:var(--purple);stroke-width:2}
+.end b{color:var(--ink)}
+
+/* ============ المعاينة ============ */
+.a-card{display:flex;gap:12px;margin-top:10px;padding:10px;border-radius:20px;background:#fff;border:1px solid var(--line);box-shadow:0 8px 20px #6246d914}
+.a-img{position:relative;flex:0 0 108px;height:132px;border-radius:15px;overflow:hidden;display:grid;place-items:center;
+  background:linear-gradient(145deg,#fff,#f1edff);border:1px solid var(--line)}
+.a-img img{width:100%;height:100%;object-fit:cover}
+.a-img svg{height:74%;width:auto}
+.pill{position:absolute;bottom:6px;inset-inline:6px;padding:3px 0;border-radius:9px;background:#fffffff5;color:var(--purple-dark);text-align:center;font-size:10.5px;font-weight:950}
+.a-body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between}
+.a-title{margin:0;font-size:14.5px;font-weight:900;line-height:1.3}
+.a-meta{margin-top:3px;font-size:10px;font-weight:750;color:var(--muted);line-height:1.5}
+.tags{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.tag{padding:3px 8px;border-radius:8px;background:var(--purple-soft);color:var(--purple-dark);font-size:9px;font-weight:900}
+.a-foot{margin-top:8px;padding-top:8px;border-top:1px solid #f1eefb}
+.a-foot .lb{display:block;font-size:9px;font-weight:800;color:var(--muted)}
+.a-price{font-size:16px;font-weight:950;color:var(--purple-dark)}
+
+/* ============ التأكيد والإرسال ============ */
+.agree{display:flex;align-items:flex-start;gap:10px;margin-top:14px;padding:12px;border-radius:16px;background:#fff;border:1px solid var(--line);font-size:11.5px;font-weight:800;line-height:1.7;cursor:pointer}
+.agree.invalid{border-color:var(--hot);animation:shake .4s}
+.agree input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--purple)}
+.submit{width:100%;height:56px;margin-top:14px;border-radius:18px;color:#fff;font-size:16px;font-weight:950;background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 12px 26px #6246d959}
+.submit:disabled{opacity:.75}
+.submit .spin{display:none;width:20px;height:20px;border-radius:50%;border:3px solid #ffffff66;border-top-color:#fff;animation:rot .7s linear infinite;margin:auto}
+.submit.busy .t{display:none}
+.submit.busy .spin{display:block}
+@keyframes rot{to{transform:rotate(360deg)}}
+.done{position:fixed;inset:0;z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#f9f8fdf7;text-align:center;padding:24px}
+.done.show{display:flex}
+.done svg{width:110px;height:110px}
+.done circle{fill:none;stroke:#e4defa;stroke-width:6}
+.done .ring{stroke:var(--purple);stroke-dasharray:289;stroke-dashoffset:0}
+.done .tick{fill:none;stroke:var(--ok);stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
+.done h2{margin:0;font-size:22px;font-weight:950}
+.done p{margin:0;font-size:12px;font-weight:700;color:var(--muted)}
+
+/* ============ الشريط السفلي ============ */
+.bottom-wrap{position:fixed;left:0;right:0;bottom:-7px;width:100%;padding:7px 10px calc(7px + var(--safe-bottom));z-index:100;pointer-events:none}
+.bottom-nav{width:min(100%,520px);margin:auto;min-height:64px;padding:5px;border-radius:20px;background:#fffffff7;border:1px solid #e7ecef;
+  box-shadow:0 10px 28px #17202a1a;backdrop-filter:blur(18px);pointer-events:auto;display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
+.nav-item{min-height:52px;padding:4px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:15px;color:#7e8992}
+.nav-icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7}
+.nav-item>span:not(.add-button){font-size:8.5px;font-weight:900}
+.add-button{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;color:#fff;background:linear-gradient(145deg,#176b87,#32b8c4)}
+.add-button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2}
+
+/* إخفاء الشريط السفلي أثناء الكتابة (الكيبورد) */
+.kb .bottom-wrap{display:none}
+
+/* ============ التوست ============ */
+.toast{position:fixed;left:50%;bottom:calc(88px + var(--safe-bottom));transform:translateX(-50%) translateY(16px);max-width:calc(100% - 40px);
+  padding:10px 14px;border-radius:13px;background:#1e2c30;color:#fff;font-size:11px;font-weight:800;opacity:0;pointer-events:none;transition:.25s;z-index:150;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.kb .toast{bottom:24px}
 </style>
 </head>
 
@@ -975,3407 +188,773 @@ input[type=range]::-webkit-slider-thumb{
 <main class="page">
 
 <header>
-
-<div class="topbar">
-
-<button class="icon-btn" id="back" type="button">
-<svg viewBox="0 0 24 24">
-<path d="M9 5l7 7-7 7"/>
-</svg>
-</button>
-
-<div class="brand-mini">
-<strong>MZAD</strong>
-<span>PHONE</span>
-</div>
-
-<span class="spacer"></span>
-
-</div>
-
-<div class="head-copy">
-<h1>بيع جهازك بالمزاد</h1>
-<p>كل ما تذكر تفاصيل أكثر، يثق المشتري ويزايد أكثر</p>
-</div>
-
-<div class="progress">
-<i id="barFill"></i>
-</div>
-
-<div class="p-label">
-<span>اكتمال الطلب</span>
-<span id="pct">0%</span>
-</div>
-
+  <div class="topbar">
+    <button class="icon-btn" id="back" type="button"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    <div class="brand-mini"><strong>MZAD</strong><span>PHONE</span></div>
+    <span class="spacer"></span>
+  </div>
+  <div class="head-copy">
+    <h1>بيع جهازك بالمزاد</h1>
+    <p>كل ما تذكر تفاصيل أكثر، يثق المشتري ويزايد أكثر</p>
+  </div>
+  <div class="progress"><i id="barFill"></i></div>
+  <div class="p-label"><span>اكتمال الطلب</span><span id="pct">0%</span></div>
 </header>
 
 <form id="form" novalidate>
 
+<!-- 1) الصور -->
 <section class="card reveal" id="c-photos">
-
-<div class="c-head">
-<span class="num">1</span>
-<div>
-<h2>صور الجهاز</h2>
-<p>الصورة الأولى هي الغلاف</p>
-</div>
-</div>
-
-<div class="photos" id="photos"></div>
-
-<input type="file" id="file" accept="image/*" multiple hidden>
-
-<p class="hint">
-صوّر الجهاز من الأمام والخلف والجوانب، وبإضاءة واضحة.
-</p>
-
-<p class="err" id="e-c-photos"></p>
-
+  <div class="c-head"><span class="num">1</span><div><h2>صور الجهاز</h2><p>الصورة الأولى هي الغلاف</p></div></div>
+  <div class="photos" id="photos"></div>
+  <input type="file" id="file" accept="image/*" multiple hidden>
+  <p class="hint">صوّر الجهاز من الأمام والخلف والجوانب، وبإضاءة واضحة.</p>
+  <p class="err" id="e-c-photos"></p>
 </section>
 
-
+<!-- 2) معلومات الجهاز -->
 <section class="card reveal" id="c-info">
+  <div class="c-head"><span class="num">2</span><div><h2>معلومات الجهاز</h2><p>الأساسيات اللي يبحث عنها المشتري</p></div></div>
 
-<div class="c-head">
-<span class="num">2</span>
-<div>
-<h2>معلومات الجهاز</h2>
-<p>الأساسيات اللي يبحث عنها المشتري</p>
-</div>
-</div>
+  <div class="field">
+    <label class="lbl">الماركة</label>
+    <select class="sel" id="brand" name="brand"></select>
+  </div>
 
-<div class="field">
+  <div class="row field">
+    <div>
+      <label class="lbl">الموديل</label>
+      <select class="sel" id="model" name="model" disabled><option value="">اختر الماركة أولاً</option></select>
+    </div>
+    <div>
+      <label class="lbl">اللون</label>
+      <select class="sel" id="color" name="color" disabled><option value="">اختر الموديل أولاً</option></select>
+      <input class="in" id="customColor" maxlength="40" placeholder="اكتب لون الجهاز" style="display:none;margin-top:8px">
+    </div>
+  </div>
 
-<label class="lbl">
-الماركة
-</label>
-
-<select class="sel" id="brand" name="brand">
-</select>
-
-</div>
-
-
-<div class="row field">
-
-<div>
-
-<label class="lbl">
-الموديل
-</label>
-
-<select class="sel" id="model" name="model" disabled>
-<option value="">اختر الماركة أولاً</option>
-</select>
-
-</div>
-
-
-<div>
-
-<label class="lbl">
-اللون
-<small>اختياري</small>
-</label>
-
-<select class="sel" id="color" name="color" disabled>
-<option value="">اختر الموديل أولاً</option>
-</select>
-
-<input
-class="in"
-id="customColor"
-maxlength="40"
-placeholder="اكتب لون الجهاز"
-style="display:none;margin-top:8px"
->
-
-</div>
-
-</div>
-
-
-<div class="field">
-
-<span class="lbl">
-السعة
-</span>
-
-<div id="storage"></div>
-
-</div>
-
-<p class="err" id="e-c-info"></p>
-
+  <div class="field"><span class="lbl">السعة</span><div id="storage"></div></div>
+  <p class="err" id="e-c-info"></p>
 </section>
 
-
+<!-- 3) حالة الجهاز -->
 <section class="card reveal" id="c-cond">
-
-<div class="c-head">
-<span class="num">3</span>
-<div>
-<h2>حالة الجهاز</h2>
-<p>كن صريح، الصدق يرفع الثقة بمزادك</p>
-</div>
-</div>
-
-
-<div class="field">
-
-<span class="lbl">
-الحالة العامة
-</span>
-
-<div id="condition"></div>
-
-</div>
-
-
-<div class="field">
-
-<span class="lbl">
-حالة الشاشة
-</span>
-
-<div id="screen"></div>
-
-</div>
-
-
-<div class="field">
-
-<span class="lbl">
-حالة الهيكل
-</span>
-
-<div id="bodyState"></div>
-
-</div>
-
-
-<div class="field">
-
-<span class="lbl">
-حالة الظهر
-</span>
-
-<div id="backState"></div>
-
-</div>
-
-
-<div class="field" id="batteryField" style="display:none">
-
-<span class="lbl">
-صحة البطارية
-</span>
-
-<div class="bat">
-
-<input
-type="range"
-id="battery"
-min="60"
-max="100"
-value="90"
->
-
-<output id="batOut">
-90%
-</output>
-
-</div>
-
-</div>
-
-<p class="err" id="e-c-cond"></p>
-
+  <div class="c-head"><span class="num">3</span><div><h2>حالة الجهاز</h2><p>كن صريح، الصدق يرفع الثقة بمزادك</p></div></div>
+  <div class="field"><span class="lbl">الحالة العامة</span><div id="condition"></div></div>
+  <div class="field"><span class="lbl">حالة الشاشة</span><div id="screen"></div></div>
+  <div class="field"><span class="lbl">حالة الهيكل</span><div id="bodyState"></div></div>
+  <div class="field"><span class="lbl">حالة الظهر</span><div id="backState"></div></div>
+  <div class="field" id="batteryField" style="display:none">
+    <span class="lbl">صحة البطارية</span>
+    <div class="bat"><input type="range" id="battery" min="60" max="100" value="90"><output id="batOut">90%</output></div>
+  </div>
+  <p class="err" id="e-c-cond"></p>
 </section>
 
-
+<!-- 4) فحص الوظائف -->
 <section class="card reveal" id="c-works">
+  <div class="c-head"><span class="num">4</span><div><h2>فحص الوظائف</h2><p>طفّي المفتاح لأي شي ما يشتغل</p></div></div>
+  <div id="works"></div>
 
-<div class="c-head">
-<span class="num">4</span>
-<div>
-<h2>فحص الوظائف</h2>
-<p>طفّي المفتاح لأي شي ما يشتغل</p>
-</div>
-</div>
+  <label class="sw warn">
+    <span>انفتح الجهاز أو تبدلت فيه قطع</span>
+    <input type="checkbox" id="repaired"><i></i>
+  </label>
+  <div class="fold" id="repFold"><div>
+    <textarea class="ta" id="repText" maxlength="200" placeholder="اذكر القطع المبدّلة أو اللي انصلحت"></textarea>
+  </div></div>
 
-<div id="works"></div>
-
-
-<label class="sw warn">
-
-<span>
-انفتح الجهاز أو تبدلت فيه قطع
-</span>
-
-<input type="checkbox" id="repaired">
-
-<i></i>
-
-</label>
-
-
-<div class="fold" id="repFold">
-
-<div>
-
-<textarea
-class="ta"
-id="repText"
-maxlength="200"
-placeholder="اذكر القطع المبدّلة أو اللي انصلحت"
-></textarea>
-
-</div>
-
-</div>
-
-
-<p class="sub-t">
-الضمان
-</p>
-
-<div id="warranty"></div>
-
-
-<p class="sub-t">
-الملحقات المرفقة
-</p>
-
-<div id="acc"></div>
-
+  <p class="sub-t">الضمان</p>
+  <div id="warranty"></div>
+  <p class="sub-t">الملحقات المرفقة</p>
+  <div id="acc"></div>
 </section>
 
-
+<!-- 5) تفاصيل المزاد -->
 <section class="card reveal" id="c-auction">
+  <div class="c-head"><span class="num">5</span><div><h2>تفاصيل المزاد</h2><p>السعر والمدة</p></div></div>
 
-<div class="c-head">
-<span class="num">5</span>
+  <div class="field">
+    <label class="lbl">سعر البداية</label>
+    <div class="money"><input class="in" id="price" inputmode="numeric" placeholder="500,000"><span>د.ع</span></div>
+  </div>
 
-<div>
-<h2>تفاصيل المزاد</h2>
-<p>السعر والمدة</p>
-</div>
+  <div class="field">
+    <label class="lbl">أقل سعر تقبله <small>اختياري، ما يظهر للمزايدين</small></label>
+    <div class="money"><input class="in" id="reserve" inputmode="numeric" placeholder="لا يوجد"><span>د.ع</span></div>
+  </div>
 
-</div>
+  <div class="field">
+    <span class="lbl">مدة المزاد <small>1 أو 3 أو 6 أو 12 ساعة</small></span>
+    <div id="duration"></div>
+  </div>
 
+  <div class="end">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+    <span>ينتهي تقريباً: <b id="endAt">اختر المدة</b></span>
+  </div>
 
-<div class="field">
-
-<label class="lbl">
-سعر البداية
-</label>
-
-<div class="money">
-
-<input
-class="in"
-id="price"
-inputmode="numeric"
-placeholder="500,000"
->
-
-<span>
-د.ع
-</span>
-
-</div>
-
-</div>
-
-
-<div class="field">
-
-<label class="lbl">
-أقل سعر تقبله
-<small>اختياري</small>
-</label>
-
-<div class="money">
-
-<input
-class="in"
-id="reserve"
-inputmode="numeric"
-placeholder="لا يوجد"
->
-
-<span>
-د.ع
-</span>
-
-</div>
-
-</div>
-
-
-<div class="field">
-
-<span class="lbl">
-مدة المزاد
-<small>
-1 أو 3 أو 6 أو 12 ساعة
-</small>
-</span>
-
-<div id="duration"></div>
-
-</div>
-
-
-<div class="end">
-
-<svg viewBox="0 0 24 24">
-<circle cx="12" cy="12" r="9"/>
-<path d="M12 7v5l3 2"/>
-</svg>
-
-<span>
-ينتهي تقريباً:
-<b id="endAt">
-اختر المدة
-</b>
-</span>
-
-</div>
-
-
-<div class="info">
-
-<div>
-قيمة الزيادة تُحدد حسب
-<b>السعر الحالي للمزاد</b>.
-</div>
-
-<div>
-أقل من 300 ألف
-<b>5,000</b>،
-ومن 300 إلى أقل من 750 ألف
-<b>10,000</b>،
-ومن 750 ألف إلى أقل من 1.5 مليون
-<b>15,000</b>،
-ومن 1.5 إلى أقل من 3 ملايين
-<b>25,000</b>،
-وفوق 3 ملايين
-<b>50,000</b>.
-</div>
-
-<div>
-أي مزايدة خلال آخر
-<b>30 ثانية</b>
-تمدد المزاد
-<b>30 ثانية</b>.
-</div>
-
-<div>
-المشاركة بالمزاد تتطلب تأميناً قدره
-<b>5,000 د.ع</b>
-يُسترد حسب شروط المنصة.
-</div>
-
-<div>
-عند الفوز يبقى التأمين كضمان إلى إتمام الصفقة،
-والتراجع قد يؤدي للاحتفاظ به وفق شروط المنصة.
-</div>
-
-</div>
-
-<p class="err" id="e-c-auction"></p>
-
+  <div class="info">
+    <div>قيمة الزيادة تُحدد حسب <b>السعر الحالي للمزاد</b>.</div>
+    <div>
+      أقل من 300 ألف <b>5,000</b>، ومن 300 إلى أقل من 750 ألف <b>10,000</b>،
+      ومن 750 ألف إلى أقل من 1.5 مليون <b>15,000</b>، ومن 1.5 إلى أقل من 3 ملايين <b>25,000</b>،
+      وفوق 3 ملايين <b>50,000</b>.
+    </div>
+    <div>أي مزايدة خلال آخر <b>30 ثانية</b> تمدد المزاد <b>30 ثانية</b>.</div>
+    <div>المشاركة بالمزاد تتطلب تأميناً قدره <b>5,000 د.ع</b> يُسترد حسب شروط المنصة.</div>
+    <div>عند الفوز يبقى التأمين كضمان إلى إتمام الصفقة، والتراجع قد يؤدي للاحتفاظ به وفق شروط المنصة.</div>
+  </div>
+  <p class="err" id="e-c-auction"></p>
 </section>
 
-
+<!-- 6) الموقع والملاحظات -->
 <section class="card reveal" id="c-extra">
+  <div class="c-head"><span class="num">6</span><div><h2>الموقع والملاحظات</h2><p>وين الجهاز، وشي تحب تضيفه</p></div></div>
 
-<div class="c-head">
+  <div class="field">
+    <label class="lbl">الموقع</label>
+    <div class="in" style="display:flex;align-items:center;background:#f7f7fa;color:#374151;cursor:default">داخل النجف</div>
+    <input type="hidden" id="city" name="city" value="داخل النجف">
+  </div>
 
-<span class="num">6</span>
-
-<div>
-<h2>الموقع والملاحظات</h2>
-<p>وين الجهاز، وشي تحب تضيفه</p>
-</div>
-
-</div>
-
-
-<div class="field">
-
-<label class="lbl">
-الموقع
-</label>
-
-<div
-class="in"
-style="
-display:flex;
-align-items:center;
-background:#f7f7fa;
-color:#374151;
-cursor:default
-"
->
-داخل النجف
-</div>
-
-<input
-type="hidden"
-id="city"
-name="city"
-value="داخل النجف"
->
-
-</div>
-
-
-<div class="field">
-
-<label class="lbl">
-ملاحظات
-<small>اختياري</small>
-</label>
-
-<textarea
-class="ta"
-id="notes"
-maxlength="500"
-placeholder="مثلاً: سبب البيع، مدة الاستخدام، أي شي يهم المشتري"
-></textarea>
-
-<div class="count">
-<span id="nCount">0</span>/500
-</div>
-
-</div>
-
-<p class="err" id="e-c-extra"></p>
-
+  <div class="field">
+    <label class="lbl">ملاحظات <small>اختياري</small></label>
+    <textarea class="ta" id="notes" maxlength="500" placeholder="مثلاً: سبب البيع، مدة الاستخدام، أي شي يهم المشتري"></textarea>
+    <div class="count"><span id="nCount">0</span>/500</div>
+  </div>
+  <p class="err" id="e-c-extra"></p>
 </section>
 
-
+<!-- المعاينة -->
 <section class="card prev reveal">
-
-<div class="c-head">
-
-<span
-class="num"
-style="background:linear-gradient(145deg,#176b87,#32b8c4)"
->
-★
-</span>
-
-<div>
-<h2>هكذا يظهر مزادك</h2>
-<p>معاينة حية للبطاقة</p>
-</div>
-
-</div>
-
-
-<article class="a-card">
-
-<div class="a-img" id="pImg"></div>
-
-<div class="a-body">
-
-<div>
-
-<h3 class="a-title" id="pTitle"></h3>
-
-<div class="a-meta" id="pMeta"></div>
-
-<div class="tags" id="pTags"></div>
-
-</div>
-
-
-<div class="a-foot">
-
-<span class="lb">
-سعر البداية
-</span>
-
-<div class="a-price">
-
-<span id="pPrice">
-0
-</span>
-
-<small>
-د.ع
-</small>
-
-</div>
-
-</div>
-
-</div>
-
-</article>
-
+  <div class="c-head">
+    <span class="num" style="background:linear-gradient(145deg,#176b87,#32b8c4)">★</span>
+    <div><h2>هكذا يظهر مزادك</h2><p>معاينة حية للبطاقة</p></div>
+  </div>
+  <article class="a-card">
+    <div class="a-img" id="pImg"></div>
+    <div class="a-body">
+      <div>
+        <h3 class="a-title" id="pTitle"></h3>
+        <div class="a-meta" id="pMeta"></div>
+        <div class="tags" id="pTags"></div>
+      </div>
+      <div class="a-foot">
+        <span class="lb">سعر البداية</span>
+        <div class="a-price"><span id="pPrice">0</span> <small>د.ع</small></div>
+      </div>
+    </div>
+  </article>
 </section>
-
 
 <label class="agree reveal" id="c-agree">
-
-<input
-type="checkbox"
-id="agree"
->
-
-<span>
-أؤكد أن المعلومات صحيحة وأن الجهاز ملكي ومسموح لي ببيعه.
-</span>
-
+  <input type="checkbox" id="agree">
+  <span>أؤكد أن المعلومات صحيحة وأن الجهاز ملكي ومسموح لي ببيعه.</span>
 </label>
+<p class="err" id="e-c-agree" style="text-align:center"></p>
 
-<p
-class="err"
-id="e-c-agree"
-style="text-align:center"
-></p>
-
-
-<button
-class="submit"
-id="submit"
->
-
-<span class="t">
-نشر المزاد
-</span>
-
-<span class="spin"></span>
-
-</button>
+<button class="submit" id="submit"><span class="t">نشر المزاد</span><span class="spin"></span></button>
 
 </form>
-
 </main>
 
-
 <div class="bottom-wrap">
-
 <nav class="bottom-nav">
-
-<a class="nav-item" href="home.html">
-
-<svg class="nav-icon" viewBox="0 0 24 24">
-<path d="m3 10 9-7 9 7M5 9v11h14V9M9 20v-6h6v6"/>
-</svg>
-
-<span>
-الرئيسية
-</span>
-
-</a>
-
-
-<a class="nav-item" href="market.html">
-
-<svg class="nav-icon" viewBox="0 0 24 24">
-<rect x="4" y="4" width="16" height="16" rx="3"/>
-<path d="M8 9h8M8 13h8M8 17h5"/>
-</svg>
-
-<span>
-الأجهزة
-</span>
-
-</a>
-
-
-<a class="nav-item" href="sell.html">
-
-<span class="add-button">
-
-<svg viewBox="0 0 24 24">
-<path d="M12 5v14M5 12h14"/>
-</svg>
-
-</span>
-
-<span>
-إضافة
-</span>
-
-</a>
-
-
-<a class="nav-item" href="favorites.html">
-
-<svg class="nav-icon" viewBox="0 0 24 24">
-<path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
-</svg>
-
-<span>
-المفضلة
-</span>
-
-</a>
-
-
-<a class="nav-item" href="profile.html">
-
-<svg class="nav-icon" viewBox="0 0 24 24">
-<circle cx="12" cy="8" r="3"/>
-<path d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5"/>
-</svg>
-
-<span>
-حسابي
-</span>
-
-</a>
-
+  <a class="nav-item" href="home.html">
+    <svg class="nav-icon" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7M5 9v11h14V9M9 20v-6h6v6"/></svg><span>الرئيسية</span>
+  </a>
+  <a class="nav-item" href="market.html">
+    <svg class="nav-icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/></svg><span>الأجهزة</span>
+  </a>
+  <a class="nav-item" href="sell.html">
+    <span class="add-button"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span>إضافة</span>
+  </a>
+  <a class="nav-item" href="favorites.html">
+    <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/></svg><span>المفضلة</span>
+  </a>
+  <a class="nav-item" href="profile.html">
+    <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5"/></svg><span>حسابي</span>
+  </a>
 </nav>
-
 </div>
-
 
 <div class="toast" id="toast"></div>
 
-
 <div class="done" id="done">
-
-<svg viewBox="0 0 110 110">
-
-<circle
-cx="55"
-cy="55"
-r="46"
-/>
-
-<circle
-class="ring"
-cx="55"
-cy="55"
-r="46"
-/>
-
-<path
-class="tick"
-d="M36 57l13 13 26-28"
-/>
-
-</svg>
-
-<h2>
-تم نشر مزادك
-</h2>
-
-<p>
-جاري تحويلك لصفحة المزادات…
-</p>
-
+  <svg viewBox="0 0 110 110">
+    <circle cx="55" cy="55" r="46"/>
+    <circle class="ring" cx="55" cy="55" r="46"/>
+    <path class="tick" d="M36 57l13 13 26-28"/>
+  </svg>
+  <h2>تم نشر مزادك</h2>
+  <p>جاري تحويلك لصفحة المزادات…</p>
 </div>
 
 
 <script type="module">
-
 import {supabase} from "./js/supabase.js";
 
+/* ================================================================
+   الإعدادات
+   ================================================================ */
+const HAS_AUCTION_COLUMNS = true;   // الأعمدة صارت موجودة بقاعدة البيانات
+const MIN_START  = 10000;
+const MAX_PHOTOS = 6;
+const MAX_IMG_MB = 12;
 
-const HAS_AUCTION_COLUMNS=false;
-
-const MIN_START=10000;
-
-const MAX_PHOTOS=6;
-
-
-const $=id=>document.getElementById(id);
-
-const form=$("form");
-
-const fmt=n=>
-Number(n||0).toLocaleString("en-US");
-
-const esc=v=>
-String(v??"").replace(
-  /[&<>"']/g,
-  c=>({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  }[c])
-);
-
-const num=el=>
-parseInt(
-  String(el?.value||"").replace(/\D/g,""),
-  10
-)||0;
-
+/* ================================================================
+   أدوات مساعدة
+   ================================================================ */
+const $ = id => document.getElementById(id);
+const form = $("form");
+const fmt = n => Number(n || 0).toLocaleString("en-US");
+const num = el => parseInt(String(el?.value || "").replace(/\D/g, ""), 10) || 0;
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[c]));
 
 let toastT;
-
-
 function toast(t){
-
-  const e=$("toast");
-
-  e.textContent=t;
-
+  const e = $("toast");
+  e.textContent = t;
   e.classList.add("show");
-
   clearTimeout(toastT);
-
-  toastT=setTimeout(
-    ()=>e.classList.remove("show"),
-    2600
-  );
-
+  toastT = setTimeout(() => e.classList.remove("show"), 2600);
 }
 
+/* ================================================================
+   البيانات
+   ================================================================ */
+const BRANDS = ["Apple","Samsung","Xiaomi","Google","Huawei","OPPO","HONOR","OnePlus","realme","Motorola","Sony","Nokia","Tecno","Infinix","أخرى"];
 
-const BRANDS=[
-  "Apple",
-  "Samsung",
-  "Xiaomi",
-  "Google",
-  "Huawei",
-  "OPPO",
-  "HONOR",
-  "OnePlus",
-  "realme",
-  "Motorola",
-  "Sony",
-  "Nokia",
-  "Tecno",
-  "Infinix",
-  "أخرى"
-];
-
-
-const PHONE_MODELS={
-
-Apple:[
-"iPhone 18 Pro Max",
-"iPhone 18 Pro",
-"iPhone 18",
-"iPhone 17 Pro Max",
-"iPhone 17 Pro",
-"iPhone 17 Air",
-"iPhone 17",
-"iPhone 17e",
-"iPhone 16 Pro Max",
-"iPhone 16 Pro",
-"iPhone 16 Plus",
-"iPhone 16",
-"iPhone 16e",
-"iPhone 15 Pro Max",
-"iPhone 15 Pro",
-"iPhone 15 Plus",
-"iPhone 15",
-"iPhone 14 Pro Max",
-"iPhone 14 Pro",
-"iPhone 14 Plus",
-"iPhone 14",
-"iPhone 13 Pro Max",
-"iPhone 13 Pro",
-"iPhone 13",
-"iPhone 13 mini",
-"iPhone 12 Pro Max",
-"iPhone 12 Pro",
-"iPhone 12",
-"iPhone 12 mini",
-"iPhone 11 Pro Max",
-"iPhone 11 Pro",
-"iPhone 11",
-"iPhone XS Max",
-"iPhone XS",
-"iPhone XR",
-"iPhone X",
-"iPhone 8 Plus",
-"iPhone 8",
-"iPhone 7 Plus",
-"iPhone 7",
-"iPhone 6s Plus",
-"iPhone 6s",
-"iPhone 6 Plus",
-"iPhone 6",
-"iPhone SE 3",
-"iPhone SE 2",
-"iPhone SE"
-],
-
-Samsung:[
-"Galaxy S26 Ultra",
-"Galaxy S26+",
-"Galaxy S26",
-"Galaxy S25 Ultra",
-"Galaxy S25 Edge",
-"Galaxy S25+",
-"Galaxy S25",
-"Galaxy S24 Ultra",
-"Galaxy S24+",
-"Galaxy S24",
-"Galaxy S23 Ultra",
-"Galaxy S23+",
-"Galaxy S23",
-"Galaxy S22 Ultra",
-"Galaxy S22+",
-"Galaxy S22",
-"Galaxy S21 Ultra",
-"Galaxy S21+",
-"Galaxy S21",
-"Galaxy S20 Ultra",
-"Galaxy S20+",
-"Galaxy S20",
-"Galaxy Note 20 Ultra",
-"Galaxy Note 20",
-"Galaxy Z Fold7",
-"Galaxy Z Flip7",
-"Galaxy Z Fold6",
-"Galaxy Z Flip6",
-"Galaxy Z Fold5",
-"Galaxy Z Flip5",
-"Galaxy A57",
-"Galaxy A37",
-"Galaxy A56",
-"Galaxy A36",
-"Galaxy A55",
-"Galaxy A35",
-"Galaxy A54",
-"Galaxy A34",
-"Galaxy A53",
-"Galaxy A33",
-"Galaxy A52",
-"Galaxy A32",
-"Galaxy A51",
-"Galaxy A31",
-"Galaxy A72",
-"Galaxy A71",
-"Galaxy A70",
-"Galaxy A50",
-"Galaxy A30",
-"Galaxy M56",
-"Galaxy M55",
-"Galaxy M54",
-"Galaxy M53",
-"Galaxy M52",
-"Galaxy M51"
-],
-
-Xiaomi:[
-"Xiaomi 17 Ultra",
-"Xiaomi 17 Pro",
-"Xiaomi 17",
-"Xiaomi 15 Ultra",
-"Xiaomi 15 Pro",
-"Xiaomi 15",
-"Xiaomi 14 Ultra",
-"Xiaomi 14 Pro",
-"Xiaomi 14",
-"Xiaomi 13 Ultra",
-"Xiaomi 13 Pro",
-"Xiaomi 13",
-"Xiaomi 12S Ultra",
-"Xiaomi 12 Pro",
-"Xiaomi 12",
-"Redmi Note 17 Pro+",
-"Redmi Note 17 Pro",
-"Redmi Note 17",
-"Redmi Note 16 Pro+",
-"Redmi Note 16 Pro",
-"Redmi Note 16",
-"Redmi Note 15 Pro+",
-"Redmi Note 15 Pro",
-"Redmi Note 15",
-"Redmi Note 14 Pro+",
-"Redmi Note 14 Pro",
-"Redmi Note 14",
-"Redmi Note 13 Pro+",
-"Redmi Note 13 Pro",
-"Redmi Note 13",
-"Redmi Note 12 Pro+",
-"Redmi Note 12 Pro",
-"Redmi Note 12",
-"POCO F8 Ultra",
-"POCO F8 Pro",
-"POCO F8",
-"POCO F7 Ultra",
-"POCO F7 Pro",
-"POCO F7",
-"POCO F6 Pro",
-"POCO F6",
-"POCO X8 Pro",
-"POCO X8",
-"POCO X7 Pro",
-"POCO X7",
-"Redmi 15",
-"Redmi 14C",
-"Redmi 13"
-],
-
-Google:[
-"Pixel 10 Pro XL",
-"Pixel 10 Pro",
-"Pixel 10",
-"Pixel 9 Pro XL",
-"Pixel 9 Pro",
-"Pixel 9",
-"Pixel 8 Pro",
-"Pixel 8",
-"Pixel 7 Pro",
-"Pixel 7",
-"Pixel 6 Pro",
-"Pixel 6",
-"Pixel 5",
-"Pixel 4 XL",
-"Pixel 4"
-],
-
-Huawei:[
-"Mate 80 Pro",
-"Mate 80",
-"Mate 70 Pro",
-"Mate 70",
-"Mate 60 Pro",
-"Mate 60",
-"Mate 50 Pro",
-"Mate 50",
-"Pura 80 Pro",
-"Pura 80",
-"P70 Pro",
-"P70",
-"P60 Pro",
-"P60",
-"P50 Pro",
-"P50",
-"Nova 14 Pro",
-"Nova 14",
-"Nova 13 Pro",
-"Nova 13",
-"Nova 12 Pro",
-"Nova 12"
-],
-
-OPPO:[
-"Find X9 Ultra",
-"Find X9 Pro",
-"Find X9",
-"Find X8 Ultra",
-"Find X8 Pro",
-"Find X8",
-"Find X7 Ultra",
-"Find X7",
-"Find X6 Pro",
-"Find X6",
-"Reno 15 Pro",
-"Reno 15",
-"Reno 14 Pro",
-"Reno 14",
-"Reno 13 Pro",
-"Reno 13",
-"Reno 12 Pro",
-"Reno 12",
-"Reno 11 Pro",
-"Reno 11",
-"A6 Pro",
-"A5 Pro",
-"A4 Pro"
-],
-
-HONOR:[
-"Magic8 Pro",
-"Magic8",
-"Magic7 Pro",
-"Magic7",
-"Magic6 Pro",
-"Magic6",
-"Magic V5",
-"Magic V3",
-"Magic V2",
-"HONOR 600 Pro",
-"HONOR 600",
-"HONOR 400 Pro",
-"HONOR 400",
-"HONOR 200 Pro",
-"HONOR 200",
-"HONOR 100 Pro",
-"HONOR 100",
-"X60 Pro",
-"X50 Pro",
-"X50"
-],
-
-OnePlus:[
-"OnePlus 14",
-"OnePlus 13",
-"OnePlus 12",
-"OnePlus 11",
-"OnePlus 10 Pro",
-"OnePlus 9 Pro",
-"OnePlus 9",
-"OnePlus Nord 6",
-"OnePlus Nord 5",
-"OnePlus Nord 4",
-"OnePlus Nord 3",
-"OnePlus Open",
-"OnePlus Open 2"
-],
-
-realme:[
-"GT 8 Pro",
-"GT 8",
-"GT 7 Pro",
-"GT 7",
-"GT 6",
-"GT 5 Pro",
-"GT 5",
-"GT Neo 7",
-"GT Neo 6",
-"realme 15 Pro",
-"realme 15",
-"realme 14 Pro+",
-"realme 14 Pro",
-"realme 14",
-"realme 13 Pro+",
-"realme 13 Pro",
-"realme 13",
-"C75",
-"C65",
-"C55"
-],
-
-Motorola:[
-"Edge 70 Ultra",
-"Edge 70 Pro",
-"Edge 70",
-"Edge 60 Ultra",
-"Edge 60 Pro",
-"Edge 60",
-"Edge 50 Ultra",
-"Edge 50 Pro",
-"Edge 50",
-"Razr 70 Ultra",
-"Razr 70",
-"Razr 60 Ultra",
-"Razr 60",
-"Moto G75",
-"Moto G85",
-"Moto G55"
-],
-
-Sony:[
-"Xperia 1 VII",
-"Xperia 1 VI",
-"Xperia 1 V",
-"Xperia 5 V",
-"Xperia 5 IV",
-"Xperia 10 VII",
-"Xperia 10 VI",
-"Xperia 10 V"
-],
-
-Nokia:[
-"Nokia X60",
-"Nokia X50",
-"Nokia X30",
-"Nokia G60",
-"Nokia G50",
-"Nokia G42",
-"Nokia C32",
-"Nokia C22"
-],
-
-Tecno:[
-"Phantom V Fold2",
-"Phantom V Fold",
-"Phantom V Flip2",
-"Phantom V Flip",
-"Camon 40 Pro",
-"Camon 40",
-"Camon 30 Pro",
-"Camon 30",
-"Spark 40 Pro+",
-"Spark 40 Pro",
-"Spark 40",
-"Spark 30 Pro",
-"Spark 30"
-],
-
-Infinix:[
-"Note 50 Pro+",
-"Note 50 Pro",
-"Note 50",
-"Note 40 Pro+",
-"Note 40 Pro",
-"Note 40",
-"GT 30 Pro",
-"GT 30",
-"GT 20 Pro",
-"Zero 40",
-"Zero 30",
-"Hot 60 Pro+",
-"Hot 60 Pro",
-"Hot 60",
-"Hot 50 Pro+",
-"Hot 50 Pro",
-"Hot 50"
-],
-
-"أخرى":[
-"موديل آخر"
-]
-
+const PHONE_MODELS = {
+  Apple:["iPhone 18 Pro Max","iPhone 18 Pro","iPhone 18","iPhone 17 Pro Max","iPhone 17 Pro","iPhone 17 Air","iPhone 17","iPhone 17e","iPhone 16 Pro Max","iPhone 16 Pro","iPhone 16 Plus","iPhone 16","iPhone 16e","iPhone 15 Pro Max","iPhone 15 Pro","iPhone 15 Plus","iPhone 15","iPhone 14 Pro Max","iPhone 14 Pro","iPhone 14 Plus","iPhone 14","iPhone 13 Pro Max","iPhone 13 Pro","iPhone 13","iPhone 13 mini","iPhone 12 Pro Max","iPhone 12 Pro","iPhone 12","iPhone 12 mini","iPhone 11 Pro Max","iPhone 11 Pro","iPhone 11","iPhone XS Max","iPhone XS","iPhone XR","iPhone X","iPhone 8 Plus","iPhone 8","iPhone 7 Plus","iPhone 7","iPhone 6s Plus","iPhone 6s","iPhone 6 Plus","iPhone 6","iPhone SE 3","iPhone SE 2","iPhone SE"],
+  Samsung:["Galaxy S26 Ultra","Galaxy S26+","Galaxy S26","Galaxy S25 Ultra","Galaxy S25 Edge","Galaxy S25+","Galaxy S25","Galaxy S24 Ultra","Galaxy S24+","Galaxy S24","Galaxy S23 Ultra","Galaxy S23+","Galaxy S23","Galaxy S22 Ultra","Galaxy S22+","Galaxy S22","Galaxy S21 Ultra","Galaxy S21+","Galaxy S21","Galaxy S20 Ultra","Galaxy S20+","Galaxy S20","Galaxy Note 20 Ultra","Galaxy Note 20","Galaxy Z Fold7","Galaxy Z Flip7","Galaxy Z Fold6","Galaxy Z Flip6","Galaxy Z Fold5","Galaxy Z Flip5","Galaxy A57","Galaxy A37","Galaxy A56","Galaxy A36","Galaxy A55","Galaxy A35","Galaxy A54","Galaxy A34","Galaxy A53","Galaxy A33","Galaxy A52","Galaxy A32","Galaxy A51","Galaxy A31","Galaxy A72","Galaxy A71","Galaxy A70","Galaxy A50","Galaxy A30","Galaxy M56","Galaxy M55","Galaxy M54","Galaxy M53","Galaxy M52","Galaxy M51"],
+  Xiaomi:["Xiaomi 17 Ultra","Xiaomi 17 Pro","Xiaomi 17","Xiaomi 15 Ultra","Xiaomi 15 Pro","Xiaomi 15","Xiaomi 14 Ultra","Xiaomi 14 Pro","Xiaomi 14","Xiaomi 13 Ultra","Xiaomi 13 Pro","Xiaomi 13","Xiaomi 12S Ultra","Xiaomi 12 Pro","Xiaomi 12","Redmi Note 17 Pro+","Redmi Note 17 Pro","Redmi Note 17","Redmi Note 16 Pro+","Redmi Note 16 Pro","Redmi Note 16","Redmi Note 15 Pro+","Redmi Note 15 Pro","Redmi Note 15","Redmi Note 14 Pro+","Redmi Note 14 Pro","Redmi Note 14","Redmi Note 13 Pro+","Redmi Note 13 Pro","Redmi Note 13","Redmi Note 12 Pro+","Redmi Note 12 Pro","Redmi Note 12","POCO F8 Ultra","POCO F8 Pro","POCO F8","POCO F7 Ultra","POCO F7 Pro","POCO F7","POCO F6 Pro","POCO F6","POCO X8 Pro","POCO X8","POCO X7 Pro","POCO X7","Redmi 15","Redmi 14C","Redmi 13"],
+  Google:["Pixel 10 Pro XL","Pixel 10 Pro","Pixel 10","Pixel 9 Pro XL","Pixel 9 Pro","Pixel 9","Pixel 8 Pro","Pixel 8","Pixel 7 Pro","Pixel 7","Pixel 6 Pro","Pixel 6","Pixel 5","Pixel 4 XL","Pixel 4"],
+  Huawei:["Mate 80 Pro","Mate 80","Mate 70 Pro","Mate 70","Mate 60 Pro","Mate 60","Mate 50 Pro","Mate 50","Pura 80 Pro","Pura 80","P70 Pro","P70","P60 Pro","P60","P50 Pro","P50","Nova 14 Pro","Nova 14","Nova 13 Pro","Nova 13","Nova 12 Pro","Nova 12"],
+  OPPO:["Find X9 Ultra","Find X9 Pro","Find X9","Find X8 Ultra","Find X8 Pro","Find X8","Find X7 Ultra","Find X7","Find X6 Pro","Find X6","Reno 15 Pro","Reno 15","Reno 14 Pro","Reno 14","Reno 13 Pro","Reno 13","Reno 12 Pro","Reno 12","Reno 11 Pro","Reno 11","A6 Pro","A5 Pro","A4 Pro"],
+  HONOR:["Magic8 Pro","Magic8","Magic7 Pro","Magic7","Magic6 Pro","Magic6","Magic V5","Magic V3","Magic V2","HONOR 600 Pro","HONOR 600","HONOR 400 Pro","HONOR 400","HONOR 200 Pro","HONOR 200","HONOR 100 Pro","HONOR 100","X60 Pro","X50 Pro","X50"],
+  OnePlus:["OnePlus 14","OnePlus 13","OnePlus 12","OnePlus 11","OnePlus 10 Pro","OnePlus 9 Pro","OnePlus 9","OnePlus Nord 6","OnePlus Nord 5","OnePlus Nord 4","OnePlus Nord 3","OnePlus Open","OnePlus Open 2"],
+  realme:["GT 8 Pro","GT 8","GT 7 Pro","GT 7","GT 6","GT 5 Pro","GT 5","GT Neo 7","GT Neo 6","realme 15 Pro","realme 15","realme 14 Pro+","realme 14 Pro","realme 14","realme 13 Pro+","realme 13 Pro","realme 13","C75","C65","C55"],
+  Motorola:["Edge 70 Ultra","Edge 70 Pro","Edge 70","Edge 60 Ultra","Edge 60 Pro","Edge 60","Edge 50 Ultra","Edge 50 Pro","Edge 50","Razr 70 Ultra","Razr 70","Razr 60 Ultra","Razr 60","Moto G75","Moto G85","Moto G55"],
+  Sony:["Xperia 1 VII","Xperia 1 VI","Xperia 1 V","Xperia 5 V","Xperia 5 IV","Xperia 10 VII","Xperia 10 VI","Xperia 10 V"],
+  Nokia:["Nokia X60","Nokia X50","Nokia X30","Nokia G60","Nokia G50","Nokia G42","Nokia C32","Nokia C22"],
+  Tecno:["Phantom V Fold2","Phantom V Fold","Phantom V Flip2","Phantom V Flip","Camon 40 Pro","Camon 40","Camon 30 Pro","Camon 30","Spark 40 Pro+","Spark 40 Pro","Spark 40","Spark 30 Pro","Spark 30"],
+  Infinix:["Note 50 Pro+","Note 50 Pro","Note 50","Note 40 Pro+","Note 40 Pro","Note 40","GT 30 Pro","GT 30","GT 20 Pro","Zero 40","Zero 30","Hot 60 Pro+","Hot 60 Pro","Hot 60","Hot 50 Pro+","Hot 50 Pro","Hot 50"],
+  "أخرى":["موديل آخر"]
 };
 
-
-const PHONE_COLORS={
-
-"Apple|iPhone 18 Pro Max":[
-"أسود",
-"فضي",
-"جليدي",
-"برغندي"
-],
-
-"Apple|iPhone 18 Pro":[
-"أسود",
-"فضي",
-"جليدي",
-"برغندي"
-],
-
-"Apple|iPhone 18":[
-"أسود",
-"أبيض",
-"أزرق",
-"وردي"
-],
-
-"Apple|iPhone 17 Pro Max":[
-"فضي",
-"برتقالي كوني",
-"أزرق داكن"
-],
-
-"Apple|iPhone 17 Pro":[
-"فضي",
-"برتقالي كوني",
-"أزرق داكن"
-],
-
-"Apple|iPhone 17 Air":[
-"أسود",
-"أبيض",
-"أزرق فاتح",
-"ذهبي فاتح"
-],
-
-"Apple|iPhone 17":[
-"أسود",
-"أبيض",
-"أزرق",
-"وردي",
-"أخضر"
-],
-
-"Apple|iPhone 17e":[
-"أسود",
-"أبيض"
-],
-
-"Apple|iPhone 16 Pro Max":[
-"تيتانيوم أسود",
-"تيتانيوم أبيض",
-"تيتانيوم طبيعي",
-"تيتانيوم صحراوي"
-],
-
-"Apple|iPhone 16 Pro":[
-"تيتانيوم أسود",
-"تيتانيوم أبيض",
-"تيتانيوم طبيعي",
-"تيتانيوم صحراوي"
-],
-
-"Apple|iPhone 16 Plus":[
-"أسود",
-"أبيض",
-"وردي",
-"تركوازي",
-"أزرق Ultramarine"
-],
-
-"Apple|iPhone 16":[
-"أسود",
-"أبيض",
-"وردي",
-"تركوازي",
-"أزرق Ultramarine"
-],
-
-"Apple|iPhone 16e":[
-"أسود",
-"أبيض"
-],
-
-"Apple|iPhone 15 Pro Max":[
-"تيتانيوم أسود",
-"تيتانيوم أبيض",
-"تيتانيوم أزرق",
-"تيتانيوم طبيعي"
-],
-
-"Apple|iPhone 15 Pro":[
-"تيتانيوم أسود",
-"تيتانيوم أبيض",
-"تيتانيوم أزرق",
-"تيتانيوم طبيعي"
-],
-
-"Apple|iPhone 15 Plus":[
-"أسود",
-"أزرق",
-"أخضر",
-"أصفر",
-"وردي"
-],
-
-"Apple|iPhone 15":[
-"أسود",
-"أزرق",
-"أخضر",
-"أصفر",
-"وردي"
-],
-
-"Apple|iPhone 14 Pro Max":[
-"أسود فلكي",
-"فضي",
-"ذهبي",
-"بنفسجي غامق"
-],
-
-"Apple|iPhone 14 Pro":[
-"أسود فلكي",
-"فضي",
-"ذهبي",
-"بنفسجي غامق"
-],
-
-"Apple|iPhone 14 Plus":[
-"منتصف الليل",
-"ضوء النجوم",
-"أزرق",
-"بنفسجي",
-"أحمر"
-],
-
-"Apple|iPhone 14":[
-"منتصف الليل",
-"ضوء النجوم",
-"أزرق",
-"بنفسجي",
-"أحمر"
-],
-
-"Apple|iPhone 13 Pro Max":[
-"أخضر Alpine",
-"فضي",
-"ذهبي",
-"رمادي غرافيتي",
-"أزرق سييرا"
-],
-
-"Apple|iPhone 13 Pro":[
-"أخضر Alpine",
-"فضي",
-"ذهبي",
-"رمادي غرافيتي",
-"أزرق سييرا"
-],
-
-"Apple|iPhone 13":[
-"أحمر",
-"ضوء النجوم",
-"منتصف الليل",
-"أزرق",
-"وردي",
-"أخضر"
-],
-
-"Apple|iPhone 13 mini":[
-"أحمر",
-"ضوء النجوم",
-"منتصف الليل",
-"أزرق",
-"وردي",
-"أخضر"
-],
-
-"Apple|iPhone 12 Pro Max":[
-"فضي",
-"غرافيت",
-"ذهبي",
-"أزرق Pacific"
-],
-
-"Apple|iPhone 12 Pro":[
-"فضي",
-"غرافيت",
-"ذهبي",
-"أزرق Pacific"
-],
-
-"Apple|iPhone 12":[
-"أسود",
-"أبيض",
-"أحمر",
-"أخضر",
-"أزرق",
-"بنفسجي"
-],
-
-"Apple|iPhone 12 mini":[
-"أسود",
-"أبيض",
-"أحمر",
-"أخضر",
-"أزرق",
-"بنفسجي"
-],
-
-"Apple|iPhone 11 Pro Max":[
-"ذهبي",
-"فضي",
-"رمادي فلكي",
-"أخضر ليلي"
-],
-
-"Apple|iPhone 11 Pro":[
-"ذهبي",
-"فضي",
-"رمادي فلكي",
-"أخضر ليلي"
-],
-
-"Apple|iPhone 11":[
-"أسود",
-"أبيض",
-"أصفر",
-"أخضر",
-"بنفسجي",
-"أحمر"
-],
-
-"Apple|iPhone XS Max":[
-"فضي",
-"رمادي فلكي",
-"ذهبي"
-],
-
-"Apple|iPhone XS":[
-"فضي",
-"رمادي فلكي",
-"ذهبي"
-],
-
-"Apple|iPhone XR":[
-"أسود",
-"أبيض",
-"أزرق",
-"أصفر",
-"مرجاني",
-"أحمر"
-],
-
-"Apple|iPhone X":[
-"فضي",
-"رمادي فلكي"
-],
-
-"Apple|iPhone 8 Plus":[
-"فضي",
-"ذهبي",
-"رمادي فلكي",
-"أحمر"
-],
-
-"Apple|iPhone 8":[
-"فضي",
-"ذهبي",
-"رمادي فلكي",
-"أحمر"
-],
-
-"Apple|iPhone 7 Plus":[
-"أسود لامع",
-"أسود",
-"فضي",
-"ذهبي",
-"ذهبي وردي",
-"أحمر"
-],
-
-"Apple|iPhone 7":[
-"أسود لامع",
-"أسود",
-"فضي",
-"ذهبي",
-"ذهبي وردي",
-"أحمر"
-],
-
-"Apple|iPhone 6s Plus":[
-"رمادي فلكي",
-"فضي",
-"ذهبي",
-"ذهبي وردي"
-],
-
-"Apple|iPhone 6s":[
-"رمادي فلكي",
-"فضي",
-"ذهبي",
-"ذهبي وردي"
-],
-
-"Apple|iPhone 6 Plus":[
-"رمادي فلكي",
-"فضي",
-"ذهبي"
-],
-
-"Apple|iPhone 6":[
-"رمادي فلكي",
-"فضي",
-"ذهبي"
-],
-
-"Apple|iPhone SE 3":[
-"منتصف الليل",
-"ضوء النجوم",
-"أحمر"
-],
-
-"Apple|iPhone SE 2":[
-"أسود",
-"أبيض",
-"أحمر"
-],
-
-"Apple|iPhone SE":[
-"رمادي فلكي",
-"فضي",
-"ذهبي",
-"ذهبي وردي"
-],
-
-"Samsung|Galaxy S25 Ultra":[
-"تيتانيوم أسود",
-"تيتانيوم فضي",
-"تيتانيوم أزرق",
-"تيتانيوم رمادي"
-],
-
-"Samsung|Galaxy S24 Ultra":[
-"أسود تيتانيوم",
-"رمادي تيتانيوم",
-"بنفسجي تيتانيوم",
-"أصفر تيتانيوم"
-],
-
-"Samsung|Galaxy S23 Ultra":[
-"أسود فانتوم",
-"أخضر",
-"كريمي",
-"بنفسجي لافندر"
-],
-
-"Samsung|Galaxy S22 Ultra":[
-"أسود فانتوم",
-"أبيض",
-"أخضر",
-"عنابي"
-],
-
-"Samsung|Galaxy Z Flip5":[
-"نعناعي",
-"كريمي",
-"لافندر",
-"غرافيت"
-],
-
-"Xiaomi|Xiaomi 15 Ultra":[
-"أسود",
-"أبيض",
-"فضي"
-],
-
-"Xiaomi|Xiaomi 14 Ultra":[
-"أسود",
-"أبيض"
-],
-
-"Xiaomi|Xiaomi 13 Pro":[
-"أسود",
-"أبيض",
-"أخضر",
-"أزرق"
-],
-
-"Xiaomi|POCO F7 Ultra":[
-"أسود",
-"أصفر",
-"أبيض"
-],
-
-"Google|Pixel 10 Pro XL":[
-"أسود Obsidian",
-"أبيض Porcelain",
-"أخضر Hazel"
-],
-
-"Google|Pixel 10 Pro":[
-"أسود Obsidian",
-"أبيض Porcelain",
-"أخضر Hazel"
-],
-
-"Google|Pixel 9 Pro XL":[
-"أسود Obsidian",
-"أبيض Porcelain",
-"أخضر Hazel"
-],
-
-"Google|Pixel 9 Pro":[
-"أسود Obsidian",
-"أبيض Porcelain",
-"أخضر Hazel"
-],
-
-"Google|Pixel 8 Pro":[
-"أسود Obsidian",
-"أبيض Porcelain",
-"أزرق Bay"
-],
-
-"Huawei|Mate 70 Pro":[
-"أسود",
-"أبيض",
-"أخضر",
-"بنفسجي"
-],
-
-"Huawei|Mate 60 Pro":[
-"أسود",
-"أبيض",
-"أخضر",
-"بنفسجي"
-],
-
-"Huawei|P60 Pro":[
-"أسود",
-"أبيض",
-"أزرق",
-"بنفسجي"
-],
-
-"OPPO|Find X8 Pro":[
-"أسود",
-"أبيض",
-"أزرق"
-],
-
-"OPPO|Find X8":[
-"أسود",
-"أبيض",
-"أزرق"
-],
-
-"OPPO|Reno 13 Pro":[
-"أسود",
-"أبيض",
-"بنفسجي"
-],
-
-"HONOR|Magic7 Pro":[
-"أسود",
-"أخضر",
-"رمادي",
-"أرجواني"
-],
-
-"HONOR|Magic6 Pro":[
-"أسود",
-"أخضر",
-"بنفسجي",
-"فضي"
-],
-
-"HONOR|Magic V3":[
-"أسود",
-"أخضر",
-"بني",
-"أبيض"
-],
-
-"OnePlus|OnePlus 13":[
-"أسود",
-"أبيض",
-"أزرق"
-],
-
-"OnePlus|OnePlus 12":[
-"أسود",
-"أخضر",
-"فضي"
-],
-
-"OnePlus|OnePlus 11":[
-"أسود",
-"أخضر"
-],
-
-"realme|GT 7 Pro":[
-"رمادي",
-"برتقالي",
-"أبيض"
-],
-
-"realme|realme 14 Pro+":[
-"لؤلؤي أبيض",
-"رمادي",
-"بنفسجي"
-],
-
-"Motorola|Edge 60 Pro":[
-"أسود",
-"أزرق",
-"بنفسجي",
-"أخضر"
-],
-
-"Motorola|Razr 60 Ultra":[
-"أحمر",
-"أخضر",
-"أزرق",
-"وردي"
-],
-
-"Sony|Xperia 1 VII":[
-"أسود",
-"أخضر",
-"بنفسجي"
-],
-
-"Sony|Xperia 1 VI":[
-"أسود",
-"فضي",
-"أخضر"
-],
-
-"Nokia|Nokia X30":[
-"أزرق Cloudy Blue",
-"أبيض Ice White"
-],
-
-"Tecno|Phantom V Fold2":[
-"أسود",
-"أبيض"
-],
-
-"Infinix|Note 50 Pro+":[
-"أسود",
-"فضي",
-"ذهبي"
-]
-
+/* ألوان عامة لكل ماركة + خيار "لون آخر" (البائع أدرى بلون جهازه) */
+const BRAND_COLORS = {
+  Apple:["أسود","أبيض","فضي","ذهبي","أزرق","أخضر","وردي","بنفسجي","أحمر"],
+  Samsung:["أسود","أبيض","فضي","رمادي","أزرق","أخضر","بنفسجي","وردي"],
+  Xiaomi:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
+  Google:["أسود","أبيض","رمادي","أزرق","أخضر","وردي"],
+  Huawei:["أسود","أبيض","فضي","ذهبي","أزرق","أخضر","بنفسجي"],
+  OPPO:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
+  HONOR:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
+  OnePlus:["أسود","أبيض","فضي","أخضر","أزرق"],
+  realme:["أسود","أبيض","ذهبي","فضي","أزرق","أخضر"],
+  Motorola:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
+  Sony:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
+  Nokia:["أسود","أبيض","أزرق","رمادي","أخضر"],
+  Tecno:["أسود","أبيض","أزرق","أخضر","بنفسجي"],
+  Infinix:["أسود","أبيض","فضي","أزرق","أخضر","ذهبي"],
+  "أخرى":["أسود","أبيض","فضي","ذهبي","أزرق","أخضر","أحمر"]
 };
 
+const STORAGE_OPTIONS = ["32GB","64GB","128GB","256GB","512GB","1TB"];
+const DURATIONS = [["1","ساعة"],["3","3 ساعات"],["6","6 ساعات"],["12","12 ساعة"]];
+const WORKS = ["Face ID / البصمة","الكاميرات","اللمس والشاشة","السماعات والمايك","الشحن والمنفذ","الشبكة والواي فاي"];
 
-const BRAND_COLORS={
+/* ================================================================
+   بناء الواجهة (chips + قوائم)
+   ================================================================ */
+const chips = (name, opts, type = "radio") =>
+  `<div class="chips">${opts.map(o => {
+    const [v, t] = Array.isArray(o) ? [o[0], o[1]] : [o, o];
+    return `<label class="chip"><input type="${type}" name="${name}" value="${esc(v)}"><span>${esc(t)}</span></label>`;
+  }).join("")}</div>`;
 
-Apple:[
-"أسود",
-"أبيض",
-"فضي",
-"ذهبي",
-"أزرق",
-"أخضر",
-"وردي",
-"بنفسجي",
-"أحمر"
-],
+const fill = (id, html) => $(id).innerHTML = html;
 
-Samsung:[
-"أسود",
-"أبيض",
-"فضي",
-"رمادي",
-"أزرق",
-"أخضر",
-"بنفسجي",
-"وردي"
-],
+$("brand").innerHTML =
+  '<option value="">اختر الماركة</option>' +
+  BRANDS.map(b => `<option value="${esc(b)}">${esc(b)}</option>`).join("");
 
-Xiaomi:[
-"أسود",
-"أبيض",
-"فضي",
-"أزرق",
-"أخضر",
-"بنفسجي"
-],
+fill("storage",   chips("storage", STORAGE_OPTIONS));
+fill("condition", chips("condition", ["نظيف","مستخدم","بي أضرار"]));
+fill("screen",    chips("screen", ["نظيفة","خدوش","كسر"]));
+fill("bodyState", chips("bodyState", ["نظيف","خدوش","ضربات"]));
+fill("backState", chips("backState", ["ممتاز","نظيف","خدوش خفيفة","فيه كسور"]));
+fill("warranty",  chips("warranty", ["لا يوجد","أقل من 3 أشهر","3 إلى 12 شهر","أكثر من سنة"]));
+fill("acc",       chips("acc", ["الشاحن","العلبة","كفر وحماية","الفاتورة"], "checkbox"));
+fill("duration",  chips("duration", DURATIONS));
+fill("works", WORKS.map(t => `
+  <label class="sw"><span>${esc(t)}</span>
+  <input type="checkbox" name="works" value="${esc(t)}" checked><i></i></label>`).join(""));
 
-Google:[
-"أسود",
-"أبيض",
-"رمادي",
-"أزرق",
-"أخضر",
-"وردي"
-],
-
-Huawei:[
-"أسود",
-"أبيض",
-"فضي",
-"ذهبي",
-"أزرق",
-"أخضر",
-"بنفسجي"
-],
-
-OPPO:[
-"أسود",
-"أبيض",
-"فضي",
-"أزرق",
-"أخضر",
-"بنفسجي"
-],
-
-HONOR:[
-"أسود",
-"أبيض",
-"فضي",
-"أزرق",
-"أخضر",
-"بنفسجي"
-],
-
-OnePlus:[
-"أسود",
-"أبيض",
-"فضي",
-"أخضر",
-"أزرق"
-],
-
-realme:[
-"أسود",
-"أبيض",
-"ذهبي",
-"فضي",
-"أزرق",
-"أخضر"
-],
-
-Motorola:[
-"أسود",
-"أبيض",
-"فضي",
-"أزرق",
-"أخضر",
-"بنفسجي"
-],
-
-Sony:[
-"أسود",
-"أبيض",
-"فضي",
-"أزرق",
-"أخضر",
-"بنفسجي"
-],
-
-Nokia:[
-"أسود",
-"أبيض",
-"أزرق",
-"رمادي",
-"أخضر"
-],
-
-Tecno:[
-"أسود",
-"أبيض",
-"أزرق",
-"أخضر",
-"بنفسجي"
-],
-
-Infinix:[
-"أسود",
-"أبيض",
-"فضي",
-"أزرق",
-"أخضر",
-"ذهبي"
-],
-
-"أخرى":[
-"أسود",
-"أبيض",
-"فضي",
-"ذهبي",
-"أزرق",
-"أخضر",
-"أحمر"
-]
-
-};
-
-
-const STORAGE_OPTIONS=[
-"32GB",
-"64GB",
-"128GB",
-"256GB",
-"512GB",
-"1TB"
-];
-
-
-const DURATIONS=[
-["1","ساعة"],
-["3","3 ساعات"],
-["6","6 ساعات"],
-["12","12 ساعة"]
-];
-
-
-const WORKS=[
-"Face ID / البصمة",
-"الكاميرات",
-"اللمس والشاشة",
-"السماعات والمايك",
-"الشحن والمنفذ",
-"الشبكة والواي فاي"
-];
-
-
-const chips=(name,opts,type="radio")=>
-
-`<div class="chips">${
-opts.map(o=>{
-
-const [v,t]=Array.isArray(o)
-?[o[0],o[1]]
-:[o,o];
-
-return `
-<label class="chip">
-
-<input
-type="${type}"
-name="${name}"
-value="${esc(v)}"
->
-
-<span>
-${esc(t)}
-</span>
-
-</label>
-`;
-
-}).join("")
-}</div>`;
-
-
-const fill=(id,html)=>
-$(id).innerHTML=html;
-
-
-$("brand").innerHTML=
-'<option value="">اختر الماركة</option>'+
-BRANDS.map(
-b=>`<option value="${esc(b)}">${esc(b)}</option>`
-).join("");
-
-
+/* ================================================================
+   الماركة / الموديل / اللون
+   ================================================================ */
 function isAppleDevice(){
-
-const brand=$("brand").value;
-
-const model=$("model").value;
-
-return brand==="Apple" &&
-/^iPhone\b/i.test(model);
-
+  return $("brand").value === "Apple" && /^iPhone\b/i.test($("model").value);
 }
-
 
 function updateBatteryVisibility(){
-
-const apple=isAppleDevice();
-
-$("batteryField").style.display=
-apple?"":"none";
-
+  $("batteryField").style.display = isAppleDevice() ? "" : "none";
 }
-
 
 function fillColors(){
+  const brand = $("brand").value;
+  const model = $("model").value;
+  const color = $("color");
+  const custom = $("customColor");
 
-const brand=$("brand").value;
+  custom.value = "";
+  custom.style.display = "none";
 
-const model=$("model").value;
+  if (!brand || !model){
+    color.disabled = true;
+    color.innerHTML = '<option value="">اختر الموديل أولاً</option>';
+    return;
+  }
 
-const color=$("color");
-
-const custom=$("customColor");
-
-custom.value="";
-
-custom.style.display="none";
-
-color.innerHTML=
-'<option value="">اختر اللون</option>';
-
-
-if(!brand||!model){
-
-color.disabled=true;
-
-color.innerHTML=
-'<option value="">اختر الموديل أولاً</option>';
-
-return;
-
+  const colors = BRAND_COLORS[brand] || BRAND_COLORS["أخرى"];
+  color.disabled = false;
+  color.innerHTML =
+    '<option value="">اختر اللون</option>' +
+    colors.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join("") +
+    '<option value="__custom__">لون آخر</option>';
 }
-
-
-const key=`${brand}|${model}`;
-
-const colors=
-PHONE_COLORS[key]||
-BRAND_COLORS[brand]||
-BRAND_COLORS["أخرى"];
-
-
-color.disabled=false;
-
-
-color.innerHTML+=
-colors
-.map(
-c=>`<option value="${esc(c)}">${esc(c)}</option>`
-)
-.join("");
-
-
-color.innerHTML+=
-`<option value="__custom__">لون آخر</option>`;
-
-}
-
 
 function fillModels(){
+  const brand = $("brand").value;
 
-const brand=$("brand").value;
+  if (!brand){
+    $("model").innerHTML = '<option value="">اختر الماركة أولاً</option>';
+    $("model").disabled = true;
+    fillColors();
+    updateBatteryVisibility();
+    return;
+  }
 
-const models=
-PHONE_MODELS[brand]||[];
+  $("model").disabled = false;
+  $("model").innerHTML =
+    '<option value="">اختر الموديل</option>' +
+    (PHONE_MODELS[brand] || []).map(m => `<option value="${esc(m)}">${esc(m)}</option>`).join("");
 
-
-if(!brand){
-
-$("model").innerHTML=
-'<option value="">اختر الماركة أولاً</option>';
-
-$("model").disabled=true;
-
-fillColors();
-
-updateBatteryVisibility();
-
-return;
-
+  fillColors();
+  updateBatteryVisibility();
 }
-
-
-$("model").disabled=false;
-
-$("model").innerHTML=
-'<option value="">اختر الموديل</option>'+
-models.map(
-m=>`<option value="${esc(m)}">${esc(m)}</option>`
-).join("");
-
-
-$("color").disabled=true;
-
-$("color").innerHTML=
-'<option value="">اختر الموديل أولاً</option>';
-
-$("customColor").value="";
-$("customColor").style.display="none";
-
-updateBatteryVisibility();
-
-}
-
 
 function getColorValue(){
-
-if($("color").value==="__custom__"){
-
-return String(
-$("customColor").value||""
-).trim();
-
+  return $("color").value === "__custom__"
+    ? String($("customColor").value || "").trim()
+    : String($("color").value || "").trim();
 }
 
-return String(
-$("color").value||""
-).trim();
+$("brand").addEventListener("change", () => { fillModels(); sync(); refreshInvalidSections(); });
 
-}
+$("model").addEventListener("change", () => {
+  fillColors(); updateBatteryVisibility(); sync(); refreshInvalidSections();
+});
 
+$("color").addEventListener("change", () => {
+  const isCustom = $("color").value === "__custom__";
+  $("customColor").style.display = isCustom ? "" : "none";
+  if (isCustom) setTimeout(() => $("customColor").focus(), 50);
+  else $("customColor").value = "";
+  sync(); refreshInvalidSections();
+});
 
-$("brand").addEventListener(
-"change",
-()=>{
-fillModels();
-sync();
-refreshInvalidSections();
-}
-);
+$("customColor").addEventListener("input", () => { sync(); refreshInvalidSections(); });
 
-
-$("model").addEventListener(
-"change",
-()=>{
-fillColors();
-updateBatteryVisibility();
-sync();
-refreshInvalidSections();
-}
-);
-
-
-$("color").addEventListener(
-"change",
-()=>{
-
-$("customColor").style.display=
-$("color").value==="__custom__"
-?""
-:"none";
-
-
-if($("color").value==="__custom__"){
-
-setTimeout(
-()=>$("customColor").focus(),
-50
-);
-
-}else{
-
-$("customColor").value="";
-
-}
-
-sync();
-
-refreshInvalidSections();
-
-}
-);
-
-
-$("customColor").addEventListener(
-"input",
-()=>{
-sync();
-refreshInvalidSections();
-}
-);
-
-
-fill(
-"storage",
-chips(
-"storage",
-STORAGE_OPTIONS
-)
-);
-
-
-fill(
-"condition",
-chips(
-"condition",
-[
-"نظيف",
-"مستخدم",
-"بي أضرار"
-]
-)
-);
-
-
-fill(
-"screen",
-chips(
-"screen",
-[
-"نظيفة",
-"خدوش",
-"كسر"
-]
-)
-);
-
-
-fill(
-"bodyState",
-chips(
-"bodyState",
-[
-"نظيف",
-"خدوش",
-"ضربات"
-]
-)
-);
-
-
-fill(
-"backState",
-chips(
-"backState",
-[
-"ممتاز",
-"نظيف",
-"خدوش خفيفة",
-"فيه كسور"
-]
-)
-);
-
-
-fill(
-"warranty",
-chips(
-"warranty",
-[
-"لا يوجد",
-"أقل من 3 أشهر",
-"3 إلى 12 شهر",
-"أكثر من سنة"
-]
-)
-);
-
-
-fill(
-"acc",
-chips(
-"acc",
-[
-"الشاحن",
-"العلبة",
-"كفر وحماية",
-"الفاتورة"
-],
-"checkbox"
-)
-);
-
-
-fill(
-"duration",
-chips(
-"duration",
-DURATIONS
-)
-);
-
-
-fill(
-"works",
-WORKS.map(
-t=>`
-<label class="sw">
-
-<span>
-${esc(t)}
-</span>
-
-<input
-type="checkbox"
-name="works"
-value="${esc(t)}"
-checked
->
-
-<i></i>
-
-</label>
-`
-).join("")
-);
-
-
-let files=[];
-
+/* ================================================================
+   الصور
+   ================================================================ */
+let files = [];
 
 function renderPhotos(){
-
-$("photos").innerHTML=
-
-files.map(
-(f,i)=>`
-
-<div class="thumb">
-
-<img
-src="${f.url}"
-alt="صورة ${i+1}"
->
-
-${
-i===0
-?
-'<span class="cv">الغلاف</span>'
-:""
+  $("photos").innerHTML =
+    files.map((f, i) => `
+      <div class="thumb">
+        <img src="${f.url}" alt="صورة ${i + 1}">
+        ${i === 0 ? '<span class="cv">الغلاف</span>' : ""}
+        <button type="button" class="x" data-i="${i}">×</button>
+      </div>`).join("") +
+    (files.length < MAX_PHOTOS ? `
+      <button type="button" class="add" id="addBtn">
+        <svg viewBox="0 0 24 24">
+          <path d="M4 8a2 2 0 0 1 2-2h1.5l1.2-1.6h6.6L16.5 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8z"/>
+          <circle cx="12" cy="12.5" r="3.2"/>
+        </svg>
+        <span>إضافة صورة</span>
+      </button>` : "");
+  sync();
 }
 
-<button
-type="button"
-class="x"
-data-i="${i}"
->
-×
-</button>
+$("photos").addEventListener("click", e => {
+  if (e.target.closest("#addBtn")) return $("file").click();
 
-</div>
-
-`
-).join("")+
-
-(
-files.length<MAX_PHOTOS
-?
-`
-<button
-type="button"
-class="add"
-id="addBtn"
->
-
-<svg viewBox="0 0 24 24">
-
-<path
-d="M4 8a2 2 0 0 1 2-2h1.5l1.2-1.6h6.6L16.5 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8z"
-/>
-
-<circle
-cx="12"
-cy="12.5"
-r="3.2"
-/>
-
-</svg>
-
-<span>
-إضافة صورة
-</span>
-
-</button>
-`
-:""
-);
-
-sync();
-
-}
-
-
-$("photos").addEventListener(
-"click",
-e=>{
-
-if(e.target.closest("#addBtn")){
-
-return $("file").click();
-
-}
-
-
-const x=e.target.closest(".x");
-
-if(x){
-
-const i=+x.dataset.i;
-
-if(files[i]){
-URL.revokeObjectURL(
-files[i].url
-);
-}
-
-files.splice(i,1);
-
-renderPhotos();
-
-refreshInvalidSections();
-
-}
-
-}
-);
-
-
-$("file").addEventListener(
-"change",
-e=>{
-
-for(const f of e.target.files){
-
-if(files.length>=MAX_PHOTOS)
-break;
-
-if(
-f.type.startsWith("image/")&&
-f.size<=12e6
-){
-
-files.push({
-file:f,
-url:URL.createObjectURL(f)
+  const x = e.target.closest(".x");
+  if (x){
+    const i = +x.dataset.i;
+    if (files[i]) URL.revokeObjectURL(files[i].url);
+    files.splice(i, 1);
+    renderPhotos();
+    refreshInvalidSections();
+  }
 });
 
-}
+$("file").addEventListener("change", e => {
+  let rejected = 0;
 
-}
+  for (const f of e.target.files){
+    if (files.length >= MAX_PHOTOS) { rejected++; continue; }
+    if (f.type.startsWith("image/") && f.size <= MAX_IMG_MB * 1e6){
+      files.push({ file: f, url: URL.createObjectURL(f) });
+    } else {
+      rejected++;
+    }
+  }
 
-e.target.value="";
+  e.target.value = "";
+  renderPhotos();
+  refreshInvalidSections();
 
-renderPhotos();
-
-refreshInvalidSections();
-
-}
-);
-
+  if (rejected) toast(`تم تجاهل ${rejected} صورة (الحد ${MAX_PHOTOS} صور، وكل صورة أقل من ${MAX_IMG_MB}MB)`);
+});
 
 async function shrink(file){
-
-try{
-
-const bmp=
-await createImageBitmap(file);
-
-const s=
-Math.min(
-1,
-1600/
-Math.max(
-bmp.width,
-bmp.height
-)
-);
-
-const c=
-document.createElement("canvas");
-
-c.width=
-Math.round(
-bmp.width*s
-);
-
-c.height=
-Math.round(
-bmp.height*s
-);
-
-c.getContext("2d")
-.drawImage(
-bmp,
-0,
-0,
-c.width,
-c.height
-);
-
-return await new Promise(
-r=>
-c.toBlob(
-b=>r(b||file),
-"image/jpeg",
-.82
-)
-);
-
-}catch{
-
-return file;
-
+  try{
+    const bmp = await createImageBitmap(file);
+    const s = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
+    const c = document.createElement("canvas");
+    c.width  = Math.round(bmp.width * s);
+    c.height = Math.round(bmp.height * s);
+    c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+    return await new Promise(r => c.toBlob(b => r(b || file), "image/jpeg", .82));
+  }catch{
+    return file;
+  }
 }
 
-}
+/* ================================================================
+   قراءة قيم الحقول
+   ================================================================ */
+const v = name => {
+  const checkedEl = form.querySelector(`[name="${name}"]:checked`);
+  if (checkedEl) return String(checkedEl.value || "").trim();
 
+  const el = document.getElementById(name);
+  if (el) return String(el.value || "").trim();
 
-/*
-  هذه هي النقطة المهمة:
+  const field = form.elements[name];
+  if (field && typeof field.value !== "undefined") return String(field.value || "").trim();
 
-  نبحث أولاً عن الاختيار المحدد
-  سواء كان radio أو checkbox.
-
-  لأن حقول مثل storage وcondition
-  عبارة عن div تحتوي inputs،
-  وليس input مباشر يحمل id.
-
-  لذلك نقرأ :checked أولاً.
-*/
-const v=name=>{
-
-const checkedEl=
-form.querySelector(
-`[name="${name}"]:checked`
-);
-
-if(checkedEl){
-
-return String(
-checkedEl.value||""
-).trim();
-
-}
-
-
-const el=
-document.getElementById(name);
-
-if(el){
-
-return String(
-el.value||""
-).trim();
-
-}
-
-
-const field=
-form.elements[name];
-
-if(field){
-
-if(
-typeof field.value!=="undefined"
-){
-
-return String(
-field.value||""
-).trim();
-
-}
-
-}
-
-
-return "";
-
+  return "";
 };
 
+const checked = name =>
+  [...form.querySelectorAll(`[name="${name}"]:checked`)].map(e => String(e.value || "").trim());
 
-const checked=name=>
-[
-...form.querySelectorAll(
-`[name="${name}"]:checked`
-)
-]
-.map(
-e=>String(
-e.value||""
-).trim()
-);
-
-
-const hours=()=>
-Number(v("duration"))||0;
-
-
-const durLabel=()=>
-(
-DURATIONS.find(
-d=>d[0]===v("duration")
-)||["",""]
-)[1];
-
+const hours = () => Number(v("duration")) || 0;
+const durLabel = () => (DURATIONS.find(d => d[0] === v("duration")) || ["", ""])[1];
 
 function bidStepForPrice(p){
-
-p=Number(p)||0;
-
-if(p<300000)
-return 5000;
-
-if(p<750000)
-return 10000;
-
-if(p<1500000)
-return 15000;
-
-if(p<3000000)
-return 25000;
-
-return 50000;
-
+  p = Number(p) || 0;
+  if (p < 300000)  return 5000;
+  if (p < 750000)  return 10000;
+  if (p < 1500000) return 15000;
+  if (p < 3000000) return 25000;
+  return 50000;
 }
 
-
-const PHONE=c=>
-
-`<svg viewBox="0 0 120 240">
-
-<rect
-x="4"
-y="4"
-width="112"
-height="232"
-rx="22"
-fill="#1d2430"
-/>
-
-<rect
-x="10"
-y="10"
-width="100"
-height="220"
-rx="17"
-fill="${c}"
-/>
-
-<rect
-x="44"
-y="16"
-width="32"
-height="9"
-rx="4.5"
-fill="#0c0f11"
-/>
-
+/* ================================================================
+   المعاينة وشريط الاكتمال
+   ================================================================ */
+const PHONE = c => `<svg viewBox="0 0 120 240">
+  <rect x="4" y="4" width="112" height="232" rx="22" fill="#1d2430"/>
+  <rect x="10" y="10" width="100" height="220" rx="17" fill="${c}"/>
+  <rect x="44" y="16" width="32" height="9" rx="4.5" fill="#0c0f11"/>
 </svg>`;
 
-
 function sync(){
+  const price = num($("price"));
 
-const price=
-num($("price"));
+  const done = [
+    files.length > 0, !!v("brand"), !!v("model"), !!v("storage"), !!getColorValue(),
+    !!v("condition"), !!v("screen"), !!v("bodyState"), !!v("backState"),
+    price >= MIN_START, !!hours(), !!$("city").value, $("agree").checked
+  ].filter(Boolean).length;
 
+  const pct = Math.round(done / 13 * 100);
+  $("barFill").style.width = pct + "%";
+  $("pct").textContent = pct + "%";
 
-const done=[
-files.length>0,
-!!v("brand"),
-!!v("model"),
-!!v("storage"),
-!!getColorValue(),
-!!v("condition"),
-!!v("screen"),
-!!v("bodyState"),
-!!v("backState"),
-price>=MIN_START,
-!!hours(),
-!!$("city").value,
-$("agree").checked
-].filter(Boolean).length;
+  $("pTitle").textContent = `${v("brand")} ${v("model")}`.trim() || "اسم الجهاز";
+  $("pMeta").textContent = [v("storage"), getColorValue(), v("city")].filter(Boolean).join(" • ") || "المواصفات تظهر هنا";
+  $("pPrice").textContent = fmt(price);
 
+  const tags = [v("condition"), v("backState") ? `ظهر ${v("backState")}` : ""];
+  if (isAppleDevice()) tags.push(`بطارية ${$("battery").value}%`);
 
-const pct=
-Math.round(
-done/13*100
-);
+  $("pTags").innerHTML = tags.filter(Boolean).map(t => `<span class="tag">${esc(t)}</span>`).join("");
 
+  const h = hours();
+  $("pImg").innerHTML =
+    (files[0] ? `<img src="${files[0].url}" alt="">` : PHONE("#6246d9")) +
+    `<span class="pill">${h ? String(h).padStart(2, "0") + ":00:00" : "المدة"}</span>`;
 
-$("barFill").style.width=
-pct+"%";
-
-$("pct").textContent=
-pct+"%";
-
-
-$("pTitle").textContent=
-`${v("brand")} ${v("model")}`.trim()||
-"اسم الجهاز";
-
-
-$("pMeta").textContent=
-[
-v("storage"),
-getColorValue(),
-v("city")
-]
-.filter(Boolean)
-.join(" • ")||
-"المواصفات تظهر هنا";
-
-
-$("pPrice").textContent=
-fmt(price);
-
-
-const tags=[
-v("condition"),
-v("backState")
-?
-`ظهر ${v("backState")}`
-:""
-];
-
-
-if(isAppleDevice()){
-
-tags.push(
-`بطارية ${$("battery").value}%`
-);
-
+  $("endAt").textContent = h
+    ? new Date(Date.now() + h * 36e5).toLocaleTimeString("ar-IQ", { hour: "numeric", minute: "2-digit" })
+    : "اختر المدة";
 }
 
-
-$("pTags").innerHTML=
-tags
-.filter(Boolean)
-.map(
-t=>`<span class="tag">${esc(t)}</span>`
-)
-.join("");
-
-
-const h=hours();
-
-
-$("pImg").innerHTML=
-
-(
-files[0]
-?
-`<img src="${files[0].url}" alt="">`
-:
-PHONE("#6246d9")
-)+
-
-`<span class="pill">
-${
-h
-?
-String(h).padStart(2,"0")+":00:00"
-:
-"المدة"
-}
-</span>`;
-
-
-$("endAt").textContent=
-
-h
-?
-new Date(
-Date.now()+h*36e5
-).toLocaleTimeString(
-"ar-IQ",
-{
-hour:"numeric",
-minute:"2-digit"
-}
-)
-:
-"اختر المدة";
-
+for (const id of ["price", "reserve"]){
+  $(id).addEventListener("input", e => {
+    const n = num(e.target);
+    e.target.value = n ? fmt(n) : "";
+    sync();
+    refreshInvalidSections();
+  });
 }
 
-
-for(
-const id of ["price","reserve"]
-){
-
-$(id).addEventListener(
-"input",
-e=>{
-
-const n=num(e.target);
-
-e.target.value=
-n
-?
-fmt(n)
-:
-"";
-
-sync();
-
-refreshInvalidSections();
-
-}
-);
-
-}
-
-
-$("battery").addEventListener(
-"input",
-e=>{
-
-$("battery").style.setProperty(
-"--p",
-(
-(e.target.value-60)/40*100
-)+"%"
-);
-
-$("batOut").textContent=
-e.target.value+"%";
-
-sync();
-
-}
-);
-
-
-$("repaired").addEventListener(
-"change",
-e=>
-$("repFold")
-.classList.toggle(
-"open",
-e.target.checked
-)
-);
-
-
-$("notes").addEventListener(
-"input",
-e=>
-$("nCount").textContent=
-e.target.value.length
-);
-
-
-function sectionComplete(id){
-
-if(id==="c-photos")
-return files.length>0;
-
-
-if(id==="c-info"){
-
-return !!(
-v("brand")&&
-v("model")&&
-v("storage")&&
-getColorValue()
-);
-
-}
-
-
-if(id==="c-cond"){
-
-return !!(
-v("condition")&&
-v("screen")&&
-v("bodyState")&&
-v("backState")
-);
-
-}
-
-
-if(id==="c-auction"){
-
-const p=num($("price"));
-
-const r=num($("reserve"));
-
-return (
-p>=MIN_START&&
-(!r||r>=p)&&
-!!hours()
-);
-
-}
-
-
-if(id==="c-extra")
-return !!$("city").value;
-
-
-if(id==="c-agree")
-return $("agree").checked;
-
-
-return true;
-
-}
-
-
-function refreshInvalidSections(){
-
-[
-"c-photos",
-"c-info",
-"c-cond",
-"c-auction",
-"c-extra",
-"c-agree"
-]
-.forEach(
-id=>{
-
-if(
-$(id)&&
-$(id).classList.contains("invalid")&&
-sectionComplete(id)
-){
-
-$(id).classList.remove(
-"invalid"
-);
-
-const err=$("e-"+id);
-
-if(err){
-err.textContent="";
-}
-
-}
-
-}
-);
-
-}
-
-
-form.addEventListener(
-"input",
-()=>{
-sync();
-refreshInvalidSections();
-}
-);
-
-
-form.addEventListener(
-"change",
-()=>{
-sync();
-refreshInvalidSections();
-}
-);
-
-
-$("back").onclick=()=>
-history.length>1
-?
-history.back()
-:
-location.href="home.html";
-
-
-document
-.querySelectorAll(".reveal")
-.forEach(
-e=>e.classList.add("shown")
-);
-
-
-function validate(){
-
-const errs=[];
-
-const p=num($("price"));
-
-const r=num($("reserve"));
-
-
-document
-.querySelectorAll(".err")
-.forEach(
-e=>e.textContent=""
-);
-
-
-document
-.querySelectorAll(".invalid")
-.forEach(
-e=>e.classList.remove(
-"invalid"
-)
-);
-
-
-const bad=(id,msg)=>
-errs.push([id,msg]);
-
-
-if(!files.length){
-
-bad(
-"c-photos",
-"أضف صورة وحدة على الأقل"
-);
-
-}
-
-
-/*
-  معلومات الجهاز:
-
-  الآن يتم فحص القيمة الحقيقية
-  للاختيارات المحددة.
-*/
-if(
-!v("brand")||
-!v("model")||
-!v("storage")||
-!getColorValue()
-){
-
-bad(
-"c-info",
-"اختر الماركة والموديل واللون والسعة"
-);
-
-}
-
-
-if(
-!v("condition")||
-!v("screen")||
-!v("bodyState")||
-!v("backState")
-){
-
-bad(
-"c-cond",
-"اختر الحالة العامة وحالة الشاشة والهيكل والظهر"
-);
-
-}
-
-
-if(p<MIN_START){
-
-bad(
-"c-auction",
-`سعر البداية لازم يكون ${fmt(MIN_START)} د.ع أو أكثر`
-);
-
-}
-else if(r&&r<p){
-
-bad(
-"c-auction",
-"أقل سعر تقبله لازم يكون أكبر من سعر البداية أو يساويه"
-);
-
-}
-else if(!hours()){
-
-bad(
-"c-auction",
-"اختر مدة المزاد"
-);
-
-}
-
-
-if(!v("city")){
-
-bad(
-"c-extra",
-"الموقع غير محدد"
-);
-
-}
-
-
-if(!$("agree").checked){
-
-bad(
-"c-agree",
-"لازم تؤكد المعلومات قبل النشر"
-);
-
-}
-
-
-errs.forEach(
-([id,msg])=>{
-
-const err=$("e-"+id);
-
-if(err){
-err.textContent=msg;
-}
-
-$(id).classList.add(
-"invalid"
-);
-
-}
-);
-
-
-if(errs.length){
-
-$(errs[0][0])
-.scrollIntoView({
-behavior:"smooth",
-block:"center"
+$("battery").addEventListener("input", e => {
+  $("battery").style.setProperty("--p", ((e.target.value - 60) / 40 * 100) + "%");
+  $("batOut").textContent = e.target.value + "%";
+  sync();
 });
 
-toast(
-errs[0][1]
-);
+$("repaired").addEventListener("change", e => $("repFold").classList.toggle("open", e.target.checked));
+$("notes").addEventListener("input", e => $("nCount").textContent = e.target.value.length);
 
+/* ================================================================
+   التحقق
+   ================================================================ */
+function sectionComplete(id){
+  if (id === "c-photos") return files.length > 0;
+  if (id === "c-info")   return !!(v("brand") && v("model") && v("storage") && getColorValue());
+  if (id === "c-cond")   return !!(v("condition") && v("screen") && v("bodyState") && v("backState"));
+  if (id === "c-auction"){
+    const p = num($("price")), r = num($("reserve"));
+    return p >= MIN_START && (!r || r >= p) && !!hours();
+  }
+  if (id === "c-extra") return !!$("city").value;
+  if (id === "c-agree") return $("agree").checked;
+  return true;
 }
 
-return !errs.length;
-
+function refreshInvalidSections(){
+  ["c-photos","c-info","c-cond","c-auction","c-extra","c-agree"].forEach(id => {
+    if ($(id) && $(id).classList.contains("invalid") && sectionComplete(id)){
+      $(id).classList.remove("invalid");
+      const err = $("e-" + id);
+      if (err) err.textContent = "";
+    }
+  });
 }
 
+form.addEventListener("input",  () => { sync(); refreshInvalidSections(); });
+form.addEventListener("change", () => { sync(); refreshInvalidSections(); });
 
+function validate(){
+  const errs = [];
+  const p = num($("price"));
+  const r = num($("reserve"));
+
+  document.querySelectorAll(".err").forEach(e => e.textContent = "");
+  document.querySelectorAll(".invalid").forEach(e => e.classList.remove("invalid"));
+
+  const bad = (id, msg) => errs.push([id, msg]);
+
+  if (!files.length) bad("c-photos", "أضف صورة وحدة على الأقل");
+
+  if (!v("brand") || !v("model") || !v("storage") || !getColorValue())
+    bad("c-info", "اختر الماركة والموديل واللون والسعة");
+
+  if (!v("condition") || !v("screen") || !v("bodyState") || !v("backState"))
+    bad("c-cond", "اختر الحالة العامة وحالة الشاشة والهيكل والظهر");
+
+  if (p < MIN_START)       bad("c-auction", `سعر البداية لازم يكون ${fmt(MIN_START)} د.ع أو أكثر`);
+  else if (r && r < p)     bad("c-auction", "أقل سعر تقبله لازم يكون أكبر من سعر البداية أو يساويه");
+  else if (!hours())       bad("c-auction", "اختر مدة المزاد");
+
+  if (!v("city"))          bad("c-extra", "الموقع غير محدد");
+  if (!$("agree").checked) bad("c-agree", "لازم تؤكد المعلومات قبل النشر");
+
+  errs.forEach(([id, msg]) => {
+    const err = $("e-" + id);
+    if (err) err.textContent = msg;
+    $(id).classList.add("invalid");
+  });
+
+  if (errs.length){
+    $(errs[0][0]).scrollIntoView({ behavior: "smooth", block: "center" });
+    toast(errs[0][1]);
+  }
+
+  return !errs.length;
+}
+
+/* ================================================================
+   الملاحظات العامة
+   ملاحظة: السعر الاحتياطي ما ينكتب هنا أبداً لأن notes يشوفها الكل
+   ================================================================ */
 function buildNotes(){
+  const works = checked("works");
+  const off = WORKS.filter(w => !works.includes(w));
+  const s = num($("price"));
 
-const works=
-checked("works");
+  return [
+    v("notes"),
 
-const off=
-WORKS.filter(
-w=>!works.includes(w)
-);
+    "— معلومات الحالة —",
+    `حالة الظهر: ${v("backState") || "غير محدد"}`,
+    isAppleDevice() ? `صحة البطارية: ${$("battery").value}%` : "",
 
-const r=
-num($("reserve"));
+    "— فحص الجهاز —",
+    `يعمل: ${works.join("، ") || "—"}`,
+    off.length ? `لا يعمل: ${off.join("، ")}` : "",
+    $("repaired").checked
+      ? `انفتح الجهاز أو تبدلت قطع: ${$("repText").value.trim() || "نعم"}`
+      : "لم يُفتح الجهاز ولم تُبدّل قطع",
+    `الضمان: ${v("warranty") || "غير محدد"}`,
+    `الملحقات: ${checked("acc").join("، ") || "لا يوجد"}`,
 
-const s=
-num($("price"));
-
-
-return [
-
-v("notes"),
-
-"— معلومات الحالة —",
-
-`حالة الظهر: ${v("backState")||"غير محدد"}`,
-
-isAppleDevice()
-?
-`صحة البطارية: ${$("battery").value}%`
-:"",
-
-"— فحص الجهاز —",
-
-`يعمل: ${
-works.join("، ")||"—"
-}`,
-
-off.length
-?
-`لا يعمل: ${off.join("، ")}`
-:"",
-
-$("repaired").checked
-?
-`انفتح الجهاز أو تبدلت قطع: ${
-$("repText").value.trim()||"نعم"
-}`
-:"لم يُفتح الجهاز ولم تُبدّل قطع",
-
-`الضمان: ${
-v("warranty")||"غير محدد"
-}`,
-
-`الملحقات: ${
-checked("acc").join("، ")||"لا يوجد"
-}`,
-
-"— تفاصيل المزاد —",
-
-`المدة: ${durLabel()}`,
-
-`سعر البداية: ${fmt(s)} د.ع`,
-
-`الزيادة المبدئية حسب السعر: ${
-fmt(
-bidStepForPrice(s)
-)
-} د.ع`,
-
-`أقل سعر مقبول: ${
-r
-?
-fmt(r)+" د.ع"
-:
-"لا يوجد سعر احتياطي"
-}`
-
-]
-.filter(Boolean)
-.join("\n");
-
+    "— تفاصيل المزاد —",
+    `المدة: ${durLabel()}`,
+    `سعر البداية: ${fmt(s)} د.ع`,
+    `الزيادة المبدئية حسب السعر: ${fmt(bidStepForPrice(s))} د.ع`
+  ].filter(Boolean).join("\n");
 }
 
+/* ================================================================
+   النشر
+   ================================================================ */
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!validate()) return;
 
-form.addEventListener(
-"submit",
-async e=>{
+  const btn = $("submit");
+  btn.disabled = true;
+  btn.classList.add("busy");
 
-e.preventDefault();
+  const paths = [];
+  const removeUploaded = async () => {
+    if (paths.length) {
+      try { await supabase.storage.from("device-images").remove(paths); } catch {}
+    }
+  };
 
+  try{
+    /* 1) تسجيل الدخول */
+    const { data: s } = await supabase.auth.getSession();
+    const uid = s?.session?.user?.id;
 
-if(!validate())
-return;
+    if (!uid){
+      sessionStorage.setItem("mzad_pending_action", "sell-auction.html");
+      toast("سجّل دخولك أو أنشئ حساباً أولاً");
+      setTimeout(() => {
+        location.href = `index.html?login=1&returnTo=${encodeURIComponent("sell-auction.html")}`;
+      }, 600);
+      return;
+    }
 
+    /* 2) رفع الصور */
+    for (let i = 0; i < files.length; i++){
+      const blob = await shrink(files[i].file);
+      const path = `${uid}/${Date.now()}-${i}.jpg`;
 
-const btn=$("submit");
+      const { error } = await supabase.storage
+        .from("device-images")
+        .upload(path, blob, { contentType: blob.type || "image/jpeg" });
 
-btn.disabled=true;
+      if (error) throw error;
+      paths.push(path);
+    }
 
-btn.classList.add("busy");
+    /* 3) بناء السجل
+       ends_at و bid_step و start_price يحسبهم السيرفر (trigger) */
+    const start = num($("price"));
+    const reserve = num($("reserve"));
 
+    const row = {
+      brand: v("brand"),
+      model: v("model"),
+      storage: v("storage"),
+      color: getColorValue() || null,
+      battery_health: isAppleDevice() ? `${$("battery").value}%` : null,
+      price: start,
+      condition: v("condition"),
+      screen_condition: v("screen"),
+      body_condition: v("bodyState"),
+      location: "داخل النجف",
+      sale_type: "auction",
+      images: paths,
+      notes: buildNotes()
+    };
 
-try{
+    if (HAS_AUCTION_COLUMNS){
+      Object.assign(row, {
+        user_id: uid,
+        reserve_price: reserve || null,
+        duration_hours: hours()
+      });
+    }
 
-const {
-data:s
-}
-=
-await supabase.auth.getSession();
+    /* 4) الحفظ */
+    const { error } = await supabase.from("devices").insert(row);
+    if (error){
+      await removeUploaded();   // ما نخلي صور يتيمة بالـ storage
+      throw error;
+    }
 
+    $("done").classList.add("show");
+    setTimeout(() => location.href = "auctions.html", 2000);
 
-const uid=
-s?.session?.user?.id;
+  }catch(err){
+    console.error("SELL AUCTION ERROR:", err);
+    await removeUploaded();
+    toast("صار خطأ بالنشر، حاول مرة ثانية");
+  }finally{
+    btn.disabled = false;
+    btn.classList.remove("busy");
+  }
+});
 
-
-if(!uid){
-
-sessionStorage.setItem(
-"mzad_pending_action",
-"sell-auction.html"
+/* ================================================================
+   إخفاء الشريط السفلي أثناء الكتابة
+   ================================================================ */
+const isTextField = el => el && el.matches && el.matches(
+  'input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]),textarea,select'
 );
 
-toast(
-"سجّل دخولك أو أنشئ حساباً أولاً"
-);
-
-setTimeout(
-()=>
-location.href=
-`index.html?login=1&returnTo=${encodeURIComponent("sell-auction.html")}`,
-600
-);
-
-return;
-
-}
-
-
-const paths=[];
-
-
-for(
-let i=0;
-i<files.length;
-i++
-){
-
-const blob=
-await shrink(
-files[i].file
-);
-
-
-const path=
-`${uid}/${Date.now()}-${i}.jpg`;
-
-
-const {
-error
-}
-=
-await supabase
-.storage
-.from("device-images")
-.upload(
-path,
-blob,
-{
-contentType:
-blob.type||
-"image/jpeg"
-}
-);
-
-
-if(error)
-throw error;
-
-
-paths.push(path);
-
-}
-
-
-const start=
-num($("price"));
-
-const reserve=
-num($("reserve"));
-
-
-const row={
-
-brand:v("brand"),
-
-model:v("model"),
-
-storage:v("storage"),
-
-color:
-getColorValue()||
-null,
-
-battery_health:
-isAppleDevice()
-?
-`${$("battery").value}%`
-:
-null,
-
-price:start,
-
-condition:
-v("condition"),
-
-screen_condition:
-v("screen"),
-
-body_condition:
-v("bodyState"),
-
-location:
-"داخل النجف",
-
-sale_type:
-"auction",
-
-images:
-paths,
-
-notes:
-buildNotes()
-
-};
-
-
-if(HAS_AUCTION_COLUMNS){
-
-Object.assign(
-row,
-{
-
-user_id:uid,
-
-start_price:start,
-
-reserve_price:
-reserve||
-null,
-
-bid_step:
-bidStepForPrice(start),
-
-ends_at:
-new Date(
-Date.now()+
-hours()*36e5
-).toISOString()
-
-}
-);
-
-}
-
-
-const {
-error
-}
-=
-await supabase
-.from("devices")
-.insert(row);
-
-
-if(error)
-throw error;
-
-
-$("done")
-.classList.add("show");
-
-
-setTimeout(
-()=>
-location.href="auctions.html",
-2000
-);
-
-
-}catch(err){
-
-console.error(
-"SELL AUCTION ERROR:",
-err
-);
-
-toast(
-"صار خطأ بالنشر، حاول مرة ثانية"
-);
-
-}finally{
-
-btn.disabled=false;
-
-btn.classList.remove(
-"busy"
-);
-
-}
-
-}
-);
-
+document.addEventListener("focusin", e => {
+  if (isTextField(e.target)) document.body.classList.add("kb");
+});
+
+document.addEventListener("focusout", () => {
+  setTimeout(() => {
+    if (!isTextField(document.activeElement)) document.body.classList.remove("kb");
+  }, 100);
+});
+
+/* ================================================================
+   التنقل والتشغيل
+   ================================================================ */
+$("back").onclick = () => history.length > 1 ? history.back() : location.href = "home.html";
+
+document.querySelectorAll(".reveal").forEach(e => e.classList.add("shown"));
 
 fillModels();
-
 fillColors();
-
 updateBatteryVisibility();
-
 renderPhotos();
-
 sync();
-
 </script>
 
 </body>
