@@ -2472,7 +2472,6 @@ const PHONE_COLORS={
 "ذهبي وردي"
 ],
 
-
 "Samsung|Galaxy S25 Ultra":[
 "تيتانيوم أسود",
 "تيتانيوم فضي",
@@ -2508,7 +2507,6 @@ const PHONE_COLORS={
 "غرافيت"
 ],
 
-
 "Xiaomi|Xiaomi 15 Ultra":[
 "أسود",
 "أبيض",
@@ -2532,7 +2530,6 @@ const PHONE_COLORS={
 "أصفر",
 "أبيض"
 ],
-
 
 "Google|Pixel 10 Pro XL":[
 "أسود Obsidian",
@@ -2564,7 +2561,6 @@ const PHONE_COLORS={
 "أزرق Bay"
 ],
 
-
 "Huawei|Mate 70 Pro":[
 "أسود",
 "أبيض",
@@ -2586,7 +2582,6 @@ const PHONE_COLORS={
 "بنفسجي"
 ],
 
-
 "OPPO|Find X8 Pro":[
 "أسود",
 "أبيض",
@@ -2604,7 +2599,6 @@ const PHONE_COLORS={
 "أبيض",
 "بنفسجي"
 ],
-
 
 "HONOR|Magic7 Pro":[
 "أسود",
@@ -2627,7 +2621,6 @@ const PHONE_COLORS={
 "أبيض"
 ],
 
-
 "OnePlus|OnePlus 13":[
 "أسود",
 "أبيض",
@@ -2645,7 +2638,6 @@ const PHONE_COLORS={
 "أخضر"
 ],
 
-
 "realme|GT 7 Pro":[
 "رمادي",
 "برتقالي",
@@ -2657,7 +2649,6 @@ const PHONE_COLORS={
 "رمادي",
 "بنفسجي"
 ],
-
 
 "Motorola|Edge 60 Pro":[
 "أسود",
@@ -2673,7 +2664,6 @@ const PHONE_COLORS={
 "وردي"
 ],
 
-
 "Sony|Xperia 1 VII":[
 "أسود",
 "أخضر",
@@ -2686,18 +2676,15 @@ const PHONE_COLORS={
 "أخضر"
 ],
 
-
 "Nokia|Nokia X30":[
 "أزرق Cloudy Blue",
 "أبيض Ice White"
 ],
 
-
 "Tecno|Phantom V Fold2":[
 "أسود",
 "أبيض"
 ],
-
 
 "Infinix|Note 50 Pro+":[
 "أسود",
@@ -3035,6 +3022,9 @@ $("color").disabled=true;
 $("color").innerHTML=
 '<option value="">اختر الموديل أولاً</option>';
 
+$("customColor").value="";
+$("customColor").style.display="none";
+
 updateBatteryVisibility();
 
 }
@@ -3335,9 +3325,11 @@ if(x){
 
 const i=+x.dataset.i;
 
+if(files[i]){
 URL.revokeObjectURL(
 files[i].url
 );
+}
 
 files.splice(i,1);
 
@@ -3441,9 +3433,36 @@ return file;
 }
 
 
+/*
+  هذه هي النقطة المهمة:
+
+  نبحث أولاً عن الاختيار المحدد
+  سواء كان radio أو checkbox.
+
+  لأن حقول مثل storage وcondition
+  عبارة عن div تحتوي inputs،
+  وليس input مباشر يحمل id.
+
+  لذلك نقرأ :checked أولاً.
+*/
 const v=name=>{
 
-const el=$(name);
+const checkedEl=
+form.querySelector(
+`[name="${name}"]:checked`
+);
+
+if(checkedEl){
+
+return String(
+checkedEl.value||""
+).trim();
+
+}
+
+
+const el=
+document.getElementById(name);
 
 if(el){
 
@@ -3454,17 +3473,20 @@ el.value||""
 }
 
 
-const checkedEl=
-form.querySelector(
-`[name="${name}"]:checked`
-);
+const field=
+form.elements[name];
 
+if(field){
 
-if(checkedEl){
+if(
+typeof field.value!=="undefined"
+){
 
 return String(
-checkedEl.value||""
+field.value||""
 ).trim();
+
+}
 
 }
 
@@ -3561,24 +3583,25 @@ num($("price"));
 
 
 const done=[
-files.length,
-v("brand"),
-v("model"),
-v("storage"),
-v("condition"),
-v("screen"),
-v("bodyState"),
-v("backState"),
+files.length>0,
+!!v("brand"),
+!!v("model"),
+!!v("storage"),
+!!getColorValue(),
+!!v("condition"),
+!!v("screen"),
+!!v("bodyState"),
+!!v("backState"),
 price>=MIN_START,
-hours(),
-v("city"),
+!!hours(),
+!!$("city").value,
 $("agree").checked
 ].filter(Boolean).length;
 
 
 const pct=
 Math.round(
-done/12*100
+done/13*100
 );
 
 
@@ -3791,7 +3814,7 @@ p>=MIN_START&&
 
 
 if(id==="c-extra")
-return !!v("city");
+return !!$("city").value;
 
 
 if(id==="c-agree")
@@ -3826,7 +3849,11 @@ $(id).classList.remove(
 "invalid"
 );
 
-$("e-"+id).textContent="";
+const err=$("e-"+id);
+
+if(err){
+err.textContent="";
+}
 
 }
 
@@ -3908,26 +3935,22 @@ bad(
 }
 
 
+/*
+  معلومات الجهاز:
+
+  الآن يتم فحص القيمة الحقيقية
+  للاختيارات المحددة.
+*/
 if(
 !v("brand")||
 !v("model")||
-!v("storage")
-){
-
-bad(
-"c-info",
-"اختر الماركة والموديل والسعة"
-);
-
-}
-else if(
-$("color").value==="__custom__"&&
+!v("storage")||
 !getColorValue()
 ){
 
 bad(
 "c-info",
-"اكتب لون الجهاز"
+"اختر الماركة والموديل واللون والسعة"
 );
 
 }
@@ -3997,8 +4020,11 @@ bad(
 errs.forEach(
 ([id,msg])=>{
 
-$("e-"+id).textContent=
-msg;
+const err=$("e-"+id);
+
+if(err){
+err.textContent=msg;
+}
 
 $(id).classList.add(
 "invalid"
