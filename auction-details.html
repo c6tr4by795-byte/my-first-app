@@ -1059,7 +1059,7 @@ td.good{
 
 import {
   supabase
-} from "./js/supabase.js?v=auction-details-final-4";
+} from "./js/supabase.js?v=auction-details-final-5";
 
 
 /* =========================================================
@@ -1495,9 +1495,8 @@ function getEndTime(){
   }
 
   /*
-    نعتمد على وقت النهاية المخزن فعلياً.
-    ما نعتمد على duration_hours حتى لا يتعطل
-    الربط إذا هذا الحقل غير موجود.
+    الأولوية لوقت النهاية المحفوظ.
+    هذا مهم بعد تمديد المزاد.
   */
 
   if(auction.auction_ends_at){
@@ -1510,6 +1509,37 @@ function getEndTime(){
     if(Number.isFinite(end)){
       return end;
     }
+
+  }
+
+  /*
+    احتياط:
+    وقت إنشاء المزاد + مدة المزاد.
+    مثال:
+    created_at + 1 ساعة
+  */
+
+  const created =
+    auction.created_at
+      ? new Date(
+          auction.created_at
+        ).getTime()
+      : NaN;
+
+  const duration =
+    Number(
+      auction.duration_hours
+    ) || 0;
+
+  if(
+    Number.isFinite(created) &&
+    duration > 0
+  ){
+
+    return (
+      created +
+      duration * 60 * 60 * 1000
+    );
 
   }
 
@@ -1556,9 +1586,8 @@ async function loadAuction(){
 
 
     /*
-      مهم:
-      نجيب السجل كامل حتى ما نعتمد على
-      حقل معين ممكن يكون غير موجود.
+      جلب السجل كامل حتى لا نعتمد على
+      حقل محدد قد يسبب فشل الاستعلام.
     */
 
     const {
@@ -2160,25 +2189,26 @@ function renderSpecs(){
   }
 
 
-  if(auction.replaced_parts){
+  /*
+    القطع المستبدلة:
+    إذا ماكو أي اختيار، تظهر
+    "لا توجد قطع مستبدلة"
+  */
 
-    rows.push([
-      "فك أو تبديل قطع",
-      valueText(
-        auction.replaced_parts
-      )
-    ]);
-
-  }else if(
-    meta["انفتح الجهاز أو تبدلت قطع"]
-  ){
-
-    rows.push([
-      "فك أو تبديل قطع",
+  const replacedParts =
+    valueText(
+      auction.replaced_parts
+    ) ||
+    valueText(
       meta["انفتح الجهاز أو تبدلت قطع"]
-    ]);
+    );
 
-  }
+
+  rows.push([
+    "فك أو تبديل قطع",
+    replacedParts ||
+    "لا توجد قطع مستبدلة"
+  ]);
 
 
   $("specs").innerHTML =
@@ -2272,19 +2302,73 @@ function renderSeller(){
     ).trim();
 
 
-  const name =
-    realName ||
-    "مستخدم MZAD PHONE";
+  const phone =
+    String(
+      auction?.seller_phone ||
+      ""
+    ).trim();
+
+
+  const location =
+    String(
+      auction?.location ||
+      ""
+    ).trim();
+
+
+  let name =
+    realName;
+
+
+  /*
+    إذا اسم البائع موجود، نعرضه.
+    إذا غير موجود لكن رقم الهاتف موجود،
+    نستخدم الرقم كمعلومة متاحة.
+    وإذا الاثنين غير موجودين نعرض
+    مستخدم MZAD PHONE.
+  */
+
+  if(!name && phone){
+    name = phone;
+  }
+
+
+  if(!name){
+    name = "مستخدم MZAD PHONE";
+  }
 
 
   $("sName").textContent =
     name;
 
 
+  const infoParts = [];
+
+
+  if(realName){
+    infoParts.push(
+      "عضو في MZAD PHONE"
+    );
+  }
+
+
+  if(location){
+    infoParts.push(
+      location
+    );
+  }
+
+
+  if(!infoParts.length && phone){
+    infoParts.push(
+      "عضو في MZAD PHONE"
+    );
+  }
+
+
   $("sInfo").textContent =
-    auction?.location
-      ? `عضو في MZAD PHONE • ${auction.location}`
-      : "عضو في MZAD PHONE";
+    infoParts.join(" • ") ||
+    "عضو في MZAD PHONE";
 
 
   $("sStatus").textContent =
@@ -2669,11 +2753,6 @@ async function refreshAuctionData(){
 
   try{
 
-    /*
-      نجيب السجل كامل أيضاً هنا حتى تبقى
-      الصفحة متوافقة مع نفس بنية البيانات.
-    */
-
     const {
       data,
       error
@@ -2712,7 +2791,10 @@ async function refreshAuctionData(){
 
     await loadBids();
 
+
     renderBody();
+
+    renderGallery();
 
     renderBids(true);
 
@@ -3021,6 +3103,11 @@ $("bid").onclick =
 
       }
 
+
+      /*
+        إذا الـ RPC رجع وقت نهاية جديد
+        بعد التمديد، نعتمده مباشرة.
+      */
 
       if(
         result &&
