@@ -1299,7 +1299,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
       أي مزايدة خلال آخر
       <b>30 ثانية</b>
       تمدد المزاد
-      <b>30 ثانية</b>.
+      <b>دقيقة كاملة</b>.
     </div>
 
     <div>
@@ -1664,11 +1664,14 @@ import { supabase } from "./js/supabase.js";
    ================================================================ */
 
 /*
-  مهم جداً:
-  قاعدة البيانات الحالية لا تحتوي أعمدة المزاد الجديدة.
-  لذلك لا نرسل auction_* إلى Supabase.
+  أعمدة المزاد موجودة في جدول devices
+  (دالة place_auction_bid في Supabase تقرأ وتكتب عليها):
+  auction_ends_at / auction_status / auction_current_price /
+  auction_bid_step / auction_start_price
+
+  لذلك نحفظ فيها القيم الفعلية عند النشر.
 */
-const HAS_AUCTION_COLUMNS = false;
+const HAS_AUCTION_COLUMNS = true;
 
 const MIN_START  = 10000;
 const MAX_PHOTOS = 6;
@@ -1785,397 +1788,40 @@ function setText(
    البيانات
    ================================================================ */
 
-const BRANDS = [
-  "Apple",
-  "Samsung",
-  "Xiaomi",
-  "Google",
-  "Huawei",
-  "OPPO",
-  "HONOR",
-  "OnePlus",
-  "realme",
-  "Motorola",
-  "Sony",
-  "Nokia",
-  "Tecno",
-  "Infinix",
-  "أخرى"
-];
+const BRANDS = ["Apple","Samsung","Xiaomi","Google","Huawei","OPPO","HONOR","OnePlus","realme","Motorola","Sony","Nokia","Tecno","Infinix","أخرى"];
 
 
 const PHONE_MODELS = {
 
-  Apple:[
-    "iPhone 18 Pro Max",
-    "iPhone 18 Pro",
-    "iPhone 18",
-    "iPhone 17 Pro Max",
-    "iPhone 17 Pro",
-    "iPhone 17 Air",
-    "iPhone 17",
-    "iPhone 17e",
-    "iPhone 16 Pro Max",
-    "iPhone 16 Pro",
-    "iPhone 16 Plus",
-    "iPhone 16",
-    "iPhone 16e",
-    "iPhone 15 Pro Max",
-    "iPhone 15 Pro",
-    "iPhone 15 Plus",
-    "iPhone 15",
-    "iPhone 14 Pro Max",
-    "iPhone 14 Pro",
-    "iPhone 14 Plus",
-    "iPhone 14",
-    "iPhone 13 Pro Max",
-    "iPhone 13 Pro",
-    "iPhone 13",
-    "iPhone 13 mini",
-    "iPhone 12 Pro Max",
-    "iPhone 12 Pro",
-    "iPhone 12",
-    "iPhone 12 mini",
-    "iPhone 11 Pro Max",
-    "iPhone 11 Pro",
-    "iPhone 11",
-    "iPhone XS Max",
-    "iPhone XS",
-    "iPhone XR",
-    "iPhone X",
-    "iPhone 8 Plus",
-    "iPhone 8",
-    "iPhone 7 Plus",
-    "iPhone 7",
-    "iPhone 6s Plus",
-    "iPhone 6s",
-    "iPhone 6 Plus",
-    "iPhone 6",
-    "iPhone SE 3",
-    "iPhone SE 2",
-    "iPhone SE"
-  ],
+  Apple:["iPhone 18 Pro Max","iPhone 18 Pro","iPhone 18","iPhone 17 Pro Max","iPhone 17 Pro","iPhone 17 Air","iPhone 17","iPhone 17e","iPhone 16 Pro Max","iPhone 16 Pro","iPhone 16 Plus","iPhone 16","iPhone 16e","iPhone 15 Pro Max","iPhone 15 Pro","iPhone 15 Plus","iPhone 15","iPhone 14 Pro Max","iPhone 14 Pro","iPhone 14 Plus","iPhone 14","iPhone 13 Pro Max","iPhone 13 Pro","iPhone 13","iPhone 13 mini","iPhone 12 Pro Max","iPhone 12 Pro","iPhone 12","iPhone 12 mini","iPhone 11 Pro Max","iPhone 11 Pro","iPhone 11","iPhone XS Max","iPhone XS","iPhone XR","iPhone X","iPhone 8 Plus","iPhone 8","iPhone 7 Plus","iPhone 7","iPhone 6s Plus","iPhone 6s","iPhone 6 Plus","iPhone 6","iPhone SE 3","iPhone SE 2","iPhone SE"],
 
-  Samsung:[
-    "Galaxy S26 Ultra",
-    "Galaxy S26+",
-    "Galaxy S26",
-    "Galaxy S25 Ultra",
-    "Galaxy S25 Edge",
-    "Galaxy S25+",
-    "Galaxy S25",
-    "Galaxy S24 Ultra",
-    "Galaxy S24+",
-    "Galaxy S24",
-    "Galaxy S23 Ultra",
-    "Galaxy S23+",
-    "Galaxy S23",
-    "Galaxy S22 Ultra",
-    "Galaxy S22+",
-    "Galaxy S22",
-    "Galaxy S21 Ultra",
-    "Galaxy S21+",
-    "Galaxy S21",
-    "Galaxy S20 Ultra",
-    "Galaxy S20+",
-    "Galaxy S20",
-    "Galaxy Note 20 Ultra",
-    "Galaxy Note 20",
-    "Galaxy Z Fold7",
-    "Galaxy Z Flip7",
-    "Galaxy Z Fold6",
-    "Galaxy Z Flip6",
-    "Galaxy Z Fold5",
-    "Galaxy Z Flip5",
-    "Galaxy A57",
-    "Galaxy A37",
-    "Galaxy A56",
-    "Galaxy A36",
-    "Galaxy A55",
-    "Galaxy A35",
-    "Galaxy A54",
-    "Galaxy A34",
-    "Galaxy A53",
-    "Galaxy A33",
-    "Galaxy A52",
-    "Galaxy A32",
-    "Galaxy A51",
-    "Galaxy A31",
-    "Galaxy A72",
-    "Galaxy A71",
-    "Galaxy A70",
-    "Galaxy A50",
-    "Galaxy A30",
-    "Galaxy M56",
-    "Galaxy M55",
-    "Galaxy M54",
-    "Galaxy M53",
-    "Galaxy M52",
-    "Galaxy M51"
-  ],
+  Samsung:["Galaxy S26 Ultra","Galaxy S26+","Galaxy S26","Galaxy S25 Ultra","Galaxy S25 Edge","Galaxy S25+","Galaxy S25","Galaxy S24 Ultra","Galaxy S24+","Galaxy S24","Galaxy S23 Ultra","Galaxy S23+","Galaxy S23","Galaxy S22 Ultra","Galaxy S22+","Galaxy S22","Galaxy S21 Ultra","Galaxy S21+","Galaxy S21","Galaxy S20 Ultra","Galaxy S20+","Galaxy S20","Galaxy Note 20 Ultra","Galaxy Note 20","Galaxy Z Fold7","Galaxy Z Flip7","Galaxy Z Fold6","Galaxy Z Flip6","Galaxy Z Fold5","Galaxy Z Flip5","Galaxy A57","Galaxy A37","Galaxy A56","Galaxy A36","Galaxy A55","Galaxy A35","Galaxy A54","Galaxy A34","Galaxy A53","Galaxy A33","Galaxy A52","Galaxy A32","Galaxy A51","Galaxy A31","Galaxy A72","Galaxy A71","Galaxy A70","Galaxy A50","Galaxy A30","Galaxy M56","Galaxy M55","Galaxy M54","Galaxy M53","Galaxy M52","Galaxy M51"],
 
-  Xiaomi:[
-    "Xiaomi 17 Ultra",
-    "Xiaomi 17 Pro",
-    "Xiaomi 17",
-    "Xiaomi 15 Ultra",
-    "Xiaomi 15 Pro",
-    "Xiaomi 15",
-    "Xiaomi 14 Ultra",
-    "Xiaomi 14 Pro",
-    "Xiaomi 14",
-    "Xiaomi 13 Ultra",
-    "Xiaomi 13 Pro",
-    "Xiaomi 13",
-    "Xiaomi 12S Ultra",
-    "Xiaomi 12 Pro",
-    "Xiaomi 12",
-    "Redmi Note 17 Pro+",
-    "Redmi Note 17 Pro",
-    "Redmi Note 17",
-    "Redmi Note 16 Pro+",
-    "Redmi Note 16 Pro",
-    "Redmi Note 16",
-    "Redmi Note 15 Pro+",
-    "Redmi Note 15 Pro",
-    "Redmi Note 15",
-    "Redmi Note 14 Pro+",
-    "Redmi Note 14 Pro",
-    "Redmi Note 14",
-    "Redmi Note 13 Pro+",
-    "Redmi Note 13 Pro",
-    "Redmi Note 13",
-    "Redmi Note 12 Pro+",
-    "Redmi Note 12 Pro",
-    "Redmi Note 12",
-    "POCO F8 Ultra",
-    "POCO F8 Pro",
-    "POCO F8",
-    "POCO F7 Ultra",
-    "POCO F7 Pro",
-    "POCO F7",
-    "POCO F6 Pro",
-    "POCO F6",
-    "POCO X8 Pro",
-    "POCO X8",
-    "POCO X7 Pro",
-    "POCO X7",
-    "Redmi 15",
-    "Redmi 14C",
-    "Redmi 13"
-  ],
+  Xiaomi:["Xiaomi 17 Ultra","Xiaomi 17 Pro","Xiaomi 17","Xiaomi 15 Ultra","Xiaomi 15 Pro","Xiaomi 15","Xiaomi 14 Ultra","Xiaomi 14 Pro","Xiaomi 14","Xiaomi 13 Ultra","Xiaomi 13 Pro","Xiaomi 13","Xiaomi 12S Ultra","Xiaomi 12 Pro","Xiaomi 12","Redmi Note 17 Pro+","Redmi Note 17 Pro","Redmi Note 17","Redmi Note 16 Pro+","Redmi Note 16 Pro","Redmi Note 16","Redmi Note 15 Pro+","Redmi Note 15 Pro","Redmi Note 15","Redmi Note 14 Pro+","Redmi Note 14 Pro","Redmi Note 14","Redmi Note 13 Pro+","Redmi Note 13 Pro","Redmi Note 13","Redmi Note 12 Pro+","Redmi Note 12 Pro","Redmi Note 12","POCO F8 Ultra","POCO F8 Pro","POCO F8","POCO F7 Ultra","POCO F7 Pro","POCO F7","POCO F6 Pro","POCO F6","POCO X8 Pro","POCO X8","POCO X7 Pro","POCO X7","Redmi 15","Redmi 14C","Redmi 13"],
 
-  Google:[
-    "Pixel 10 Pro XL",
-    "Pixel 10 Pro",
-    "Pixel 10",
-    "Pixel 9 Pro XL",
-    "Pixel 9 Pro",
-    "Pixel 9",
-    "Pixel 8 Pro",
-    "Pixel 8",
-    "Pixel 7 Pro",
-    "Pixel 7",
-    "Pixel 6 Pro",
-    "Pixel 6",
-    "Pixel 5",
-    "Pixel 4 XL",
-    "Pixel 4"
-  ],
+  Google:["Pixel 10 Pro XL","Pixel 10 Pro","Pixel 10","Pixel 9 Pro XL","Pixel 9 Pro","Pixel 9","Pixel 8 Pro","Pixel 8","Pixel 7 Pro","Pixel 7","Pixel 6 Pro","Pixel 6","Pixel 5","Pixel 4 XL","Pixel 4"],
 
-  Huawei:[
-    "Mate 80 Pro",
-    "Mate 80",
-    "Mate 70 Pro",
-    "Mate 70",
-    "Mate 60 Pro",
-    "Mate 60",
-    "Mate 50 Pro",
-    "Mate 50",
-    "Pura 80 Pro",
-    "Pura 80",
-    "P70 Pro",
-    "P70",
-    "P60 Pro",
-    "P60",
-    "P50 Pro",
-    "P50",
-    "Nova 14 Pro",
-    "Nova 14",
-    "Nova 13 Pro",
-    "Nova 13",
-    "Nova 12 Pro",
-    "Nova 12"
-  ],
+  Huawei:["Mate 80 Pro","Mate 80","Mate 70 Pro","Mate 70","Mate 60 Pro","Mate 60","Mate 50 Pro","Mate 50","Pura 80 Pro","Pura 80","P70 Pro","P70","P60 Pro","P60","P50 Pro","P50","Nova 14 Pro","Nova 14","Nova 13 Pro","Nova 13","Nova 12 Pro","Nova 12"],
 
-  OPPO:[
-    "Find X9 Ultra",
-    "Find X9 Pro",
-    "Find X9",
-    "Find X8 Ultra",
-    "Find X8 Pro",
-    "Find X8",
-    "Find X7 Ultra",
-    "Find X7",
-    "Find X6 Pro",
-    "Find X6",
-    "Reno 15 Pro",
-    "Reno 15",
-    "Reno 14 Pro",
-    "Reno 14",
-    "Reno 13 Pro",
-    "Reno 13",
-    "Reno 12 Pro",
-    "Reno 12",
-    "Reno 11 Pro",
-    "Reno 11",
-    "A6 Pro",
-    "A5 Pro",
-    "A4 Pro"
-  ],
+  OPPO:["Find X9 Ultra","Find X9 Pro","Find X9","Find X8 Ultra","Find X8 Pro","Find X8","Find X7 Ultra","Find X7","Find X6 Pro","Find X6","Reno 15 Pro","Reno 15","Reno 14 Pro","Reno 14","Reno 13 Pro","Reno 13","Reno 12 Pro","Reno 12","Reno 11 Pro","Reno 11","A6 Pro","A5 Pro","A4 Pro"],
 
-  HONOR:[
-    "Magic8 Pro",
-    "Magic8",
-    "Magic7 Pro",
-    "Magic7",
-    "Magic6 Pro",
-    "Magic6",
-    "Magic V5",
-    "Magic V3",
-    "Magic V2",
-    "HONOR 600 Pro",
-    "HONOR 600",
-    "HONOR 400 Pro",
-    "HONOR 400",
-    "HONOR 200 Pro",
-    "HONOR 200",
-    "HONOR 100 Pro",
-    "HONOR 100",
-    "X60 Pro",
-    "X50 Pro",
-    "X50"
-  ],
+  HONOR:["Magic8 Pro","Magic8","Magic7 Pro","Magic7","Magic6 Pro","Magic6","Magic V5","Magic V3","Magic V2","HONOR 600 Pro","HONOR 600","HONOR 400 Pro","HONOR 400","HONOR 200 Pro","HONOR 200","HONOR 100 Pro","HONOR 100","X60 Pro","X50 Pro","X50"],
 
-  OnePlus:[
-    "OnePlus 14",
-    "OnePlus 13",
-    "OnePlus 12",
-    "OnePlus 11",
-    "OnePlus 10 Pro",
-    "OnePlus 9 Pro",
-    "OnePlus 9",
-    "OnePlus Nord 6",
-    "OnePlus Nord 5",
-    "OnePlus Nord 4",
-    "OnePlus Nord 3",
-    "OnePlus Open",
-    "OnePlus Open 2"
-  ],
+  OnePlus:["OnePlus 14","OnePlus 13","OnePlus 12","OnePlus 11","OnePlus 10 Pro","OnePlus 9 Pro","OnePlus 9","OnePlus Nord 6","OnePlus Nord 5","OnePlus Nord 4","OnePlus Nord 3","OnePlus Open","OnePlus Open 2"],
 
-  realme:[
-    "GT 8 Pro",
-    "GT 8",
-    "GT 7 Pro",
-    "GT 7",
-    "GT 6",
-    "GT 5 Pro",
-    "GT 5",
-    "GT Neo 7",
-    "GT Neo 6",
-    "realme 15 Pro",
-    "realme 15",
-    "realme 14 Pro+",
-    "realme 14 Pro",
-    "realme 14",
-    "realme 13 Pro+",
-    "realme 13 Pro",
-    "realme 13",
-    "C75",
-    "C65",
-    "C55"
-  ],
+  realme:["GT 8 Pro","GT 8","GT 7 Pro","GT 7","GT 6","GT 5 Pro","GT 5","GT Neo 7","GT Neo 6","realme 15 Pro","realme 15","realme 14 Pro+","realme 14 Pro","realme 14","realme 13 Pro+","realme 13 Pro","realme 13","C75","C65","C55"],
 
-  Motorola:[
-    "Edge 70 Ultra",
-    "Edge 70 Pro",
-    "Edge 70",
-    "Edge 60 Ultra",
-    "Edge 60 Pro",
-    "Edge 60",
-    "Edge 50 Ultra",
-    "Edge 50 Pro",
-    "Edge 50",
-    "Razr 70 Ultra",
-    "Razr 70",
-    "Razr 60 Ultra",
-    "Razr 60",
-    "Moto G75",
-    "Moto G85",
-    "Moto G55"
-  ],
+  Motorola:["Edge 70 Ultra","Edge 70 Pro","Edge 70","Edge 60 Ultra","Edge 60 Pro","Edge 60","Edge 50 Ultra","Edge 50 Pro","Edge 50","Razr 70 Ultra","Razr 70","Razr 60 Ultra","Razr 60","Moto G75","Moto G85","Moto G55"],
 
-  Sony:[
-    "Xperia 1 VII",
-    "Xperia 1 VI",
-    "Xperia 1 V",
-    "Xperia 5 V",
-    "Xperia 5 IV",
-    "Xperia 10 VII",
-    "Xperia 10 VI",
-    "Xperia 10 V"
-  ],
+  Sony:["Xperia 1 VII","Xperia 1 VI","Xperia 1 V","Xperia 5 V","Xperia 5 IV","Xperia 10 VII","Xperia 10 VI","Xperia 10 V"],
 
-  Nokia:[
-    "Nokia X60",
-    "Nokia X50",
-    "Nokia X30",
-    "Nokia G60",
-    "Nokia G50",
-    "Nokia G42",
-    "Nokia C32",
-    "Nokia C22"
-  ],
+  Nokia:["Nokia X60","Nokia X50","Nokia X30","Nokia G60","Nokia G50","Nokia G42","Nokia C32","Nokia C22"],
 
-  Tecno:[
-    "Phantom V Fold2",
-    "Phantom V Fold",
-    "Phantom V Flip2",
-    "Phantom V Flip",
-    "Camon 40 Pro",
-    "Camon 40",
-    "Camon 30 Pro",
-    "Camon 30",
-    "Spark 40 Pro+",
-    "Spark 40 Pro",
-    "Spark 40",
-    "Spark 30 Pro",
-    "Spark 30"
-  ],
+  Tecno:["Phantom V Fold2","Phantom V Fold","Phantom V Flip2","Phantom V Flip","Camon 40 Pro","Camon 40","Camon 30 Pro","Camon 30","Spark 40 Pro+","Spark 40 Pro","Spark 40","Spark 30 Pro","Spark 30"],
 
-  Infinix:[
-    "Note 50 Pro+",
-    "Note 50 Pro",
-    "Note 50",
-    "Note 40 Pro+",
-    "Note 40 Pro",
-    "Note 40",
-    "GT 30 Pro",
-    "GT 30",
-    "GT 20 Pro",
-    "Zero 40",
-    "Zero 30",
-    "Hot 60 Pro+",
-    "Hot 60 Pro",
-    "Hot 60",
-    "Hot 50 Pro+",
-    "Hot 50 Pro",
-    "Hot 50"
-  ],
+  Infinix:["Note 50 Pro+","Note 50 Pro","Note 50","Note 40 Pro+","Note 40 Pro","Note 40","GT 30 Pro","GT 30","GT 20 Pro","Zero 40","Zero 30","Hot 60 Pro+","Hot 60 Pro","Hot 60","Hot 50 Pro+","Hot 50 Pro","Hot 50"],
 
-  "أخرى":[
-    "موديل آخر"
-  ]
+  "أخرى":["موديل آخر"]
 
 };
 
@@ -2186,374 +1832,59 @@ const PHONE_MODELS = {
 
 const MODEL_COLORS = {
 
-  "Apple|iPhone 18 Pro Max":[
-    "أسود",
-    "فضي",
-    "جليدي",
-    "عنابي"
-  ],
+  "Apple|iPhone 18 Pro Max":["أسود","فضي","جليدي","عنابي"],
+  "Apple|iPhone 18 Pro":["أسود","فضي","جليدي","عنابي"],
+  "Apple|iPhone 18":["أسود","أبيض","أزرق","وردي"],
+  "Apple|iPhone 17 Pro Max":["فضي","برتقالي كوني","أزرق داكن"],
+  "Apple|iPhone 17 Pro":["فضي","برتقالي كوني","أزرق داكن"],
+  "Apple|iPhone 17 Air":["أسود","أبيض","أزرق سماوي","ذهبي فاتح"],
+  "Apple|iPhone 17":["أسود","أبيض","أزرق","أخضر","وردي"],
+  "Apple|iPhone 17e":["أسود","أبيض","وردي فاتح"],
+  "Apple|iPhone 16 Pro Max":["تيتانيوم أسود","تيتانيوم أبيض","تيتانيوم طبيعي","تيتانيوم صحراوي"],
+  "Apple|iPhone 16 Pro":["تيتانيوم أسود","تيتانيوم أبيض","تيتانيوم طبيعي","تيتانيوم صحراوي"],
+  "Apple|iPhone 16 Plus":["أسود","أبيض","وردي","تركوازي","أزرق"],
+  "Apple|iPhone 16":["أسود","أبيض","وردي","تركوازي","أزرق"],
+  "Apple|iPhone 16e":["أسود","أبيض"],
+  "Apple|iPhone 15 Pro Max":["تيتانيوم أسود","تيتانيوم أبيض","تيتانيوم أزرق","تيتانيوم طبيعي"],
+  "Apple|iPhone 15 Pro":["تيتانيوم أسود","تيتانيوم أبيض","تيتانيوم أزرق","تيتانيوم طبيعي"],
+  "Apple|iPhone 15 Plus":["أسود","أزرق","أخضر","أصفر","وردي"],
+  "Apple|iPhone 15":["أسود","أزرق","أخضر","أصفر","وردي"],
+  "Apple|iPhone 14 Pro Max":["بنفسجي عميق","ذهبي","فضي","أسود فضائي"],
+  "Apple|iPhone 14 Pro":["بنفسجي عميق","ذهبي","فضي","أسود فضائي"],
+  "Apple|iPhone 14 Plus":["أسود","أبيض نجمي","أزرق","بنفسجي","أحمر"],
+  "Apple|iPhone 14":["أسود","أبيض نجمي","أزرق","بنفسجي","أحمر"],
+  "Apple|iPhone 13 Pro Max":["أزرق سييرا","فضي","ذهبي","جرافيت","أخضر ألبيني"],
+  "Apple|iPhone 13 Pro":["أزرق سييرا","فضي","ذهبي","جرافيت","أخضر ألبيني"],
+  "Apple|iPhone 13":["وردي","أزرق","منتصف الليل","أبيض نجمي","أحمر","أخضر"],
+  "Apple|iPhone 13 mini":["وردي","أزرق","منتصف الليل","أبيض نجمي","أحمر","أخضر"],
+  "Apple|iPhone 12 Pro Max":["أزرق باسيفيكي","ذهبي","فضي","جرافيت"],
+  "Apple|iPhone 12 Pro":["أزرق باسيفيكي","ذهبي","فضي","جرافيت"],
+  "Apple|iPhone 12":["أسود","أبيض","أحمر","أخضر","أزرق","بنفسجي"],
+  "Apple|iPhone 12 mini":["أسود","أبيض","أحمر","أخضر","أزرق","بنفسجي"],
+  "Apple|iPhone 11 Pro Max":["أخضر ليلي","فضي","ذهبي","رمادي فلكي"],
+  "Apple|iPhone 11 Pro":["أخضر ليلي","فضي","ذهبي","رمادي فلكي"],
+  "Apple|iPhone 11":["أسود","أبيض","أخضر","أصفر","بنفسجي","أحمر"],
 
-  "Apple|iPhone 18 Pro":[
-    "أسود",
-    "فضي",
-    "جليدي",
-    "عنابي"
-  ],
+  "Samsung|Galaxy S26 Ultra":["أسود","أبيض","فضي","أزرق"],
+  "Samsung|Galaxy S26+":["أسود","أبيض","فضي","أزرق"],
+  "Samsung|Galaxy S26":["أسود","أبيض","فضي","أزرق"],
+  "Samsung|Galaxy S25 Ultra":["تيتانيوم أسود","تيتانيوم فضي","تيتانيوم أزرق","تيتانيوم رمادي","تيتانيوم أبيض"],
+  "Samsung|Galaxy S25 Edge":["فضي تيتانيوم","أسود تيتانيوم","أزرق تيتانيوم"],
+  "Samsung|Galaxy S25+":["كحلي","أزرق ثلجي","فضي","رمادي"],
+  "Samsung|Galaxy S25":["كحلي","أزرق ثلجي","فضي","رمادي"],
+  "Samsung|Galaxy S24 Ultra":["تيتانيوم أسود","تيتانيوم رمادي","تيتانيوم بنفسجي","تيتانيوم أصفر"],
+  "Samsung|Galaxy S24+":["أسود","بنفسجي","أصفر","أزرق","أخضر"],
+  "Samsung|Galaxy S24":["أسود","بنفسجي","أصفر","أزرق","أخضر"],
+  "Samsung|Galaxy S23 Ultra":["أسود","أخضر","كريمي","بنفسجي"],
+  "Samsung|Galaxy S23+":["أسود","كريمي","أخضر","بنفسجي"],
+  "Samsung|Galaxy S23":["أسود","كريمي","أخضر","بنفسجي"],
 
-  "Apple|iPhone 18":[
-    "أسود",
-    "أبيض",
-    "أزرق",
-    "وردي"
-  ],
-
-  "Apple|iPhone 17 Pro Max":[
-    "فضي",
-    "برتقالي كوني",
-    "أزرق داكن"
-  ],
-
-  "Apple|iPhone 17 Pro":[
-    "فضي",
-    "برتقالي كوني",
-    "أزرق داكن"
-  ],
-
-  "Apple|iPhone 17 Air":[
-    "أسود",
-    "أبيض",
-    "أزرق سماوي",
-    "ذهبي فاتح"
-  ],
-
-  "Apple|iPhone 17":[
-    "أسود",
-    "أبيض",
-    "أزرق",
-    "أخضر",
-    "وردي"
-  ],
-
-  "Apple|iPhone 17e":[
-    "أسود",
-    "أبيض",
-    "وردي فاتح"
-  ],
-
-  "Apple|iPhone 16 Pro Max":[
-    "تيتانيوم أسود",
-    "تيتانيوم أبيض",
-    "تيتانيوم طبيعي",
-    "تيتانيوم صحراوي"
-  ],
-
-  "Apple|iPhone 16 Pro":[
-    "تيتانيوم أسود",
-    "تيتانيوم أبيض",
-    "تيتانيوم طبيعي",
-    "تيتانيوم صحراوي"
-  ],
-
-  "Apple|iPhone 16 Plus":[
-    "أسود",
-    "أبيض",
-    "وردي",
-    "تركوازي",
-    "أزرق"
-  ],
-
-  "Apple|iPhone 16":[
-    "أسود",
-    "أبيض",
-    "وردي",
-    "تركوازي",
-    "أزرق"
-  ],
-
-  "Apple|iPhone 16e":[
-    "أسود",
-    "أبيض"
-  ],
-
-  "Apple|iPhone 15 Pro Max":[
-    "تيتانيوم أسود",
-    "تيتانيوم أبيض",
-    "تيتانيوم أزرق",
-    "تيتانيوم طبيعي"
-  ],
-
-  "Apple|iPhone 15 Pro":[
-    "تيتانيوم أسود",
-    "تيتانيوم أبيض",
-    "تيتانيوم أزرق",
-    "تيتانيوم طبيعي"
-  ],
-
-  "Apple|iPhone 15 Plus":[
-    "أسود",
-    "أزرق",
-    "أخضر",
-    "أصفر",
-    "وردي"
-  ],
-
-  "Apple|iPhone 15":[
-    "أسود",
-    "أزرق",
-    "أخضر",
-    "أصفر",
-    "وردي"
-  ],
-
-  "Apple|iPhone 14 Pro Max":[
-    "بنفسجي عميق",
-    "ذهبي",
-    "فضي",
-    "أسود فضائي"
-  ],
-
-  "Apple|iPhone 14 Pro":[
-    "بنفسجي عميق",
-    "ذهبي",
-    "فضي",
-    "أسود فضائي"
-  ],
-
-  "Apple|iPhone 14 Plus":[
-    "أسود",
-    "أبيض نجمي",
-    "أزرق",
-    "بنفسجي",
-    "أحمر"
-  ],
-
-  "Apple|iPhone 14":[
-    "أسود",
-    "أبيض نجمي",
-    "أزرق",
-    "بنفسجي",
-    "أحمر"
-  ],
-
-  "Apple|iPhone 13 Pro Max":[
-    "أزرق سييرا",
-    "فضي",
-    "ذهبي",
-    "جرافيت",
-    "أخضر ألبيني"
-  ],
-
-  "Apple|iPhone 13 Pro":[
-    "أزرق سييرا",
-    "فضي",
-    "ذهبي",
-    "جرافيت",
-    "أخضر ألبيني"
-  ],
-
-  "Apple|iPhone 13":[
-    "وردي",
-    "أزرق",
-    "منتصف الليل",
-    "أبيض نجمي",
-    "أحمر",
-    "أخضر"
-  ],
-
-  "Apple|iPhone 13 mini":[
-    "وردي",
-    "أزرق",
-    "منتصف الليل",
-    "أبيض نجمي",
-    "أحمر",
-    "أخضر"
-  ],
-
-  "Apple|iPhone 12 Pro Max":[
-    "أزرق باسيفيكي",
-    "ذهبي",
-    "فضي",
-    "جرافيت"
-  ],
-
-  "Apple|iPhone 12 Pro":[
-    "أزرق باسيفيكي",
-    "ذهبي",
-    "فضي",
-    "جرافيت"
-  ],
-
-  "Apple|iPhone 12":[
-    "أسود",
-    "أبيض",
-    "أحمر",
-    "أخضر",
-    "أزرق",
-    "بنفسجي"
-  ],
-
-  "Apple|iPhone 12 mini":[
-    "أسود",
-    "أبيض",
-    "أحمر",
-    "أخضر",
-    "أزرق",
-    "بنفسجي"
-  ],
-
-  "Apple|iPhone 11 Pro Max":[
-    "أخضر ليلي",
-    "فضي",
-    "ذهبي",
-    "رمادي فلكي"
-  ],
-
-  "Apple|iPhone 11 Pro":[
-    "أخضر ليلي",
-    "فضي",
-    "ذهبي",
-    "رمادي فلكي"
-  ],
-
-  "Apple|iPhone 11":[
-    "أسود",
-    "أبيض",
-    "أخضر",
-    "أصفر",
-    "بنفسجي",
-    "أحمر"
-  ],
-
-  "Samsung|Galaxy S26 Ultra":[
-    "أسود",
-    "أبيض",
-    "فضي",
-    "أزرق"
-  ],
-
-  "Samsung|Galaxy S26+":[
-    "أسود",
-    "أبيض",
-    "فضي",
-    "أزرق"
-  ],
-
-  "Samsung|Galaxy S26":[
-    "أسود",
-    "أبيض",
-    "فضي",
-    "أزرق"
-  ],
-
-  "Samsung|Galaxy S25 Ultra":[
-    "تيتانيوم أسود",
-    "تيتانيوم فضي",
-    "تيتانيوم أزرق",
-    "تيتانيوم رمادي",
-    "تيتانيوم أبيض"
-  ],
-
-  "Samsung|Galaxy S25 Edge":[
-    "فضي تيتانيوم",
-    "أسود تيتانيوم",
-    "أزرق تيتانيوم"
-  ],
-
-  "Samsung|Galaxy S25+":[
-    "كحلي",
-    "أزرق ثلجي",
-    "فضي",
-    "رمادي"
-  ],
-
-  "Samsung|Galaxy S25":[
-    "كحلي",
-    "أزرق ثلجي",
-    "فضي",
-    "رمادي"
-  ],
-
-  "Samsung|Galaxy S24 Ultra":[
-    "تيتانيوم أسود",
-    "تيتانيوم رمادي",
-    "تيتانيوم بنفسجي",
-    "تيتانيوم أصفر"
-  ],
-
-  "Samsung|Galaxy S24+":[
-    "أسود",
-    "بنفسجي",
-    "أصفر",
-    "أزرق",
-    "أخضر"
-  ],
-
-  "Samsung|Galaxy S24":[
-    "أسود",
-    "بنفسجي",
-    "أصفر",
-    "أزرق",
-    "أخضر"
-  ],
-
-  "Samsung|Galaxy S23 Ultra":[
-    "أسود",
-    "أخضر",
-    "كريمي",
-    "بنفسجي"
-  ],
-
-  "Samsung|Galaxy S23+":[
-    "أسود",
-    "كريمي",
-    "أخضر",
-    "بنفسجي"
-  ],
-
-  "Samsung|Galaxy S23":[
-    "أسود",
-    "كريمي",
-    "أخضر",
-    "بنفسجي"
-  ],
-
-  "Xiaomi|Xiaomi 17 Ultra":[
-    "أسود",
-    "أبيض",
-    "أزرق"
-  ],
-
-  "Xiaomi|Xiaomi 17 Pro":[
-    "أسود",
-    "أبيض",
-    "بنفسجي"
-  ],
-
-  "Xiaomi|Xiaomi 17":[
-    "أسود",
-    "أبيض",
-    "أزرق",
-    "أخضر"
-  ],
-
-  "Xiaomi|Xiaomi 15 Ultra":[
-    "أسود",
-    "أبيض",
-    "فضي"
-  ],
-
-  "Xiaomi|Xiaomi 15 Pro":[
-    "أسود",
-    "أبيض",
-    "رمادي"
-  ],
-
-  "Xiaomi|Xiaomi 15":[
-    "أسود",
-    "أبيض",
-    "أخضر",
-    "بنفسجي"
-  ]
+  "Xiaomi|Xiaomi 17 Ultra":["أسود","أبيض","أزرق"],
+  "Xiaomi|Xiaomi 17 Pro":["أسود","أبيض","بنفسجي"],
+  "Xiaomi|Xiaomi 17":["أسود","أبيض","أزرق","أخضر"],
+  "Xiaomi|Xiaomi 15 Ultra":["أسود","أبيض","فضي"],
+  "Xiaomi|Xiaomi 15 Pro":["أسود","أبيض","رمادي"],
+  "Xiaomi|Xiaomi 15":["أسود","أبيض","أخضر","بنفسجي"]
 
 };
 
@@ -2561,144 +1892,21 @@ const MODEL_COLORS = {
 /* ألوان عامة كاحتياط للموديلات التي لم نحددها */
 const BRAND_COLORS = {
 
-  Apple:[
-    "أسود",
-    "أبيض",
-    "فضي",
-    "ذهبي",
-    "أزرق",
-    "أخضر",
-    "وردي",
-    "بنفسجي",
-    "أحمر"
-  ],
-
-  Samsung:[
-    "أسود",
-    "أبيض",
-    "فضي",
-    "رمادي",
-    "أزرق",
-    "أخضر",
-    "بنفسجي",
-    "وردي"
-  ],
-
-  Xiaomi:[
-    "أسود",
-    "أبيض",
-    "فضي",
-    "أزرق",
-    "أخضر",
-    "بنفسجي"
-  ],
-
-  Google:[
-    "أسود",
-    "أبيض",
-    "رمادي",
-    "أزرق",
-    "أخضر",
-    "وردي"
-  ],
-
-  Huawei:[
-    "أسود",
-    "أبيض",
-    "فضي",
-    "ذهبي",
-    "أزرق",
-    "أخضر",
-    "بنفسجي"
-  ],
-
-  OPPO:[
-    "أسود",
-    "أبيض",
-    "فضي",
-    "أزرق",
-    "أخضر",
-    "بنفسجي"
-  ],
-
-  HONOR:[
-    "أسود",
-    "أبيض",
-    "فضي",
-    "أزرق",
-    "أخضر",
-    "بنفسجي"
-  ],
-
-  OnePlus:[
-    "أسود",
-    "أبيض",
-    "فضي",
-    "أخضر",
-    "أزرق"
-  ],
-
-  realme:[
-    "أسود",
-    "أبيض",
-    "ذهبي",
-    "فضي",
-    "أزرق",
-    "أخضر"
-  ],
-
-  Motorola:[
-    "أسود",
-    "أبيض",
-    "فضي",
-    "أزرق",
-    "أخضر",
-    "بنفسجي"
-  ],
-
-  Sony:[
-    "أسود",
-    "أبيض",
-    "فضي",
-    "أزرق",
-    "أخضر",
-    "بنفسجي"
-  ],
-
-  Nokia:[
-    "أسود",
-    "أبيض",
-    "أزرق",
-    "رمادي",
-    "أخضر"
-  ],
-
-  Tecno:[
-    "أسود",
-    "أبيض",
-    "أزرق",
-    "أخضر",
-    "بنفسجي"
-  ],
-
-  Infinix:[
-    "أسود",
-    "أبيض",
-    "فضي",
-    "أزرق",
-    "أخضر",
-    "ذهبي"
-  ],
-
-  "أخرى":[
-    "أسود",
-    "أبيض",
-    "فضي",
-    "ذهبي",
-    "أزرق",
-    "أخضر",
-    "أحمر"
-  ]
+  Apple:["أسود","أبيض","فضي","ذهبي","أزرق","أخضر","وردي","بنفسجي","أحمر"],
+  Samsung:["أسود","أبيض","فضي","رمادي","أزرق","أخضر","بنفسجي","وردي"],
+  Xiaomi:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
+  Google:["أسود","أبيض","رمادي","أزرق","أخضر","وردي"],
+  Huawei:["أسود","أبيض","فضي","ذهبي","أزرق","أخضر","بنفسجي"],
+  OPPO:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
+  HONOR:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
+  OnePlus:["أسود","أبيض","فضي","أخضر","أزرق"],
+  realme:["أسود","أبيض","ذهبي","فضي","أزرق","أخضر"],
+  Motorola:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
+  Sony:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
+  Nokia:["أسود","أبيض","أزرق","رمادي","أخضر"],
+  Tecno:["أسود","أبيض","أزرق","أخضر","بنفسجي"],
+  Infinix:["أسود","أبيض","فضي","أزرق","أخضر","ذهبي"],
+  "أخرى":["أسود","أبيض","فضي","ذهبي","أزرق","أخضر","أحمر"]
 
 };
 
@@ -4531,6 +3739,7 @@ function validate(){
 
 /* ================================================================
    بيانات المزاد التي نحفظها داخل notes
+   (نسخة احتياطية تقرأها صفحة التفاصيل عند غياب الأعمدة)
    ================================================================ */
 
 function buildAuctionMeta(){
@@ -4577,7 +3786,7 @@ function buildAuctionMeta(){
       duration,
     ends_at:
       endsAt,
-    extension_seconds:30,
+    extension_seconds:60,
     participation_deposit:5000
   };
 
@@ -4955,10 +4164,6 @@ form.addEventListener(
 
       /* =====================================================
          3) بناء السجل
-         
-         ملاحظة:
-         لا نستخدم auction_* columns.
-         نستخدم فقط أعمدة devices الموجودة.
       ===================================================== */
 
       const start =
@@ -5017,25 +4222,113 @@ form.addEventListener(
       };
 
 
+      /*
+        أعمدة المزاد الحقيقية التي تقرأها
+        دالة place_auction_bid:
+        - auction_ends_at: وقت النهاية = الآن + المدة
+        - auction_bid_step: الزيادة حسب سعر البداية
+        - auction_start_price / auction_current_price
+      */
+
+      if(HAS_AUCTION_COLUMNS){
+
+        row.auction_ends_at =
+          new Date(
+            Date.now() +
+            hours() *
+            60 *
+            60 *
+            1000
+          ).toISOString();
+
+        row.auction_bid_step =
+          bidStepForPrice(
+            start
+          );
+
+        row.auction_start_price =
+          start;
+
+        row.auction_current_price =
+          start;
+
+      }
+
+
       /* =====================================================
          4) الحفظ في devices
+         إذا كان عمود اختياري (سعر البداية/الحالي)
+         غير موجود نعيد المحاولة بدونه.
+         أما auction_ends_at و auction_bid_step
+         فلا نتجاوزهما أبداً.
       ===================================================== */
 
-      const {
-        error
-      } =
-        await supabase
-          .from("devices")
-          .insert(
-            row
+      const OPTIONAL_COLUMNS = [
+        "auction_start_price",
+        "auction_current_price"
+      ];
+
+
+      let insertError =
+        null;
+
+
+      for(
+        let attempt = 0;
+        attempt <= OPTIONAL_COLUMNS.length;
+        attempt++
+      ){
+
+        const {
+          error
+        } =
+          await supabase
+            .from("devices")
+            .insert(
+              row
+            );
+
+
+        insertError =
+          error ||
+          null;
+
+
+        if(!error){
+          break;
+        }
+
+
+        const msg =
+          String(
+            error.message ||
+            ""
           );
 
 
-      if(error){
+        const missing =
+          OPTIONAL_COLUMNS.find(
+            c =>
+              msg.includes(c) &&
+              row[c] !== undefined
+          );
+
+
+        if(!missing){
+          break;
+        }
+
+
+        delete row[missing];
+
+      }
+
+
+      if(insertError){
 
         await removeUploaded();
 
-        throw error;
+        throw insertError;
 
       }
 
@@ -5069,11 +4362,6 @@ form.addEventListener(
       await removeUploaded();
 
 
-      /*
-        نعرض الخطأ الحقيقي إذا كان واضحاً
-        حتى نعرف أي مشكلة بالضبط أثناء الربط.
-      */
-
       const message =
         String(
           err?.message ||
@@ -5085,8 +4373,13 @@ form.addEventListener(
         message.includes(
           "column"
         ) &&
-        message.includes(
-          "does not exist"
+        (
+          message.includes(
+            "does not exist"
+          ) ||
+          message.includes(
+            "schema cache"
+          )
         )
       ){
 
