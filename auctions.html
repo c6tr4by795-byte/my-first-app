@@ -18,491 +18,104 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{
-  margin:0;
-  min-height:100dvh;
-  background:var(--bg);
-  color:var(--ink);
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
-  -webkit-font-smoothing:antialiased;
-  text-rendering:optimizeLegibility
-}
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 button,input{font:inherit}
 button{border:0;background:none;color:inherit;cursor:pointer}
 a{text-decoration:none;color:inherit}
 :focus-visible{outline:3px solid var(--purple);outline-offset:2px}
-
-.page{
-  width:min(100%,520px);
-  margin:0 auto;
-  padding:0 14px calc(92px + var(--safe-bottom))
-}
+.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(92px + var(--safe-bottom))}
 
 /* header */
-header{
-  margin-inline:-14px;
-  padding:0 14px 14px;
-  background:linear-gradient(145deg,#fff 0%,#f7f5ff 55%,#ece8ff 100%);
-  border-radius:0 0 24px 24px;
-  border-bottom:1px solid var(--line);
-  box-shadow:0 10px 26px rgba(23,32,42,.05)
-}
-.topbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding:12px 2px 0
-}
-.brand-mini{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  line-height:.9
-}
-.brand-mini strong{
-  font-size:16px;
-  letter-spacing:-.03em
-}
-.brand-mini span{
-  font-size:7px;
-  font-weight:800;
-  letter-spacing:.15em;
-  color:#8a96a3;
-  margin-top:3px
-}
-.icon-btn{
-  width:39px;
-  height:34px;
-  display:grid;
-  place-items:center;
-  border:1px solid var(--edge);
-  border-radius:12px;
-  background:#fff;
-  color:var(--purple);
-  box-shadow:0 7px 18px rgba(23,32,42,.045)
-}
-.icon-btn svg{
-  width:20px;
-  height:20px;
-  fill:none;
-  stroke:currentColor;
-  stroke-width:1.9;
-  stroke-linecap:round;
-  stroke-linejoin:round
-}
+header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg,#fff 0%,#f7f5ff 55%,#ece8ff 100%);
+  border-radius:0 0 24px 24px;border-bottom:1px solid var(--line);box-shadow:0 10px 26px rgba(23,32,42,.05)}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 2px 0}
+.brand-mini{display:flex;flex-direction:column;align-items:center;line-height:.9}
+.brand-mini strong{font-size:16px;letter-spacing:-.03em}
+.brand-mini span{font-size:7px;font-weight:800;letter-spacing:.15em;color:#8a96a3;margin-top:3px}
+.icon-btn{width:39px;height:34px;display:grid;place-items:center;border:1px solid var(--edge);border-radius:12px;background:#fff;
+  color:var(--purple);box-shadow:0 7px 18px rgba(23,32,42,.045)}
+.icon-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .spacer{width:39px}
+.head-copy{margin:14px 2px 12px}
+.head-copy h1{margin:0;font-size:22px;letter-spacing:-.035em;font-weight:950}
+.head-copy p{margin:3px 0 0;font-size:11px;font-weight:700;color:var(--muted)}
 
-.head-copy{
-  margin:14px 2px 12px
-}
-.head-copy h1{
-  margin:0;
-  font-size:22px;
-  letter-spacing:-.035em;
-  font-weight:950
-}
-.head-copy p{
-  margin:3px 0 0;
-  font-size:11px;
-  font-weight:700;
-  color:var(--muted)
-}
-
-.search-wrap{
-  position:relative
-}
-.search{
-  width:100%;
-  height:45px;
-  border:1px solid var(--edge);
-  border-radius:15px;
-  background:#fff;
-  padding:0 44px 0 42px;
-  outline:none;
-  color:var(--ink);
-  box-shadow:0 8px 22px rgba(98,70,217,.10)
-}
+.search-wrap{position:relative}
+.search{width:100%;height:45px;border:1px solid var(--edge);border-radius:15px;background:#fff;padding:0 44px 0 42px;outline:none;color:var(--ink);
+  box-shadow:0 8px 22px rgba(98,70,217,.10)}
 .search::placeholder{color:#9ba6aa}
 .search:focus{border-color:#a99cf0}
-.search-icon{
-  position:absolute;
-  inset-inline-end:14px;
-  top:50%;
-  transform:translateY(-50%);
-  width:21px;
-  height:21px;
-  pointer-events:none;
-  color:var(--purple);
-  fill:none;
-  stroke:currentColor;
-  stroke-width:1.9
-}
-.search-clear{
-  position:absolute;
-  inset-inline-start:10px;
-  top:50%;
-  transform:translateY(-50%);
-  width:33px;
-  height:33px;
-  border-radius:11px;
-  background:var(--purple-soft);
-  display:grid;
-  place-items:center;
-  opacity:0;
-  pointer-events:none;
-  color:var(--purple-dark)
-}
-.search-clear svg{
-  width:15px;
-  height:15px;
-  fill:none;
-  stroke:currentColor;
-  stroke-width:1.9
-}
-.search-wrap.has-value .search-clear{
-  opacity:1;
-  pointer-events:auto
-}
+.search-icon{position:absolute;inset-inline-end:14px;top:50%;transform:translateY(-50%);width:21px;height:21px;pointer-events:none;color:var(--purple);
+  fill:none;stroke:currentColor;stroke-width:1.9}
+.search-clear{position:absolute;inset-inline-start:10px;top:50%;transform:translateY(-50%);width:33px;height:33px;border-radius:11px;background:var(--purple-soft);
+  display:grid;place-items:center;opacity:0;pointer-events:none;color:var(--purple-dark)}
+.search-clear svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.9}
+.search-wrap.has-value .search-clear{opacity:1;pointer-events:auto}
 
 /* filters */
-.filters{
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-  padding:14px 2px 4px;
-  scrollbar-width:none;
-  -webkit-overflow-scrolling:touch
-}
+.filters{display:flex;gap:8px;overflow-x:auto;padding:14px 2px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .filters::-webkit-scrollbar{display:none}
-.fchip{
-  flex:0 0 auto;
-  padding:8px 14px;
-  border-radius:999px;
-  background:#fff;
-  border:1px solid var(--line);
-  font-size:11px;
-  font-weight:800;
-  color:#4b5563;
-  white-space:nowrap
-}
-.fchip.active{
-  background:var(--purple-soft);
-  border-color:#c9bff7;
-  color:var(--purple-dark);
-  font-weight:900
-}
-.result{
-  margin:10px 4px 8px;
-  font-size:11px;
-  font-weight:800;
-  color:var(--muted)
-}
+.fchip{flex:0 0 auto;padding:8px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:11px;font-weight:800;color:#4b5563;white-space:nowrap}
+.fchip.active{background:var(--purple-soft);border-color:#c9bff7;color:var(--purple-dark);font-weight:900}
+.result{margin:10px 4px 8px;font-size:11px;font-weight:800;color:var(--muted)}
 
 /* auction cards */
-.list{
-  display:flex;
-  flex-direction:column;
-  gap:10px
-}
-.a-card{
-  position:relative;
-  display:flex;
-  gap:12px;
-  padding:10px;
-  border-radius:20px;
-  background:#fff;
-  border:1px solid var(--line);
-  box-shadow:0 8px 20px rgba(98,70,217,.07);
-  cursor:pointer;
-  -webkit-tap-highlight-color:transparent
-}
+.list{display:flex;flex-direction:column;gap:10px}
+.a-card{position:relative;display:flex;gap:12px;padding:10px;border-radius:20px;background:#fff;border:1px solid var(--line);
+  box-shadow:0 8px 20px rgba(98,70,217,.07);cursor:pointer;-webkit-tap-highlight-color:transparent}
 .a-card:active{transform:scale(.99)}
 .a-card.done{opacity:.65}
-
-.a-img{
-  position:relative;
-  flex:0 0 116px;
-  height:142px;
-  border-radius:15px;
-  overflow:hidden;
-  display:grid;
-  place-items:center;
-  background:linear-gradient(145deg,#fff,#f1edff);
-  border:1px solid var(--line)
-}
-.a-img img{
-  width:100%;
-  height:100%;
-  object-fit:cover
-}
-.a-img svg{
-  height:76%;
-  width:auto;
-  filter:drop-shadow(0 8px 10px rgba(74,52,184,.22))
-}
-.fav{
-  position:absolute;
-  top:6px;
-  inset-inline-start:6px;
-  width:32px;
-  height:32px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  background:rgba(255,255,255,.97);
-  color:#7b7f84;
-  box-shadow:0 5px 13px rgba(23,32,42,.11)
-}
-.fav svg{
-  width:17px;
-  height:17px;
-  fill:none;
-  stroke:currentColor;
-  stroke-width:1.8;
-  stroke-linecap:round;
-  stroke-linejoin:round
-}
+.a-img{position:relative;flex:0 0 116px;height:142px;border-radius:15px;overflow:hidden;display:grid;place-items:center;
+  background:linear-gradient(145deg,#fff,#f1edff);border:1px solid var(--line)}
+.a-img img{width:100%;height:100%;object-fit:cover}
+.a-img svg{height:76%;width:auto;filter:drop-shadow(0 8px 10px rgba(74,52,184,.22))}
+.fav{position:absolute;top:6px;inset-inline-start:6px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.97);color:#7b7f84;box-shadow:0 5px 13px rgba(23,32,42,.11)}
+.fav svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .fav.active{color:var(--purple)}
 .fav.active svg{fill:var(--purple)}
+.pill{position:absolute;bottom:6px;inset-inline:6px;padding:3px 0;border-radius:9px;background:rgba(255,255,255,.96);color:var(--purple-dark);
+  text-align:center;font-size:10.5px;font-weight:950;direction:ltr;font-variant-numeric:tabular-nums;box-shadow:0 4px 10px rgba(23,32,42,.08)}
+.pill.hot{background:#fff4ec;color:var(--hot)}
 
-.pill{
-  position:absolute;
-  bottom:6px;
-  inset-inline:6px;
-  padding:3px 0;
-  border-radius:9px;
-  background:rgba(255,255,255,.96);
-  color:var(--purple-dark);
-  text-align:center;
-  font-size:10.5px;
-  font-weight:950;
-  direction:ltr;
-  font-variant-numeric:tabular-nums;
-  box-shadow:0 4px 10px rgba(23,32,42,.08)
-}
-.pill.hot{
-  background:#fff4ec;
-  color:var(--hot)
-}
+.a-body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between;padding:2px 0}
+.a-title{margin:0;font-size:14.5px;font-weight:900;line-height:1.3;letter-spacing:-.02em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.a-meta{margin-top:3px;font-size:10px;font-weight:750;color:var(--muted);line-height:1.5}
+.a-tags{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.tag{padding:3px 8px;border-radius:8px;background:var(--purple-soft);color:var(--purple-dark);font-size:9px;font-weight:900}
+.a-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid #f1eefb}
+.lbl{display:block;font-size:9px;font-weight:800;color:var(--muted)}
+.a-price{font-size:16px;font-weight:950;color:var(--purple-dark);letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.a-price small{font-size:9px;font-weight:800;color:var(--muted);margin-inline-start:3px}
+.go{flex:0 0 auto;height:36px;padding:0 16px;border-radius:12px;color:#fff;font-size:12px;font-weight:950;
+  background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 6px 14px rgba(98,70,217,.28)}
+.a-card.done .go{background:#9ca3af;box-shadow:none}
 
-.a-body{
-  flex:1;
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  padding:2px 0
-}
-.a-title{
-  margin:0;
-  font-size:14.5px;
-  font-weight:900;
-  line-height:1.3;
-  letter-spacing:-.02em;
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  overflow:hidden
-}
-.a-meta{
-  margin-top:3px;
-  font-size:10px;
-  font-weight:750;
-  color:var(--muted);
-  line-height:1.5
-}
-.a-tags{
-  display:flex;
-  gap:6px;
-  margin-top:6px;
-  flex-wrap:wrap
-}
-.tag{
-  padding:3px 8px;
-  border-radius:8px;
-  background:var(--purple-soft);
-  color:var(--purple-dark);
-  font-size:9px;
-  font-weight:900
-}
-.a-foot{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap:8px;
-  margin-top:8px;
-  padding-top:8px;
-  border-top:1px solid #f1eefb
-}
-.lbl{
-  display:block;
-  font-size:9px;
-  font-weight:800;
-  color:var(--muted)
-}
-.a-price{
-  font-size:16px;
-  font-weight:950;
-  color:var(--purple-dark);
-  letter-spacing:-.02em;
-  font-variant-numeric:tabular-nums;
-  white-space:nowrap
-}
-.a-price small{
-  font-size:9px;
-  font-weight:800;
-  color:var(--muted);
-  margin-inline-start:3px
-}
-.go{
-  flex:0 0 auto;
-  height:36px;
-  padding:0 16px;
-  border-radius:12px;
-  color:#fff;
-  font-size:12px;
-  font-weight:950;
-  background:linear-gradient(145deg,#6246d9,#8b6cf0);
-  box-shadow:0 6px 14px rgba(98,70,217,.28)
-}
-.a-card.done .go{
-  background:#9ca3af;
-  box-shadow:none
-}
+.empty{padding:34px 18px;text-align:center;border-radius:20px;background:#fff;border:1px dashed #cfc7f3}
+.empty h3{margin:0 0 4px;font-size:15px;font-weight:900}
+.empty p{margin:0;font-size:11px;font-weight:700;color:var(--muted);line-height:1.7}
 
-.empty{
-  padding:34px 18px;
-  text-align:center;
-  border-radius:20px;
-  background:#fff;
-  border:1px dashed #cfc7f3
-}
-.empty h3{
-  margin:0 0 4px;
-  font-size:15px;
-  font-weight:900
-}
-.empty p{
-  margin:0;
-  font-size:11px;
-  font-weight:700;
-  color:var(--muted);
-  line-height:1.7
-}
+/* bottom nav */
+.bottom-wrap{position:fixed;left:0;right:0;bottom:-7px;width:100%;padding:7px 10px calc(7px + var(--safe-bottom));z-index:100;pointer-events:none}
+.bottom-nav{width:min(100%,520px);margin:0 auto;min-height:64px;padding:5px;border-radius:20px;background:rgba(255,255,255,.97);border:1px solid #e7ecef;
+  box-shadow:0 10px 28px rgba(23,32,42,.10);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);pointer-events:auto;
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;align-items:center}
+.nav-item{min-width:0;min-height:52px;padding:4px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:15px;color:#7e8992}
+.nav-item.active{color:var(--purple-dark);background:var(--purple-soft)}
+.nav-icon{width:20px;height:20px;flex:0 0 20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.nav-item>span:not(.add-button){font-size:8.5px;line-height:1;font-weight:900;white-space:nowrap}
+.add-button{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(145deg,#176b87,#32b8c4);box-shadow:0 6px 14px rgba(23,107,135,.18)}
+.add-button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 
-/* bottom nav (نفس الصفحة الرئيسية) */
-.bottom-wrap{
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:-7px;
-  width:100%;
-  padding:7px 10px calc(7px + var(--safe-bottom));
-  z-index:100;
-  pointer-events:none
-}
-.bottom-nav{
-  width:min(100%,520px);
-  margin:0 auto;
-  min-height:64px;
-  padding:5px;
-  border-radius:20px;
-  background:rgba(255,255,255,.97);
-  border:1px solid #e7ecef;
-  box-shadow:0 10px 28px rgba(23,32,42,.10);
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-  pointer-events:auto;
-  display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:3px;
-  align-items:center
-}
-.nav-item{
-  min-width:0;
-  min-height:52px;
-  padding:4px 2px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:3px;
-  border-radius:15px;
-  color:#7e8992
-}
-.nav-item.active{
-  color:var(--purple-dark);
-  background:var(--purple-soft)
-}
-.nav-icon{
-  width:20px;
-  height:20px;
-  flex:0 0 20px;
-  fill:none;
-  stroke:currentColor;
-  stroke-width:1.7;
-  stroke-linecap:round;
-  stroke-linejoin:round
-}
-.nav-item>span:not(.add-button){
-  font-size:8.5px;
-  line-height:1;
-  font-weight:900;
-  white-space:nowrap
-}
-.add-button{
-  width:38px;
-  height:38px;
-  border-radius:13px;
-  display:grid;
-  place-items:center;
-  color:#fff;
-  background:linear-gradient(145deg,#176b87,#32b8c4);
-  box-shadow:0 6px 14px rgba(23,107,135,.18)
-}
-.add-button svg{
-  width:20px;
-  height:20px;
-  fill:none;
-  stroke:currentColor;
-  stroke-width:2;
-  stroke-linecap:round
-}
-
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:calc(88px + var(--safe-bottom));
-  transform:translateX(-50%) translateY(16px);
-  max-width:calc(100% - 40px);
-  padding:10px 14px;
-  border-radius:13px;
-  background:#1e2c30;
-  color:#fff;
-  font-size:11px;
-  font-weight:800;
-  box-shadow:0 14px 34px rgba(24,44,49,.12);
-  opacity:0;
-  pointer-events:none;
-  transition:.25s ease;
-  z-index:120;
-  text-align:center
-}
-.toast.show{
-  opacity:1;
-  transform:translateX(-50%) translateY(0)
-}
-
-@media (prefers-reduced-motion:reduce){
-  .toast,.a-card{transition:none}
-  .a-card:active{transform:none}
-}
-@media (max-width:360px){
-  .a-img{flex-basis:100px}
-  .a-price{font-size:14.5px}
-  .go{padding:0 12px}
-}
+.toast{position:fixed;left:50%;bottom:calc(88px + var(--safe-bottom));transform:translateX(-50%) translateY(16px);max-width:calc(100% - 40px);
+  padding:10px 14px;border-radius:13px;background:#1e2c30;color:#fff;font-size:11px;font-weight:800;box-shadow:0 14px 34px rgba(24,44,49,.12);
+  opacity:0;pointer-events:none;transition:.25s ease;z-index:120;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion:reduce){.toast,.a-card{transition:none}.a-card:active{transform:none}}
+@media (max-width:360px){.a-img{flex-basis:100px}.a-price{font-size:14.5px}.go{padding:0 12px}}
 </style>
 </head>
 
@@ -511,8 +124,15 @@ header{
 <main class="page">
 
 <header>
+
   <div class="topbar">
-    <button class="icon-btn" id="back" type="button" aria-label="رجوع">
+
+    <button
+      class="icon-btn"
+      id="back"
+      type="button"
+      aria-label="رجوع"
+    >
       <svg viewBox="0 0 24 24">
         <path d="M9 5l7 7-7 7"/>
       </svg>
@@ -524,6 +144,7 @@ header{
     </div>
 
     <span class="spacer"></span>
+
   </div>
 
   <div class="head-copy">
@@ -532,7 +153,11 @@ header{
   </div>
 
   <div class="search-wrap" id="searchWrap">
-    <svg class="search-icon" viewBox="0 0 24 24">
+
+    <svg
+      class="search-icon"
+      viewBox="0 0 24 24"
+    >
       <circle cx="11" cy="11" r="7"/>
       <path d="m20 20-4-4"/>
     </svg>
@@ -547,33 +172,101 @@ header{
       aria-label="البحث عن مزاد"
     >
 
-    <button id="clear" class="search-clear" type="button" aria-label="مسح البحث">
+    <button
+      id="clear"
+      class="search-clear"
+      type="button"
+      aria-label="مسح البحث"
+    >
       <svg viewBox="0 0 24 24">
         <path d="M7 7l10 10M17 7 7 17"/>
       </svg>
     </button>
+
   </div>
+
 </header>
 
-<div class="filters" id="filters" role="tablist" aria-label="ترتيب المزادات">
-  <button class="fchip active" data-f="all" role="tab" aria-selected="true">الكل</button>
-  <button class="fchip" data-f="soon" role="tab" aria-selected="false">تنتهي قريباً</button>
-  <button class="fchip" data-f="new" role="tab" aria-selected="false">الأحدث</button>
-  <button class="fchip" data-f="low" role="tab" aria-selected="false">الأقل سعراً</button>
-  <button class="fchip" data-f="high" role="tab" aria-selected="false">الأعلى سعراً</button>
+<div
+  class="filters"
+  id="filters"
+  role="tablist"
+  aria-label="ترتيب المزادات"
+>
+
+  <button
+    class="fchip active"
+    data-f="all"
+    role="tab"
+    aria-selected="true"
+  >
+    الكل
+  </button>
+
+  <button
+    class="fchip"
+    data-f="soon"
+    role="tab"
+    aria-selected="false"
+  >
+    تنتهي قريباً
+  </button>
+
+  <button
+    class="fchip"
+    data-f="new"
+    role="tab"
+    aria-selected="false"
+  >
+    الأحدث
+  </button>
+
+  <button
+    class="fchip"
+    data-f="low"
+    role="tab"
+    aria-selected="false"
+  >
+    الأقل سعراً
+  </button>
+
+  <button
+    class="fchip"
+    data-f="high"
+    role="tab"
+    aria-selected="false"
+  >
+    الأعلى سعراً
+  </button>
+
 </div>
 
-<div class="result" id="result"></div>
+<div
+  class="result"
+  id="result"
+></div>
 
-<section class="list" id="list" aria-live="polite"></section>
+<section
+  class="list"
+  id="list"
+  aria-live="polite"
+></section>
 
 </main>
 
+
 <div class="bottom-wrap">
+
   <nav class="bottom-nav">
 
-    <a class="nav-item" href="home.html">
-      <svg class="nav-icon" viewBox="0 0 24 24">
+    <a
+      class="nav-item"
+      href="home.html"
+    >
+      <svg
+        class="nav-icon"
+        viewBox="0 0 24 24"
+      >
         <path d="m3 10 9-7 9 7"/>
         <path d="M5 9v11h14V9"/>
         <path d="M9 20v-6h6v6"/>
@@ -581,15 +274,30 @@ header{
       <span>الرئيسية</span>
     </a>
 
-    <a class="nav-item" href="market.html">
-      <svg class="nav-icon" viewBox="0 0 24 24">
-        <rect x="4" y="4" width="16" height="16" rx="3"/>
+    <a
+      class="nav-item"
+      href="market.html"
+    >
+      <svg
+        class="nav-icon"
+        viewBox="0 0 24 24"
+      >
+        <rect
+          x="4"
+          y="4"
+          width="16"
+          height="16"
+          rx="3"
+        />
         <path d="M8 9h8M8 13h8M8 17h5"/>
       </svg>
       <span>الأجهزة</span>
     </a>
 
-    <a class="nav-item" href="sell.html">
+    <a
+      class="nav-item"
+      href="sell.html"
+    >
       <span class="add-button">
         <svg viewBox="0 0 24 24">
           <path d="M12 5v14M5 12h14"/>
@@ -598,124 +306,918 @@ header{
       <span>إضافة</span>
     </a>
 
-    <a class="nav-item" href="favorites.html">
-      <svg class="nav-icon" viewBox="0 0 24 24">
+    <a
+      class="nav-item"
+      href="favorites.html"
+    >
+      <svg
+        class="nav-icon"
+        viewBox="0 0 24 24"
+      >
         <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
       </svg>
       <span>المفضلة</span>
     </a>
 
-    <a class="nav-item" href="profile.html">
-      <svg class="nav-icon" viewBox="0 0 24 24">
-        <circle cx="12" cy="8" r="3"/>
+    <a
+      class="nav-item"
+      href="profile.html"
+    >
+      <svg
+        class="nav-icon"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          cx="12"
+          cy="8"
+          r="3"
+        />
         <path d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5"/>
       </svg>
       <span>حسابي</span>
     </a>
 
   </nav>
+
 </div>
 
-<div class="toast" id="toast" role="status"></div>
+<div
+  class="toast"
+  id="toast"
+  role="status"
+></div>
+
 
 <script type="module">
 
 /* =========================================================
-   MZAD PHONE
-   auctions.html
-   ربط حقيقي مع Supabase
-   ========================================================= */
+   SUPABASE
+========================================================= */
 
-import { supabase } from "./js/supabase.js?v=auctions-live-1";
-
-
-/* =========================================================
-   عناصر الصفحة
-   ========================================================= */
-
-const $ = id => document.getElementById(id);
-
-const fmt = n => {
-  const value = Number(n || 0);
-  return value.toLocaleString("en-US");
-};
+import {
+  supabase
+} from "./js/supabase.js?v=auctions-final-1";
 
 
 /* =========================================================
-   الحالة
-   ========================================================= */
+   HELPERS
+========================================================= */
 
-let auctions = [];
-let filter = "all";
-let query = "";
-let toastT = null;
+const $ =
+  id =>
+    document.getElementById(id);
 
-let favorites = new Set();
 
-try{
-  const saved = JSON.parse(localStorage.getItem("mzad_favorites") || "[]");
+const fmt =
+  n =>
+    Number(n || 0)
+      .toLocaleString("en-US");
 
-  if(Array.isArray(saved)){
-    favorites = new Set(saved.map(String));
+
+const escapeHtml =
+  value =>
+    String(value ?? "")
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;")
+      .replace(/'/g,"&#039;");
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let AUCTIONS = [];
+
+let filter =
+  "all";
+
+let query =
+  "";
+
+let toastT =
+  null;
+
+let loading =
+  false;
+
+
+/* =========================================================
+   FAVORITES
+========================================================= */
+
+const FAVORITE_KEY =
+  "mzad_favorite_auctions";
+
+
+function getFavorites(){
+
+  try{
+
+    const raw =
+      localStorage.getItem(
+        FAVORITE_KEY
+      );
+
+    if(!raw){
+      return new Set();
+    }
+
+    const parsed =
+      JSON.parse(raw);
+
+    if(!Array.isArray(parsed)){
+      return new Set();
+    }
+
+    return new Set(
+      parsed.map(
+        id => String(id)
+      )
+    );
+
+  }catch{
+
+    return new Set();
+
   }
-}catch{
-  favorites = new Set();
+
+}
+
+
+function saveFavorites(set){
+
+  try{
+
+    localStorage.setItem(
+      FAVORITE_KEY,
+      JSON.stringify(
+        [...set]
+      )
+    );
+
+  }catch{
+
+    /* لا نوقف الصفحة إذا فشل localStorage */
+
+  }
+
+}
+
+
+let favs =
+  getFavorites();
+
+
+/* =========================================================
+   SEARCH NORMALIZATION
+========================================================= */
+
+const norm =
+  value =>
+    String(value || "")
+      .toLowerCase()
+      .normalize("NFKC")
+      .replace(/[أإآٱ]/g,"ا")
+      .replace(/ة/g,"ه")
+      .replace(/ى/g,"ي")
+      .replace(/ؤ/g,"و")
+      .replace(/ئ/g,"ي")
+      .replace(/ايفون/g,"iphone")
+      .replace(/اىفون/g,"iphone")
+      .replace(/اي فون/g,"iphone")
+      .replace(/ايفن/g,"iphone")
+      .replace(/سامسونج/g,"samsung")
+      .replace(/سامسنج/g,"samsung")
+      .replace(/شاومي/g,"xiaomi")
+      .replace(/شياومي/g,"xiaomi")
+      .replace(/جوجل/g,"google")
+      .replace(/قوقل/g,"google")
+      .replace(/بكسل/g,"pixel")
+      .replace(/ون بلس/g,"oneplus")
+      .replace(/ون بلاس/g,"oneplus")
+      .replace(/\s+/g," ")
+      .trim();
+
+
+/* =========================================================
+   IMAGE PARSER
+========================================================= */
+
+function parseImages(value){
+
+  if(!value){
+    return [];
+  }
+
+  let data =
+    value;
+
+  if(typeof data === "string"){
+
+    try{
+
+      data =
+        JSON.parse(data);
+
+    }catch{
+
+      data =
+        data
+          .split(",")
+          .map(
+            x =>
+              x.trim()
+          )
+          .filter(Boolean);
+
+    }
+
+  }
+
+  if(!Array.isArray(data)){
+
+    if(
+      typeof data === "object"
+    ){
+
+      data =
+        Object.values(data);
+
+    }else{
+
+      data =
+        [data];
+
+    }
+
+  }
+
+  return data
+    .map(item => {
+
+      if(!item){
+        return "";
+      }
+
+      if(
+        typeof item === "string"
+      ){
+
+        return item.trim();
+
+      }
+
+      if(
+        typeof item === "object"
+      ){
+
+        return (
+          item.url ||
+          item.path ||
+          item.src ||
+          item.publicUrl ||
+          item.public_url ||
+          ""
+        );
+
+      }
+
+      return "";
+
+    })
+    .filter(Boolean);
+
+}
+
+
+function imageUrl(path){
+
+  if(!path){
+    return "";
+  }
+
+  if(
+    path.startsWith("http://") ||
+    path.startsWith("https://") ||
+    path.startsWith("data:")
+  ){
+
+    return path;
+
+  }
+
+  const clean =
+    path
+      .replace(/^\/+/,"")
+      .replace(
+        /^device-images\//,
+        ""
+      );
+
+  const {
+    data
+  } =
+    supabase
+      .storage
+      .from("device-images")
+      .getPublicUrl(
+        clean
+      );
+
+  return data?.publicUrl || "";
+
 }
 
 
 /* =========================================================
-   إعدادات
-   ========================================================= */
+   AUCTION TIME
+========================================================= */
 
-const BUCKET_NAME = "device-images";
+function endTimeOf(auction){
 
-const now = () => Date.now();
+  if(
+    !auction?.auction_ends_at
+  ){
 
-const MINUTE = 60 * 1000;
-const HOUR = 60 * MINUTE;
-const DAY = 24 * HOUR;
+    return null;
+
+  }
+
+  const time =
+    new Date(
+      auction.auction_ends_at
+    ).getTime();
+
+  return Number.isFinite(time)
+    ? time
+    : null;
+
+}
 
 
-/* =========================================================
-   تطبيع النص للبحث
-   ========================================================= */
+function isEnded(auction){
 
-function norm(value){
+  const end =
+    endTimeOf(auction);
 
-  return String(value || "")
-    .toLowerCase()
-    .normalize("NFKC")
+  if(
+    end !== null &&
+    end <= Date.now()
+  ){
 
-    .replace(/[أإآٱ]/g,"ا")
-    .replace(/ة/g,"ه")
-    .replace(/ى/g,"ي")
+    return true;
 
-    .replace(/ايفون/g,"iphone")
-    .replace(/آيفون/g,"iphone")
-    .replace(/ايفن/g,"iphone")
+  }
 
-    .replace(/سامسونج/g,"samsung")
-    .replace(/سامسنغ/g,"samsung")
+  if(
+    String(
+      auction.auction_status || ""
+    ).toLowerCase() === "ended"
+  ){
 
-    .replace(/شاومي/g,"xiaomi")
-    .replace(/شياومي/g,"xiaomi")
+    return true;
 
-    .replace(/جوجل/g,"google")
-    .replace(/قوقل/g,"google")
+  }
 
-    .replace(/بكسل/g,"pixel")
+  return false;
 
-    .replace(/ون بلس/g,"oneplus")
-    .replace(/ونبلس/g,"oneplus")
+}
 
-    .replace(/\s+/g," ")
-    .trim();
+
+function isActive(auction){
+
+  return !isEnded(
+    auction
+  );
+
+}
+
+
+function timeText(left){
+
+  if(
+    left <= 0
+  ){
+
+    return "انتهى";
+
+  }
+
+  const D =
+    24 * 60 * 60 * 1000;
+
+  const H =
+    60 * 60 * 1000;
+
+  const M =
+    60 * 1000;
+
+  if(
+    left >= D
+  ){
+
+    const days =
+      Math.floor(
+        left / D
+      );
+
+    const hours =
+      Math.floor(
+        (left % D) / H
+      );
+
+    return `${days} يوم ${String(hours).padStart(2,"0")}:00`;
+
+  }
+
+  const p =
+    n =>
+      String(n)
+        .padStart(2,"0");
+
+  return `
+    ${p(
+      Math.floor(
+        left / H
+      )
+    )}:${p(
+      Math.floor(
+        (left % H) / M
+      )
+    )}:${p(
+      Math.floor(
+        (left % M) / 1000
+      )
+    )}
+  `;
+
 }
 
 
 /* =========================================================
-   صورة افتراضية فقط إذا الجهاز ما عنده صورة
-   ========================================================= */
+   CURRENT PRICE
+========================================================= */
+
+function currentPrice(auction){
+
+  return Number(
+    auction.auction_current_price ??
+    auction.price ??
+    auction.auction_start_price ??
+    0
+  );
+
+}
+
+
+/* =========================================================
+   BID COUNT
+========================================================= */
+
+function bidCount(auction){
+
+  return Number(
+    auction.bid_count ||
+    auction.bids_count ||
+    auction.auction_bid_count ||
+    0
+  );
+
+}
+
+
+/* =========================================================
+   LOAD BID COUNTS
+========================================================= */
+
+async function loadBidCounts(){
+
+  if(!AUCTIONS.length){
+    return;
+  }
+
+  const ids =
+    AUCTIONS
+      .map(
+        a => a.id
+      )
+      .filter(
+        id =>
+          id !== null &&
+          id !== undefined &&
+          id !== ""
+      );
+
+  if(!ids.length){
+    return;
+  }
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabase
+
+        .from("auction_bids")
+
+        .select(`
+          auction_id,
+          amount
+        `)
+
+        .in(
+          "auction_id",
+          ids
+        );
+
+    if(error){
+
+      console.error(
+        "AUCTION BID COUNTS ERROR:",
+        error
+      );
+
+      return;
+
+    }
+
+    const counts =
+      new Map();
+
+    for(
+      const row
+      of data || []
+    ){
+
+      const key =
+        String(
+          row.auction_id
+        );
+
+      counts.set(
+        key,
+        (
+          counts.get(key) ||
+          0
+        ) + 1
+      );
+
+    }
+
+    AUCTIONS =
+      AUCTIONS.map(
+        auction => ({
+          ...auction,
+          bid_count:
+            counts.get(
+              String(auction.id)
+            ) || 0
+        })
+      );
+
+  }catch(error){
+
+    console.error(
+      "BID COUNT LOAD ERROR:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   LOAD REAL AUCTIONS
+========================================================= */
+
+async function loadAuctions(){
+
+  if(loading){
+    return;
+  }
+
+  loading =
+    true;
+
+  try{
+
+    $("result").textContent =
+      "جاري تحميل المزادات...";
+
+    $("list").innerHTML =
+      "";
+
+    /*
+      نجيب المزادات الحقيقية
+      من جدول devices فقط.
+    */
+
+    let response =
+      await supabase
+
+        .from("devices")
+
+        .select(`
+          id,
+          created_at,
+          brand,
+          model,
+          storage,
+          color,
+          battery_health,
+          condition,
+          price,
+          images,
+          location,
+          sale_type,
+          seller_name,
+          auction_start_price,
+          auction_current_price,
+          auction_bid_step,
+          auction_ends_at,
+          auction_status,
+          notes
+        `)
+
+        .eq(
+          "sale_type",
+          "auction"
+        )
+
+        .order(
+          "created_at",
+          {
+            ascending:false
+          }
+        )
+
+        .limit(100);
+
+
+    /*
+      إذا صار خطأ بسبب بعض أعمدة المزاد،
+      نجرب استعلام أساسي حتى لا تنهار الصفحة.
+    */
+
+    if(response.error){
+
+      console.error(
+        "AUCTIONS FULL QUERY ERROR:",
+        response.error
+      );
+
+      const fallback =
+        await supabase
+
+          .from("devices")
+
+          .select(`
+            id,
+            created_at,
+            brand,
+            model,
+            storage,
+            color,
+            battery_health,
+            condition,
+            price,
+            images,
+            location,
+            sale_type,
+            seller_name,
+            notes
+          `)
+
+          .eq(
+            "sale_type",
+            "auction"
+          )
+
+          .order(
+            "created_at",
+            {
+              ascending:false
+            }
+          )
+
+          .limit(100);
+
+      if(fallback.error){
+
+        throw fallback.error;
+
+      }
+
+      AUCTIONS =
+        fallback.data || [];
+
+    }else{
+
+      AUCTIONS =
+        response.data || [];
+
+    }
+
+
+    /*
+      نجلب عدد المزايدات الحقيقي.
+    */
+
+    await loadBidCounts();
+
+
+    render();
+
+  }catch(error){
+
+    console.error(
+      "AUCTIONS LOAD ERROR:",
+      error
+    );
+
+    AUCTIONS = [];
+
+    $("result").textContent =
+      "";
+
+    $("list").innerHTML = `
+
+      <div class="empty">
+
+        <h3>
+          تعذر تحميل المزادات
+        </h3>
+
+        <p>
+          تأكد من الاتصال أو حاول مرة ثانية.
+        </p>
+
+      </div>
+
+    `;
+
+    toast(
+      "تعذر تحميل المزادات"
+    );
+
+  }finally{
+
+    loading =
+      false;
+
+  }
+
+}
+
+
+/* =========================================================
+   SEARCH MATCH
+========================================================= */
+
+function matchesSearch(auction){
+
+  if(!query){
+    return true;
+  }
+
+  const text =
+    [
+      auction.brand,
+      auction.model,
+      auction.storage,
+      auction.color,
+      auction.condition,
+      auction.location,
+      auction.seller_name,
+      auction.notes
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+  return norm(text)
+    .includes(
+      norm(query)
+    );
+
+}
+
+
+/* =========================================================
+   VISIBLE LIST
+========================================================= */
+
+function visible(){
+
+  let list =
+    AUCTIONS
+      .filter(
+        matchesSearch
+      );
+
+
+  /*
+    تنتهي قريباً:
+    المزادات التي بقي عليها 30 دقيقة أو أقل
+    ولم تنتهِ بعد.
+  */
+
+  if(
+    filter === "soon"
+  ){
+
+    const now =
+      Date.now();
+
+    const thirtyMinutes =
+      30 * 60 * 1000;
+
+    list =
+      list.filter(
+        auction => {
+
+          const end =
+            endTimeOf(
+              auction
+            );
+
+          return (
+            end !== null &&
+            end > now &&
+            end - now <= thirtyMinutes
+          );
+
+        }
+      );
+
+    list =
+      [...list].sort(
+        (a,b) =>
+          endTimeOf(a) -
+          endTimeOf(b)
+      );
+
+  }
+
+
+  if(
+    filter === "new"
+  ){
+
+    list =
+      [...list].sort(
+        (a,b) =>
+          new Date(
+            b.created_at || 0
+          ).getTime() -
+          new Date(
+            a.created_at || 0
+          ).getTime()
+      );
+
+  }
+
+
+  if(
+    filter === "low"
+  ){
+
+    list =
+      [...list].sort(
+        (a,b) =>
+          currentPrice(a) -
+          currentPrice(b)
+      );
+
+  }
+
+
+  if(
+    filter === "high"
+  ){
+
+    list =
+      [...list].sort(
+        (a,b) =>
+          currentPrice(b) -
+          currentPrice(a)
+      );
+
+  }
+
+
+  return list;
+
+}
+
+
+/* =========================================================
+   FALLBACK PHONE SVG
+========================================================= */
 
 const tones = [
   "#6246d9",
@@ -724,10 +1226,14 @@ const tones = [
   "#7c5cf0"
 ];
 
-function phone(color){
+
+function phone(c){
 
   return `
-    <svg viewBox="0 0 120 240" aria-hidden="true">
+    <svg
+      viewBox="0 0 120 240"
+      aria-hidden="true"
+    >
       <rect
         x="4"
         y="4"
@@ -743,7 +1249,7 @@ function phone(color){
         width="100"
         height="220"
         rx="17"
-        fill="${color}"
+        fill="${c}"
       />
 
       <rect
@@ -754,871 +1260,627 @@ function phone(color){
         rx="4.5"
         fill="#0c0f11"
       />
+
     </svg>
   `;
+
 }
 
 
 /* =========================================================
-   تحويل مسار الصورة إلى رابط Supabase
-   ========================================================= */
-
-function imageUrl(value){
-
-  if(!value) return "";
-
-  let path = value;
-
-  if(typeof value === "object"){
-
-    if(value.url) path = value.url;
-    else if(value.path) path = value.path;
-    else if(value.name) path = value.name;
-    else return "";
-  }
-
-  path = String(path).trim();
-
-  if(!path) return "";
-
-  /* إذا هو رابط كامل */
-  if(/^https?:\/\//i.test(path)){
-    return path;
-  }
-
-  /* إذا عنده data URL */
-  if(/^data:/i.test(path)){
-    return path;
-  }
-
-  /* إذا كان JSON */
-  if(
-    (path.startsWith("[") && path.endsWith("]")) ||
-    (path.startsWith("{") && path.endsWith("}"))
-  ){
-
-    try{
-
-      const parsed = JSON.parse(path);
-
-      if(Array.isArray(parsed) && parsed.length){
-        return imageUrl(parsed[0]);
-      }
-
-      if(parsed && typeof parsed === "object"){
-        return imageUrl(parsed.url || parsed.path || parsed.name);
-      }
-
-    }catch{}
-  }
-
-  try{
-
-    const { data } = supabase
-      .storage
-      .from(BUCKET_NAME)
-      .getPublicUrl(path);
-
-    return data?.publicUrl || "";
-
-  }catch{
-
-    return "";
-  }
-}
-
-
-/* =========================================================
-   استخراج أول صورة
-   ========================================================= */
-
-function firstImage(images){
-
-  if(!images) return "";
-
-  let list = images;
-
-  if(typeof images === "string"){
-
-    const raw = images.trim();
-
-    if(!raw) return "";
-
-    try{
-
-      const parsed = JSON.parse(raw);
-
-      if(Array.isArray(parsed)){
-        list = parsed;
-      }else{
-        list = [parsed];
-      }
-
-    }catch{
-
-      list = raw.includes(",")
-        ? raw.split(",").map(x => x.trim()).filter(Boolean)
-        : [raw];
-
-    }
-
-  }
-
-  if(!Array.isArray(list)){
-    list = [list];
-  }
-
-  for(const item of list){
-
-    const url = imageUrl(item);
-
-    if(url) return url;
-  }
-
-  return "";
-}
-
-
-/* =========================================================
-   تحويل البيانات القادمة من Supabase
-   ========================================================= */
-
-function normalizeAuction(row, bidCount){
-
-  const currentPrice =
-    Number(
-      row.auction_current_price ??
-      row.price ??
-      row.auction_start_price ??
-      0
-    );
-
-  const startPrice =
-    Number(
-      row.auction_start_price ??
-      row.price ??
-      0
-    );
-
-  const endsAt = row.auction_ends_at
-    ? new Date(row.auction_ends_at).getTime()
-    : 0;
-
-  const created = row.created_at
-    ? new Date(row.created_at).getTime()
-    : 0;
-
-  const image = firstImage(row.images);
-
-  const brand = String(row.brand || "").trim();
-  const model = String(row.model || "").trim();
-
-  const title = [brand, model]
-    .filter(Boolean)
-    .join(" ")
-    .trim() || "جهاز";
-
-  const metaParts = [];
-
-  if(row.storage){
-    metaParts.push(String(row.storage));
-  }
-
-  if(row.color){
-    metaParts.push(String(row.color));
-  }
-
-  if(row.location){
-    metaParts.push(String(row.location));
-  }
-
-  const meta = metaParts.join(" • ");
-
-  let tag = "مزاد نشط";
-
-  if(row.battery_health && brand.toLowerCase() === "apple"){
-    tag = `بطارية ${String(row.battery_health).replace("%","")}%`;
-  }else if(row.condition){
-    tag = String(row.condition);
-  }
-
-  return {
-    id: String(row.id),
-
-    title,
-
-    meta,
-
-    tag,
-
-    price: currentPrice,
-
-    startPrice,
-
-    bids: Number(bidCount || 0),
-
-    endsAt,
-
-    created,
-
-    img: image,
-
-    brand,
-
-    model,
-
-    storage: row.storage || "",
-
-    color: row.color || "",
-
-    condition: row.condition || "",
-
-    sellerName: row.seller_name || "",
-
-    saleType: row.sale_type || "auction"
-  };
-}
-
-
-/* =========================================================
-   تحميل المزادات من Supabase
-   ========================================================= */
-
-async function loadAuctions(){
-
-  $("list").innerHTML = `
-    <div class="empty">
-      <h3>جاري تحميل المزادات</h3>
-      <p>لحظات ونجيب لك المزادات الحالية.</p>
-    </div>
-  `;
-
-  try{
-
-    /*
-      نجيب فقط أجهزة المزاد.
-      الوقت الحقيقي موجود في auction_ends_at.
-    */
-
-    const { data, error } = await supabase
-      .from("devices")
-      .select(`
-        id,
-        created_at,
-        brand,
-        model,
-        storage,
-        color,
-        battery_health,
-        price,
-        condition,
-        location,
-        sale_type,
-        images,
-        seller_name,
-        auction_start_price,
-        auction_current_price,
-        auction_bid_step,
-        auction_ends_at,
-        auction_status
-      `)
-      .eq("sale_type","auction")
-      .order("created_at",{ascending:false});
-
-    if(error){
-      console.error("AUCTIONS DEVICES ERROR:", error);
-      throw error;
-    }
-
-
-    const rows = Array.isArray(data) ? data : [];
-
-
-    /*
-      فقط المزادات الفعالة والتي عندها وقت انتهاء.
-      وإذا auction_status موجود، لازم يكون active.
-    */
-
-    const activeRows = rows.filter(row => {
-
-      const endsAt = row.auction_ends_at
-        ? new Date(row.auction_ends_at).getTime()
-        : 0;
-
-      if(!endsAt || endsAt <= Date.now()){
-        return false;
-      }
-
-      if(
-        row.auction_status !== null &&
-        row.auction_status !== undefined &&
-        row.auction_status !== "" &&
-        row.auction_status !== "active"
-      ){
-        return false;
-      }
-
-      return true;
-    });
-
-
-    /*
-      نجيب المزايدات حتى نعرض العدد الحقيقي.
-    */
-
-    let bidRows = [];
-
-    if(activeRows.length){
-
-      const ids = activeRows.map(row => row.id);
-
-      const { data: bidsData, error: bidsError } = await supabase
-        .from("auction_bids")
-        .select("auction_id, amount")
-        .in("auction_id", ids);
-
-      if(bidsError){
-
-        /*
-          إذا RLS مانع قراءة المزايدات،
-          لا نخلي صفحة المزادات كلها تتعطل.
-        */
-
-        console.warn(
-          "AUCTION BIDS READ WARNING:",
-          bidsError
-        );
-
-        bidRows = [];
-
-      }else{
-
-        bidRows = Array.isArray(bidsData)
-          ? bidsData
-          : [];
-      }
-    }
-
-
-    /*
-      حساب عدد المزايدات لكل مزاد.
-    */
-
-    const bidCounts = new Map();
-
-    for(const bid of bidRows){
-
-      const id = String(bid.auction_id);
-
-      bidCounts.set(
-        id,
-        (bidCounts.get(id) || 0) + 1
-      );
-    }
-
-
-    auctions = activeRows.map(row => {
-
-      return normalizeAuction(
-        row,
-        bidCounts.get(String(row.id)) || 0
-      );
-
-    });
-
-
-    render();
-
-  }catch(error){
-
-    console.error("AUCTIONS LOAD ERROR:", error);
-
-    $("result").textContent = "";
-
-    $("list").innerHTML = `
-      <div class="empty">
-        <h3>تعذر تحميل المزادات</h3>
-        <p>
-          تأكد من اتصال قاعدة البيانات والمحاولة مرة ثانية.
-        </p>
-      </div>
-    `;
-  }
-}
-
-
-/* =========================================================
-   الفلاتر والبحث
-   ========================================================= */
-
-function visible(){
-
-  let list = auctions.filter(a => {
-
-    if(!query) return true;
-
-    const text = [
-      a.title,
-      a.meta,
-      a.tag,
-      a.brand,
-      a.model,
-      a.storage,
-      a.color,
-      a.condition
-    ].join(" ");
-
-    return norm(text).includes(norm(query));
-  });
-
-
-  const by = {
-
-    soon:(a,b) =>
-      a.endsAt - b.endsAt,
-
-    new:(a,b) =>
-      b.created - a.created,
-
-    low:(a,b) =>
-      a.price - b.price,
-
-    high:(a,b) =>
-      b.price - a.price
-
-  };
-
-
-  if(by[filter]){
-    list = [...list].sort(by[filter]);
-  }
-
-
-  return list;
-}
-
-
-/* =========================================================
-   حفظ المفضلة
-   ========================================================= */
-
-function saveFavorites(){
-
-  try{
-
-    localStorage.setItem(
-      "mzad_favorites",
-      JSON.stringify([...favorites])
-    );
-
-  }catch{}
-}
-
-
-/* =========================================================
-   رسم القائمة
-   ========================================================= */
+   RENDER
+========================================================= */
 
 function render(){
 
-  const list = visible();
+  const list =
+    visible();
 
-  $("result").textContent =
-    `${list.length} مزاد`;
+  const activeCount =
+    AUCTIONS.filter(
+      auction =>
+        isActive(auction)
+    ).length;
+
+
+  if(
+    filter === "all"
+  ){
+
+    $("result").textContent =
+      `${list.length} مزاد`;
+
+  }else{
+
+    $("result").textContent =
+      `${list.length} مزاد`;
+
+  }
 
 
   if(!list.length){
 
     $("list").innerHTML = `
+
       <div class="empty">
-        <h3>لا توجد مزادات مطابقة</h3>
+
+        <h3>
+          لا توجد مزادات مطابقة
+        </h3>
+
         <p>
           ${
-            auctions.length
-              ? "جرب كلمة بحث ثانية أو غيّر الفلتر."
-              : "لا توجد مزادات نشطة حالياً."
+            AUCTIONS.length
+              ? "جرب كلمة بحث ثانية أو ارجع لعرض الكل."
+              : "لا توجد مزادات منشورة حالياً."
           }
         </p>
+
       </div>
+
     `;
 
     return;
+
   }
 
 
-  $("list").innerHTML = list.map((a,i) => {
-
-    const image = a.img
-      ? `
-        <img
-          src="${escapeHtml(a.img)}"
-          alt="${escapeHtml(a.title)}"
-          loading="lazy"
-          decoding="async"
-          draggable="false"
-        >
-      `
-      : phone(tones[i % tones.length]);
-
-
-    return `
-      <article
-        class="a-card"
-        data-id="${escapeHtml(a.id)}"
-        tabindex="0"
-        role="link"
-        aria-label="${escapeHtml(a.title)}"
-      >
-
-        <div class="a-img">
-
-          ${image}
-
-          <button
-            class="fav${favorites.has(String(a.id)) ? " active" : ""}"
-            type="button"
-            aria-label="إضافة إلى المفضلة"
-          >
-            <svg viewBox="0 0 24 24">
-              <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
-            </svg>
-          </button>
-
-          <span
-            class="pill"
-            data-end="${a.endsAt}"
-          ></span>
-
-        </div>
-
-
-        <div class="a-body">
-
-          <div>
-
-            <h3 class="a-title">
-              ${escapeHtml(a.title)}
-            </h3>
-
-            <div class="a-meta">
-              ${escapeHtml(a.meta || "مزاد داخل المنصة")}
-            </div>
-
-            <div class="a-tags">
-
-              <span class="tag">
-                ${escapeHtml(a.tag)}
-              </span>
-
-              <span class="tag">
-                ${a.bids} مزايدة
-              </span>
-
-            </div>
-
-          </div>
-
-
-          <div class="a-foot">
-
-            <div>
-
-              <span class="lbl">
-                السعر الحالي
-              </span>
-
-              <div class="a-price">
-                ${fmt(a.price)}
-                <small>د.ع</small>
-              </div>
-
-            </div>
-
-            <button
-              class="go"
-              type="button"
-            >
-              زايد
-            </button>
-
-          </div>
-
-        </div>
-
-      </article>
-    `;
-
-  }).join("");
-
+  $("list").innerHTML =
+    list
+      .map(
+        (auction,index) =>
+          renderCard(
+            auction,
+            index
+          )
+      )
+      .join("");
 
   tick();
+
 }
 
 
 /* =========================================================
-   حماية النصوص قبل وضعها داخل HTML
-   ========================================================= */
+   CARD
+========================================================= */
 
-function escapeHtml(value){
+function renderCard(
+  auction,
+  index
+){
 
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-}
+  const id =
+    String(
+      auction.id
+    );
 
+  const images =
+    parseImages(
+      auction.images
+    );
 
-/* =========================================================
-   المؤقت
-   ========================================================= */
-
-function timeText(left){
-
-  if(left <= 0){
-    return "انتهى";
-  }
-
-
-  if(left >= DAY){
-
-    const days = Math.floor(left / DAY);
-
-    return `${days} يوم`;
-  }
+  const firstImage =
+    images.length
+      ? imageUrl(
+          images[0]
+        )
+      : "";
 
 
-  const p = n =>
-    String(n).padStart(2,"0");
+  const title =
+    [
+      auction.brand,
+      auction.model
+    ]
+      .filter(Boolean)
+      .join(" ") ||
+    "جهاز";
 
 
-  const hours =
-    Math.floor(left / HOUR);
-
-  const minutes =
-    Math.floor((left % HOUR) / MINUTE);
-
-  const seconds =
-    Math.floor((left % MINUTE) / 1000);
-
-
-  return `${p(hours)}:${p(minutes)}:${p(seconds)}`;
-}
+  const meta =
+    [
+      auction.storage,
+      auction.color,
+      auction.location
+    ]
+      .filter(Boolean)
+      .join(" • ") ||
+    "داخل النجف";
 
 
-function tick(){
-
-  const t = Date.now();
-
-  document.querySelectorAll(".pill").forEach(el => {
-
-    const left =
-      Number(el.dataset.end) - t;
+  const condition =
+    auction.condition ||
+    "غير محدد";
 
 
-    el.textContent =
-      timeText(left);
-
-
-    el.classList.toggle(
-      "hot",
-      left > 0 && left <= 5 * MINUTE
+  const price =
+    currentPrice(
+      auction
     );
 
 
+  const bids =
+    bidCount(
+      auction
+    );
+
+
+  const ended =
+    isEnded(
+      auction
+    );
+
+
+  const image =
+    firstImage
+      ? `
+        <img
+          src="${escapeHtml(firstImage)}"
+          alt="${escapeHtml(title)}"
+          loading="${index < 2 ? "eager" : "lazy"}"
+          decoding="async"
+          draggable="false"
+          onerror="this.style.display='none'"
+        >
+      `
+      : phone(
+          tones[
+            index %
+            tones.length
+          ]
+        );
+
+
+  return `
+
+    <article
+      class="a-card${ended ? " done" : ""}"
+      data-id="${escapeHtml(id)}"
+      tabindex="0"
+      role="link"
+      aria-label="${escapeHtml(title)}"
+    >
+
+      <div class="a-img">
+
+        ${image}
+
+        <button
+          class="fav${
+            favs.has(id)
+              ? " active"
+              : ""
+          }"
+          type="button"
+          aria-label="${
+            favs.has(id)
+              ? "إزالة من المفضلة"
+              : "إضافة إلى المفضلة"
+          }"
+        >
+
+          <svg viewBox="0 0 24 24">
+
+            <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
+
+          </svg>
+
+        </button>
+
+        <span
+          class="pill"
+          data-end="${escapeHtml(
+            auction.auction_ends_at || ""
+          )}"
+        ></span>
+
+      </div>
+
+
+      <div class="a-body">
+
+        <div>
+
+          <h3 class="a-title">
+            ${escapeHtml(title)}
+          </h3>
+
+          <div class="a-meta">
+            ${escapeHtml(meta)}
+          </div>
+
+          <div class="a-tags">
+
+            <span class="tag">
+              ${escapeHtml(condition)}
+            </span>
+
+            <span class="tag">
+              ${bids} مزايدة
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="a-foot">
+
+          <div>
+
+            <span class="lbl">
+              ${
+                ended
+                  ? "السعر النهائي"
+                  : "السعر الحالي"
+              }
+            </span>
+
+            <div class="a-price">
+
+              ${fmt(price)}
+
+              <small>
+                د.ع
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <button
+            class="go"
+            type="button"
+            ${
+              ended
+                ? "disabled"
+                : ""
+            }
+          >
+            ${
+              ended
+                ? "انتهى"
+                : "زايد"
+            }
+          </button>
+
+        </div>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+
+/* =========================================================
+   TICK
+========================================================= */
+
+function tick(){
+
+  const now =
+    Date.now();
+
+  document
+    .querySelectorAll(
+      ".pill"
+    )
+    .forEach(
+      el => {
+
+        const end =
+          new Date(
+            el.dataset.end
+          ).getTime();
+
+
+        if(
+          !Number.isFinite(end)
+        ){
+
+          el.textContent =
+            "";
+
+          return;
+
+        }
+
+
+        const left =
+          end - now;
+
+
+        el.textContent =
+          timeText(
+            left
+          );
+
+
+        el.classList.toggle(
+          "hot",
+          left > 0 &&
+          left <= 5 * 60 * 1000
+        );
+
+
+        const card =
+          el.closest(
+            ".a-card"
+          );
+
+
+        if(card){
+
+          const done =
+            left <= 0;
+
+          card.classList.toggle(
+            "done",
+            done
+          );
+
+
+          const button =
+            card.querySelector(
+              ".go"
+            );
+
+
+          if(button){
+
+            button.disabled =
+              done;
+
+            button.textContent =
+              done
+                ? "انتهى"
+                : "زايد";
+
+          }
+
+        }
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   CARD CLICK
+========================================================= */
+
+$("list").addEventListener(
+  "click",
+  event => {
+
     const card =
-      el.closest(".a-card");
-
-
-    if(card){
-
-      card.classList.toggle(
-        "done",
-        left <= 0
+      event.target.closest(
+        ".a-card"
       );
 
-    }
-
-  });
-
-}
-
-
-/* =========================================================
-   تحديث المزادات المنتهية من قاعدة البيانات
-   ========================================================= */
-
-async function refreshExpiredAuctions(){
-
-  const expired = auctions.some(
-    a => a.endsAt <= Date.now()
-  );
-
-  if(expired){
-
-    await loadAuctions();
-  }
-
-}
-
-
-/* =========================================================
-   تفاعل القائمة
-   ========================================================= */
-
-$("list").addEventListener("click", e => {
-
-  const card =
-    e.target.closest(".a-card");
-
-  if(!card) return;
-
-
-  const fav =
-    e.target.closest(".fav");
-
-
-  /*
-    المفضلة لا تفتح صفحة التفاصيل.
-  */
-
-  if(fav){
-
-    const id =
-      String(card.dataset.id);
-
-    const on =
-      !favorites.has(id);
-
-
-    if(on){
-
-      favorites.add(id);
-
-      fav.classList.add("active");
-
-      toast(
-        "تمت إضافة المزاد إلى المفضلة"
-      );
-
-    }else{
-
-      favorites.delete(id);
-
-      fav.classList.remove("active");
-
-      toast(
-        "تمت إزالة المزاد من المفضلة"
-      );
-
+    if(!card){
+      return;
     }
 
 
-    saveFavorites();
-
-    return;
-  }
-
-
-  /*
-    هنا أهم تعديل:
-    نرسل ID الحقيقي من Supabase
-    إلى auction-details.html
-  */
-
-  const auctionId =
-    String(card.dataset.id || "").trim();
+    const fav =
+      event.target.closest(
+        ".fav"
+      );
 
 
-  if(!auctionId){
+    if(fav){
 
-    toast("معرّف المزاد غير صحيح");
+      event.preventDefault();
 
-    return;
-  }
-
-
-  window.location.href =
-    `auction-details.html?id=${encodeURIComponent(auctionId)}`;
-
-});
+      event.stopPropagation();
 
 
-/* =========================================================
-   فتح المزاد بالكيبورد
-   ========================================================= */
+      const id =
+        String(
+          card.dataset.id
+        );
 
-$("list").addEventListener("keydown", e => {
-
-  if(
-    e.key === "Enter" &&
-    e.target.classList.contains("a-card")
-  ){
-
-    const auctionId =
-      String(e.target.dataset.id || "").trim();
-
-
-    if(!auctionId) return;
-
-
-    window.location.href =
-      `auction-details.html?id=${encodeURIComponent(auctionId)}`;
-  }
-
-});
-
-
-/* =========================================================
-   الفلاتر
-   ========================================================= */
-
-$("filters").addEventListener("click", e => {
-
-  const b =
-    e.target.closest(".fchip");
-
-  if(!b) return;
-
-
-  filter =
-    b.dataset.f;
-
-
-  document.querySelectorAll(".fchip")
-    .forEach(c => {
 
       const on =
-        c === b;
+        !favs.has(id);
 
-      c.classList.toggle(
+
+      if(on){
+
+        favs.add(id);
+
+      }else{
+
+        favs.delete(id);
+
+      }
+
+
+      saveFavorites(
+        favs
+      );
+
+
+      fav.classList.toggle(
         "active",
         on
       );
 
-      c.setAttribute(
-        "aria-selected",
-        on ? "true" : "false"
+
+      fav.setAttribute(
+        "aria-label",
+        on
+          ? "إزالة من المفضلة"
+          : "إضافة إلى المفضلة"
       );
 
-    });
+
+      toast(
+        on
+          ? "تمت إضافة المزاد إلى المفضلة"
+          : "تمت إزالة المزاد من المفضلة"
+      );
 
 
-  render();
-});
+      return;
+
+    }
+
+
+    const id =
+      card.dataset.id;
+
+
+    if(!id){
+      return;
+    }
+
+
+    const auction =
+      AUCTIONS.find(
+        item =>
+          String(item.id) ===
+          String(id)
+      );
+
+
+    if(
+      auction &&
+      isEnded(auction)
+    ){
+
+      location.href =
+        `auction-details.html?id=${encodeURIComponent(id)}`;
+
+      return;
+
+    }
+
+
+    location.href =
+      `auction-details.html?id=${encodeURIComponent(id)}`;
+
+  }
+);
 
 
 /* =========================================================
-   البحث
-   ========================================================= */
+   KEYBOARD
+========================================================= */
+
+$("list").addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key !== "Enter"
+    ){
+
+      return;
+
+    }
+
+
+    const card =
+      event.target.closest(
+        ".a-card"
+      );
+
+
+    if(!card){
+      return;
+    }
+
+
+    const id =
+      card.dataset.id;
+
+
+    if(id){
+
+      location.href =
+        `auction-details.html?id=${encodeURIComponent(id)}`;
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
+$("filters").addEventListener(
+  "click",
+  event => {
+
+    const button =
+      event.target.closest(
+        ".fchip"
+      );
+
+
+    if(!button){
+      return;
+    }
+
+
+    filter =
+      button.dataset.f;
+
+
+    document
+      .querySelectorAll(
+        ".fchip"
+      )
+      .forEach(
+        chip => {
+
+          const active =
+            chip === button;
+
+          chip.classList.toggle(
+            "active",
+            active
+          );
+
+          chip.setAttribute(
+            "aria-selected",
+            active
+          );
+
+        }
+      );
+
+
+    render();
+
+  }
+);
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
 
 function syncSearch(){
 
   $("searchWrap")
-    .classList.toggle(
+    .classList
+    .toggle(
       "has-value",
-      $("search").value.trim().length > 0
+      $("search")
+        .value
+        .trim()
+        .length > 0
     );
 
 }
@@ -1626,10 +1888,12 @@ function syncSearch(){
 
 $("search").addEventListener(
   "input",
-  e => {
+  event => {
 
     query =
-      e.target.value.trim();
+      event.target
+        .value
+        .trim();
 
     syncSearch();
 
@@ -1643,9 +1907,11 @@ $("clear").addEventListener(
   "click",
   () => {
 
-    $("search").value = "";
+    $("search").value =
+      "";
 
-    query = "";
+    query =
+      "";
 
     syncSearch();
 
@@ -1658,20 +1924,22 @@ $("clear").addEventListener(
 
 
 /* =========================================================
-   زر الرجوع
-   ========================================================= */
+   BACK
+========================================================= */
 
 $("back").addEventListener(
   "click",
   () => {
 
-    if(window.history.length > 1){
+    if(
+      window.history.length > 1
+    ){
 
       window.history.back();
 
     }else{
 
-      window.location.href =
+      location.href =
         "home.html";
 
     }
@@ -1681,29 +1949,33 @@ $("back").addEventListener(
 
 
 /* =========================================================
-   Toast
-   ========================================================= */
+   TOAST
+========================================================= */
 
-function toast(text){
+function toast(message){
 
   const el =
     $("toast");
 
-
   el.textContent =
-    text;
+    message;
 
+  el.classList.add(
+    "show"
+  );
 
-  el.classList.add("show");
-
-
-  clearTimeout(toastT);
-
+  clearTimeout(
+    toastT
+  );
 
   toastT =
     setTimeout(
       () => {
-        el.classList.remove("show");
+
+        el.classList.remove(
+          "show"
+        );
+
       },
       2200
     );
@@ -1712,34 +1984,143 @@ function toast(text){
 
 
 /* =========================================================
-   بدء الصفحة
-   ========================================================= */
+   REAL-TIME-ish REFRESH
+========================================================= */
 
-(async function(){
+/*
+  نعيد جلب بيانات المزادات كل 15 ثانية
+  حتى السعر والوقت والحالة وعدد المزايدات
+  تبقى محدثة.
+*/
 
-  await loadAuctions();
+async function refreshAuctions(){
 
-  /*
-    تحديث العداد كل ثانية.
-  */
+  try{
 
+    const {
+      data,
+      error
+    } =
+      await supabase
+
+        .from("devices")
+
+        .select(`
+          id,
+          created_at,
+          brand,
+          model,
+          storage,
+          color,
+          battery_health,
+          condition,
+          price,
+          images,
+          location,
+          sale_type,
+          seller_name,
+          auction_start_price,
+          auction_current_price,
+          auction_bid_step,
+          auction_ends_at,
+          auction_status,
+          notes
+        `)
+
+        .eq(
+          "sale_type",
+          "auction"
+        )
+
+        .order(
+          "created_at",
+          {
+            ascending:false
+          }
+        )
+
+        .limit(100);
+
+
+    if(error){
+
+      console.error(
+        "AUCTION REFRESH ERROR:",
+        error
+      );
+
+      return;
+
+    }
+
+
+    AUCTIONS =
+      data || [];
+
+
+    await loadBidCounts();
+
+
+    render();
+
+  }catch(error){
+
+    console.error(
+      "AUCTION REFRESH ERROR:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+loadAuctions();
+
+
+/*
+  تحديث العداد كل ثانية
+*/
+const timer =
   setInterval(
     tick,
     1000
   );
 
 
-  /*
-    كل 30 ثانية نفحص إذا انتهى مزاد
-    ونحدث القائمة من Supabase.
-  */
-
+/*
+  تحديث البيانات من Supabase
+  كل 15 ثانية
+*/
+const refreshTimer =
   setInterval(
-    refreshExpiredAuctions,
-    30000
+    refreshAuctions,
+    15000
   );
 
-})();
+
+/* =========================================================
+   CLEANUP
+========================================================= */
+
+window.addEventListener(
+  "pagehide",
+  () => {
+
+    clearInterval(
+      timer
+    );
+
+    clearInterval(
+      refreshTimer
+    );
+
+  }
+);
 
 </script>
 
