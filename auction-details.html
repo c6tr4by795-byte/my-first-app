@@ -469,6 +469,7 @@ td.good{color:var(--ok)}
 </div>
 
 <div class="chips">
+
   <span class="chip ver">
     <svg viewBox="0 0 24 24">
       <path d="M12 3 5 6v5c0 4.5 3 7.8 7 10 4-2.2 7-5.5 7-10V6l-7-3Z"/>
@@ -478,6 +479,7 @@ td.good{color:var(--ok)}
   </span>
 
   <span class="chip" id="cond"></span>
+
 </div>
 
 <section class="auction" id="auction">
@@ -586,12 +588,14 @@ td.good{color:var(--ok)}
   <h2>البائع</h2>
 
   <div class="seller">
+
     <div class="avatar" id="sAv"></div>
 
     <p>
       <b id="sName"></b>
       <span id="sInfo"></span>
     </p>
+
   </div>
 </section>
 
@@ -601,9 +605,10 @@ td.good{color:var(--ok)}
 
 <script type="module">
 
-import { supabase } from "./js/supabase.js?v=auction-details-2";
+import { supabase } from "./js/supabase.js?v=auction-details-final-1";
 
-const $ = id => document.getElementById(id);
+const $ = id =>
+  document.getElementById(id);
 
 const fmt = n =>
   Number(n || 0).toLocaleString("en-US");
@@ -616,13 +621,21 @@ const escapeHtml = value =>
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#039;");
 
+
+/* =========================================================
+   AUCTION ID
+   مهم:
+   لا نحوله إلى Number لأن Supabase ممكن يستخدم UUID
+========================================================= */
+
 const params =
   new URLSearchParams(
     window.location.search
   );
 
 const auctionId =
-  params.get("id");
+  params.get("id")?.trim() || "";
+
 
 let auction = null;
 let bids = [];
@@ -925,10 +938,6 @@ if(!auctionId){
   $("bid").disabled =
     true;
 
-  toast(
-    "رابط المزاد غير صحيح"
-  );
-
 }else{
 
   loadAuction();
@@ -949,18 +958,11 @@ async function loadAuction(){
 
     $("sub").textContent = "";
 
-    const numericId =
-      Number(auctionId);
-
-    if(
-      !Number.isFinite(numericId)
-    ){
-
-      throw new Error(
-        "معرّف المزاد غير صحيح"
-      );
-
-    }
+    /*
+      مهم جداً:
+      نستخدم auctionId كما هو بدون Number()
+      حتى يدعم UUID أو ID رقمي.
+    */
 
     const {
       data,
@@ -1002,7 +1004,7 @@ async function loadAuction(){
 
         .eq(
           "id",
-          numericId
+          auctionId
         )
 
         .eq(
@@ -1010,16 +1012,23 @@ async function loadAuction(){
           "auction"
         )
 
-        .single();
+        .maybeSingle();
 
     if(error){
+
+      console.error(
+        "AUCTION LOAD ERROR:",
+        error
+      );
+
       throw error;
+
     }
 
     if(!data){
 
       throw new Error(
-        "المزاد غير موجود"
+        "المزاد غير موجود أو لم يعد متاحاً"
       );
 
     }
@@ -1057,8 +1066,7 @@ async function loadAuction(){
       true;
 
     toast(
-      error?.message ||
-      "حدث خطأ أثناء تحميل المزاد"
+      "تعذر تحميل بيانات المزاد"
     );
 
   }
@@ -1216,6 +1224,7 @@ function renderGallery(){
                   : "lazy"
               }"
               decoding="async"
+              draggable="false"
               onerror="
                 this.style.display='none'
               "
@@ -1420,6 +1429,11 @@ function renderSpecs(){
     ]);
 
   }
+
+  /*
+    البطارية تظهر فقط إذا كانت موجودة
+    وهي أساساً محفوظة من صفحة البيع للأجهزة المناسبة.
+  */
 
   if(auction.battery_health){
 
@@ -1861,23 +1875,26 @@ function tick(){
 
     ended = false;
 
-    if(
-      auction.auction_status ===
-      "active"
-    ){
+    $("auction")
+      .classList
+      .remove("ended");
 
-      $("liveBadge").textContent =
-        "مزاد مستمر";
+    $("liveBadge").textContent =
+      "مزاد مستمر";
 
-      $("endLabel").textContent =
-        "الوقت المتبقي";
+    $("endLabel").textContent =
+      "الوقت المتبقي";
 
-      if(!locked){
+    /*
+      لا نعتمد فقط على auction_status
+      حتى لا يتعطل زر المزايدة إذا كان
+      status فارغاً لكن الوقت ما زال صالحاً.
+    */
 
-        $("bid").disabled =
-          false;
+    if(!locked){
 
-      }
+      $("bid").disabled =
+        false;
 
     }
 
@@ -1950,7 +1967,7 @@ async function refreshAuctionData(){
           auction.id
         )
 
-        .single();
+        .maybeSingle();
 
     if(error){
 
@@ -2090,6 +2107,28 @@ $("bid").onclick =
       }
 
       /* =========================
+         التأكد من الوقت قبل الإرسال
+      ========================= */
+
+      const end =
+        getEndTime();
+
+      if(
+        end &&
+        Date.now() >= end
+      ){
+
+        finish();
+
+        toast(
+          "انتهى المزاد"
+        );
+
+        return;
+
+      }
+
+      /* =========================
          حساب المبلغ
       ========================= */
 
@@ -2112,8 +2151,19 @@ $("bid").onclick =
       }
 
       /* =========================
-         إرسال المزايدة إلى Supabase
+         إرسال المزايدة
       ========================= */
+
+      /*
+        نرسل ID كما هو.
+        إذا كان UUID يبقى UUID.
+        إذا كان رقم يبقى رقم.
+      */
+
+      const rpcAuctionId =
+        String(
+          auction.id
+        );
 
       const {
         data,
@@ -2123,9 +2173,7 @@ $("bid").onclick =
           "place_auction_bid",
           {
             p_auction_id:
-              Number(
-                auction.id
-              ),
+              rpcAuctionId,
 
             p_amount:
               amount
@@ -2146,11 +2194,6 @@ $("bid").onclick =
         let message =
           error?.message ||
           "تعذر تسجيل المزايدة";
-
-        /*
-          تنظيف بعض رسائل PostgreSQL
-          حتى تظهر للمستخدم بشكل أوضح
-        */
 
         if(
           message.includes(
@@ -2203,66 +2246,95 @@ $("bid").onclick =
       }
 
       /* =========================
-         التحقق من النتيجة
+         نتيجة RPC
       ========================= */
+
+      let result =
+        data;
+
+      /*
+        بعض RPCs ترجع object
+        وبعضها ترجع array فيها object واحد.
+      */
 
       if(
-        !data ||
-        data.success !== true
+        Array.isArray(result)
       ){
 
-        toast(
-          "لم يتم تسجيل المزايدة"
-        );
-
-        return;
-
-      }
-
-      /* =========================
-         تحديث المزاد مباشرة
-      ========================= */
-
-      if(data.amount){
-
-        auction.auction_current_price =
-          Number(
-            data.amount
-          );
-
-      }
-
-      if(data.ends_at){
-
-        auction.auction_ends_at =
-          data.ends_at;
+        result =
+          result[0] || null;
 
       }
 
       /*
-        إذا كانت المزايدة مددت المزاد،
-        نضمن أن العداد يأخذ الوقت الجديد
+        إذا رجعت RPC نتيجة بدون success
+        لكن بدون error، نعتبرها نجاحاً
+        إذا كان فيها amount أو ends_at.
       */
 
       if(
-        data.extended === true &&
-        data.ends_at
+        result &&
+        typeof result === "object"
       ){
 
-        auction.auction_ends_at =
-          data.ends_at;
+        const hasSuccessField =
+          Object.prototype.hasOwnProperty.call(
+            result,
+            "success"
+          );
+
+        if(
+          hasSuccessField &&
+          result.success !== true
+        ){
+
+          toast(
+            result.message ||
+            "لم يتم تسجيل المزايدة"
+          );
+
+          return;
+
+        }
 
       }
 
       /* =========================
-         إعادة تحميل المزايدات
+         تحديث السعر والوقت
+      ========================= */
+
+      if(
+        result &&
+        result.amount
+      ){
+
+        auction.auction_current_price =
+          Number(
+            result.amount
+          );
+
+      }else{
+
+        auction.auction_current_price =
+          amount;
+
+      }
+
+      if(
+        result &&
+        result.ends_at
+      ){
+
+        auction.auction_ends_at =
+          result.ends_at;
+
+      }
+
+      /* =========================
+         تحديث المزايدات
       ========================= */
 
       await loadBids();
-
-      /* =========================
-         تحديث الواجهة
-      ========================= */
 
       renderBids(true);
 
@@ -2286,11 +2358,12 @@ $("bid").onclick =
       );
 
       /* =========================
-         رسالة النجاح
+         نجاح
       ========================= */
 
       if(
-        data.extended === true
+        result &&
+        result.extended === true
       ){
 
         toast(
