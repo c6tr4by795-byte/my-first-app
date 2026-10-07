@@ -1059,7 +1059,7 @@ td.good{
 
 import {
   supabase
-} from "./js/supabase.js?v=auction-details-final-3";
+} from "./js/supabase.js?v=auction-details-final-4";
 
 
 /* =========================================================
@@ -1095,7 +1095,6 @@ const params =
   new URLSearchParams(
     window.location.search
   );
-
 
 const auctionId =
   params.get("id")?.trim() || "";
@@ -1495,63 +1494,24 @@ function getEndTime(){
     return null;
   }
 
-
   /*
-    المصدر الأساسي:
-    auction_ends_at
+    نعتمد على وقت النهاية المخزن فعلياً.
+    ما نعتمد على duration_hours حتى لا يتعطل
+    الربط إذا هذا الحقل غير موجود.
   */
 
-  if(
-    auction.auction_ends_at
-  ){
+  if(auction.auction_ends_at){
 
-    const direct =
+    const end =
       new Date(
         auction.auction_ends_at
       ).getTime();
 
-    if(
-      Number.isFinite(direct)
-    ){
-
-      return direct;
-
+    if(Number.isFinite(end)){
+      return end;
     }
 
   }
-
-
-  /*
-    احتياط:
-    created_at + duration_hours
-  */
-
-  const created =
-    auction.created_at
-      ? new Date(
-          auction.created_at
-        ).getTime()
-      : NaN;
-
-
-  const duration =
-    Number(
-      auction.duration_hours
-    ) || 0;
-
-
-  if(
-    Number.isFinite(created) &&
-    duration > 0
-  ){
-
-    return (
-      created +
-      duration * 60 * 60 * 1000
-    );
-
-  }
-
 
   return null;
 
@@ -1595,49 +1555,22 @@ async function loadAuction(){
       "";
 
 
+    /*
+      مهم:
+      نجيب السجل كامل حتى ما نعتمد على
+      حقل معين ممكن يكون غير موجود.
+    */
+
     const {
       data,
       error
     } =
       await supabase
         .from("devices")
-        .select(`
-          id,
-          created_at,
-          brand,
-          model,
-          storage,
-          color,
-          battery_health,
-          condition,
-          price,
-          seller_id,
-          images,
-          seller_name,
-          seller_phone,
-          screen_condition,
-          body_condition,
-          face_id,
-          cameras,
-          charging,
-          replaced_parts,
-          location,
-          sale_type,
-          notes,
-          auction_start_price,
-          auction_current_price,
-          auction_bid_step,
-          auction_ends_at,
-          auction_status,
-          duration_hours
-        `)
+        .select("*")
         .eq(
           "id",
           auctionId
-        )
-        .eq(
-          "sale_type",
-          "auction"
         )
         .maybeSingle();
 
@@ -2634,10 +2567,6 @@ function tick(){
     );
 
 
-  /*
-    الأحمر يبدأ من 5 دقائق.
-  */
-
   $("auction")
     .classList
     .toggle(
@@ -2740,21 +2669,18 @@ async function refreshAuctionData(){
 
   try{
 
+    /*
+      نجيب السجل كامل أيضاً هنا حتى تبقى
+      الصفحة متوافقة مع نفس بنية البيانات.
+    */
+
     const {
       data,
       error
     } =
       await supabase
         .from("devices")
-        .select(`
-          auction_current_price,
-          auction_bid_step,
-          auction_ends_at,
-          auction_status,
-          duration_hours,
-          created_at,
-          price
-        `)
+        .select("*")
         .eq(
           "id",
           auction.id
@@ -2786,6 +2712,7 @@ async function refreshAuctionData(){
 
     await loadBids();
 
+    renderBody();
 
     renderBids(true);
 
@@ -2880,10 +2807,6 @@ $("bid").onclick =
         true;
 
 
-      /*
-        تسجيل الدخول
-      */
-
       const {
         data: sessionData,
         error: sessionError
@@ -2913,10 +2836,6 @@ $("bid").onclick =
       }
 
 
-      /*
-        التأكد من الوقت
-      */
-
       const end =
         getEndTime();
 
@@ -2937,10 +2856,6 @@ $("bid").onclick =
       }
 
 
-      /*
-        مبلغ المزايدة
-      */
-
       const amount =
         Number(
           nextBid()
@@ -2960,10 +2875,6 @@ $("bid").onclick =
 
       }
 
-
-      /*
-        RPC
-      */
 
       const {
         data,
@@ -3093,10 +3004,6 @@ $("bid").onclick =
       }
 
 
-      /*
-        تحديث السعر
-      */
-
       if(
         result &&
         result.amount
@@ -3114,11 +3021,6 @@ $("bid").onclick =
 
       }
 
-
-      /*
-        تحديث وقت النهاية.
-        الـ RPC هو المسؤول عن تمديد دقيقة.
-      */
 
       if(
         result &&
@@ -3155,10 +3057,6 @@ $("bid").onclick =
         "bump"
       );
 
-
-      /*
-        التمديد دقيقة كاملة.
-      */
 
       if(
         result &&
