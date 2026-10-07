@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="MZAD PHONE">
 <title>MZAD PHONE — المزادات</title>
+
 <style>
 :root{
   --bg:#f9f8fd; --ink:#17202a; --muted:#6b7280; --line:#ece8fb;
@@ -17,123 +18,540 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);
+body{
+  margin:0;
+  min-height:100dvh;
+  background:var(--bg);
+  color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
-  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility
+}
 button,input{font:inherit}
 button{border:0;background:none;color:inherit;cursor:pointer}
 a{text-decoration:none;color:inherit}
 :focus-visible{outline:3px solid var(--purple);outline-offset:2px}
-.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(92px + var(--safe-bottom))}
+
+.page{
+  width:min(100%,520px);
+  margin:0 auto;
+  padding:0 14px calc(92px + var(--safe-bottom))
+}
 
 /* header */
-header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg,#fff 0%,#f7f5ff 55%,#ece8ff 100%);
-  border-radius:0 0 24px 24px;border-bottom:1px solid var(--line);box-shadow:0 10px 26px rgba(23,32,42,.05)}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 2px 0}
-.brand-mini{display:flex;flex-direction:column;align-items:center;line-height:.9}
-.brand-mini strong{font-size:16px;letter-spacing:-.03em}
-.brand-mini span{font-size:7px;font-weight:800;letter-spacing:.15em;color:#8a96a3;margin-top:3px}
-.icon-btn{width:39px;height:34px;display:grid;place-items:center;border:1px solid var(--edge);border-radius:12px;background:#fff;
-  color:var(--purple);box-shadow:0 7px 18px rgba(23,32,42,.045)}
-.icon-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+header{
+  margin-inline:-14px;
+  padding:0 14px 14px;
+  background:linear-gradient(145deg,#fff 0%,#f7f5ff 55%,#ece8ff 100%);
+  border-radius:0 0 24px 24px;
+  border-bottom:1px solid var(--line);
+  box-shadow:0 10px 26px rgba(23,32,42,.05)
+}
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 2px 0
+}
+.brand-mini{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  line-height:.9
+}
+.brand-mini strong{
+  font-size:16px;
+  letter-spacing:-.03em
+}
+.brand-mini span{
+  font-size:7px;
+  font-weight:800;
+  letter-spacing:.15em;
+  color:#8a96a3;
+  margin-top:3px
+}
+.icon-btn{
+  width:39px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--edge);
+  border-radius:12px;
+  background:#fff;
+  color:var(--purple);
+  box-shadow:0 7px 18px rgba(23,32,42,.045)
+}
+.icon-btn svg{
+  width:20px;
+  height:20px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.9;
+  stroke-linecap:round;
+  stroke-linejoin:round
+}
 .spacer{width:39px}
-.head-copy{margin:14px 2px 12px}
-.head-copy h1{margin:0;font-size:22px;letter-spacing:-.035em;font-weight:950}
-.head-copy p{margin:3px 0 0;font-size:11px;font-weight:700;color:var(--muted)}
 
-.search-wrap{position:relative}
-.search{width:100%;height:45px;border:1px solid var(--edge);border-radius:15px;background:#fff;padding:0 44px 0 42px;outline:none;color:var(--ink);
-  box-shadow:0 8px 22px rgba(98,70,217,.10)}
+.head-copy{
+  margin:14px 2px 12px
+}
+.head-copy h1{
+  margin:0;
+  font-size:22px;
+  letter-spacing:-.035em;
+  font-weight:950
+}
+.head-copy p{
+  margin:3px 0 0;
+  font-size:11px;
+  font-weight:700;
+  color:var(--muted)
+}
+
+.search-wrap{
+  position:relative
+}
+.search{
+  width:100%;
+  height:45px;
+  border:1px solid var(--edge);
+  border-radius:15px;
+  background:#fff;
+  padding:0 44px 0 42px;
+  outline:none;
+  color:var(--ink);
+  box-shadow:0 8px 22px rgba(98,70,217,.10)
+}
 .search::placeholder{color:#9ba6aa}
 .search:focus{border-color:#a99cf0}
-.search-icon{position:absolute;inset-inline-end:14px;top:50%;transform:translateY(-50%);width:21px;height:21px;pointer-events:none;color:var(--purple);
-  fill:none;stroke:currentColor;stroke-width:1.9}
-.search-clear{position:absolute;inset-inline-start:10px;top:50%;transform:translateY(-50%);width:33px;height:33px;border-radius:11px;background:var(--purple-soft);
-  display:grid;place-items:center;opacity:0;pointer-events:none;color:var(--purple-dark)}
-.search-clear svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.9}
-.search-wrap.has-value .search-clear{opacity:1;pointer-events:auto}
+.search-icon{
+  position:absolute;
+  inset-inline-end:14px;
+  top:50%;
+  transform:translateY(-50%);
+  width:21px;
+  height:21px;
+  pointer-events:none;
+  color:var(--purple);
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.9
+}
+.search-clear{
+  position:absolute;
+  inset-inline-start:10px;
+  top:50%;
+  transform:translateY(-50%);
+  width:33px;
+  height:33px;
+  border-radius:11px;
+  background:var(--purple-soft);
+  display:grid;
+  place-items:center;
+  opacity:0;
+  pointer-events:none;
+  color:var(--purple-dark)
+}
+.search-clear svg{
+  width:15px;
+  height:15px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.9
+}
+.search-wrap.has-value .search-clear{
+  opacity:1;
+  pointer-events:auto
+}
 
 /* filters */
-.filters{display:flex;gap:8px;overflow-x:auto;padding:14px 2px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.filters{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:14px 2px 4px;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch
+}
 .filters::-webkit-scrollbar{display:none}
-.fchip{flex:0 0 auto;padding:8px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:11px;font-weight:800;color:#4b5563;white-space:nowrap}
-.fchip.active{background:var(--purple-soft);border-color:#c9bff7;color:var(--purple-dark);font-weight:900}
-.result{margin:10px 4px 8px;font-size:11px;font-weight:800;color:var(--muted)}
+.fchip{
+  flex:0 0 auto;
+  padding:8px 14px;
+  border-radius:999px;
+  background:#fff;
+  border:1px solid var(--line);
+  font-size:11px;
+  font-weight:800;
+  color:#4b5563;
+  white-space:nowrap
+}
+.fchip.active{
+  background:var(--purple-soft);
+  border-color:#c9bff7;
+  color:var(--purple-dark);
+  font-weight:900
+}
+.result{
+  margin:10px 4px 8px;
+  font-size:11px;
+  font-weight:800;
+  color:var(--muted)
+}
 
 /* auction cards */
-.list{display:flex;flex-direction:column;gap:10px}
-.a-card{position:relative;display:flex;gap:12px;padding:10px;border-radius:20px;background:#fff;border:1px solid var(--line);
-  box-shadow:0 8px 20px rgba(98,70,217,.07);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.list{
+  display:flex;
+  flex-direction:column;
+  gap:10px
+}
+.a-card{
+  position:relative;
+  display:flex;
+  gap:12px;
+  padding:10px;
+  border-radius:20px;
+  background:#fff;
+  border:1px solid var(--line);
+  box-shadow:0 8px 20px rgba(98,70,217,.07);
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent
+}
 .a-card:active{transform:scale(.99)}
 .a-card.done{opacity:.65}
-.a-img{position:relative;flex:0 0 116px;height:142px;border-radius:15px;overflow:hidden;display:grid;place-items:center;
-  background:linear-gradient(145deg,#fff,#f1edff);border:1px solid var(--line)}
-.a-img img{width:100%;height:100%;object-fit:cover}
-.a-img svg{height:76%;width:auto;filter:drop-shadow(0 8px 10px rgba(74,52,184,.22))}
-.fav{position:absolute;top:6px;inset-inline-start:6px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;
-  background:rgba(255,255,255,.97);color:#7b7f84;box-shadow:0 5px 13px rgba(23,32,42,.11)}
-.fav svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+.a-img{
+  position:relative;
+  flex:0 0 116px;
+  height:142px;
+  border-radius:15px;
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(145deg,#fff,#f1edff);
+  border:1px solid var(--line)
+}
+.a-img img{
+  width:100%;
+  height:100%;
+  object-fit:cover
+}
+.a-img svg{
+  height:76%;
+  width:auto;
+  filter:drop-shadow(0 8px 10px rgba(74,52,184,.22))
+}
+.fav{
+  position:absolute;
+  top:6px;
+  inset-inline-start:6px;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:rgba(255,255,255,.97);
+  color:#7b7f84;
+  box-shadow:0 5px 13px rgba(23,32,42,.11)
+}
+.fav svg{
+  width:17px;
+  height:17px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round
+}
 .fav.active{color:var(--purple)}
 .fav.active svg{fill:var(--purple)}
-.pill{position:absolute;bottom:6px;inset-inline:6px;padding:3px 0;border-radius:9px;background:rgba(255,255,255,.96);color:var(--purple-dark);
-  text-align:center;font-size:10.5px;font-weight:950;direction:ltr;font-variant-numeric:tabular-nums;box-shadow:0 4px 10px rgba(23,32,42,.08)}
-.pill.hot{background:#fff4ec;color:var(--hot)}
 
-.a-body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between;padding:2px 0}
-.a-title{margin:0;font-size:14.5px;font-weight:900;line-height:1.3;letter-spacing:-.02em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.a-meta{margin-top:3px;font-size:10px;font-weight:750;color:var(--muted);line-height:1.5}
-.a-tags{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
-.tag{padding:3px 8px;border-radius:8px;background:var(--purple-soft);color:var(--purple-dark);font-size:9px;font-weight:900}
-.a-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid #f1eefb}
-.lbl{display:block;font-size:9px;font-weight:800;color:var(--muted)}
-.a-price{font-size:16px;font-weight:950;color:var(--purple-dark);letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
-.a-price small{font-size:9px;font-weight:800;color:var(--muted);margin-inline-start:3px}
-.go{flex:0 0 auto;height:36px;padding:0 16px;border-radius:12px;color:#fff;font-size:12px;font-weight:950;
-  background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 6px 14px rgba(98,70,217,.28)}
-.a-card.done .go{background:#9ca3af;box-shadow:none}
+.pill{
+  position:absolute;
+  bottom:6px;
+  inset-inline:6px;
+  padding:3px 0;
+  border-radius:9px;
+  background:rgba(255,255,255,.96);
+  color:var(--purple-dark);
+  text-align:center;
+  font-size:10.5px;
+  font-weight:950;
+  direction:ltr;
+  font-variant-numeric:tabular-nums;
+  box-shadow:0 4px 10px rgba(23,32,42,.08)
+}
+.pill.hot{
+  background:#fff4ec;
+  color:var(--hot)
+}
 
-.empty{padding:34px 18px;text-align:center;border-radius:20px;background:#fff;border:1px dashed #cfc7f3}
-.empty h3{margin:0 0 4px;font-size:15px;font-weight:900}
-.empty p{margin:0;font-size:11px;font-weight:700;color:var(--muted);line-height:1.7}
+.a-body{
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:2px 0
+}
+.a-title{
+  margin:0;
+  font-size:14.5px;
+  font-weight:900;
+  line-height:1.3;
+  letter-spacing:-.02em;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden
+}
+.a-meta{
+  margin-top:3px;
+  font-size:10px;
+  font-weight:750;
+  color:var(--muted);
+  line-height:1.5
+}
+.a-tags{
+  display:flex;
+  gap:6px;
+  margin-top:6px;
+  flex-wrap:wrap
+}
+.tag{
+  padding:3px 8px;
+  border-radius:8px;
+  background:var(--purple-soft);
+  color:var(--purple-dark);
+  font-size:9px;
+  font-weight:900
+}
+.a-foot{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:8px;
+  margin-top:8px;
+  padding-top:8px;
+  border-top:1px solid #f1eefb
+}
+.lbl{
+  display:block;
+  font-size:9px;
+  font-weight:800;
+  color:var(--muted)
+}
+.a-price{
+  font-size:16px;
+  font-weight:950;
+  color:var(--purple-dark);
+  letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap
+}
+.a-price small{
+  font-size:9px;
+  font-weight:800;
+  color:var(--muted);
+  margin-inline-start:3px
+}
+.go{
+  flex:0 0 auto;
+  height:36px;
+  padding:0 16px;
+  border-radius:12px;
+  color:#fff;
+  font-size:12px;
+  font-weight:950;
+  background:linear-gradient(145deg,#6246d9,#8b6cf0);
+  box-shadow:0 6px 14px rgba(98,70,217,.28)
+}
+.a-card.done .go{
+  background:#9ca3af;
+  box-shadow:none
+}
+
+.empty{
+  padding:34px 18px;
+  text-align:center;
+  border-radius:20px;
+  background:#fff;
+  border:1px dashed #cfc7f3
+}
+.empty h3{
+  margin:0 0 4px;
+  font-size:15px;
+  font-weight:900
+}
+.empty p{
+  margin:0;
+  font-size:11px;
+  font-weight:700;
+  color:var(--muted);
+  line-height:1.7
+}
 
 /* bottom nav (نفس الصفحة الرئيسية) */
-.bottom-wrap{position:fixed;left:0;right:0;bottom:-7px;width:100%;padding:7px 10px calc(7px + var(--safe-bottom));z-index:100;pointer-events:none}
-.bottom-nav{width:min(100%,520px);margin:0 auto;min-height:64px;padding:5px;border-radius:20px;background:rgba(255,255,255,.97);border:1px solid #e7ecef;
-  box-shadow:0 10px 28px rgba(23,32,42,.10);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);pointer-events:auto;
-  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;align-items:center}
-.nav-item{min-width:0;min-height:52px;padding:4px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:15px;color:#7e8992}
-.nav-item.active{color:var(--purple-dark);background:var(--purple-soft)}
-.nav-icon{width:20px;height:20px;flex:0 0 20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.nav-item>span:not(.add-button){font-size:8.5px;line-height:1;font-weight:900;white-space:nowrap}
-.add-button{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;color:#fff;
-  background:linear-gradient(145deg,#176b87,#32b8c4);box-shadow:0 6px 14px rgba(23,107,135,.18)}
-.add-button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.bottom-wrap{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:-7px;
+  width:100%;
+  padding:7px 10px calc(7px + var(--safe-bottom));
+  z-index:100;
+  pointer-events:none
+}
+.bottom-nav{
+  width:min(100%,520px);
+  margin:0 auto;
+  min-height:64px;
+  padding:5px;
+  border-radius:20px;
+  background:rgba(255,255,255,.97);
+  border:1px solid #e7ecef;
+  box-shadow:0 10px 28px rgba(23,32,42,.10);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  pointer-events:auto;
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:3px;
+  align-items:center
+}
+.nav-item{
+  min-width:0;
+  min-height:52px;
+  padding:4px 2px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  border-radius:15px;
+  color:#7e8992
+}
+.nav-item.active{
+  color:var(--purple-dark);
+  background:var(--purple-soft)
+}
+.nav-icon{
+  width:20px;
+  height:20px;
+  flex:0 0 20px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.7;
+  stroke-linecap:round;
+  stroke-linejoin:round
+}
+.nav-item>span:not(.add-button){
+  font-size:8.5px;
+  line-height:1;
+  font-weight:900;
+  white-space:nowrap
+}
+.add-button{
+  width:38px;
+  height:38px;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  background:linear-gradient(145deg,#176b87,#32b8c4);
+  box-shadow:0 6px 14px rgba(23,107,135,.18)
+}
+.add-button svg{
+  width:20px;
+  height:20px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2;
+  stroke-linecap:round
+}
 
-.toast{position:fixed;left:50%;bottom:calc(88px + var(--safe-bottom));transform:translateX(-50%) translateY(16px);max-width:calc(100% - 40px);
-  padding:10px 14px;border-radius:13px;background:#1e2c30;color:#fff;font-size:11px;font-weight:800;box-shadow:0 14px 34px rgba(24,44,49,.12);
-  opacity:0;pointer-events:none;transition:.25s ease;z-index:120;text-align:center}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-@media (prefers-reduced-motion:reduce){.toast,.a-card{transition:none}.a-card:active{transform:none}}
-@media (max-width:360px){.a-img{flex-basis:100px}.a-price{font-size:14.5px}.go{padding:0 12px}}
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:calc(88px + var(--safe-bottom));
+  transform:translateX(-50%) translateY(16px);
+  max-width:calc(100% - 40px);
+  padding:10px 14px;
+  border-radius:13px;
+  background:#1e2c30;
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+  box-shadow:0 14px 34px rgba(24,44,49,.12);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s ease;
+  z-index:120;
+  text-align:center
+}
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0)
+}
+
+@media (prefers-reduced-motion:reduce){
+  .toast,.a-card{transition:none}
+  .a-card:active{transform:none}
+}
+@media (max-width:360px){
+  .a-img{flex-basis:100px}
+  .a-price{font-size:14.5px}
+  .go{padding:0 12px}
+}
 </style>
 </head>
+
 <body>
+
 <main class="page">
 
 <header>
   <div class="topbar">
-    <button class="icon-btn" id="back" type="button" aria-label="رجوع"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-    <div class="brand-mini"><strong>MZAD</strong><span>PHONE</span></div>
+    <button class="icon-btn" id="back" type="button" aria-label="رجوع">
+      <svg viewBox="0 0 24 24">
+        <path d="M9 5l7 7-7 7"/>
+      </svg>
+    </button>
+
+    <div class="brand-mini">
+      <strong>MZAD</strong>
+      <span>PHONE</span>
+    </div>
+
     <span class="spacer"></span>
   </div>
+
   <div class="head-copy">
     <h1>المزادات الحالية</h1>
     <p>تابع الأجهزة وزايد قبل ما ينتهي الوقت</p>
   </div>
+
   <div class="search-wrap" id="searchWrap">
-    <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-    <input id="search" class="search" type="search" autocomplete="off" inputmode="search" placeholder='ابحث عن مزاد، مثل "iPhone 15"' aria-label="البحث عن مزاد">
-    <button id="clear" class="search-clear" type="button" aria-label="مسح البحث"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17"/></svg></button>
+    <svg class="search-icon" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="7"/>
+      <path d="m20 20-4-4"/>
+    </svg>
+
+    <input
+      id="search"
+      class="search"
+      type="search"
+      autocomplete="off"
+      inputmode="search"
+      placeholder='ابحث عن مزاد، مثل "iPhone 15"'
+      aria-label="البحث عن مزاد"
+    >
+
+    <button id="clear" class="search-clear" type="button" aria-label="مسح البحث">
+      <svg viewBox="0 0 24 24">
+        <path d="M7 7l10 10M17 7 7 17"/>
+      </svg>
+    </button>
   </div>
 </header>
 
@@ -144,134 +562,1186 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
   <button class="fchip" data-f="low" role="tab" aria-selected="false">الأقل سعراً</button>
   <button class="fchip" data-f="high" role="tab" aria-selected="false">الأعلى سعراً</button>
 </div>
+
 <div class="result" id="result"></div>
+
 <section class="list" id="list" aria-live="polite"></section>
 
 </main>
 
 <div class="bottom-wrap">
   <nav class="bottom-nav">
-    <a class="nav-item" href="home.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></svg><span>الرئيسية</span></a>
-    <a class="nav-item" href="market.html"><svg class="nav-icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/></svg><span>الأجهزة</span></a>
-    <a class="nav-item" href="sell.html"><span class="add-button"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span>إضافة</span></a>
-    <a class="nav-item" href="favorites.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/></svg><span>المفضلة</span></a>
-    <a class="nav-item" href="profile.html"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5"/></svg><span>حسابي</span></a>
+
+    <a class="nav-item" href="home.html">
+      <svg class="nav-icon" viewBox="0 0 24 24">
+        <path d="m3 10 9-7 9 7"/>
+        <path d="M5 9v11h14V9"/>
+        <path d="M9 20v-6h6v6"/>
+      </svg>
+      <span>الرئيسية</span>
+    </a>
+
+    <a class="nav-item" href="market.html">
+      <svg class="nav-icon" viewBox="0 0 24 24">
+        <rect x="4" y="4" width="16" height="16" rx="3"/>
+        <path d="M8 9h8M8 13h8M8 17h5"/>
+      </svg>
+      <span>الأجهزة</span>
+    </a>
+
+    <a class="nav-item" href="sell.html">
+      <span class="add-button">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 5v14M5 12h14"/>
+        </svg>
+      </span>
+      <span>إضافة</span>
+    </a>
+
+    <a class="nav-item" href="favorites.html">
+      <svg class="nav-icon" viewBox="0 0 24 24">
+        <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
+      </svg>
+      <span>المفضلة</span>
+    </a>
+
+    <a class="nav-item" href="profile.html">
+      <svg class="nav-icon" viewBox="0 0 24 24">
+        <circle cx="12" cy="8" r="3"/>
+        <path d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5"/>
+      </svg>
+      <span>حسابي</span>
+    </a>
+
   </nav>
 </div>
+
 <div class="toast" id="toast" role="status"></div>
 
-<script>
-/* بيانات تجريبية: استبدلها ببيانات Supabase (الأجهزة اللي sale_type مالتها مزاد)
-   كل عنصر: id, title, meta, price (السعر الحالي), bids, endsAt (وقت الانتهاء), created, img (رابط الصورة أو null) */
-const now=Date.now(), M=60e3, H=60*M, D=24*H;
-const AUCTIONS=[
-  {id:'a1',title:'iPhone 15 Pro Max',meta:'256GB • Natural Titanium • النجف',tag:'بطارية 91%',price:1150000,bids:17,endsAt:now+42*M+18e3,created:now-5*H,img:null},
-  {id:'a2',title:'Samsung Galaxy S24 Ultra',meta:'512GB • Titanium Gray • كربلاء',tag:'نظيف جداً',price:850000,bids:9,endsAt:now+3*H+25*M,created:now-9*H,img:null},
-  {id:'a3',title:'iPhone 13 Pro',meta:'128GB • Sierra Blue • بغداد',tag:'بطارية 85%',price:520000,bids:5,endsAt:now+4*M+40e3,created:now-1*D,img:null},
-  {id:'a4',title:'Google Pixel 8 Pro',meta:'256GB • Obsidian • النجف',tag:'ممتاز',price:640000,bids:12,endsAt:now+1*D+6*H,created:now-2*H,img:null},
-  {id:'a5',title:'Xiaomi 14 Ultra',meta:'512GB • Black • الحلة',tag:'نظيف',price:700000,bids:3,endsAt:now+2*D+3*H,created:now-30*M,img:null},
-  {id:'a6',title:'iPhone 14 Pro Max',meta:'256GB • Deep Purple • بغداد',tag:'بطارية 88%',price:930000,bids:21,endsAt:now+19*M+5e3,created:now-3*D,img:null}
-];
+<script type="module">
 
-const $=id=>document.getElementById(id);
-const fmt=n=>Number(n).toLocaleString('en-US');
-const favs=new Set();
-let filter='all', query='', toastT;
+/* =========================================================
+   MZAD PHONE
+   auctions.html
+   ربط حقيقي مع Supabase
+   ========================================================= */
 
-/* صورة مؤقتة للجهاز إذا ما كو صورة */
-const tones=['#6246d9','#8b6cf0','#4a34b8','#7c5cf0'];
-const phone=c=>`<svg viewBox="0 0 120 240" aria-hidden="true"><rect x="4" y="4" width="112" height="232" rx="22" fill="#1d2430"/><rect x="10" y="10" width="100" height="220" rx="17" fill="${c}"/><rect x="44" y="16" width="32" height="9" rx="4.5" fill="#0c0f11"/></svg>`;
+import { supabase } from "./js/supabase.js?v=auctions-live-1";
 
-/* بحث (يفهم أسماء عربية للماركات) */
-const norm=s=>String(s||'').toLowerCase().normalize('NFKC').replace(/[أإآٱ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي')
-  .replace(/ايفون/g,'iphone').replace(/سامسونج/g,'samsung').replace(/شاومي/g,'xiaomi').replace(/جوجل|قوقل/g,'google').replace(/بكسل/g,'pixel').replace(/\s+/g,' ').trim();
 
-function timeText(left){
-  if(left<=0)return 'انتهى';
-  if(left>=D)return `${Math.floor(left/D)} يوم`;
-  const p=n=>String(n).padStart(2,'0');
-  return `${p(Math.floor(left/H))}:${p(Math.floor(left%H/M))}:${p(Math.floor(left%M/1000))}`;
+/* =========================================================
+   عناصر الصفحة
+   ========================================================= */
+
+const $ = id => document.getElementById(id);
+
+const fmt = n => {
+  const value = Number(n || 0);
+  return value.toLocaleString("en-US");
+};
+
+
+/* =========================================================
+   الحالة
+   ========================================================= */
+
+let auctions = [];
+let filter = "all";
+let query = "";
+let toastT = null;
+
+let favorites = new Set();
+
+try{
+  const saved = JSON.parse(localStorage.getItem("mzad_favorites") || "[]");
+
+  if(Array.isArray(saved)){
+    favorites = new Set(saved.map(String));
+  }
+}catch{
+  favorites = new Set();
 }
 
+
+/* =========================================================
+   إعدادات
+   ========================================================= */
+
+const BUCKET_NAME = "device-images";
+
+const now = () => Date.now();
+
+const MINUTE = 60 * 1000;
+const HOUR = 60 * MINUTE;
+const DAY = 24 * HOUR;
+
+
+/* =========================================================
+   تطبيع النص للبحث
+   ========================================================= */
+
+function norm(value){
+
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFKC")
+
+    .replace(/[أإآٱ]/g,"ا")
+    .replace(/ة/g,"ه")
+    .replace(/ى/g,"ي")
+
+    .replace(/ايفون/g,"iphone")
+    .replace(/آيفون/g,"iphone")
+    .replace(/ايفن/g,"iphone")
+
+    .replace(/سامسونج/g,"samsung")
+    .replace(/سامسنغ/g,"samsung")
+
+    .replace(/شاومي/g,"xiaomi")
+    .replace(/شياومي/g,"xiaomi")
+
+    .replace(/جوجل/g,"google")
+    .replace(/قوقل/g,"google")
+
+    .replace(/بكسل/g,"pixel")
+
+    .replace(/ون بلس/g,"oneplus")
+    .replace(/ونبلس/g,"oneplus")
+
+    .replace(/\s+/g," ")
+    .trim();
+}
+
+
+/* =========================================================
+   صورة افتراضية فقط إذا الجهاز ما عنده صورة
+   ========================================================= */
+
+const tones = [
+  "#6246d9",
+  "#8b6cf0",
+  "#4a34b8",
+  "#7c5cf0"
+];
+
+function phone(color){
+
+  return `
+    <svg viewBox="0 0 120 240" aria-hidden="true">
+      <rect
+        x="4"
+        y="4"
+        width="112"
+        height="232"
+        rx="22"
+        fill="#1d2430"
+      />
+
+      <rect
+        x="10"
+        y="10"
+        width="100"
+        height="220"
+        rx="17"
+        fill="${color}"
+      />
+
+      <rect
+        x="44"
+        y="16"
+        width="32"
+        height="9"
+        rx="4.5"
+        fill="#0c0f11"
+      />
+    </svg>
+  `;
+}
+
+
+/* =========================================================
+   تحويل مسار الصورة إلى رابط Supabase
+   ========================================================= */
+
+function imageUrl(value){
+
+  if(!value) return "";
+
+  let path = value;
+
+  if(typeof value === "object"){
+
+    if(value.url) path = value.url;
+    else if(value.path) path = value.path;
+    else if(value.name) path = value.name;
+    else return "";
+  }
+
+  path = String(path).trim();
+
+  if(!path) return "";
+
+  /* إذا هو رابط كامل */
+  if(/^https?:\/\//i.test(path)){
+    return path;
+  }
+
+  /* إذا عنده data URL */
+  if(/^data:/i.test(path)){
+    return path;
+  }
+
+  /* إذا كان JSON */
+  if(
+    (path.startsWith("[") && path.endsWith("]")) ||
+    (path.startsWith("{") && path.endsWith("}"))
+  ){
+
+    try{
+
+      const parsed = JSON.parse(path);
+
+      if(Array.isArray(parsed) && parsed.length){
+        return imageUrl(parsed[0]);
+      }
+
+      if(parsed && typeof parsed === "object"){
+        return imageUrl(parsed.url || parsed.path || parsed.name);
+      }
+
+    }catch{}
+  }
+
+  try{
+
+    const { data } = supabase
+      .storage
+      .from(BUCKET_NAME)
+      .getPublicUrl(path);
+
+    return data?.publicUrl || "";
+
+  }catch{
+
+    return "";
+  }
+}
+
+
+/* =========================================================
+   استخراج أول صورة
+   ========================================================= */
+
+function firstImage(images){
+
+  if(!images) return "";
+
+  let list = images;
+
+  if(typeof images === "string"){
+
+    const raw = images.trim();
+
+    if(!raw) return "";
+
+    try{
+
+      const parsed = JSON.parse(raw);
+
+      if(Array.isArray(parsed)){
+        list = parsed;
+      }else{
+        list = [parsed];
+      }
+
+    }catch{
+
+      list = raw.includes(",")
+        ? raw.split(",").map(x => x.trim()).filter(Boolean)
+        : [raw];
+
+    }
+
+  }
+
+  if(!Array.isArray(list)){
+    list = [list];
+  }
+
+  for(const item of list){
+
+    const url = imageUrl(item);
+
+    if(url) return url;
+  }
+
+  return "";
+}
+
+
+/* =========================================================
+   تحويل البيانات القادمة من Supabase
+   ========================================================= */
+
+function normalizeAuction(row, bidCount){
+
+  const currentPrice =
+    Number(
+      row.auction_current_price ??
+      row.price ??
+      row.auction_start_price ??
+      0
+    );
+
+  const startPrice =
+    Number(
+      row.auction_start_price ??
+      row.price ??
+      0
+    );
+
+  const endsAt = row.auction_ends_at
+    ? new Date(row.auction_ends_at).getTime()
+    : 0;
+
+  const created = row.created_at
+    ? new Date(row.created_at).getTime()
+    : 0;
+
+  const image = firstImage(row.images);
+
+  const brand = String(row.brand || "").trim();
+  const model = String(row.model || "").trim();
+
+  const title = [brand, model]
+    .filter(Boolean)
+    .join(" ")
+    .trim() || "جهاز";
+
+  const metaParts = [];
+
+  if(row.storage){
+    metaParts.push(String(row.storage));
+  }
+
+  if(row.color){
+    metaParts.push(String(row.color));
+  }
+
+  if(row.location){
+    metaParts.push(String(row.location));
+  }
+
+  const meta = metaParts.join(" • ");
+
+  let tag = "مزاد نشط";
+
+  if(row.battery_health && brand.toLowerCase() === "apple"){
+    tag = `بطارية ${String(row.battery_health).replace("%","")}%`;
+  }else if(row.condition){
+    tag = String(row.condition);
+  }
+
+  return {
+    id: String(row.id),
+
+    title,
+
+    meta,
+
+    tag,
+
+    price: currentPrice,
+
+    startPrice,
+
+    bids: Number(bidCount || 0),
+
+    endsAt,
+
+    created,
+
+    img: image,
+
+    brand,
+
+    model,
+
+    storage: row.storage || "",
+
+    color: row.color || "",
+
+    condition: row.condition || "",
+
+    sellerName: row.seller_name || "",
+
+    saleType: row.sale_type || "auction"
+  };
+}
+
+
+/* =========================================================
+   تحميل المزادات من Supabase
+   ========================================================= */
+
+async function loadAuctions(){
+
+  $("list").innerHTML = `
+    <div class="empty">
+      <h3>جاري تحميل المزادات</h3>
+      <p>لحظات ونجيب لك المزادات الحالية.</p>
+    </div>
+  `;
+
+  try{
+
+    /*
+      نجيب فقط أجهزة المزاد.
+      الوقت الحقيقي موجود في auction_ends_at.
+    */
+
+    const { data, error } = await supabase
+      .from("devices")
+      .select(`
+        id,
+        created_at,
+        brand,
+        model,
+        storage,
+        color,
+        battery_health,
+        price,
+        condition,
+        location,
+        sale_type,
+        images,
+        seller_name,
+        auction_start_price,
+        auction_current_price,
+        auction_bid_step,
+        auction_ends_at,
+        auction_status
+      `)
+      .eq("sale_type","auction")
+      .order("created_at",{ascending:false});
+
+    if(error){
+      console.error("AUCTIONS DEVICES ERROR:", error);
+      throw error;
+    }
+
+
+    const rows = Array.isArray(data) ? data : [];
+
+
+    /*
+      فقط المزادات الفعالة والتي عندها وقت انتهاء.
+      وإذا auction_status موجود، لازم يكون active.
+    */
+
+    const activeRows = rows.filter(row => {
+
+      const endsAt = row.auction_ends_at
+        ? new Date(row.auction_ends_at).getTime()
+        : 0;
+
+      if(!endsAt || endsAt <= Date.now()){
+        return false;
+      }
+
+      if(
+        row.auction_status !== null &&
+        row.auction_status !== undefined &&
+        row.auction_status !== "" &&
+        row.auction_status !== "active"
+      ){
+        return false;
+      }
+
+      return true;
+    });
+
+
+    /*
+      نجيب المزايدات حتى نعرض العدد الحقيقي.
+    */
+
+    let bidRows = [];
+
+    if(activeRows.length){
+
+      const ids = activeRows.map(row => row.id);
+
+      const { data: bidsData, error: bidsError } = await supabase
+        .from("auction_bids")
+        .select("auction_id, amount")
+        .in("auction_id", ids);
+
+      if(bidsError){
+
+        /*
+          إذا RLS مانع قراءة المزايدات،
+          لا نخلي صفحة المزادات كلها تتعطل.
+        */
+
+        console.warn(
+          "AUCTION BIDS READ WARNING:",
+          bidsError
+        );
+
+        bidRows = [];
+
+      }else{
+
+        bidRows = Array.isArray(bidsData)
+          ? bidsData
+          : [];
+      }
+    }
+
+
+    /*
+      حساب عدد المزايدات لكل مزاد.
+    */
+
+    const bidCounts = new Map();
+
+    for(const bid of bidRows){
+
+      const id = String(bid.auction_id);
+
+      bidCounts.set(
+        id,
+        (bidCounts.get(id) || 0) + 1
+      );
+    }
+
+
+    auctions = activeRows.map(row => {
+
+      return normalizeAuction(
+        row,
+        bidCounts.get(String(row.id)) || 0
+      );
+
+    });
+
+
+    render();
+
+  }catch(error){
+
+    console.error("AUCTIONS LOAD ERROR:", error);
+
+    $("result").textContent = "";
+
+    $("list").innerHTML = `
+      <div class="empty">
+        <h3>تعذر تحميل المزادات</h3>
+        <p>
+          تأكد من اتصال قاعدة البيانات والمحاولة مرة ثانية.
+        </p>
+      </div>
+    `;
+  }
+}
+
+
+/* =========================================================
+   الفلاتر والبحث
+   ========================================================= */
+
 function visible(){
-  let list=AUCTIONS.filter(a=>!query||norm(a.title+' '+a.meta).includes(norm(query)));
-  const by={soon:(a,b)=>a.endsAt-b.endsAt,new:(a,b)=>b.created-a.created,low:(a,b)=>a.price-b.price,high:(a,b)=>b.price-a.price};
-  if(by[filter])list=[...list].sort(by[filter]);
+
+  let list = auctions.filter(a => {
+
+    if(!query) return true;
+
+    const text = [
+      a.title,
+      a.meta,
+      a.tag,
+      a.brand,
+      a.model,
+      a.storage,
+      a.color,
+      a.condition
+    ].join(" ");
+
+    return norm(text).includes(norm(query));
+  });
+
+
+  const by = {
+
+    soon:(a,b) =>
+      a.endsAt - b.endsAt,
+
+    new:(a,b) =>
+      b.created - a.created,
+
+    low:(a,b) =>
+      a.price - b.price,
+
+    high:(a,b) =>
+      b.price - a.price
+
+  };
+
+
+  if(by[filter]){
+    list = [...list].sort(by[filter]);
+  }
+
+
   return list;
 }
 
+
+/* =========================================================
+   حفظ المفضلة
+   ========================================================= */
+
+function saveFavorites(){
+
+  try{
+
+    localStorage.setItem(
+      "mzad_favorites",
+      JSON.stringify([...favorites])
+    );
+
+  }catch{}
+}
+
+
+/* =========================================================
+   رسم القائمة
+   ========================================================= */
+
 function render(){
-  const list=visible();
-  $('result').textContent=`${list.length} مزاد`;
+
+  const list = visible();
+
+  $("result").textContent =
+    `${list.length} مزاد`;
+
+
   if(!list.length){
-    $('list').innerHTML=`<div class="empty"><h3>لا توجد مزادات مطابقة</h3><p>جرب كلمة بحث ثانية أو ارجع لعرض الكل.</p></div>`;
+
+    $("list").innerHTML = `
+      <div class="empty">
+        <h3>لا توجد مزادات مطابقة</h3>
+        <p>
+          ${
+            auctions.length
+              ? "جرب كلمة بحث ثانية أو غيّر الفلتر."
+              : "لا توجد مزادات نشطة حالياً."
+          }
+        </p>
+      </div>
+    `;
+
     return;
   }
-  $('list').innerHTML=list.map((a,i)=>`
-    <article class="a-card" data-id="${a.id}" tabindex="0" role="link" aria-label="${a.title}">
-      <div class="a-img">
-        ${a.img?`<img src="${a.img}" alt="${a.title}" loading="lazy" decoding="async" draggable="false">`:phone(tones[i%tones.length])}
-        <button class="fav${favs.has(a.id)?' active':''}" type="button" aria-label="إضافة إلى المفضلة"><svg viewBox="0 0 24 24"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/></svg></button>
-        <span class="pill" data-end="${a.endsAt}"></span>
-      </div>
-      <div class="a-body">
-        <div>
-          <h3 class="a-title">${a.title}</h3>
-          <div class="a-meta">${a.meta}</div>
-          <div class="a-tags"><span class="tag">${a.tag}</span><span class="tag">${a.bids} مزايدة</span></div>
+
+
+  $("list").innerHTML = list.map((a,i) => {
+
+    const image = a.img
+      ? `
+        <img
+          src="${escapeHtml(a.img)}"
+          alt="${escapeHtml(a.title)}"
+          loading="lazy"
+          decoding="async"
+          draggable="false"
+        >
+      `
+      : phone(tones[i % tones.length]);
+
+
+    return `
+      <article
+        class="a-card"
+        data-id="${escapeHtml(a.id)}"
+        tabindex="0"
+        role="link"
+        aria-label="${escapeHtml(a.title)}"
+      >
+
+        <div class="a-img">
+
+          ${image}
+
+          <button
+            class="fav${favorites.has(String(a.id)) ? " active" : ""}"
+            type="button"
+            aria-label="إضافة إلى المفضلة"
+          >
+            <svg viewBox="0 0 24 24">
+              <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
+            </svg>
+          </button>
+
+          <span
+            class="pill"
+            data-end="${a.endsAt}"
+          ></span>
+
         </div>
-        <div class="a-foot">
-          <div><span class="lbl">السعر الحالي</span><div class="a-price">${fmt(a.price)}<small>د.ع</small></div></div>
-          <button class="go" type="button">زايد</button>
+
+
+        <div class="a-body">
+
+          <div>
+
+            <h3 class="a-title">
+              ${escapeHtml(a.title)}
+            </h3>
+
+            <div class="a-meta">
+              ${escapeHtml(a.meta || "مزاد داخل المنصة")}
+            </div>
+
+            <div class="a-tags">
+
+              <span class="tag">
+                ${escapeHtml(a.tag)}
+              </span>
+
+              <span class="tag">
+                ${a.bids} مزايدة
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="a-foot">
+
+            <div>
+
+              <span class="lbl">
+                السعر الحالي
+              </span>
+
+              <div class="a-price">
+                ${fmt(a.price)}
+                <small>د.ع</small>
+              </div>
+
+            </div>
+
+            <button
+              class="go"
+              type="button"
+            >
+              زايد
+            </button>
+
+          </div>
+
         </div>
-      </div>
-    </article>`).join('');
+
+      </article>
+    `;
+
+  }).join("");
+
+
   tick();
 }
 
-/* المؤقتات: تتحدث كل ثانية بدون إعادة رسم القائمة */
-function tick(){
-  const t=Date.now();
-  document.querySelectorAll('.pill').forEach(el=>{
-    const left=Number(el.dataset.end)-t;
-    el.textContent=timeText(left);
-    el.classList.toggle('hot',left>0&&left<=5*M);
-    el.closest('.a-card').classList.toggle('done',left<=0);
-  });
+
+/* =========================================================
+   حماية النصوص قبل وضعها داخل HTML
+   ========================================================= */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
-/* تفاعل */
-$('list').addEventListener('click',e=>{
-  const card=e.target.closest('.a-card'); if(!card)return;
-  const fav=e.target.closest('.fav');
+
+/* =========================================================
+   المؤقت
+   ========================================================= */
+
+function timeText(left){
+
+  if(left <= 0){
+    return "انتهى";
+  }
+
+
+  if(left >= DAY){
+
+    const days = Math.floor(left / DAY);
+
+    return `${days} يوم`;
+  }
+
+
+  const p = n =>
+    String(n).padStart(2,"0");
+
+
+  const hours =
+    Math.floor(left / HOUR);
+
+  const minutes =
+    Math.floor((left % HOUR) / MINUTE);
+
+  const seconds =
+    Math.floor((left % MINUTE) / 1000);
+
+
+  return `${p(hours)}:${p(minutes)}:${p(seconds)}`;
+}
+
+
+function tick(){
+
+  const t = Date.now();
+
+  document.querySelectorAll(".pill").forEach(el => {
+
+    const left =
+      Number(el.dataset.end) - t;
+
+
+    el.textContent =
+      timeText(left);
+
+
+    el.classList.toggle(
+      "hot",
+      left > 0 && left <= 5 * MINUTE
+    );
+
+
+    const card =
+      el.closest(".a-card");
+
+
+    if(card){
+
+      card.classList.toggle(
+        "done",
+        left <= 0
+      );
+
+    }
+
+  });
+
+}
+
+
+/* =========================================================
+   تحديث المزادات المنتهية من قاعدة البيانات
+   ========================================================= */
+
+async function refreshExpiredAuctions(){
+
+  const expired = auctions.some(
+    a => a.endsAt <= Date.now()
+  );
+
+  if(expired){
+
+    await loadAuctions();
+  }
+
+}
+
+
+/* =========================================================
+   تفاعل القائمة
+   ========================================================= */
+
+$("list").addEventListener("click", e => {
+
+  const card =
+    e.target.closest(".a-card");
+
+  if(!card) return;
+
+
+  const fav =
+    e.target.closest(".fav");
+
+
+  /*
+    المفضلة لا تفتح صفحة التفاصيل.
+  */
+
   if(fav){
-    const id=card.dataset.id,on=!favs.has(id);
-    on?favs.add(id):favs.delete(id);
-    fav.classList.toggle('active',on);
-    toast(on?'تمت إضافة الجهاز إلى المفضلة':'تمت إزالة الجهاز من المفضلة');
+
+    const id =
+      String(card.dataset.id);
+
+    const on =
+      !favorites.has(id);
+
+
+    if(on){
+
+      favorites.add(id);
+
+      fav.classList.add("active");
+
+      toast(
+        "تمت إضافة المزاد إلى المفضلة"
+      );
+
+    }else{
+
+      favorites.delete(id);
+
+      fav.classList.remove("active");
+
+      toast(
+        "تمت إزالة المزاد من المفضلة"
+      );
+
+    }
+
+
+    saveFavorites();
+
     return;
   }
-  location.href=`auction-details.html?id=${encodeURIComponent(card.dataset.id)}`;
-});
-$('list').addEventListener('keydown',e=>{
-  if(e.key==='Enter'&&e.target.classList.contains('a-card'))e.target.click();
+
+
+  /*
+    هنا أهم تعديل:
+    نرسل ID الحقيقي من Supabase
+    إلى auction-details.html
+  */
+
+  const auctionId =
+    String(card.dataset.id || "").trim();
+
+
+  if(!auctionId){
+
+    toast("معرّف المزاد غير صحيح");
+
+    return;
+  }
+
+
+  window.location.href =
+    `auction-details.html?id=${encodeURIComponent(auctionId)}`;
+
 });
 
-$('filters').addEventListener('click',e=>{
-  const b=e.target.closest('.fchip'); if(!b)return;
-  filter=b.dataset.f;
-  document.querySelectorAll('.fchip').forEach(c=>{const on=c===b;c.classList.toggle('active',on);c.setAttribute('aria-selected',on)});
+
+/* =========================================================
+   فتح المزاد بالكيبورد
+   ========================================================= */
+
+$("list").addEventListener("keydown", e => {
+
+  if(
+    e.key === "Enter" &&
+    e.target.classList.contains("a-card")
+  ){
+
+    const auctionId =
+      String(e.target.dataset.id || "").trim();
+
+
+    if(!auctionId) return;
+
+
+    window.location.href =
+      `auction-details.html?id=${encodeURIComponent(auctionId)}`;
+  }
+
+});
+
+
+/* =========================================================
+   الفلاتر
+   ========================================================= */
+
+$("filters").addEventListener("click", e => {
+
+  const b =
+    e.target.closest(".fchip");
+
+  if(!b) return;
+
+
+  filter =
+    b.dataset.f;
+
+
+  document.querySelectorAll(".fchip")
+    .forEach(c => {
+
+      const on =
+        c === b;
+
+      c.classList.toggle(
+        "active",
+        on
+      );
+
+      c.setAttribute(
+        "aria-selected",
+        on ? "true" : "false"
+      );
+
+    });
+
+
   render();
 });
 
-const sync=()=>$('searchWrap').classList.toggle('has-value',$('search').value.trim().length>0);
-$('search').addEventListener('input',e=>{query=e.target.value.trim();sync();render()});
-$('clear').addEventListener('click',()=>{$('search').value='';query='';sync();render();$('search').focus()});
-$('back').addEventListener('click',()=>history.length>1?history.back():location.href='home.html');
 
-function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2200)}
+/* =========================================================
+   البحث
+   ========================================================= */
 
-render(); setInterval(tick,1000);
+function syncSearch(){
+
+  $("searchWrap")
+    .classList.toggle(
+      "has-value",
+      $("search").value.trim().length > 0
+    );
+
+}
+
+
+$("search").addEventListener(
+  "input",
+  e => {
+
+    query =
+      e.target.value.trim();
+
+    syncSearch();
+
+    render();
+
+  }
+);
+
+
+$("clear").addEventListener(
+  "click",
+  () => {
+
+    $("search").value = "";
+
+    query = "";
+
+    syncSearch();
+
+    render();
+
+    $("search").focus();
+
+  }
+);
+
+
+/* =========================================================
+   زر الرجوع
+   ========================================================= */
+
+$("back").addEventListener(
+  "click",
+  () => {
+
+    if(window.history.length > 1){
+
+      window.history.back();
+
+    }else{
+
+      window.location.href =
+        "home.html";
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   Toast
+   ========================================================= */
+
+function toast(text){
+
+  const el =
+    $("toast");
+
+
+  el.textContent =
+    text;
+
+
+  el.classList.add("show");
+
+
+  clearTimeout(toastT);
+
+
+  toastT =
+    setTimeout(
+      () => {
+        el.classList.remove("show");
+      },
+      2200
+    );
+
+}
+
+
+/* =========================================================
+   بدء الصفحة
+   ========================================================= */
+
+(async function(){
+
+  await loadAuctions();
+
+  /*
+    تحديث العداد كل ثانية.
+  */
+
+  setInterval(
+    tick,
+    1000
+  );
+
+
+  /*
+    كل 30 ثانية نفحص إذا انتهى مزاد
+    ونحدث القائمة من Supabase.
+  */
+
+  setInterval(
+    refreshExpiredAuctions,
+    30000
+  );
+
+})();
+
 </script>
+
 </body>
 </html>
