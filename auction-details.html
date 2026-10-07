@@ -1059,45 +1059,33 @@ td.good{
 
 import {
   supabase
-} from "./js/supabase.js?v=auction-details-final-5";
+} from "./js/supabase.js?v=auction-details-final-6";
 
 
 /* =========================================================
    HELPERS
 ========================================================= */
 
-const $ =
-  id =>
-    document.getElementById(id);
+const $ = id => document.getElementById(id);
 
+const fmt = n => Number(n || 0).toLocaleString("en-US");
 
-const fmt =
-  n =>
-    Number(n || 0)
-      .toLocaleString("en-US");
-
-
-const escapeHtml =
-  value =>
-    String(value ?? "")
-      .replace(/&/g,"&amp;")
-      .replace(/</g,"&lt;")
-      .replace(/>/g,"&gt;")
-      .replace(/"/g,"&quot;")
-      .replace(/'/g,"&#039;");
+const escapeHtml = value =>
+  String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 
 /* =========================================================
    AUCTION ID
 ========================================================= */
 
-const params =
-  new URLSearchParams(
-    window.location.search
-  );
+const params = new URLSearchParams(window.location.search);
 
-const auctionId =
-  params.get("id")?.trim() || "";
+const auctionId = params.get("id")?.trim() || "";
 
 
 let auction = null;
@@ -1108,6 +1096,12 @@ let toastT = null;
 let timerInterval = null;
 let refreshInterval = null;
 
+/* وقت نهاية يرجع من الـ RPC بعد التمديد */
+let endOverride = 0;
+
+/* بيانات البائع من جدول المستخدمين (إن وُجدت وسمحت الصلاحيات) */
+let sellerProfile = null;
+
 
 /* =========================================================
    TOAST
@@ -1115,23 +1109,17 @@ let refreshInterval = null;
 
 function toast(message){
 
-  const el =
-    $("toast");
+  const el = $("toast");
 
-  el.textContent =
-    String(message || "");
+  el.textContent = String(message || "");
 
   el.classList.add("show");
 
   clearTimeout(toastT);
 
-  toastT =
-    setTimeout(
-      () => {
-        el.classList.remove("show");
-      },
-      2600
-    );
+  toastT = setTimeout(() => {
+    el.classList.remove("show");
+  }, 2600);
 
 }
 
@@ -1146,21 +1134,15 @@ function ago(value){
     return "";
   }
 
-  const time =
-    new Date(value).getTime();
+  const time = new Date(value).getTime();
 
   if(!Number.isFinite(time)){
     return "";
   }
 
-  const diff =
-    Math.max(
-      0,
-      Date.now() - time
-    );
+  const diff = Math.max(0, Date.now() - time);
 
-  const minutes =
-    Math.floor(diff / 60000);
+  const minutes = Math.floor(diff / 60000);
 
   if(minutes < 1){
     return "الآن";
@@ -1170,15 +1152,13 @@ function ago(value){
     return `منذ ${minutes} دقيقة`;
   }
 
-  const hours =
-    Math.floor(minutes / 60);
+  const hours = Math.floor(minutes / 60);
 
   if(hours < 24){
     return `منذ ${hours} ساعة`;
   }
 
-  const days =
-    Math.floor(hours / 24);
+  const days = Math.floor(hours / 24);
 
   return `منذ ${days} يوم`;
 
@@ -1200,36 +1180,28 @@ function colorOf(name){
     "#c2255c"
   ];
 
-  const text =
-    String(name || "مستخدم");
+  const text = String(name || "مستخدم");
 
-  const total =
-    [...text].reduce(
-      (sum,char) =>
-        sum + char.charCodeAt(0),
-      0
-    );
+  const total = [...text].reduce(
+    (sum,char) => sum + char.charCodeAt(0),
+    0
+  );
 
-  return colors[
-    total % colors.length
-  ];
+  return colors[total % colors.length];
 
 }
 
 
 function av(name){
 
-  const text =
-    String(name || "مستخدم");
+  const text = String(name || "مستخدم");
 
   return `
     <span
       class="av"
       style="background:${colorOf(text)}"
     >
-      ${escapeHtml(
-        text.trim()[0] || "م"
-      )}
+      ${escapeHtml(text.trim()[0] || "م")}
     </span>
   `;
 
@@ -1246,23 +1218,20 @@ function parseImages(value){
     return [];
   }
 
-  let data =
-    value;
+  let data = value;
 
   if(typeof data === "string"){
 
     try{
 
-      data =
-        JSON.parse(data);
+      data = JSON.parse(data);
 
     }catch{
 
-      data =
-        data
-          .split(",")
-          .map(x => x.trim())
-          .filter(Boolean);
+      data = data
+        .split(",")
+        .map(x => x.trim())
+        .filter(Boolean);
 
     }
 
@@ -1272,13 +1241,11 @@ function parseImages(value){
 
     if(typeof data === "object"){
 
-      data =
-        Object.values(data);
+      data = Object.values(data);
 
     }else{
 
-      data =
-        [data];
+      data = [data];
 
     }
 
@@ -1332,16 +1299,14 @@ function imageUrl(path){
 
   }
 
-  const clean =
-    path
-      .replace(/^\/+/,"")
-      .replace(/^device-images\//,"");
+  const clean = path
+    .replace(/^\/+/,"")
+    .replace(/^device-images\//,"");
 
-  const { data } =
-    supabase
-      .storage
-      .from("device-images")
-      .getPublicUrl(clean);
+  const { data } = supabase
+    .storage
+    .from("device-images")
+    .getPublicUrl(clean);
 
   return data?.publicUrl || "";
 
@@ -1350,13 +1315,8 @@ function imageUrl(path){
 
 function valueText(value){
 
-  if(
-    value === null ||
-    value === undefined
-  ){
-
+  if(value === null || value === undefined){
     return "";
-
   }
 
   if(typeof value === "string"){
@@ -1386,8 +1346,7 @@ function valueText(value){
 
 function parseStoredNotes(raw){
 
-  const text =
-    valueText(raw);
+  const text = valueText(raw);
 
   if(!text){
 
@@ -1407,21 +1366,14 @@ function parseStoredNotes(raw){
   let markerIndex = -1;
   let markerLength = 0;
 
-  for(
-    const marker
-    of markers
-  ){
+  for(const marker of markers){
 
-    const index =
-      text.indexOf(marker);
+    const index = text.indexOf(marker);
 
     if(index >= 0){
 
-      markerIndex =
-        index;
-
-      markerLength =
-        marker.length;
+      markerIndex = index;
+      markerLength = marker.length;
 
       break;
 
@@ -1432,19 +1384,13 @@ function parseStoredNotes(raw){
 
   const userNotes =
     markerIndex >= 0
-      ? text
-          .slice(0,markerIndex)
-          .trim()
+      ? text.slice(0,markerIndex).trim()
       : text.trim();
 
 
   const internal =
     markerIndex >= 0
-      ? text
-          .slice(
-            markerIndex + markerLength
-          )
-          .trim()
+      ? text.slice(markerIndex + markerLength).trim()
       : "";
 
 
@@ -1453,25 +1399,17 @@ function parseStoredNotes(raw){
 
   internal
     .split("\n")
-    .map(
-      line => line.trim()
-    )
+    .map(line => line.trim())
     .filter(Boolean)
     .forEach(line => {
 
-      const match =
-        line.match(
-          /^([^:：]+)\s*[:：]\s*(.*)$/
-        );
+      const match = line.match(/^([^:：]+)\s*[:：]\s*(.*)$/);
 
       if(!match){
         return;
       }
 
-      meta[
-        match[1].trim()
-      ] =
-        match[2].trim();
+      meta[match[1].trim()] = match[2].trim();
 
     });
 
@@ -1480,6 +1418,65 @@ function parseStoredNotes(raw){
     userNotes,
     meta
   };
+
+}
+
+
+/* =========================================================
+   AUCTION META
+   صفحة البيع (sell-auction.html) تحفظ بيانات المزاد
+   كسطر JSON داخل notes بعد العلامة MZAD_AUCTION_META
+   وليس في أعمدة auction_* (غير موجودة في الجدول).
+========================================================= */
+
+function parseAuctionMeta(raw){
+
+  const text = valueText(raw);
+
+  const marker = "MZAD_AUCTION_META";
+
+  const at = text.indexOf(marker);
+
+  if(at < 0){
+    return {};
+  }
+
+  const rest = text.slice(at + marker.length);
+
+  const s = rest.indexOf("{");
+  const e = rest.lastIndexOf("}");
+
+  if(s < 0 || e < s){
+    return {};
+  }
+
+  try{
+
+    const obj = JSON.parse(rest.slice(s, e + 1));
+
+    return obj && typeof obj === "object" ? obj : {};
+
+  }catch{
+
+    return {};
+
+  }
+
+}
+
+
+function auctionMeta(){
+  return parseAuctionMeta(auction?.notes);
+}
+
+
+function toTime(value){
+
+  if(!value){
+    return NaN;
+  }
+
+  return new Date(value).getTime();
 
 }
 
@@ -1494,53 +1491,46 @@ function getEndTime(){
     return null;
   }
 
+  const meta = auctionMeta();
+
   /*
-    الأولوية لوقت النهاية المحفوظ.
-    هذا مهم بعد تمديد المزاد.
+    1) auction_ends_at (عمود، إن وُجد)
+    2) meta.ends_at (المحفوظ في notes عند النشر)
+    3) created_at + duration_hours (عمود أو من meta)
   */
 
-  if(auction.auction_ends_at){
+  let base = toTime(auction.auction_ends_at);
 
-    const end =
-      new Date(
-        auction.auction_ends_at
-      ).getTime();
+  if(!Number.isFinite(base)){
+    base = toTime(meta.ends_at);
+  }
 
-    if(Number.isFinite(end)){
-      return end;
+  if(!Number.isFinite(base)){
+
+    const created = toTime(auction.created_at);
+
+    const duration =
+      Number(auction.duration_hours) ||
+      Number(meta.duration_hours) ||
+      0;
+
+    if(Number.isFinite(created) && duration > 0){
+      base = created + duration * 60 * 60 * 1000;
     }
 
   }
 
   /*
-    احتياط:
-    وقت إنشاء المزاد + مدة المزاد.
-    مثال:
-    created_at + 1 ساعة
+    وقت النهاية الممدد القادم من الـ RPC
+    يغلب إذا كان أبعد.
   */
 
-  const created =
-    auction.created_at
-      ? new Date(
-          auction.created_at
-        ).getTime()
-      : NaN;
+  if(Number.isFinite(base)){
+    return Math.max(base, endOverride || 0);
+  }
 
-  const duration =
-    Number(
-      auction.duration_hours
-    ) || 0;
-
-  if(
-    Number.isFinite(created) &&
-    duration > 0
-  ){
-
-    return (
-      created +
-      duration * 60 * 60 * 1000
-    );
-
+  if(endOverride){
+    return endOverride;
   }
 
   return null;
@@ -1554,18 +1544,80 @@ function getEndTime(){
 
 if(!auctionId){
 
-  $("name").textContent =
-    "المزاد غير موجود";
+  $("name").textContent = "المزاد غير موجود";
 
-  $("sub").textContent =
-    "لم يتم تحديد الجهاز";
+  $("sub").textContent = "لم يتم تحديد الجهاز";
 
-  $("bid").disabled =
-    true;
+  $("bid").disabled = true;
 
 }else{
 
   loadAuction();
+
+}
+
+
+/* =========================================================
+   SELLER PROFILE
+   محاولة قراءة بيانات البائع الحقيقية عن طريق seller_id.
+   إذا لم تنجح (الجدول غير موجود أو الصلاحيات تمنع)
+   لا نعرض بيانات وهمية.
+========================================================= */
+
+async function loadSeller(){
+
+  sellerProfile = null;
+
+  const sid = auction?.seller_id;
+
+  if(!sid){
+    return;
+  }
+
+  try{
+
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", sid)
+      .maybeSingle();
+
+    if(error){
+
+      console.warn("SELLER PROFILE LOAD:", error.message);
+
+      return;
+
+    }
+
+    sellerProfile = data || null;
+
+  }catch(error){
+
+    console.warn("SELLER PROFILE ERROR:", error);
+
+  }
+
+}
+
+
+function pickFirst(obj, keys){
+
+  if(!obj){
+    return "";
+  }
+
+  for(const key of keys){
+
+    const value = String(obj[key] ?? "").trim();
+
+    if(value){
+      return value;
+    }
+
+  }
+
+  return "";
 
 }
 
@@ -1578,38 +1630,21 @@ async function loadAuction(){
 
   try{
 
-    $("name").textContent =
-      "جاري تحميل المزاد...";
+    $("name").textContent = "جاري تحميل المزاد...";
 
-    $("sub").textContent =
-      "";
+    $("sub").textContent = "";
 
 
-    /*
-      جلب السجل كامل حتى لا نعتمد على
-      حقل محدد قد يسبب فشل الاستعلام.
-    */
-
-    const {
-      data,
-      error
-    } =
-      await supabase
-        .from("devices")
-        .select("*")
-        .eq(
-          "id",
-          auctionId
-        )
-        .maybeSingle();
+    const { data, error } = await supabase
+      .from("devices")
+      .select("*")
+      .eq("id", auctionId)
+      .maybeSingle();
 
 
     if(error){
 
-      console.error(
-        "AUCTION LOAD ERROR:",
-        error
-      );
+      console.error("AUCTION LOAD ERROR:", error);
 
       throw error;
 
@@ -1618,18 +1653,18 @@ async function loadAuction(){
 
     if(!data){
 
-      throw new Error(
-        "المزاد غير موجود أو لم يعد متاحاً"
-      );
+      throw new Error("المزاد غير موجود أو لم يعد متاحاً");
 
     }
 
 
-    auction =
-      data;
+    auction = data;
 
 
-    await loadBids();
+    await Promise.all([
+      loadBids(),
+      loadSeller()
+    ]);
 
     renderBody();
 
@@ -1646,23 +1681,15 @@ async function loadAuction(){
 
   }catch(error){
 
-    console.error(
-      "AUCTION DETAILS LOAD ERROR:",
-      error
-    );
+    console.error("AUCTION DETAILS LOAD ERROR:", error);
 
-    $("name").textContent =
-      "تعذر تحميل المزاد";
+    $("name").textContent = "تعذر تحميل المزاد";
 
-    $("sub").textContent =
-      "تأكد من أن المزاد موجود أو أن الرابط صحيح";
+    $("sub").textContent = "تأكد من أن المزاد موجود أو أن الرابط صحيح";
 
-    $("bid").disabled =
-      true;
+    $("bid").disabled = true;
 
-    toast(
-      "تعذر تحميل بيانات المزاد"
-    );
+    toast("تعذر تحميل بيانات المزاد");
 
   }
 
@@ -1684,45 +1711,25 @@ async function loadBids(){
   }
 
 
-  const {
-    data,
-    error
-  } =
-    await supabase
-      .from("auction_bids")
-      .select(`
-        id,
-        auction_id,
-        user_id,
-        bidder_name,
-        amount,
-        created_at
-      `)
-      .eq(
-        "auction_id",
-        auction.id
-      )
-      .order(
-        "amount",
-        {
-          ascending:false
-        }
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      )
-      .limit(100);
+  const { data, error } = await supabase
+    .from("auction_bids")
+    .select(`
+      id,
+      auction_id,
+      user_id,
+      bidder_name,
+      amount,
+      created_at
+    `)
+    .eq("auction_id", auction.id)
+    .order("amount", { ascending:false })
+    .order("created_at", { ascending:false })
+    .limit(100);
 
 
   if(error){
 
-    console.error(
-      "AUCTION BIDS LOAD ERROR:",
-      error
-    );
+    console.error("AUCTION BIDS LOAD ERROR:", error);
 
     bids = [];
 
@@ -1731,8 +1738,7 @@ async function loadBids(){
   }
 
 
-  bids =
-    data || [];
+  bids = data || [];
 
 }
 
@@ -1743,20 +1749,15 @@ async function loadBids(){
 
 function renderGallery(){
 
-  const images =
-    parseImages(
-      auction?.images
-    )
-      .map(imageUrl)
-      .filter(Boolean)
-      .slice(0,6);
+  const images = parseImages(auction?.images)
+    .map(imageUrl)
+    .filter(Boolean)
+    .slice(0,6);
 
 
-  const slides =
-    $("slides");
+  const slides = $("slides");
 
-  const dots =
-    $("dots");
+  const dots = $("dots");
 
 
   if(!images.length){
@@ -1792,50 +1793,38 @@ function renderGallery(){
   }
 
 
-  slides.innerHTML =
-    images
-      .map(
-        (src,index) => `
-          <div
-            class="slide"
-            style="background:#fff"
+  slides.innerHTML = images
+    .map(
+      (src,index) => `
+        <div
+          class="slide"
+          style="background:#fff"
+        >
+
+          <img
+            src="${escapeHtml(src)}"
+            alt="${escapeHtml(
+              auction?.model ||
+              "صورة الجهاز"
+            )} - صورة ${index + 1}"
+            loading="${index === 0 ? "eager" : "lazy"}"
+            decoding="async"
+            draggable="false"
+            onerror="this.style.display='none'"
           >
 
-            <img
-              src="${escapeHtml(src)}"
-              alt="${escapeHtml(
-                auction?.model ||
-                "صورة الجهاز"
-              )} - صورة ${index + 1}"
-              loading="${
-                index === 0
-                  ? "eager"
-                  : "lazy"
-              }"
-              decoding="async"
-              draggable="false"
-              onerror="
-                this.style.display='none'
-              "
-            >
-
-          </div>
-        `
-      )
-      .join("");
+        </div>
+      `
+    )
+    .join("");
 
 
-  dots.innerHTML =
-    images
-      .map(
-        (_,index) =>
-          `<span class="dot${
-            index
-              ? ""
-              : " active"
-          }"></span>`
-      )
-      .join("");
+  dots.innerHTML = images
+    .map(
+      (_,index) =>
+        `<span class="dot${index ? "" : " active"}"></span>`
+    )
+    .join("");
 
 }
 
@@ -1844,34 +1833,24 @@ $("slides").addEventListener(
   "scroll",
   event => {
 
-    const el =
-      event.target;
+    const el = event.target;
 
-    const width =
-      el.clientWidth;
+    const width = el.clientWidth;
 
     if(!width){
       return;
     }
 
 
-    const index =
-      Math.round(
-        Math.abs(
-          el.scrollLeft
-        ) / width
-      );
+    const index = Math.round(
+      Math.abs(el.scrollLeft) / width
+    );
 
 
-    [
-      ...$("dots").children
-    ].forEach(
+    [...$("dots").children].forEach(
       (dot,k) => {
 
-        dot.classList.toggle(
-          "active",
-          k === index
-        );
+        dot.classList.toggle("active", k === index);
 
       }
     );
@@ -1887,23 +1866,13 @@ $("slides").addEventListener(
    PRICE
 ========================================================= */
 
-function currentPrice(){
+function startPrice(){
 
-  if(bids.length){
-
-    return Number(
-      bids[0].amount ||
-      auction.auction_current_price ||
-      auction.price ||
-      0
-    );
-
-  }
-
+  const meta = auctionMeta();
 
   return Number(
-    auction.auction_current_price ??
     auction.auction_start_price ??
+    meta.start_price ??
     auction.price ??
     0
   );
@@ -1911,22 +1880,81 @@ function currentPrice(){
 }
 
 
-function bidStep(){
+function currentPrice(){
+
+  if(bids.length){
+
+    return Number(
+      bids[0].amount ||
+      auction.auction_current_price ||
+      startPrice() ||
+      0
+    );
+
+  }
+
+
+  const meta = auctionMeta();
 
   return Number(
-    auction.auction_bid_step ||
+    auction.auction_current_price ??
+    meta.current_price ??
+    startPrice() ??
     0
-  ) || 10000;
+  );
+
+}
+
+
+/*
+  شرائح الزيادة (نفس المعلن في صفحة البيع):
+  أقل من 300 ألف: 5,000
+  300 إلى أقل من 750 ألف: 10,000
+  750 ألف إلى أقل من 1.5 مليون: 15,000
+  1.5 إلى أقل من 3 ملايين: 25,000
+  3 ملايين فأكثر: 50,000
+*/
+function stepForPrice(p){
+
+  p = Number(p) || 0;
+
+  if(p < 300000){
+    return 5000;
+  }
+
+  if(p < 750000){
+    return 10000;
+  }
+
+  if(p < 1500000){
+    return 15000;
+  }
+
+  if(p < 3000000){
+    return 25000;
+  }
+
+  return 50000;
+
+}
+
+
+function bidStep(){
+
+  const column = Number(auction.auction_bid_step || 0);
+
+  if(column > 0){
+    return column;
+  }
+
+  return stepForPrice(currentPrice());
 
 }
 
 
 function nextBid(){
 
-  return (
-    currentPrice() +
-    bidStep()
-  );
+  return currentPrice() + bidStep();
 
 }
 
@@ -1937,65 +1965,46 @@ function nextBid(){
 
 function renderBody(){
 
-  const title =
-    [
-      auction.brand,
-      auction.model
-    ]
-      .filter(Boolean)
-      .join(" ");
+  const title = [
+    auction.brand,
+    auction.model
+  ]
+    .filter(Boolean)
+    .join(" ");
 
 
-  const subtitle =
-    [
-      auction.storage,
-      auction.color,
-      auction.location ||
-      "النجف"
-    ]
-      .filter(Boolean)
-      .join(" • ");
+  const subtitle = [
+    auction.storage,
+    auction.color,
+    auction.location
+  ]
+    .filter(Boolean)
+    .join(" • ");
 
 
-  $("name").textContent =
-    title || "جهاز";
+  $("name").textContent = title || "جهاز";
 
 
-  $("sub").textContent =
-    subtitle;
+  $("sub").textContent = subtitle;
 
 
-  $("cond").textContent =
-    auction.condition ||
-    "غير محدد";
+  $("cond").textContent = auction.condition || "غير محدد";
 
 
-  $("price").textContent =
-    fmt(
-      currentPrice()
-    );
+  $("price").textContent = fmt(currentPrice());
 
 
-  $("count").textContent =
-    `${bids.length} مزايدة`;
+  $("count").textContent = `${bids.length} مزايدة`;
 
 
-  $("stepTag").textContent =
-    `+${fmt(
-      bidStep()
-    )} د.ع`;
+  $("stepTag").textContent = `+${fmt(bidStep())} د.ع`;
 
 
-  $("next").textContent =
-    fmt(
-      nextBid()
-    );
+  $("next").textContent = fmt(nextBid());
 
 
   $("note").textContent =
-    `كل مزايدة ثابتة ${fmt(
-      bidStep()
-    )} د.ع، وأي مزايدة بآخر 30 ثانية تمدد المزاد دقيقة كاملة`;
+    `كل مزايدة ثابتة ${fmt(bidStep())} د.ع، وأي مزايدة بآخر 30 ثانية تمدد المزاد دقيقة كاملة`;
 
 
   renderSpecs();
@@ -2015,19 +2024,12 @@ function renderSpecs(){
 
   const rows = [];
 
-  const parsed =
-    parseStoredNotes(
-      auction.notes
-    );
+  const parsed = parseStoredNotes(auction.notes);
 
-  const meta =
-    parsed.meta;
+  const meta = parsed.meta;
 
 
-  if(
-    auction.brand ||
-    auction.model
-  ){
+  if(auction.brand || auction.model){
 
     rows.push([
       "الجهاز",
@@ -2059,9 +2061,7 @@ function renderSpecs(){
       auction.battery_health
     ]);
 
-  }else if(
-    meta["صحة البطارية"]
-  ){
+  }else if(meta["صحة البطارية"]){
 
     rows.push([
       "البطارية",
@@ -2134,13 +2134,9 @@ function renderSpecs(){
   }
 
 
-  if(
-    !auction.face_id &&
-    meta["يعمل"]
-  ){
+  if(!auction.face_id && meta["يعمل"]){
 
-    const works =
-      meta["يعمل"];
+    const works = meta["يعمل"];
 
 
     if(
@@ -2191,54 +2187,49 @@ function renderSpecs(){
 
   /*
     القطع المستبدلة:
-    إذا ماكو أي اختيار، تظهر
-    "لا توجد قطع مستبدلة"
+    صفحة البيع تحفظها في notes بالسطر
+    "انفتح الجهاز أو تبدلت قطع: ..." وفقط إذا فُعّل المفتاح.
+    إذا لم يُفعّل لا يوجد السطر فتظهر "لا توجد قطع مستبدلة".
+    وإذا فُعّل ولم يكتب البائع تفاصيل، القيمة المحفوظة "نعم".
   */
 
-  const replacedParts =
-    valueText(
-      auction.replaced_parts
-    ) ||
-    valueText(
-      meta["انفتح الجهاز أو تبدلت قطع"]
-    );
+  let replacedParts =
+    valueText(auction.replaced_parts) ||
+    valueText(meta["انفتح الجهاز أو تبدلت قطع"]);
+
+
+  if(replacedParts === "نعم"){
+    replacedParts = "نعم، بدون تحديد القطع";
+  }
 
 
   rows.push([
     "فك أو تبديل قطع",
-    replacedParts ||
-    "لا توجد قطع مستبدلة"
+    replacedParts || "لا توجد قطع مستبدلة"
   ]);
 
 
-  $("specs").innerHTML =
-    rows
-      .map(
-        ([key,value,good]) => `
+  $("specs").innerHTML = rows
+    .map(
+      ([key,value,good]) => `
 
-          <tr>
+        <tr>
 
-            <th>
-              ${escapeHtml(key)}
-            </th>
+          <th>
+            ${escapeHtml(key)}
+          </th>
 
-            <td class="${
-              good
-                ? "good"
-                : ""
-            }">
+          <td class="${good ? "good" : ""}">
 
-              ${escapeHtml(
-                value
-              )}
+            ${escapeHtml(value)}
 
-            </td>
+          </td>
 
-          </tr>
+        </tr>
 
-        `
-      )
-      .join("");
+      `
+    )
+    .join("");
 
 }
 
@@ -2249,42 +2240,32 @@ function renderSpecs(){
 
 function renderNotes(){
 
-  const parsed =
-    parseStoredNotes(
-      auction?.notes
-    );
+  const parsed = parseStoredNotes(auction?.notes);
 
 
-  const userNotes =
-    parsed.userNotes;
+  const userNotes = parsed.userNotes;
 
 
-  const card =
-    $("notesCard");
+  const card = $("notesCard");
 
 
-  const text =
-    $("notesText");
+  const text = $("notesText");
 
 
   if(!userNotes){
 
-    card.style.display =
-      "none";
+    card.style.display = "none";
 
-    text.textContent =
-      "";
+    text.textContent = "";
 
     return;
 
   }
 
 
-  card.style.display =
-    "";
+  card.style.display = "";
 
-  text.textContent =
-    userNotes;
+  text.textContent = userNotes;
 
 }
 
@@ -2296,36 +2277,32 @@ function renderNotes(){
 function renderSeller(){
 
   const realName =
-    String(
-      auction?.seller_name ||
-      ""
-    ).trim();
+    String(auction?.seller_name || "").trim() ||
+    pickFirst(sellerProfile, [
+      "full_name",
+      "name",
+      "display_name",
+      "username"
+    ]);
 
 
   const phone =
-    String(
-      auction?.seller_phone ||
-      ""
-    ).trim();
+    String(auction?.seller_phone || "").trim() ||
+    pickFirst(sellerProfile, [
+      "phone",
+      "phone_number"
+    ]);
 
 
-  const location =
-    String(
-      auction?.location ||
-      ""
-    ).trim();
+  const location = String(auction?.location || "").trim();
 
 
-  let name =
-    realName;
+  let name = realName;
 
 
   /*
-    إذا اسم البائع موجود، نعرضه.
-    إذا غير موجود لكن رقم الهاتف موجود،
-    نستخدم الرقم كمعلومة متاحة.
-    وإذا الاثنين غير موجودين نعرض
-    مستخدم MZAD PHONE.
+    إذا الاسم موجود نعرضه، وإلا الرقم إن وُجد،
+    وإذا لا شيء متاح نعرض "مستخدم MZAD PHONE".
   */
 
   if(!name && phone){
@@ -2338,31 +2315,24 @@ function renderSeller(){
   }
 
 
-  $("sName").textContent =
-    name;
+  $("sName").textContent = name;
 
 
   const infoParts = [];
 
 
   if(realName){
-    infoParts.push(
-      "عضو في MZAD PHONE"
-    );
+    infoParts.push("عضو في MZAD PHONE");
   }
 
 
   if(location){
-    infoParts.push(
-      location
-    );
+    infoParts.push(location);
   }
 
 
   if(!infoParts.length && phone){
-    infoParts.push(
-      "عضو في MZAD PHONE"
-    );
+    infoParts.push("عضو في MZAD PHONE");
   }
 
 
@@ -2371,8 +2341,7 @@ function renderSeller(){
     "عضو في MZAD PHONE";
 
 
-  $("sStatus").textContent =
-    "مستخدم جديد";
+  $("sStatus").textContent = "مستخدم جديد";
 
 }
 
@@ -2383,16 +2352,12 @@ function renderSeller(){
 
 function uniqueBidders(){
 
-  const seen =
-    new Set();
+  const seen = new Set();
 
   const result = [];
 
 
-  for(
-    const bid
-    of bids
-  ){
+  for(const bid of bids){
 
     const key =
       bid.user_id ||
@@ -2421,37 +2386,25 @@ function uniqueBidders(){
    RENDER BIDS
 ========================================================= */
 
-function renderBids(
-  animate=false
-){
+function renderBids(animate=false){
 
-  const unique =
-    uniqueBidders();
+  const unique = uniqueBidders();
 
 
-  $("stack").innerHTML =
-    unique
-      .slice(0,3)
-      .map(
-        b =>
-          av(
-            b.bidder_name ||
-            "مستخدم"
-          )
-      )
-      .join("");
+  $("stack").innerHTML = unique
+    .slice(0,3)
+    .map(b => av(b.bidder_name || "مستخدم"))
+    .join("");
 
 
-  const top =
-    bids[0];
+  const top = bids[0];
 
 
   if(top){
 
     $("tickText").innerHTML =
       `<b>${escapeHtml(
-        top.bidder_name ||
-        "مستخدم"
+        top.bidder_name || "مستخدم"
       )}</b> زايد ${fmt(
         top.amount
       )} د.ع • ${ago(
@@ -2460,95 +2413,67 @@ function renderBids(
 
   }else{
 
-    $("tickText").textContent =
-      "لا توجد مزايدات بعد";
+    $("tickText").textContent = "لا توجد مزايدات بعد";
 
   }
 
 
   if(animate){
 
-    const ticker =
-      $("ticker");
+    const ticker = $("ticker");
 
-    ticker.classList.remove(
-      "swap"
-    );
+    ticker.classList.remove("swap");
 
     void ticker.offsetWidth;
 
-    ticker.classList.add(
-      "swap"
-    );
+    ticker.classList.add("swap");
 
   }
 
 
-  $("panelHead").textContent =
-    `المزايدون (${bids.length})`;
+  $("panelHead").textContent = `المزايدون (${bids.length})`;
 
 
-  $("bidders").innerHTML =
-    bids
-      .slice(0,20)
-      .map(
-        (b,index) => `
+  $("bidders").innerHTML = bids
+    .slice(0,20)
+    .map(
+      (b,index) => `
 
-          <li class="${
-            index === 0
-              ? "lead"
-              : ""
-          }">
+        <li class="${index === 0 ? "lead" : ""}">
 
-            ${av(
-              b.bidder_name ||
-              "مستخدم"
-            )}
+          ${av(b.bidder_name || "مستخدم")}
 
-            <span class="who">
+          <span class="who">
 
-              ${escapeHtml(
-                b.bidder_name ||
-                "مستخدم"
-              )}
+            ${escapeHtml(b.bidder_name || "مستخدم")}
 
-              <span>
-                ${escapeHtml(
-                  ago(
-                    b.created_at
-                  )
-                )}
-              </span>
-
+            <span>
+              ${escapeHtml(ago(b.created_at))}
             </span>
 
-            <b>
-              ${fmt(
-                b.amount
-              )} د.ع
-            </b>
+          </span>
 
-          </li>
+          <b>
+            ${fmt(b.amount)} د.ع
+          </b>
 
-        `
-      )
-      .join("");
+        </li>
 
-
-  $("count").textContent =
-    `${bids.length} مزايدة`;
+      `
+    )
+    .join("");
 
 
-  $("price").textContent =
-    fmt(
-      currentPrice()
-    );
+  $("count").textContent = `${bids.length} مزايدة`;
 
 
-  $("next").textContent =
-    fmt(
-      nextBid()
-    );
+  $("price").textContent = fmt(currentPrice());
+
+
+  $("next").textContent = fmt(nextBid());
+
+
+  $("stepTag").textContent = `+${fmt(bidStep())} د.ع`;
 
 }
 
@@ -2557,22 +2482,13 @@ function renderBids(
    BIDDERS PANEL
 ========================================================= */
 
-$("liveRow").onclick =
-  event => {
+$("liveRow").onclick = event => {
 
-    const open =
-      $("panel")
-        .classList
-        .toggle("open");
+  const open = $("panel").classList.toggle("open");
 
+  event.currentTarget.setAttribute("aria-expanded", open);
 
-    event.currentTarget
-      .setAttribute(
-        "aria-expanded",
-        open
-      );
-
-  };
+};
 
 
 /* =========================================================
@@ -2586,78 +2502,48 @@ function tick(){
   }
 
 
-  const end =
-    getEndTime();
+  const end = getEndTime();
 
 
   if(!end){
 
-    $("hh").textContent =
-      "00";
+    $("hh").textContent = "00";
 
-    $("mm").textContent =
-      "00";
+    $("mm").textContent = "00";
 
-    $("ss").textContent =
-      "00";
+    $("ss").textContent = "00";
 
-    $("endLabel").textContent =
-      "وقت الانتهاء غير محدد";
+    $("endLabel").textContent = "وقت الانتهاء غير محدد";
 
-    $("bid").disabled =
-      true;
+    $("bid").disabled = true;
 
     return;
 
   }
 
 
-  const left =
-    Math.max(
-      0,
-      Math.ceil(
-        (end - Date.now()) /
-        1000
-      )
-    );
+  const left = Math.max(
+    0,
+    Math.ceil((end - Date.now()) / 1000)
+  );
 
 
-  const p =
-    n =>
-      String(n)
-        .padStart(2,"0");
+  const p = n => String(n).padStart(2,"0");
 
 
-  $("hh").textContent =
-    p(
-      Math.floor(
-        left / 3600
-      )
-    );
+  $("hh").textContent = p(Math.floor(left / 3600));
 
 
-  $("mm").textContent =
-    p(
-      Math.floor(
-        (left % 3600) /
-        60
-      )
-    );
+  $("mm").textContent = p(Math.floor((left % 3600) / 60));
 
 
-  $("ss").textContent =
-    p(
-      left % 60
-    );
+  $("ss").textContent = p(left % 60);
 
 
-  $("auction")
-    .classList
-    .toggle(
-      "hot",
-      left > 0 &&
-      left <= 5 * 60
-    );
+  $("auction").classList.toggle(
+    "hot",
+    left > 0 && left <= 5 * 60
+  );
 
 
   if(left <= 0){
@@ -2672,26 +2558,20 @@ function tick(){
   ended = false;
 
 
-  $("auction")
-    .classList
-    .remove("ended");
+  $("auction").classList.remove("ended");
 
 
-  $("liveBadge").textContent =
-    "مزاد مستمر";
+  $("liveBadge").textContent = "مزاد مستمر";
 
 
-  $("endLabel").textContent =
-    "الوقت المتبقي";
+  $("endLabel").textContent = "الوقت المتبقي";
 
 
   if(!locked){
 
-    $("bid").disabled =
-      false;
+    $("bid").disabled = false;
 
-    $("bid").textContent =
-      "زايد";
+    $("bid").textContent = "زايد";
 
   }
 
@@ -2712,30 +2592,22 @@ function finish(){
   ended = true;
 
 
-  $("auction")
-    .classList
-    .remove("hot");
+  $("auction").classList.remove("hot");
 
 
-  $("auction")
-    .classList
-    .add("ended");
+  $("auction").classList.add("ended");
 
 
-  $("liveBadge").textContent =
-    "انتهى المزاد";
+  $("liveBadge").textContent = "انتهى المزاد";
 
 
-  $("endLabel").textContent =
-    "انتهى المزاد";
+  $("endLabel").textContent = "انتهى المزاد";
 
 
-  $("bid").disabled =
-    true;
+  $("bid").disabled = true;
 
 
-  $("bid").textContent =
-    "انتهى";
+  $("bid").textContent = "انتهى";
 
 }
 
@@ -2753,26 +2625,16 @@ async function refreshAuctionData(){
 
   try{
 
-    const {
-      data,
-      error
-    } =
-      await supabase
-        .from("devices")
-        .select("*")
-        .eq(
-          "id",
-          auction.id
-        )
-        .maybeSingle();
+    const { data, error } = await supabase
+      .from("devices")
+      .select("*")
+      .eq("id", auction.id)
+      .maybeSingle();
 
 
     if(error){
 
-      console.error(
-        "AUCTION REFRESH ERROR:",
-        error
-      );
+      console.error("AUCTION REFRESH ERROR:", error);
 
       return;
 
@@ -2794,8 +2656,6 @@ async function refreshAuctionData(){
 
     renderBody();
 
-    renderGallery();
-
     renderBids(true);
 
     tick();
@@ -2803,10 +2663,7 @@ async function refreshAuctionData(){
 
   }catch(error){
 
-    console.error(
-      "LIVE REFRESH ERROR:",
-      error
-    );
+    console.error("LIVE REFRESH ERROR:", error);
 
   }
 
@@ -2815,16 +2672,13 @@ async function refreshAuctionData(){
 
 function startLiveRefresh(){
 
-  clearInterval(
-    refreshInterval
+  clearInterval(refreshInterval);
+
+
+  refreshInterval = setInterval(
+    refreshAuctionData,
+    5000
   );
-
-
-  refreshInterval =
-    setInterval(
-      refreshAuctionData,
-      5000
-    );
 
 }
 
@@ -2833,368 +2687,270 @@ function startLiveRefresh(){
    PLACE BID
 ========================================================= */
 
-$("bid").onclick =
-  async () => {
+$("bid").onclick = async () => {
 
-    if(!auction?.id){
+  if(!auction?.id){
 
-      toast(
-        "المزاد غير موجود"
-      );
+    toast("المزاد غير موجود");
+
+    return;
+
+  }
+
+
+  if(ended){
+
+    toast("انتهى المزاد");
+
+    return;
+
+  }
+
+
+  if(locked){
+    return;
+  }
+
+
+  locked = true;
+
+
+  const button = $("bid");
+
+
+  button.classList.remove("pulse");
+
+
+  void button.offsetWidth;
+
+
+  button.classList.add("pulse");
+
+
+  try{
+
+    button.disabled = true;
+
+
+    const {
+      data: sessionData,
+      error: sessionError
+    } = await supabase.auth.getSession();
+
+
+    if(sessionError){
+      throw sessionError;
+    }
+
+
+    const user = sessionData?.session?.user || null;
+
+
+    if(!user){
+
+      toast("يجب تسجيل الدخول أولاً حتى تستطيع المزايدة");
 
       return;
 
     }
 
 
-    if(ended){
+    const end = getEndTime();
 
-      toast(
-        "انتهى المزاد"
-      );
+
+    if(end && Date.now() >= end){
+
+      finish();
+
+      toast("انتهى المزاد");
 
       return;
 
     }
 
 
-    if(locked){
+    const amount = Number(nextBid());
+
+
+    if(!Number.isFinite(amount) || amount <= 0){
+
+      toast("قيمة المزايدة غير صحيحة");
+
       return;
+
     }
 
 
-    locked = true;
-
-
-    const button =
-      $("bid");
-
-
-    button.classList.remove(
-      "pulse"
+    const { data, error } = await supabase.rpc(
+      "place_auction_bid",
+      {
+        p_auction_id: String(auction.id),
+        p_amount: amount
+      }
     );
 
 
-    void button.offsetWidth;
+    if(error){
+
+      console.error("PLACE AUCTION BID ERROR:", error);
 
 
-    button.classList.add(
-      "pulse"
-    );
+      let message = error?.message || "تعذر تسجيل المزايدة";
 
 
-    try{
-
-      button.disabled =
-        true;
-
-
-      const {
-        data: sessionData,
-        error: sessionError
-      } =
-        await supabase.auth
-          .getSession();
-
-
-      if(sessionError){
-        throw sessionError;
+      if(message.includes("المبلغ المطلوب")){
+        message = "قيمة المزايدة غير صحيحة";
       }
 
 
-      const user =
-        sessionData?.session?.user ||
-        null;
-
-
-      if(!user){
-
-        toast(
-          "يجب تسجيل الدخول أولاً حتى تستطيع المزايدة"
-        );
-
-        return;
-
+      if(message.includes("المزاد غير نشط")){
+        message = "هذا المزاد غير نشط";
       }
 
 
-      const end =
-        getEndTime();
-
-
-      if(
-        end &&
-        Date.now() >= end
-      ){
-
-        finish();
-
-        toast(
-          "انتهى المزاد"
-        );
-
-        return;
-
+      if(message.includes("انتهى المزاد")){
+        message = "انتهى المزاد";
       }
 
 
-      const amount =
-        Number(
-          nextBid()
-        );
-
-
-      if(
-        !Number.isFinite(amount) ||
-        amount <= 0
-      ){
-
-        toast(
-          "قيمة المزايدة غير صحيحة"
-        );
-
-        return;
-
+      if(message.includes("تسجيل الدخول")){
+        message = "يجب تسجيل الدخول أولاً";
       }
 
 
-      const {
-        data,
-        error
-      } =
-        await supabase.rpc(
-          "place_auction_bid",
-          {
-            p_auction_id:
-              String(auction.id),
+      toast(message);
 
-            p_amount:
-              amount
-          }
-        );
+      /* قد تكون المزايدة تغيرت من شخص آخر: حدّث الأرقام */
+      refreshAuctionData();
+
+      return;
+
+    }
 
 
-      if(error){
-
-        console.error(
-          "PLACE AUCTION BID ERROR:",
-          error
-        );
+    let result = data;
 
 
-        let message =
-          error?.message ||
-          "تعذر تسجيل المزايدة";
+    if(Array.isArray(result)){
+      result = result[0] || null;
+    }
 
 
-        if(
-          message.includes(
-            "المبلغ المطلوب"
-          )
-        ){
+    if(result && typeof result === "object"){
 
-          message =
-            "قيمة المزايدة غير صحيحة";
-
-        }
-
-
-        if(
-          message.includes(
-            "المزاد غير نشط"
-          )
-        ){
-
-          message =
-            "هذا المزاد غير نشط";
-
-        }
-
-
-        if(
-          message.includes(
-            "انتهى المزاد"
-          )
-        ){
-
-          message =
-            "انتهى المزاد";
-
-        }
-
-
-        if(
-          message.includes(
-            "تسجيل الدخول"
-          )
-        ){
-
-          message =
-            "يجب تسجيل الدخول أولاً";
-
-        }
-
-
-        toast(message);
-
-        return;
-
-      }
-
-
-      let result =
-        data;
-
-
-      if(
-        Array.isArray(result)
-      ){
-
-        result =
-          result[0] ||
-          null;
-
-      }
-
-
-      if(
-        result &&
-        typeof result === "object"
-      ){
-
-        const hasSuccessField =
-          Object.prototype.hasOwnProperty.call(
-            result,
-            "success"
-          );
-
-
-        if(
-          hasSuccessField &&
-          result.success !== true
-        ){
-
-          toast(
-            result.message ||
-            "لم يتم تسجيل المزايدة"
-          );
-
-          return;
-
-        }
-
-      }
-
-
-      if(
-        result &&
-        result.amount
-      ){
-
-        auction.auction_current_price =
-          Number(
-            result.amount
-          );
-
-      }else{
-
-        auction.auction_current_price =
-          amount;
-
-      }
-
-
-      /*
-        إذا الـ RPC رجع وقت نهاية جديد
-        بعد التمديد، نعتمده مباشرة.
-      */
-
-      if(
-        result &&
-        result.ends_at
-      ){
-
-        auction.auction_ends_at =
-          result.ends_at;
-
-      }
-
-
-      await loadBids();
-
-
-      renderBids(true);
-
-      tick();
-
-
-      const priceBox =
-        $("priceBox");
-
-
-      priceBox.classList.remove(
-        "bump"
+      const hasSuccessField = Object.prototype.hasOwnProperty.call(
+        result,
+        "success"
       );
 
 
-      void priceBox.offsetWidth;
+      if(hasSuccessField && result.success !== true){
 
+        toast(result.message || "لم يتم تسجيل المزايدة");
 
-      priceBox.classList.add(
-        "bump"
-      );
+        refreshAuctionData();
 
-
-      if(
-        result &&
-        result.extended === true
-      ){
-
-        toast(
-          "تمت المزايدة بنجاح وتم تمديد المزاد دقيقة كاملة"
-        );
-
-      }else{
-
-        toast(
-          "تمت المزايدة بنجاح"
-        );
-
-      }
-
-
-    }catch(error){
-
-      console.error(
-        "BID ERROR:",
-        error
-      );
-
-
-      toast(
-        error?.message ||
-        "حدث خطأ أثناء المزايدة"
-      );
-
-
-    }finally{
-
-      locked = false;
-
-
-      if(!ended){
-
-        $("bid").disabled =
-          false;
-
-        $("bid").textContent =
-          "زايد";
+        return;
 
       }
 
     }
 
-  };
+
+    if(result && result.amount){
+
+      auction.auction_current_price = Number(result.amount);
+
+    }else{
+
+      auction.auction_current_price = amount;
+
+    }
+
+
+    /*
+      إذا الـ RPC رجع وقت نهاية جديد بعد التمديد
+      نعتمده مباشرة. (الاسم المستخدم فعلياً
+      في الكود الأصلي: ends_at)
+    */
+
+    const returnedEnd = toTime(
+      result?.ends_at ||
+      result?.auction_ends_at
+    );
+
+
+    if(Number.isFinite(returnedEnd)){
+
+      endOverride = Math.max(endOverride, returnedEnd);
+
+    }
+
+
+    await loadBids();
+
+
+    renderBody();
+
+    renderBids(true);
+
+    tick();
+
+
+    const priceBox = $("priceBox");
+
+
+    priceBox.classList.remove("bump");
+
+
+    void priceBox.offsetWidth;
+
+
+    priceBox.classList.add("bump");
+
+
+    if(result && result.extended === true){
+
+      toast("تمت المزايدة بنجاح وتم تمديد المزاد دقيقة كاملة");
+
+    }else{
+
+      toast("تمت المزايدة بنجاح");
+
+    }
+
+
+    /* مزامنة فورية مع قاعدة البيانات */
+    refreshAuctionData();
+
+
+  }catch(error){
+
+    console.error("BID ERROR:", error);
+
+
+    toast(
+      error?.message ||
+      "حدث خطأ أثناء المزايدة"
+    );
+
+
+  }finally{
+
+    locked = false;
+
+
+    if(!ended){
+
+      $("bid").disabled = false;
+
+      $("bid").textContent = "زايد";
+
+    }
+
+  }
+
+};
 
 
 /* =========================================================
@@ -3215,124 +2971,96 @@ function checkFavorite(){
   }
 
 
-  const saved =
-    localStorage.getItem(
-      favoriteKey()
-    ) === "1";
+  const saved = localStorage.getItem(favoriteKey()) === "1";
 
 
-  $("fav")
-    .setAttribute(
-      "aria-pressed",
-      saved
-        ? "true"
-        : "false"
-    );
+  $("fav").setAttribute(
+    "aria-pressed",
+    saved ? "true" : "false"
+  );
 
 
-  $("fav")
-    .setAttribute(
-      "aria-label",
-      saved
-        ? "إزالة من المفضلة"
-        : "إضافة إلى المفضلة"
-    );
+  $("fav").setAttribute(
+    "aria-label",
+    saved
+      ? "إزالة من المفضلة"
+      : "إضافة إلى المفضلة"
+  );
 
 }
 
 
-$("fav").onclick =
-  event => {
+$("fav").onclick = event => {
 
-    if(!auction?.id){
-      return;
-    }
-
-
-    const button =
-      event.currentTarget;
+  if(!auction?.id){
+    return;
+  }
 
 
-    const on =
-      button.getAttribute(
-        "aria-pressed"
-      ) !== "true";
+  const button = event.currentTarget;
 
 
-    if(on){
-
-      localStorage.setItem(
-        favoriteKey(),
-        "1"
-      );
-
-    }else{
-
-      localStorage.removeItem(
-        favoriteKey()
-      );
-
-    }
+  const on = button.getAttribute("aria-pressed") !== "true";
 
 
-    button.setAttribute(
-      "aria-pressed",
-      on
-        ? "true"
-        : "false"
-    );
+  if(on){
+
+    localStorage.setItem(favoriteKey(), "1");
+
+  }else{
+
+    localStorage.removeItem(favoriteKey());
+
+  }
 
 
-    button.setAttribute(
-      "aria-label",
-      on
-        ? "إزالة من المفضلة"
-        : "إضافة إلى المفضلة"
-    );
+  button.setAttribute(
+    "aria-pressed",
+    on ? "true" : "false"
+  );
 
 
-    toast(
-      on
-        ? "تمت إضافة المزاد إلى المفضلة"
-        : "تمت إزالة المزاد من المفضلة"
-    );
+  button.setAttribute(
+    "aria-label",
+    on
+      ? "إزالة من المفضلة"
+      : "إضافة إلى المفضلة"
+  );
 
-  };
+
+  toast(
+    on
+      ? "تمت إضافة المزاد إلى المفضلة"
+      : "تمت إزالة المزاد من المفضلة"
+  );
+
+};
 
 
 /* =========================================================
    BACK
 ========================================================= */
 
-$("back").onclick =
-  () => {
+$("back").onclick = () => {
 
-    if(
-      document.referrer &&
-      history.length > 1
-    ){
+  if(document.referrer && history.length > 1){
 
-      history.back();
+    history.back();
 
-    }else{
+  }else{
 
-      location.href =
-        "auctions.html";
+    location.href = "auctions.html";
 
-    }
+  }
 
-  };
+};
 
 
 /* =========================================================
    START TIMER
 ========================================================= */
 
-timerInterval =
-  setInterval(
-    tick,
-    1000
-  );
+timerInterval = setInterval(tick, 1000);
 
 
 /* =========================================================
@@ -3343,13 +3071,9 @@ window.addEventListener(
   "pagehide",
   () => {
 
-    clearInterval(
-      timerInterval
-    );
+    clearInterval(timerInterval);
 
-    clearInterval(
-      refreshInterval
-    );
+    clearInterval(refreshInterval);
 
   }
 );
