@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>دخول الإدارة | MZAD PHONE</title>
+<style>
+:root{--p:#E91D4F;--c:#32B8C4;--bg:#f4f5f7;--ink:#20242a;--muted:#737983;--line:#e6e8eb;--cream:#fbfaf7;--bad:#c92a45}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:linear-gradient(160deg,#fff 0%,#fff7fa 48%,#f4f5f7 100%);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Tahoma,Arial,sans-serif;display:flex;align-items:center;justify-content:center;padding:20px}
+.wrap{width:min(430px,100%)}.brand{text-align:center;font-weight:950;font-size:25px;letter-spacing:-.5px;margin-bottom:5px}.brand span{color:var(--p)}.sub{text-align:center;color:var(--muted);font-size:13px;margin-bottom:22px}
+.card{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:26px;padding:22px;box-shadow:0 18px 55px rgba(25,28,34,.10)}h1{font-size:22px;margin:0 0 6px}p{margin:0;color:var(--muted);font-size:13px;line-height:1.7}.security{margin:15px 0;padding:12px;border-radius:15px;background:var(--cream);font-size:12px;line-height:1.7}.security b{color:var(--p)}
+label{display:block;font-size:12px;font-weight:800;margin:14px 0 7px}input{width:100%;height:49px;border:1px solid var(--line);border-radius:14px;padding:0 14px;background:#fff;outline:none;direction:ltr;text-align:left}input:focus{border-color:var(--c);box-shadow:0 0 0 3px rgba(50,184,196,.10)}
+button{width:100%;height:50px;border:0;border-radius:14px;background:var(--p);color:#fff;font-weight:900;font-size:15px;margin-top:17px;box-shadow:0 8px 20px rgba(233,29,79,.20);cursor:pointer}button:disabled{opacity:.6;cursor:wait}
+.msg{display:none;margin-top:12px;padding:11px 13px;border-radius:13px;font-size:12px;line-height:1.7;background:#fff0f3;color:var(--bad);border:1px solid #f3cbd4}.msg.show{display:block}.foot{text-align:center;color:#9a9fa6;font-size:11px;margin-top:15px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">MZAD <span>PHONE</span></div>
+  <div class="sub">لوحة الإدارة — وصول مصرح به فقط</div>
+  <section class="card">
+    <h1>تسجيل دخول الإدارة</h1>
+    <p>استخدم حساب Supabase المخصص للإدارة. بعد تسجيل الدخول يتم التحقق من صلاحية الأدمن من قاعدة البيانات.</p>
+    <div class="security">الحماية لا تعتمد على إخفاء الصفحة. <b>الدخول الإداري يُرفض إذا لم يكن الحساب مصرحاً له.</b></div>
+    <form id="form" novalidate>
+      <label for="email">البريد الإلكتروني</label>
+      <input id="email" type="email" autocomplete="username" inputmode="email" placeholder="admin@example.com" required>
+      <label for="password">كلمة المرور</label>
+      <input id="password" type="password" autocomplete="current-password" placeholder="كلمة المرور" required>
+      <button id="submit" type="submit">دخول لوحة الإدارة</button>
+    </form>
+    <div id="msg" class="msg"></div>
+  </section>
+  <div class="foot">MZAD PHONE • Admin Access</div>
+</div>
+<script type="module">
+import {supabase} from "./js/supabase.js";
+const form=document.getElementById("form"),email=document.getElementById("email"),password=document.getElementById("password"),btn=document.getElementById("submit"),msg=document.getElementById("msg");
+function show(t){msg.textContent=t;msg.classList.add("show")}
+function clear(){msg.textContent="";msg.classList.remove("show")}
+function errorText(e){
+ const s=String(e?.message||e||"");
+ if(/invalid login credentials/i.test(s))return "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
+ if(/email not confirmed/i.test(s))return "يجب تأكيد البريد الإلكتروني أولاً.";
+ if(/too many requests/i.test(s))return "محاولات كثيرة. انتظر قليلاً ثم حاول مرة أخرى.";
+ if(/AUTH_REQUIRED/i.test(s))return "يجب تسجيل الدخول.";
+ return s||"تعذر تسجيل الدخول.";
+}
+async function isAdmin(){
+ const r=await supabase.rpc("mzad_is_admin");
+ if(r.error)throw r.error;
+ return r.data===true;
+}
+async function boot(){
+ try{
+  const s=await supabase.auth.getSession();
+  if(!s.data.session)return;
+  if(await isAdmin()){location.href="admin/dashboard.html";return}
+  await supabase.auth.signOut();
+  show("هذا الحساب ليس لديه صلاحية إدارة.");
+ }catch(e){console.error(e)}
+}
+form.addEventListener("submit",async e=>{
+ e.preventDefault();clear();
+ const em=email.value.trim(),pw=password.value;
+ if(!em||!pw){show("أدخل البريد الإلكتروني وكلمة المرور.");return}
+ btn.disabled=true;btn.textContent="جاري التحقق…";
+ try{
+  const r=await supabase.auth.signInWithPassword({email:em,password:pw});
+  if(r.error)throw r.error;
+  if(!(await isAdmin())){
+    await supabase.auth.signOut();
+    throw new Error("هذا الحساب ليس لديه صلاحية إدارة.");
+  }
+  location.href="admin/dashboard.html";
+ }catch(err){console.error(err);show(errorText(err))}
+ finally{btn.disabled=false;btn.textContent="دخول لوحة الإدارة"}
+});
+boot();
+</script>
+</body>
+</html>
