@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#f7f7f7">
+<title>إدارة المستخدمين | MZAD PHONE</title>
+<style>
+:root{
+  --pink:#E91D4F;
+  --teal:#32B8C4;
+  --cream:#fffaf5;
+  --bg:#f4f5f7;
+  --text:#17181b;
+  --muted:#74777f;
+  --line:#e7e8ec;
+  --green:#159957;
+  --red:#d92d20;
+  --orange:#e58b20;
+  --shadow:0 12px 35px rgba(20,22,30,.08);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Tahoma,Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button{border:0;cursor:pointer}
+.top{
+  position:sticky;top:0;z-index:20;
+  background:rgba(255,255,255,.94);backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+  padding:14px 16px;
+}
+.toprow{display:flex;align-items:center;gap:10px}
+.back{width:42px;height:42px;border-radius:14px;background:#f1f2f4;font-size:21px}
+.brand{flex:1}
+.brand b{display:block;font-size:18px}
+.brand span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.badge{background:#fff0f4;color:var(--pink);padding:7px 10px;border-radius:999px;font-size:12px;font-weight:800}
+.wrap{max-width:900px;margin:auto;padding:18px 14px 50px}
+.hero{background:linear-gradient(135deg,#fff,#fff7fa);border:1px solid #f0dbe2;border-radius:24px;padding:20px;box-shadow:var(--shadow);margin-bottom:14px}
+.hero h1{margin:0 0 7px;font-size:25px}
+.hero p{margin:0;color:var(--muted);line-height:1.7;font-size:14px}
+.search{display:flex;gap:9px;margin:14px 0}
+.search input{flex:1;min-width:0;border:1px solid var(--line);background:#fff;border-radius:16px;padding:14px 15px;outline:none}
+.search input:focus{border-color:var(--teal);box-shadow:0 0 0 4px rgba(50,184,196,.12)}
+.btn{border-radius:15px;padding:12px 15px;font-weight:800}
+.primary{background:var(--pink);color:#fff}
+.secondary{background:#fff;border:1px solid var(--line);color:var(--text)}
+.user{
+ background:#fff;border:1px solid var(--line);border-radius:22px;padding:16px;margin:12px 0;box-shadow:0 7px 22px rgba(20,22,30,.045)
+}
+.userhead{display:flex;gap:12px;align-items:center}
+.avatar{width:52px;height:52px;border-radius:17px;background:#eaf9fb;color:#148d99;display:grid;place-items:center;font-weight:900;font-size:19px;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.info{flex:1;min-width:0}
+.name{font-weight:900;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta{color:var(--muted);font-size:12px;margin-top:4px;line-height:1.7}
+.state{padding:7px 10px;border-radius:999px;font-size:11px;font-weight:900;white-space:nowrap}
+.active{background:#eaf9f1;color:var(--green)}
+.off{background:#fff0f0;color:var(--red)}
+.restricted{background:#fff4df;color:#a96100}
+.details{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.stat{background:#f8f8fa;border-radius:14px;padding:10px}
+.stat small{display:block;color:var(--muted);font-size:10px}
+.stat b{display:block;margin-top:3px;font-size:13px}
+.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:13px}
+.actions .wide{grid-column:1/-1}
+.btn.red{background:#fff0f0;color:var(--red);border:1px solid #ffd8d5}
+.btn.green{background:#eaf9f1;color:var(--green)}
+.btn.orange{background:#fff5e6;color:#a96100}
+.empty,.loading{padding:30px;text-align:center;color:var(--muted);background:#fff;border-radius:20px;border:1px solid var(--line)}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:50;display:none;align-items:flex-end}
+.overlay.show{display:flex}
+.sheet{width:100%;background:#fff;border-radius:28px 28px 0 0;padding:20px;max-height:90vh;overflow:auto}
+.sheet h2{margin:0 0 5px}
+.sheet p{margin:0 0 16px;color:var(--muted);font-size:13px}
+label{display:block;font-size:12px;font-weight:800;margin:12px 0 6px}
+select,textarea{width:100%;border:1px solid var(--line);border-radius:14px;padding:13px;background:#fff;outline:none}
+textarea{min-height:90px;resize:vertical}
+.row{display:flex;gap:8px;margin-top:16px}
+.row>*{flex:1}
+.toast{position:fixed;left:14px;right:14px;bottom:18px;z-index:80;background:#17181b;color:#fff;padding:14px 16px;border-radius:16px;display:none;text-align:center;font-size:13px}
+.toast.show{display:block}
+@media(min-width:700px){.overlay{align-items:center;padding:20px}.sheet{max-width:520px;border-radius:26px}.actions{grid-template-columns:repeat(4,1fr)}.actions .wide{grid-column:auto}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="toprow">
+    <button class="back" onclick="history.back()">‹</button>
+    <div class="brand">
+      <b>MZAD PHONE</b>
+      <span>لوحة تحكم الإدارة • المستخدمون</span>
+    </div>
+    <div class="badge">SUPER ADMIN</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>إدارة المستخدمين</h1>
+    <p>بحث، تفعيل وتعطيل الحسابات، وحظر المستخدمين حسب نوع العملية. كل إجراء إداري يمر عبر قاعدة البيانات ويسجل في سجل التدقيق.</p>
+  </section>
+
+  <div class="search">
+    <input id="search" placeholder="ابحث بالاسم أو رقم الهاتف أو User ID">
+    <button class="btn primary" id="searchBtn">بحث</button>
+  </div>
+
+  <div id="status" class="loading">جاري التحقق من صلاحيات الإدارة...</div>
+  <div id="list"></div>
+</main>
+
+<div id="overlay" class="overlay">
+  <div class="sheet">
+    <h2 id="sheetTitle">حظر المستخدم</h2>
+    <p id="sheetUser"></p>
+
+    <label>نوع المنع</label>
+    <select id="restrictionType">
+      <option value="all">منع كامل</option>
+      <option value="bid">منع المزايدة فقط</option>
+      <option value="sell">منع البيع فقط</option>
+      <option value="buy">منع الشراء فقط</option>
+    </select>
+
+    <label>مدة المنع</label>
+    <select id="duration">
+      <option value="permanent">دائم</option>
+      <option value="1">ساعة واحدة</option>
+      <option value="24">24 ساعة</option>
+      <option value="72">3 أيام</option>
+      <option value="168">7 أيام</option>
+      <option value="720">30 يوم</option>
+    </select>
+
+    <label>السبب</label>
+    <textarea id="reason" placeholder="سبب الحظر..."></textarea>
+
+    <label>ملاحظات داخلية</label>
+    <textarea id="notes" placeholder="ملاحظات للإدارة فقط..."></textarea>
+
+    <div class="row">
+      <button class="btn secondary" id="cancelBtn">إلغاء</button>
+      <button class="btn primary" id="confirmBtn">تأكيد الحظر</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const supabase = createClient(
+  "https://ldvxctpngkidvatkisae.supabase.co",
+  "sb_publishable_iKh2hmOMdDYt9MmGmCX3jA_Hs-MovkB"
+);
+
+const $ = id => document.getElementById(id);
+let selectedUser = null;
+
+function toast(message){
+  $("toast").textContent = message;
+  $("toast").classList.add("show");
+  setTimeout(() => $("toast").classList.remove("show"), 2800);
+}
+
+function esc(v){
+  return String(v ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[c]));
+}
+
+function initials(name){
+  const s = String(name || "مستخدم").trim();
+  return esc(s.slice(0,1));
+}
+
+function money(v){
+  return Number(v || 0).toLocaleString("ar-IQ");
+}
+
+async function ensureAdmin(){
+  const { data:{session} } = await supabase.auth.getSession();
+
+  if(!session){
+    location.href="../index.html";
+    return false;
+  }
+
+  const { data, error } = await supabase
+    .from("mzad_admin_users")
+    .select("user_id,role_id,is_active")
+    .eq("user_id", session.user.id)
+    .eq("is_active", true)
+    .maybeSingle();
+
+  if(error || !data){
+    $("status").className="empty";
+    $("status").textContent="ليس لديك صلاحية دخول لوحة الإدارة.";
+    return false;
+  }
+
+  return true;
+}
+
+async function loadUsers(){
+  $("status").className="loading";
+  $("status").textContent="جاري تحميل المستخدمين...";
+
+  const q = $("search").value.trim();
+
+  const { data, error } = await supabase.rpc("mzad_admin_list_users", {
+    p_search: q || null,
+    p_limit: 100,
+    p_offset: 0
+  });
+
+  if(error){
+    $("status").className="empty";
+    $("status").textContent="تعذر تحميل المستخدمين: " + (error.message || "خطأ");
+    return;
+  }
+
+  const users = Array.isArray(data) ? data : [];
+
+  $("status").className="";
+  $("status").textContent = users.length
+    ? "عدد النتائج: " + users.length
+    : "";
+
+  if(!users.length){
+    $("list").innerHTML='<div class="empty">ماكو مستخدمين مطابقين للبحث.</div>';
+    return;
+  }
+
+  $("list").innerHTML = users.map(renderUser).join("");
+}
+
+function renderUser(u){
+  const isRestricted = !!u.has_active_restriction;
+  const active = !!u.is_active;
+
+  const avatar = u.avatar_url
+    ? '<img src="' + esc(u.avatar_url) + '" alt="">'
+    : initials(u.full_name);
+
+  return `
+  <article class="user">
+    <div class="userhead">
+      <div class="avatar">${avatar}</div>
+      <div class="info">
+        <div class="name">${esc(u.full_name || "بدون اسم")}</div>
+        <div class="meta">${esc(u.phone || "بدون رقم")} • ${esc(u.city || "غير محدد")}</div>
+      </div>
+      <div class="state ${isRestricted ? "restricted" : active ? "active" : "off"}">
+        ${isRestricted ? "مقيّد" : active ? "نشط" : "معطّل"}
+      </div>
+    </div>
+
+    <div class="details">
+      <div class="stat"><small>الثقة</small><b>${money(u.trust_score)}</b></div>
+      <div class="stat"><small>الحساب</small><b>${active ? "فعال" : "موقوف"}</b></div>
+      <div class="stat"><small>القيود</small><b>${isRestricted ? "موجودة" : "لا توجد"}</b></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn ${active ? "red" : "green"}" onclick='toggleActive(${JSON.stringify(u)})'>
+        ${active ? "تعطيل الحساب" : "تفعيل الحساب"}
+      </button>
+
+      <button class="btn orange" onclick='openRestrict(${JSON.stringify(u)})'>
+        حظر / تقييد
+      </button>
+
+      <button class="btn secondary" onclick='unrestrict(${JSON.stringify(u)})'>
+        فك الحظر
+      </button>
+
+      <button class="btn secondary" onclick='showId(${JSON.stringify(u)})'>
+        User ID
+      </button>
+    </div>
+  </article>`;
+}
+
+window.showId = function(u){
+  navigator.clipboard?.writeText(u.user_id);
+  toast("تم نسخ User ID");
+};
+
+window.toggleActive = async function(u){
+  const next = !u.is_active;
+  const ok = confirm(next
+    ? "تفعيل حساب هذا المستخدم؟"
+    : "تعطيل حساب هذا المستخدم؟");
+
+  if(!ok) return;
+
+  const reason = prompt("سبب العملية (اختياري):") || null;
+
+  const { error } = await supabase.rpc("mzad_admin_set_user_active", {
+    p_user_id: u.user_id,
+    p_is_active: next,
+    p_reason: reason
+  });
+
+  if(error){
+    toast("فشلت العملية: " + error.message);
+    return;
+  }
+
+  toast(next ? "تم تفعيل الحساب" : "تم تعطيل الحساب");
+  loadUsers();
+};
+
+window.openRestrict = function(u){
+  selectedUser = u;
+  $("sheetUser").textContent = u.full_name || u.phone || u.user_id;
+  $("restrictionType").value="all";
+  $("duration").value="permanent";
+  $("reason").value="";
+  $("notes").value="";
+  $("overlay").classList.add("show");
+};
+
+window.unrestrict = async function(u){
+  const ok = confirm("فك جميع القيود الفعالة عن هذا المستخدم؟");
+  if(!ok) return;
+
+  const reason = prompt("سبب فك الحظر (اختياري):") || null;
+
+  const { error } = await supabase.rpc("mzad_admin_unrestrict_user", {
+    p_user_id: u.user_id,
+    p_restriction_type: null,
+    p_reason: reason
+  });
+
+  if(error){
+    toast("فشلت العملية: " + error.message);
+    return;
+  }
+
+  toast("تم فك القيود");
+  loadUsers();
+};
+
+$("cancelBtn").onclick = () => {
+  $("overlay").classList.remove("show");
+  selectedUser = null;
+};
+
+$("confirmBtn").onclick = async () => {
+  if(!selectedUser) return;
+
+  const type = $("restrictionType").value;
+  const duration = $("duration").value;
+  const reason = $("reason").value.trim() || null;
+  const notes = $("notes").value.trim() || null;
+
+  let expires = null;
+
+  if(duration !== "permanent"){
+    expires = new Date(
+      Date.now() + Number(duration) * 60 * 60 * 1000
+    ).toISOString();
+  }
+
+  $("confirmBtn").disabled=true;
+  $("confirmBtn").textContent="جاري التنفيذ...";
+
+  const { error } = await supabase.rpc("mzad_admin_restrict_user", {
+    p_user_id: selectedUser.user_id,
+    p_restriction_type: type,
+    p_reason: reason,
+    p_notes: notes,
+    p_expires_at: expires
+  });
+
+  $("confirmBtn").disabled=false;
+  $("confirmBtn").textContent="تأكيد الحظر";
+
+  if(error){
+    toast("فشل الحظر: " + error.message);
+    return;
+  }
+
+  $("overlay").classList.remove("show");
+  selectedUser=null;
+  toast("تم تطبيق القيد وتسجيل العملية");
+  loadUsers();
+};
+
+$("searchBtn").onclick = loadUsers;
+$("search").addEventListener("keydown", e => {
+  if(e.key === "Enter") loadUsers();
+});
+
+(async()=>{
+  const ok = await ensureAdmin();
+  if(ok) await loadUsers();
+})();
+</script>
+</body>
+</html>
