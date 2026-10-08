@@ -2956,157 +2956,51 @@ function getFileExtension(file){
 }
 
 
-async function uploadDeviceImages(
-  user,
-  files
-){
+async function uploadDeviceImages(user, deviceId, files){
+  const uploadedPaths = [];
 
-  const uploadedPaths =
-    [];
+  for(let i = 0; i < files.length; i++){
+    const originalFile = files[i];
 
-  const publicUrls =
-    [];
-
-
-  for(
-    let i = 0;
-    i < files.length;
-    i++
-  ){
-
-    const originalFile =
-      files[i];
-
-
-    if(
-      !originalFile.type ||
-      !originalFile.type.startsWith(
-        "image/"
-      )
-    ){
-
-      throw new Error(
-        "IMAGE_ONLY"
-      );
-
+    if(!originalFile.type || !originalFile.type.startsWith("image/")){
+      throw new Error("IMAGE_ONLY");
     }
 
-
-    submitBtn.textContent =
-      `تجهيز الصورة ${i + 1} من ${files.length}...`;
-
+    submitBtn.textContent = `تجهيز الصورة ${i + 1} من ${files.length}...`;
 
     let file;
 
-
     try{
-
-      file =
-        await compressImage(
-          originalFile
-        );
-
+      file = await compressImage(originalFile);
     }catch(compressionError){
-
-      console.warn(
-        "IMAGE COMPRESSION FALLBACK:",
-        compressionError
-      );
-
-      file =
-        originalFile;
-
+      console.warn("IMAGE COMPRESSION FALLBACK:", compressionError);
+      file = originalFile;
     }
 
+    const extension = getFileExtension(file);
+    const uniqueName = `${Date.now()}-${crypto.randomUUID()}.${extension}`;
+    const path = `${user.id}/${deviceId}/${uniqueName}`;
 
-    const extension =
-      getFileExtension(
-        file
-      );
+    submitBtn.textContent = `رفع الصورة ${i + 1} من ${files.length}...`;
 
-
-    const uniqueName =
-      `${Date.now()}-${crypto.randomUUID()}.${extension}`;
-
-
-    const path =
-      `${user.id}/${uniqueName}`;
-
-
-    submitBtn.textContent =
-      `رفع الصورة ${i + 1} من ${files.length}...`;
-
-
-    const {
-      error:uploadError
-    } =
-      await supabase
-        .storage
-        .from("device-images")
-        .upload(
-          path,
-          file,
-          {
-            cacheControl:"31536000",
-            contentType:
-              file.type ||
-              "image/jpeg",
-            upsert:false
-          }
-        );
-
+    const { error: uploadError } = await supabase
+      .storage
+      .from("device-images")
+      .upload(path, file, {
+        cacheControl:"31536000",
+        contentType:file.type || "image/jpeg",
+        upsert:false
+      });
 
     if(uploadError){
-
-      console.error(
-        "IMAGE UPLOAD ERROR:",
-        uploadError
-      );
-
-      throw new Error(
-        "UPLOAD_FAILED"
-      );
-
+      console.error("IMAGE UPLOAD ERROR:", uploadError);
+      throw new Error("UPLOAD_FAILED");
     }
 
-
-    uploadedPaths.push(
-      path
-    );
-
-
-    const {
-      data
-    } =
-      supabase
-        .storage
-        .from("device-images")
-        .getPublicUrl(
-          path
-        );
-
-
-    if(!data?.publicUrl){
-
-      throw new Error(
-        "URL_FAILED"
-      );
-
-    }
-
-
-    publicUrls.push(
-      data.publicUrl
-    );
-
+    uploadedPaths.push(path);
   }
 
-
-  return {
-    uploadedPaths,
-    publicUrls
-  };
-
+  return { uploadedPaths };
 }
 
 
@@ -3211,555 +3105,311 @@ function resetSellForm(){
 
 
 async function saveDevice(){
-
-  const user =
-    await requireLogin();
+  const user = await requireLogin();
 
   if(!user){
-
     return;
-
   }
 
+  const brand = brandInput.value.trim();
+  const model = modelInput.value.trim();
+  const storage = document.getElementById("storage").value.trim();
+  const color = document.getElementById("color").value.trim();
 
-  const brand =
-    brandInput.value.trim();
+  const isApple = brand === "Apple";
 
-  const model =
-    modelInput.value.trim();
-
-  const storage =
-    document
-      .getElementById("storage")
-      .value
-      .trim();
-
-  const color =
-    document
-      .getElementById("color")
-      .value
-      .trim();
-
-
-  const isApple =
-    brand === "Apple";
-
-  const battery =
-    isApple
-      ? Number(
-          batteryInput.value
-        )
-      : null;
+  const battery = isApple
+    ? Number(batteryInput.value)
+    : null;
 
   const bodyCondition =
-    document
-      .querySelector(
-        'input[name="body_condition"]:checked'
-      )?.value || "";
+    document.querySelector('input[name="body_condition"]:checked')?.value || "";
 
   const screenCondition =
-    document
-      .querySelector(
-        'input[name="screen_condition"]:checked'
-      )?.value || "";
+    document.querySelector('input[name="screen_condition"]:checked')?.value || "";
 
   const faceId =
-    document
-      .querySelector(
-        'input[name="face_id"]:checked'
-      )?.value || "";
+    document.querySelector('input[name="face_id"]:checked')?.value || "";
 
   const cameras =
-    document
-      .querySelector(
-        'input[name="cameras"]:checked'
-      )?.value || "";
+    document.querySelector('input[name="cameras"]:checked')?.value || "";
 
   const charging =
-    document
-      .querySelector(
-        'input[name="charging"]:checked'
-      )?.value || "";
-
+    document.querySelector('input[name="charging"]:checked')?.value || "";
 
   const replacedParts =
     Array.from(
-      document.querySelectorAll(
-        'input[name="replaced_parts"]:checked'
-      )
-    )
-    .map(
-      input => input.value
-    );
+      document.querySelectorAll('input[name="replaced_parts"]:checked')
+    ).map(input => input.value);
 
+  const replacedPartsValue = replacedParts.join("، ");
 
-  const replacedPartsValue =
-    replacedParts.join("، ");
+  const price = Number(
+    document.getElementById("price").value
+  );
 
+  const notes = document
+    .getElementById("notes")
+    .value
+    .trim();
 
-  const price =
-    Number(
-      document
-        .getElementById("price")
-        .value
-    );
-
-
-  const notes =
-    document
-      .getElementById("notes")
-      .value
-      .trim();
-
-
-  const photos =
-    Array.from(
-      photosInput.files || []
-    );
-
+  const photos = Array.from(
+    photosInput.files || []
+  );
 
   if(!brand){
-
-    showToast(
-      "اختار شركة الجهاز"
-    );
-
+    showToast("اختار شركة الجهاز");
     return;
-
   }
-
 
   if(!model){
-
-    showToast(
-      "اختار موديل الجهاز"
-    );
-
+    showToast("اختار موديل الجهاز");
     return;
-
   }
-
 
   if(!storage){
-
-    showToast(
-      "اختار سعة الجهاز"
-    );
-
+    showToast("اختار سعة الجهاز");
     return;
-
   }
-
 
   if(!color){
-
-    showToast(
-      "اكتب لون الجهاز"
-    );
-
+    showToast("اكتب لون الجهاز");
     return;
-
   }
 
-
   if(isApple){
-
     if(
-      !Number.isInteger(
-        battery
-      ) ||
+      !Number.isInteger(battery) ||
       battery < 1 ||
       battery > 100
     ){
-
-      showToast(
-        "أدخل صحة البطارية من 1 إلى 100"
-      );
-
+      showToast("أدخل صحة البطارية من 1 إلى 100");
       return;
-
     }
-
   }
-
 
   if(!bodyCondition){
-
-    showToast(
-      "اختار حالة الهيكل"
-    );
-
+    showToast("اختار حالة الهيكل");
     return;
-
   }
-
 
   if(!screenCondition){
-
-    showToast(
-      "اختار حالة الشاشة"
-    );
-
+    showToast("اختار حالة الشاشة");
     return;
-
   }
-
 
   if(!faceId){
-
-    showToast(
-      "اختار حالة Face ID أو البصمة"
-    );
-
+    showToast("اختار حالة Face ID أو البصمة");
     return;
-
   }
-
 
   if(!cameras){
-
-    showToast(
-      "اختار حالة الكاميرات"
-    );
-
+    showToast("اختار حالة الكاميرات");
     return;
-
   }
-
 
   if(!charging){
-
-    showToast(
-      "اختار حالة الشحن"
-    );
-
+    showToast("اختار حالة الشحن");
     return;
-
   }
-
 
   if(!replacedParts.length){
-
-    showToast(
-      "حدد إذا كانت توجد قطع مبدلة أو اختر لا توجد"
-    );
-
+    showToast("حدد إذا كانت توجد قطع مبدلة أو اختر لا توجد");
     return;
-
   }
 
-
-  if(
-    !Number.isInteger(price)
-  ){
-
-    showToast(
-      "أدخل سعراً صحيحاً"
-    );
-
+  if(!Number.isInteger(price)){
+    showToast("أدخل سعراً صحيحاً");
     return;
-
   }
-
 
   if(price < 20000){
-
-    showToast(
-      "السعر المدخل أقل من الحد الأدنى المسموح به: 20 ألف د.ع"
-    );
-
+    showToast("السعر المدخل أقل من الحد الأدنى المسموح به: 20 ألف د.ع");
     return;
-
   }
-
 
   if(price > 5000000){
-
-    showToast(
-      "السعر المدخل يتجاوز الحد الأعلى المسموح به: 5 ملايين د.ع"
-    );
-
+    showToast("السعر المدخل يتجاوز الحد الأعلى المسموح به: 5 ملايين د.ع");
     return;
-
   }
-
 
   if(price % 1000 !== 0){
-
-    showToast(
-      "السعر لازم يكون بزيادة 1,000 د.ع"
-    );
-
+    showToast("السعر لازم يكون بزيادة 1,000 د.ع");
     return;
-
   }
-
 
   if(photos.length === 0){
-
-    showToast(
-      "أضف صورة واحدة على الأقل للجهاز"
-    );
-
+    showToast("أضف صورة واحدة على الأقل للجهاز");
     return;
-
   }
-
 
   if(photos.length > 10){
-
-    showToast(
-      "الحد الأقصى 10 صور للجهاز"
-    );
-
+    showToast("الحد الأقصى 10 صور للجهاز");
     return;
-
   }
 
+  if(photos.length > 0){
+    const invalidImage = photos.find(
+      file => !file.type || !file.type.startsWith("image/")
+    );
+
+    if(invalidImage){
+      showToast("كل الملفات لازم تكون صور");
+      return;
+    }
+  }
 
   if(notes.length > 300){
-
-    showToast(
-      "الملاحظات أقصى شيء 300 حرف"
-    );
-
+    showToast("الملاحظات أقصى شيء 300 حرف");
     return;
-
   }
 
+  submitBtn.disabled = true;
+  submitBtn.textContent = "جاري إنشاء سجل الجهاز...";
 
-  submitBtn.disabled =
-    true;
-
-  submitBtn.textContent =
-    "جاري تجهيز الصور...";
-
-
-  const fullName =
-    user.user_metadata?.full_name ||
-    "مستخدم MZAD PHONE";
-
-  const phone =
-    user.user_metadata?.phone ||
-    "";
-
-  let uploadedPaths =
-    [];
-
+  let deviceId = null;
+  let uploadedPaths = [];
 
   try{
+    const { data: createdDevice, error: createError } =
+      await supabase.rpc("mzad_create_device", {
+        p_brand: brand,
+        p_model: model,
+        p_storage: storage,
+        p_color: color,
+        p_condition_grade: bodyCondition,
+        p_battery_health: isApple ? String(battery) : null,
+        p_replaced_parts: replacedPartsValue,
+        p_screen_condition: screenCondition,
+        p_camera_condition: cameras,
+        p_biometric_condition: faceId,
+        p_sim_network: charging,
+        p_imei: null,
+        p_serial_number: null,
+        p_scratches_dents: bodyCondition,
+        p_faults: notes || null,
+        p_accessories: charging,
+        p_seller_notes: notes || null
+      });
 
-    const uploadResult =
-      await uploadDeviceImages(
-        user,
-        photos
-      );
-
-
-    uploadedPaths =
-      uploadResult.uploadedPaths;
-
-
-    const images =
-      JSON.stringify(
-        uploadResult.publicUrls
-      );
-
-
-    submitBtn.textContent =
-      "جاري نشر الجهاز...";
-
-
-    const {
-      data,
-      error
-    } =
-      await supabase
-        .from("devices")
-        .insert({
-
-          brand:
-            brand,
-
-          model:
-            model,
-
-          storage:
-            storage,
-
-          color:
-            color,
-
-          battery_health:
-            battery,
-
-          condition:
-            bodyCondition,
-
-          body_condition:
-            bodyCondition,
-
-          screen_condition:
-            screenCondition,
-
-          face_id:
-            faceId,
-
-          cameras:
-            cameras,
-
-          charging:
-            charging,
-
-          replaced_parts:
-            replacedPartsValue,
-
-          price:
-            price,
-
-          location:
-            "النجف",
-
-          sale_type:
-            "direct",
-
-          seller_id:
-            user.id,
-
-          seller_name:
-            fullName,
-
-          seller_phone:
-            phone,
-
-          images:
-            images,
-
-          notes:
-            notes || null
-
-        })
-        .select()
-        .single();
-
-
-    if(error){
-
-      console.error(
-        "DEVICE INSERT ERROR:",
-        error
-      );
-
-
-      await removeUploadedImages(
-        uploadedPaths
-      );
-
-
-      showToast(
-        "ما قدرنا نحفظ الجهاز حالياً"
-      );
-
-
-      submitBtn.disabled =
-        false;
-
-      submitBtn.textContent =
-        "نشر الجهاز";
-
-      return;
-
+    if(createError){
+      console.error("MZAD DEVICE CREATE ERROR:", createError);
+      throw new Error(createError.message || "DEVICE_CREATE_FAILED");
     }
 
+    deviceId =
+      typeof createdDevice === "string"
+        ? createdDevice
+        : createdDevice?.id ||
+          createdDevice?.device_id ||
+          createdDevice?.[0]?.id ||
+          createdDevice?.[0]?.device_id ||
+          null;
 
-    showToast(
-      "تم نشر الجهاز بنجاح"
+    if(!deviceId){
+      console.error("MZAD DEVICE CREATE RETURNED:", createdDevice);
+      throw new Error("DEVICE_ID_MISSING");
+    }
+
+    const uploadResult = await uploadDeviceImages(
+      user,
+      deviceId,
+      photos
     );
 
+    uploadedPaths = uploadResult.uploadedPaths;
+
+    submitBtn.textContent = "جاري ربط صور الجهاز...";
+
+    const imageRows = uploadedPaths.map((storagePath, index) => ({
+      device_id: deviceId,
+      storage_path: storagePath,
+      sort_order: index,
+      is_primary: index === 0
+    }));
+
+    const { error: imageInsertError } =
+      await supabase
+        .from("mzad_device_images")
+        .insert(imageRows);
+
+    if(imageInsertError){
+      console.error(
+        "MZAD DEVICE IMAGE LINK ERROR:",
+        imageInsertError
+      );
+
+      await removeUploadedImages(uploadedPaths);
+
+      throw new Error("IMAGE_LINK_FAILED");
+    }
+
+    showToast("تم إرسال الجهاز للمراجعة بنجاح");
 
     sessionStorage.setItem(
       "mzad_sell_reset",
       "1"
     );
 
-
     setTimeout(() => {
-
-      window.location.href =
-        "device.html?id=" +
-        encodeURIComponent(
-          data.id
-        );
-
-    },900);
-
+      resetSellForm();
+    }, 900);
 
   }catch(error){
-
     console.error(
       "SELL DEVICE ERROR:",
       error
     );
 
-
-    await removeUploadedImages(
-      uploadedPaths
-    );
-
-
     if(
-      error.message ===
-      "IMAGE_ONLY"
+      error.message === "IMAGE_ONLY"
     ){
-
-      showToast(
-        "كل الملفات لازم تكون صور"
-      );
+      showToast("كل الملفات لازم تكون صور");
 
     }else if(
-      error.message ===
-      "IMAGE_DECODE_FAILED"
+      error.message === "IMAGE_DECODE_FAILED"
     ){
-
-      showToast(
-        "تعذر قراءة إحدى الصور"
-      );
+      showToast("تعذر قراءة إحدى الصور");
 
     }else if(
-      error.message ===
-      "UPLOAD_FAILED"
+      error.message === "UPLOAD_FAILED"
     ){
-
-      showToast(
-        "فشل رفع الصورة"
-      );
+      showToast("فشل رفع إحدى صور الجهاز");
 
     }else if(
-      error.message ===
-      "URL_FAILED"
+      error.message === "IMAGE_LINK_FAILED"
     ){
+      showToast("تم إنشاء الجهاز لكن تعذر ربط الصور. لا تعيد الإرسال، راجع الإدارة.");
 
-      showToast(
-        "تعذر الحصول على رابط الصورة"
-      );
+    }else if(
+      error.message === "DEVICE_ID_MISSING"
+    ){
+      showToast("تعذر استلام رقم الجهاز من النظام");
+
+    }else if(
+      /AUTH_REQUIRED|PROFILE_NOT_FOUND|ACCOUNT_DISABLED/i.test(
+        error.message || ""
+      )
+    ){
+      showToast("لازم تسجل الدخول بحساب فعال حتى تنشر الجهاز");
+
+    }else if(
+      /DEVICE_SUBMISSIONS_DISABLED|MAINTENANCE_MODE/i.test(
+        error.message || ""
+      )
+    ){
+      showToast("استقبال الأجهزة متوقف حالياً");
 
     }else{
-
       showToast(
-        "صار خطأ أثناء رفع الصور"
+        error.message ||
+        "صار خطأ أثناء إرسال الجهاز للمراجعة"
       );
-
     }
 
-
-    submitBtn.disabled =
-      false;
-
-    submitBtn.textContent =
-      "نشر الجهاز";
-
+    submitBtn.disabled = false;
+    submitBtn.textContent = "نشر الجهاز";
   }
-
 }
 
 
