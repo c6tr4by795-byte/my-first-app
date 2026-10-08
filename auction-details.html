@@ -52,7 +52,7 @@
 
 <section class="card">
 <div class="title">تأمين المزايدة</div>
-<div class="deposit"><b>5,000 د.ع — تأمين قابل للاسترداد</b><span id="eligibilityText">يجب اعتماد تأمين المشاركة قبل السماح بالمزايدة.</span></div>
+<div class="deposit"><b>5,000 د.ع — تأمين قابل للاسترداد</b><span id="eligibilityText">يجب اعتماد تأمين المشاركة قبل السماح بالمزايدة.</span></div><button class="btn secondary" id="depositBtn" type="button">إكمال تأمين المشاركة</button>
 </section>
 
 <section class="card" id="bidCard">
@@ -142,7 +142,7 @@ function render(){
  const minimum=Number(a.current_price_iqd||a.starting_price_iqd||0)+Number(a.bid_increment_iqd||0);
  $("minimumBid").textContent=money(minimum);
 
- const eligible=state.eligibility?.eligible===true;
+ const eligible=state.eligibility?.eligible===true;\n const depositBtn=$("depositBtn");\n if(depositBtn){depositBtn.classList.toggle("hidden",eligible);depositBtn.disabled=false;}
  $("eligibilityText").textContent=eligible?"تم اعتماد تأمينك. أنت مؤهل للمزايدة.":"يجب اعتماد تأمين المشاركة قبل السماح بالمزايدة.";
 
  const live=status==="live"&&Date.now()<new Date(a.ends_at).getTime();
