@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f5f7">
+<title>لوحة الإدارة | MZAD PHONE</title>
+<style>
+:root{--p:#E91D4F;--c:#32B8C4;--bg:#f4f5f7;--ink:#20242a;--muted:#747a83;--line:#e5e7eb;--cream:#fbfaf7;--green:#15966b;--orange:#d88918;--red:#c92a45}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Tahoma,Arial,sans-serif}
+header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.95);backdrop-filter:blur(18px);border-bottom:1px solid var(--line);padding:calc(12px + env(safe-area-inset-top)) 15px 12px}
+.head{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between}.brand{font-size:19px;font-weight:950}.brand span{color:var(--p)}.head small{display:block;color:var(--muted);font-size:10px;margin-top:3px}.logout{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 13px;font-weight:800}
+main{max-width:1100px;margin:auto;padding:20px 15px 50px}.welcome{margin-bottom:18px}.welcome h1{font-size:25px;margin:0 0 5px;font-weight:950}.welcome p{margin:0;color:var(--muted);font-size:12px;line-height:1.7}
+.alert{display:none;background:#fff0f3;border:1px solid #f3cbd4;color:var(--red);border-radius:15px;padding:12px;font-size:12px;line-height:1.7;margin-bottom:14px}.alert.show{display:block}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:0 5px 18px rgba(20,25,30,.04)}.stat b{display:block;font-size:24px;margin-top:6px}.stat span{color:var(--muted);font-size:11px}
+.section{margin-top:23px}.section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.section h2{font-size:16px;margin:0}.section-title small{color:var(--muted);font-size:10px}
+.card{background:#fff;border:1px solid var(--line);border-radius:19px;overflow:hidden}.row{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px;border-bottom:1px solid var(--line)}.row:last-child{border-bottom:0}.name{font-weight:850;font-size:13px}.desc{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.6}.switch{position:relative;width:52px;height:30px;flex:0 0 auto}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;inset:0;background:#cfd3d8;border-radius:30px;transition:.18s;cursor:pointer}.slider:before{content:"";position:absolute;width:24px;height:24px;right:3px;top:3px;background:#fff;border-radius:50%;box-shadow:0 2px 5px rgba(0,0,0,.18);transition:.18s}.switch input:checked+.slider{background:var(--p)}.switch input:checked+.slider:before{transform:translateX(-22px)}
+.settings{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.field{background:#fff;border:1px solid var(--line);border-radius:17px;padding:13px}.field label{display:block;font-size:11px;font-weight:850;margin-bottom:8px}.field input{width:100%;height:43px;border:1px solid var(--line);border-radius:11px;padding:0 11px;font:inherit;outline:none}.field input:focus{border-color:var(--c)}.save{margin-top:10px;width:100%;height:46px;border:0;border-radius:13px;background:var(--c);color:#fff;font-weight:900}
+.links{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.link{display:flex;align-items:center;justify-content:center;min-height:62px;background:#fff;border:1px solid var(--line);border-radius:16px;text-decoration:none;color:var(--ink);font-size:12px;font-weight:850}
+.status{position:fixed;left:15px;right:15px;bottom:calc(15px + env(safe-area-inset-bottom));z-index:30;display:none;background:#20242a;color:#fff;border-radius:14px;padding:12px 14px;text-align:center;font-size:12px;box-shadow:0 10px 35px rgba(0,0,0,.2)}.status.show{display:block}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.settings{grid-template-columns:repeat(2,1fr)}.links{grid-template-columns:repeat(2,1fr)}}@media(max-width:450px){.settings{grid-template-columns:1fr}.row{padding:14px}.welcome h1{font-size:22px}}
+</style>
+</head>
+<body>
+<header><div class="head"><div><div class="brand">MZAD <span>PHONE</span></div><small>لوحة التحكم الرئيسية</small></div><button class="logout" id="logout">خروج</button></div></header>
+<main>
+<section class="welcome"><h1>لوحة الإدارة</h1><p>تحكم مركزي بالمزاد، البيع، التسجيل، الدفع والإعدادات التشغيلية.</p></section>
+<div id="alert" class="alert"></div>
+<section class="stats">
+<div class="stat"><span>التأمينات قيد المراجعة</span><b id="pending">—</b></div>
+<div class="stat"><span>المزادات المباشرة</span><b id="live">—</b></div>
+<div class="stat"><span>مزادات اليوم</span><b id="today">—</b></div>
+<div class="stat"><span>طرق الدفع المفعلة</span><b id="methods">—</b></div>
+</section>
+
+<section class="section"><div class="section-title"><h2>مفاتيح التشغيل</h2><small>تغييرها يؤثر على سلوك النظام</small></div><div class="card" id="toggles">
+<div class="row"><div><div class="name">المزادات</div><div class="desc">السماح بإنشاء وتشغيل المزادات الجديدة.</div></div><label class="switch"><input data-key="auctions_enabled" type="checkbox"><span class="slider"></span></label></div>
+<div class="row"><div><div class="name">المزايدة</div><div class="desc">السماح للمستخدمين بوضع مزايدات.</div></div><label class="switch"><input data-key="bidding_enabled" type="checkbox"><span class="slider"></span></label></div>
+<div class="row"><div><div class="name">البيع المباشر</div><div class="desc">السماح بإنشاء عمليات البيع المباشر.</div></div><label class="switch"><input data-key="direct_sales_enabled" type="checkbox"><span class="slider"></span></label></div>
+<div class="row"><div><div class="name">التسجيل الجديد</div><div class="desc">السماح بإنشاء حسابات مستخدمين جديدة.</div></div><label class="switch"><input data-key="registration_enabled" type="checkbox"><span class="slider"></span></label></div>
+<div class="row"><div><div class="name">استقبال أجهزة جديدة</div><div class="desc">السماح بإضافة أجهزة للبيع أو المزاد.</div></div><label class="switch"><input data-key="device_submissions_enabled" type="checkbox"><span class="slider"></span></label></div>
+<div class="row"><div><div class="name">الإيداع الإلكتروني</div><div class="desc">السماح بإنشاء طلبات تأمين إلكترونية.</div></div><label class="switch"><input data-key="deposits_enabled" type="checkbox"><span class="slider"></span></label></div>
+<div class="row"><div><div class="name">ظهور الأجهزة للعامة</div><div class="desc">التحكم بظهور الأجهزة المنشورة للزوار.</div></div><label class="switch"><input data-key="public_devices_enabled" type="checkbox"><span class="slider"></span></label></div>
+<div class="row"><div><div class="name">الإشعارات</div><div class="desc">تشغيل إشعارات النظام العامة.</div></div><label class="switch"><input data-key="notifications_enabled" type="checkbox"><span class="slider"></span></label></div>
+<div class="row"><div><div class="name">الوضع الصياني</div><div class="desc">إيقاف الوصول العام أثناء الصيانة.</div></div><label class="switch"><input data-key="maintenance_mode" type="checkbox"><span class="slider"></span></label></div>
+</div></section>
+
+<section class="section"><div class="section-title"><h2>إعدادات المزادات والدفع</h2><small>القيم محفوظة في mzad_settings</small></div><div class="settings">
+<div class="field"><label>مدة المزاد — ثانية</label><input id="auction_duration_seconds" type="number" min="60"></div>
+<div class="field"><label>تأمين المشتري — د.ع</label><input id="auction_buyer_deposit_iqd" type="number" min="0"></div>
+<div class="field"><label>تأمين البائع — د.ع</label><input id="auction_seller_deposit_iqd" type="number" min="0"></div>
+<div class="field"><label>تأمين مشتري البيع المباشر — د.ع</label><input id="direct_buyer_deposit_iqd" type="number" min="0"></div>
+<div class="field"><label>رسوم البائع — د.ع</label><input id="seller_platform_fee_iqd" type="number" min="0"></div>
+<div class="field"><label>رسوم المشتري — د.ع</label><input id="buyer_platform_fee_iqd" type="number" min="0"></div>
+<div class="field"><label>زيادة المزايدة — د.ع</label><input id="auction_bid_increment_iqd" type="number" min="1"></div>
+<div class="field"><label>نافذة التمديد — ثانية</label><input id="anti_snipe_window_seconds" type="number" min="0"></div>
+<div class="field"><label>تمديد المزاد — ثانية</label><input id="anti_snipe_extension_seconds" type="number" min="0"></div>
+<div class="field"><label>أقصى عدد تمديدات</label><input id="anti_snipe_max_extensions" type="number" min="0"></div>
+</div><button class="save" id="saveSettings">حفظ الإعدادات</button></section>
+
+<section class="section"><div class="section-title"><h2>إدارة سريعة</h2></div><div class="links">
+<a class="link" href="deposits.html">التأمينات</a><a class="link" href="../auctions.html">المزادات</a><a class="link" href="../market.html">السوق</a><a class="link" href="../home.html">الرئيسية</a>
+</div></section>
+</main><div id="status" class="status"></div>
+<script type="module">
+import {supabase} from "../js/supabase.js";
+const toggleKeys=[...document.querySelectorAll("[data-key]")].map(x=>x.dataset.key);
+const numericKeys=["auction_duration_seconds","auction_buyer_deposit_iqd","auction_seller_deposit_iqd","direct_buyer_deposit_iqd","seller_platform_fee_iqd","buyer_platform_fee_iqd","auction_bid_increment_iqd","anti_snipe_window_seconds","anti_snipe_extension_seconds","anti_snipe_max_extensions"];
+const allKeys=[...toggleKeys,...numericKeys];
+const $=id=>document.getElementById(id);
+function notify(t,bad=false){const e=$("status");e.textContent=t;e.style.background=bad?"#c92a45":"#20242a";e.classList.add("show");clearTimeout(window.__st);window.__st=setTimeout(()=>e.classList.remove("show"),2500)}
+function fail(t){$("alert").textContent=t;$("alert").classList.add("show")}
+async function admin(){const s=await supabase.auth.getSession();if(!s.data.session){location.href="../admin-login.html";throw Error("AUTH_REQUIRED")}const r=await supabase.rpc("mzad_is_admin");if(r.error)throw r.error;if(r.data!==true){await supabase.auth.signOut();location.href="../admin-login.html";throw Error("ADMIN_REQUIRED")}}
+async function loadSettings(){
+ const r=await supabase.from("mzad_settings").select("key,value_json").in("key",allKeys);if(r.error)throw r.error;
+ const map=new Map((r.data||[]).map(x=>[x.key,x.value_json]));
+ document.querySelectorAll("[data-key]").forEach(el=>{const v=map.get(el.dataset.key);el.checked=v===true||v?.value===true||v?.enabled===true});
+ numericKeys.forEach(k=>{const v=map.get(k);$(k).value=typeof v==="number"?v:(v?.value??"")});
+}
+async function save(key,value){
+ const r=await supabase.rpc("mzad_admin_update_setting",{p_key:key,p_value:value,p_description_ar:null});if(r.error)throw r.error;
+}
+async function loadStats(){
+ const p=await supabase.from("mzad_payment_proofs").select("id",{count:"exact",head:true}).eq("review_status","pending");$("pending").textContent=p.error?"—":(p.count??0);
+ const l=await supabase.from("mzad_auctions").select("id",{count:"exact",head:true}).eq("status","live");$("live").textContent=l.error?"—":(l.count??0);
+ const start=new Date();start.setHours(0,0,0,0);const t=await supabase.from("mzad_auctions").select("id",{count:"exact",head:true}).gte("created_at",start.toISOString());$("today").textContent=t.error?"—":(t.count??0);
+ const m=await supabase.from("mzad_payment_methods").select("id",{count:"exact",head:true}).eq("is_enabled",true);$("methods").textContent=m.error?"—":(m.count??0);
+}
+async function boot(){try{await admin();await Promise.all([loadSettings(),loadStats()])}catch(e){console.error(e);if(e.message!=="AUTH_REQUIRED"&&e.message!=="ADMIN_REQUIRED")fail("تعذر تحميل لوحة الإدارة: "+(e.message||"خطأ"))}}
+document.querySelectorAll("[data-key]").forEach(el=>el.addEventListener("change",async()=>{el.disabled=true;try{await save(el.dataset.key,el.checked);notify("تم حفظ التغيير")}catch(e){el.checked=!el.checked;notify("فشل حفظ التغيير: "+(e.message||"خطأ"),true)}finally{el.disabled=false}}));
+$("saveSettings").onclick=async()=>{const b=$("saveSettings");b.disabled=true;try{for(const k of numericKeys){const v=Number($(k).value);if(!Number.isFinite(v)||v<0)throw Error("قيمة غير صحيحة في "+k);await save(k,v)}notify("تم حفظ إعدادات المزادات والدفع");await loadSettings()}catch(e){notify(e.message||"فشل الحفظ",true)}finally{b.disabled=false}};
+$("logout").onclick=async()=>{await supabase.auth.signOut();location.href="../admin-login.html"};
+boot();
+</script>
+</body>
+</html>
