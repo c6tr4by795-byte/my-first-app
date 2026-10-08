@@ -6,82 +6,168 @@
 <meta name="theme-color" content="#ffffff">
 <title>إدارة التأمينات | MZAD PHONE</title>
 <style>
-:root{--p:#E91D4F;--c:#32B8C4;--bg:#f4f5f7;--card:#fff;--line:#e7e8eb;--text:#20242a;--muted:#737983;--ok:#16875d;--bad:#c92a45}
+:root{--p:#E91D4F;--c:#32B8C4;--bg:#f4f5f7;--card:#fff;--line:#e7e8eb;--text:#20242a;--muted:#737983;--ok:#16875d;--bad:#c92a45;--warn:#8b6400}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif}
-main{max-width:900px;margin:auto;padding:18px 14px 40px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.brand{font-weight:900;font-size:20px}.brand i{color:var(--p);font-style:normal}
+main{max-width:950px;margin:auto;padding:18px 14px 40px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.brand{font-weight:900;font-size:20px}.brand i{color:var(--p);font-style:normal}
 button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:11px 14px}.logout{background:#fff;border:1px solid var(--line)}.refresh{background:#20242a;color:#fff}
 .hero,.item{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:17px;margin-bottom:12px}.hero h1{margin:0 0 6px}.hero p{margin:0;color:var(--muted);font-size:13px;line-height:1.7}
 .toolbar{display:flex;gap:8px;margin:12px 0}.msg{display:none;padding:11px 13px;border-radius:12px;background:#fff;border:1px solid var(--line);margin-bottom:12px;font-size:13px}.msg.on{display:block}.msg.bad{color:var(--bad)}
-.head{display:flex;justify-content:space-between;gap:10px}.title{font-weight:900}.muted{color:var(--muted);font-size:12px;line-height:1.7}.badge{background:#fff1d4;color:#8b6400;border-radius:999px;padding:6px 9px;font-size:11px;height:max-content}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}.cell{background:#fbfaf7;border-radius:12px;padding:9px}.cell small{display:block;color:var(--muted);font-size:10px}.cell b{display:block;font-size:13px;word-break:break-word}
+.head{display:flex;justify-content:space-between;gap:10px}.title{font-weight:900}.muted{color:var(--muted);font-size:12px;line-height:1.7}.badge{border-radius:999px;padding:6px 9px;font-size:11px;height:max-content;white-space:nowrap}.badge.seller{background:#FFF0F4;color:var(--p)}.badge.buyer{background:#EAF9FB;color:#167984}.badge.other{background:#fff1d4;color:var(--warn)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.cell{background:#fbfaf7;border-radius:12px;padding:9px}.cell small{display:block;color:var(--muted);font-size:10px}.cell b{display:block;font-size:13px;word-break:break-word}
 .proof{margin-top:12px;border:1px solid var(--line);border-radius:14px;overflow:hidden}.proof img{width:100%;max-height:380px;object-fit:contain;display:block;background:#eee}.proof div{padding:12px;color:var(--muted);font-size:11px;word-break:break-all}
-.note{width:100%;margin-top:10px;min-height:70px;border:1px solid var(--line);border-radius:12px;padding:10px;resize:vertical}.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.ok{background:var(--ok);color:#fff}.no{background:#fff;color:var(--bad);border:1px solid #efc6ce}
-.empty{text-align:center;padding:35px;color:var(--muted);background:#fff;border:1px dashed #d8dbe0;border-radius:16px}
-@media(max-width:520px){.grid,.actions{grid-template-columns:1fr}.head{align-items:flex-start}}
+.note{width:100%;margin-top:10px;min-height:70px;border:1px solid var(--line);border-radius:12px;padding:10px;resize:vertical;font:inherit}.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.ok{background:var(--ok);color:#fff}.no{background:#fff;color:var(--bad);border:1px solid #efc6ce}
+.empty{text-align:center;padding:35px;color:var(--muted);background:#fff;border:1px dashed #d8dbe0;border-radius:16px}.seller-note{margin-top:10px;padding:10px 12px;border-radius:13px;background:#FFF5F7;color:#8b2641;font-size:11px;line-height:1.7}.buyer-note{margin-top:10px;padding:10px 12px;border-radius:13px;background:#EEF9FA;color:#176c74;font-size:11px;line-height:1.7}
+@media(max-width:650px){.grid{grid-template-columns:1fr 1fr}.actions{grid-template-columns:1fr}.head{align-items:flex-start}}
 </style>
 </head>
 <body>
 <main>
-<div class="top"><div><div class="brand">MZAD <i>PHONE</i></div><div class="muted">مراجعة إثباتات التأمين</div></div><button class="logout" id="logout">خروج</button></div>
-<section class="hero"><h1>إدارة التأمينات</h1><p>اعتماد التأمين لا يتم من الواجهة مباشرة؛ القرار يمر عبر الدالة الآمنة <b>mzad_approve_deposit</b>.</p></section>
-<div class="toolbar"><button class="refresh" id="refresh">تحديث</button></div><div id="msg" class="msg"></div><div id="list">جاري التحميل…</div>
+<div class="top"><div><div class="brand">MZAD <i>PHONE</i></div><div class="muted">مراجعة التأمينات الإلكترونية</div></div><button class="logout" id="logout">خروج</button></div>
+
+<section class="hero">
+<h1>إدارة التأمينات</h1>
+<p>هذه الصفحة للأدمن فقط. اعتماد <b>تأمين البائع</b> يفعّل مسودة المزاد تلقائياً من خلال قاعدة البيانات ويبدأ ساعة المزاد. اعتماد <b>تأمين المشتري</b> يمنحه أهلية المزايدة فقط.</p>
+</section>
+
+<div class="toolbar"><button class="refresh" id="refresh">تحديث</button></div>
+<div id="msg" class="msg"></div>
+<div id="list">جاري التحميل…</div>
 </main>
+
 <script type="module">
 import {supabase} from "../js/supabase.js";
+
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));
 const money=v=>new Intl.NumberFormat("ar-IQ").format(Number(v||0))+" د.ع";
 const date=v=>v?new Date(v).toLocaleString("ar-IQ"):"—";
+
 function show(t,bad=false){$("msg").textContent=t;$("msg").className="msg on"+(bad?" bad":"")}
-async function auth(){const s=await supabase.auth.getSession();if(!s.data.session){location.href="../index.html?next="+encodeURIComponent("admin/deposits.html");throw Error("AUTH_REQUIRED")}}
-async function signed(path){if(!path)return null;const r=await supabase.storage.from("mzad-payment-proofs").createSignedUrl(path,600);return r.data?.signedUrl||null}
+
+async function auth(){
+ const s=await supabase.auth.getSession();
+ if(!s.data.session){location.href="../index.html?next="+encodeURIComponent("admin/deposits.html");throw Error("AUTH_REQUIRED")}
+ const admin=await supabase.rpc("mzad_is_admin");
+ if(admin.error)throw admin.error;
+ if(!admin.data){await supabase.auth.signOut();location.href="../index.html?next="+encodeURIComponent("admin/deposits.html");throw Error("ADMIN_REQUIRED")}
+}
+
+async function signed(path){
+ if(!path)return null;
+ const r=await supabase.storage.from("mzad-payment-proofs").createSignedUrl(path,600);
+ return r.data?.signedUrl||null;
+}
+
 async function load(){
  $("list").innerHTML="جاري التحميل…";
  try{
   await auth();
-  const p=await supabase.from("mzad_payment_proofs").select("*").eq("review_status","pending").order("created_at",{ascending:true});
+
+  const p=await supabase.from("mzad_payment_proofs")
+   .select("*")
+   .eq("review_status","pending")
+   .order("created_at",{ascending:true});
   if(p.error)throw p.error;
+
   const proofs=p.data||[];
   if(!proofs.length){$("list").innerHTML='<div class="empty">لا توجد إثباتات بانتظار المراجعة.</div>';return}
+
   const rids=[...new Set(proofs.map(x=>x.request_id).filter(Boolean))];
-  const rq=await supabase.from("mzad_payment_requests").select("*").in("id",rids);if(rq.error)throw rq.error;
+  const rq=await supabase.from("mzad_payment_requests").select("*").in("id",rids);
+  if(rq.error)throw rq.error;
   const reqs=rq.data||[],rm=new Map(reqs.map(x=>[x.id,x]));
+
   const dids=[...new Set(reqs.map(x=>x.deposit_id).filter(Boolean))];
-  const dp=await supabase.from("mzad_deposits").select("*").in("id",dids);if(dp.error)throw dp.error;
+  const dp=await supabase.from("mzad_deposits").select("*").in("id",dids);
+  if(dp.error)throw dp.error;
   const deps=dp.data||[],dm=new Map(deps.map(x=>[x.id,x]));
+
   const aids=[...new Set(deps.map(x=>x.auction_id).filter(Boolean))];
-  const au=aids.length?await supabase.from("mzad_auctions").select("*").in("id",aids):{data:[],error:null};if(au.error)throw au.error;
+  const au=aids.length?await supabase.from("mzad_auctions").select("*").in("id",aids):{data:[],error:null};
+  if(au.error)throw au.error;
   const auctions=au.data||[],am=new Map(auctions.map(x=>[x.id,x]));
+
   const vids=[...new Set(auctions.map(x=>x.device_id).filter(Boolean))];
-  const dv=vids.length?await supabase.from("mzad_devices").select("*").in("id",vids):{data:[],error:null};if(dv.error)throw dv.error;
+  const dv=vids.length?await supabase.from("mzad_devices").select("*").in("id",vids):{data:[],error:null};
+  if(dv.error)throw dv.error;
   const devices=dv.data||[],vm=new Map(devices.map(x=>[x.id,x]));
+
   const mids=[...new Set(reqs.map(x=>x.payment_method_id).filter(Boolean))];
-  const mt=mids.length?await supabase.from("mzad_payment_methods").select("*").in("id",mids):{data:[],error:null};if(mt.error)throw mt.error;
+  const mt=mids.length?await supabase.from("mzad_payment_methods").select("*").in("id",mids):{data:[],error:null};
+  if(mt.error)throw mt.error;
   const methods=mt.data||[],mm=new Map(methods.map(x=>[x.id,x]));
+
   const urls=await Promise.all(proofs.map(x=>signed(x.proof_storage_path)));
+
   $("list").innerHTML=proofs.map((p,i)=>{
-   const q=rm.get(p.request_id)||{},d=dm.get(q.deposit_id)||{},a=am.get(d.auction_id)||{},v=vm.get(a.device_id)||{},m=mm.get(q.payment_method_id)||{};
+   const q=rm.get(p.request_id)||{};
+   const d=dm.get(q.deposit_id)||{};
+   const a=am.get(d.auction_id)||{};
+   const v=vm.get(a.device_id)||{};
+   const m=mm.get(q.payment_method_id)||{};
+   const type=String(d.deposit_type||"").toLowerCase();
+   const isSeller=type==="auction_seller";
+   const isBuyer=type==="auction_buyer";
    const name=[v.brand,v.model,v.storage].filter(Boolean).join(" ")||"تأمين";
+   const roleLabel=isSeller?"تأمين بائع المزاد":isBuyer?"تأمين مزايد":"تأمين";
+   const note=isSeller
+    ?'<div class="seller-note"><b>مهم:</b> عند الاعتماد، مسودة هذا المزاد ستتحول إلى <b>LIVE</b> ويبدأ العداد تلقائياً لمدة ساعة. لا يوجد اعتماد آخر من هذه الصفحة لتشغيل المزاد.</div>'
+    :isBuyer
+    ?'<div class="buyer-note"><b>مهم:</b> عند الاعتماد، يحصل المزايد على أهلية المزايدة فقط. لا يتغير سعر الجهاز ولا يُعتبر التأمين دفعة من سعر الشراء.</div>'
+    :"";
+
    return '<article class="item" data-deposit="'+esc(d.id||"")+'">'+
-   '<div class="head"><div><div class="title">'+esc(name)+'</div><div class="muted">طلب: '+esc(q.request_number||q.id)+'<br>الإثبات: '+esc(p.id)+'<br>أُرسل: '+date(p.created_at)+'</div></div><span class="badge">قيد المراجعة</span></div>'+
-   '<div class="grid"><div class="cell"><small>المطلوب</small><b>'+money(q.amount_iqd||d.amount_iqd)+'</b></div><div class="cell"><small>المثبت</small><b>'+money(p.paid_amount_iqd)+'</b></div><div class="cell"><small>طريقة الدفع</small><b>'+esc(m.name_ar||m.name||m.code||"—")+'</b></div><div class="cell"><small>المرجع</small><b>'+esc(p.reference_number||q.payment_reference||"—")+'</b></div><div class="cell"><small>المزاد</small><b>'+esc(a.auction_number||a.id||"—")+'</b></div><div class="cell"><small>المستخدم</small><b>'+esc(p.user_id||d.user_id||"—")+'</b></div></div>'+
-   '<div class="proof">'+(urls[i]?'<img src="'+esc(urls[i])+'" alt="إثبات الدفع">':'<div>تعذر إنشاء رابط آمن للإثبات: '+esc(p.proof_storage_path||"لا يوجد")+'</div>')+'</div>'+
-   '<textarea class="note" placeholder="ملاحظة المراجعة (اختياري)"></textarea><div class="actions"><button class="ok" data-a="1">اعتماد التأمين</button><button class="no" data-a="0">رفض الإثبات</button></div></article>';
+    '<div class="head"><div><div class="title">'+esc(name)+'</div><div class="muted">طلب: '+esc(q.request_number||q.id)+'<br>الإثبات: '+esc(p.id)+'<br>أُرسل: '+date(p.created_at)+'</div></div>'+
+    '<span class="badge '+(isSeller?"seller":isBuyer?"buyer":"other")+'">'+esc(roleLabel)+'</span></div>'+
+    '<div class="grid">'+
+    '<div class="cell"><small>المطلوب</small><b>'+money(q.amount_iqd||d.amount_iqd)+'</b></div>'+
+    '<div class="cell"><small>المثبت</small><b>'+money(p.paid_amount_iqd)+'</b></div>'+
+    '<div class="cell"><small>طريقة الدفع</small><b>'+esc(m.name_ar||m.name||m.code||"—")+'</b></div>'+
+    '<div class="cell"><small>المرجع</small><b>'+esc(p.reference_number||q.payment_reference||"—")+'</b></div>'+
+    '<div class="cell"><small>المزاد</small><b>'+esc(a.auction_number||a.id||"—")+'</b></div>'+
+    '<div class="cell"><small>المستخدم</small><b>'+esc(p.user_id||d.user_id||"—")+'</b></div>'+
+    '</div>'+note+
+    '<div class="proof">'+(urls[i]?'<img src="'+esc(urls[i])+'" alt="إثبات الدفع">':'<div>تعذر إنشاء رابط آمن للإثبات: '+esc(p.proof_storage_path||"لا يوجد")+'</div>')+'</div>'+
+    '<textarea class="note" placeholder="ملاحظة المراجعة (اختياري)"></textarea>'+
+    '<div class="actions"><button class="ok" data-a="1">اعتماد التأمين</button><button class="no" data-a="0">رفض الإثبات</button></div>'+
+    '</article>';
   }).join("");
+
   $("list").querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>review(b.closest(".item"),b.dataset.a==="1"));
- }catch(e){console.error(e);$("list").innerHTML='<div class="empty">تعذر تحميل إثباتات الدفع. تحقق من RLS وصلاحيات الإدارة.</div>';if(e.message!=="AUTH_REQUIRED")show(e.message||"حدث خطأ",true)}
+ }catch(e){
+  console.error(e);
+  $("list").innerHTML='<div class="empty">تعذر تحميل إثباتات الدفع.</div>';
+  if(e.message!=="AUTH_REQUIRED"&&e.message!=="ADMIN_REQUIRED")show(e.message||"حدث خطأ",true);
+ }
 }
+
 async function review(card,approve){
- const id=card.dataset.deposit,note=card.querySelector(".note").value.trim()||null;
+ const id=card.dataset.deposit;
+ const note=card.querySelector(".note").value.trim()||null;
  if(!id)return show("deposit_id غير موجود.",true);
+
+ if(approve){
+  const role=card.querySelector(".badge")?.textContent||"";
+  const ok=confirm(role.includes("بائع")
+   ?"تأكيد اعتماد تأمين البائع؟\n\nعند النجاح سيبدأ المزاد تلقائياً لمدة ساعة."
+   :"تأكيد اعتماد التأمين؟");
+  if(!ok)return;
+ }
+
  card.querySelectorAll("button").forEach(b=>b.disabled=true);
+
  try{
   const r=await supabase.rpc("mzad_approve_deposit",{p_deposit_id:id,p_approve:approve,p_note:note});
   if(r.error)throw r.error;
-  show(approve?"تم اعتماد التأمين.":"تم رفض الإثبات.");
+  show(approve?"تم اعتماد التأمين بنجاح. إذا كان تأمين بائع، فالمزاد أصبح Live تلقائياً.":"تم رفض الإثبات.");
   await load();
- }catch(e){console.error(e);show("فشل القرار: "+(e.message||"خطأ غير معروف"),true);card.querySelectorAll("button").forEach(b=>b.disabled=false)}
+ }catch(e){
+  console.error(e);
+  show("فشل القرار: "+(e.message||"خطأ غير معروف"),true);
+  card.querySelectorAll("button").forEach(b=>b.disabled=false);
+ }
 }
+
 $("refresh").onclick=load;
 $("logout").onclick=async()=>{await supabase.auth.signOut();location.href="../index.html"};
 load();
