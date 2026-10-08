@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+
+<title>تأمين البائع | MZAD PHONE</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+--pink:#E91D4F;
+--turq:#32B8C4;
+--bg:#F7F8FA;
+--ink:#171A1F;
+--muted:#747B86;
+--line:#E7E9ED;
+--cream:#FFFDF8;
+--green:#138A5B;
+--red:#C62F4D;
+}
+
+*{
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent
+}
+
+body{
+margin:0;
+background:var(--bg);
+color:var(--ink);
+font-family:Cairo,sans-serif
+}
+
+.app{
+max-width:520px;
+min-height:100vh;
+margin:auto;
+padding-bottom:40px
+}
+
+.top{
+height:68px;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#fff;
+border-bottom:1px solid var(--line);
+position:sticky;
+top:0;
+z-index:10
+}
+
+.back{
+position:absolute;
+right:14px;
+width:42px;
+height:42px;
+border:1px solid var(--line);
+border-radius:14px;
+background:#fff;
+font-size:22px
+}
+
+.logo{
+font-size:19px;
+font-weight:900
+}
+
+.logo b{
+color:var(--pink)
+}
+
+.sub{
+display:block;
+font-size:7px;
+letter-spacing:3px;
+color:var(--muted);
+text-align:center;
+direction:ltr
+}
+
+.content{
+padding:20px 14px
+}
+
+.card{
+background:#fff;
+border:1px solid var(--line);
+border-radius:24px;
+padding:18px;
+margin-bottom:14px;
+box-shadow:0 12px 32px rgba(20,24,31,.07)
+}
+
+.badge{
+display:inline-flex;
+padding:7px 11px;
+border-radius:999px;
+background:#FFF0F4;
+color:var(--pink);
+font-size:9px;
+font-weight:900
+}
+
+h1{
+font-size:27px;
+margin:10px 0 5px;
+font-weight:900
+}
+
+.lead{
+font-size:10px;
+line-height:1.9;
+color:var(--muted);
+margin:0
+}
+
+.amount{
+text-align:center;
+padding:22px 10px;
+background:var(--cream);
+border:1px solid var(--line);
+border-radius:20px;
+margin-top:15px
+}
+
+.amount small{
+display:block;
+font-size:9px;
+color:var(--muted)
+}
+
+.amount strong{
+display:block;
+font-size:30px;
+margin-top:5px;
+color:var(--pink)
+}
+
+.title{
+font-size:15px;
+font-weight:900;
+margin-bottom:12px
+}
+
+.methods{
+display:grid;
+gap:9px
+}
+
+.method{
+width:100%;
+border:1px solid var(--line);
+background:#fff;
+border-radius:16px;
+padding:13px;
+text-align:right;
+font-family:inherit
+}
+
+.method.selected{
+border-color:var(--pink);
+background:#FFF5F7
+}
+
+.method b{
+display:block;
+font-size:11px
+}
+
+.method span{
+display:block;
+margin-top:3px;
+font-size:8px;
+color:var(--muted)
+}
+
+input{
+width:100%;
+height:50px;
+border:1px solid var(--line);
+border-radius:15px;
+background:#FAFBFC;
+padding:0 13px;
+font-family:inherit;
+outline:0;
+font-size:11px
+}
+
+input:focus{
+border-color:var(--turq);
+background:#fff
+}
+
+.file{
+height:auto;
+padding:13px;
+background:#fff
+}
+
+.btn{
+width:100%;
+height:55px;
+border:0;
+border-radius:17px;
+background:linear-gradient(135deg,var(--pink),#F0446D);
+color:#fff;
+font-family:inherit;
+font-size:12px;
+font-weight:900;
+margin-top:12px
+}
+
+.btn:disabled{
+opacity:.45
+}
+
+.notice{
+padding:13px;
+border-radius:16px;
+background:#FFF9EA;
+border:1px solid #F2E2B7;
+font-size:9px;
+line-height:1.8;
+color:#766542
+}
+
+.msg{
+display:none;
+margin-top:10px;
+padding:11px;
+border-radius:13px;
+text-align:center;
+font-size:9px;
+font-weight:800
+}
+
+.msg.show{
+display:block
+}
+
+.err{
+background:#FFF0F3;
+color:var(--red)
+}
+
+.ok{
+background:#ECFAF4;
+color:var(--green)
+}
+
+.status{
+text-align:center;
+padding:15px;
+border-radius:17px;
+background:#F5F7F9;
+font-size:10px;
+font-weight:800;
+color:var(--muted)
+}
+
+.hidden{
+display:none!important
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="top">
+
+<button class="back" id="back">‹</button>
+
+<div>
+<div class="logo">
+MZ<span style="color:var(--pink)">AD</span> PHONE
+</div>
+
+<span class="sub">
+SELLER DEPOSIT
+</span>
+
+</div>
+
+</header>
+
+
+<main class="content">
+
+<section class="card">
+
+<span class="badge">
+تأمين البائع
+</span>
+
+<h1>
+أكمل تأمين المزاد
+</h1>
+
+<p class="lead">
+طلب المزاد تم إنشاؤه، لكنه لم يُنشر بعد.
+حتى يتم إرسال الطلب للمراجعة يجب دفع تأمين البائع.
+</p>
+
+<div class="amount">
+
+<small>
+تأمين قابل للاسترداد
+</small>
+
+<strong>
+5,000 د.ع
+</strong>
+
+</div>
+
+</section>
+
+
+<section class="card">
+
+<div class="title">
+طريقة الدفع
+</div>
+
+<div id="methods" class="methods">
+</div>
+
+</section>
+
+
+<section class="card">
+
+<div class="title">
+بيانات إثبات الدفع
+</div>
+
+<div class="field">
+
+<label style="display:block;font-size:9px;font-weight:800;margin-bottom:7px">
+رقم العملية / المرجع
+</label>
+
+<input
+id="reference"
+placeholder="اختياري"
+/>
+
+</div>
+
+
+<div style="margin-top:12px">
+
+<label style="display:block;font-size:9px;font-weight:800;margin-bottom:7px">
+صورة إثبات الدفع
+</label>
+
+<input
+id="proof"
+class="file"
+type="file"
+accept="image/*"
+/>
+
+</div>
+
+
+<div class="notice" style="margin-top:13px">
+
+بعد إرسال الإثبات، يقوم فريق الإدارة بمراجعته.
+لن يبدأ المزاد ولن يظهر للعامة قبل الموافقة.
+
+</div>
+
+
+<button
+id="submit"
+class="btn"
+disabled
+>
+إرسال إثبات الدفع
+</button>
+
+<div id="msg" class="msg"></div>
+
+</section>
+
+
+<section class="card">
+
+<div class="title">
+حالة الطلب
+</div>
+
+<div id="status" class="status">
+جاري تحميل الحالة...
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<script type="module">
+
+import {supabase}
+from "./js/supabase.js";
+
+
+const $ =
+id => document.getElementById(id);
+
+
+const params =
+new URLSearchParams(location.search);
+
+
+const auctionId =
+params.get("auction") ||
+params.get("id");
+
+
+const state = {
+user:null,
+deposit:null,
+request:null,
+method:null,
+busy:false
+};
+
+
+function show(text,type="err"){
+
+const box = $("msg");
+
+box.textContent = text;
+
+box.className =
+"msg show " + type;
+
+}
+
+
+function money(n){
+
+return Number(n||0)
+.toLocaleString("en-US")
++ " د.ع";
+
+}
+
+
+/* =========================
+Auth
+========================= */
+
+async function auth(){
+
+const {data,error} =
+await supabase.auth.getUser();
+
+if(error || !data.user){
+
+location.href =
+"index.html?login=1";
+
+return false;
+
+}
+
+state.user =
+data.user;
+
+return true;
+
+}
+
+
+/* =========================
+Create seller deposit
+========================= */
+
+async function createDeposit(){
+
+const r =
+await supabase.rpc(
+"mzad_create_auction_deposit",
+{
+p_auction_id:auctionId,
+p_role:"seller"
+}
+);
+
+if(r.error)
+throw r.error;
+
+state.deposit =
+typeof r.data === "string"
+? {id:r.data}
+: r.data;
+
+}
+
+
+/* =========================
+Load methods
+========================= */
+
+async function loadMethods(){
+
+const r =
+await supabase.rpc(
+"mzad_get_enabled_payment_methods"
+);
+
+if(r.error)
+throw r.error;
+
+const methods =
+Array.isArray(r.data)
+? r.data
+: [];
+
+const box =
+$("methods");
+
+box.innerHTML = "";
+
+if(!methods.length){
+
+box.innerHTML =
+"<div class='status'>لا توجد طريقة دفع مفعلة حالياً.</div>";
+
+return;
+
+}
+
+methods.forEach(m=>{
+
+const b =
+document.createElement("button");
+
+b.className =
+"method";
+
+b.innerHTML = `
+<b>${m.name_ar || "طريقة دفع"}</b>
+<span>
+${m.account_label || ""}
+</span>
+`;
+
+b.onclick = ()=>{
+
+document
+.querySelectorAll(".method")
+.forEach(x=>
+x.classList.remove("selected")
+);
+
+b.classList.add("selected");
+
+state.method = m;
+
+refresh();
+
+};
+
+box.appendChild(b);
+
+});
+
+}
+
+
+/* =========================
+Payment request
+========================= */
+
+async function createPaymentRequest(){
+
+if(!state.deposit?.id)
+throw new Error("DEPOSIT_NOT_FOUND");
+
+if(!state.method?.id)
+throw new Error("PAYMENT_METHOD_REQUIRED");
+
+const r =
+await supabase.rpc(
+"mzad_create_deposit_payment_request",
+{
+p_deposit_id:state.deposit.id,
+p_payment_method_id:state.method.id
+}
+);
+
+if(r.error)
+throw r.error;
+
+state.request =
+typeof r.data === "string"
+? {id:r.data}
+: r.data;
+
+}
+
+
+/* =========================
+Refresh button
+========================= */
+
+function refresh(){
+
+$("submit").disabled =
+state.busy ||
+!state.method ||
+!$("proof").files.length;
+
+}
+
+
+/* =========================
+Submit proof
+========================= */
+
+$("submit").onclick =
+async ()=>{
+
+if(state.busy)
+return;
+
+state.busy = true;
+
+$("submit").textContent =
+"جاري إرسال الإثبات...";
+
+refresh();
+
+try{
+
+await createPaymentRequest();
+
+const file =
+$("proof").files[0];
+
+const path =
+`payment-proofs/${state.user.id}/${state.request.id}-${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,"-")}`;
+
+
+/*
+  رفع الإثبات إلى bucket
+*/
+
+const upload =
+await supabase.storage
+.from("mzad-payment-proofs")
+.upload(
+path,
+file,
+{
+upsert:false,
+cacheControl:"3600"
+}
+);
+
+if(upload.error)
+throw upload.error;
+
+
+/*
+  تسجيل الإثبات
+*/
+
+const proof =
+await supabase.rpc(
+"mzad_submit_deposit_proof",
+{
+p_request_id:state.request.id,
+p_reference_number:
+$("reference").value.trim() || null,
+p_proof_storage_path:path,
+p_paid_amount_iqd:5000,
+p_paid_at:new Date().toISOString()
+}
+);
+
+if(proof.error)
+throw proof.error;
+
+
+show(
+"تم إرسال إثبات الدفع. المزاد بانتظار مراجعة الإدارة.",
+"ok"
+);
+
+$("status").textContent =
+"بانتظار مراجعة تأمين البائع";
+
+$("submit").textContent =
+"تم إرسال الإثبات";
+
+}
+catch(e){
+
+console.error(e);
+
+const code =
+e?.message || "";
+
+const map = {
+
+AUTH_REQUIRED:
+"يجب تسجيل الدخول.",
+
+DEPOSIT_NOT_FOUND:
+"تعذر العثور على تأمين المزاد.",
+
+PAYMENT_METHOD_REQUIRED:
+"اختر طريقة الدفع.",
+
+DEPOSITS_DISABLED:
+"نظام التأمينات متوقف حالياً.",
+
+AMOUNT_MISMATCH:
+"قيمة إثبات الدفع غير صحيحة.",
+
+PAYMENT_REQUEST_NOT_FOUND:
+"تعذر إنشاء طلب الدفع."
+
+};
+
+show(
+map[code] ||
+"تعذر إرسال إثبات الدفع. " + code
+);
+
+state.busy = false;
+
+$("submit").textContent =
+"إرسال إثبات الدفع";
+
+refresh();
+
+}
+
+};
+
+
+$("proof").onchange =
+refresh;
+
+
+/* =========================
+Back
+========================= */
+
+$("back").onclick =
+()=>history.back();
+
+
+/* =========================
+Load
+========================= */
+
+(async()=>{
+
+try{
+
+const ok =
+await auth();
+
+if(!ok)
+return;
+
+if(!auctionId){
+
+show(
+"رابط المزاد غير صحيح."
+);
+
+return;
+
+}
+
+await createDeposit();
+
+await loadMethods();
+
+$("status").textContent =
+"بانتظار إكمال دفع التأمين";
+
+refresh();
+
+}
+catch(e){
+
+console.error(e);
+
+show(
+"تعذر تحميل صفحة التأمين. " +
+(e?.message || "")
+);
+
+}
+
+})();
+
+</script>
+
+</body>
+</html>
