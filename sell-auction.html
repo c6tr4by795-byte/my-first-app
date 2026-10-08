@@ -3,64 +3,84 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<meta name="theme-color" content="#fff">
+<meta name="theme-color" content="#ffffff">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>MZAD PHONE — بيع مزاد</title>
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="MZAD PHONE">
+<title>MZAD PHONE — إدارة مزادك</title>
 
 <style>
-/* ============ المتغيرات ============ */
 :root{
-  --bg:#f9f8fd;--ink:#17202a;--muted:#6b7280;--line:#ece8fb;
-  --primary:#176b87;--purple:#6246d9;--purple-dark:#4a34b8;--purple-soft:#f3f0ff;
-  --edge:#ddd8f8;--hot:#e8590c;--ok:#1e8a5a;
-  --safe-bottom:env(safe-area-inset-bottom,0px)
+  --bg:#f9f8fd; --ink:#17202a; --muted:#6b7280; --line:#ece8fb;
+  --primary:#176b87; --primary-soft:#e8f3f6; --purple:#6246d9; --purple-dark:#4a34b8; --purple-soft:#f3f0ff; --edge:#e0daf8;
+  --ok:#1e8a5a; --hot:#e8590c; --gold:#b9791a; --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 
-/* ============ الأساسيات ============ */
 *{box-sizing:border-box}
+
 html{scroll-behavior:smooth}
+
 body{
   margin:0;
   min-height:100dvh;
   background:var(--bg);
   color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
-  -webkit-font-smoothing:antialiased
-}
-button,input,select,textarea{font:inherit;color:inherit}
-button{border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
-a{text-decoration:none;color:inherit}
-:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
-.page{
-  width:min(100%,520px);
-  margin:auto;
-  padding:0 14px calc(96px + var(--safe-bottom));
-  overflow-x:clip
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility
 }
 
-/* ============ الهيدر ============ */
+button{
+  font:inherit;
+  border:0;
+  background:none;
+  color:inherit;
+  cursor:pointer
+}
+
+:focus-visible{
+  outline:3px solid var(--purple);
+  outline-offset:2px
+}
+
+.page{
+  width:min(100%,520px);
+  margin:0 auto;
+  padding:0 14px calc(40px + var(--safe-bottom))
+}
+
+/* header */
+
 header{
   margin-inline:-14px;
-  padding:0 14px 16px;
-  background:linear-gradient(145deg,#fff,#f7f5ff 55%,#ece8ff);
+  padding:0 14px 14px;
+  background:linear-gradient(145deg,#fff 0%,#f7f5ff 55%,#ece8ff 100%);
   border-radius:0 0 24px 24px;
   border-bottom:1px solid var(--line);
-  box-shadow:0 10px 26px #17202a0d
+  box-shadow:0 10px 26px rgba(23,32,42,.05)
 }
+
 .topbar{
   display:flex;
   align-items:center;
   justify-content:space-between;
+  gap:12px;
   padding:12px 2px 0
 }
+
 .brand-mini{
   display:flex;
   flex-direction:column;
   align-items:center;
   line-height:.9
 }
-.brand-mini strong{font-size:16px;letter-spacing:-.03em}
+
+.brand-mini strong{
+  font-size:16px;
+  letter-spacing:-.03em
+}
+
 .brand-mini span{
   font-size:7px;
   font-weight:800;
@@ -68,6 +88,7 @@ header{
   color:#8a96a3;
   margin-top:3px
 }
+
 .icon-btn{
   width:39px;
   height:34px;
@@ -77,10 +98,9 @@ header{
   border-radius:12px;
   background:#fff;
   color:var(--purple);
-  box-shadow:0 7px 18px #17202a0b;
-  transition:transform .15s
+  box-shadow:0 7px 18px rgba(23,32,42,.045)
 }
-.icon-btn:active{transform:scale(.9)}
+
 .icon-btn svg{
   width:20px;
   height:20px;
@@ -90,812 +110,680 @@ header{
   stroke-linecap:round;
   stroke-linejoin:round
 }
-.spacer{width:39px}
-.head-copy{margin:14px 2px 12px;animation:swapIn .6s both}
-.head-copy h1{
-  margin:0;
-  font-size:22px;
-  font-weight:950;
-  letter-spacing:-.035em
+
+#fav[aria-pressed="true"] svg{
+  fill:var(--purple)
 }
-.head-copy p{
-  margin:3px 0 0;
-  font-size:11px;
-  font-weight:700;
-  color:var(--muted)
+
+/* gallery */
+
+.gallery{
+  margin-top:12px;
+  border-radius:22px;
+  overflow:hidden;
+  border:1px solid var(--edge);
+  box-shadow:0 12px 28px rgba(98,70,217,.10)
 }
-.progress{
-  height:8px;
-  border-radius:99px;
-  background:#e4defa;
+
+.slides{
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+  overscroll-behavior-x:contain
+}
+
+.slides::-webkit-scrollbar{
+  display:none
+}
+
+.slide{
+  flex:0 0 100%;
+  scroll-snap-align:center;
+  scroll-snap-stop:always;
+  aspect-ratio:1/.82;
+  display:grid;
+  place-items:center;
   overflow:hidden
 }
-.progress i{
-  display:block;
-  position:relative;
-  overflow:hidden;
+
+.slide svg{
+  height:80%;
+  width:auto;
+  filter:drop-shadow(0 14px 18px rgba(74,52,184,.22))
+}
+
+.slide img{
+  width:100%;
   height:100%;
-  width:0;
-  border-radius:99px;
-  background:linear-gradient(90deg,#8b6cf0,#6246d9);
-  transition:width .6s cubic-bezier(.3,1.2,.4,1)
+  object-fit:contain;
+  display:block
 }
-.progress i::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(90deg,transparent,#ffffff80,transparent);
-  transform:translateX(100%);
-  animation:shimmer 2s infinite
-}
-@keyframes shimmer{to{transform:translateX(-100%)}}
-.p-label{
+
+.dots{
   display:flex;
+  justify-content:center;
+  gap:6px;
+  margin-top:9px
+}
+
+.dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#d6d2ea;
+  transition:.2s ease
+}
+
+.dot.active{
+  width:19px;
+  border-radius:999px;
+  background:var(--purple)
+}
+
+/* title */
+
+.title{
+  margin:14px 2px 0
+}
+
+.title h1{
+  margin:0;
+  font-size:21px;
+  line-height:1.25;
+  letter-spacing:-.035em;
+  font-weight:950
+}
+
+.sub{
+  margin:3px 0 0;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:700
+}
+
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin:10px 2px 0
+}
+
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  min-height:26px;
+  padding:0 10px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:900;
+  color:var(--purple-dark);
+  background:var(--purple-soft)
+}
+
+.chip.ver{
+  background:#fff;
+  border:1px solid #9edfe3;
+  color:var(--primary)
+}
+
+.chip svg{
+  width:13px;
+  height:13px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round
+}
+
+/* auction */
+
+.auction{
+  margin-top:14px;
+  padding:14px;
+  border-radius:24px;
+  border:1px solid var(--edge);
+  background:
+    radial-gradient(circle at 100% 0,rgba(98,70,217,.10),transparent 55%),
+    linear-gradient(145deg,#fff 0%,#f7f5ff 60%,#efebff 100%);
+  box-shadow:0 14px 32px rgba(98,70,217,.10)
+}
+
+.a-top{
+  display:flex;
+  align-items:center;
   justify-content:space-between;
-  margin-top:6px;
+  gap:10px
+}
+
+.live{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  min-height:26px;
+  padding:0 10px;
+  border-radius:999px;
+  background:#fff;
+  border:1px solid var(--edge);
+  font-size:10px;
+  font-weight:900;
+  color:var(--purple-dark)
+}
+
+.live:before{
+  content:"";
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--ok)
+}
+
+.auction.hot .live:before{
+  background:var(--hot)
+}
+
+.auction.ended .live:before{
+  background:#9ca3af
+}
+
+.a-count{
   font-size:10px;
   font-weight:800;
   color:var(--muted)
 }
 
-/* ============ البطاقات ============ */
-form{margin-top:14px}
-.card{
-  margin-top:12px;
-  padding:14px;
-  border-radius:20px;
-  background:#fff;
-  border:1px solid var(--edge);
-  box-shadow:0 10px 24px -10px #6246d938;
-  transition:border-color .4s,box-shadow .4s
-}
-.card.ok{
-  border-color:#bfe8d3;
-  box-shadow:0 10px 24px -10px #1e8a5a40
-}
-.reveal{
-  opacity:0;
-  transform:translateY(22px);
-  transition:opacity .6s ease,transform .6s cubic-bezier(.2,.9,.3,1)
-}
-.reveal.shown{
-  opacity:1;
-  transform:none
-}
-.card.invalid{
-  border-color:var(--hot);
-  animation:shake .4s
-}
-@keyframes shake{
-  20%,60%{transform:translateX(-6px)}
-  40%,80%{transform:translateX(6px)}
-}
-.c-head{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:12px
-}
-.num{
-  width:28px;
-  height:28px;
-  flex:0 0 28px;
-  border-radius:10px;
+.a-grid{
   display:grid;
-  place-items:center;
-  color:#fff;
-  font-size:13px;
-  font-weight:950;
-  background:linear-gradient(145deg,#6246d9,#8b6cf0);
-  box-shadow:0 5px 12px #6246d947;
-  transition:background .4s
+  grid-template-columns:1fr auto;
+  gap:14px;
+  align-items:end;
+  margin-top:14px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--line)
 }
-.card.ok .num{
-  background:linear-gradient(145deg,#1e8a5a,#34b27d);
-  font-size:0
-}
-.card.ok .num::after{
-  content:"✓";
-  font-size:15px;
-  animation:pop .4s
-}
-.c-head h2{
-  margin:0;
-  font-size:16px;
-  font-weight:950;
-  letter-spacing:-.02em
-}
-.c-head p{
-  margin:1px 0 0;
+
+.label{
+  display:block;
   font-size:10px;
-  font-weight:700;
-  color:var(--muted)
+  font-weight:800;
+  color:var(--muted);
+  margin-bottom:3px
 }
-.err{
-  margin:8px 2px 0;
+
+.price{
+  font-size:28px;
+  font-weight:950;
+  color:var(--purple-dark);
+  line-height:1.15;
+  letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap
+}
+
+.price small{
   font-size:11px;
   font-weight:800;
+  color:var(--muted);
+  margin-inline-start:4px;
+  letter-spacing:0
+}
+
+.price.bump{
+  animation:bump .4s ease
+}
+
+@keyframes bump{
+  40%{transform:scale(1.05)}
+}
+
+.tdig{
+  direction:ltr;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  font-variant-numeric:tabular-nums
+}
+
+.tdig span{
+  width:38px;
+  padding:6px 0;
+  text-align:center;
+  border-radius:11px;
+  background:#fff;
+  border:1px solid var(--edge);
+  font-size:20px;
+  font-weight:950;
+  line-height:1.1;
+  color:var(--ink)
+}
+
+.tdig i{
+  font-style:normal;
+  font-weight:900;
+  color:#b9b1e6
+}
+
+.auction.hot .tdig span{
+  background:#fff4ec;
+  border-color:#ffd2b8;
   color:var(--hot)
 }
 
-/* ============ الحقول ============ */
-.field{margin-top:12px}
-.field:first-of-type{margin-top:0}
-.lbl{
+.auction.hot .tdig i{
+  color:var(--hot);
+  animation:blink 1s steps(1) infinite
+}
+
+@keyframes blink{
+  50%{opacity:.15}
+}
+
+.auction.ended .tdig span{
+  opacity:.6
+}
+
+.a-bid{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin-bottom:6px;
-  font-size:11px;
-  font-weight:900;
-  color:#374151
+  gap:14px;
+  padding:16px 4px 12px
 }
-.lbl small{font-weight:700;color:#9ca3af}
-.in,.sel,.ta{
-  width:100%;
-  border:1.5px solid #e4defa;
-  border-radius:14px;
-  background:#fff;
-  padding:0 14px;
-  outline:none;
-  transition:.25s;
-  font-weight:700
+
+.nextbox b{
+  display:block;
+  font-size:21px;
+  font-weight:950;
+  letter-spacing:-.02em;
+  line-height:1.3;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap
 }
-.in,.sel{height:46px}
-.ta{
-  min-height:92px;
-  padding:12px 14px;
-  resize:vertical;
-  line-height:1.7
+
+.nextbox b small{
+  font-size:10px;
+  font-weight:800;
+  color:var(--muted);
+  margin-inline-start:3px
 }
-.in:focus,.sel:focus,.ta:focus{
-  border-color:#a99cf0;
-  box-shadow:0 0 0 4px #6246d91a;
-  transform:translateY(-1px)
+
+.nextbox em{
+  display:inline-block;
+  margin-top:3px;
+  padding:2px 10px;
+  border-radius:9px;
+  background:var(--purple-soft);
+  color:var(--purple-dark);
+  font-style:normal;
+  font-size:10px;
+  font-weight:900
 }
-.in::placeholder,.ta::placeholder{
-  color:#a8b0bb;
-  font-weight:600
-}
-.sel{
-  appearance:none;
-  background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236246d9' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat 14px center
-}
-.sel:disabled{
-  background-color:#f7f7fa;
-  color:#9ca3af;
-  cursor:not-allowed;
-  opacity:.85
-}
-.row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px
-}
-.money{position:relative}
-.money .in{
-  padding-inline-start:14px;
-  padding-inline-end:60px;
+
+.bid-btn{
+  position:relative;
+  flex:0 0 auto;
+  width:88px;
+  height:88px;
+  border-radius:50%;
+  border:4px solid #fff;
+  color:#fff;
   font-size:18px;
   font-weight:950;
-  direction:ltr;
-  text-align:right;
-  font-variant-numeric:tabular-nums
+  background:linear-gradient(145deg,#6246d9,#8b6cf0);
+  box-shadow:0 12px 26px rgba(98,70,217,.38);
+  -webkit-tap-highlight-color:transparent
 }
-.money span{
+
+.bid-btn:after{
+  content:"";
   position:absolute;
-  inset-inline-start:14px;
-  top:50%;
-  transform:translateY(-50%);
-  font-size:11px;
-  font-weight:900;
-  color:var(--muted);
+  inset:-4px;
+  border-radius:50%;
+  border:3px solid #8b6cf0;
+  opacity:0;
   pointer-events:none
 }
-.count{
-  text-align:end;
-  margin-top:4px;
-  font-size:10px;
+
+.bid-btn.pulse{
+  animation:press .45s ease
+}
+
+.bid-btn.pulse:after{
+  animation:ring .7s ease-out
+}
+
+@keyframes press{
+  0%{transform:scale(1)}
+  35%{transform:scale(.86)}
+  70%{transform:scale(1.08)}
+  100%{transform:scale(1)}
+}
+
+@keyframes ring{
+  0%{opacity:.85;transform:scale(1)}
+  100%{opacity:0;transform:scale(1.6)}
+}
+
+.bid-btn:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+  background:#9ca3af;
+  box-shadow:none
+}
+
+.live-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:100%;
+  padding:9px 12px;
+  border-radius:15px;
+  background:#fff;
+  border:1px solid var(--line);
+  text-align:start
+}
+
+.stack{
+  display:flex;
+  flex:0 0 auto;
+  min-width:26px
+}
+
+.av{
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:11px;
+  font-weight:950;
+  color:#fff;
+  border:2px solid #fff;
+  margin-inline-start:-9px
+}
+
+.av:first-child{
+  margin-inline-start:0
+}
+
+.ticker{
+  flex:1;
+  min-width:0;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  font-size:11px;
+  font-weight:800;
+  color:#374151
+}
+
+.ticker b{
+  font-weight:950;
+  color:var(--ink)
+}
+
+.ticker.swap>span{
+  display:block;
+  animation:slide .45s ease
+}
+
+@keyframes slide{
+  from{opacity:0;transform:translateY(9px)}
+  to{opacity:1;transform:none}
+}
+
+.chev{
+  width:16px;
+  height:16px;
+  flex:0 0 auto;
+  color:var(--purple);
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  transition:transform .25s
+}
+
+.live-row[aria-expanded="true"] .chev{
+  transform:rotate(180deg)
+}
+
+.panel{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .3s ease
+}
+
+.panel.open{
+  max-height:250px;
+  overflow-y:auto
+}
+
+.panel h3{
+  margin:0;
+  padding:12px 4px 2px;
+  font-size:11px;
+  font-weight:900;
+  color:var(--muted)
+}
+
+.panel ul{
+  list-style:none;
+  margin:0;
+  padding:0
+}
+
+.panel li{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:9px 4px;
+  border-bottom:1px solid var(--line)
+}
+
+.panel li:last-child{
+  border-bottom:0
+}
+
+.panel .av{
+  margin:0;
+  width:30px;
+  height:30px;
+  font-size:12px
+}
+
+.panel .who{
+  flex:1;
+  min-width:0;
+  font-size:12px;
+  font-weight:900;
+  line-height:1.35
+}
+
+.panel .who span{
+  display:block;
+  font-size:9px;
   font-weight:700;
   color:#9ca3af
 }
 
-/* ============ الخيارات ============ */
-.chips{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px
-}
-.chip{position:relative}
-.chip input{
-  position:absolute;
-  opacity:0;
-  inset:0;
-  width:100%;
-  height:100%;
-  margin:0;
-  cursor:pointer
-}
-.chip span{
-  display:block;
-  padding:9px 14px;
-  border-radius:999px;
-  background:#fff;
-  border:1.5px solid var(--line);
-  font-size:11.5px;
-  font-weight:800;
-  color:#4b5563;
-  transition:transform .15s,background .25s,border-color .25s,color .25s
-}
-.chip:active span{transform:scale(.93)}
-.chip input:checked+span{
-  background:var(--purple-soft);
-  border-color:var(--purple);
-  color:var(--purple-dark);
+.panel li b{
+  font-size:12px;
   font-weight:950;
-  animation:pop .35s
+  font-variant-numeric:tabular-nums;
+  color:var(--purple-dark)
 }
-@keyframes pop{50%{transform:scale(1.12)}}
 
-/* ============ الصور ============ */
-.photos{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:9px
+.panel li.lead b{
+  color:var(--gold)
 }
-.add,.thumb{
-  position:relative;
-  aspect-ratio:1;
-  border-radius:16px;
-  overflow:hidden
-}
-.add{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-  border:2px dashed #c9bff7;
-  background:var(--purple-soft);
-  color:var(--purple-dark);
-  font-size:10.5px;
-  font-weight:900;
-  transition:transform .15s,background .25s
-}
-.add:active{
-  transform:scale(.94);
-  background:#e9e3ff
-}
-.add svg{
-  width:26px;
-  height:26px;
-  fill:none;
-  stroke:currentColor;
-  stroke-width:1.8;
-  animation:floaty 2.6s ease-in-out infinite
-}
-.thumb{border:1px solid var(--edge)}
-.thumb.in{animation:thumbIn .45s cubic-bezier(.3,1.5,.5,1)}
-@keyframes thumbIn{
-  from{opacity:0;transform:scale(.5) rotate(-6deg)}
-  to{opacity:1;transform:none}
-}
-.thumb img{
-  width:100%;
-  height:100%;
-  object-fit:cover
-}
-.thumb .x{
-  position:absolute;
-  top:5px;
-  inset-inline-start:5px;
-  width:26px;
-  height:26px;
-  border-radius:50%;
-  background:#fffffff5;
-  display:grid;
-  place-items:center;
-  color:#6b7280;
-  box-shadow:0 4px 10px #0002;
-  transition:transform .15s
-}
-.thumb .x:active{transform:scale(.8)}
-.thumb .cv{
-  position:absolute;
-  bottom:5px;
-  inset-inline:5px;
-  padding:2px 0;
+
+.panel li.lead .who:after{
+  content:"الأعلى";
+  display:inline-block;
+  margin-top:2px;
+  padding:1px 7px;
   border-radius:8px;
-  background:var(--purple);
-  color:#fff;
-  text-align:center;
-  font-size:9px;
-  font-weight:900
+  background:#fdf3e1;
+  color:var(--gold);
+  font-size:8.5px
 }
-.hint{
-  margin:8px 2px 0;
+
+.note{
+  margin:10px 2px 0;
   font-size:10px;
   font-weight:700;
-  color:var(--muted)
+  color:var(--muted);
+  line-height:1.7;
+  text-align:center
 }
 
-/* ============ البطارية والمفاتيح ============ */
-.bat{
-  display:flex;
-  align-items:center;
-  gap:12px
-}
-.bat output{
-  min-width:58px;
-  padding:6px 0;
-  border-radius:12px;
-  background:var(--purple-soft);
-  color:var(--purple-dark);
-  text-align:center;
-  font-size:15px;
-  font-weight:950;
-  direction:ltr
-}
-.bat output.tick{animation:pop .25s}
-#batteryField{animation:swapIn .4s both}
-input[type=range]{
-  flex:1;
-  -webkit-appearance:none;
-  height:8px;
-  border-radius:99px;
-  background:linear-gradient(to left,#6246d9 var(--p,75%),#e4defa var(--p,75%))
-}
-input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;
-  width:26px;
-  height:26px;
-  border-radius:50%;
+/* cards */
+
+.card{
+  margin-top:12px;
+  padding:14px;
+  border-radius:18px;
   background:#fff;
-  border:4px solid var(--purple);
-  box-shadow:0 4px 10px #6246d959;
-  transition:transform .15s
+  border:1px solid var(--line);
+  box-shadow:0 8px 20px rgba(23,32,42,.05)
 }
-input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
-.sw{
-  position:relative;
+
+.card h2{
+  margin:0 0 8px;
+  font-size:15px;
+  font-weight:900;
+  letter-spacing:-.02em
+}
+
+table{
+  width:100%;
+  border-collapse:collapse
+}
+
+th,td{
+  text-align:start;
+  padding:9px 0;
+  border-bottom:1px solid #f1eefb;
+  font-size:12px;
+  font-weight:800
+}
+
+th{
+  width:42%;
+  color:var(--muted);
+  font-weight:700
+}
+
+tr:last-child th,
+tr:last-child td{
+  border-bottom:0
+}
+
+td.good{
+  color:var(--ok)
+}
+
+/* seller */
+
+.seller{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:10px;
-  padding:11px 2px;
-  border-bottom:1px solid #f1eefb;
-  cursor:pointer;
-  font-size:12.5px;
-  font-weight:800
+  gap:12px
 }
-.sw:last-of-type{border-bottom:0}
-.sw input{position:absolute;opacity:0}
-.sw i{
-  width:44px;
-  height:26px;
-  border-radius:99px;
-  background:#d9d6e8;
-  position:relative;
+
+.seller-info{
+  min-width:0;
+  flex:1
+}
+
+.seller p{
+  margin:0;
+  line-height:1.45
+}
+
+.seller b{
+  font-size:13px;
+  font-weight:900
+}
+
+.seller span{
+  display:block;
+  font-size:10px;
+  font-weight:700;
+  color:var(--muted)
+}
+
+.seller-status{
   flex:0 0 auto;
-  transition:background .3s
-}
-.sw i:after{
-  content:"";
-  position:absolute;
-  top:3px;
-  inset-inline-start:3px;
-  width:20px;
-  height:20px;
-  border-radius:50%;
-  background:#fff;
-  box-shadow:0 2px 6px #0003;
-  transition:transform .3s cubic-bezier(.3,1.4,.5,1)
-}
-.sw:active i:after{width:24px}
-.sw input:checked+i{background:var(--ok)}
-.sw input:checked+i:after{transform:translateX(-18px)}
-.sw.warn input:checked+i{background:var(--hot)}
-.fold{
-  display:grid;
-  grid-template-rows:0fr;
-  transition:grid-template-rows .4s cubic-bezier(.3,1,.4,1)
-}
-.fold.open{grid-template-rows:1fr}
-.fold>div{overflow:hidden}
-.fold .ta{margin-top:10px}
-.sub-t{
-  margin:16px 2px 8px;
-  font-size:11px;
+  padding:7px 10px;
+  border-radius:999px;
+  background:var(--purple-soft);
+  color:var(--purple-dark);
+  font-size:9px;
   font-weight:900;
+  white-space:nowrap
+}
+
+/* notes */
+
+.notes-card{
+  margin-top:12px
+}
+
+.notes-text{
+  margin:0;
+  white-space:pre-wrap;
+  word-break:break-word;
+  font-size:12px;
+  line-height:1.8;
+  font-weight:700;
   color:#374151
 }
 
-/* ============ معلومات المزاد ============ */
-.info{
-  margin-top:12px;
-  padding:12px;
-  border-radius:14px;
-  background:var(--purple-soft);
-  border:1px solid #e4defa;
-  font-size:11px;
-  font-weight:700;
-  line-height:1.8;
-  color:#4b5563
-}
-.info b{
-  color:var(--purple-dark);
-  font-weight:950
-}
-.end{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-top:10px;
-  font-size:11px;
-  font-weight:800;
-  color:var(--muted)
-}
-.end svg{
-  width:16px;
-  height:16px;
-  fill:none;
-  stroke:var(--purple);
-  stroke-width:2
-}
-.end b{color:var(--ink)}
-
-/* ============ المعاينة ============ */
-.a-card{
-  display:flex;
-  gap:12px;
-  margin-top:10px;
-  padding:10px;
-  border-radius:20px;
-  background:#fff;
-  border:1px solid var(--line);
-  box-shadow:0 8px 20px #6246d914
-}
-.a-card.bump{animation:bump .35s}
-@keyframes bump{50%{transform:scale(1.018)}}
-.a-img{
-  position:relative;
-  flex:0 0 108px;
-  height:132px;
-  border-radius:15px;
-  overflow:hidden;
-  background:linear-gradient(145deg,#fff,#f1edff);
-  border:1px solid var(--line)
-}
-.a-img .cover{
-  position:absolute;
-  inset:0
-}
-.a-img .cover img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  animation:fadeIn .5s
-}
-.a-img .ph{
-  height:100%;
-  display:grid;
-  place-items:center
-}
-.a-img .ph svg{
-  height:74%;
-  width:auto;
-  animation:floaty 3s ease-in-out infinite
-}
-@keyframes floaty{50%{transform:translateY(-6px)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.pill{
-  position:absolute;
-  bottom:6px;
-  inset-inline:6px;
-  padding:3px 0;
-  border-radius:9px;
-  background:#fffffff5;
-  color:var(--purple-dark);
-  text-align:center;
-  font-size:10.5px;
-  font-weight:950;
-  font-variant-numeric:tabular-nums;
-  direction:ltr
-}
-.a-body{
-  flex:1;
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between
-}
-.a-title{
-  margin:0;
-  font-size:14.5px;
-  font-weight:900;
-  line-height:1.3
-}
-.a-meta{
-  margin-top:3px;
-  font-size:10px;
-  font-weight:750;
-  color:var(--muted);
-  line-height:1.5
-}
-.tags{
-  display:flex;
-  gap:6px;
-  margin-top:6px;
-  flex-wrap:wrap
-}
-.tag{
-  padding:3px 8px;
-  border-radius:8px;
-  background:var(--purple-soft);
-  color:var(--purple-dark);
-  font-size:9px;
-  font-weight:900;
-  animation:tagIn .4s cubic-bezier(.3,1.5,.5,1) both;
-  animation-delay:calc(var(--i,0)*55ms)
-}
-@keyframes tagIn{
-  from{opacity:0;transform:scale(.5) translateY(6px)}
-  to{opacity:1;transform:none}
-}
-.swap{animation:swapIn .35s both}
-@keyframes swapIn{
-  from{opacity:0;transform:translateY(8px)}
-  to{opacity:1;transform:none}
-}
-.a-foot{
-  margin-top:8px;
-  padding-top:8px;
-  border-top:1px solid #f1eefb
-}
-.a-foot .lb{
-  display:block;
-  font-size:9px;
-  font-weight:800;
-  color:var(--muted)
-}
-.a-price{
-  font-size:16px;
-  font-weight:950;
-  color:var(--purple-dark);
-  font-variant-numeric:tabular-nums
-}
-
-/* ============ التأكيد والإرسال ============ */
-.agree{
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  margin-top:14px;
-  padding:12px;
-  border-radius:16px;
-  background:#fff;
-  border:1px solid var(--line);
-  font-size:11.5px;
-  font-weight:800;
-  line-height:1.7;
-  cursor:pointer;
-  transition:border-color .3s
-}
-.agree.invalid{
-  border-color:var(--hot);
-  animation:shake .4s
-}
-.agree input{
-  width:20px;
-  height:20px;
-  margin:2px 0 0;
-  accent-color:var(--purple)
-}
-.submit{
-  width:100%;
-  height:56px;
-  margin-top:14px;
-  border-radius:18px;
-  color:#fff;
-  font-size:16px;
-  font-weight:950;
-  background:linear-gradient(145deg,#6246d9,#8b6cf0);
-  box-shadow:0 12px 26px #6246d959;
-  transition:transform .15s,box-shadow .3s
-}
-.submit:active{transform:scale(.97)}
-.submit.ready{animation:glow 2s ease-in-out infinite}
-@keyframes glow{
-  50%{
-    box-shadow:
-      0 12px 36px #6246d9aa,
-      0 0 0 6px #6246d922
+@media (prefers-reduced-motion:reduce){
+  .bid-btn.pulse,
+  .bid-btn.pulse:after,
+  .price.bump,
+  .ticker.swap>span,
+  .auction.hot .tdig i{
+    animation:none
   }
-}
-.submit:disabled{
-  opacity:.75;
-  animation:none
-}
-.submit .spin{
-  display:none;
-  width:20px;
-  height:20px;
-  border-radius:50%;
-  border:3px solid #ffffff66;
-  border-top-color:#fff;
-  animation:rot .7s linear infinite;
-  margin:auto
-}
-.submit.busy .t{display:none}
-.submit.busy .spin{display:block}
-@keyframes rot{to{transform:rotate(360deg)}}
 
-/* ============ شاشة النجاح ============ */
-.done{
-  position:fixed;
-  inset:0;
-  z-index:200;
-  display:none;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:14px;
-  background:#f9f8fdf7;
-  text-align:center;
-  padding:24px;
-  overflow:hidden
-}
-.done.show{
-  display:flex;
-  animation:fadeIn .3s
-}
-.done svg{width:110px;height:110px}
-.done.show svg{
-  animation:pop2 .6s cubic-bezier(.3,1.5,.5,1)
-}
-@keyframes pop2{
-  from{transform:scale(.4)}
-  to{transform:scale(1)}
-}
-.done circle{
-  fill:none;
-  stroke:#e4defa;
-  stroke-width:6
-}
-.done .ring{
-  stroke:var(--purple);
-  stroke-dasharray:289;
-  stroke-dashoffset:289;
-  stroke-linecap:round;
-  transform:rotate(-90deg);
-  transform-origin:center
-}
-.done.show .ring{
-  animation:draw .8s ease-out forwards
-}
-@keyframes draw{to{stroke-dashoffset:0}}
-.done .tick{
-  fill:none;
-  stroke:var(--ok);
-  stroke-width:7;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-  stroke-dasharray:60;
-  stroke-dashoffset:60
-}
-.done.show .tick{
-  animation:tick .4s .6s ease-out forwards
-}
-@keyframes tick{to{stroke-dashoffset:0}}
-.done h2{
-  margin:0;
-  font-size:22px;
-  font-weight:950
-}
-.done.show h2{animation:swapIn .5s .5s both}
-.done p{
-  margin:0;
-  font-size:12px;
-  font-weight:700;
-  color:var(--muted)
-}
-.done.show p{animation:swapIn .5s .7s both}
-.confetti{
-  position:absolute;
-  top:34%;
-  left:50%;
-  width:8px;
-  height:12px;
-  border-radius:2px;
-  opacity:0;
-  animation:fall 1.5s ease-out forwards
-}
-@keyframes fall{
-  0%{
-    opacity:1;
-    transform:translate(0,0) rotate(0)
-  }
-  100%{
-    opacity:0;
-    transform:translate(var(--x),var(--y)) rotate(var(--r))
+  .dot,
+  .toast,
+  .panel,
+  .chev{
+    transition:none
   }
 }
 
-/* ============ الشريط السفلي ============ */
-.bottom-wrap{
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:-7px;
-  width:100%;
-  padding:7px 10px calc(7px + var(--safe-bottom));
-  z-index:100;
-  pointer-events:none
-}
-.bottom-nav{
-  width:min(100%,520px);
-  margin:auto;
-  min-height:64px;
-  padding:5px;
-  border-radius:20px;
-  background:#fffffff7;
-  border:1px solid #e7ecef;
-  box-shadow:0 10px 28px #17202a1a;
-  backdrop-filter:blur(18px);
-  pointer-events:auto;
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:3px
-}
-.nav-item{
-  min-height:52px;
-  padding:4px 2px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:3px;
-  border-radius:15px;
-  color:#7e8992;
-  transition:transform .15s
-}
-.nav-item:active{transform:scale(.92)}
-.nav-icon{
-  width:20px;
-  height:20px;
-  fill:none;
-  stroke:currentColor;
-  stroke-width:1.7
-}
-.nav-item>span:not(.add-button){
-  font-size:8.5px;
-  font-weight:900
-}
-.add-button{
-  width:38px;
-  height:38px;
-  border-radius:13px;
-  display:grid;
-  place-items:center;
-  color:#fff;
-  background:linear-gradient(145deg,#176b87,#32b8c4)
-}
-.add-button svg{
-  width:20px;
-  height:20px;
-  fill:none;
-  stroke:currentColor;
-  stroke-width:2
+@media (max-width:360px){
+
+  .price{
+    font-size:24px
+  }
+
+  .tdig span{
+    width:34px;
+    font-size:18px
+  }
+
+  .bid-btn{
+    width:80px;
+    height:80px
+  }
+
 }
 
-/* إخفاء الشريط السفلي أثناء الكتابة */
-.kb .bottom-wrap{display:none}
-
-/* ============ التوست ============ */
 .toast{
   position:fixed;
   left:50%;
-  bottom:calc(88px + var(--safe-bottom));
+  bottom:calc(24px + var(--safe-bottom));
   transform:translateX(-50%) translateY(16px);
   max-width:calc(100% - 40px);
   padding:10px 14px;
@@ -904,30 +792,64 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
   color:#fff;
   font-size:11px;
   font-weight:800;
+  box-shadow:0 14px 34px rgba(24,44,49,.12);
   opacity:0;
   pointer-events:none;
-  transition:.3s cubic-bezier(.3,1.4,.5,1);
-  z-index:150;
+  transition:.25s ease;
+  z-index:120;
   text-align:center
 }
+
 .toast.show{
   opacity:1;
-  transform:translateX(-50%)
+  transform:translateX(-50%) translateY(0)
 }
-.kb .toast{bottom:24px}
 
-/* احترام تقليل الحركة */
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{
-    animation:none!important;
-    transition:none!important
-  }
-  .reveal{
-    opacity:1;
-    transform:none
-  }
-  .done .ring{stroke-dashoffset:0}
-  .done .tick{stroke-dashoffset:0}
+/* أزرار الإدارة (خاصة بهذه الصفحة) */
+
+.acts{
+  display:flex;
+  flex-direction:column;
+  gap:10px
+}
+
+.act{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  width:100%;
+  height:44px;
+  border-radius:14px;
+  border:1px solid var(--edge);
+  background:var(--purple-soft);
+  color:var(--purple-dark);
+  font-family:inherit;
+  font-size:12px;
+  font-weight:800;
+  text-decoration:none
+}
+
+.act svg{
+  width:17px;
+  height:17px;
+  flex:0 0 auto;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.9;
+  stroke-linecap:round;
+  stroke-linejoin:round
+}
+
+.act.danger{
+  background:#fff;
+  color:#c92a2a;
+  border-color:#f3c7c7
+}
+
+.act:disabled{
+  opacity:.5;
+  cursor:not-allowed
 }
 </style>
 </head>
@@ -937,8 +859,10 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
 <main class="page">
 
 <header>
+
   <div class="topbar">
-    <button class="icon-btn" id="back" type="button">
+
+    <button class="icon-btn" id="back" type="button" aria-label="رجوع">
       <svg viewBox="0 0 24 24">
         <path d="M9 5l7 7-7 7"/>
       </svg>
@@ -949,3615 +873,1106 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
       <span>PHONE</span>
     </div>
 
-    <span class="spacer"></span>
+    <span style="width:39px"></span>
+
   </div>
 
-  <div class="head-copy">
-    <h1>بيع جهازك بالمزاد</h1>
-    <p>كل ما تذكر تفاصيل أكثر، يثق المشتري ويزايد أكثر</p>
-  </div>
-
-  <div class="progress">
-    <i id="barFill"></i>
-  </div>
-
-  <div class="p-label">
-    <span>اكتمال الطلب</span>
-    <span id="pct">0%</span>
-  </div>
 </header>
 
-<form id="form" novalidate>
+<div class="title">
 
-<!-- 1) الصور -->
-<section class="card reveal" id="c-photos">
-  <div class="c-head">
-    <span class="num">1</span>
-    <div>
-      <h2>صور الجهاز</h2>
-      <p>الصورة الأولى هي الغلاف</p>
-    </div>
-  </div>
+  <h1 id="name"></h1>
 
-  <div class="photos" id="photos"></div>
-
-  <input
-    type="file"
-    id="file"
-    accept="image/*"
-    multiple
-    hidden
-  >
-
-  <p class="hint">
-    صوّر الجهاز من الأمام والخلف والجوانب، وبإضاءة واضحة.
-  </p>
-
-  <p class="err" id="e-c-photos"></p>
-</section>
-
-
-<!-- 2) معلومات الجهاز -->
-<section class="card reveal" id="c-info">
-
-  <div class="c-head">
-    <span class="num">2</span>
-    <div>
-      <h2>معلومات الجهاز</h2>
-      <p>الأساسيات اللي يبحث عنها المشتري</p>
-    </div>
-  </div>
-
-  <div class="field">
-    <label class="lbl">الماركة</label>
-
-    <select
-      class="sel"
-      id="brand"
-      name="brand"
-    ></select>
-  </div>
-
-  <div class="row field">
-
-    <div>
-      <label class="lbl">الموديل</label>
-
-      <select
-        class="sel"
-        id="model"
-        name="model"
-        disabled
-      >
-        <option value="">
-          اختر الماركة أولاً
-        </option>
-      </select>
-    </div>
-
-    <div>
-      <label class="lbl">اللون</label>
-
-      <select
-        class="sel"
-        id="color"
-        name="color"
-        disabled
-      >
-        <option value="">
-          اختر الموديل أولاً
-        </option>
-      </select>
-
-      <input
-        class="in"
-        id="customColor"
-        maxlength="40"
-        placeholder="اكتب لون الجهاز"
-        style="display:none;margin-top:8px"
-      >
-    </div>
-
-  </div>
-
-  <div class="field">
-    <span class="lbl">السعة</span>
-    <div id="storage"></div>
-  </div>
-
-  <p class="err" id="e-c-info"></p>
-
-</section>
-
-
-<!-- 3) حالة الجهاز -->
-<section class="card reveal" id="c-cond">
-
-  <div class="c-head">
-    <span class="num">3</span>
-    <div>
-      <h2>حالة الجهاز</h2>
-      <p>كن صريح، الصدق يرفع الثقة بمزادك</p>
-    </div>
-  </div>
-
-  <div class="field">
-    <span class="lbl">الحالة العامة</span>
-    <div id="condition"></div>
-  </div>
-
-  <div class="field">
-    <span class="lbl">حالة الشاشة</span>
-    <div id="screen"></div>
-  </div>
-
-  <div class="field">
-    <span class="lbl">حالة الهيكل</span>
-    <div id="bodyState"></div>
-  </div>
-
-  <div class="field">
-    <span class="lbl">حالة الظهر</span>
-    <div id="backState"></div>
-  </div>
-
-  <div
-    class="field"
-    id="batteryField"
-    style="display:none"
-  >
-    <span class="lbl">صحة البطارية</span>
-
-    <div class="bat">
-      <input
-        type="range"
-        id="battery"
-        min="60"
-        max="100"
-        value="90"
-      >
-
-      <output id="batOut">
-        90%
-      </output>
-    </div>
-  </div>
-
-  <p class="err" id="e-c-cond"></p>
-
-</section>
-
-
-<!-- 4) فحص الوظائف -->
-<section class="card reveal" id="c-works">
-
-  <div class="c-head">
-    <span class="num">4</span>
-    <div>
-      <h2>فحص الوظائف</h2>
-      <p>طفّي المفتاح لأي شي ما يشتغل</p>
-    </div>
-  </div>
-
-  <div id="works"></div>
-
-  <label class="sw warn">
-
-    <span>
-      انفتح الجهاز أو تبدلت فيه قطع
-    </span>
-
-    <input
-      type="checkbox"
-      id="repaired"
-    >
-
-    <i></i>
-
-  </label>
-
-  <div class="fold" id="repFold">
-    <div>
-      <textarea
-        class="ta"
-        id="repText"
-        maxlength="200"
-        placeholder="اذكر القطع المبدّلة أو اللي انصلحت"
-      ></textarea>
-    </div>
-  </div>
-
-  <p class="sub-t">
-    الضمان
-  </p>
-
-  <div id="warranty"></div>
-
-  <p class="sub-t">
-    الملحقات المرفقة
-  </p>
-
-  <div id="acc"></div>
-
-</section>
-
-
-<!-- 5) تفاصيل المزاد -->
-<section class="card reveal" id="c-auction">
-
-  <div class="c-head">
-    <span class="num">5</span>
-    <div>
-      <h2>تفاصيل المزاد</h2>
-      <p>السعر والمدة</p>
-    </div>
-  </div>
-
-  <div class="field">
-
-    <label class="lbl">
-      سعر البداية
-    </label>
-
-    <div class="money">
-
-      <input
-        class="in"
-        id="price"
-        inputmode="numeric"
-        placeholder="500,000"
-      >
-
-      <span>
-        د.ع
-      </span>
-
-    </div>
-
-  </div>
-
-
-  <div class="field">
-
-    <label class="lbl">
-      أقل سعر تقبله
-      <small>
-        اختياري، ما يظهر للمزايدين
-      </small>
-    </label>
-
-    <div class="money">
-
-      <input
-        class="in"
-        id="reserve"
-        inputmode="numeric"
-        placeholder="لا يوجد"
-      >
-
-      <span>
-        د.ع
-      </span>
-
-    </div>
-
-  </div>
-
-
-  <div class="field">
-
-    <span class="lbl">
-      مدة المزاد
-      <small>
-        1 أو 3 أو 6 أو 12 ساعة
-      </small>
-    </span>
-
-    <div id="duration"></div>
-
-  </div>
-
-
-  <div class="end">
-
-    <svg viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="9"/>
-      <path d="M12 7v5l3 2"/>
-    </svg>
-
-    <span>
-      ينتهي تقريباً:
-      <b id="endAt">
-        اختر المدة
-      </b>
-    </span>
-
-  </div>
-
-
-  <div class="info">
-
-    <div>
-      قيمة الزيادة تُحدد حسب
-      <b>السعر الحالي للمزاد</b>.
-    </div>
-
-    <div>
-      أقل من 300 ألف
-      <b>5,000</b>،
-      ومن 300 إلى أقل من 750 ألف
-      <b>10,000</b>،
-      ومن 750 ألف إلى أقل من 1.5 مليون
-      <b>15,000</b>،
-      ومن 1.5 إلى أقل من 3 ملايين
-      <b>25,000</b>،
-      وفوق 3 ملايين
-      <b>50,000</b>.
-    </div>
-
-    <div>
-      أي مزايدة خلال آخر
-      <b>30 ثانية</b>
-      تمدد المزاد
-      <b>دقيقة كاملة</b>.
-    </div>
-
-    <div>
-      المشاركة بالمزاد تتطلب تأميناً قدره
-      <b>5,000 د.ع</b>
-      يُسترد حسب شروط المنصة.
-    </div>
-
-    <div>
-      عند الفوز يبقى التأمين كضمان إلى إتمام الصفقة،
-      والتراجع قد يؤدي للاحتفاظ به وفق شروط المنصة.
-    </div>
-
-  </div>
-
-  <p class="err" id="e-c-auction"></p>
-
-</section>
-
-
-<!-- 6) الموقع والملاحظات -->
-<section class="card reveal" id="c-extra">
-
-  <div class="c-head">
-    <span class="num">6</span>
-    <div>
-      <h2>الموقع والملاحظات</h2>
-      <p>وين الجهاز، وشي تحب تضيفه</p>
-    </div>
-  </div>
-
-  <div class="field">
-
-    <label class="lbl">
-      الموقع
-    </label>
-
-    <div
-      class="in"
-      style="
-        display:flex;
-        align-items:center;
-        background:#f7f7fa;
-        color:#374151;
-        cursor:default
-      "
-    >
-      داخل النجف
-    </div>
-
-    <input
-      type="hidden"
-      id="city"
-      name="city"
-      value="داخل النجف"
-    >
-
-  </div>
-
-
-  <div class="field">
-
-    <label class="lbl">
-      ملاحظات
-      <small>اختياري</small>
-    </label>
-
-    <textarea
-      class="ta"
-      id="notes"
-      maxlength="500"
-      placeholder="مثلاً: سبب البيع، مدة الاستخدام، أي شي يهم المشتري"
-    ></textarea>
-
-    <div class="count">
-      <span id="nCount">0</span>/500
-    </div>
-
-  </div>
-
-  <p class="err" id="e-c-extra"></p>
-
-</section>
-
-
-<!-- المعاينة -->
-<section class="card prev reveal">
-
-  <div class="c-head">
-
-    <span
-      class="num"
-      style="background:linear-gradient(145deg,#176b87,#32b8c4)"
-    >
-      ★
-    </span>
-
-    <div>
-      <h2>هكذا يظهر مزادك</h2>
-      <p>معاينة حية للبطاقة</p>
-    </div>
-
-  </div>
-
-
-  <article
-    class="a-card"
-    id="aCard"
-  >
-
-    <div
-      class="a-img"
-      id="pImg"
-    >
-
-      <div
-        class="cover"
-        id="pCover"
-      ></div>
-
-      <span
-        class="pill"
-        id="pPill"
-      >
-        المدة
-      </span>
-
-    </div>
-
-
-    <div class="a-body">
-
-      <div>
-
-        <h3
-          class="a-title"
-          id="pTitle"
-        ></h3>
-
-        <div
-          class="a-meta"
-          id="pMeta"
-        ></div>
-
-        <div
-          class="tags"
-          id="pTags"
-        ></div>
-
-      </div>
-
-
-      <div class="a-foot">
-
-        <span class="lb">
-          سعر البداية
-        </span>
-
-        <div class="a-price">
-
-          <span id="pPrice">
-            0
-          </span>
-
-          <small>
-            د.ع
-          </small>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </article>
-
-</section>
-
-
-<label
-  class="agree reveal"
-  id="c-agree"
->
-
-  <input
-    type="checkbox"
-    id="agree"
-  >
-
-  <span>
-    أؤكد أن المعلومات صحيحة وأن الجهاز ملكي ومسموح لي ببيعه.
-  </span>
-
-</label>
-
-<p
-  class="err"
-  id="e-c-agree"
-  style="text-align:center"
-></p>
-
-
-<button
-  class="submit"
-  id="submit"
->
-
-  <span class="t">
-    نشر المزاد
-  </span>
-
-  <span class="spin"></span>
-
-</button>
-
-</form>
-
-</main>
-
-
-<!-- الشريط السفلي -->
-<div class="bottom-wrap">
-
-<nav class="bottom-nav">
-
-  <a
-    class="nav-item"
-    href="home.html"
-  >
-    <svg
-      class="nav-icon"
-      viewBox="0 0 24 24"
-    >
-      <path d="m3 10 9-7 9 7M5 9v11h14V9M9 20v-6h6v6"/>
-    </svg>
-    <span>الرئيسية</span>
-  </a>
-
-
-  <a
-    class="nav-item"
-    href="market.html"
-  >
-    <svg
-      class="nav-icon"
-      viewBox="0 0 24 24"
-    >
-      <rect
-        x="4"
-        y="4"
-        width="16"
-        height="16"
-        rx="3"
-      />
-      <path d="M8 9h8M8 13h8M8 17h5"/>
-    </svg>
-    <span>الأجهزة</span>
-  </a>
-
-
-  <a
-    class="nav-item"
-    href="sell.html"
-  >
-    <span class="add-button">
-      <svg viewBox="0 0 24 24">
-        <path d="M12 5v14M5 12h14"/>
-      </svg>
-    </span>
-    <span>إضافة</span>
-  </a>
-
-
-  <a
-    class="nav-item"
-    href="favorites.html"
-  >
-    <svg
-      class="nav-icon"
-      viewBox="0 0 24 24"
-    >
-      <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
-    </svg>
-    <span>المفضلة</span>
-  </a>
-
-
-  <a
-    class="nav-item"
-    href="profile.html"
-  >
-    <svg
-      class="nav-icon"
-      viewBox="0 0 24 24"
-    >
-      <circle
-        cx="12"
-        cy="8"
-        r="3"
-      />
-      <path d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5"/>
-    </svg>
-    <span>حسابي</span>
-  </a>
-
-</nav>
+  <p class="sub" id="sub"></p>
 
 </div>
 
+<div class="chips">
+
+  <span class="chip ver">
+    إدارة مزادك
+  </span>
+
+</div>
+
+<section class="auction" id="auction">
+
+  <div class="a-top">
+
+    <span class="live" id="liveBadge">
+      مزاد مستمر
+    </span>
+
+    <span class="a-count" id="count"></span>
+
+  </div>
+
+  <div class="a-grid">
+
+    <div>
+
+      <span class="label">
+        السعر الحالي
+      </span>
+
+      <div class="price" id="priceBox">
+
+        <span id="price"></span>
+
+        <small>د.ع</small>
+
+      </div>
+
+    </div>
+
+    <div role="timer">
+
+      <span class="label" id="endLabel">
+        الوقت المتبقي
+      </span>
+
+      <div class="tdig">
+
+        <span id="hh">00</span>
+
+        <i>:</i>
+
+        <span id="mm">00</span>
+
+        <i>:</i>
+
+        <span id="ss">00</span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <button
+    class="live-row"
+    id="liveRow"
+    type="button"
+    aria-expanded="false"
+    aria-controls="panel"
+    style="margin-top:14px"
+  >
+
+    <span class="stack" id="stack"></span>
+
+    <span class="ticker" id="ticker">
+      <span id="tickText"></span>
+    </span>
+
+    <svg class="chev" viewBox="0 0 24 24">
+      <path d="M6 9l6 6 6-6"/>
+    </svg>
+
+  </button>
+
+  <div
+    class="panel"
+    id="panel"
+    role="region"
+    aria-label="المزايدون"
+  >
+
+    <h3 id="panelHead"></h3>
+
+    <ul id="bidders"></ul>
+
+  </div>
+
+</section>
+
+<section class="card">
+
+  <h2>
+    تفاصيل المزاد
+  </h2>
+
+  <table id="specs"></table>
+
+</section>
+
+<section class="card">
+
+  <h2>
+    إدارة المزاد
+  </h2>
+
+  <div class="acts">
+
+    <a class="act" id="viewPublic" href="#">
+      <svg viewBox="0 0 24 24">
+        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+      عرض المزاد كما يراه المشتري
+    </a>
+
+    <button class="act danger" id="del" type="button">
+      <svg viewBox="0 0 24 24">
+        <path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/>
+      </svg>
+      حذف المزاد
+    </button>
+
+  </div>
+
+  <p class="note" id="delNote"></p>
+
+</section>
+
+</main>
 
 <div
   class="toast"
   id="toast"
+  role="status"
 ></div>
-
-
-<div
-  class="done"
-  id="done"
->
-
-  <svg viewBox="0 0 110 110">
-
-    <circle
-      cx="55"
-      cy="55"
-      r="46"
-    />
-
-    <circle
-      class="ring"
-      cx="55"
-      cy="55"
-      r="46"
-    />
-
-    <path
-      class="tick"
-      d="M36 57l13 13 26-28"
-    />
-
-  </svg>
-
-  <h2>
-    تم نشر مزادك
-  </h2>
-
-  <p>
-    جاري تحويلك لصفحة المزادات…
-  </p>
-
-</div>
 
 
 <script type="module">
 
-import { supabase } from "./js/supabase.js";
+import {
+  supabase
+} from "./js/supabase.js?v=auction-details-final-6";
 
 
-/* ================================================================
-   الإعدادات
-   ================================================================ */
+/* =========================================================
+   HELPERS
+========================================================= */
 
-/*
-  أعمدة المزاد موجودة في جدول devices
-  (دالة place_auction_bid في Supabase تقرأ وتكتب عليها):
-  auction_ends_at / auction_status / auction_current_price /
-  auction_bid_step / auction_start_price
+const $ = id => document.getElementById(id);
 
-  لذلك نحفظ فيها القيم الفعلية عند النشر.
-*/
-const HAS_AUCTION_COLUMNS = true;
+const fmt = n => Number(n || 0).toLocaleString("en-US");
 
-const MIN_START  = 10000;
-const MAX_PHOTOS = 6;
-const MAX_IMG_MB = 12;
+const escapeHtml = value =>
+  String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 
-/* ================================================================
-   أدوات مساعدة
-   ================================================================ */
+const params = new URLSearchParams(window.location.search);
 
-const $ = id =>
-  document.getElementById(id);
+const auctionId = params.get("id")?.trim() || "";
 
-
-const form =
-  $("form");
-
-
-const fmt =
-  n =>
-    Number(n || 0)
-      .toLocaleString("en-US");
+let auction = null;
+let bids = [];
+let me = null;
+let ended = false;
+let busy = false;
+let toastT = null;
+let timerInterval = null;
+let refreshInterval = null;
 
 
-const num =
-  el =>
-    parseInt(
-      String(
-        el?.value || ""
-      ).replace(/\D/g,""),
-      10
-    ) || 0;
+function toast(message){
 
+  const el = $("toast");
 
-const esc =
-  v =>
-    String(v ?? "")
-      .replace(
-        /[&<>"']/g,
-        c =>
-          ({
-            "&":"&amp;",
-            "<":"&lt;",
-            ">":"&gt;",
-            '"':"&quot;",
-            "'":"&#39;"
-          }[c])
-      );
+  el.textContent = String(message || "");
 
+  el.classList.add("show");
 
-let toastT;
+  clearTimeout(toastT);
 
-
-function toast(t){
-
-  const e =
-    $("toast");
-
-  e.textContent =
-    t;
-
-  e.classList.add(
-    "show"
-  );
-
-  clearTimeout(
-    toastT
-  );
-
-  toastT =
-    setTimeout(
-      () =>
-        e.classList.remove(
-          "show"
-        ),
-      2600
-    );
+  toastT = setTimeout(() => {
+    el.classList.remove("show");
+  }, 2800);
 
 }
 
 
-/* يغيّر النص ويشغل أنميشن فقط إذا تغيّر فعلاً */
+function ago(value){
 
-function setText(
-  el,
-  txt
-){
-
-  if(
-    el.textContent === txt
-  ){
-
-    return;
-
-  }
-
-  el.textContent =
-    txt;
-
-  el.classList.remove(
-    "swap"
-  );
-
-  void el.offsetWidth;
-
-  el.classList.add(
-    "swap"
-  );
-
-}
-
-
-/* ================================================================
-   البيانات
-   ================================================================ */
-
-const BRANDS = ["Apple","Samsung","Xiaomi","Google","Huawei","OPPO","HONOR","OnePlus","realme","Motorola","Sony","Nokia","Tecno","Infinix","أخرى"];
-
-
-const PHONE_MODELS = {
-
-  Apple:["iPhone 18 Pro Max","iPhone 18 Pro","iPhone 18","iPhone 17 Pro Max","iPhone 17 Pro","iPhone 17 Air","iPhone 17","iPhone 17e","iPhone 16 Pro Max","iPhone 16 Pro","iPhone 16 Plus","iPhone 16","iPhone 16e","iPhone 15 Pro Max","iPhone 15 Pro","iPhone 15 Plus","iPhone 15","iPhone 14 Pro Max","iPhone 14 Pro","iPhone 14 Plus","iPhone 14","iPhone 13 Pro Max","iPhone 13 Pro","iPhone 13","iPhone 13 mini","iPhone 12 Pro Max","iPhone 12 Pro","iPhone 12","iPhone 12 mini","iPhone 11 Pro Max","iPhone 11 Pro","iPhone 11","iPhone XS Max","iPhone XS","iPhone XR","iPhone X","iPhone 8 Plus","iPhone 8","iPhone 7 Plus","iPhone 7","iPhone 6s Plus","iPhone 6s","iPhone 6 Plus","iPhone 6","iPhone SE 3","iPhone SE 2","iPhone SE"],
-
-  Samsung:["Galaxy S26 Ultra","Galaxy S26+","Galaxy S26","Galaxy S25 Ultra","Galaxy S25 Edge","Galaxy S25+","Galaxy S25","Galaxy S24 Ultra","Galaxy S24+","Galaxy S24","Galaxy S23 Ultra","Galaxy S23+","Galaxy S23","Galaxy S22 Ultra","Galaxy S22+","Galaxy S22","Galaxy S21 Ultra","Galaxy S21+","Galaxy S21","Galaxy S20 Ultra","Galaxy S20+","Galaxy S20","Galaxy Note 20 Ultra","Galaxy Note 20","Galaxy Z Fold7","Galaxy Z Flip7","Galaxy Z Fold6","Galaxy Z Flip6","Galaxy Z Fold5","Galaxy Z Flip5","Galaxy A57","Galaxy A37","Galaxy A56","Galaxy A36","Galaxy A55","Galaxy A35","Galaxy A54","Galaxy A34","Galaxy A53","Galaxy A33","Galaxy A52","Galaxy A32","Galaxy A51","Galaxy A31","Galaxy A72","Galaxy A71","Galaxy A70","Galaxy A50","Galaxy A30","Galaxy M56","Galaxy M55","Galaxy M54","Galaxy M53","Galaxy M52","Galaxy M51"],
-
-  Xiaomi:["Xiaomi 17 Ultra","Xiaomi 17 Pro","Xiaomi 17","Xiaomi 15 Ultra","Xiaomi 15 Pro","Xiaomi 15","Xiaomi 14 Ultra","Xiaomi 14 Pro","Xiaomi 14","Xiaomi 13 Ultra","Xiaomi 13 Pro","Xiaomi 13","Xiaomi 12S Ultra","Xiaomi 12 Pro","Xiaomi 12","Redmi Note 17 Pro+","Redmi Note 17 Pro","Redmi Note 17","Redmi Note 16 Pro+","Redmi Note 16 Pro","Redmi Note 16","Redmi Note 15 Pro+","Redmi Note 15 Pro","Redmi Note 15","Redmi Note 14 Pro+","Redmi Note 14 Pro","Redmi Note 14","Redmi Note 13 Pro+","Redmi Note 13 Pro","Redmi Note 13","Redmi Note 12 Pro+","Redmi Note 12 Pro","Redmi Note 12","POCO F8 Ultra","POCO F8 Pro","POCO F8","POCO F7 Ultra","POCO F7 Pro","POCO F7","POCO F6 Pro","POCO F6","POCO X8 Pro","POCO X8","POCO X7 Pro","POCO X7","Redmi 15","Redmi 14C","Redmi 13"],
-
-  Google:["Pixel 10 Pro XL","Pixel 10 Pro","Pixel 10","Pixel 9 Pro XL","Pixel 9 Pro","Pixel 9","Pixel 8 Pro","Pixel 8","Pixel 7 Pro","Pixel 7","Pixel 6 Pro","Pixel 6","Pixel 5","Pixel 4 XL","Pixel 4"],
-
-  Huawei:["Mate 80 Pro","Mate 80","Mate 70 Pro","Mate 70","Mate 60 Pro","Mate 60","Mate 50 Pro","Mate 50","Pura 80 Pro","Pura 80","P70 Pro","P70","P60 Pro","P60","P50 Pro","P50","Nova 14 Pro","Nova 14","Nova 13 Pro","Nova 13","Nova 12 Pro","Nova 12"],
-
-  OPPO:["Find X9 Ultra","Find X9 Pro","Find X9","Find X8 Ultra","Find X8 Pro","Find X8","Find X7 Ultra","Find X7","Find X6 Pro","Find X6","Reno 15 Pro","Reno 15","Reno 14 Pro","Reno 14","Reno 13 Pro","Reno 13","Reno 12 Pro","Reno 12","Reno 11 Pro","Reno 11","A6 Pro","A5 Pro","A4 Pro"],
-
-  HONOR:["Magic8 Pro","Magic8","Magic7 Pro","Magic7","Magic6 Pro","Magic6","Magic V5","Magic V3","Magic V2","HONOR 600 Pro","HONOR 600","HONOR 400 Pro","HONOR 400","HONOR 200 Pro","HONOR 200","HONOR 100 Pro","HONOR 100","X60 Pro","X50 Pro","X50"],
-
-  OnePlus:["OnePlus 14","OnePlus 13","OnePlus 12","OnePlus 11","OnePlus 10 Pro","OnePlus 9 Pro","OnePlus 9","OnePlus Nord 6","OnePlus Nord 5","OnePlus Nord 4","OnePlus Nord 3","OnePlus Open","OnePlus Open 2"],
-
-  realme:["GT 8 Pro","GT 8","GT 7 Pro","GT 7","GT 6","GT 5 Pro","GT 5","GT Neo 7","GT Neo 6","realme 15 Pro","realme 15","realme 14 Pro+","realme 14 Pro","realme 14","realme 13 Pro+","realme 13 Pro","realme 13","C75","C65","C55"],
-
-  Motorola:["Edge 70 Ultra","Edge 70 Pro","Edge 70","Edge 60 Ultra","Edge 60 Pro","Edge 60","Edge 50 Ultra","Edge 50 Pro","Edge 50","Razr 70 Ultra","Razr 70","Razr 60 Ultra","Razr 60","Moto G75","Moto G85","Moto G55"],
-
-  Sony:["Xperia 1 VII","Xperia 1 VI","Xperia 1 V","Xperia 5 V","Xperia 5 IV","Xperia 10 VII","Xperia 10 VI","Xperia 10 V"],
-
-  Nokia:["Nokia X60","Nokia X50","Nokia X30","Nokia G60","Nokia G50","Nokia G42","Nokia C32","Nokia C22"],
-
-  Tecno:["Phantom V Fold2","Phantom V Fold","Phantom V Flip2","Phantom V Flip","Camon 40 Pro","Camon 40","Camon 30 Pro","Camon 30","Spark 40 Pro+","Spark 40 Pro","Spark 40","Spark 30 Pro","Spark 30"],
-
-  Infinix:["Note 50 Pro+","Note 50 Pro","Note 50","Note 40 Pro+","Note 40 Pro","Note 40","GT 30 Pro","GT 30","GT 20 Pro","Zero 40","Zero 30","Hot 60 Pro+","Hot 60 Pro","Hot 60","Hot 50 Pro+","Hot 50 Pro","Hot 50"],
-
-  "أخرى":["موديل آخر"]
-
-};
-
-
-/* ================================================================
-   ألوان الموديلات
-   ================================================================ */
-
-const MODEL_COLORS = {
-
-  "Apple|iPhone 18 Pro Max":["أسود","فضي","جليدي","عنابي"],
-  "Apple|iPhone 18 Pro":["أسود","فضي","جليدي","عنابي"],
-  "Apple|iPhone 18":["أسود","أبيض","أزرق","وردي"],
-  "Apple|iPhone 17 Pro Max":["فضي","برتقالي كوني","أزرق داكن"],
-  "Apple|iPhone 17 Pro":["فضي","برتقالي كوني","أزرق داكن"],
-  "Apple|iPhone 17 Air":["أسود","أبيض","أزرق سماوي","ذهبي فاتح"],
-  "Apple|iPhone 17":["أسود","أبيض","أزرق","أخضر","وردي"],
-  "Apple|iPhone 17e":["أسود","أبيض","وردي فاتح"],
-  "Apple|iPhone 16 Pro Max":["تيتانيوم أسود","تيتانيوم أبيض","تيتانيوم طبيعي","تيتانيوم صحراوي"],
-  "Apple|iPhone 16 Pro":["تيتانيوم أسود","تيتانيوم أبيض","تيتانيوم طبيعي","تيتانيوم صحراوي"],
-  "Apple|iPhone 16 Plus":["أسود","أبيض","وردي","تركوازي","أزرق"],
-  "Apple|iPhone 16":["أسود","أبيض","وردي","تركوازي","أزرق"],
-  "Apple|iPhone 16e":["أسود","أبيض"],
-  "Apple|iPhone 15 Pro Max":["تيتانيوم أسود","تيتانيوم أبيض","تيتانيوم أزرق","تيتانيوم طبيعي"],
-  "Apple|iPhone 15 Pro":["تيتانيوم أسود","تيتانيوم أبيض","تيتانيوم أزرق","تيتانيوم طبيعي"],
-  "Apple|iPhone 15 Plus":["أسود","أزرق","أخضر","أصفر","وردي"],
-  "Apple|iPhone 15":["أسود","أزرق","أخضر","أصفر","وردي"],
-  "Apple|iPhone 14 Pro Max":["بنفسجي عميق","ذهبي","فضي","أسود فضائي"],
-  "Apple|iPhone 14 Pro":["بنفسجي عميق","ذهبي","فضي","أسود فضائي"],
-  "Apple|iPhone 14 Plus":["أسود","أبيض نجمي","أزرق","بنفسجي","أحمر"],
-  "Apple|iPhone 14":["أسود","أبيض نجمي","أزرق","بنفسجي","أحمر"],
-  "Apple|iPhone 13 Pro Max":["أزرق سييرا","فضي","ذهبي","جرافيت","أخضر ألبيني"],
-  "Apple|iPhone 13 Pro":["أزرق سييرا","فضي","ذهبي","جرافيت","أخضر ألبيني"],
-  "Apple|iPhone 13":["وردي","أزرق","منتصف الليل","أبيض نجمي","أحمر","أخضر"],
-  "Apple|iPhone 13 mini":["وردي","أزرق","منتصف الليل","أبيض نجمي","أحمر","أخضر"],
-  "Apple|iPhone 12 Pro Max":["أزرق باسيفيكي","ذهبي","فضي","جرافيت"],
-  "Apple|iPhone 12 Pro":["أزرق باسيفيكي","ذهبي","فضي","جرافيت"],
-  "Apple|iPhone 12":["أسود","أبيض","أحمر","أخضر","أزرق","بنفسجي"],
-  "Apple|iPhone 12 mini":["أسود","أبيض","أحمر","أخضر","أزرق","بنفسجي"],
-  "Apple|iPhone 11 Pro Max":["أخضر ليلي","فضي","ذهبي","رمادي فلكي"],
-  "Apple|iPhone 11 Pro":["أخضر ليلي","فضي","ذهبي","رمادي فلكي"],
-  "Apple|iPhone 11":["أسود","أبيض","أخضر","أصفر","بنفسجي","أحمر"],
-
-  "Samsung|Galaxy S26 Ultra":["أسود","أبيض","فضي","أزرق"],
-  "Samsung|Galaxy S26+":["أسود","أبيض","فضي","أزرق"],
-  "Samsung|Galaxy S26":["أسود","أبيض","فضي","أزرق"],
-  "Samsung|Galaxy S25 Ultra":["تيتانيوم أسود","تيتانيوم فضي","تيتانيوم أزرق","تيتانيوم رمادي","تيتانيوم أبيض"],
-  "Samsung|Galaxy S25 Edge":["فضي تيتانيوم","أسود تيتانيوم","أزرق تيتانيوم"],
-  "Samsung|Galaxy S25+":["كحلي","أزرق ثلجي","فضي","رمادي"],
-  "Samsung|Galaxy S25":["كحلي","أزرق ثلجي","فضي","رمادي"],
-  "Samsung|Galaxy S24 Ultra":["تيتانيوم أسود","تيتانيوم رمادي","تيتانيوم بنفسجي","تيتانيوم أصفر"],
-  "Samsung|Galaxy S24+":["أسود","بنفسجي","أصفر","أزرق","أخضر"],
-  "Samsung|Galaxy S24":["أسود","بنفسجي","أصفر","أزرق","أخضر"],
-  "Samsung|Galaxy S23 Ultra":["أسود","أخضر","كريمي","بنفسجي"],
-  "Samsung|Galaxy S23+":["أسود","كريمي","أخضر","بنفسجي"],
-  "Samsung|Galaxy S23":["أسود","كريمي","أخضر","بنفسجي"],
-
-  "Xiaomi|Xiaomi 17 Ultra":["أسود","أبيض","أزرق"],
-  "Xiaomi|Xiaomi 17 Pro":["أسود","أبيض","بنفسجي"],
-  "Xiaomi|Xiaomi 17":["أسود","أبيض","أزرق","أخضر"],
-  "Xiaomi|Xiaomi 15 Ultra":["أسود","أبيض","فضي"],
-  "Xiaomi|Xiaomi 15 Pro":["أسود","أبيض","رمادي"],
-  "Xiaomi|Xiaomi 15":["أسود","أبيض","أخضر","بنفسجي"]
-
-};
-
-
-/* ألوان عامة كاحتياط للموديلات التي لم نحددها */
-const BRAND_COLORS = {
-
-  Apple:["أسود","أبيض","فضي","ذهبي","أزرق","أخضر","وردي","بنفسجي","أحمر"],
-  Samsung:["أسود","أبيض","فضي","رمادي","أزرق","أخضر","بنفسجي","وردي"],
-  Xiaomi:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
-  Google:["أسود","أبيض","رمادي","أزرق","أخضر","وردي"],
-  Huawei:["أسود","أبيض","فضي","ذهبي","أزرق","أخضر","بنفسجي"],
-  OPPO:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
-  HONOR:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
-  OnePlus:["أسود","أبيض","فضي","أخضر","أزرق"],
-  realme:["أسود","أبيض","ذهبي","فضي","أزرق","أخضر"],
-  Motorola:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
-  Sony:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
-  Nokia:["أسود","أبيض","أزرق","رمادي","أخضر"],
-  Tecno:["أسود","أبيض","أزرق","أخضر","بنفسجي"],
-  Infinix:["أسود","أبيض","فضي","أزرق","أخضر","ذهبي"],
-  "أخرى":["أسود","أبيض","فضي","ذهبي","أزرق","أخضر","أحمر"]
-
-};
-
-
-const STORAGE_OPTIONS = [
-  "32GB",
-  "64GB",
-  "128GB",
-  "256GB",
-  "512GB",
-  "1TB"
-];
-
-
-const DURATIONS = [
-  ["1","ساعة"],
-  ["3","3 ساعات"],
-  ["6","6 ساعات"],
-  ["12","12 ساعة"]
-];
-
-
-const WORKS = [
-  "Face ID / البصمة",
-  "الكاميرات",
-  "اللمس والشاشة",
-  "السماعات والمايك",
-  "الشحن والمنفذ",
-  "الشبكة والواي فاي"
-];
-
-
-/* ================================================================
-   بناء الواجهة
-   ================================================================ */
-
-const chips =
-  (
-    name,
-    opts,
-    type = "radio"
-  ) =>
-    `
-      <div class="chips">
-        ${
-          opts
-            .map(o => {
-
-              const [
-                v,
-                t
-              ] =
-                Array.isArray(o)
-                  ? [
-                      o[0],
-                      o[1]
-                    ]
-                  : [
-                      o,
-                      o
-                    ];
-
-              return `
-                <label class="chip">
-
-                  <input
-                    type="${type}"
-                    name="${esc(name)}"
-                    value="${esc(v)}"
-                  >
-
-                  <span>
-                    ${esc(t)}
-                  </span>
-
-                </label>
-              `;
-
-            })
-            .join("")
-        }
-      </div>
-    `;
-
-
-const fill =
-  (
-    id,
-    html
-  ) =>
-    $(id).innerHTML =
-      html;
-
-
-$("brand").innerHTML =
-  '<option value="">اختر الماركة</option>' +
-  BRANDS
-    .map(
-      b =>
-        `<option value="${esc(b)}">${esc(b)}</option>`
-    )
-    .join("");
-
-
-fill(
-  "storage",
-  chips(
-    "storage",
-    STORAGE_OPTIONS
-  )
-);
-
-
-fill(
-  "condition",
-  chips(
-    "condition",
-    [
-      "نظيف",
-      "مستخدم",
-      "بي أضرار"
-    ]
-  )
-);
-
-
-fill(
-  "screen",
-  chips(
-    "screen",
-    [
-      "نظيفة",
-      "خدوش",
-      "كسر"
-    ]
-  )
-);
-
-
-fill(
-  "bodyState",
-  chips(
-    "bodyState",
-    [
-      "نظيف",
-      "خدوش",
-      "ضربات"
-    ]
-  )
-);
-
-
-fill(
-  "backState",
-  chips(
-    "backState",
-    [
-      "ممتاز",
-      "نظيف",
-      "خدوش خفيفة",
-      "فيه كسور"
-    ]
-  )
-);
-
-
-fill(
-  "warranty",
-  chips(
-    "warranty",
-    [
-      "لا يوجد",
-      "أقل من 3 أشهر",
-      "3 إلى 12 شهر",
-      "أكثر من سنة"
-    ]
-  )
-);
-
-
-fill(
-  "acc",
-  chips(
-    "acc",
-    [
-      "الشاحن",
-      "العلبة",
-      "كفر وحماية",
-      "الفاتورة"
-    ],
-    "checkbox"
-  )
-);
-
-
-fill(
-  "duration",
-  chips(
-    "duration",
-    DURATIONS
-  )
-);
-
-
-fill(
-  "works",
-  WORKS
-    .map(
-      t =>
-        `
-          <label class="sw">
-
-            <span>
-              ${esc(t)}
-            </span>
-
-            <input
-              type="checkbox"
-              name="works"
-              value="${esc(t)}"
-              checked
-            >
-
-            <i></i>
-
-          </label>
-        `
-    )
-    .join("")
-);
-
-
-/* ================================================================
-   الماركة / الموديل / اللون
-   ================================================================ */
-
-function isAppleDevice(){
-
-  return (
-    $("brand").value === "Apple" &&
-    /^iPhone\b/i.test(
-      $("model").value
-    )
-  );
-
-}
-
-
-function updateBatteryVisibility(){
-
-  const show =
-    isAppleDevice();
-
-  const f =
-    $("batteryField");
-
-  const was =
-    f.style.display !== "none";
-
-  f.style.display =
-    show
-      ? ""
-      : "none";
-
-  if(
-    show &&
-    !was
-  ){
-
-    f.style.animation =
-      "none";
-
-    void f.offsetWidth;
-
-    f.style.animation =
-      "";
-
-  }
-
-}
-
-
-function fillColors(){
-
-  const brand =
-    $("brand").value;
-
-  const model =
-    $("model").value;
-
-  const color =
-    $("color");
-
-  const custom =
-    $("customColor");
-
-  custom.value =
-    "";
-
-  custom.style.display =
-    "none";
-
-  if(
-    !brand ||
-    !model
-  ){
-
-    color.disabled =
-      true;
-
-    color.innerHTML =
-      '<option value="">اختر الموديل أولاً</option>';
-
-    return;
-
-  }
-
-  const key =
-    `${brand}|${model}`;
-
-  const colors =
-    MODEL_COLORS[key] ||
-    BRAND_COLORS[brand] ||
-    BRAND_COLORS["أخرى"];
-
-  color.disabled =
-    false;
-
-  color.innerHTML =
-    '<option value="">اختر اللون</option>' +
-
-    colors
-      .map(
-        c =>
-          `<option value="${esc(c)}">${esc(c)}</option>`
-      )
-      .join("") +
-
-    '<option value="__custom__">لون آخر</option>';
-
-}
-
-
-function fillModels(){
-
-  const brand =
-    $("brand").value;
-
-  if(!brand){
-
-    $("model").innerHTML =
-      '<option value="">اختر الماركة أولاً</option>';
-
-    $("model").disabled =
-      true;
-
-    fillColors();
-
-    updateBatteryVisibility();
-
-    return;
-
-  }
-
-  $("model").disabled =
-    false;
-
-  $("model").innerHTML =
-    '<option value="">اختر الموديل</option>' +
-
-    (
-      PHONE_MODELS[brand] ||
-      []
-    )
-      .map(
-        m =>
-          `<option value="${esc(m)}">${esc(m)}</option>`
-      )
-      .join("");
-
-  fillColors();
-
-  updateBatteryVisibility();
-
-}
-
-
-function getColorValue(){
-
-  return $("color").value === "__custom__"
-
-    ? String(
-        $("customColor").value ||
-        ""
-      ).trim()
-
-    : String(
-        $("color").value ||
-        ""
-      ).trim();
-
-}
-
-
-$("brand").addEventListener(
-  "change",
-  () => {
-
-    fillModels();
-
-    sync();
-
-    refreshInvalidSections();
-
-  }
-);
-
-
-$("model").addEventListener(
-  "change",
-  () => {
-
-    fillColors();
-
-    updateBatteryVisibility();
-
-    sync();
-
-    refreshInvalidSections();
-
-  }
-);
-
-
-$("color").addEventListener(
-  "change",
-  () => {
-
-    const isCustom =
-      $("color").value ===
-      "__custom__";
-
-    $("customColor").style.display =
-      isCustom
-        ? ""
-        : "none";
-
-    if(isCustom){
-
-      setTimeout(
-        () =>
-          $("customColor").focus(),
-        50
-      );
-
-    }else{
-
-      $("customColor").value =
-        "";
-
-    }
-
-    sync();
-
-    refreshInvalidSections();
-
-  }
-);
-
-
-$("customColor").addEventListener(
-  "input",
-  () => {
-
-    sync();
-
-    refreshInvalidSections();
-
-  }
-);
-
-
-/* ================================================================
-   الصور
-   ================================================================ */
-
-let files = [];
-
-
-function renderPhotos(){
-
-  $("photos").innerHTML =
-
-    files
-      .map(
-        (f,i) =>
-          `
-            <div class="thumb${f.fresh ? " in" : ""}">
-
-              <img
-                src="${f.url}"
-                alt="صورة ${i + 1}"
-              >
-
-              ${
-                i === 0
-                  ? '<span class="cv">الغلاف</span>'
-                  : ""
-              }
-
-              <button
-                type="button"
-                class="x"
-                data-i="${i}"
-              >
-                ×
-              </button>
-
-            </div>
-          `
-      )
-      .join("") +
-
-    (
-      files.length < MAX_PHOTOS
-
-        ? `
-          <button
-            type="button"
-            class="add"
-            id="addBtn"
-          >
-
-            <svg viewBox="0 0 24 24">
-              <path d="M4 8a2 2 0 0 1 2-2h1.5l1.2-1.6h6.6L16.5 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8z"/>
-              <circle
-                cx="12"
-                cy="12.5"
-                r="3.2"
-              />
-            </svg>
-
-            <span>
-              إضافة صورة
-            </span>
-
-          </button>
-        `
-
-        : ""
-    );
-
-  files.forEach(
-    f =>
-      f.fresh = false
-  );
-
-  sync();
-
-}
-
-
-$("photos").addEventListener(
-  "click",
-  e => {
-
-    if(
-      e.target.closest(
-        "#addBtn"
-      )
-    ){
-
-      return $("file").click();
-
-    }
-
-    const x =
-      e.target.closest(
-        ".x"
-      );
-
-    if(x){
-
-      const i =
-        +x.dataset.i;
-
-      if(files[i]){
-
-        URL.revokeObjectURL(
-          files[i].url
-        );
-
-      }
-
-      files.splice(
-        i,
-        1
-      );
-
-      renderPhotos();
-
-      refreshInvalidSections();
-
-    }
-
-  }
-);
-
-
-$("file").addEventListener(
-  "change",
-  e => {
-
-    let rejected = 0;
-
-    for(
-      const f
-      of e.target.files
-    ){
-
-      if(
-        files.length >=
-        MAX_PHOTOS
-      ){
-
-        rejected++;
-
-        continue;
-
-      }
-
-      if(
-        f.type.startsWith("image/") &&
-        f.size <= MAX_IMG_MB * 1e6
-      ){
-
-        files.push({
-          file:f,
-          url:URL.createObjectURL(f),
-          fresh:true
-        });
-
-      }else{
-
-        rejected++;
-
-      }
-
-    }
-
-    e.target.value =
-      "";
-
-    renderPhotos();
-
-    refreshInvalidSections();
-
-    if(rejected){
-
-      toast(
-        `تم تجاهل ${rejected} صورة (الحد ${MAX_PHOTOS} صور، وكل صورة أقل من ${MAX_IMG_MB}MB)`
-      );
-
-    }
-
-  }
-);
-
-
-async function shrink(file){
-
-  try{
-
-    const bmp =
-      await createImageBitmap(
-        file
-      );
-
-    const s =
-      Math.min(
-        1,
-        1600 /
-        Math.max(
-          bmp.width,
-          bmp.height
-        )
-      );
-
-    const c =
-      document.createElement(
-        "canvas"
-      );
-
-    c.width =
-      Math.round(
-        bmp.width * s
-      );
-
-    c.height =
-      Math.round(
-        bmp.height * s
-      );
-
-    c.getContext("2d")
-      .drawImage(
-        bmp,
-        0,
-        0,
-        c.width,
-        c.height
-      );
-
-    return await new Promise(
-      r =>
-        c.toBlob(
-          b =>
-            r(
-              b || file
-            ),
-          "image/jpeg",
-          .82
-        )
-    );
-
-  }catch{
-
-    return file;
-
-  }
-
-}
-
-
-/* ================================================================
-   قراءة قيم الحقول
-   ================================================================ */
-
-const v =
-  name => {
-
-    const checkedEl =
-      form.querySelector(
-        `[name="${name}"]:checked`
-      );
-
-    if(checkedEl){
-
-      return String(
-        checkedEl.value ||
-        ""
-      ).trim();
-
-    }
-
-    const el =
-      document.getElementById(
-        name
-      );
-
-    if(el){
-
-      return String(
-        el.value ||
-        ""
-      ).trim();
-
-    }
-
-    const field =
-      form.elements[name];
-
-    if(
-      field &&
-      typeof field.value !==
-      "undefined"
-    ){
-
-      return String(
-        field.value ||
-        ""
-      ).trim();
-
-    }
-
+  if(!value){
     return "";
-
-  };
-
-
-const checked =
-  name =>
-    [
-      ...form.querySelectorAll(
-        `[name="${name}"]:checked`
-      )
-    ]
-      .map(
-        e =>
-          String(
-            e.value ||
-            ""
-          ).trim()
-      );
-
-
-const hours =
-  () =>
-    Number(
-      v("duration")
-    ) || 0;
-
-
-const durLabel =
-  () =>
-    (
-      DURATIONS.find(
-        d =>
-          d[0] ===
-          v("duration")
-      ) ||
-      ["",""]
-    )[1];
-
-
-function bidStepForPrice(p){
-
-  p =
-    Number(p) || 0;
-
-  if(
-    p < 300000
-  ){
-
-    return 5000;
-
   }
 
-  if(
-    p < 750000
-  ){
+  const time = new Date(value).getTime();
 
-    return 10000;
-
+  if(!Number.isFinite(time)){
+    return "";
   }
 
-  if(
-    p < 1500000
-  ){
+  const diff = Math.max(0, Date.now() - time);
 
-    return 15000;
+  const minutes = Math.floor(diff / 60000);
 
+  if(minutes < 1){
+    return "الآن";
   }
 
-  if(
-    p < 3000000
-  ){
-
-    return 25000;
-
+  if(minutes < 60){
+    return `منذ ${minutes} دقيقة`;
   }
 
-  return 50000;
+  const hours = Math.floor(minutes / 60);
+
+  if(hours < 24){
+    return `منذ ${hours} ساعة`;
+  }
+
+  return `منذ ${Math.floor(hours / 24)} يوم`;
 
 }
 
 
-/* ================================================================
-   المعاينة الحية
-   ================================================================ */
-
-const PHONE =
-  c =>
-    `
-      <svg viewBox="0 0 120 240">
-
-        <rect
-          x="4"
-          y="4"
-          width="112"
-          height="232"
-          rx="22"
-          fill="#1d2430"
-        />
-
-        <rect
-          x="10"
-          y="10"
-          width="100"
-          height="220"
-          rx="17"
-          fill="${c}"
-        />
-
-        <rect
-          x="44"
-          y="16"
-          width="32"
-          height="9"
-          rx="4.5"
-          fill="#0c0f11"
-        />
-
-      </svg>
-    `;
-
-
-let lastCover = null;
-let lastTagsKey = null;
-let lastKey = "";
-
-let shownPrice = 0;
-let priceTarget = 0;
-let priceRaf;
-
-let lastHours = 0;
-let previewEnd = 0;
-
-
-/* عداد السعر المتحرك */
-
-function animatePrice(to){
-
-  if(
-    to ===
-    priceTarget
-  ){
-
-    return;
-
-  }
-
-  priceTarget =
-    to;
-
-  cancelAnimationFrame(
-    priceRaf
-  );
-
-  const from =
-    shownPrice;
-
-  const t0 =
-    performance.now();
-
-  const d =
-    380;
-
-
-  const step =
-    t => {
-
-      const k =
-        Math.min(
-          1,
-          (t - t0) /
-          d
-        );
-
-      const e =
-        1 -
-        Math.pow(
-          1 - k,
-          3
-        );
-
-      shownPrice =
-        Math.round(
-          from +
-          (to - from) *
-          e
-        );
-
-      $("pPrice").textContent =
-        fmt(
-          shownPrice
-        );
-
-      if(
-        k < 1
-      ){
-
-        priceRaf =
-          requestAnimationFrame(
-            step
-          );
-
-      }
-
-    };
-
-
-  priceRaf =
-    requestAnimationFrame(
-      step
-    );
-
-}
-
-
-/* مؤقت المعاينة */
-
-function tickPill(){
-
-  const el =
-    $("pPill");
-
-  if(!lastHours){
-
-    el.textContent =
-      "المدة";
-
-    return;
-
-  }
-
-  const left =
-    Math.max(
-      0,
-      previewEnd -
-      Date.now()
-    );
-
-  const s =
-    Math.floor(
-      left /
-      1000
-    );
-
-  const p =
-    n =>
-      String(n)
-        .padStart(
-          2,
-          "0"
-        );
-
-  el.textContent =
-    `${p(Math.floor(s / 3600))}:${p(Math.floor(s % 3600 / 60))}:${p(s % 60)}`;
-
-}
-
-
-setInterval(
-  tickPill,
-  1000
-);
-
-
-const TRACKED = [
-  "c-photos",
-  "c-info",
-  "c-cond",
-  "c-auction",
-  "c-extra"
-];
-
-
-function sync(){
-
-  const price =
-    num(
-      $("price")
-    );
-
-
-  /* شريط الاكتمال */
-
-  const done = [
-
-    files.length > 0,
-
-    !!v("brand"),
-
-    !!v("model"),
-
-    !!v("storage"),
-
-    !!getColorValue(),
-
-    !!v("condition"),
-
-    !!v("screen"),
-
-    !!v("bodyState"),
-
-    !!v("backState"),
-
-    price >= MIN_START,
-
-    !!hours(),
-
-    !!$("city").value,
-
-    $("agree").checked
-
-  ]
-    .filter(Boolean)
-    .length;
-
-
-  const pct =
-    Math.round(
-      done /
-      13 *
-      100
-    );
-
-
-  $("barFill").style.width =
-    pct + "%";
-
-
-  $("pct").textContent =
-    pct + "%";
-
-
-  $("submit").classList.toggle(
-    "ready",
-    pct === 100
-  );
-
-
-  /* علامة ✓ */
-
-  TRACKED.forEach(
-    id =>
-      $(id)
-        .classList
-        .toggle(
-          "ok",
-          sectionComplete(id)
-        )
-  );
-
-
-  /* العنوان */
-
-  const brand =
-    v("brand");
-
-  const model =
-    v("model");
-
-
-  const title =
-    model &&
-    brand &&
-    model
-      .toLowerCase()
-      .startsWith(
-        brand.toLowerCase()
-      )
-
-      ? model
-
-      : `${brand} ${model}`;
-
-
-  setText(
-    $("pTitle"),
-    title.trim() ||
-    "اسم الجهاز"
-  );
-
-
-  setText(
-    $("pMeta"),
-    [
-      v("storage"),
-      getColorValue(),
-      v("city")
-    ]
-      .filter(Boolean)
-      .join(" • ") ||
-      "المواصفات تظهر هنا"
-  );
-
-
-  /* السعر */
-
-  animatePrice(
-    price
-  );
-
-
-  /* التاغات */
-
-  const tags = [
-
-    v("condition"),
-
-    v("screen")
-      ? `شاشة ${v("screen")}`
-      : "",
-
-    v("bodyState")
-      ? `هيكل ${v("bodyState")}`
-      : "",
-
-    v("backState")
-      ? `ظهر ${v("backState")}`
-      : ""
-
-  ];
-
-
-  if(
-    isAppleDevice()
-  ){
-
-    tags.push(
-      `بطارية ${$("battery").value}%`
-    );
-
-  }
-
-
-  const tagList =
-    tags.filter(Boolean);
-
-
-  const tagsKey =
-    tagList.join("|");
-
-
-  if(
-    tagsKey !==
-    lastTagsKey
-  ){
-
-    lastTagsKey =
-      tagsKey;
-
-    $("pTags").innerHTML =
-      tagList
-        .map(
-          (t,i) =>
-            `
-              <span
-                class="tag"
-                style="--i:${i}"
-              >
-                ${esc(t)}
-              </span>
-            `
-        )
-        .join("");
-
-  }
-
-
-  /* الغلاف */
-
-  const cover =
-    files[0]?.url ||
-    "";
-
-
-  if(
-    cover !==
-    lastCover
-  ){
-
-    lastCover =
-      cover;
-
-    $("pCover").innerHTML =
-      cover
-
-        ? `
-          <img
-            src="${cover}"
-            alt=""
-          >
-        `
-
-        : `
-          <div class="ph">
-            ${PHONE("#6246d9")}
-          </div>
-        `;
-
-  }
-
-
-  /* المدة */
-
-  const h =
-    hours();
-
-
-  if(
-    h !==
-    lastHours
-  ){
-
-    lastHours =
-      h;
-
-    previewEnd =
-      Date.now() +
-      h *
-      36e5;
-
-  }
-
-
-  tickPill();
-
-
-  $("endAt").textContent =
-    h
-
-      ? new Date(
-          Date.now() +
-          h *
-          36e5
-        )
-          .toLocaleTimeString(
-            "ar-IQ",
-            {
-              hour:"numeric",
-              minute:"2-digit"
-            }
-          )
-
-      : "اختر المدة";
-
-
-  /* نبضة خفيفة */
-
-  const key =
-    [
-      title,
-      tagsKey,
-      cover,
-      price,
-      h
-    ].join("~");
-
-
-  if(
-    key !==
-    lastKey
-  ){
-
-    const first =
-      lastKey === "";
-
-
-    lastKey =
-      key;
-
-
-    if(!first){
-
-      const c =
-        $("aCard");
-
-      c.classList.remove(
-        "bump"
-      );
-
-      void c.offsetWidth;
-
-      c.classList.add(
-        "bump"
-      );
-
-    }
-
-  }
-
-}
-
-
-/* ================================================================
-   الأسعار
-   ================================================================ */
-
-for(
-  const id
-  of [
-    "price",
-    "reserve"
-  ]
-){
-
-  $(id).addEventListener(
-    "input",
-    e => {
-
-      const n =
-        num(
-          e.target
-        );
-
-      e.target.value =
-        n
-          ? fmt(n)
-          : "";
-
-      sync();
-
-      refreshInvalidSections();
-
-    }
-  );
-
-}
-
-
-/* ================================================================
-   البطارية
-   ================================================================ */
-
-$("battery").addEventListener(
-  "input",
-  e => {
-
-    $("battery")
-      .style
-      .setProperty(
-        "--p",
-        (
-          (e.target.value - 60) /
-          40 *
-          100
-        ) + "%"
-      );
-
-
-    const o =
-      $("batOut");
-
-
-    o.textContent =
-      e.target.value +
-      "%";
-
-
-    o.classList.remove(
-      "tick"
-    );
-
-    void o.offsetWidth;
-
-    o.classList.add(
-      "tick"
-    );
-
-
-    sync();
-
-  }
-);
-
-
-/* ================================================================
-   المفاتيح
-   ================================================================ */
-
-$("repaired").addEventListener(
-  "change",
-  e =>
-    $("repFold")
-      .classList
-      .toggle(
-        "open",
-        e.target.checked
-      )
-);
-
-
-$("notes").addEventListener(
-  "input",
-  e =>
-    $("nCount").textContent =
-      e.target.value.length
-);
-
-
-/* ================================================================
-   التحقق
-   ================================================================ */
-
-function sectionComplete(id){
-
-  if(
-    id === "c-photos"
-  ){
-
-    return files.length > 0;
-
-  }
-
-
-  if(
-    id === "c-info"
-  ){
-
-    return !!(
-      v("brand") &&
-      v("model") &&
-      v("storage") &&
-      getColorValue()
-    );
-
-  }
-
-
-  if(
-    id === "c-cond"
-  ){
-
-    return !!(
-      v("condition") &&
-      v("screen") &&
-      v("bodyState") &&
-      v("backState")
-    );
-
-  }
-
-
-  if(
-    id === "c-auction"
-  ){
-
-    const p =
-      num(
-        $("price")
-      );
-
-    const r =
-      num(
-        $("reserve")
-      );
-
-    return (
-      p >= MIN_START &&
-      (!r || r >= p) &&
-      !!hours()
-    );
-
-  }
-
-
-  if(
-    id === "c-extra"
-  ){
-
-    return !!$("city").value;
-
-  }
-
-
-  if(
-    id === "c-agree"
-  ){
-
-    return $("agree").checked;
-
-  }
-
-
-  return true;
-
-}
-
-
-function refreshInvalidSections(){
-
-  [
-    "c-photos",
-    "c-info",
-    "c-cond",
-    "c-auction",
-    "c-extra",
-    "c-agree"
-  ]
-    .forEach(
-      id => {
-
-        if(
-          $(id) &&
-          $(id)
-            .classList
-            .contains(
-              "invalid"
-            ) &&
-          sectionComplete(id)
-        ){
-
-          $(id)
-            .classList
-            .remove(
-              "invalid"
-            );
-
-          const err =
-            $("e-" + id);
-
-          if(err){
-
-            err.textContent =
-              "";
-
-          }
-
-        }
-
-      }
-    );
-
-}
-
-
-form.addEventListener(
-  "input",
-  () => {
-
-    sync();
-
-    refreshInvalidSections();
-
-  }
-);
-
-
-form.addEventListener(
-  "change",
-  () => {
-
-    sync();
-
-    refreshInvalidSections();
-
-  }
-);
-
-
-function validate(){
-
-  const errs =
-    [];
-
-  const p =
-    num(
-      $("price")
-    );
-
-  const r =
-    num(
-      $("reserve")
-    );
-
-
-  document
-    .querySelectorAll(".err")
-    .forEach(
-      e =>
-        e.textContent =
-          ""
-    );
-
-
-  document
-    .querySelectorAll(".invalid")
-    .forEach(
-      e =>
-        e.classList.remove(
-          "invalid"
-        )
-    );
-
-
-  const bad =
-    (
-      id,
-      msg
-    ) =>
-      errs.push([
-        id,
-        msg
-      ]);
-
-
-  if(
-    !files.length
-  ){
-
-    bad(
-      "c-photos",
-      "أضف صورة وحدة على الأقل"
-    );
-
-  }
-
-
-  if(
-    !v("brand") ||
-    !v("model") ||
-    !v("storage") ||
-    !getColorValue()
-  ){
-
-    bad(
-      "c-info",
-      "اختر الماركة والموديل واللون والسعة"
-    );
-
-  }
-
-
-  if(
-    !v("condition") ||
-    !v("screen") ||
-    !v("bodyState") ||
-    !v("backState")
-  ){
-
-    bad(
-      "c-cond",
-      "اختر الحالة العامة وحالة الشاشة والهيكل والظهر"
-    );
-
-  }
-
-
-  if(
-    p < MIN_START
-  ){
-
-    bad(
-      "c-auction",
-      `سعر البداية لازم يكون ${fmt(MIN_START)} د.ع أو أكثر`
-    );
-
-  }else if(
-    r &&
-    r < p
-  ){
-
-    bad(
-      "c-auction",
-      "أقل سعر تقبله لازم يكون أكبر من سعر البداية أو يساويه"
-    );
-
-  }else if(
-    !hours()
-  ){
-
-    bad(
-      "c-auction",
-      "اختر مدة المزاد"
-    );
-
-  }
-
-
-  if(
-    !v("city")
-  ){
-
-    bad(
-      "c-extra",
-      "الموقع غير محدد"
-    );
-
-  }
-
-
-  if(
-    !$("agree").checked
-  ){
-
-    bad(
-      "c-agree",
-      "لازم تؤكد المعلومات قبل النشر"
-    );
-
-  }
-
-
-  errs.forEach(
-    ([id,msg]) => {
-
-      const err =
-        $("e-" + id);
-
-      if(err){
-
-        err.textContent =
-          msg;
-
-      }
-
-      $(id)
-        .classList
-        .add(
-          "invalid"
-        );
-
-    }
-  );
-
-
-  if(
-    errs.length
-  ){
-
-    $(errs[0][0])
-      .scrollIntoView({
-        behavior:"smooth",
-        block:"center"
-      });
-
-    toast(
-      errs[0][1]
-    );
-
-  }
-
-
-  return !errs.length;
-
-}
-
-
-/* ================================================================
-   بيانات المزاد التي نحفظها داخل notes
-   (نسخة احتياطية تقرأها صفحة التفاصيل عند غياب الأعمدة)
-   ================================================================ */
-
-function buildAuctionMeta(){
-
-  const start =
-    num(
-      $("price")
-    );
-
-  const reserve =
-    num(
-      $("reserve")
-    );
-
-  const duration =
-    hours();
-
-  const endsAt =
-    duration
-      ? new Date(
-          Date.now() +
-          duration *
-          60 *
-          60 *
-          1000
-        ).toISOString()
-
-      : null;
-
-
-  return {
-    version:1,
-    type:"auction",
-    start_price:start,
-    current_price:start,
-    reserve_price:
-      reserve ||
-      null,
-    bid_step:
-      bidStepForPrice(
-        start
-      ),
-    duration_hours:
-      duration,
-    ends_at:
-      endsAt,
-    extension_seconds:60,
-    participation_deposit:5000
-  };
-
-}
-
-
-/* ================================================================
-   الملاحظات
-   ================================================================ */
-
-function buildNotes(){
-
-  const works =
-    checked("works");
-
-
-  const off =
-    WORKS.filter(
-      w =>
-        !works.includes(w)
-    );
-
-
-  const s =
-    num(
-      $("price")
-    );
-
-
-  const meta =
-    buildAuctionMeta();
-
-
-  const userNotes =
-    v("notes");
-
-
-  const publicNotes = [
-
-    userNotes,
-
-    "— معلومات الحالة —",
-
-    `حالة الظهر: ${
-      v("backState") ||
-      "غير محدد"
-    }`,
-
-    isAppleDevice()
-      ? `صحة البطارية: ${$("battery").value}%`
-      : "",
-
-    "— فحص الجهاز —",
-
-    `يعمل: ${
-      works.join("، ") ||
-      "—"
-    }`,
-
-    off.length
-      ? `لا يعمل: ${off.join("، ")}`
-      : "",
-
-    $("repaired").checked
-      ? `انفتح الجهاز أو تبدلت قطع: ${
-          $("repText").value.trim() ||
-          "نعم"
-        }`
-      : "لم يُفتح الجهاز ولم تُبدّل قطع",
-
-    `الضمان: ${
-      v("warranty") ||
-      "غير محدد"
-    }`,
-
-    `الملحقات: ${
-      checked("acc").join("، ") ||
-      "لا يوجد"
-    }`,
-
-    "— تفاصيل المزاد —",
-
-    `المدة: ${durLabel()}`,
-
-    `سعر البداية: ${fmt(s)} د.ع`,
-
-    `الزيادة المبدئية حسب السعر: ${fmt(
-      bidStepForPrice(s)
-    )} د.ع`,
-
-    "— MZAD_AUCTION_META —",
-
-    JSON.stringify(meta)
-
-  ];
-
-
-  return publicNotes
-    .filter(Boolean)
-    .join("\n");
-
-}
-
-
-/* ================================================================
-   شاشة النجاح
-   ================================================================ */
-
-function showSuccess(){
-
-  const d =
-    $("done");
-
+function colorOf(name){
 
   const colors = [
     "#6246d9",
-    "#8b6cf0",
-    "#1e8a5a",
-    "#32b8c4",
+    "#176b87",
     "#e8590c",
-    "#f5b301"
+    "#1e8a5a",
+    "#b9791a",
+    "#c2255c"
   ];
 
+  const text = String(name || "مستخدم");
 
-  for(
-    let i = 0;
-    i < 28;
-    i++
-  ){
+  const total = [...text].reduce(
+    (sum,char) => sum + char.charCodeAt(0),
+    0
+  );
 
-    const c =
-      document.createElement(
-        "i"
-      );
+  return colors[total % colors.length];
 
-
-    c.className =
-      "confetti";
+}
 
 
-    c.style.background =
-      colors[
-        i %
-        colors.length
-      ];
+function av(name){
+
+  const text = String(name || "مستخدم");
+
+  return `
+    <span
+      class="av"
+      style="background:${colorOf(text)}"
+    >
+      ${escapeHtml(text.trim()[0] || "م")}
+    </span>
+  `;
+
+}
 
 
-    c.style.setProperty(
-      "--x",
-      (
-        (
-          Math.random() -
-          .5
-        ) *
-        340
-      ) +
-      "px"
-    );
+function valueText(value){
+
+  if(value === null || value === undefined){
+    return "";
+  }
+
+  if(typeof value === "string"){
+    return value.trim();
+  }
+
+  if(Array.isArray(value)){
+    return value.join("، ");
+  }
+
+  if(typeof value === "object"){
+    return Object.values(value).filter(Boolean).join("، ");
+  }
+
+  return String(value);
+
+}
 
 
-    c.style.setProperty(
-      "--y",
-      (
-        Math.random() *
-        360 -
-        60
-      ) +
-      "px"
-    );
+function parseImages(value){
 
+  if(!value){
+    return [];
+  }
 
-    c.style.setProperty(
-      "--r",
-      (
-        Math.random() *
-        720 -
-        360
-      ) +
-      "deg"
-    );
+  let data = value;
 
+  if(typeof data === "string"){
 
-    c.style.animationDelay =
-      (
-        .5 +
-        Math.random() *
-        .3
-      ) +
-      "s";
+    try{
 
+      data = JSON.parse(data);
 
-    d.appendChild(
-      c
-    );
+    }catch{
+
+      data = data
+        .split(",")
+        .map(x => x.trim())
+        .filter(Boolean);
+
+    }
 
   }
 
+  if(!Array.isArray(data)){
 
-  d.classList.add(
-    "show"
+    data =
+      typeof data === "object"
+        ? Object.values(data)
+        : [data];
+
+  }
+
+  return data
+    .map(item => {
+
+      if(!item){
+        return "";
+      }
+
+      if(typeof item === "string"){
+        return item.trim();
+      }
+
+      if(typeof item === "object"){
+
+        return (
+          item.path ||
+          item.url ||
+          ""
+        );
+
+      }
+
+      return "";
+
+    })
+    .filter(Boolean);
+
+}
+
+
+/* =========================================================
+   AUCTION META (نسخة احتياطية داخل notes)
+========================================================= */
+
+function parseAuctionMeta(raw){
+
+  const text = valueText(raw);
+
+  const at = text.indexOf("MZAD_AUCTION_META");
+
+  if(at < 0){
+    return {};
+  }
+
+  const rest = text.slice(at + "MZAD_AUCTION_META".length);
+
+  const s = rest.indexOf("{");
+  const e = rest.lastIndexOf("}");
+
+  if(s < 0 || e < s){
+    return {};
+  }
+
+  try{
+
+    const obj = JSON.parse(rest.slice(s, e + 1));
+
+    return obj && typeof obj === "object" ? obj : {};
+
+  }catch{
+
+    return {};
+
+  }
+
+}
+
+
+const toTime = value =>
+  value
+    ? new Date(value).getTime()
+    : NaN;
+
+
+function getEndTime(){
+
+  if(!auction){
+    return null;
+  }
+
+  const meta = parseAuctionMeta(auction.notes);
+
+  let base = toTime(auction.auction_ends_at);
+
+  if(!Number.isFinite(base)){
+    base = toTime(meta.ends_at);
+  }
+
+  if(!Number.isFinite(base)){
+
+    const created = toTime(auction.created_at);
+
+    const duration =
+      Number(auction.duration_hours) ||
+      Number(meta.duration_hours) ||
+      0;
+
+    if(Number.isFinite(created) && duration > 0){
+      base = created + duration * 60 * 60 * 1000;
+    }
+
+  }
+
+  return Number.isFinite(base) ? base : null;
+
+}
+
+
+function startPrice(){
+
+  const meta = parseAuctionMeta(auction.notes);
+
+  return Number(
+    auction.auction_start_price ??
+    meta.start_price ??
+    auction.price ??
+    0
   );
 
 }
 
 
-/* ================================================================
-   النشر
-   ================================================================ */
+function currentPrice(){
 
-form.addEventListener(
-  "submit",
-  async e => {
+  if(bids.length){
 
-    e.preventDefault();
+    return Number(
+      bids[0].amount ||
+      auction.auction_current_price ||
+      startPrice() ||
+      0
+    );
+
+  }
+
+  return Number(
+    auction.auction_current_price ??
+    startPrice() ??
+    0
+  );
+
+}
 
 
-    if(
-      !validate()
-    ){
+/* =========================================================
+   LOAD
+========================================================= */
+
+async function init(){
+
+  if(!auctionId){
+
+    $("name").textContent = "المزاد غير موجود";
+
+    $("del").disabled = true;
+
+    return;
+
+  }
+
+
+  try{
+
+    const {
+      data: sessionData
+    } = await supabase.auth.getSession();
+
+    me = sessionData?.session?.user || null;
+
+
+    if(!me){
+
+      const back = `seller-auction.html?id=${encodeURIComponent(auctionId)}`;
+
+      sessionStorage.setItem("mzad_pending_action", back);
+
+      location.replace(
+        `index.html?login=1&returnTo=${encodeURIComponent(back)}`
+      );
 
       return;
 
     }
 
 
-    const btn =
-      $("submit");
+    const { data, error } = await supabase
+      .from("devices")
+      .select("*")
+      .eq("id", auctionId)
+      .maybeSingle();
 
 
-    btn.disabled =
-      true;
+    if(error){
+      throw error;
+    }
 
 
-    btn.classList.add(
-      "busy"
-    );
+    if(!data){
 
+      $("name").textContent = "المزاد غير موجود أو تم حذفه";
 
-    const paths =
-      [];
+      $("del").disabled = true;
 
-
-    const removeUploaded =
-      async () => {
-
-        if(
-          paths.length
-        ){
-
-          try{
-
-            await supabase
-              .storage
-              .from(
-                "device-images"
-              )
-              .remove(
-                paths
-              );
-
-          }catch{}
-
-        }
-
-      };
-
-
-    try{
-
-      /* =====================================================
-         1) تسجيل الدخول
-      ===================================================== */
-
-      const {
-        data:s,
-        error:sessionError
-      } =
-        await supabase
-          .auth
-          .getSession();
-
-
-      if(sessionError){
-
-        throw sessionError;
-
-      }
-
-
-      const uid =
-        s?.session?.user?.id;
-
-
-      if(!uid){
-
-        sessionStorage.setItem(
-          "mzad_pending_action",
-          "sell-auction.html"
-        );
-
-
-        toast(
-          "سجّل دخولك أو أنشئ حساباً أولاً"
-        );
-
-
-        setTimeout(
-          () => {
-
-            location.href =
-              `index.html?login=1&returnTo=${encodeURIComponent("sell-auction.html")}`;
-
-          },
-          600
-        );
-
-
-        return;
-
-      }
-
-
-      /* =====================================================
-         2) رفع الصور
-      ===================================================== */
-
-      for(
-        let i = 0;
-        i < files.length;
-        i++
-      ){
-
-        const blob =
-          await shrink(
-            files[i].file
-          );
-
-
-        const path =
-          `${uid}/${Date.now()}-${i}.jpg`;
-
-
-        const {
-          error
-        } =
-          await supabase
-            .storage
-            .from(
-              "device-images"
-            )
-            .upload(
-              path,
-              blob,
-              {
-                contentType:
-                  blob.type ||
-                  "image/jpeg"
-              }
-            );
-
-
-        if(error){
-
-          throw error;
-
-        }
-
-
-        paths.push(
-          path
-        );
-
-      }
-
-
-      /* =====================================================
-         3) بناء السجل
-      ===================================================== */
-
-      const start =
-        num(
-          $("price")
-        );
-
-
-      const row = {
-
-        brand:
-          v("brand"),
-
-        model:
-          v("model"),
-
-        storage:
-          v("storage"),
-
-        color:
-          getColorValue() ||
-          null,
-
-        battery_health:
-          isAppleDevice()
-            ? `${$("battery").value}%`
-            : null,
-
-        price:
-          start,
-
-        condition:
-          v("condition"),
-
-        screen_condition:
-          v("screen"),
-
-        body_condition:
-          v("bodyState"),
-
-        location:
-          "داخل النجف",
-
-        sale_type:
-          "auction",
-
-        seller_id:
-          uid,
-
-        images:
-          paths,
-
-        notes:
-          buildNotes()
-
-      };
-
-
-      /*
-        أعمدة المزاد الحقيقية التي تقرأها
-        دالة place_auction_bid:
-        - auction_ends_at: وقت النهاية = الآن + المدة
-        - auction_bid_step: الزيادة حسب سعر البداية
-        - auction_start_price / auction_current_price
-      */
-
-      if(HAS_AUCTION_COLUMNS){
-
-        row.auction_ends_at =
-          new Date(
-            Date.now() +
-            hours() *
-            60 *
-            60 *
-            1000
-          ).toISOString();
-
-        row.auction_bid_step =
-          bidStepForPrice(
-            start
-          );
-
-        row.auction_start_price =
-          start;
-
-        row.auction_current_price =
-          start;
-
-      }
-
-
-      /* =====================================================
-         4) الحفظ في devices
-         إذا كان عمود اختياري (سعر البداية/الحالي)
-         غير موجود نعيد المحاولة بدونه.
-         أما auction_ends_at و auction_bid_step
-         فلا نتجاوزهما أبداً.
-      ===================================================== */
-
-      const OPTIONAL_COLUMNS = [
-        "auction_start_price",
-        "auction_current_price"
-      ];
-
-
-      let insertError =
-        null;
-
-
-      for(
-        let attempt = 0;
-        attempt <= OPTIONAL_COLUMNS.length;
-        attempt++
-      ){
-
-        const {
-          error
-        } =
-          await supabase
-            .from("devices")
-            .insert(
-              row
-            );
-
-
-        insertError =
-          error ||
-          null;
-
-
-        if(!error){
-          break;
-        }
-
-
-        const msg =
-          String(
-            error.message ||
-            ""
-          );
-
-
-        const missing =
-          OPTIONAL_COLUMNS.find(
-            c =>
-              msg.includes(c) &&
-              row[c] !== undefined
-          );
-
-
-        if(!missing){
-          break;
-        }
-
-
-        delete row[missing];
-
-      }
-
-
-      if(insertError){
-
-        await removeUploaded();
-
-        throw insertError;
-
-      }
-
-
-      /* =====================================================
-         5) نجاح
-      ===================================================== */
-
-      showSuccess();
-
-
-      setTimeout(
-        () => {
-
-          location.href =
-            "auctions.html";
-
-        },
-        2400
-      );
-
-
-    }catch(err){
-
-      console.error(
-        "SELL AUCTION ERROR:",
-        err
-      );
-
-
-      await removeUploaded();
-
-
-      const message =
-        String(
-          err?.message ||
-          ""
-        );
-
-
-      if(
-        message.includes(
-          "column"
-        ) &&
-        (
-          message.includes(
-            "does not exist"
-          ) ||
-          message.includes(
-            "schema cache"
-          )
-        )
-      ){
-
-        toast(
-          "هناك حقل غير موجود في قاعدة البيانات. أرسل لي رسالة الخطأ كاملة."
-        );
-
-      }else{
-
-        toast(
-          message ||
-          "صار خطأ بالنشر، حاول مرة ثانية"
-        );
-
-      }
-
-    }finally{
-
-      btn.disabled =
-        false;
-
-      btn.classList.remove(
-        "busy"
-      );
+      return;
 
     }
 
-  }
-);
 
+    /* ليس بائع هذا المزاد: نرجعه للصفحة العامة */
 
-/* ================================================================
-   إخفاء الشريط السفلي أثناء الكتابة
-   ================================================================ */
+    if(String(data.seller_id || "") !== String(me.id)){
 
-const isTextField =
-  el =>
-    el &&
-    el.matches &&
-    el.matches(
-      'input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]),textarea,select'
-    );
+      location.replace(
+        `auction-details.html?id=${encodeURIComponent(auctionId)}`
+      );
 
-
-document.addEventListener(
-  "focusin",
-  e => {
-
-    if(
-      isTextField(
-        e.target
-      )
-    ){
-
-      document.body
-        .classList
-        .add("kb");
+      return;
 
     }
 
+
+    auction = data;
+
+    $("viewPublic").href =
+      `auction-details.html?id=${encodeURIComponent(auction.id)}&view=public`;
+
+    await loadBids();
+
+    render();
+
+    tick();
+
+    refreshInterval = setInterval(refresh, 5000);
+
+    timerInterval = setInterval(tick, 1000);
+
+
+  }catch(error){
+
+    console.error("SELLER PAGE LOAD ERROR:", error);
+
+    $("name").textContent = "تعذر تحميل المزاد";
+
+    $("del").disabled = true;
+
+    toast("تعذر تحميل بيانات المزاد");
+
   }
-);
-
-
-document.addEventListener(
-  "focusout",
-  () => {
-
-    setTimeout(
-      () => {
-
-        if(
-          !isTextField(
-            document.activeElement
-          )
-        ){
-
-          document.body
-            .classList
-            .remove("kb");
-
-        }
-
-      },
-      100
-    );
-
-  }
-);
-
-
-/* ================================================================
-   ظهور الكروت
-   ================================================================ */
-
-const reveals =
-  document.querySelectorAll(
-    ".reveal"
-  );
-
-
-if(
-  "IntersectionObserver"
-  in window
-){
-
-  const io =
-    new IntersectionObserver(
-      entries => {
-
-        entries.forEach(
-          en => {
-
-            if(
-              en.isIntersecting
-            ){
-
-              en.target
-                .classList
-                .add("shown");
-
-              io.unobserve(
-                en.target
-              );
-
-            }
-
-          }
-        );
-
-      },
-      {
-        threshold:.08,
-        rootMargin:
-          "0px 0px -30px 0px"
-      }
-    );
-
-
-  reveals.forEach(
-    el =>
-      io.observe(el)
-  );
-
-
-}else{
-
-  reveals.forEach(
-    el =>
-      el.classList.add(
-        "shown"
-      )
-  );
 
 }
 
 
-/* ================================================================
-   التنقل والتشغيل
-   ================================================================ */
+async function loadBids(){
 
-$("back").onclick =
-  () =>
-    history.length > 1
-      ? history.back()
-      : location.href =
-          "home.html";
+  const { data, error } = await supabase
+    .from("auction_bids")
+    .select(`
+      id,
+      auction_id,
+      user_id,
+      bidder_name,
+      amount,
+      created_at
+    `)
+    .eq("auction_id", auction.id)
+    .order("amount", { ascending:false })
+    .order("created_at", { ascending:false })
+    .limit(100);
 
 
-fillModels();
+  if(error){
 
-fillColors();
+    console.error("SELLER BIDS LOAD ERROR:", error);
 
-updateBatteryVisibility();
+    return;
 
-renderPhotos();
+  }
 
-sync();
+
+  bids = data || [];
+
+}
+
+
+async function refresh(){
+
+  if(!auction?.id || busy){
+    return;
+  }
+
+
+  try{
+
+    const { data, error } = await supabase
+      .from("devices")
+      .select("*")
+      .eq("id", auction.id)
+      .maybeSingle();
+
+
+    if(error){
+      return;
+    }
+
+
+    if(!data){
+
+      /* حُذف من مكان آخر */
+
+      location.href = "auctions.html";
+
+      return;
+
+    }
+
+
+    auction = {
+      ...auction,
+      ...data
+    };
+
+
+    await loadBids();
+
+    render();
+
+    tick();
+
+
+  }catch(error){
+
+    console.error("SELLER REFRESH ERROR:", error);
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function render(){
+
+  const title = [
+    auction.brand,
+    auction.model
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+
+  $("name").textContent = title || "جهاز";
+
+
+  $("sub").textContent = [
+    auction.storage,
+    auction.color,
+    auction.location
+  ]
+    .filter(Boolean)
+    .join(" • ");
+
+
+  $("count").textContent = `${bids.length} مزايدة`;
+
+
+  $("price").textContent = fmt(currentPrice());
+
+
+  /* المزايدون */
+
+  const seen = new Set();
+
+  const unique = [];
+
+  for(const b of bids){
+
+    const key = b.user_id || b.bidder_name || b.id;
+
+    if(seen.has(key)){
+      continue;
+    }
+
+    seen.add(key);
+
+    unique.push(b);
+
+  }
+
+
+  $("stack").innerHTML = unique
+    .slice(0,3)
+    .map(b => av(b.bidder_name || "مستخدم"))
+    .join("");
+
+
+  const top = bids[0];
+
+
+  if(top){
+
+    $("tickText").innerHTML =
+      `<b>${escapeHtml(top.bidder_name || "مستخدم")}</b> زايد ${fmt(top.amount)} د.ع • ${ago(top.created_at)}`;
+
+  }else{
+
+    $("tickText").textContent = "لا توجد مزايدات بعد";
+
+  }
+
+
+  $("panelHead").textContent = `المزايدون (${bids.length})`;
+
+
+  $("bidders").innerHTML = bids
+    .slice(0,20)
+    .map(
+      (b,index) => `
+
+        <li class="${index === 0 ? "lead" : ""}">
+
+          ${av(b.bidder_name || "مستخدم")}
+
+          <span class="who">
+
+            ${escapeHtml(b.bidder_name || "مستخدم")}
+
+            <span>
+              ${escapeHtml(ago(b.created_at))}
+            </span>
+
+          </span>
+
+          <b>
+            ${fmt(b.amount)} د.ع
+          </b>
+
+        </li>
+
+      `
+    )
+    .join("");
+
+
+  /* جدول التفاصيل */
+
+  const end = getEndTime();
+
+  const rows = [
+    ["سعر البداية", `${fmt(startPrice())} د.ع`],
+    ["الزيادة", `${fmt(Number(auction.auction_bid_step) || 10000)} د.ع`],
+    ["عدد المزايدات", String(bids.length)]
+  ];
+
+
+  if(end){
+
+    rows.push([
+      "وقت الانتهاء",
+      new Date(end).toLocaleString("ar-IQ")
+    ]);
+
+  }
+
+
+  $("specs").innerHTML = rows
+    .map(
+      ([key,value]) => `
+
+        <tr>
+
+          <th>${escapeHtml(key)}</th>
+
+          <td>${escapeHtml(value)}</td>
+
+        </tr>
+
+      `
+    )
+    .join("");
+
+
+  /* الحذف */
+
+  if(bids.length){
+
+    $("del").disabled = true;
+
+    $("delNote").textContent =
+      "لا يمكن حذف المزاد بعد وجود مزايدات عليه، حفاظاً على حق المزايدين.";
+
+  }else{
+
+    $("del").disabled = busy;
+
+    $("delNote").textContent =
+      "يمكنك حذف المزاد طالما لا توجد عليه مزايدات.";
+
+  }
+
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+function tick(){
+
+  if(!auction){
+    return;
+  }
+
+
+  const end = getEndTime();
+
+
+  if(!end){
+
+    $("hh").textContent = "00";
+
+    $("mm").textContent = "00";
+
+    $("ss").textContent = "00";
+
+    $("endLabel").textContent = "وقت الانتهاء غير محدد";
+
+    return;
+
+  }
+
+
+  const left = Math.max(
+    0,
+    Math.ceil((end - Date.now()) / 1000)
+  );
+
+
+  const p = n => String(n).padStart(2,"0");
+
+
+  $("hh").textContent = p(Math.floor(left / 3600));
+
+  $("mm").textContent = p(Math.floor((left % 3600) / 60));
+
+  $("ss").textContent = p(left % 60);
+
+
+  $("auction").classList.toggle(
+    "hot",
+    left > 0 && left <= 5 * 60
+  );
+
+
+  if(left <= 0){
+
+    ended = true;
+
+    $("auction").classList.remove("hot");
+
+    $("auction").classList.add("ended");
+
+    $("liveBadge").textContent = "انتهى المزاد";
+
+    $("endLabel").textContent = "انتهى المزاد";
+
+    return;
+
+  }
+
+
+  ended = false;
+
+  $("auction").classList.remove("ended");
+
+  $("liveBadge").textContent = "مزاد مستمر";
+
+  $("endLabel").textContent = "الوقت المتبقي";
+
+}
+
+
+/* =========================================================
+   PANEL
+========================================================= */
+
+$("liveRow").onclick = event => {
+
+  const open = $("panel").classList.toggle("open");
+
+  event.currentTarget.setAttribute("aria-expanded", open);
+
+};
+
+
+/* =========================================================
+   DELETE
+   الحذف يتم عبر دالة delete_auction في Supabase
+   (تتحقق أنك البائع وأنه لا توجد مزايدات).
+========================================================= */
+
+$("del").onclick = async () => {
+
+  if(!auction?.id || busy){
+    return;
+  }
+
+
+  /* تحديث أخير قبل الحذف */
+
+  await loadBids();
+
+  render();
+
+
+  if(bids.length){
+
+    toast("لا يمكن حذف مزاد عليه مزايدات");
+
+    return;
+
+  }
+
+
+  if(!confirm("هل تريد حذف المزاد نهائياً؟ لا يمكن التراجع عن ذلك.")){
+    return;
+  }
+
+
+  busy = true;
+
+  $("del").disabled = true;
+
+
+  try{
+
+    const { data, error } = await supabase.rpc(
+      "delete_auction",
+      {
+        p_auction_id: String(auction.id)
+      }
+    );
+
+
+    if(error){
+
+      console.error("DELETE AUCTION ERROR:", error);
+
+      let message = error.message || "تعذر حذف المزاد";
+
+      if(
+        message.includes("delete_auction") &&
+        (
+          message.includes("function") ||
+          message.includes("schema cache")
+        )
+      ){
+
+        message = "ميزة الحذف غير مفعلة في قاعدة البيانات بعد";
+
+      }
+
+      toast(message);
+
+      return;
+
+    }
+
+
+    /* حذف الصور من التخزين (محاولة، لا تؤثر على النتيجة) */
+
+    try{
+
+      const paths = parseImages(data?.images)
+        .filter(p => !/^(https?:|data:)/.test(p))
+        .map(p =>
+          p
+            .replace(/^\/+/,"")
+            .replace(/^device-images\//,"")
+        );
+
+
+      if(paths.length){
+
+        await supabase
+          .storage
+          .from("device-images")
+          .remove(paths);
+
+      }
+
+    }catch{}
+
+
+    clearInterval(refreshInterval);
+
+    toast("تم حذف المزاد");
+
+    setTimeout(() => {
+      location.href = "auctions.html";
+    }, 1200);
+
+
+  }catch(error){
+
+    console.error("DELETE ERROR:", error);
+
+    toast(error?.message || "حدث خطأ أثناء الحذف");
+
+  }finally{
+
+    busy = false;
+
+    if(auction){
+      render();
+    }
+
+  }
+
+};
+
+
+/* =========================================================
+   BACK
+========================================================= */
+
+$("back").onclick = () => {
+
+  if(document.referrer && history.length > 1){
+
+    history.back();
+
+  }else{
+
+    location.href = "auctions.html";
+
+  }
+
+};
+
+
+window.addEventListener(
+  "pagehide",
+  () => {
+
+    clearInterval(timerInterval);
+
+    clearInterval(refreshInterval);
+
+  }
+);
+
+
+init();
 
 </script>
 
