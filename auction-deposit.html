@@ -1,2211 +1,329 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"
-  >
-
-  <meta name="theme-color" content="#ffffff">
-
-  <title>تأمين المشاركة | MZAD PHONE</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet"
-  >
-
-  <style>
-    :root {
-      --pink: #E91D4F;
-      --pink-light: #FFF0F4;
-
-      --turq: #32B8C4;
-      --turq-light: #F0FCFD;
-
-      --green: #138A5B;
-      --green-light: #ECFAF4;
-
-      --red: #C62F4D;
-      --red-light: #FFF0F3;
-
-      --orange: #A66A00;
-      --orange-light: #FFF9EA;
-
-      --bg: #F7F8FA;
-      --white: #FFFFFF;
-      --text: #171A1F;
-      --muted: #747B86;
-
-      --line: #E6E9ED;
-
-      --shadow:
-        0 12px 32px rgba(20, 24, 31, 0.07);
-    }
-
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      font-family: "Cairo", sans-serif;
-    }
-
-    body {
-      min-height: 100vh;
-    }
-
-    button,
-    input {
-      font-family: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .app {
-      width: 100%;
-      max-width: 520px;
-      min-height: 100vh;
-      margin: 0 auto;
-      padding-bottom: 35px;
-    }
-
-    /* HEADER */
-
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-
-      height: 68px;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      background: rgba(255, 255, 255, 0.96);
-
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-
-      border-bottom: 1px solid var(--line);
-    }
-
-    .back-btn {
-      position: absolute;
-      right: 14px;
-
-      width: 42px;
-      height: 42px;
-
-      border: 1px solid var(--line);
-      border-radius: 14px;
-
-      background: var(--white);
-
-      color: var(--text);
-
-      font-size: 26px;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .back-btn:active {
-      transform: scale(0.95);
-    }
-
-    .logo {
-      text-align: center;
-
-      font-size: 19px;
-      font-weight: 900;
-
-      letter-spacing: -0.5px;
-    }
-
-    .logo span {
-      color: var(--pink);
-    }
-
-    .logo small {
-      display: block;
-
-      margin-top: -2px;
-
-      color: var(--muted);
-
-      font-size: 7px;
-      font-weight: 800;
-
-      letter-spacing: 3px;
-
-      direction: ltr;
-    }
-
-    /* CONTENT */
-
-    .content {
-      padding: 18px 14px;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-
-      padding: 7px 11px;
-
-      border-radius: 999px;
-
-      background: var(--pink-light);
-      color: var(--pink);
-
-      font-size: 10px;
-      font-weight: 900;
-    }
-
-    .eyebrow-dot {
-      width: 7px;
-      height: 7px;
-
-      border-radius: 50%;
-
-      background: var(--turq);
-    }
-
-    h1 {
-      margin: 10px 0 4px;
-
-      font-size: 26px;
-      line-height: 1.35;
-
-      font-weight: 900;
-
-      letter-spacing: -0.7px;
-    }
-
-    .subtitle {
-      margin: 0 0 16px;
-
-      color: var(--muted);
-
-      font-size: 10px;
-      line-height: 1.9;
-    }
-
-    /* CARD */
-
-    .card {
-      margin-bottom: 13px;
-      padding: 16px;
-
-      background: var(--white);
-
-      border: 1px solid var(--line);
-      border-radius: 23px;
-
-      box-shadow: var(--shadow);
-    }
-
-    .card-title {
-      margin-bottom: 11px;
-
-      font-size: 14px;
-      font-weight: 900;
-    }
-
-    /* AUCTION INFO */
-
-    .auction-info {
-      display: grid;
-      gap: 8px;
-    }
-
-    .info-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      gap: 15px;
-
-      padding: 10px 12px;
-
-      background: #FAFBFC;
-
-      border: 1px solid var(--line);
-      border-radius: 14px;
-
-      font-size: 9px;
-    }
-
-    .info-row span {
-      color: var(--muted);
-    }
-
-    .info-row strong {
-      max-width: 60%;
-
-      text-align: left;
-
-      word-break: break-word;
-    }
-
-    /* AMOUNT */
-
-    .amount-box {
-      padding: 17px;
-
-      text-align: center;
-
-      background: var(--pink-light);
-
-      border: 1px solid #F6D4DD;
-
-      border-radius: 19px;
-    }
-
-    .amount-label {
-      color: var(--muted);
-
-      font-size: 8px;
-      font-weight: 700;
-    }
-
-    .amount-value {
-      margin-top: 2px;
-
-      color: var(--pink);
-
-      font-size: 29px;
-      font-weight: 900;
-    }
-
-    .amount-note {
-      margin-top: 1px;
-
-      color: var(--muted);
-
-      font-size: 8px;
-    }
-
-    /* REASON */
-
-    .reason-box {
-      padding: 13px;
-
-      background: var(--turq-light);
-
-      border: 1px solid #CDECEF;
-
-      border-radius: 17px;
-
-      color: #27747C;
-
-      font-size: 9px;
-      line-height: 2;
-    }
-
-    /* METHODS */
-
-    .methods {
-      display: grid;
-      gap: 9px;
-    }
-
-    .method {
-      width: 100%;
-
-      display: flex;
-      align-items: center;
-
-      gap: 10px;
-
-      padding: 12px;
-
-      background: var(--white);
-
-      border: 1px solid var(--line);
-      border-radius: 17px;
-
-      text-align: right;
-
-      transition:
-        border-color .15s ease,
-        background .15s ease,
-        transform .15s ease;
-    }
-
-    .method:active {
-      transform: scale(.99);
-    }
-
-    .method.active {
-      background: var(--turq-light);
-
-      border-color: var(--turq);
-    }
-
-    .method-icon {
-      width: 40px;
-      height: 40px;
-
-      flex: 0 0 40px;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      border-radius: 13px;
-
-      background: #F0F2F4;
-
-      color: var(--turq);
-
-      font-size: 13px;
-      font-weight: 900;
-    }
-
-    .method-content {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .method-name {
-      font-size: 10px;
-      font-weight: 900;
-    }
-
-    .method-detail {
-      margin-top: 3px;
-
-      color: var(--muted);
-
-      font-size: 8px;
-      line-height: 1.6;
-
-      word-break: break-word;
-    }
-
-    .method-status {
-      color: var(--green);
-
-      font-size: 8px;
-      font-weight: 900;
-    }
-
-    /* FORM */
-
-    label {
-      display: block;
-
-      margin: 13px 0 6px;
-
-      font-size: 9px;
-      font-weight: 900;
-    }
-
-    .input {
-      width: 100%;
-      height: 51px;
-
-      padding: 0 13px;
-
-      background: #FAFBFC;
-
-      border: 1px solid var(--line);
-      border-radius: 15px;
-
-      outline: none;
-
-      color: var(--text);
-
-      font-size: 11px;
-    }
-
-    .input:focus {
-      background: var(--white);
-
-      border-color: var(--turq);
-
-      box-shadow:
-        0 0 0 3px rgba(50, 184, 196, 0.10);
-    }
-
-    .file-box {
-      width: 100%;
-
-      padding: 13px;
-
-      background: #FAFBFC;
-
-      border: 1px dashed #C9D1D6;
-      border-radius: 15px;
-
-      font-size: 9px;
-    }
-
-    .file-box::file-selector-button {
-      margin-left: 8px;
-
-      padding: 8px 11px;
-
-      background: var(--white);
-
-      border: 1px solid var(--line);
-      border-radius: 10px;
-
-      color: var(--text);
-
-      font-family: inherit;
-      font-size: 8px;
-      font-weight: 800;
-    }
-
-    /* NOTICE */
-
-    .notice {
-      margin-bottom: 12px;
-
-      padding: 11px 12px;
-
-      background: var(--orange-light);
-
-      border: 1px solid #F0DFB5;
-      border-radius: 15px;
-
-      color: #765F32;
-
-      font-size: 8px;
-      line-height: 1.9;
-    }
-
-    /* BUTTON */
-
-    .primary-btn {
-      width: 100%;
-      height: 53px;
-
-      margin-top: 15px;
-
-      border: 0;
-      border-radius: 17px;
-
-      background:
-        linear-gradient(
-          135deg,
-          var(--pink),
-          #F0446D
-        );
-
-      color: white;
-
-      font-size: 12px;
-      font-weight: 900;
-
-      box-shadow:
-        0 10px 22px rgba(233, 29, 79, 0.18);
-
-      transition:
-        transform .15s ease,
-        opacity .15s ease;
-    }
-
-    .primary-btn:active {
-      transform: scale(.98);
-    }
-
-    .primary-btn:disabled {
-      opacity: .5;
-
-      cursor: not-allowed;
-
-      box-shadow: none;
-    }
-
-    /* MESSAGE */
-
-    .message {
-      display: none;
-
-      margin-top: 10px;
-
-      padding: 11px;
-
-      border-radius: 14px;
-
-      text-align: center;
-
-      font-size: 9px;
-      font-weight: 800;
-
-      line-height: 1.8;
-    }
-
-    .message.show {
-      display: block;
-    }
-
-    .message.error {
-      background: var(--red-light);
-
-      border: 1px solid #F2CBD5;
-
-      color: var(--red);
-    }
-
-    .message.success {
-      background: var(--green-light);
-
-      border: 1px solid #C8EBD9;
-
-      color: var(--green);
-    }
-
-    /* STATUS */
-
-    .status-box {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      gap: 10px;
-
-      padding: 12px 13px;
-
-      background: #F8FAFB;
-
-      border: 1px solid var(--line);
-      border-radius: 15px;
-
-      font-size: 9px;
-    }
-
-    .status-box span {
-      color: var(--muted);
-    }
-
-    .status-value {
-      font-weight: 900;
-    }
-
-    .status-pending {
-      color: var(--orange);
-    }
-
-    .status-approved {
-      color: var(--green);
-    }
-
-    .status-rejected {
-      color: var(--red);
-    }
-
-    .status-refunded {
-      color: var(--turq);
-    }
-
-    /* LOADING */
-
-    .loading {
-      padding: 50px 15px;
-
-      color: var(--muted);
-
-      text-align: center;
-
-      font-size: 10px;
-    }
-
-    .spinner {
-      display: inline-block;
-
-      width: 18px;
-      height: 18px;
-
-      margin-left: 7px;
-
-      vertical-align: middle;
-
-      border: 2px solid #DDE5E8;
-      border-top-color: var(--turq);
-
-      border-radius: 50%;
-
-      animation: spin .7s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    /* EMPTY */
-
-    .empty {
-      padding: 18px;
-
-      background: #FAFBFC;
-
-      border: 1px solid var(--line);
-      border-radius: 16px;
-
-      color: var(--muted);
-
-      text-align: center;
-
-      font-size: 9px;
-      line-height: 1.8;
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>تأمين المشاركة | MZAD PHONE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#E91D4F;--turq:#32B8C4;--bg:#F7F8FA;--ink:#171A1F;--muted:#747B86;--line:#E6E9ED;--green:#138A5B;--red:#C62F4D;--gold:#765F32;--shadow:0 12px 32px rgba(20,24,31,.07)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;background:var(--bg);color:var(--ink);font-family:Cairo,sans-serif}.app{max-width:520px;min-height:100vh;margin:auto;padding-bottom:40px}.header{height:68px;position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.back{position:absolute;right:14px;width:42px;height:42px;border:1px solid var(--line);border-radius:14px;background:#fff;font-size:25px}.logo{font-size:19px;font-weight:900;text-align:center}.logo span{color:var(--pink)}.logo small{display:block;color:var(--muted);font-size:7px;letter-spacing:3px;direction:ltr}.content{padding:18px 14px}.eyebrow{display:inline-flex;gap:7px;align-items:center;padding:7px 11px;border-radius:999px;background:#FFF0F4;color:var(--pink);font-size:10px;font-weight:900}.dot{width:7px;height:7px;border-radius:50%;background:var(--turq)}h1{margin:10px 0 4px;font-size:25px;font-weight:900}.sub{margin:0 0 16px;color:var(--muted);font-size:10px;line-height:1.9}.card{background:#fff;border:1px solid var(--line);border-radius:23px;padding:16px;margin-bottom:13px;box-shadow:var(--shadow)}.title{margin-bottom:11px;font-size:14px;font-weight:900}.hero{background:linear-gradient(145deg,#171A1F,#2B3037);color:#fff;border:0}.hero-amount{font-size:34px;font-weight:900;margin-top:3px}.hero-note{color:#C6CBD2;font-size:8px}.why{margin-top:13px;display:grid;gap:7px}.why div{font-size:9px;line-height:1.8}.auction-row{display:flex;justify-content:space-between;gap:12px}.device{font-size:13px;font-weight:900}.muted{color:var(--muted);font-size:8px;margin-top:3px}.price{text-align:left}.price span{display:block;color:var(--muted);font-size:7px}.price strong{color:var(--pink);font-size:14px}.method{width:100%;display:block;text-align:right;border:1px solid var(--line);background:#FAFBFC;border-radius:17px;padding:13px;margin:8px 0;font-family:inherit}.method.active{border-color:var(--turq);background:#F0FCFD}.method-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.method-name{font-size:11px;font-weight:900}.radio{width:19px;height:19px;border-radius:50%;border:2px solid #CDD3D9;background:#fff}.active .radio{border:5px solid var(--turq)}.method-info{margin-top:6px;color:var(--muted);font-size:8px;line-height:1.8}.account{color:var(--ink);font-weight:900;direction:ltr;text-align:right;word-break:break-word}.notice{padding:12px;border-radius:16px;background:#FFF9EA;border:1px solid #F0DFB5;color:var(--gold);font-size:9px;line-height:1.9}.notice b{display:block;font-size:10px}.label{display:block;margin:13px 0 6px;font-size:9px;font-weight:900}.input,.file{width:100%;min-height:52px;border:1px solid var(--line);border-radius:15px;background:#FAFBFC;padding:12px;font-family:inherit;font-size:11px;outline:0}.input:focus{border-color:var(--turq);background:#fff}.btn{width:100%;height:54px;margin-top:12px;border:0;border-radius:17px;background:linear-gradient(135deg,var(--pink),#F0446D);color:#fff;font-family:inherit;font-size:12px;font-weight:900;box-shadow:0 10px 22px rgba(233,29,79,.18)}.btn:disabled{opacity:.45;box-shadow:none}.secondary{background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:none}.status{padding:12px;border-radius:16px;background:#FFF9EA;border:1px solid #F0DFB5;color:var(--gold);font-size:9px;line-height:1.9}.status.ok{background:#ECFAF4;border-color:#C8EBD9;color:var(--green)}.status.bad{background:#FFF0F3;border-color:#F2CBD5;color:var(--red)}.rows{margin-top:10px}.row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:9px}.row:last-child{border:0}.row span{color:var(--muted)}.row strong{text-align:left;word-break:break-word}.preview{display:none;margin-top:9px;border-radius:15px;overflow:hidden;border:1px solid var(--line);background:#F5F6F8}.preview.show{display:block}.preview img{width:100%;max-height:280px;object-fit:contain;display:block}.msg{display:none;margin-top:10px;padding:11px;border-radius:13px;text-align:center;font-size:9px;font-weight:800}.msg.show{display:block}.error{background:#FFF0F3;color:var(--red);border:1px solid #F2CBD5}.ok{background:#ECFAF4;color:var(--green);border:1px solid #C8EBD9}.loading{text-align:center;padding:45px;color:var(--muted);font-size:10px}.spinner{display:inline-block;width:17px;height:17px;border:2px solid #DDE5E8;border-top-color:var(--turq);border-radius:50%;vertical-align:middle;margin-left:7px;animation:s .7s linear infinite}@keyframes s{to{transform:rotate(360deg)}}.hidden{display:none!important}.empty{text-align:center;padding:20px;color:var(--muted);font-size:9px;line-height:1.8}
+</style>
 </head>
-
 <body>
-
 <div class="app">
-
-  <!-- HEADER -->
-  <header class="header">
-
-    <button
-      class="back-btn"
-      id="backBtn"
-      type="button"
-      aria-label="رجوع"
-    >
-      ‹
-    </button>
-
-    <div class="logo">
-      MZ<span>AD</span> PHONE
-      <small>SECURITY DEPOSIT</small>
-    </div>
-
-  </header>
-
-
-  <main class="content">
-
-    <!-- LOADING -->
-    <div id="loading" class="loading">
-      <span class="spinner"></span>
-      جاري تجهيز صفحة التأمين...
-    </div>
-
-
-    <!-- PAGE -->
-    <div id="page" class="hidden">
-
-      <span class="eyebrow">
-        <span class="eyebrow-dot"></span>
-        تأمين المشاركة
-      </span>
-
-      <h1>
-        تأمين المزايدة
-      </h1>
-
-      <p class="subtitle">
-        قبل أن تبدأ بالمزايدة، لازم يكون عندك تأمين مشارك معتمد من إدارة MZAD PHONE.
-      </p>
-
-
-      <!-- AUCTION -->
-      <section class="card">
-
-        <div class="card-title">
-          بيانات المزاد
-        </div>
-
-        <div class="auction-info">
-
-          <div class="info-row">
-            <span>رقم المزاد</span>
-            <strong id="auctionId">—</strong>
-          </div>
-
-          <div class="info-row">
-            <span>الجهاز</span>
-            <strong id="deviceName">—</strong>
-          </div>
-
-          <div class="info-row">
-            <span>حالة المزاد</span>
-            <strong id="auctionStatus">—</strong>
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- AMOUNT -->
-      <section class="card">
-
-        <div class="card-title">
-          مبلغ التأمين
-        </div>
-
-        <div class="amount-box">
-
-          <div class="amount-label">
-            تأمين قابل للاسترداد
-          </div>
-
-          <div class="amount-value">
-            5,000 د.ع
-          </div>
-
-          <div class="amount-note">
-            هذا المبلغ ليس سعر الجهاز
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- WHY -->
-      <section class="card">
-
-        <div class="card-title">
-          لماذا نطلب التأمين؟
-        </div>
-
-        <div class="reason-box">
-
-          التأمين يساعدنا على التأكد من جدية المزايد
-          وتقليل الحسابات الوهمية والمزايدات غير الجادة.
-
-          <br>
-
-          التأمين منفصل عن سعر الجهاز وعن رسوم المنصة،
-          وتتم معاملته كتأمين قابل للاسترداد حسب قواعد الاسترداد المعتمدة من المنصة.
-
-        </div>
-
-      </section>
-
-
-      <!-- METHODS -->
-      <section class="card">
-
-        <div class="card-title">
-          اختر طريقة الدفع
-        </div>
-
-        <div id="methods" class="methods">
-
-          <div class="empty">
-            جاري تحميل طرق الدفع...
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- PROOF -->
-      <section class="card" id="proofCard">
-
-        <div class="card-title">
-          إثبات التحويل
-        </div>
-
-        <div class="notice">
-
-          بعد تحويل مبلغ التأمين، ارفع صورة الإيصال أو أدخل رقم العملية.
-
-          <br>
-
-          لن تصبح مؤهلاً للمزايدة إلا بعد مراجعة الإدارة والموافقة على التأمين.
-
-          <br>
-
-          لا تدخل بيانات البطاقة السرية أو رمز PIN هنا.
-
-        </div>
-
-
-        <label for="reference">
-          رقم العملية / المرجع
-        </label>
-
-        <input
-          id="reference"
-          class="input"
-          type="text"
-          inputmode="numeric"
-          autocomplete="off"
-          placeholder="مثال: 123456789"
-        >
-
-
-        <label for="proof">
-          صورة إيصال التحويل
-        </label>
-
-        <input
-          id="proof"
-          class="file-box"
-          type="file"
-          accept="image/*"
-        >
-
-
-        <button
-          id="submitBtn"
-          class="primary-btn"
-          type="button"
-        >
-          إرسال إثبات الدفع
-        </button>
-
-
-        <div
-          id="message"
-          class="message"
-        ></div>
-
-      </section>
-
-
-      <!-- STATUS -->
-      <section class="card">
-
-        <div class="card-title">
-          حالة التأمين
-        </div>
-
-        <div class="status-box">
-
-          <span>
-            الحالة الحالية
-          </span>
-
-          <strong
-            id="depositStatus"
-            class="status-value"
-          >
-            جاري التحقق...
-          </strong>
-
-        </div>
-
-      </section>
-
-    </div>
-
-  </main>
-
+<header class="header"><button class="back" id="back">‹</button><div class="logo">MZ<span>AD</span> PHONE<small>SECURE DEPOSIT</small></div></header>
+<main class="content">
+<div id="loading" class="loading"><span class="spinner"></span>جاري تجهيز التأمين...</div>
+<div id="errorPage" class="empty hidden"></div>
+
+<div id="page" class="hidden">
+<span class="eyebrow"><i class="dot"></i>تأمين المشاركة</span>
+<h1>تأمين المزايدة</h1>
+<p class="sub">التأمين مطلوب قبل المزايدة، وهو مبلغ مستقل عن سعر الجهاز ورسوم المنصة.</p>
+
+<section class="card hero">
+<div class="title">تأمين قابل للاسترداد</div>
+<div class="hero-amount">5,000 د.ع</div>
+<div class="hero-note">يُعامل حسب قواعد الاسترداد المعتمدة من MZAD PHONE.</div>
+<div class="why">
+<div>✓ يقلل المزايدات الوهمية والحسابات غير الجادة.</div>
+<div>✓ لا يُحتسب من سعر الجهاز.</div>
+<div>✓ اعتماد التأمين لا يعني الفوز بالمزاد.</div>
+</div>
+</section>
+
+<section class="card">
+<div class="title">بيانات المزاد</div>
+<div class="auction-row">
+<div><div class="device" id="deviceName">—</div><div class="muted">رقم المزاد: <span id="auctionId">—</span></div></div>
+<div class="price"><span>السعر الحالي</span><strong id="currentPrice">—</strong></div>
+</div>
+<div class="rows">
+<div class="row"><span>الحالة</span><strong id="auctionStatus">—</strong></div>
+</div>
+</section>
+
+<section class="card">
+<div class="title">طريقة الدفع</div>
+<div id="methods"><div class="empty">جاري تحميل طرق الدفع...</div></div>
+<div class="muted">بيانات المستلم المعروضة هنا تأتي من إعدادات المنصة. لا تدخل رقم البطاقة أو PIN داخل هذه الصفحة.</div>
+</section>
+
+<section class="card">
+<div class="title">طلب الدفع</div>
+<div id="requestStatus" class="status">لم يتم إنشاء طلب دفع بعد.</div>
+<div id="requestRows" class="rows hidden">
+<div class="row"><span>رقم الطلب</span><strong id="requestNumber">—</strong></div>
+<div class="row"><span>المبلغ</span><strong id="requestAmount">—</strong></div>
+<div class="row"><span>الحالة</span><strong id="requestState">—</strong></div>
+</div>
+<button class="btn" id="createRequest">إنشاء طلب الدفع</button>
+</section>
+
+<section class="card hidden" id="proofCard">
+<div class="title">إرسال إثبات التحويل</div>
+<div class="notice"><b>بعد التحويل الإلكتروني</b>ارفع صورة الإيصال أو أدخل رقم العملية. ستراجع الإدارة الإثبات قبل تفعيل أهلية المزايدة.</div>
+<label for="reference">رقم العملية / المرجع</label>
+<input id="reference" class="input" autocomplete="off" placeholder="مثال: 123456789">
+<label for="paidAmount">المبلغ المدفوع</label>
+<input id="paidAmount" class="input" inputmode="numeric" value="5000">
+<label for="paidAt">وقت الدفع</label>
+<input id="paidAt" class="input" type="datetime-local">
+<label for="proofFile">صورة الإيصال</label>
+<input id="proofFile" class="file" type="file" accept="image/jpeg,image/png,image/webp">
+<div id="preview" class="preview"><img id="previewImg" alt="معاينة الإيصال"></div>
+<button class="btn" id="submitProof">إرسال الإثبات للمراجعة</button>
+<div id="proofMsg" class="msg"></div>
+</section>
+
+<section class="card">
+<div class="title">حالة التأمين</div>
+<div id="finalStatus" class="status">جاري التحقق...</div>
+</section>
+</div>
+</main>
 </div>
 
-
 <script type="module">
+import { supabase } from "./js/supabase.js";
 
-  import { supabase } from "./js/supabase.js";
+const $=id=>document.getElementById(id);
+const params=new URLSearchParams(location.search);
+const auctionId=params.get("auction")||params.get("id");
+const BUCKET="mzad-payment-proofs";
+const state={user:null,auction:null,device:null,deposit:null,request:null,proof:null,methods:[],selectedMethod:null,busy:false};
 
+const val=(o,keys,def="")=>{for(const k of keys)if(o?.[k]!==undefined&&o[k]!==null&&o[k]!=="")return o[k];return def};
+const money=n=>Number(n||0).toLocaleString("en-US");
+const esc=s=>String(s??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
+const statusMap={pending:"بانتظار المراجعة",proof_submitted:"الإثبات بانتظار المراجعة",approved:"تمت الموافقة",rejected:"مرفوض",cancelled:"ملغى",refunded:"تم رد التأمين"};
 
-  /*
-   * ============================================================
-   * STATE
-   * ============================================================
-   */
+function setMsg(t,type="error"){const e=$("proofMsg");e.textContent=t;e.className="msg show "+(type==="ok"?"ok":"error")}
+function translate(s){return statusMap[String(s||"").toLowerCase()]||s||"—"}
+function auctionStatus(s){return ({scheduled:"مجدول",live:"جاري الآن",active:"جاري الآن",ended:"منتهي",completed:"مكتمل",cancelled:"ملغي",canceled:"ملغي"})[String(s||"").toLowerCase()]||s||"—"}
 
-  const state = {
+async function auth(){
+ const r=await supabase.auth.getUser();
+ if(r.error||!r.data.user){location.href="index.html?login=1&returnTo="+encodeURIComponent(location.pathname+location.search);return false}
+ state.user=r.data.user;return true;
+}
 
-    user: null,
+async function loadAuction(){
+ if(!auctionId)throw new Error("AUCTION_ID_MISSING");
+ const a=await supabase.from("mzad_auctions").select("*").eq("id",auctionId).single();
+ if(a.error)throw a.error;
+ state.auction=a.data;
+ const sellerId=val(state.auction,["seller_user_id","seller_id","owner_user_id"],"");
+ if(sellerId&&String(sellerId)===String(state.user.id))throw new Error("SELLER_CANNOT_DEPOSIT");
+ const d=await supabase.from("mzad_devices").select("*").eq("id",state.auction.device_id).single();
+ if(!d.error)state.device=d.data;
+ const name=state.device?[val(state.device,["brand","brand_name"]),val(state.device,["model","model_name"]),val(state.device,["storage","storage_capacity"])].filter(Boolean).join(" "):"الجهاز";
+ $("deviceName").textContent=name||"الجهاز";
+ $("auctionId").textContent=state.auction.id;
+ $("auctionStatus").textContent=auctionStatus(state.auction.status);
+ $("currentPrice").textContent=money(state.auction.current_price_iqd??state.auction.starting_price_iqd)+" د.ع";
+}
 
-    auction: null,
+async function loadDeposit(){
+ const r=await supabase.from("mzad_deposits").select("*").eq("auction_id",auctionId).eq("user_id",state.user.id).order("created_at",{ascending:false}).limit(1);
+ if(r.error)throw r.error;
+ state.deposit=r.data?.[0]||null;
+}
 
-    device: null,
+async function ensureDeposit(){
+ if(state.deposit)return;
+ const r=await supabase.rpc("mzad_create_auction_deposit",{p_auction_id:auctionId,p_role:"buyer"});
+ if(r.error)throw r.error;
+ await loadDeposit();
+ if(!state.deposit)throw new Error("DEPOSIT_CREATE_FAILED");
+}
 
-    deposit: null,
+async function loadMethods(){
+ const r=await supabase.rpc("mzad_get_enabled_payment_methods");
+ if(r.error)throw r.error;
+ state.methods=Array.isArray(r.data)?r.data:[];
+ if(state.methods.length&&!state.selectedMethod)state.selectedMethod=state.methods[0];
+ renderMethods();
+}
 
-    paymentMethods: [],
+function renderMethods(){
+ const box=$("methods");
+ if(!state.methods.length){box.innerHTML='<div class="empty">لا توجد طريقة دفع مفعّلة حاليًا. يجب تفعيل طريقة من لوحة الإدارة.</div>';return}
+ box.innerHTML=state.methods.map(m=>{
+  const active=state.selectedMethod?.id===m.id;
+  const info=[m.provider,m.instructions].filter(Boolean).join(" — ");
+  return '<button type="button" class="method '+(active?"active":"")+'" data-id="'+esc(m.id)+'"><div class="method-head"><span class="method-name">'+esc(m.name_ar||m.code||"طريقة دفع")+'</span><span class="radio"></span></div>'+
+    (m.account_name?'<div class="method-info">اسم المستلم: <b>'+esc(m.account_name)+'</b></div>':'')+
+    (m.account_identifier?'<div class="method-info account">'+esc(m.account_identifier)+'</div>':'')+
+    (info?'<div class="method-info">'+esc(info)+'</div>':'')+
+    '</button>';
+ }).join("");
+ box.querySelectorAll(".method").forEach(b=>b.onclick=()=>{state.selectedMethod=state.methods.find(m=>String(m.id)===String(b.dataset.id))||null;renderMethods()});
+}
 
-    selectedMethod: null,
+function requestStatusRender(){
+ const r=state.request;
+ if(!r){
+  $("requestStatus").className="status";
+  $("requestStatus").textContent="لم يتم إنشاء طلب دفع بعد.";
+  $("requestRows").classList.add("hidden");
+  $("createRequest").classList.remove("hidden");
+  $("proofCard").classList.add("hidden");
+  return;
+ }
+ $("requestRows").classList.remove("hidden");
+ $("requestNumber").textContent=r.request_number||"—";
+ $("requestAmount").textContent=money(r.amount_iqd)+" د.ع";
+ $("requestState").textContent=translate(r.status);
+ $("createRequest").classList.add("hidden");
+ const s=String(r.status||"").toLowerCase();
+ $("requestStatus").className="status "+(s==="proof_submitted"?"":"");
+ $("requestStatus").textContent=translate(s);
+ $("proofCard").classList.toggle("hidden",s==="proof_submitted");
+}
 
-    submitting: false
+function finalStatusRender(){
+ const d=state.deposit,r=state.request,p=state.proof;
+ if(d?.status==="approved"||d?.eligible===true){
+  $("finalStatus").className="status ok";
+  $("finalStatus").textContent="تم اعتماد التأمين. أصبحت مؤهلًا للمزايدة.";
+  return;
+ }
+ if(p?.review_status==="rejected"||d?.status==="rejected"){
+  $("finalStatus").className="status bad";
+  $("finalStatus").textContent="تم رفض الإثبات. يمكنك إرسال إثبات جديد بعد تصحيح البيانات.";
+  return;
+ }
+ if(r?.status==="proof_submitted"||p?.review_status==="pending"){
+  $("finalStatus").className="status";
+  $("finalStatus").textContent="إثبات الدفع بانتظار مراجعة الإدارة. لا يمكنك المزايدة حتى تتم الموافقة.";
+  return;
+ }
+ if(d?.refunded_at){
+  $("finalStatus").className="status ok";
+  $("finalStatus").textContent="تم رد التأمين حسب سجل المنصة.";
+  return;
+ }
+ $("finalStatus").className="status";
+ $("finalStatus").textContent="التأمين غير معتمد حتى الآن.";
+}
 
-  };
+async function loadRequest(){
+ if(!state.deposit){state.request=null;return}
+ const r=await supabase.from("mzad_payment_requests").select("*").eq("deposit_id",state.deposit.id).eq("user_id",state.user.id).order("created_at",{ascending:false}).limit(1);
+ if(r.error)throw r.error;
+ state.request=r.data?.[0]||null;
+}
 
+async function loadProof(){
+ if(!state.request){state.proof=null;return}
+ const r=await supabase.from("mzad_payment_proofs").select("*").eq("request_id",state.request.id).eq("user_id",state.user.id).order("created_at",{ascending:false}).limit(1);
+ if(r.error)throw r.error;
+ state.proof=r.data?.[0]||null;
+}
 
-  /*
-   * ============================================================
-   * HELPERS
-   * ============================================================
-   */
+function rpcObject(x){return Array.isArray(x)?(x[0]||{}):(x||{})}
 
-  const $ = (id) => document.getElementById(id);
+async function createRequest(){
+ if(state.busy)return;
+ if(!state.selectedMethod){setMsg("اختار طريقة الدفع أولًا.");return}
+ state.busy=true;$("createRequest").disabled=true;$("createRequest").textContent="جاري إنشاء الطلب...";
+ try{
+  await ensureDeposit();
+  const r=await supabase.rpc("mzad_create_deposit_payment_request",{p_deposit_id:state.deposit.id,p_payment_method_id:state.selectedMethod.id});
+  if(r.error)throw r.error;
+  const o=rpcObject(r.data);
+  await loadRequest();
+  if(!state.request&&o.request_id)state.request={id:o.request_id,request_number:o.request_number,amount_iqd:o.amount_iqd,status:"pending"};
+  await loadProof();
+  requestStatusRender();finalStatusRender();
+ }catch(e){
+  const m=e?.message||"";
+  setMsg(({DEPOSIT_NOT_FOUND:"تعذر إنشاء سجل التأمين.",PAYMENT_METHOD_NOT_FOUND:"طريقة الدفع غير متاحة.",PAYMENT_METHOD_REQUIRED:"اختار طريقة الدفع.",DEPOSIT_REQUIRED:"تعذر إنشاء طلب الدفع."})[m]||m||"تعذر إنشاء طلب الدفع.");
+ }finally{
+  state.busy=false;
+  if(!state.request)$("createRequest").disabled=false;
+  $("createRequest").textContent="إنشاء طلب الدفع";
+ }
+}
 
+$("proofFile").onchange=e=>{
+ const f=e.target.files?.[0];if(!f)return;
+ if(f.size>5*1024*1024){e.target.value="";setMsg("حجم الصورة يجب ألا يتجاوز 5MB.");return}
+ const reader=new FileReader();reader.onload=()=>{$("previewImg").src=reader.result;$("preview").classList.add("show")};reader.readAsDataURL(f);
+};
 
-  const params = new URLSearchParams(
-    window.location.search
-  );
+function setLocalDateTime(){
+ const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());$("paidAt").value=d.toISOString().slice(0,16);
+}
 
-
-  const auctionId =
-    params.get("auction") ||
-    params.get("id");
-
-
-  function escapeHtml(value) {
-
-    if (value === null || value === undefined) {
-      return "";
-    }
-
-    return String(value)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
+async function submitProof(){
+ if(state.busy||!state.request)return;
+ const file=$("proofFile").files?.[0]||null;
+ const ref=$("reference").value.trim();
+ const amount=Number($("paidAmount").value);
+ const paidAt=$("paidAt").value?new Date($("paidAt").value).toISOString():null;
+ if(!file&&!ref){setMsg("ارفع صورة الإيصال أو أدخل رقم العملية.");return}
+ if(!amount||amount<=0){setMsg("أدخل المبلغ المدفوع.");return}
+ if(!paidAt){setMsg("حدد وقت الدفع.");return}
+ state.busy=true;$("submitProof").disabled=true;$("submitProof").textContent="جاري إرسال الإثبات...";
+ let path=null;
+ try{
+  if(file){
+   const ext=(file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
+   path=state.user.id+"/"+state.request.id+"-"+crypto.randomUUID()+"."+ext;
+   const up=await supabase.storage.from(BUCKET).upload(path,file,{contentType:file.type,upsert:false});
+   if(up.error)throw up.error;
   }
-
-
-  function getValue(object, keys, fallback = "") {
-
-    for (const key of keys) {
-
-      if (
-        object &&
-        object[key] !== undefined &&
-        object[key] !== null &&
-        object[key] !== ""
-      ) {
-
-        return object[key];
-
-      }
-
-    }
-
-    return fallback;
-  }
-
-
-  function showMessage(text, type = "error") {
-
-    const box = $("message");
-
-    box.textContent = text;
-
-    box.className =
-      "message show " +
-      (type === "success" ? "success" : "error");
-
-  }
-
-
-  function hideMessage() {
-
-    $("message").className = "message";
-
-  }
-
-
-  function normalizeError(error) {
-
-    if (!error) {
-      return "حدث خطأ غير معروف.";
-    }
-
-    const message =
-      error.message ||
-      error.details ||
-      error.hint ||
-      String(error);
-
-    return message;
-
-  }
-
-
-  /*
-   * ============================================================
-   * AUTH
-   * ============================================================
-   */
-
-  async function loadUser() {
-
-    const result =
-      await supabase.auth.getUser();
-
-
-    if (
-      result.error ||
-      !result.data ||
-      !result.data.user
-    ) {
-
-      const returnTo =
-        window.location.pathname +
-        window.location.search;
-
-      window.location.href =
-        "index.html?login=1&returnTo=" +
-        encodeURIComponent(returnTo);
-
-      return false;
-
-    }
-
-
-    state.user =
-      result.data.user;
-
-    return true;
-
-  }
-
-
-  /*
-   * ============================================================
-   * LOAD AUCTION
-   * ============================================================
-   */
-
-  async function loadAuction() {
-
-    if (!auctionId) {
-
-      throw new Error(
-        "لم يتم تحديد رقم المزاد."
-      );
-
-    }
-
-
-    const result =
-      await supabase
-        .from("mzad_auctions")
-        .select("*")
-        .eq("id", auctionId)
-        .single();
-
-
-    if (result.error) {
-
-      throw result.error;
-
-    }
-
-
-    state.auction =
-      result.data;
-
-
-    /*
-     * SELLER MUST NOT CREATE BUYER DEPOSIT
-     */
-
-    const sellerId =
-      getValue(
-        state.auction,
-        [
-          "seller_user_id",
-          "seller_id",
-          "owner_user_id"
-        ]
-      );
-
-
-    if (
-      sellerId &&
-      String(sellerId) ===
-      String(state.user.id)
-    ) {
-
-      throw new Error(
-        "SELLER_CANNOT_DEPOSIT"
-      );
-
-    }
-
-
-    $("auctionId").textContent =
-      state.auction.id;
-
-
-    $("auctionStatus").textContent =
-      getAuctionStatus(
-        state.auction.status
-      );
-
-
-    await loadDevice();
-
-  }
-
-
-  /*
-   * ============================================================
-   * LOAD DEVICE
-   * ============================================================
-   */
-
-  async function loadDevice() {
-
-    const deviceId =
-      getValue(
-        state.auction,
-        [
-          "device_id"
-        ]
-      );
-
-
-    if (!deviceId) {
-
-      $("deviceName").textContent =
-        "غير متوفر";
-
-      return;
-
-    }
-
-
-    const result =
-      await supabase
-        .from("mzad_devices")
-        .select("*")
-        .eq("id", deviceId)
-        .single();
-
-
-    if (result.error) {
-
-      console.warn(
-        "DEVICE_LOAD_ERROR",
-        result.error
-      );
-
-      $("deviceName").textContent =
-        "الجهاز";
-
-      return;
-
-    }
-
-
-    state.device =
-      result.data;
-
-
-    const brand =
-      getValue(
-        state.device,
-        ["brand"],
-        ""
-      );
-
-
-    const model =
-      getValue(
-        state.device,
-        ["model"],
-        ""
-      );
-
-
-    const name =
-      [brand, model]
-        .filter(Boolean)
-        .join(" ");
-
-
-    $("deviceName").textContent =
-      name || "الجهاز";
-
-  }
-
-
-  /*
-   * ============================================================
-   * AUCTION STATUS
-   * ============================================================
-   */
-
-  function getAuctionStatus(status) {
-
-    const value =
-      String(status || "")
-        .toLowerCase();
-
-
-    const map = {
-
-      scheduled: "مجدول",
-
-      live: "جاري الآن",
-
-      active: "جاري الآن",
-
-      ended: "منتهي",
-
-      completed: "مكتمل",
-
-      cancelled: "ملغي",
-
-      canceled: "ملغي"
-
-    };
-
-
-    return (
-      map[value] ||
-      status ||
-      "غير معروف"
-    );
-
-  }
-
-
-  /*
-   * ============================================================
-   * DEPOSIT
-   * ============================================================
-   */
-
-  async function loadOrCreateDeposit() {
-
-    /*
-     * First try existing deposit
-     */
-
-    const existing =
-      await supabase
-        .from("mzad_deposits")
-        .select("*")
-        .eq("auction_id", auctionId)
-        .eq("user_id", state.user.id)
-        .eq("role", "buyer")
-        .order("created_at", {
-          ascending: false
-        })
-        .limit(1);
-
-
-    if (existing.error) {
-
-      throw existing.error;
-
-    }
-
-
-    if (
-      existing.data &&
-      existing.data.length
-    ) {
-
-      state.deposit =
-        existing.data[0];
-
-      return;
-
-    }
-
-
-    /*
-     * Create deposit through secure RPC
-     */
-
-    const created =
-      await supabase.rpc(
-        "mzad_create_auction_deposit",
-        {
-          p_auction_id: auctionId,
-
-          p_role: "buyer"
-        }
-      );
-
-
-    if (created.error) {
-
-      throw created.error;
-
-    }
-
-
-    /*
-     * Reload created record
-     */
-
-    const reload =
-      await supabase
-        .from("mzad_deposits")
-        .select("*")
-        .eq("auction_id", auctionId)
-        .eq("user_id", state.user.id)
-        .eq("role", "buyer")
-        .order("created_at", {
-          ascending: false
-        })
-        .limit(1);
-
-
-    if (reload.error) {
-
-      throw reload.error;
-
-    }
-
-
-    state.deposit =
-      reload.data?.[0] || null;
-
-
-    if (!state.deposit) {
-
-      throw new Error(
-        "تم إنشاء التأمين لكن تعذر قراءة السجل."
-      );
-
-    }
-
-  }
-
-
-  /*
-   * ============================================================
-   * PAYMENT METHODS
-   * ============================================================
-   */
-
-  async function loadPaymentMethods() {
-
-    const result =
-      await supabase
-        .from("mzad_payment_methods")
-        .select("*")
-        .eq("enabled", true)
-        .order("created_at", {
-          ascending: true
-        });
-
-
-    if (result.error) {
-
-      console.warn(
-        "PAYMENT_METHODS_ERROR",
-        result.error
-      );
-
-      state.paymentMethods = [];
-
-      renderPaymentMethods();
-
-      return;
-
-    }
-
-
-    state.paymentMethods =
-      result.data || [];
-
-
-    if (state.paymentMethods.length) {
-
-      state.selectedMethod =
-        state.paymentMethods[0];
-
-    }
-
-
-    renderPaymentMethods();
-
-  }
-
-
-  function renderPaymentMethods() {
-
-    const box =
-      $("methods");
-
-
-    if (
-      !state.paymentMethods.length
-    ) {
-
-      box.innerHTML = `
-        <div class="empty">
-          لا توجد طريقة دفع مفعلة حاليًا.
-          <br>
-          سيتم إظهار طرق الدفع بعد تفعيلها من لوحة الإدارة.
-        </div>
-      `;
-
-      return;
-
-    }
-
-
-    box.innerHTML =
-      state.paymentMethods
-        .map((method, index) => {
-
-          const id =
-            method.id;
-
-
-          const name =
-            getValue(
-              method,
-              [
-                "name_ar",
-                "title_ar",
-                "name",
-                "title"
-              ],
-              "طريقة دفع"
-            );
-
-
-          const detail =
-            getValue(
-              method,
-              [
-                "recipient_label",
-                "account_identifier",
-                "account_name",
-                "details",
-                "description"
-              ],
-              "اتبع بيانات الدفع المعروضة"
-            );
-
-
-          const active =
-            state.selectedMethod &&
-            String(
-              state.selectedMethod.id
-            ) === String(id);
-
-
-          return `
-
-            <button
-              type="button"
-              class="method ${active ? "active" : ""}"
-              data-method-id="${escapeHtml(id)}"
-            >
-
-              <div class="method-icon">
-                ${index + 1}
-              </div>
-
-              <div class="method-content">
-
-                <div class="method-name">
-                  ${escapeHtml(name)}
-                </div>
-
-                <div class="method-detail">
-                  ${escapeHtml(detail)}
-                </div>
-
-              </div>
-
-              <div class="method-status">
-                مفعلة
-              </div>
-
-            </button>
-
-          `;
-
-        })
-        .join("");
-
-
-    box
-      .querySelectorAll(".method")
-      .forEach((button) => {
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            const id =
-              button.dataset.methodId;
-
-
-            state.selectedMethod =
-              state.paymentMethods.find(
-                method =>
-                  String(method.id) ===
-                  String(id)
-              ) || null;
-
-
-            renderPaymentMethods();
-
-          }
-        );
-
-      });
-
-  }
-
-
-  /*
-   * ============================================================
-   * STATUS
-   * ============================================================
-   */
-
-  function renderDepositStatus() {
-
-    const status =
-      String(
-        state.deposit?.status || ""
-      ).toLowerCase();
-
-
-    const element =
-      $("depositStatus");
-
-
-    element.className =
-      "status-value";
-
-
-    if (status === "approved") {
-
-      element.textContent =
-        "تمت الموافقة";
-
-      element.classList.add(
-        "status-approved"
-      );
-
-
-      $("submitBtn").disabled =
-        true;
-
-      $("submitBtn").textContent =
-        "تم اعتماد التأمين";
-
-
-      $("proofCard")
-        .querySelector(".notice")
-        .textContent =
-        "تم اعتماد تأمينك. يمكنك الآن الرجوع إلى المزاد والمزايدة.";
-
-
-      return;
-
-    }
-
-
-    if (status === "pending") {
-
-      element.textContent =
-        "بانتظار مراجعة الإدارة";
-
-      element.classList.add(
-        "status-pending"
-      );
-
-
-      $("submitBtn").disabled =
-        true;
-
-      $("submitBtn").textContent =
-        "بانتظار المراجعة";
-
-
-      return;
-
-    }
-
-
-    if (status === "rejected") {
-
-      element.textContent =
-        "مرفوض — أعد إرسال الإثبات";
-
-      element.classList.add(
-        "status-rejected"
-      );
-
-
-      $("submitBtn").disabled =
-        false;
-
-      $("submitBtn").textContent =
-        "إرسال إثبات جديد";
-
-
-      return;
-
-    }
-
-
-    if (status === "refunded") {
-
-      element.textContent =
-        "تم الاسترداد";
-
-      element.classList.add(
-        "status-refunded"
-      );
-
-
-      $("submitBtn").disabled =
-        true;
-
-      $("submitBtn").textContent =
-        "تم استرداد التأمين";
-
-
-      return;
-
-    }
-
-
-    element.textContent =
-      status || "غير محدد";
-
-
-    $("submitBtn").disabled =
-      false;
-
-  }
-
-
-  /*
-   * ============================================================
-   * UPLOAD PROOF
-   * ============================================================
-   */
-
-  async function uploadProofImage(file) {
-
-    if (!file) {
-
-      return null;
-
-    }
-
-
-    /*
-     * IMPORTANT:
-     * The Storage bucket must exist as:
-     *
-     * payment-proofs
-     */
-
-
-    const extension =
-      (
-        file.name
-          .split(".")
-          .pop() ||
-        "jpg"
-      )
-        .toLowerCase()
-        .replace(
-          /[^a-z0-9]/g,
-          ""
-        ) || "jpg";
-
-
-    const path =
-      state.user.id +
-      "/" +
-      auctionId +
-      "-" +
-      Date.now() +
-      "." +
-      extension;
-
-
-    const upload =
-      await supabase
-        .storage
-        .from("payment-proofs")
-        .upload(
-          path,
-          file,
-          {
-            upsert: false,
-
-            contentType:
-              file.type ||
-              "image/jpeg"
-          }
-        );
-
-
-    if (upload.error) {
-
-      throw upload.error;
-
-    }
-
-
-    /*
-     * For production we should later
-     * switch this to signed URLs/private bucket.
-     */
-
-    const publicUrl =
-      supabase
-        .storage
-        .from("payment-proofs")
-        .getPublicUrl(path);
-
-
-    return (
-      publicUrl
-        .data
-        .publicUrl
-    );
-
-  }
-
-
-  /*
-   * ============================================================
-   * SUBMIT PROOF
-   * ============================================================
-   */
-
-  async function submitProof() {
-
-    if (state.submitting) {
-
-      return;
-
-    }
-
-
-    hideMessage();
-
-
-    /*
-     * Check deposit
-     */
-
-    if (!state.deposit) {
-
-      showMessage(
-        "لم يتم العثور على سجل التأمين."
-      );
-
-      return;
-
-    }
-
-
-    /*
-     * Check payment method
-     */
-
-    if (!state.selectedMethod) {
-
-      showMessage(
-        "اختر طريقة الدفع أولاً."
-      );
-
-      return;
-
-    }
-
-
-    const reference =
-      $("reference")
-        .value
-        .trim();
-
-
-    const file =
-      $("proof")
-        .files?.[0] ||
-      null;
-
-
-    if (!reference && !file) {
-
-      showMessage(
-        "أدخل رقم العملية أو ارفع صورة الإيصال."
-      );
-
-      return;
-
-    }
-
-
-    /*
-     * File validation
-     */
-
-    if (file) {
-
-      if (
-        !file.type.startsWith(
-          "image/"
-        )
-      ) {
-
-        showMessage(
-          "الملف يجب أن يكون صورة."
-        );
-
-        return;
-
-      }
-
-
-      /*
-       * 5 MB
-       */
-
-      if (
-        file.size >
-        5 * 1024 * 1024
-      ) {
-
-        showMessage(
-          "حجم الصورة يجب ألا يتجاوز 5MB."
-        );
-
-        return;
-
-      }
-
-    }
-
-
-    state.submitting =
-      true;
-
-
-    const button =
-      $("submitBtn");
-
-
-    button.disabled =
-      true;
-
-
-    button.textContent =
-      "جاري إرسال الإثبات...";
-
-
-    try {
-
-      /*
-       * Upload image first
-       */
-
-      const proofUrl =
-        await uploadProofImage(
-          file
-        );
-
-
-      /*
-       * Current payment-proof schema
-       *
-       * If your actual columns differ,
-       * Supabase will show the exact
-       * missing-column error.
-       */
-
-      const insertResult =
-        await supabase
-          .from("mzad_payment_proofs")
-          .insert({
-
-            deposit_id:
-              state.deposit.id,
-
-            payment_method_id:
-              state.selectedMethod.id,
-
-            reference:
-              reference || null,
-
-            proof_url:
-              proofUrl,
-
-            submitted_at:
-              new Date().toISOString()
-
-          });
-
-
-      if (insertResult.error) {
-
-        throw insertResult.error;
-
-      }
-
-
-      showMessage(
-        "تم إرسال إثبات الدفع بنجاح. الآن ينتظر التأمين مراجعة الإدارة، وبعد الموافقة تصبح مؤهلاً للمزايدة.",
-        "success"
-      );
-
-
-      /*
-       * Reload deposit
-       */
-
-      const reload =
-        await supabase
-          .from("mzad_deposits")
-          .select("*")
-          .eq("id", state.deposit.id)
-          .single();
-
-
-      if (!reload.error) {
-
-        state.deposit =
-          reload.data;
-
-      }
-
-
-      renderDepositStatus();
-
-
-      $("reference").value = "";
-
-      $("proof").value = "";
-
-
-    } catch (error) {
-
-      console.error(
-        "SUBMIT_PROOF_ERROR:",
-        error
-      );
-
-
-      showMessage(
-        "تعذر إرسال الإثبات: " +
-        normalizeError(error)
-      );
-
-
-      button.disabled =
-        false;
-
-      button.textContent =
-        "إرسال إثبات الدفع";
-
-    } finally {
-
-      state.submitting =
-        false;
-
-
-      if (
-        String(
-          state.deposit?.status || ""
-        ).toLowerCase() !==
-        "approved" &&
-        String(
-          state.deposit?.status || ""
-        ).toLowerCase() !==
-        "pending"
-      ) {
-
-        button.disabled =
-          false;
-
-      }
-
-    }
-
-  }
-
-
-  /*
-   * ============================================================
-   * BACK
-   * ============================================================
-   */
-
-  $("backBtn")
-    .addEventListener(
-      "click",
-      () => {
-
-        if (
-          window.history.length > 1
-        ) {
-
-          window.history.back();
-
-        } else {
-
-          window.location.href =
-            "auctions.html";
-
-        }
-
-      }
-    );
-
-
-  /*
-   * ============================================================
-   * SUBMIT
-   * ============================================================
-   */
-
-  $("submitBtn")
-    .addEventListener(
-      "click",
-      submitProof
-    );
-
-
-  /*
-   * ============================================================
-   * INIT
-   * ============================================================
-   */
-
-  async function init() {
-
-    try {
-
-      /*
-       * Auth
-       */
-
-      const loggedIn =
-        await loadUser();
-
-
-      if (!loggedIn) {
-
-        return;
-
-      }
-
-
-      /*
-       * Auction
-       */
-
-      await loadAuction();
-
-
-      /*
-       * Deposit
-       */
-
-      await loadOrCreateDeposit();
-
-
-      /*
-       * Payment methods
-       */
-
-      await loadPaymentMethods();
-
-
-      /*
-       * Status
-       */
-
-      renderDepositStatus();
-
-
-      /*
-       * Show page
-       */
-
-      $("loading")
-        .classList
-        .add("hidden");
-
-
-      $("page")
-        .classList
-        .remove("hidden");
-
-
-    } catch (error) {
-
-      console.error(
-        "AUCTION_DEPOSIT_INIT_ERROR:",
-        error
-      );
-
-
-      $("loading")
-        .classList
-        .remove("hidden");
-
-
-      if (
-        error.message ===
-        "SELLER_CANNOT_DEPOSIT"
-      ) {
-
-        $("loading").innerHTML = `
-          <div class="empty">
-            أنت صاحب هذا المزاد،
-            <br>
-            ولا يمكنك إنشاء تأمين مشتري لنفس المزاد.
-          </div>
-        `;
-
-        return;
-
-      }
-
-
-      $("loading").innerHTML = `
-        <div class="empty">
-          تعذر تجهيز صفحة التأمين.
-          <br><br>
-          ${escapeHtml(
-            normalizeError(error)
-          )}
-        </div>
-      `;
-
-    }
-
-  }
-
-
-  init();
-
+  const r=await supabase.rpc("mzad_submit_deposit_proof",{
+   p_request_id:state.request.id,
+   p_proof_storage_path:path,
+   p_reference_number:ref||null,
+   p_paid_amount_iqd:amount,
+   p_paid_at:paidAt
+  });
+  if(r.error)throw r.error;
+  await loadRequest();await loadProof();
+  requestStatusRender();finalStatusRender();
+  setMsg("تم إرسال إثبات الدفع. بانتظار مراجعة الإدارة.","ok");
+ }catch(e){
+  if(path)await supabase.storage.from(BUCKET).remove([path]);
+  const m=e?.message||"";
+  setMsg(({PROOF_ALREADY_PENDING:"يوجد إثبات قيد المراجعة لهذا الطلب.",PAYMENT_REQUEST_NOT_FOUND:"طلب الدفع غير موجود.",INVALID_PAID_AMOUNT:"المبلغ المدفوع غير صحيح.",PAID_AT_REQUIRED:"وقت الدفع مطلوب."})[m]||m||"تعذر إرسال إثبات الدفع.");
+ }finally{
+  state.busy=false;
+  $("submitProof").disabled=false;
+  $("submitProof").textContent="إرسال الإثبات للمراجعة";
+ }
+}
+
+$("createRequest").onclick=createRequest;
+$("submitProof").onclick=submitProof;
+$("paidAmount").oninput=e=>e.target.value=e.target.value.replace(/\D/g,"");
+$("back").onclick=()=>history.length>1?history.back():location.href="home.html";
+
+async function init(){
+ try{
+  if(!(await auth()))return;
+  await loadAuction();
+  await loadDeposit();
+  await loadMethods();
+  await loadRequest();
+  await loadProof();
+  requestStatusRender();finalStatusRender();
+  setLocalDateTime();
+  $("loading").classList.add("hidden");$("page").classList.remove("hidden");
+ }catch(e){
+  console.error(e);
+  $("loading").classList.add("hidden");$("errorPage").classList.remove("hidden");
+  $("errorPage").innerHTML=e.message==="SELLER_CANNOT_DEPOSIT"?"أنت صاحب هذا المزاد، ولا يمكنك المشاركة فيه كمزايد.":"تعذر تجهيز صفحة التأمين.<br><br>"+esc(e.message||"حدث خطأ.");
+ }
+}
+init();
 </script>
-
 </body>
 </html>
