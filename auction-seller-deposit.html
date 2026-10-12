@@ -4,542 +4,316 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#6246d9">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<title>دفع تأمين النشر — MZAD PHONE</title>
+<title>تأمين البائع — MZAD PHONE</title>
 <style>
-:root{
-  --bg:#faf9fe;--ink:#1b2330;--muted:#6f7787;--line:#eeeaf9;--edge:#e2dcf6;
-  --p:#6246d9;--p-dark:#4a34b8;--p-soft:#f4f1ff;--hot:#e8590c;--ok:#1e8a5a;--ok-soft:#eaf7f0;--warn:#8a5d00;--warn-soft:#fff8e6;--bad:#c62f4d;--bad-soft:#fff1f4;
-  --safe-bottom:env(safe-area-inset-bottom,0px)
-}
+:root{--bg:#f9f8fd;--ink:#17202a;--muted:#6b7280;--edge:#e4defa;--p:#6246d9;--pd:#4a34b8;--ps:#f3f0ff;--ok:#1e8a5a;--oks:#e8f6ef;--bad:#c62f4d;--bads:#fff0f3;--hot:#e8590c;--sb:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}
-[hidden]{display:none!important}
-body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
-  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-button,input{font:inherit;color:inherit}
-button{border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}button{border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:3px solid var(--p);outline-offset:2px}
-.wrap{width:min(100%,520px);margin:0 auto;padding:0 14px}
-.page{padding-bottom:calc(40px + var(--safe-bottom))}
-
-@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-@keyframes fade{from{opacity:0}to{opacity:1}}
+.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(40px + var(--sb));overflow-x:clip}
+@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes pop{50%{transform:scale(1.15)}}
 @keyframes rot{to{transform:rotate(360deg)}}
-@keyframes sheet{from{transform:translateY(100%)}to{transform:none}}
-@keyframes shimmer{to{background-position:-200% 0}}
-.card,.intro{animation:up .45s ease backwards}
-.card:nth-of-type(2){animation-delay:.08s}
-.btn,.opt,.icon-btn,.copy{transition:transform .18s ease,background .2s,border-color .2s}
-.btn:active,.opt:active,.icon-btn:active,.copy:active{transform:scale(.98)}
+.rv{animation:up .5s cubic-bezier(.2,.8,.3,1) backwards}
+.rv:nth-child(2){animation-delay:.08s}.rv:nth-child(3){animation-delay:.16s}.rv:nth-child(4){animation-delay:.24s}
 
-/* ===== الهيدر ===== */
-header{background:linear-gradient(180deg,#fff 0%,#f6f3ff 100%);border-bottom:1px solid var(--line);border-radius:0 0 24px 24px;padding-bottom:18px}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding-top:12px}
-.brand-mini{display:flex;flex-direction:column;align-items:center;line-height:.9}
-.brand-mini strong{font-size:16px;letter-spacing:-.03em}
-.brand-mini span{font-size:7px;font-weight:800;letter-spacing:.15em;color:#8a96a3;margin-top:3px}
-.icon-btn{width:39px;height:34px;display:grid;place-items:center;border:1px solid var(--edge);border-radius:12px;background:#fff;color:var(--p)}
-.icon-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-.icon-btn b{font-size:17px;font-weight:950}
+header{margin-inline:-14px;padding:0 14px 18px;background:linear-gradient(145deg,#fff,#ece8ff);border-radius:0 0 26px 26px;border-bottom:1px solid #ece8fb}
+.top{display:flex;align-items:center;justify-content:space-between;padding:12px 2px 0}
+.ib{width:39px;height:34px;display:grid;place-items:center;border:1px solid var(--edge);border-radius:12px;background:#fff;color:var(--p)}
+.ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.brand{display:flex;flex-direction:column;align-items:center;line-height:.9}
+.brand b{font-size:16px;letter-spacing:-.03em}.brand span{font-size:7px;font-weight:800;letter-spacing:.15em;color:#8a96a3;margin-top:3px}
+h1{margin:16px 2px 4px;font-size:23px;font-weight:950;letter-spacing:-.03em}
+.lead{margin:0 2px 14px;font-size:12px;font-weight:700;line-height:1.9;color:var(--muted)}
+.amount{padding:16px 14px;border-radius:20px;color:#fff;background:linear-gradient(145deg,#6246d9,#8b6cf0);display:flex;align-items:center;justify-content:space-between;box-shadow:0 14px 28px -12px rgba(98,70,217,.55)}
+.amount small{font-size:11px;font-weight:800;opacity:.85}
+.amount strong{font-size:26px;font-weight:950;font-variant-numeric:tabular-nums}
 
-.intro{margin-top:16px}
-.chip{display:inline-block;padding:5px 11px;border-radius:999px;background:#fff;border:1px solid var(--edge);color:var(--p-dark);font-size:10px;font-weight:900}
-h1{margin:10px 0 6px;font-size:23px;font-weight:950;letter-spacing:-.035em}
-.lead{margin:0;font-size:12px;font-weight:700;line-height:1.9;color:var(--muted)}
-.amount{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding:13px 15px;border-radius:18px;background:#fff;border:1px solid var(--edge)}
-.amount small{display:block;font-size:11px;font-weight:800;color:var(--muted)}
-.amount span{display:block;margin-top:2px;font-size:10.5px;font-weight:700;color:#9ca3af}
-.amount strong{font-size:26px;font-weight:950;color:var(--p-dark);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-.meta{margin:10px 2px 0;font-size:11px;font-weight:700;color:var(--muted)}
+.card{margin-top:14px;padding:16px;border-radius:22px;background:#fff;border:1px solid var(--edge);box-shadow:0 10px 24px -14px rgba(98,70,217,.25)}
+.ch{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.num{width:28px;height:28px;flex:0 0 28px;border-radius:10px;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:950;background:linear-gradient(145deg,#6246d9,#8b6cf0)}
+.ch h2{margin:0;font-size:16px;font-weight:950}
+.ch p{margin:1px 0 0;font-size:11px;font-weight:700;color:var(--muted)}
+.card.locked{opacity:.55;pointer-events:none}
 
-/* ===== البطاقات ===== */
-.card{margin-top:14px;padding:16px;border-radius:20px;background:#fff;border:1px solid var(--line);box-shadow:0 1px 2px rgba(23,32,42,.04)}
-.c-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.num{width:26px;height:26px;flex:0 0 26px;border-radius:50%;display:grid;place-items:center;background:var(--p-soft);color:var(--p-dark);font-size:12px;font-weight:950}
-.c-head h2{margin:0;font-size:15.5px;font-weight:950}
-.c-head p{margin:1px 0 0;font-size:10.5px;font-weight:700;color:var(--muted)}
-.note{margin-top:14px;padding:12px 14px;border-radius:14px;font-size:11.5px;font-weight:800;line-height:1.8}
-.note.bad{background:var(--bad-soft);color:var(--bad)}
-
-/* ===== طرق الدفع ===== */
 .methods{display:grid;gap:10px}
-.opt{position:relative;display:block;width:100%;text-align:start;padding:13px 14px;border-radius:16px;background:#fff;border:1.5px solid var(--line);cursor:pointer}
-.opt-top{display:flex;align-items:center;gap:12px}
-.rd{width:20px;height:20px;flex:0 0 20px;border-radius:50%;border:2px solid #d6d2ea;display:grid;place-items:center;transition:.2s}
-.opt.on{border-color:var(--p);background:var(--p-soft)}
-.opt.on .rd{border-color:var(--p);background:var(--p)}
-.opt.on .rd:after{content:"";width:7px;height:7px;border-radius:50%;background:#fff}
-.mi{width:38px;height:38px;flex:0 0 38px;border-radius:12px;display:grid;place-items:center;background:var(--p-soft);color:var(--p-dark)}
-.opt.on .mi{background:#fff}
-.mi svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.tx b{display:block;font-size:14px;font-weight:900}
-.tx small{display:block;margin-top:2px;font-size:10.5px;font-weight:700;color:var(--muted)}
-.det{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
-.opt.on .det{grid-template-rows:1fr}
+.m{width:100%;text-align:start;padding:14px;border-radius:18px;border:1.5px solid #ece8fb;background:#fff;transition:.25s}
+.m-top{display:flex;align-items:center;gap:12px}
+.mi{width:44px;height:44px;flex:0 0 44px;border-radius:14px;display:grid;place-items:center;background:var(--ps);color:var(--p)}
+.mi svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.m b{display:block;font-size:14px;font-weight:900}
+.m .sub{display:block;margin-top:2px;font-size:11px;font-weight:700;color:var(--muted)}
+.tick{margin-inline-start:auto;width:22px;height:22px;flex:0 0 22px;border-radius:50%;border:2px solid #d6d2ea;display:grid;place-items:center;transition:.25s}
+.m.sel{border-color:var(--p);background:var(--ps)}
+.m.sel .mi{background:var(--p);color:#fff}
+.m.sel .tick{background:var(--p);border-color:var(--p)}
+.m.sel .tick:after{content:"✓";color:#fff;font-size:12px;font-weight:950;animation:pop .35s}
+.det{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.3,1,.4,1)}
+.m.sel .det{grid-template-rows:1fr}
 .det>div{overflow:hidden}
-.det-in{margin-top:12px;padding-top:12px;border-top:1px dashed #d4cbf5}
-.kv+.kv{margin-top:12px}
-.kv small{display:block;font-size:10.5px;font-weight:800;color:var(--muted);margin-bottom:4px}
-.kv>strong{font-size:15px;font-weight:950}
-.acc{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.acc strong{font-size:16px;font-weight:950;direction:ltr;text-align:start;word-break:break-all;letter-spacing:.02em}
-.copy{flex:0 0 auto;padding:7px 14px;border-radius:10px;background:#fff;border:1px solid var(--edge);color:var(--p-dark);font-size:11px;font-weight:900}
-.copy.ok{background:var(--ok-soft);border-color:#bfe8d3;color:var(--ok)}
-.ins{margin:12px 0 0;font-size:11px;font-weight:700;line-height:1.9;color:#4b5563}
-.empty{padding:16px;border-radius:14px;background:var(--p-soft);text-align:center;font-size:12px;font-weight:800;color:var(--muted)}
-.sk{height:62px;border-radius:16px;background:linear-gradient(90deg,#f1eefb 25%,#faf8ff 50%,#f1eefb 75%);background-size:200% 100%;animation:shimmer 1.4s linear infinite}
-.sk+.sk{margin-top:10px}
+.din{margin-top:12px;padding-top:12px;border-top:1px dashed #cfc6f3}
+.acc{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 12px;border-radius:14px;background:#fff;border:1px solid var(--edge)}
+.acc small{display:block;font-size:10px;font-weight:800;color:var(--muted)}
+.acc strong{display:block;margin-top:2px;font-size:16px;font-weight:950;direction:ltr;text-align:start;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.copy{flex:0 0 auto;padding:8px 14px;border-radius:10px;background:var(--ps);border:1px solid var(--edge);color:var(--pd);font-size:11px;font-weight:900;transition:.2s}
+.copy.ok{background:var(--oks);border-color:#bfe8d3;color:var(--ok)}
+.how{margin:10px 0 0;padding:0;list-style:none;counter-reset:s;font-size:11.5px;font-weight:700;line-height:1.8;color:#4b5563}
+.how li{counter-increment:s;display:flex;gap:8px}
+.how li:before{content:counter(s);flex:0 0 20px;height:20px;margin-top:2px;border-radius:50%;background:var(--p);color:#fff;display:grid;place-items:center;font-size:10px;font-weight:900}
 
-/* ===== رفع الصورة ===== */
-.drop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:120px;padding:14px;border-radius:16px;
-  border:2px dashed #cfc6f3;background:var(--p-soft);color:var(--p-dark);text-align:center;cursor:pointer;font-size:12px;font-weight:900;transition:.2s}
+.help{display:flex;align-items:center;gap:12px;margin-top:12px;padding:12px;border-radius:16px;background:var(--oks);border:1px solid #bfe8d3}
+.help .hi{width:38px;height:38px;flex:0 0 38px;border-radius:50%;background:var(--ok);color:#fff;display:grid;place-items:center}
+.help svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.help p{margin:0;flex:1;font-size:11px;font-weight:800;line-height:1.7;color:#25523f}
+.help strong{display:block;direction:ltr;text-align:start;font-size:13px;font-weight:950}
+.help a.call{padding:8px 13px;border-radius:10px;background:#fff;color:var(--ok);font-size:11px;font-weight:900;border:1px solid #bfe8d3}
+
+.lbl{display:block;margin-bottom:6px;font-size:12px;font-weight:900;color:#374151}
+.lbl small{font-weight:700;color:#9ca3af}
+.in{width:100%;height:46px;border:1.5px solid var(--edge);border-radius:14px;padding:0 14px;outline:none;font-weight:700;background:#fff}
+.in:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)}
+.fld+.fld{margin-top:14px}
+.drop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:110px;padding:14px;border-radius:18px;border:2px dashed #c9bff7;background:var(--ps);color:var(--pd);text-align:center;font-size:12px;font-weight:900}
 .drop svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.drop small{font-size:10.5px;font-weight:700;color:var(--muted)}
+.drop small{font-size:10px;font-weight:700;color:var(--muted)}
 .drop input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
-.drop.invalid{border-color:var(--hot)}
-.preview{display:none;align-items:center;gap:12px;padding:10px;border-radius:16px;background:#fff;border:1.5px solid var(--edge)}
-.preview.show{display:flex;animation:up .35s}
-.preview img{width:62px;height:62px;border-radius:12px;object-fit:cover;background:var(--p-soft)}
-.preview .m{flex:1;min-width:0}
-.preview b{display:block;font-size:12px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.preview small{font-size:10.5px;font-weight:700;color:var(--muted)}
-.preview .x{width:32px;height:32px;border-radius:50%;background:var(--p-soft);color:#6b7280;font-size:18px;display:grid;place-items:center}
-
-/* ===== الإرسال ===== */
-.btn{display:flex;align-items:center;justify-content:center;width:100%;height:54px;margin-top:16px;border-radius:16px;color:#fff;font-size:15px;font-weight:950;background:var(--p);box-shadow:0 8px 20px rgba(98,70,217,.28)}
+.drop.bad{border-color:var(--hot)}
+.pv{display:none;align-items:center;gap:12px;padding:10px;border-radius:18px;border:1.5px solid var(--edge);animation:up .35s}
+.pv.show{display:flex}
+.pv img{width:60px;height:60px;border-radius:12px;object-fit:cover}
+.pv .meta{flex:1;min-width:0}
+.pv b{display:block;font-size:12px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pv small{font-size:10px;font-weight:700;color:var(--muted)}
+.pv .x{width:32px;height:32px;border-radius:50%;background:var(--ps);color:#6b7280;font-size:18px}
+.safe{display:flex;gap:10px;margin-top:14px;padding:12px;border-radius:14px;background:var(--ps);font-size:11px;font-weight:700;line-height:1.9;color:#4b5563}
+.safe b{color:var(--pd);font-weight:950}
+.btn{width:100%;height:54px;margin-top:14px;border-radius:17px;color:#fff;font-size:15px;font-weight:950;background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 12px 26px rgba(98,70,217,.3);transition:.2s}
+.btn:active{transform:scale(.98)}
 .btn:disabled{opacity:.45;box-shadow:none;cursor:not-allowed}
-.btn .spin{display:none;width:20px;height:20px;border-radius:50%;border:3px solid #ffffff66;border-top-color:#fff;animation:rot .7s linear infinite}
-.btn.busy .t{display:none}
-.btn.busy .spin{display:block}
-.hint{margin:10px 4px 0;text-align:center;font-size:11px;font-weight:700;color:var(--muted)}
-.foot{margin:14px 6px 0;text-align:center;font-size:11px;font-weight:700;line-height:1.9;color:var(--muted)}
-.msg{display:none;margin-top:12px;padding:11px;border-radius:13px;text-align:center;font-size:11.5px;font-weight:800;line-height:1.7;background:var(--bad-soft);color:var(--bad)}
-.msg.show{display:block;animation:up .3s}
-
-/* ===== نافذة المساعدة ===== */
-.sheet{position:fixed;inset:0;z-index:300;display:none}
-.sheet.show{display:block}
-.ov{position:absolute;inset:0;background:rgba(23,32,42,.45);animation:fade .2s}
-.box{position:absolute;left:0;right:0;bottom:0;max-width:520px;margin:0 auto;padding:10px 18px calc(22px + var(--safe-bottom));border-radius:24px 24px 0 0;background:#fff;animation:sheet .3s cubic-bezier(.2,.9,.3,1)}
-.grab{width:42px;height:4px;border-radius:99px;background:#d9d6e8;margin:0 auto 16px}
-.box h3{margin:0 0 6px;font-size:16px;font-weight:950}
-.box p{margin:0;font-size:12px;font-weight:700;line-height:1.9;color:var(--muted)}
-.acts{display:grid;gap:9px;margin-top:16px}
-.acts a,.acts button{display:flex;align-items:center;justify-content:center;height:50px;border-radius:14px;font-size:14px;font-weight:900}
-.acts .call{background:var(--p);color:#fff}
-.acts .wa{background:var(--ok-soft);color:var(--ok)}
-.acts .close{background:var(--p-soft);color:var(--p-dark)}
-
-.toast{position:fixed;left:50%;bottom:calc(24px + var(--safe-bottom));transform:translateX(-50%) translateY(14px);max-width:calc(100% - 40px);padding:10px 14px;border-radius:13px;
-  background:#1e2c30;color:#fff;font-size:11.5px;font-weight:800;opacity:0;pointer-events:none;transition:.25s;z-index:400;text-align:center}
+.btn .sp{display:none;width:20px;height:20px;border-radius:50%;border:3px solid #fff6;border-top-color:#fff;animation:rot .7s linear infinite;margin:auto}
+.btn.busy .t{display:none}.btn.busy .sp{display:block}
+.msg{display:none;margin-top:12px;padding:11px;border-radius:13px;text-align:center;font-size:12px;font-weight:800;line-height:1.7;background:var(--bads);color:var(--bad)}
+.msg.show{display:block}
+.empty{padding:16px;border-radius:14px;background:var(--ps);text-align:center;font-size:12px;font-weight:800;color:var(--muted)}
+.sk{height:64px;border-radius:16px;background:#f1eefb}
+.toast{position:fixed;left:50%;bottom:calc(24px + var(--sb));transform:translateX(-50%) translateY(16px);padding:10px 14px;border-radius:13px;background:#1e2c30;color:#fff;font-size:12px;font-weight:800;opacity:0;pointer-events:none;transition:.3s;z-index:50}
 .toast.show{opacity:1;transform:translateX(-50%)}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-
+<main class="page">
 <header>
-  <div class="wrap">
-    <div class="topbar">
-      <button class="icon-btn" id="back" type="button" aria-label="رجوع"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-      <div class="brand-mini"><strong>MZAD</strong><span>PHONE</span></div>
-      <button class="icon-btn" id="helpBtn" type="button" aria-label="مساعدة"><b>؟</b></button>
-    </div>
-
-    <div class="intro">
-      <span class="chip">آخر خطوة قبل النشر</span>
-      <h1>ادفع تأمين النشر</h1>
-      <p class="lead">حوّل المبلغ ثم أرسل صورة الإيصال. ندقق التحويل خلال ساعة كحد أقصى، وبعدها ينشر مزادك تلقائياً.</p>
-      <div class="amount">
-        <div><small>مبلغ التأمين</small><span>يرجع لك بعد انتهاء المزاد</span></div>
-        <strong id="amount">—</strong>
-      </div>
-      <p class="meta" id="meta"></p>
-    </div>
+  <div class="top">
+    <button class="ib" id="back" type="button" aria-label="رجوع"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    <div class="brand"><b>MZAD</b><span>PHONE</span></div>
+    <span style="width:39px"></span>
   </div>
+  <h1>تأمين المزاد</h1>
+  <p class="lead">خطوتين وينتهي: حوّل التأمين، ثم ارفع صورة التحويل. الإدارة تراجع وينشر مزادك لمدة ساعة.</p>
+  <div class="amount"><div><small>مبلغ التأمين</small><br><small>يرجع لك بعد المزاد</small></div><strong id="amount">—</strong></div>
 </header>
 
-<main class="wrap page">
+<section class="card rv" id="cPay">
+  <div class="ch"><span class="num">1</span><div><h2>اختر طريقة التحويل</h2><p>اضغط على الطريقة لتظهر لك التفاصيل</p></div></div>
+  <div id="methods" class="methods"><div class="sk"></div><div class="sk"></div></div>
+  <div class="help">
+    <span class="hi"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg></span>
+    <p>واجهتك مشكلة بالتحويل؟ كلمنا مباشرة<strong>+964 783 800 3991</strong></p>
+    <a class="call" href="tel:+9647838003991">اتصال</a>
+  </div>
+</section>
 
-  <div class="note bad" id="notice" hidden>تم رفض الإيصال السابق. ارفع صورة أوضح للتحويل وأرسلها من جديد.</div>
-
-  <section class="card">
-    <div class="c-head"><span class="num">1</span><div><h2>اختر طريقة الدفع</h2><p>بعد الاختيار تظهر معلومات التحويل</p></div></div>
-    <div class="methods" id="methods"><div class="sk"></div><div class="sk"></div></div>
-  </section>
-
-  <section class="card">
-    <div class="c-head"><span class="num">2</span><div><h2>صورة التحويل</h2><p>صورة واضحة للإيصال بعد الدفع</p></div></div>
+<section class="card rv" id="cProof">
+  <div class="ch"><span class="num">2</span><div><h2>صورة التحويل</h2><p>صورة واضحة للإيصال</p></div></div>
+  <div class="fld">
+    <span class="lbl">صورة الإيصال</span>
     <label class="drop" id="drop">
       <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0-4 4m4-4 4 4"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
-      اضغط لاختيار صورة الإيصال
-      <small>صورة فقط</small>
+      اضغط لاختيار الصورة
+      <small>صورة فقط، حد أقصى 10MB</small>
       <input id="proof" type="file" accept="image/*">
     </label>
-    <div class="preview" id="preview">
-      <img id="pvImg" alt="">
-      <div class="m"><b id="pvName">—</b><small id="pvSize">—</small></div>
-      <button class="x" id="pvRemove" type="button" aria-label="حذف">×</button>
-    </div>
-  </section>
-
-  <button id="submit" class="btn" type="button" disabled><span class="t">إرسال للتدقيق</span><span class="spin"></span></button>
-  <p class="hint" id="hint">اختر طريقة الدفع أولاً.</p>
-  <div class="msg" id="msg"></div>
-
-  <p class="foot">التأمين مبلغ مسترد وليس رسماً على النشر. بعد إرسال الإيصال تظهر لك صفحة فيها رقم طلبك وحالته.</p>
-</main>
-
-<!-- نافذة المساعدة -->
-<div class="sheet" id="sheet">
-  <div class="ov" id="ov"></div>
-  <div class="box">
-    <div class="grab"></div>
-    <h3>تحتاج مساعدة؟</h3>
-    <p>إذا صارت مشكلة بالتحويل أو برفع الإيصال، تواصل مع إدارة المنصة وراح نساعدك.</p>
-    <div class="acts" id="acts"></div>
+    <div class="pv" id="pv"><img id="pvImg" alt=""><div class="meta"><b id="pvName">—</b><small id="pvSize">—</small></div><button class="x" id="pvX" type="button" aria-label="حذف">×</button></div>
   </div>
-</div>
-
+  <div class="fld">
+    <label class="lbl" for="ref">رقم العملية <small>(اختياري)</small></label>
+    <input class="in" id="ref" placeholder="رقم الحوالة إن وجد" autocomplete="off">
+  </div>
+  <div class="safe"><span>🔒</span><div><b>تأمينك محفوظ.</b> هو ليس رسم نشر، ويرجع لك كامل بعد انتهاء المزاد. لن ينشر مزادك قبل موافقة الإدارة.</div></div>
+  <button id="submit" class="btn" type="button" disabled><span class="t">إرسال وتتبع الطلب</span><span class="sp"></span></button>
+  <div id="msg" class="msg"></div>
+</section>
+</main>
 <div class="toast" id="toast"></div>
 
 <script type="module">
 import { supabase } from "./js/supabase.js";
-
-/* ================================================================
-   إعدادات المنصة
-   ================================================================ */
-const SUPPORT_PHONE = "";   // اكتب رقم المنصة لاحقاً بصيغة دولية بدون +، مثال: 9647XXXXXXXXX
-
-/* ================================================================
-   الأساسيات
-   ================================================================ */
 const $ = id => document.getElementById(id);
-const qs = new URLSearchParams(location.search);
-const auctionId = qs.get("auction") || qs.get("id");
-
-const state = { user:null, auction:null, deposit:null, request:null, requestMethodId:null, method:null, file:null, busy:false };
-
-const money = n => Number(n || 0).toLocaleString("en-US") + " د.ع";
+const auctionId = new URLSearchParams(location.search).get("auction") || new URLSearchParams(location.search).get("id");
+const st = { user:null, dep:null, req:null, reqMethod:null, method:null, file:null, busy:false };
+const money = n => Number(n||0).toLocaleString("en-US") + " د.ع";
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let tt; const toast = t => { const e=$("toast"); e.textContent=t; e.classList.add("show"); clearTimeout(tt); tt=setTimeout(()=>e.classList.remove("show"),2200); };
+const showMsg = t => { $("msg").textContent=t; $("msg").className="msg show"; };
+const hideMsg = () => $("msg").className="msg";
 
-let toastT;
-function toast(t){
-  const e = $("toast");
-  e.textContent = t;
-  e.classList.add("show");
-  clearTimeout(toastT);
-  toastT = setTimeout(() => e.classList.remove("show"), 2200);
-}
-function showMsg(t){ const m = $("msg"); m.textContent = t; m.classList.add("show"); }
-function hideMsg(){ $("msg").classList.remove("show"); }
+const ERR = { AUTH_REQUIRED:"يجب تسجيل الدخول.", AUCTION_NOT_FOUND:"المزاد غير موجود.", ACCESS_DENIED:"لا تملك صلاحية هذا المزاد.", DEPOSIT_NOT_FOUND:"تعذر العثور على التأمين.", PAYMENT_METHOD_REQUIRED:"اختر طريقة التحويل.", DEPOSITS_DISABLED:"نظام التأمينات متوقف حالياً.", AMOUNT_MISMATCH:"المبلغ غير صحيح.", PAYMENT_REQUEST_NOT_FOUND:"تعذر إنشاء الطلب.", USER_SELL_RESTRICTED:"حسابك مقيّد من البيع حالياً." };
+const errText = e => { const c = String(e?.message || e || ""); for (const k in ERR) if (c.includes(k)) return ERR[k]; return "تعذر تنفيذ العملية، حاول مرة ثانية أو كلمنا على +964 783 800 3991"; };
 
-const ERRORS = {
-  AUTH_REQUIRED:"يجب تسجيل الدخول.",
-  AUCTION_NOT_FOUND:"المزاد غير موجود.",
-  ACCESS_DENIED:"لا تملك صلاحية هذا المزاد.",
-  DEPOSIT_NOT_FOUND:"تعذر العثور على تأمين البائع.",
-  PAYMENT_METHOD_REQUIRED:"اختر طريقة الدفع.",
-  DEPOSITS_DISABLED:"نظام التأمينات متوقف حالياً.",
-  DEPOSIT_ALREADY_APPROVED:"التأمين معتمد بالفعل.",
-  AMOUNT_MISMATCH:"قيمة إثبات الدفع غير صحيحة.",
-  PAYMENT_REQUEST_NOT_FOUND:"تعذر إنشاء طلب الدفع.",
-  USER_SELL_RESTRICTED:"حسابك مقيّد من البيع حالياً."
+/* بيانات المنصة الثابتة */
+const ICON = {
+  card:'<svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19M6 15h4"/></svg>',
+  wallet:'<svg viewBox="0 0 24 24"><path d="M4 7a2 2 0 0 1 2-2h11v3"/><rect x="3" y="7" width="18" height="13" rx="2.5"/><circle cx="16.5" cy="13.5" r="1.2"/></svg>'
 };
-function errorText(e){
-  const code = String(e?.message || e || "UNKNOWN_ERROR");
-  for (const k of Object.keys(ERRORS)) if (code.includes(k)) return ERRORS[k];
-  return "تعذر تنفيذ العملية. حاول مرة ثانية، وإذا استمرت المشكلة تواصل مع المنصة.";
-}
+const PLATFORM = [
+  { re:/master|ماستر/i, name:"MasterCard", sub:"سوبر كي", icon:ICON.card, label:"رقم الماستر (سوبر كي)", num:"1470043132", copy:"1470043132",
+    how:["حوّل مبلغ التأمين إلى الرقم أعلاه","صوّر شاشة التحويل أو الإيصال","ارفع الصورة بالأسفل"] },
+  { re:/zain|زين/i, name:"Zain Cash", sub:"محفظة زين كاش", icon:ICON.wallet, label:"رقم محفظة زين كاش", num:"+964 771 552 2118", copy:"07715522118",
+    how:["افتح زين كاش وحوّل المبلغ إلى الرقم أعلاه","صوّر شاشة التحويل","ارفع الصورة بالأسفل"] }
+];
 
-const statusUrl = () => "auction-request-status.html?auction=" + encodeURIComponent(auctionId)
-  + (state.request?.id ? "&request=" + encodeURIComponent(state.request.id) : "");
-
-/* ================================================================
-   البيانات
-   ================================================================ */
 async function auth(){
   const { data, error } = await supabase.auth.getUser();
-  if (error || !data.user){
-    location.href = "index.html?login=1&returnTo=" + encodeURIComponent("auction-seller-deposit.html?auction=" + auctionId);
-    return false;
-  }
-  state.user = data.user;
-  return true;
-}
-
-async function loadAuction(){
-  const r = await supabase.from("mzad_auctions")
-    .select("id,auction_number,device_id,seller_user_id,status")
-    .eq("id", auctionId).maybeSingle();
-  if (r.error) throw r.error;
-  if (!r.data) throw new Error("AUCTION_NOT_FOUND");
-  if (r.data.seller_user_id !== state.user.id) throw new Error("ACCESS_DENIED");
-  state.auction = r.data;
-
-  const d = await supabase.from("mzad_devices").select("brand,model,storage").eq("id", r.data.device_id).maybeSingle();
-  const name = d.data ? [d.data.brand, d.data.model, d.data.storage].filter(Boolean).join(" ") : "";
-  $("meta").textContent = [r.data.auction_number ? "مزاد " + r.data.auction_number : "", name].filter(Boolean).join(" · ");
+  if (error || !data.user){ location.href = "index.html?login=1&returnTo=" + encodeURIComponent("auction-seller-deposit.html?auction=" + auctionId); return false; }
+  st.user = data.user; return true;
 }
 
 async function loadDeposit(retry = true){
-  const r = await supabase.from("mzad_deposits")
-    .select("id,deposit_number,amount_iqd,status,auction_id")
-    .eq("auction_id", auctionId).eq("user_id", state.user.id).eq("deposit_type", "auction_seller")
-    .order("created_at", { ascending:false }).limit(1).maybeSingle();
-  if (r.error) throw r.error;
+  const a = await supabase.from("mzad_auctions").select("id,seller_user_id,status").eq("id", auctionId).maybeSingle();
+  if (a.error) throw a.error;
+  if (!a.data) throw new Error("AUCTION_NOT_FOUND");
+  if (a.data.seller_user_id !== st.user.id) throw new Error("ACCESS_DENIED");
 
+  const r = await supabase.from("mzad_deposits").select("id,amount_iqd,status")
+    .eq("auction_id", auctionId).eq("user_id", st.user.id).eq("deposit_type","auction_seller")
+    .order("created_at",{ascending:false}).limit(1).maybeSingle();
+  if (r.error) throw r.error;
   if (!r.data){
     if (!retry) throw new Error("DEPOSIT_NOT_FOUND");
-    const c = await supabase.rpc("mzad_create_auction_deposit", { p_auction_id: auctionId, p_role: "seller" });
+    const c = await supabase.rpc("mzad_create_auction_deposit",{ p_auction_id:auctionId, p_role:"seller" });
     if (c.error) throw c.error;
     return loadDeposit(false);
   }
-  state.deposit = r.data;
+  st.dep = r.data;
   $("amount").textContent = money(r.data.amount_iqd);
+  /* أي حالة غير "بانتظار الدفع أو المرفوض" تروح مباشرة لصفحة المتابعة */
+  if (a.data.status === "live" || ["proof_submitted","approved","refunded","forfeited","cancelled"].includes(r.data.status)){
+    location.replace("auction-request-status.html?auction=" + encodeURIComponent(auctionId));
+    return null;
+  }
   return r.data;
 }
-
-/* طرق الدفع المفعّلة (تتحكم بها الإدارة من قاعدة البيانات) */
-const CARD_ICON = '<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M3 10h18"/><path d="M7 15h3"/></svg>';
 
 async function loadMethods(){
   const r = await supabase.rpc("mzad_get_enabled_payment_methods");
   if (r.error) throw r.error;
-  const methods = Array.isArray(r.data) ? r.data : [];
+  const all = Array.isArray(r.data) ? r.data : [];
+  /* نعرض فقط ماستر وزين كاش ونستخدم بيانات المنصة الثابتة */
+  let list = all.map(m => ({ m, p: PLATFORM.find(p => p.re.test((m.name_ar||"") + " " + (m.code||"") + " " + (m.name_en||""))) })).filter(x => x.p);
   const box = $("methods");
+  if (!list.length){ box.innerHTML = '<div class="empty">لا توجد طريقة تحويل مفعلة حالياً. كلمنا على +964 783 800 3991</div>'; return; }
 
-  if (!methods.length){
-    box.innerHTML = '<div class="empty">لا توجد طريقة دفع متاحة حالياً. حاول لاحقاً أو تواصل مع المنصة.</div>';
-    return;
-  }
-
-  const amount = money(state.deposit.amount_iqd);
-  box.innerHTML = methods.map((m, i) => `
-    <div class="opt" role="radio" aria-checked="false" tabindex="0" data-i="${i}">
-      <div class="opt-top">
-        <span class="rd"></span>
-        <span class="mi">${CARD_ICON}</span>
-        <span class="tx"><b>${esc(m.name_ar || "طريقة دفع")}</b>${m.account_label ? `<small>${esc(m.account_label)}</small>` : ""}</span>
-      </div>
-      <div class="det"><div><div class="det-in">
-        <div class="kv"><small>حوّل إلى</small>
-          <div class="acc"><strong>${esc(m.account_identifier || "—")}</strong>${m.account_identifier ? `<button class="copy" type="button" data-copy="${esc(m.account_identifier)}">نسخ</button>` : ""}</div>
-        </div>
-        <div class="kv"><small>المبلغ المطلوب</small><strong>${esc(amount)}</strong></div>
-        ${m.instructions_ar ? `<p class="ins">${esc(m.instructions_ar)}</p>` : ""}
+  box.innerHTML = list.map(({p}, i) => `
+    <button type="button" class="m" data-i="${i}">
+      <div class="m-top"><span class="mi">${p.icon}</span><div><b>${p.name}</b><span class="sub">${p.sub}</span></div><span class="tick"></span></div>
+      <div class="det"><div><div class="din">
+        <div class="acc"><div><small>${p.label}</small><strong>${p.num}</strong></div><span class="copy" data-copy="${p.copy}">نسخ</span></div>
+        <ol class="how">${p.how.map(h=>`<li>${h}</li>`).join("")}</ol>
       </div></div></div>
-    </div>`).join("");
+    </button>`).join("");
 
-  const pick = el => {
-    box.querySelectorAll(".opt").forEach(x => { x.classList.remove("on"); x.setAttribute("aria-checked", "false"); });
-    el.classList.add("on");
-    el.setAttribute("aria-checked", "true");
-    state.method = methods[+el.dataset.i];
+  box.addEventListener("click", async e => {
+    const c = e.target.closest(".copy");
+    if (c){
+      try{ await navigator.clipboard.writeText(c.dataset.copy); }catch{ const t=document.createElement("textarea"); t.value=c.dataset.copy; document.body.appendChild(t); t.select(); try{document.execCommand("copy")}catch{} t.remove(); }
+      c.textContent="تم النسخ"; c.classList.add("ok"); setTimeout(()=>{c.textContent="نسخ";c.classList.remove("ok")},1400);
+      return;
+    }
+    const el = e.target.closest(".m"); if (!el) return;
+    box.querySelectorAll(".m").forEach(x => x.classList.remove("sel"));
+    el.classList.add("sel");
+    st.method = list[+el.dataset.i].m;
     hideMsg(); refresh();
-  };
-  box.querySelectorAll(".opt").forEach(el => {
-    el.addEventListener("click", e => { if (!e.target.closest(".copy")) pick(el); });
-    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); pick(el); } });
   });
-}
-
-document.addEventListener("click", async e => {
-  const b = e.target.closest("[data-copy]");
-  if (!b) return;
-  e.stopPropagation();
-  const text = b.dataset.copy;
-  try{ await navigator.clipboard.writeText(text); }
-  catch{
-    const t = document.createElement("textarea");
-    t.value = text; document.body.appendChild(t); t.select();
-    try{ document.execCommand("copy"); }catch{}
-    t.remove();
-  }
-  b.textContent = "تم النسخ"; b.classList.add("ok");
-  setTimeout(() => { b.textContent = "نسخ"; b.classList.remove("ok"); }, 1400);
-});
-
-/* طلب الدفع: نعيد استخدام نفس الطلب إذا نفس الطريقة (بدون تكرار) */
-function normalizeRequest(data){
-  const v = Array.isArray(data) ? (data[0] || {}) : (data || {});
-  if (typeof v === "string") return { id:v };
-  const id = v.id || v.request_id || v.payment_request_id || v.paymentRequestId;
-  return id ? { ...v, id } : null;
 }
 
 async function ensureRequest(){
-  if (!state.deposit?.id) throw new Error("DEPOSIT_NOT_FOUND");
-  if (!state.method?.id)  throw new Error("PAYMENT_METHOD_REQUIRED");
-  if (state.request?.id && state.requestMethodId === state.method.id) return;
-
-  const r = await supabase.rpc("mzad_create_deposit_payment_request", {
-    p_deposit_id: state.deposit.id,
-    p_payment_method_id: state.method.id
-  });
+  if (st.req && st.reqMethod === st.method.id) return;
+  const r = await supabase.rpc("mzad_create_deposit_payment_request",{ p_deposit_id:st.dep.id, p_payment_method_id:st.method.id });
   if (r.error) throw r.error;
-
-  state.request = normalizeRequest(r.data);
-  state.requestMethodId = state.method.id;
-
-  if (!state.request?.id){
-    const ex = await supabase.from("mzad_payment_requests")
-      .select("id,request_number,status")
-      .eq("deposit_id", state.deposit.id).eq("user_id", state.user.id).eq("payment_method_id", state.method.id)
-      .in("status", ["pending", "proof_submitted"])
-      .order("created_at", { ascending:false }).limit(1).maybeSingle();
-    if (ex.error) throw ex.error;
-    if (ex.data) state.request = normalizeRequest(ex.data);
+  const v = Array.isArray(r.data) ? (r.data[0]||{}) : (r.data||{});
+  let id = typeof v === "string" ? v : (v.id || v.request_id || v.payment_request_id);
+  if (!id){
+    const x = await supabase.from("mzad_payment_requests").select("id")
+      .eq("deposit_id",st.dep.id).eq("user_id",st.user.id).eq("payment_method_id",st.method.id)
+      .in("status",["pending","proof_submitted"]).order("created_at",{ascending:false}).limit(1).maybeSingle();
+    if (x.error) throw x.error;
+    id = x.data?.id;
   }
-  if (!state.request?.id) throw new Error("PAYMENT_REQUEST_NOT_FOUND");
+  if (!id) throw new Error("PAYMENT_REQUEST_NOT_FOUND");
+  st.req = id; st.reqMethod = st.method.id;
 }
 
-/* ================================================================
-   صورة التحويل
-   ================================================================ */
-const fmtSize = b => b > 1048576 ? (b / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(b / 1024)) + " KB";
-
-async function shrink(file){
-  try{
-    const bmp = await createImageBitmap(file);
-    const s = Math.min(1, 1800 / Math.max(bmp.width, bmp.height));
-    const c = document.createElement("canvas");
-    c.width = Math.round(bmp.width * s);
-    c.height = Math.round(bmp.height * s);
-    c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
-    return await new Promise(r => c.toBlob(b => r(b || file), "image/jpeg", .85));
-  }catch{ return file; }
-}
-
+const fmtSize = b => b > 1048576 ? (b/1048576).toFixed(1)+" MB" : Math.max(1,Math.round(b/1024))+" KB";
+function refresh(){ $("submit").disabled = st.busy || !st.method || !st.file; }
 function clearFile(){
-  if (state.file?.url) URL.revokeObjectURL(state.file.url);
-  state.file = null;
-  $("proof").value = "";
-  $("preview").classList.remove("show");
-  $("drop").style.display = "";
-  refresh();
+  if (st.file?.url) URL.revokeObjectURL(st.file.url);
+  st.file = null; $("proof").value=""; $("pv").classList.remove("show"); $("drop").style.display=""; refresh();
 }
-
 $("proof").addEventListener("change", e => {
-  const f = e.target.files[0];
-  if (!f) return;
+  const f = e.target.files[0]; if (!f) return;
   if (!f.type.startsWith("image/")){ toast("اختر صورة فقط"); clearFile(); return; }
-  if (f.size > 15e6){ toast("حجم الصورة كبير، اختر صورة أصغر"); clearFile(); return; }
-
-  if (state.file?.url) URL.revokeObjectURL(state.file.url);
-  const url = URL.createObjectURL(f);
-  state.file = { file:f, url };
-  $("pvImg").src = url;
-  $("pvName").textContent = f.name;
-  $("pvSize").textContent = fmtSize(f.size);
-  $("preview").classList.add("show");
-  $("drop").style.display = "none";
-  $("drop").classList.remove("invalid");
-  hideMsg(); refresh();
+  if (f.size > 10e6){ toast("حجم الصورة أكبر من 10MB"); clearFile(); return; }
+  if (st.file?.url) URL.revokeObjectURL(st.file.url);
+  st.file = { file:f, url:URL.createObjectURL(f) };
+  $("pvImg").src = st.file.url; $("pvName").textContent = f.name; $("pvSize").textContent = fmtSize(f.size);
+  $("pv").classList.add("show"); $("drop").style.display="none"; $("drop").classList.remove("bad"); hideMsg(); refresh();
 });
-$("pvRemove").addEventListener("click", clearFile);
+$("pvX").addEventListener("click", clearFile);
 
-function refresh(){
-  const ok = !state.busy && !!state.method && !!state.file;
-  $("submit").disabled = !ok;
-  $("hint").textContent = !state.method ? "اختر طريقة الدفع أولاً." : !state.file ? "ارفع صورة التحويل." : "جاهز للإرسال.";
-}
-
-/* ================================================================
-   الإرسال
-   ================================================================ */
 $("submit").addEventListener("click", async () => {
-  if (state.busy) return;
-  if (!state.file){ $("drop").classList.add("invalid"); toast("ارفع صورة التحويل أولاً"); return; }
-
-  state.busy = true;
-  $("submit").classList.add("busy");
-  hideMsg(); refresh();
-
+  if (st.busy) return;
+  if (!st.method){ toast("اختر طريقة التحويل أولاً"); return; }
+  if (!st.file){ $("drop").classList.add("bad"); toast("ارفع صورة التحويل"); return; }
+  st.busy = true; $("submit").classList.add("busy"); hideMsg(); refresh();
   try{
     await ensureRequest();
-
-    const file = state.file.file;
-    const blob = await shrink(file);
-    const ext = blob.type === "image/jpeg" ? "jpg" : ((file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg");
-    const path = state.user.id + "/" + state.request.id + "-" + Date.now() + "." + ext;
-
-    const up = await supabase.storage.from("mzad-payment-proofs")
-      .upload(path, blob, { upsert:false, cacheControl:"3600", contentType:blob.type || "image/jpeg" });
+    const file = st.file.file;
+    const path = st.user.id + "/" + st.req + "-" + Date.now() + "-" + file.name.replace(/[^a-zA-Z0-9._-]/g,"-");
+    const up = await supabase.storage.from("mzad-payment-proofs").upload(path, file, { upsert:false, cacheControl:"3600", contentType:file.type || "image/jpeg" });
     if (up.error) throw up.error;
-
-    const proof = await supabase.rpc("mzad_submit_deposit_proof", {
-      p_request_id: state.request.id,
-      p_reference_number: null,
-      p_proof_storage_path: path,
-      p_paid_amount_iqd: Number(state.deposit.amount_iqd),
-      p_paid_at: new Date().toISOString()
+    const pr = await supabase.rpc("mzad_submit_deposit_proof",{
+      p_request_id:st.req, p_reference_number:$("ref").value.trim() || null, p_proof_storage_path:path,
+      p_paid_amount_iqd:Number(st.dep.amount_iqd), p_paid_at:new Date().toISOString()
     });
-    if (proof.error) throw proof.error;
-
-    location.replace(statusUrl());
+    if (pr.error) throw pr.error;
+    location.href = "auction-request-status.html?auction=" + encodeURIComponent(auctionId) + "&request=" + encodeURIComponent(st.req) + "&new=1";
     return;
   }catch(e){
     console.error("DEPOSIT PROOF ERROR:", e);
-    showMsg(errorText(e));
+    showMsg(errText(e));
   }finally{
-    state.busy = false;
-    $("submit").classList.remove("busy");
-    refresh();
+    st.busy = false; $("submit").classList.remove("busy"); refresh();
   }
 });
 
-/* ================================================================
-   نافذة المساعدة
-   ================================================================ */
-function openHelp(){
-  const phone = String(SUPPORT_PHONE || "").replace(/\D/g, "");
-  $("acts").innerHTML =
-    (phone ? `<a class="call" href="tel:+${phone}">اتصال بالمنصة</a><a class="wa" href="https://wa.me/${phone}" target="_blank" rel="noopener">مراسلة واتساب</a>` : "") +
-    '<button class="close" id="hClose" type="button">تمام</button>';
-  $("hClose").addEventListener("click", closeHelp);
-  $("sheet").classList.add("show");
-}
-function closeHelp(){ $("sheet").classList.remove("show"); }
-$("helpBtn").addEventListener("click", openHelp);
-$("ov").addEventListener("click", closeHelp);
-
-/* ================================================================
-   التشغيل
-   ================================================================ */
 $("back").addEventListener("click", () => history.length > 1 ? history.back() : location.href = "home.html");
 
-async function start(){
+(async () => {
   try{
     if (!await auth()) return;
     if (!auctionId) throw new Error("AUCTION_NOT_FOUND");
-
-    await loadAuction();
-    await loadDeposit();
-
-    /* إذا أرسل الإثبات قبل، أو المزاد تقدّم، نوديه لصفحة الحالة */
-    const done = ["proof_submitted", "approved", "refunded", "forfeited", "cancelled"];
-    if (done.includes(state.deposit.status) || ["live", "ended", "cancelled"].includes(state.auction.status)){
-      location.replace(statusUrl());
-      return;
-    }
-
-    if (state.deposit.status === "rejected") $("notice").hidden = false;
-
+    if (!await loadDeposit()) return;
     await loadMethods();
-    refresh();
   }catch(e){
     console.error("START ERROR:", e);
-    $("methods").innerHTML = '<div class="empty">' + esc(errorText(e)) + "</div>";
-    showMsg(errorText(e));
+    showMsg(errText(e));
+    $("methods").innerHTML = "";
   }
-}
-
-start();
+})();
 </script>
-
 </body>
 </html>
