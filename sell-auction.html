@@ -115,7 +115,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
 .add input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
 .add.invalid{border-color:var(--hot);animation:shake .4s}
 .thumb{border:1px solid var(--edge)}
-.thumb.in{animation:thumbIn .45s cubic-bezier(.3,1.5,.5,1)}
+.thumb-enter{animation:thumbIn .45s cubic-bezier(.3,1.5,.5,1)}
 @keyframes thumbIn{from{opacity:0;transform:scale(.5) rotate(-6deg)}to{opacity:1;transform:none}}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .thumb .x,.thumb .mk{position:absolute;top:5px;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.96);display:grid;place-items:center;color:#6b7280;box-shadow:0 4px 10px rgba(0,0,0,.18);font-size:15px;transition:transform .15s}
@@ -417,9 +417,7 @@ function hideMsg(){ $("msg").className = "msg"; }
 
 /* أي تعديل بعد فشل جزئي يلغي التكملة من نفس النقطة */
 function invalidate(){
-  state.deviceId = null;
-  state.imagesDone = false;
-  state.auctionId = null;
+  // لا نمسح معرّفات المراحل الناجحة حتى لا ننشئ جهازاً أو مزاداً مكرراً.
 }
 
 /* ================================================================
@@ -523,7 +521,7 @@ form.addEventListener("input", e => {
 function renderPhotos(){
   $("photos").innerHTML =
     state.files.map((f, i) => `
-      <div class="thumb${f.fresh ? " in" : ""}">
+      <div class="thumb${f.fresh ? " thumb-enter" : ""}">
         <img src="${f.url}" alt="صورة ${i + 1}">
         ${i === 0 ? '<span class="cv">الغلاف</span>' : `<button type="button" class="mk" data-act="cover" data-i="${i}" aria-label="تعيين كغلاف">★</button>`}
         <button type="button" class="x" data-act="del" data-i="${i}" aria-label="حذف">×</button>
@@ -697,18 +695,30 @@ const extFor = (blob, file) => {
 };
 
 async function uploadImages(deviceId){
-  const rows = [];
+  // احفظ كل مرحلة ناجحة حتى لا تتكرر الصور عند إعادة المحاولة.
   for (let i = 0; i < state.files.length; i++){
-    const file = state.files[i].file;
-    const blob = await shrink(file);
-    const path = state.user.id + "/" + deviceId + "/" + crypto.randomUUID() + "." + extFor(blob, file);
-    const up = await supabase.storage.from("device-images").upload(path, blob, { upsert:false, contentType:blob.type || file.type || "image/jpeg" });
-    if (up.error) throw up.error;
-    rows.push({ device_id:deviceId, storage_path:path, sort_order:i, is_primary:i === 0 });
-  }
-  if (rows.length){
-    const ins = await supabase.from("mzad_device_images").insert(rows);
-    if (ins.error) throw ins.error;
+    const item = state.files[i];
+    const file = item.file;
+    if (!item.storagePath){
+      const blob = await shrink(file);
+      const path = state.user.id + "/" + deviceId + "/" + crypto.randomUUID() + "." + extFor(blob, file);
+      const up = await supabase.storage.from("device-images").upload(path, blob, {
+        upsert:false,
+        contentType:blob.type || file.type || "image/jpeg"
+      });
+      if (up.error) throw up.error;
+      item.storagePath = path;
+    }
+    if (!item.rowInserted){
+      const ins = await supabase.from("mzad_device_images").insert({
+        device_id:deviceId,
+        storage_path:item.storagePath,
+        sort_order:i,
+        is_primary:i === 0
+      });
+      if (ins.error) throw ins.error;
+      item.rowInserted = true;
+    }
   }
 }
 
