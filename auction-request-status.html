@@ -1,46 +1,574 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#6246d9"><title>تأكيد طلب المزاد | MZAD PHONE</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#6246d9">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>حالة طلب المزاد — MZAD PHONE</title>
 <style>
-:root{--p:#6246d9;--soft:#f2efff;--bg:#f7f6fc;--ink:#19212b;--muted:#747f90;--line:#e6e1f8;--safe:env(safe-area-inset-bottom,0px)}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif}.wrap{max-width:540px;margin:auto;padding:0 14px calc(30px + var(--safe))}header{margin:0 -14px;padding:20px;background:linear-gradient(145deg,#fff,#f0ecff);text-align:center;border-bottom:1px solid var(--line);border-radius:0 0 25px 25px}.brand{font-weight:950;font-size:23px}.brand b{color:#e91d4f}.sub{font-size:10px;letter-spacing:.24em;color:var(--muted);margin-top:5px;font-weight:900}.card{background:#fff;border:1px solid var(--line);border-radius:22px;margin-top:14px;padding:17px;box-shadow:0 12px 25px -22px #6246d9}.hero{text-align:center;padding:25px 17px}.loader{width:48px;height:48px;border:4px solid #e8e2ff;border-top-color:var(--p);border-radius:50%;margin:0 auto 13px;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}h1{font-size:21px;margin:0 0 8px;font-weight:950}.muted{color:var(--muted);font-size:12px;line-height:1.9;margin:0}.status{background:#fff8e8;color:#80601d;border-radius:14px;padding:13px;font-size:12px;font-weight:850;line-height:1.9}.title{font-size:16px;font-weight:950;margin:0 0 12px}.row{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px dashed var(--line);font-size:12px}.row:last-child{border:0}.row span{color:var(--muted)}.row strong{max-width:68%;text-align:left;overflow-wrap:anywhere}.copy{border:0;border-radius:8px;background:var(--soft);color:var(--p);padding:5px 8px;font-weight:900}.ad{padding:0;overflow:hidden}.photo{height:225px;background:linear-gradient(145deg,#eee9ff,#faf9ff);display:grid;place-items:center;color:#8176b4;font-size:12px;font-weight:800}.photo img{width:100%;height:100%;object-fit:cover}.adbody{padding:16px}.tag{display:inline-block;border-radius:99px;background:var(--soft);color:var(--p);font-size:10px;font-weight:900;padding:6px 10px}.adtitle{font-size:19px;font-weight:950;margin:10px 0}.specs{display:flex;gap:6px;flex-wrap:wrap}.spec{font-size:10px;background:#f3f4f8;color:#596475;border-radius:8px;padding:6px 8px;font-weight:800}.price{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:13px;border-top:1px solid var(--line)}.price small{display:block;color:var(--muted);font-size:10px}.price b{display:block;color:var(--p);font-size:18px;margin-top:4px}.pill{background:#fff4d7;color:#805e12;padding:7px 9px;border-radius:99px;font-size:10px;font-weight:900}.steps{display:grid;gap:12px}.step{display:flex;gap:10px;font-size:12px;color:#5b6574;line-height:1.8}.n{width:25px;height:25px;flex:0 0 25px;display:grid;place-items:center;border-radius:9px;background:var(--soft);color:var(--p);font-weight:950}.btn{display:block;margin-top:12px;text-decoration:none;text-align:center;background:linear-gradient(135deg,#6246d9,#8b6cf0);color:#fff;padding:15px;border-radius:14px;font-weight:950;font-size:14px}.btn.alt{background:#fff;color:var(--p);border:1px solid var(--line)}.error{display:none;background:#fff0f3;color:#b72849;border-radius:12px;padding:12px;font-size:12px;line-height:1.8;margin-top:10px}.error.show{display:block}@media(prefers-reduced-motion:reduce){*{animation:none!important}}
-</style></head>
-<body><main class="wrap">
-<header><div class="brand">MZ<b>AD</b> PHONE</div><div class="sub">AUCTION REQUEST STATUS</div></header>
-<section class="card hero"><div class="loader" id="loader"></div><h1 id="headline">جاري تأكيد طلبك…</h1><p class="muted" id="intro">نحمّل معلومات الطلب ومعاينة الإعلان.</p></section>
-<section class="card"><div class="status" id="status">طلبك بانتظار مراجعة إثبات التأمين من الإدارة. لن يبدأ المزاد قبل الموافقة.</div></section>
-<section class="card"><h2 class="title">معلومات الطلب</h2>
-<div class="row"><span>رقم طلب الدفع</span><strong><span id="requestNo">—</span> <button class="copy" id="copy">نسخ</button></strong></div>
-<div class="row"><span>رقم المزاد</span><strong id="auctionNo">—</strong></div><div class="row"><span>رقم التأمين</span><strong id="depositNo">—</strong></div>
-<div class="row"><span>نوع الطلب</span><strong>تأمين بائع المزاد</strong></div><div class="row"><span>مبلغ التأمين</span><strong id="amount">5,000 د.ع</strong></div>
-<div class="row"><span>حالة الإثبات</span><strong id="proofStatus">قيد المراجعة</strong></div><div class="row"><span>تاريخ الطلب</span><strong id="sentAt">—</strong></div><div class="error" id="error"></div></section>
-<section class="card ad"><div class="photo" id="photo">جاري تحميل صورة الجهاز…</div><div class="adbody"><span class="tag">معاينة الإعلان · مزاد</span><h2 class="adtitle" id="adtitle">جاري تحميل الجهاز…</h2><div class="specs" id="specs"></div><div class="price"><div><small>السعر الابتدائي</small><b id="price">—</b></div><span class="pill" id="adstatus">بانتظار الموافقة</span></div></div></section>
-<section class="card"><h2 class="title">شنو الخطوة الجاية؟</h2><div class="steps"><div class="step"><span class="n">1</span><span>الإدارة تراجع إيصال التأمين ومعلومات التحويل.</span></div><div class="step"><span class="n">2</span><span>بعد الموافقة، يتفعل المزاد وتبدأ مدة الساعة وفق إعدادات المنصة.</span></div><div class="step"><span class="n">3</span><span>ارجع لهذه الصفحة لمتابعة الحالة ومعاينة إعلانك.</span></div></div></section>
-<a class="btn" id="track" href="my-auction.html">متابعة المزاد</a><a class="btn alt" href="home.html">العودة للرئيسية</a>
+/* ============ المتغيرات ============ */
+:root{
+  --bg:#f9f8fd;--ink:#17202a;--muted:#6b7280;--line:#ece8fb;--edge:#ddd8f8;
+  --p:#6246d9;--p-dark:#4a34b8;--p-soft:#f3f0ff;--hot:#e8590c;--ok:#1e8a5a;--ok-soft:#e8f6ef;--warn:#946100;--warn-soft:#fff8e6;--bad:#c62f4d;--bad-soft:#fff0f3;
+  --safe-bottom:env(safe-area-inset-bottom,0px)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+a{text-decoration:none;color:inherit;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--p);outline-offset:2px}
+.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(36px + var(--safe-bottom));overflow-x:clip}
+
+/* ============ أنميشن ============ */
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes shimmer{to{background-position:-200% 0}}
+@keyframes rot{to{transform:rotate(360deg)}}
+@keyframes pop{from{transform:scale(.4)}to{transform:scale(1)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(98,70,217,.45)}70%{box-shadow:0 0 0 9px rgba(98,70,217,0)}100%{box-shadow:0 0 0 0 rgba(98,70,217,0)}}
+@keyframes pulse2{50%{opacity:.3}}
+@keyframes floaty{50%{transform:translateY(-5px)}}
+@keyframes slowzoom{from{transform:scale(1)}to{transform:scale(1.08)}}
+@keyframes sweep{0%,55%{transform:translateX(130%)}100%{transform:translateX(-130%)}}
+header{animation:fade .5s backwards}
+.reveal{animation:up .6s cubic-bezier(.2,.8,.3,1) backwards}
+.page>.reveal:nth-of-type(1){animation-delay:.08s}
+.page>.reveal:nth-of-type(2){animation-delay:.16s}
+.page>.reveal:nth-of-type(3){animation-delay:.24s}
+.icon-btn,.btn,.copy,.more{transition:transform .18s ease,background .25s,border-color .25s,box-shadow .25s}
+.icon-btn:active,.btn:active,.copy:active,.more:active{transform:scale(.97)}
+
+/* ============ الهيدر والهيرو ============ */
+header{margin-inline:-14px;padding:0 14px 20px;background:linear-gradient(145deg,#fff 0%,#f7f5ff 55%,#ece8ff 100%);
+  border-radius:0 0 26px 26px;border-bottom:1px solid var(--line);box-shadow:0 10px 26px rgba(23,32,42,.06)}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 2px 0}
+.brand-mini{display:flex;flex-direction:column;align-items:center;line-height:.9}
+.brand-mini strong{font-size:16px;letter-spacing:-.03em}
+.brand-mini span{font-size:7px;font-weight:800;letter-spacing:.15em;color:#8a96a3;margin-top:3px}
+.icon-btn{width:39px;height:34px;display:grid;place-items:center;border:1px solid var(--edge);border-radius:12px;background:#fff;color:var(--p);box-shadow:0 7px 18px rgba(23,32,42,.045)}
+.icon-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.spacer{width:39px}
+
+.hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:22px 6px 0}
+.hi{width:92px;height:92px;margin-bottom:12px;animation:pop .6s cubic-bezier(.3,1.5,.5,1)}
+.hi svg{width:100%;height:100%;overflow:visible}
+.hi circle{fill:none;stroke-width:6}
+.hi .bg{stroke:#e4defa}
+.hi .fg{stroke-linecap:round;stroke-dasharray:289;stroke-dashoffset:289;transform:rotate(-90deg);transform-origin:center;animation:draw .9s ease-out forwards}
+.hi .ic{fill:none;stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+.hi .dr{stroke-dasharray:70;stroke-dashoffset:70;animation:draw .45s .6s ease-out forwards}
+.hi.wait .fg{stroke:var(--p);stroke-dasharray:80 209;stroke-dashoffset:0;animation:rot 1.1s linear infinite;transform:none;transform-origin:center}
+.hi.wait .ic{stroke:var(--p)}
+.hi.ok .fg{stroke:var(--ok)}
+.hi.ok .ic{stroke:var(--ok)}
+.hi.bad .fg{stroke:var(--bad)}
+.hi.bad .ic{stroke:var(--bad)}
+.hi.todo .fg{stroke:var(--hot)}
+.hi.todo .ic{stroke:var(--hot)}
+.hi.live .fg{stroke:var(--ok)}
+.hi.live .ic{stroke:var(--ok)}
+.hero h1{margin:0 0 6px;font-size:22px;font-weight:950;letter-spacing:-.035em;animation:up .5s .15s backwards}
+.hero p{margin:0;max-width:340px;font-size:12px;font-weight:700;line-height:1.9;color:var(--muted);animation:up .5s .25s backwards}
+.cdbox{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:9px 16px;border-radius:999px;background:#fff;border:1px solid var(--edge);
+  font-size:20px;font-weight:950;color:var(--ok);font-variant-numeric:tabular-nums;direction:ltr;box-shadow:0 8px 18px -10px rgba(30,138,90,.5);animation:up .5s .3s backwards}
+.cdbox:before{content:"";width:9px;height:9px;border-radius:50%;background:var(--ok);animation:pulse2 1.6s infinite}
+.cdbox.urgent{color:var(--hot);box-shadow:0 8px 18px -10px rgba(232,89,12,.5)}
+.cdbox.urgent:before{background:var(--hot)}
+.sk{border-radius:14px;background:linear-gradient(90deg,#f1eefb 25%,#faf8ff 50%,#f1eefb 75%);background-size:200% 100%;animation:shimmer 1.4s linear infinite}
+.hero .sk.c{width:92px;height:92px;border-radius:50%;margin-bottom:14px}
+.hero .sk.l{width:190px;height:22px;margin-bottom:10px}
+.hero .sk.s{width:260px;height:14px}
+.retry{margin-top:14px;padding:10px 20px;border-radius:12px;background:var(--p);color:#fff;font-size:12.5px;font-weight:900;box-shadow:0 8px 18px rgba(98,70,217,.3)}
+
+/* ============ البطاقات ============ */
+.card{margin-top:14px;padding:16px;border-radius:22px;background:#fff;border:1px solid var(--edge);box-shadow:0 10px 24px -10px rgba(98,70,217,.22)}
+.c-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.num{width:28px;height:28px;flex:0 0 28px;border-radius:10px;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:950;
+  background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 5px 12px rgba(98,70,217,.28)}
+.c-head h2{margin:0;font-size:16px;font-weight:950;letter-spacing:-.02em}
+.c-head p{margin:1px 0 0;font-size:10px;font-weight:700;color:var(--muted)}
+
+/* ============ الخط الزمني ============ */
+.tl{margin:0;padding:0;list-style:none}
+.tl li{position:relative;display:flex;gap:12px;padding-bottom:18px}
+.tl li:last-child{padding-bottom:0}
+.tl li:not(:last-child):before{content:"";position:absolute;top:32px;bottom:2px;inset-inline-start:15px;width:3px;border-radius:3px;background:#e4defa;transform:translateX(1.5px)}
+.tl li.done:not(:last-child):before{background:var(--p)}
+.tl .n{position:relative;z-index:1;width:32px;height:32px;flex:0 0 32px;border-radius:50%;display:grid;place-items:center;background:#fff;border:2px solid #e4defa;color:#a99cf0;font-size:12px;font-weight:950;transition:.35s}
+.tl li.active .n{border-color:var(--p);color:var(--p);animation:ping 1.8s infinite}
+.tl li.done .n{background:var(--p);border-color:var(--p);color:#fff;font-size:0}
+.tl li.done .n:after{content:"✓";font-size:15px}
+.tl li.bad .n{background:var(--bad);border-color:var(--bad);color:#fff;font-size:0}
+.tl li.bad .n:after{content:"✕";font-size:14px}
+.tl b{display:block;font-size:13px;font-weight:950}
+.tl p{margin:2px 0 0;font-size:11px;font-weight:700;line-height:1.8;color:var(--muted)}
+.tl li.active b,.tl li.done b{color:var(--p-dark)}
+.tl li.bad b{color:var(--bad)}
+.tl li.pend b{color:#9ca3af}
+
+/* ============ معاينة الإعلان ============ */
+.pv-wrap{display:flex;flex-direction:column;align-items:center}
+.pv{position:relative;width:min(64%,220px);aspect-ratio:7/10;border-radius:22px;overflow:hidden;background:#1d2430;box-shadow:0 14px 28px -12px rgba(74,52,184,.5),inset 0 0 0 1px rgba(255,255,255,.08)}
+.pv-media{position:absolute;inset:0;overflow:hidden;background:linear-gradient(160deg,#7b61e8,#3b2a92)}
+.pv-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:slowzoom 12s ease-in-out infinite alternate}
+.pv-media .ph{position:absolute;inset:0;display:grid;place-items:center}
+.pv-media .ph svg{width:44px;height:44px;opacity:.5;animation:floaty 3s ease-in-out infinite}
+.pv-shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(20,14,48,.95) 0%,rgba(20,14,48,.72) 32%,rgba(20,14,48,0) 62%)}
+.pv:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.13) 50%,transparent 58%);transform:translateX(130%);animation:sweep 8s ease-in-out infinite 1s}
+.pv-state{position:absolute;top:9px;inset-inline-end:9px;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.2);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.28);color:#fff;font-size:9px;font-weight:900;z-index:3}
+.pv-body{position:absolute;inset-inline:0;bottom:0;padding:10px 11px 11px;color:#fff;display:flex;flex-direction:column;gap:6px;z-index:2}
+.pv-title{margin:0;font-size:14px;font-weight:950;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.specs{display:flex;flex-wrap:wrap;gap:4px}
+.spec{padding:3px 7px;border-radius:7px;background:rgba(255,255,255,.16);font-size:9px;font-weight:800}
+.pv-row{display:flex;align-items:flex-end;justify-content:space-between;gap:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,.18)}
+.pv-row small{display:block;font-size:8.5px;font-weight:800;color:#ffffffb3}
+.pv-row b{display:block;margin-top:1px;font-size:13px;font-weight:950;white-space:nowrap}
+.type{padding:4px 8px;border-radius:999px;background:var(--p);color:#fff;font-size:8.5px;font-weight:900}
+.pv-cap{margin:12px 0 0;font-size:10.5px;font-weight:800;color:var(--muted);text-align:center}
+
+/* ============ التفاصيل ============ */
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px dashed #e9e5f8;font-size:12px;font-weight:700}
+.row:last-child{border:0;padding-bottom:0}
+.row span{color:var(--muted);flex:0 0 auto}
+.row strong{display:flex;align-items:center;gap:8px;font-weight:900;text-align:end;overflow-wrap:anywhere;direction:ltr;justify-content:flex-end}
+.row strong.rtl{direction:rtl}
+.copy{flex:0 0 auto;padding:5px 11px;border-radius:9px;background:var(--p-soft);border:1px solid #e4defa;color:var(--p-dark);font-size:10px;font-weight:900}
+.copy.ok{background:var(--ok-soft);border-color:#bfe8d3;color:var(--ok)}
+.more{width:100%;margin-top:6px;padding:9px;border-radius:12px;background:var(--p-soft);color:var(--p-dark);font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:6px}
+.more svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s}
+.more.open svg{transform:rotate(180deg)}
+.fold{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.3,1,.4,1)}
+.fold.open{grid-template-rows:1fr}
+.fold>div{overflow:hidden}
+.empty{padding:14px;border-radius:14px;background:var(--p-soft);text-align:center;font-size:11.5px;font-weight:800;color:var(--muted)}
+
+/* ============ الأزرار ============ */
+.actions{margin-top:16px;display:grid;gap:10px}
+.btn{display:flex;align-items:center;justify-content:center;height:54px;border-radius:17px;font-size:14.5px;font-weight:950;text-align:center}
+.btn.main{color:#fff;background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 12px 26px rgba(98,70,217,.35)}
+.btn.alt{background:#fff;color:var(--p-dark);border:1.5px solid var(--edge)}
+.btn.hidden{display:none}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + var(--safe-bottom));transform:translateX(-50%) translateY(16px);max-width:calc(100% - 40px);padding:10px 14px;border-radius:13px;
+  background:#1e2c30;color:#fff;font-size:11px;font-weight:800;box-shadow:0 14px 34px rgba(24,44,49,.14);opacity:0;pointer-events:none;transition:.3s cubic-bezier(.3,1.4,.5,1);z-index:250;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%)}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.hi .fg,.hi .dr{stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+
+<main class="page">
+
+<header>
+  <div class="topbar">
+    <button class="icon-btn" id="back" type="button" aria-label="رجوع"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    <div class="brand-mini"><strong>MZAD</strong><span>PHONE</span></div>
+    <span class="spacer"></span>
+  </div>
+
+  <div class="hero" id="hero">
+    <div class="sk c"></div><div class="sk l"></div><div class="sk s"></div>
+  </div>
+</header>
+
+<!-- المراحل -->
+<section class="card reveal" id="cTl" hidden>
+  <div class="c-head"><span class="num">1</span><div><h2>وين وصل طلبك؟</h2><p>ثلاث مراحل فقط</p></div></div>
+  <ol class="tl" id="tl"></ol>
+</section>
+
+<!-- معاينة الإعلان -->
+<section class="card reveal" id="cPv" hidden>
+  <div class="c-head"><span class="num">★</span><div><h2>إعلانك</h2><p>هكذا يظهر للمزايدين</p></div></div>
+  <div class="pv-wrap">
+    <div class="pv">
+      <div class="pv-media" id="pvMedia"></div>
+      <div class="pv-shade"></div>
+      <span class="pv-state" id="pvState">—</span>
+      <div class="pv-body">
+        <h3 class="pv-title" id="pvTitle">—</h3>
+        <div class="specs" id="pvSpecs"></div>
+        <div class="pv-row">
+          <div><small>السعر الابتدائي</small><b id="pvPrice">—</b></div>
+          <span class="type">مزاد</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- معلومات الطلب -->
+<section class="card reveal" id="cInfo" hidden>
+  <div class="c-head"><span class="num">#</span><div><h2>معلومات الطلب</h2><p>احتفظ برقم الطلب للمتابعة مع الإدارة</p></div></div>
+  <div id="info"></div>
+  <button class="more" id="more" type="button"><span id="moreTxt">تفاصيل إضافية</span><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+  <div class="fold" id="fold"><div id="extra"></div></div>
+</section>
+
+<div class="actions" id="actions" hidden>
+  <a class="btn main" id="bMain" href="#">—</a>
+  <a class="btn alt" href="home.html">العودة للرئيسية</a>
+</div>
+
 </main>
+
+<div class="toast" id="toast"></div>
+
 <script type="module">
-import {supabase} from "./js/supabase.js";
-const $=id=>document.getElementById(id),q=new URLSearchParams(location.search),auctionId=q.get("auction")||q.get("id"),requestId=q.get("request");
-const money=n=>Number(n||0).toLocaleString("en-US")+" د.ع";
-const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let requestNumber="";
-function showError(t){$("error").textContent=t;$("error").classList.add("show");}
-async function init(){try{
- const {data:u,error:ue}=await supabase.auth.getUser();if(ue||!u.user){location.href="index.html?login=1&returnTo="+encodeURIComponent(location.pathname+location.search);return}
- if(!auctionId)throw Error("رابط الطلب لا يحتوي على رقم المزاد.");
- const {data:a,error:ae}=await supabase.from("mzad_auctions").select("id,auction_number,device_id,seller_user_id,starting_price_iqd,status").eq("id",auctionId).maybeSingle();if(ae)throw ae;if(!a)throw Error("المزاد غير موجود.");if(a.seller_user_id!==u.user.id)throw Error("هذا المزاد لا يتبع حسابك.");
- $("auctionNo").textContent=a.auction_number||a.id;$("price").textContent=money(a.starting_price_iqd);$("track").href="my-auction.html?auction="+encodeURIComponent(a.id);$("adstatus").textContent=a.status==="live"?"مباشر":a.status==="ended"?"منتهي":"بانتظار الموافقة";
- const {data:d,error:de}=await supabase.from("mzad_devices").select("id,mzad_id,brand,model,storage,color,condition_grade,battery_health").eq("id",a.device_id).maybeSingle();if(de)throw de;
- if(d){$("adtitle").textContent=[d.brand,d.model].filter(Boolean).join(" ")||"جهاز";$("specs").innerHTML=[d.storage,d.color,d.condition_grade,d.battery_health?"البطارية "+d.battery_health:null,d.mzad_id].filter(Boolean).map(x=>'<span class="spec">'+esc(x)+'</span>').join("");
- const {data:imgs}=await supabase.from("mzad_device_images").select("storage_path,is_primary,sort_order").eq("device_id",d.id).order("sort_order",{ascending:true}).limit(6);if(imgs?.length){const im=imgs.find(x=>x.is_primary)||imgs[0],{data:s}=await supabase.storage.from("device-images").createSignedUrl(im.storage_path,3600);if(s?.signedUrl){const el=document.createElement("img");el.src=s.signedUrl;el.alt="صورة الجهاز";$("photo").replaceChildren(el)}else $("photo").textContent="تعذر عرض الصورة"}else $("photo").textContent="لا توجد صورة محفوظة";}
- const {data:dep,error:depe}=await supabase.from("mzad_deposits").select("id,deposit_number,amount_iqd,status,created_at,updated_at").eq("auction_id",a.id).eq("user_id",u.user.id).eq("deposit_type","auction_seller").order("created_at",{ascending:false}).limit(1).maybeSingle();if(depe)throw depe;
- if(dep){$("depositNo").textContent=dep.deposit_number||dep.id;$("amount").textContent=money(dep.amount_iqd);$("proofStatus").textContent=dep.status==="proof_submitted"?"قيد المراجعة":dep.status==="approved"?"تمت الموافقة":dep.status==="rejected"?"مرفوض":dep.status;$("sentAt").textContent=new Date(dep.updated_at||dep.created_at).toLocaleString("ar-IQ")}
- let pr=null;if(requestId){const x=await supabase.from("mzad_payment_requests").select("id,request_number,status,created_at").eq("id",requestId).eq("user_id",u.user.id).maybeSingle();if(x.error)throw x.error;pr=x.data}
- if(!pr&&dep){const x=await supabase.from("mzad_payment_requests").select("id,request_number,status,created_at").eq("deposit_id",dep.id).eq("user_id",u.user.id).order("created_at",{ascending:false}).limit(1).maybeSingle();if(x.error)throw x.error;pr=x.data}
- if(pr){requestNumber=pr.request_number||pr.id;$("requestNo").textContent=requestNumber;$("sentAt").textContent=new Date(pr.created_at).toLocaleString("ar-IQ");$("proofStatus").textContent=pr.status==="proof_submitted"?"قيد المراجعة":pr.status==="approved"?"تمت الموافقة":pr.status==="rejected"?"مرفوض":pr.status}
- $("loader").style.display="none";$("headline").textContent="وصل طلبك بنجاح";$("headline").style.animation="rise .4s both";$("intro").textContent="تم تسجيل الطلب. احتفظ برقم الطلب لمتابعة المراجعة.";
- $("status").textContent=(dep?.status==="approved"||a.status==="live")?"تمت الموافقة على التأمين والمزاد مفعّل.":"طلبك بانتظار مراجعة إثبات التأمين من الإدارة. لن يبدأ المزاد قبل الموافقة.";
- }catch(e){console.error("AUCTION REQUEST STATUS",e);$("loader").style.display="none";$("headline").textContent="تعذر تحميل بعض التفاصيل";$("intro").textContent="يمكنك الرجوع إلى صفحة مزادك ومتابعة حالته.";showError(e.message||"حدث خطأ غير معروف.")}}
-$("copy").addEventListener("click",async()=>{if(!requestNumber)return;try{await navigator.clipboard.writeText(requestNumber);$("copy").textContent="تم النسخ";setTimeout(()=>$("copy").textContent="نسخ",1400)}catch{$("copy").textContent="انسخ يدوياً"}});init();
-</script></body></html>
+import { supabase } from "./js/supabase.js";
+
+/* ================================================================
+   الأساسيات
+   ================================================================ */
+const $ = id => document.getElementById(id);
+const q = new URLSearchParams(location.search);
+const auctionId = q.get("auction") || q.get("id");
+const requestId = q.get("request");
+
+const S = { user:null, a:null, dep:null, pr:null, device:null, imgUrl:"", phase:null, loaded:false, poll:null, tick:null };
+
+const money = n => Number(n || 0).toLocaleString("en-US") + " د.ع";
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmtDate = v => { const d = new Date(v); return isNaN(d) ? "—" : d.toLocaleString("ar-IQ", { dateStyle:"medium", timeStyle:"short" }); };
+
+let toastT;
+function toast(t){
+  const e = $("toast");
+  e.textContent = t;
+  e.classList.add("show");
+  clearTimeout(toastT);
+  toastT = setTimeout(() => e.classList.remove("show"), 2200);
+}
+
+const PAY_LABELS = { proof_submitted:"قيد المراجعة", approved:"تمت الموافقة", rejected:"مرفوض", refunded:"تم الاسترداد", forfeited:"مصادَر", cancelled:"ملغي" };
+
+/* ================================================================
+   الحالة (phase) من البيانات الحقيقية
+   ================================================================ */
+function phaseOf(){
+  const a = S.a, d = S.dep;
+  if (!a) return null;
+  if (a.status === "live")      return "live";
+  if (a.status === "ended")     return "ended";
+  if (a.status === "cancelled" || d?.status === "cancelled") return "cancelled";
+  if (d?.status === "refunded" || d?.status === "forfeited") return "closed";
+  if (d?.status === "approved") return "approved";
+  if (d?.status === "rejected") return "rejected";
+  if (d?.status === "proof_submitted") return "review";
+  return "unpaid";
+}
+
+/* ================================================================
+   الهيرو
+   ================================================================ */
+const IC = {
+  wait:  '<path class="ic dr" d="M55 36v20l13 8"/>',
+  ok:    '<path class="ic dr" d="M36 57l13 13 26-28"/>',
+  bad:   '<path class="ic dr" d="M40 40l30 30M70 40L40 70"/>',
+  todo:  '<path class="ic dr" d="M55 70V42m0 0-12 12m12-12 12 12"/>',
+  live:  '<path class="ic dr" d="M36 57l13 13 26-28"/>'
+};
+
+const HERO = {
+  unpaid:    { k:"todo", t:"باقي إرسال إثبات التأمين", s:"مزادك محفوظ كمسودة. ادفع تأمين البائع وارفع صورة الإيصال حتى يبدأ المزاد." },
+  review:    { k:"wait", t:"وصل طلبك، قيد المراجعة",   s:"الإدارة تراجع إثبات التأمين. تقدر تسكر الصفحة، وراح نحدثها تلقائياً." },
+  rejected:  { k:"bad",  t:"تم رفض إثبات الدفع",       s:"تقدر ترسل إثبات جديد. تأكد أن الإيصال واضح والمبلغ صحيح." },
+  approved:  { k:"ok",   t:"تمت الموافقة على التأمين", s:"مزادك قيد التفعيل وراح يبدأ بعد لحظات." },
+  live:      { k:"live", t:"مزادك مباشر الآن",         s:"المزايدون يتنافسون على جهازك. تابع المزاد من الزر تحت." },
+  ended:     { k:"ok",   t:"انتهى المزاد",             s:"تقدر تتابع نتيجة المزاد من صفحة مزادك." },
+  cancelled: { k:"bad",  t:"المزاد ملغي",              s:"هذا المزاد ما عاد فعال. تقدر تنشر مزاد جديد من الرئيسية." },
+  closed:    { k:"bad",  t:"أُغلق هذا الطلب",          s:"تمت معالجة التأمين الخاص بهذا المزاد." }
+};
+
+function renderHero(){
+  const h = HERO[S.phase];
+  $("hero").innerHTML = `
+    <div class="hi ${h.k}">
+      <svg viewBox="0 0 110 110"><circle class="bg" cx="55" cy="55" r="46"/><circle class="fg" cx="55" cy="55" r="46"/>${IC[h.k]}</svg>
+    </div>
+    <h1>${esc(h.t)}</h1>
+    <p>${esc(h.s)}</p>
+    ${S.phase === "live" && S.a.ends_at ? '<div class="cdbox" id="cdbox">--:--:--</div>' : ""}`;
+  tickCountdown();
+}
+
+/* ================================================================
+   الخط الزمني
+   ================================================================ */
+function renderTimeline(){
+  const p = S.phase;
+  if (["cancelled", "closed"].includes(p)){ $("cTl").hidden = true; return; }
+  $("cTl").hidden = false;
+
+  /* [حالة كل مرحلة, وصفها] */
+  const map = {
+    unpaid:   [["active","مطلوب منك الآن"], ["pend","بعد إرسال الإثبات"], ["pend","بعد الموافقة تبدأ مدة الساعة"]],
+    review:   [["done","تم الإرسال"],        ["active","جاري المراجعة"],     ["pend","بعد الموافقة تبدأ مدة الساعة"]],
+    rejected: [["done","تم الإرسال"],        ["bad","تم رفض الإثبات"],       ["pend","بعد الموافقة تبدأ مدة الساعة"]],
+    approved: [["done","تم الإرسال"],        ["done","تمت الموافقة"],        ["active","قيد التفعيل"]],
+    live:     [["done","تم الإرسال"],        ["done","تمت الموافقة"],        ["done","مباشر الآن"]],
+    ended:    [["done","تم الإرسال"],        ["done","تمت الموافقة"],        ["done","انتهى المزاد"]]
+  }[p];
+  const names = ["إرسال إثبات التأمين", "مراجعة الإدارة", "بدء المزاد"];
+
+  $("tl").innerHTML = map.map(([st, sub], i) => `
+    <li class="${st}"><span class="n">${i + 1}</span><div><b>${names[i]}</b><p>${esc(sub)}</p></div></li>`).join("");
+}
+
+/* ================================================================
+   معاينة الإعلان
+   ================================================================ */
+const PH_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M9.5 5.5h5"/><path d="M11 18.5h2"/></svg>';
+const PV_STATE = { unpaid:"مسودة", review:"بانتظار الموافقة", rejected:"بانتظار الموافقة", approved:"قيد التفعيل", live:"مباشر", ended:"منتهي", cancelled:"ملغي", closed:"مغلق" };
+
+function renderPreview(){
+  const d = S.device, a = S.a;
+  $("cPv").hidden = false;
+  const title = d ? ([d.brand, d.model].filter(Boolean).join(" ") || "جهاز") : "جهاز";
+  const specs = d ? [d.storage, d.color, d.condition_grade, d.battery_health ? "بطارية " + d.battery_health : null].filter(Boolean).slice(0, 3) : [];
+
+  $("pvTitle").textContent = title;
+  $("pvSpecs").innerHTML = specs.map(s => `<span class="spec">${esc(s)}</span>`).join("");
+  $("pvPrice").textContent = money(a.starting_price_iqd);
+  $("pvState").textContent = PV_STATE[S.phase] || "—";
+  $("pvMedia").innerHTML = S.imgUrl
+    ? `<img src="${esc(S.imgUrl)}" alt="" onerror="this.remove()">`
+    : `<div class="ph">${PH_ICON}</div>`;
+}
+
+/* ================================================================
+   معلومات الطلب
+   ================================================================ */
+function row(k, v, copy){
+  return `<div class="row"><span>${esc(k)}</span><strong>${esc(v)}${copy ? `<button class="copy" type="button" data-copy="${esc(copy)}">نسخ</button>` : ""}</strong></div>`;
+}
+
+function renderInfo(){
+  const a = S.a, dep = S.dep, pr = S.pr;
+  $("cInfo").hidden = false;
+
+  const reqNo = pr ? (pr.request_number || pr.id) : "";
+  const when = pr?.created_at || dep?.updated_at || dep?.created_at;
+
+  $("info").innerHTML =
+    (reqNo ? row("رقم الطلب", reqNo, reqNo) : "") +
+    row("رقم المزاد", a.auction_number || a.id, a.auction_number || "") +
+    row("مبلغ التأمين", money(dep?.amount_iqd ?? 0)) +
+    (when ? row("تاريخ الإرسال", fmtDate(when)) : "");
+
+  const payState = PAY_LABELS[pr?.status] || PAY_LABELS[dep?.status] || (dep ? dep.status : "لم يُرسل");
+  $("extra").innerHTML =
+    (dep ? row("رقم التأمين", dep.deposit_number || dep.id, dep.deposit_number || "") : "") +
+    row("نوع الطلب", "تأمين بائع المزاد") +
+    row("حالة الدفع", payState);
+}
+
+$("more").addEventListener("click", () => {
+  const open = $("fold").classList.toggle("open");
+  $("more").classList.toggle("open", open);
+  $("moreTxt").textContent = open ? "إخفاء التفاصيل" : "تفاصيل إضافية";
+});
+
+document.addEventListener("click", async e => {
+  const b = e.target.closest("[data-copy]");
+  if (!b) return;
+  const text = b.dataset.copy;
+  try{
+    await navigator.clipboard.writeText(text);
+  }catch{
+    const t = document.createElement("textarea");
+    t.value = text; document.body.appendChild(t); t.select();
+    try{ document.execCommand("copy"); }catch{}
+    t.remove();
+  }
+  b.textContent = "تم النسخ";
+  b.classList.add("ok");
+  toast("تم النسخ");
+  setTimeout(() => { b.textContent = "نسخ"; b.classList.remove("ok"); }, 1400);
+});
+
+/* ================================================================
+   الأزرار
+   ================================================================ */
+function renderActions(){
+  $("actions").hidden = false;
+  const id = encodeURIComponent(S.a.id);
+  const b = $("bMain");
+
+  if (S.phase === "unpaid" || S.phase === "rejected"){
+    b.href = "auction-seller-deposit.html?auction=" + id;
+    b.textContent = S.phase === "rejected" ? "إرسال إثبات جديد" : "إرسال إثبات الدفع";
+  } else if (S.phase === "cancelled" || S.phase === "closed"){
+    b.href = "sell-auction.html";
+    b.textContent = "نشر مزاد جديد";
+  } else {
+    b.href = "my-auction.html?auction=" + id;
+    b.textContent = "متابعة المزاد";
+  }
+}
+
+/* ================================================================
+   العدّاد (للمزاد المباشر)
+   ================================================================ */
+const fmtLeft = ms => {
+  if (ms <= 0) return "00:00:00";
+  const s = Math.floor(ms / 1000);
+  const p = n => String(n).padStart(2, "0");
+  const d = Math.floor(s / 86400);
+  return (d > 0 ? d + "ي " : "") + p(Math.floor(s % 86400 / 3600)) + ":" + p(Math.floor(s % 3600 / 60)) + ":" + p(s % 60);
+};
+
+let endedFetched = false;
+function tickCountdown(){
+  const el = $("cdbox");
+  if (!el || !S.a?.ends_at) return;
+  const left = new Date(S.a.ends_at).getTime() - Date.now();
+  el.textContent = fmtLeft(left);
+  el.classList.toggle("urgent", left > 0 && left < 3600e3 / 4);
+  if (left <= 0 && !endedFetched){ endedFetched = true; refresh(); }   // نتحقق من انتهاء المزاد مرة وحدة
+}
+
+/* ================================================================
+   البيانات (Supabase)
+   ================================================================ */
+async function fetchAuction(){
+  const r = await supabase.from("mzad_auctions")
+    .select("id,auction_number,device_id,seller_user_id,starting_price_iqd,status,ends_at")
+    .eq("id", auctionId).maybeSingle();
+  if (r.error) throw r.error;
+  if (!r.data) throw new Error("المزاد غير موجود.");
+  if (r.data.seller_user_id !== S.user.id) throw new Error("هذا المزاد لا يتبع حسابك.");
+  return r.data;
+}
+
+async function fetchDeposit(){
+  const r = await supabase.from("mzad_deposits")
+    .select("id,deposit_number,amount_iqd,status,created_at,updated_at")
+    .eq("auction_id", auctionId).eq("user_id", S.user.id).eq("deposit_type", "auction_seller")
+    .order("created_at", { ascending:false }).limit(1).maybeSingle();
+  if (r.error) throw r.error;
+  return r.data;
+}
+
+async function fetchRequest(dep){
+  const cols = "id,request_number,status,created_at";
+  if (requestId){
+    const r = await supabase.from("mzad_payment_requests").select(cols).eq("id", requestId).eq("user_id", S.user.id).maybeSingle();
+    if (r.error) throw r.error;
+    if (r.data) return r.data;
+  }
+  if (!dep) return null;
+  const r = await supabase.from("mzad_payment_requests").select(cols)
+    .eq("deposit_id", dep.id).eq("user_id", S.user.id)
+    .order("created_at", { ascending:false }).limit(1).maybeSingle();
+  if (r.error) throw r.error;
+  return r.data;
+}
+
+/* الجهاز والصورة: نجلبهم مرة وحدة فقط */
+async function loadDevice(){
+  const d = await supabase.from("mzad_devices")
+    .select("id,mzad_id,brand,model,storage,color,condition_grade,battery_health")
+    .eq("id", S.a.device_id).maybeSingle();
+  if (d.error) throw d.error;
+  S.device = d.data;
+  if (!d.data) return;
+
+  try{
+    const imgs = await supabase.from("mzad_device_images")
+      .select("storage_path,is_primary,sort_order").eq("device_id", d.data.id)
+      .order("sort_order", { ascending:true }).limit(6);
+    const list = imgs.data || [];
+    if (!list.length) return;
+    const im = list.find(x => x.is_primary) || list[0];
+    const signed = await supabase.storage.from("device-images").createSignedUrl(im.storage_path, 3600);
+    S.imgUrl = signed.data?.signedUrl || supabase.storage.from("device-images").getPublicUrl(im.storage_path).data?.publicUrl || "";
+  }catch(e){ console.error("IMAGE ERROR:", e); }
+}
+
+/* ================================================================
+   التحديث والعرض
+   ================================================================ */
+function renderAll(){
+  const prev = S.phase;
+  S.phase = phaseOf();
+  if (S.phase !== prev) renderHero();      // الهيرو يتجدد فقط عند تغيّر الحالة (بدون وميض)
+  renderTimeline();
+  renderPreview();
+  renderInfo();
+  renderActions();
+  schedule();
+}
+
+async function refresh(){
+  try{
+    S.a = await fetchAuction();
+    S.dep = await fetchDeposit();
+    S.pr = await fetchRequest(S.dep);
+    if (S.phase === "live" && S.a.status !== "live") endedFetched = false;
+    renderAll();
+  }catch(e){ console.error("REFRESH ERROR:", e); }
+}
+
+/* تحديث تلقائي فقط أثناء انتظار الإدارة */
+function schedule(){
+  clearInterval(S.poll);
+  if (["review", "approved"].includes(S.phase)){
+    S.poll = setInterval(() => { if (!document.hidden) refresh(); }, 12000);
+  }
+}
+
+function showError(msg){
+  $("hero").innerHTML = `
+    <div class="hi bad"><svg viewBox="0 0 110 110"><circle class="bg" cx="55" cy="55" r="46"/><circle class="fg" cx="55" cy="55" r="46"/>${IC.bad}</svg></div>
+    <h1>تعذر تحميل الطلب</h1>
+    <p>${esc(msg)}</p>
+    <button class="retry" id="retry" type="button">إعادة المحاولة</button>`;
+  $("retry").addEventListener("click", start);
+  ["cTl", "cPv", "cInfo", "actions"].forEach(id => $(id).hidden = true);
+}
+
+async function start(){
+  $("hero").innerHTML = '<div class="sk c"></div><div class="sk l"></div><div class="sk s"></div>';
+  S.phase = null; S.loaded = false;
+  try{
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data.user){
+      location.href = "index.html?login=1&returnTo=" + encodeURIComponent(location.pathname + location.search);
+      return;
+    }
+    S.user = data.user;
+    if (!auctionId) throw new Error("رابط الطلب لا يحتوي على رقم المزاد.");
+
+    S.a = await fetchAuction();
+    S.dep = await fetchDeposit();
+    S.pr = await fetchRequest(S.dep);
+    await loadDevice();
+
+    S.loaded = true;
+    renderAll();
+  }catch(e){
+    console.error("AUCTION REQUEST STATUS ERROR:", e);
+    showError(e?.message || "حدث خطأ غير معروف.");
+  }
+}
+
+/* ================================================================
+   التشغيل
+   ================================================================ */
+$("back").addEventListener("click", () => history.length > 1 ? history.back() : location.href = "home.html");
+S.tick = setInterval(tickCountdown, 1000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden && S.loaded) refresh(); });
+
+start();
+</script>
+
+</body>
+</html>
