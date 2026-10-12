@@ -286,9 +286,9 @@ setInterval(tick, 1000);
 
 async function refresh(){ try{ if (S.busy) return; if (await load()) render(); }catch(e){ console.error("REFRESH:", e); } }
 
-function fail(t, p, link){
+function fail(t, p, link, detail){
   $("ld").hidden = true; $("pg").hidden = true; $("bar").hidden = true; $("errPg").hidden = false;
-  $("errPg").innerHTML = `<h2>${esc(t)}</h2><p>${esc(p)}</p>` + (link ? '<a href="auctions.html">رجوع للمزادات</a>' : '<button id="rt" type="button">إعادة المحاولة</button>');
+  $("errPg").innerHTML = `<h2>${esc(t)}</h2><p>${esc(p)}</p>` + (detail ? `<p dir="ltr" style="font-size:10px;color:#9ca3af;word-break:break-all">${esc(detail)}</p>` : "") + (link ? '<a href="auctions.html">رجوع للمزادات</a>' : '<button id="rt" type="button">إعادة المحاولة</button>');
   $("rt")?.addEventListener("click", () => location.reload());
 }
 
@@ -310,7 +310,7 @@ $("back").addEventListener("click", () => history.length > 1 ? history.back() : 
     const m = String(e?.message||"");
     if (m==="NO_ID" || m==="NOT_FOUND") fail("المزاد غير موجود","الرابط غير صحيح أو أن المزاد حُذف.",true);
     else if (m==="UNAVAILABLE") fail("المزاد غير متاح","هذا المزاد لم ينشر بعد.",true);
-    else fail("تعذر تحميل المزاد","تأكد من الاتصال وحاول مرة ثانية.",false);
+    else fail("تعذر تحميل المزاد","تأكد من الاتصال وحاول مرة ثانية.",false,(e?.code||"")+" "+m);
   }
 })();
 </script>
