@@ -19,10 +19,11 @@ html{scroll-behavior:smooth}
 body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body.lock{overflow:hidden}
 button,input,textarea{font:inherit;color:inherit}
 button{border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
 :focus-visible{outline:3px solid var(--p);outline-offset:2px}
-.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(100px + var(--safe-bottom));overflow-x:clip}
+.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(104px + var(--safe-bottom));overflow-x:clip}
 
 /* ============ أنميشن ============ */
 @keyframes fade{from{opacity:0}to{opacity:1}}
@@ -36,9 +37,10 @@ button{border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:trans
 @keyframes ping{0%{box-shadow:0 0 0 0 rgba(98,70,217,.45)}70%{box-shadow:0 0 0 9px rgba(98,70,217,0)}100%{box-shadow:0 0 0 0 rgba(98,70,217,0)}}
 @keyframes glow{50%{box-shadow:0 12px 34px rgba(98,70,217,.6),0 0 0 6px rgba(98,70,217,.12)}}
 @keyframes slowzoom{from{transform:scale(1)}to{transform:scale(1.08)}}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:none}}
 header{animation:fade .5s backwards}
-.icon-btn,.opt,.b-next,.b-back,.add,.sw{transition:transform .18s ease,background .25s,border-color .25s,color .25s,box-shadow .25s}
-.icon-btn:active,.opt:active,.add:active,.b-back:active{transform:scale(.94)}
+.icon-btn,.opt,.tile,.pick,.b-next,.b-back,.add,.edit{transition:transform .18s ease,background .25s,border-color .25s,color .25s,box-shadow .25s}
+.icon-btn:active,.opt:active,.tile:active,.pick:active,.add:active,.b-back:active{transform:scale(.95)}
 
 /* ============ الهيدر ============ */
 header{margin-inline:-14px;padding:0 14px 16px;background:linear-gradient(145deg,#fff 0%,#f7f5ff 55%,#ece8ff 100%);
@@ -50,17 +52,21 @@ header{margin-inline:-14px;padding:0 14px 16px;background:linear-gradient(145deg
 .icon-btn{width:39px;height:34px;display:grid;place-items:center;border:1px solid var(--edge);border-radius:12px;background:#fff;color:var(--p);box-shadow:0 7px 18px rgba(23,32,42,.045)}
 .icon-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .spacer{width:39px}
-.head-copy{margin:14px 2px 14px}
+.head-copy{margin:14px 2px 12px}
 .badge{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;background:#fff;border:1px solid var(--edge);color:var(--p-dark);font-size:10px;font-weight:900}
 .badge:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--p);animation:ping 1.8s infinite}
 h1{margin:10px 0 4px;font-size:23px;font-weight:950;letter-spacing:-.035em}
 .lead{margin:0;font-size:11px;font-weight:700;line-height:1.9;color:var(--muted)}
+.helpbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 12px;padding:9px 12px;border-radius:14px;background:#ffffffcc;border:1px solid var(--edge)}
+.helpbar b{display:block;font-size:11.5px;font-weight:950}
+.helpbar small{display:block;margin-top:1px;font-size:10px;font-weight:700;color:var(--muted)}
 
-/* شريط التقدم */
+/* شريط التقدم (كل مرحلة تنضغط للرجوع) */
 .prog{display:flex;gap:6px}
-.seg{position:relative;flex:1;height:6px;border-radius:99px;background:#e4defa;overflow:hidden}
+.seg{position:relative;flex:1;height:8px;border-radius:99px;background:#e4defa;overflow:hidden;padding:0}
 .seg i{position:absolute;inset:0;background:linear-gradient(90deg,#8b6cf0,#6246d9);transform:scaleX(0);transform-origin:right;transition:transform .5s cubic-bezier(.3,1,.4,1)}
 .seg.done i,.seg.active i{transform:scaleX(1)}
+.seg.done{cursor:pointer}
 .plabel{display:flex;justify-content:space-between;margin-top:7px;font-size:10px;font-weight:800;color:var(--muted)}
 .plabel b{color:var(--p-dark);font-weight:950}
 
@@ -76,9 +82,20 @@ h1{margin:10px 0 4px;font-size:23px;font-weight:950;letter-spacing:-.035em}
 .c-head h2{margin:0;font-size:16px;font-weight:950;letter-spacing:-.02em}
 .c-head p{margin:1px 0 0;font-size:10px;font-weight:700;color:var(--muted)}
 
+/* كرت التعليمات */
+.guide{display:flex;gap:11px;margin-top:14px;padding:13px;border-radius:18px;background:linear-gradient(145deg,#f7f5ff,#ece8ff);border:1px solid #d9d1fb;animation:up .5s}
+.guide .gi{width:34px;height:34px;flex:0 0 34px;border-radius:12px;display:grid;place-items:center;background:#fff;font-size:17px;box-shadow:0 5px 12px rgba(98,70,217,.18)}
+.guide b{display:block;font-size:12.5px;font-weight:950;color:var(--p-dark)}
+.guide p{margin:3px 0 0;font-size:11px;font-weight:700;line-height:1.9;color:#4b5563}
+.guide ul{margin:6px 0 0;padding:0;list-style:none}
+.guide li{position:relative;padding-inline-start:18px;font-size:11px;font-weight:700;line-height:1.9;color:#4b5563}
+.guide li:before{content:"✓";position:absolute;inset-inline-start:0;color:var(--p);font-weight:950}
+.help{margin:7px 2px 0;font-size:10.5px;font-weight:700;line-height:1.8;color:var(--muted)}
+body.nohelp .help,body.nohelp .guide{display:none}
+
 /* ============ الحقول ============ */
-.field+.field{margin-top:16px}
-.lbl{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;font-size:11px;font-weight:900;color:#374151}
+.field+.field{margin-top:18px}
+.lbl{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:11.5px;font-weight:900;color:#374151}
 .lbl i{font-style:normal;color:var(--hot)}
 .lbl small{font-weight:700;color:#9ca3af}
 .in,.ta{width:100%;border:1.5px solid #e4defa;border-radius:14px;background:#fff;padding:0 14px;outline:none;font-weight:700;transition:.25s}
@@ -86,21 +103,55 @@ h1{margin:10px 0 4px;font-size:23px;font-weight:950;letter-spacing:-.035em}
 .ta{min-height:92px;padding:12px 14px;resize:vertical;line-height:1.7}
 .in:focus,.ta:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.10)}
 .in::placeholder,.ta::placeholder{color:#a8b0bb;font-weight:600}
-.in.invalid,.chips.invalid{animation:shake .4s}
-.in.invalid{border-color:var(--hot)}
-.chips.invalid{padding:6px;margin:-6px;border-radius:16px;box-shadow:0 0 0 1.5px var(--hot)}
+.in.invalid,.chips.invalid,.tiles.invalid,.pick.invalid{animation:shake .4s}
+.in.invalid,.pick.invalid{border-color:var(--hot)}
+.chips.invalid,.tiles.invalid{padding:6px;margin:-6px;border-radius:16px;box-shadow:0 0 0 1.5px var(--hot)}
 .count{text-align:end;margin-top:4px;font-size:10px;font-weight:700;color:#9ca3af}
 .sub-in{margin-top:9px;animation:up .35s}
 
-/* ============ الخيارات (chips) ============ */
+/* ============ الخيارات ============ */
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .opt{padding:9px 14px;border-radius:999px;background:#fff;border:1.5px solid var(--line);font-size:11.5px;font-weight:800;color:#4b5563}
 .opt.on{background:var(--p-soft);border-color:var(--p);color:var(--p-dark);font-weight:950;animation:pop .3s}
 .opt.sm{padding:6px 11px;font-size:10.5px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tile{padding:13px 4px;border-radius:15px;background:#fff;border:1.5px solid var(--line);font-size:12px;font-weight:900;color:#374151;text-align:center}
+.tile.on{background:var(--p-soft);border-color:var(--p);color:var(--p-dark);box-shadow:0 8px 18px -10px rgba(98,70,217,.5);animation:pop .3s}
+
+/* زر اختيار الموديل */
+.pick{width:100%;height:50px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;border-radius:14px;background:#fff;border:1.5px solid #e4defa;font-size:13px;font-weight:800;text-align:start}
+.pick span{color:#a8b0bb;font-weight:700}
+.pick.has span{color:var(--ink);font-weight:900}
+.pick:disabled{background:#f7f7fa;opacity:.7;cursor:not-allowed}
+.pick svg{width:16px;height:16px;flex:0 0 16px;fill:none;stroke:var(--p);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+
+/* ============ مفاتيح التشغيل والإيقاف ============ */
+.tg{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 2px;border-bottom:1px solid #f1eefb;cursor:pointer}
+.tg:last-of-type{border-bottom:0}
+.tg b{display:block;font-size:13px;font-weight:900}
+.tg small{display:block;margin-top:2px;font-size:10.5px;font-weight:800;color:var(--ok);transition:color .25s}
+.tg.off small{color:var(--hot)}
+.tg input{position:absolute;opacity:0;pointer-events:none}
+.tg i{position:relative;width:46px;height:27px;flex:0 0 46px;border-radius:99px;background:#d9d6e8;transition:background .3s}
+.tg i:after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:21px;height:21px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:transform .3s cubic-bezier(.3,1.4,.5,1)}
+.tg:active i:after{width:25px}
+.tg input:checked+i{background:var(--ok)}
+.tg input:checked+i:after{transform:translateX(-19px)}
+.tg.warn input:checked+i{background:var(--hot)}
+.tg.mini{padding:0;border:0}
+.tg.mini i{width:42px;flex-basis:42px;height:25px}
+.tg.mini i:after{width:19px;height:19px}
+.tg.mini input:checked+i:after{transform:translateX(-17px)}
+.tg.mini input:checked+i{background:var(--p)}
+.link-btn{margin-top:10px;padding:7px 13px;border-radius:999px;background:var(--p-soft);border:1px solid #e4defa;color:var(--p-dark);font-size:10.5px;font-weight:900}
+.fold{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.3,1,.4,1)}
+.fold.open{grid-template-rows:1fr}
+.fold>div{overflow:hidden}
+.fold .in{margin-top:10px}
 
 /* ============ البطارية ============ */
 .bat{display:flex;align-items:center;gap:12px}
-.bat output{min-width:58px;padding:6px 0;border-radius:12px;background:var(--p-soft);color:var(--p-dark);text-align:center;font-size:14px;font-weight:950;direction:ltr}
+.bat output{min-width:62px;padding:6px 0;border-radius:12px;background:var(--p-soft);color:var(--p-dark);text-align:center;font-size:14px;font-weight:950;direction:ltr}
 .bat output.idle{color:var(--muted);font-size:11px;font-weight:800}
 input[type=range]{flex:1;-webkit-appearance:none;height:8px;border-radius:99px;
   background:linear-gradient(to left,#6246d9 var(--p-fill,75%),#e4defa var(--p-fill,75%))}
@@ -115,7 +166,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
 .add input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
 .add.invalid{border-color:var(--hot);animation:shake .4s}
 .thumb{border:1px solid var(--edge)}
-.thumb-enter{animation:thumbIn .45s cubic-bezier(.3,1.5,.5,1)}
+.thumb.in{animation:thumbIn .45s cubic-bezier(.3,1.5,.5,1)}
 @keyframes thumbIn{from{opacity:0;transform:scale(.5) rotate(-6deg)}to{opacity:1;transform:none}}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .thumb .x,.thumb .mk{position:absolute;top:5px;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.96);display:grid;place-items:center;color:#6b7280;box-shadow:0 4px 10px rgba(0,0,0,.18);font-size:15px;transition:transform .15s}
@@ -124,8 +175,6 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
 .thumb .x:active,.thumb .mk:active{transform:scale(.8)}
 .thumb .cv{position:absolute;bottom:5px;inset-inline:5px;padding:2px 0;border-radius:8px;background:var(--p);color:#fff;text-align:center;font-size:9px;font-weight:900}
 .hint{margin:10px 2px 0;font-size:10.5px;font-weight:700;line-height:1.8;color:var(--muted)}
-.tip{display:flex;gap:10px;margin-top:12px;padding:11px;border-radius:14px;background:var(--p-soft);border:1px solid #e4defa;font-size:10.5px;font-weight:700;line-height:1.8;color:#4b5563}
-.tip b{color:var(--p-dark)}
 
 /* ============ المعاينة ============ */
 .pv-wrap{display:flex;flex-direction:column;align-items:center}
@@ -146,7 +195,6 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
 .pv-row small{display:block;font-size:8.5px;font-weight:800;color:#ffffffb3}
 .pv-row b{display:block;margin-top:1px;font-size:13px;font-weight:950;white-space:nowrap}
 .type{padding:4px 8px;border-radius:999px;background:var(--p);color:#fff;font-size:8.5px;font-weight:900}
-.pv-cap{margin-top:10px;font-size:10.5px;font-weight:800;color:var(--muted)}
 
 /* ============ السعر والملخص ============ */
 .money{position:relative}
@@ -154,8 +202,16 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
 .money span{position:absolute;inset-inline-start:14px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:900;color:var(--muted);pointer-events:none}
 .row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px dashed #e9e5f8;font-size:11px;font-weight:700}
 .row:last-child{border:0;padding-bottom:0}
-.row span{color:var(--muted)}
-.row strong{font-weight:900;text-align:end}
+.row span{color:var(--muted);flex:0 0 auto}
+.row strong{font-weight:900;text-align:end;line-height:1.7}
+.rv{display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-bottom:1px dashed #e9e5f8}
+.rv:last-child{border:0;padding-bottom:0}
+.rv .k{flex:0 0 62px;font-size:10.5px;font-weight:800;color:var(--muted);padding-top:2px}
+.rv .v{flex:1;font-size:12px;font-weight:900;line-height:1.7}
+.rv .v.bad{color:var(--hot)}
+.rv .v.good{color:var(--ok)}
+.edit{flex:0 0 auto;padding:5px 11px;border-radius:999px;background:var(--p-soft);color:var(--p-dark);font-size:10px;font-weight:900}
+.edit:active{transform:scale(.94)}
 .notice{display:flex;gap:10px;margin-top:14px;padding:12px;border-radius:14px;background:var(--warn-soft);border:1px solid #f2e2b7}
 .notice i{width:28px;height:28px;display:grid;place-items:center;flex:0 0 28px;border-radius:10px;background:#ffefc8;color:var(--warn);font-style:normal;font-weight:950}
 .notice b{display:block;font-size:11.5px;font-weight:950;color:#5f4a1a}
@@ -164,6 +220,48 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
 .msg.show{display:block;animation:up .35s}
 .msg.err{background:var(--bad-soft);color:var(--bad)}
 .msg.ok{background:var(--ok-soft);color:var(--ok)}
+
+/* مؤشر اكتمال الإعلان */
+.meter{display:flex;align-items:center;gap:12px}
+.ring{position:relative;width:62px;height:62px;flex:0 0 62px}
+.ring svg{width:62px;height:62px;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:6}
+.ring .bg{stroke:#e4defa}
+.ring .fg{stroke:var(--p);stroke-linecap:round;stroke-dasharray:157;stroke-dashoffset:157;transition:stroke-dashoffset .8s cubic-bezier(.3,1,.4,1)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:14px;font-weight:950;color:var(--p-dark)}
+.meter b.t{display:block;font-size:13px;font-weight:950}
+.meter p{margin:2px 0 0;font-size:10.5px;font-weight:700;color:var(--muted);line-height:1.8}
+.miss{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
+.miss span{padding:5px 10px;border-radius:999px;background:var(--p-soft);border:1px solid #e4defa;font-size:10px;font-weight:800;color:var(--p-dark)}
+
+/* الخط الزمني */
+.tl{margin:0;padding:0;list-style:none}
+.tl li{position:relative;display:flex;gap:12px;padding-bottom:16px}
+.tl li:last-child{padding-bottom:0}
+.tl li:not(:last-child):before{content:"";position:absolute;top:30px;bottom:2px;inset-inline-start:14px;width:2px;background:#e4defa;transform:translateX(1px)}
+.tl .n{position:relative;width:30px;height:30px;flex:0 0 30px;border-radius:50%;display:grid;place-items:center;background:var(--p-soft);border:2px solid #cfc6f3;color:var(--p-dark);font-size:12px;font-weight:950}
+.tl li:first-child .n{background:var(--p);border-color:var(--p);color:#fff}
+.tl b{display:block;font-size:12.5px;font-weight:950}
+.tl p{margin:2px 0 0;font-size:10.5px;font-weight:700;line-height:1.8;color:var(--muted)}
+
+/* ============ نافذة اختيار الموديل ============ */
+.sheet{position:fixed;inset:0;z-index:300;display:none}
+.sheet.show{display:block}
+.sheet-ov{position:absolute;inset:0;background:rgba(23,32,42,.5);animation:fade .25s}
+.sheet-box{position:absolute;left:0;right:0;bottom:0;max-width:520px;margin:0 auto;max-height:82dvh;display:flex;flex-direction:column;border-radius:26px 26px 0 0;background:#fff;box-shadow:0 -14px 40px rgba(23,32,42,.25);animation:sheetUp .35s cubic-bezier(.2,.9,.3,1)}
+.sheet-h{padding:12px 16px 10px;border-bottom:1px solid var(--line)}
+.grab{width:42px;height:4px;border-radius:99px;background:#d9d6e8;margin:0 auto 12px}
+.sheet-h .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.sheet-h h3{margin:0;font-size:15px;font-weight:950}
+.sheet-h .cls{width:32px;height:32px;border-radius:50%;background:var(--p-soft);color:#6b7280;font-size:18px;display:grid;place-items:center}
+.sheet-list{overflow-y:auto;padding:6px 12px calc(16px + var(--safe-bottom));-webkit-overflow-scrolling:touch}
+.gh{position:sticky;top:0;margin:6px -4px 4px;padding:6px 8px;background:#fff;font-size:10.5px;font-weight:950;color:var(--p-dark);letter-spacing:.02em}
+.mi{width:100%;display:flex;align-items:center;justify-content:space-between;padding:13px 12px;border-radius:14px;font-size:13px;font-weight:800;text-align:start;transition:background .2s}
+.mi:active,.mi:hover{background:var(--p-soft)}
+.mi.on{background:var(--p-soft);color:var(--p-dark);font-weight:950}
+.mi.on:after{content:"✓";color:var(--p);font-weight:950}
+.mi.other{margin-top:8px;border:1.5px dashed #c9bff7;color:var(--p-dark);font-weight:900;justify-content:center}
+.none{padding:22px 10px;text-align:center;font-size:12px;font-weight:800;color:var(--muted)}
 
 /* ============ الشريط السفلي ============ */
 .bar{position:fixed;left:0;right:0;bottom:0;padding:10px 12px calc(10px + var(--safe-bottom));z-index:100;pointer-events:none}
@@ -182,14 +280,14 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
 .kb .bar{display:none}
 
 /* ============ النجاح + التوست ============ */
-.done{position:fixed;inset:0;z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#f9f8fdf7;text-align:center;padding:24px}
+.done{position:fixed;inset:0;z-index:400;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#f9f8fdf7;text-align:center;padding:24px}
 .done.show{display:flex;animation:fade .3s}
 .done svg{width:104px;height:104px}
 .done.show svg{animation:pop2 .6s cubic-bezier(.3,1.5,.5,1)}
 @keyframes pop2{from{transform:scale(.4)}to{transform:scale(1)}}
 .done circle{fill:none;stroke:#e4defa;stroke-width:6}
-.done .ring{stroke:var(--p);stroke-dasharray:289;stroke-dashoffset:289;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center}
-.done.show .ring{animation:draw .8s ease-out forwards}
+.done .ringd{stroke:var(--p);stroke-dasharray:289;stroke-dashoffset:289;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center}
+.done.show .ringd{animation:draw .8s ease-out forwards}
 @keyframes draw{to{stroke-dashoffset:0}}
 .done .tick{fill:none;stroke:var(--ok);stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60}
 .done.show .tick{animation:tick .4s .6s ease-out forwards}
@@ -199,7 +297,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
 .done.show h2{animation:up .5s .5s both}
 .done.show p{animation:up .5s .7s both}
 .toast{position:fixed;left:50%;bottom:calc(88px + var(--safe-bottom));transform:translateX(-50%) translateY(16px);max-width:calc(100% - 40px);padding:10px 14px;border-radius:13px;
-  background:#1e2c30;color:#fff;font-size:11px;font-weight:800;box-shadow:0 14px 34px rgba(24,44,49,.14);opacity:0;pointer-events:none;transition:.3s cubic-bezier(.3,1.4,.5,1);z-index:250;text-align:center}
+  background:#1e2c30;color:#fff;font-size:11px;font-weight:800;box-shadow:0 14px 34px rgba(24,44,49,.14);opacity:0;pointer-events:none;transition:.3s cubic-bezier(.3,1.4,.5,1);z-index:500;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%)}
 .kb .toast{bottom:24px}
 
@@ -220,112 +318,213 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
   <div class="head-copy">
     <span class="badge">مزاد مستقل</span>
     <h1>انشر جهازك بالمزاد</h1>
-    <p class="lead">أربع خطوات سريعة. هذا المسار منفصل بالكامل عن البيع المباشر.</p>
+    <p class="lead">خمس خطوات بسيطة، وكل خطوة نشرحلك شنو تسوي بيها.</p>
   </div>
 
+  <label class="helpbar tg mini" style="cursor:pointer">
+    <div><b>التعليمات والشرح</b><small style="color:var(--muted);font-weight:700">طفّيها إذا تعرف الصفحة</small></div>
+    <input type="checkbox" id="helpSw" checked><i></i>
+  </label>
+
   <div class="prog" id="prog">
-    <div class="seg"><i></i></div><div class="seg"><i></i></div><div class="seg"><i></i></div><div class="seg"><i></i></div>
+    <button class="seg" type="button" aria-label="الخطوة 1"><i></i></button>
+    <button class="seg" type="button" aria-label="الخطوة 2"><i></i></button>
+    <button class="seg" type="button" aria-label="الخطوة 3"><i></i></button>
+    <button class="seg" type="button" aria-label="الخطوة 4"><i></i></button>
+    <button class="seg" type="button" aria-label="الخطوة 5"><i></i></button>
   </div>
-  <div class="plabel"><span id="pCount">الخطوة 1 من 4</span><b id="pName">الجهاز</b></div>
+  <div class="plabel"><span id="pCount">الخطوة 1 من 5</span><b id="pName">الجهاز</b></div>
 </header>
 
 <form id="form" novalidate onsubmit="return false">
 
-<!-- الخطوة 1: الجهاز -->
+<!-- ============ الخطوة 1: الجهاز ============ -->
 <div class="step active fwd" data-step="1">
+
+  <div class="guide">
+    <div class="gi">👋</div>
+    <div>
+      <b>قبل ما تبدأ، جهز هذي الأشياء</b>
+      <ul>
+        <li>جهازك بيدك حتى تصوره وتفحصه</li>
+        <li>3 صور واضحة على الأقل</li>
+        <li>سعر البداية اللي تريده</li>
+        <li>5,000 د.ع تأمين (قابل للاسترداد) بعد النشر</li>
+      </ul>
+    </div>
+  </div>
+
   <section class="card">
-    <div class="c-head"><span class="num">1</span><div><h2>معلومات الجهاز</h2><p>املأ المعلومات الحقيقية، تُقفل بعد بدء المزاد</p></div></div>
+    <div class="c-head"><span class="num">1</span><div><h2>معلومات الجهاز</h2><p>شركة، موديل، سعة، لون</p></div></div>
 
     <div class="field">
       <span class="lbl">الشركة <i>*</i></span>
-      <div class="chips" id="ch-brand"></div>
+      <div class="tiles" id="tiles"></div>
       <input class="in sub-in" id="brandOther" placeholder="اكتب اسم الشركة" maxlength="40" style="display:none">
+      <p class="help">اضغط على شركة جهازك. إذا شركتك مو موجودة اختر «أخرى».</p>
     </div>
 
     <div class="field">
-      <label class="lbl" for="model">الموديل <i>*</i></label>
-      <input class="in" id="model" placeholder="مثلاً: iPhone 15 Pro" maxlength="60" autocomplete="off">
+      <span class="lbl">الموديل <i>*</i></span>
+      <button class="pick" id="modelBtn" type="button" disabled><span id="modelTxt">اختر الشركة أولاً</span><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+      <input class="in sub-in" id="modelCustom" placeholder="اكتب اسم الموديل" maxlength="60" autocomplete="off" style="display:none">
+      <p class="help">القائمة مرتبة من الأحدث للأقدم وفيها بحث. موديلك مو موجود؟ اختر «موديلي مو موجود» واكتبه.</p>
     </div>
 
     <div class="field">
-      <span class="lbl">السعة <small>اختياري</small></span>
+      <span class="lbl">السعة <i>*</i></span>
       <div class="chips" id="ch-storage"></div>
+      <p class="help">تلكاها بإعدادات الجهاز › عام › حول (أو معلومات الهاتف).</p>
     </div>
 
     <div class="field">
-      <label class="lbl" for="color">اللون <small>اختياري</small></label>
-      <input class="in" id="color" placeholder="مثلاً: Natural Titanium" maxlength="40" autocomplete="off">
-      <div class="chips" id="ch-color" style="margin-top:9px"></div>
+      <span class="lbl">اللون <small>اختياري</small></span>
+      <div class="chips" id="ch-color"></div>
+      <input class="in sub-in" id="colorCustom" placeholder="اكتب لون الجهاز" maxlength="40" style="display:none">
     </div>
   </section>
 </div>
 
-<!-- الخطوة 2: الحالة -->
+<!-- ============ الخطوة 2: الحالة ============ -->
 <div class="step" data-step="2">
+
+  <div class="guide">
+    <div class="gi">🔍</div>
+    <div>
+      <b>شنو تسوي هنا؟</b>
+      <p>صف شكل جهازك من برا بصدق. الصدق يرفع ثقة المزايدين ويقلل المشاكل بعد البيع.</p>
+    </div>
+  </div>
+
   <section class="card">
-    <div class="c-head"><span class="num">2</span><div><h2>حالة الجهاز</h2><p>كن صريح، الصدق يرفع الثقة بمزادك</p></div></div>
+    <div class="c-head"><span class="num">2</span><div><h2>حالة الجهاز</h2><p>الشكل الخارجي للجهاز</p></div></div>
 
     <div class="field">
-      <span class="lbl">الحالة العامة</span>
+      <span class="lbl">الحالة العامة <i>*</i></span>
       <div class="chips" id="ch-condition"></div>
+      <p class="help">جديد: ما انستخدم · ممتاز: بدون أي علامات · جيد جداً: علامات بسيطة جداً · جيد: علامات واضحة · متوسط: علامات كثيرة.</p>
     </div>
 
     <div class="field">
-      <span class="lbl">حالة الشاشة</span>
+      <span class="lbl">حالة الشاشة <i>*</i></span>
       <div class="chips" id="ch-screen"></div>
+      <p class="help">«أصلية» يعني ما تغيرت. «مبدلة» إذا انحطت شاشة ثانية.</p>
+    </div>
+
+    <div class="field">
+      <span class="lbl">حالة الهيكل <small>الإطار والجوانب</small></span>
+      <div class="chips" id="ch-body"></div>
+    </div>
+
+    <div class="field">
+      <span class="lbl">حالة الظهر</span>
+      <div class="chips" id="ch-back"></div>
     </div>
 
     <div class="field" id="batField" style="display:none">
       <span class="lbl">صحة البطارية <small>للآيفون</small></span>
       <div class="bat"><input type="range" id="battery" min="60" max="100" value="90"><output id="batOut" class="idle">لم تحدد</output></div>
-    </div>
-
-    <div class="field">
-      <span class="lbl">الكاميرات</span>
-      <div class="chips" id="ch-cameras"></div>
-    </div>
-
-    <div class="field">
-      <span class="lbl">Face ID / البصمة</span>
-      <div class="chips" id="ch-biometric"></div>
-    </div>
-
-    <div class="field">
-      <span class="lbl">انفتح الجهاز أو تبدلت قطع؟</span>
-      <div class="chips" id="ch-replacedPick"></div>
-      <input class="in sub-in" id="replaced" placeholder="اذكر القطع المبدّلة أو اللي انصلحت" maxlength="200" style="display:none">
-    </div>
-
-    <div class="field">
-      <label class="lbl" for="notes">ملاحظات البائع <small>اختياري</small></label>
-      <textarea class="ta" id="notes" maxlength="500" placeholder="أي معلومات مهمة عن الجهاز، سبب البيع، مدة الاستخدام..."></textarea>
-      <div class="count"><span id="nCount">0</span>/500</div>
+      <p class="help">تلكاها بالإعدادات › البطارية › صحة البطارية. حرّك المؤشر للرقم الصحيح.</p>
     </div>
   </section>
 </div>
 
-<!-- الخطوة 3: الصور -->
+<!-- ============ الخطوة 3: الفحص ============ -->
 <div class="step" data-step="3">
+
+  <div class="guide">
+    <div class="gi">🛠️</div>
+    <div>
+      <b>شنو تسوي هنا؟</b>
+      <ul>
+        <li>جرّب كل وظيفة بجهازك</li>
+        <li>طفّي المفتاح لأي شي ما يشتغل</li>
+        <li>إذا انفتح الجهاز، فعّل المفتاح الأحمر</li>
+      </ul>
+    </div>
+  </div>
+
   <section class="card">
-    <div class="c-head"><span class="num">3</span><div><h2>صور الجهاز</h2><p>الصورة الأولى هي الغلاف</p></div></div>
-    <div class="photos" id="photos"></div>
-    <p class="hint"><span id="pCnt">0</span>/6 صور. اضغط ★ على أي صورة لتخليها الغلاف.</p>
-    <div class="tip"><span>💡</span><div><b>نصيحة:</b> صوّر الجهاز من الأمام والخلف والجوانب وبإضاءة واضحة. الصور الأوضح تجذب مزايدين أكثر. يفضل 3 صور أو أكثر.</div></div>
+    <div class="c-head"><span class="num">3</span><div><h2>فحص الوظائف</h2><p>المفتاح مشغّل = الشي يشتغل</p></div></div>
+    <div id="works"></div>
+    <button class="link-btn" id="allWork" type="button">✓ كل الوظائف تعمل</button>
+  </section>
+
+  <section class="card">
+    <div class="c-head"><span class="num">🔧</span><div><h2>الصيانة</h2><p>هل انفتح الجهاز قبل؟</p></div></div>
+    <label class="tg warn" id="repRow">
+      <div><b>انفتح الجهاز أو تبدلت فيه قطع</b><small id="repSt">لا، الجهاز أصلي</small></div>
+      <input type="checkbox" id="repSw"><i></i>
+    </label>
+    <div class="fold" id="repFold"><div>
+      <input class="in" id="replaced" placeholder="اذكر القطع المبدّلة أو اللي انصلحت" maxlength="200">
+    </div></div>
+    <p class="help">مثلاً: شاشة، بطارية، كاميرا. ذكرها يزيد الثقة ويحميك من الاعتراض بعدين.</p>
+  </section>
+
+  <section class="card">
+    <div class="c-head"><span class="num">🎁</span><div><h2>الضمان والملحقات</h2><p>اختياري لكنه يرفع السعر</p></div></div>
+    <div class="field">
+      <span class="lbl">الضمان</span>
+      <div class="chips" id="ch-warranty"></div>
+    </div>
+    <div class="field">
+      <span class="lbl">الملحقات المرفقة <small>تقدر تختار أكثر من واحد</small></span>
+      <div class="chips" id="ch-acc"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="c-head"><span class="num">✎</span><div><h2>ملاحظات</h2><p>اختياري</p></div></div>
+    <textarea class="ta" id="notes" maxlength="500" placeholder="سبب البيع، مدة الاستخدام، أي شي يهم المشتري..."></textarea>
+    <div class="count"><span id="nCount">0</span>/500</div>
   </section>
 </div>
 
-<!-- الخطوة 4: السعر والنشر -->
+<!-- ============ الخطوة 4: الصور ============ -->
 <div class="step" data-step="4">
+
+  <div class="guide">
+    <div class="gi">📸</div>
+    <div>
+      <b>شنو تسوي هنا؟</b>
+      <ul>
+        <li>صوّر الجهاز من الأمام والخلف والجوانب</li>
+        <li>استخدم إضاءة واضحة وخلفية نظيفة</li>
+        <li>صوّر أي خدش أو كسر حتى ما يكون مفاجأة</li>
+      </ul>
+    </div>
+  </div>
+
   <section class="card">
-    <div class="c-head"><span class="num">4</span><div><h2>السعر الابتدائي</h2><p>من وين يبدأ المزاد</p></div></div>
+    <div class="c-head"><span class="num">4</span><div><h2>صور الجهاز</h2><p>الصورة الأولى هي الغلاف</p></div></div>
+    <div class="photos" id="photos"></div>
+    <p class="hint"><b id="pCnt">0</b>/6 صور. اضغط ★ على أي صورة لتخليها الغلاف، و× لحذفها. يفضل 3 صور أو أكثر.</p>
+  </section>
+</div>
+
+<!-- ============ الخطوة 5: السعر والنشر ============ -->
+<div class="step" data-step="5">
+
+  <div class="guide">
+    <div class="gi">🚀</div>
+    <div>
+      <b>آخر خطوة</b>
+      <p>اكتب سعر البداية، راجع المعاينة والملخص، وإذا كلشي تمام اضغط «نشر المزاد».</p>
+    </div>
+  </div>
+
+  <section class="card">
+    <div class="c-head"><span class="num">5</span><div><h2>السعر الابتدائي</h2><p>من وين يبدأ المزاد</p></div></div>
     <div class="field">
       <label class="lbl" for="price">سعر البداية <i>*</i></label>
       <div class="money"><input class="in" id="price" inputmode="numeric" autocomplete="off" placeholder="0"><span>د.ع</span></div>
+      <p class="help">ابدأ بسعر مغري. السعر الواطي يجذب مزايدين أكثر، والمنافسة هي اللي ترفعه.</p>
     </div>
   </section>
 
   <section class="card">
-    <div class="c-head"><span class="num" style="background:linear-gradient(145deg,#4a34b8,#8b6cf0)">★</span><div><h2>هكذا يظهر مزادك</h2><p>معاينة حية للبطاقة</p></div></div>
+    <div class="c-head"><span class="num">★</span><div><h2>هكذا يظهر مزادك</h2><p>معاينة حية للبطاقة</p></div></div>
     <div class="pv-wrap">
       <div class="pv">
         <div class="pv-media" id="pvMedia"></div>
@@ -344,21 +543,50 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
   </section>
 
   <section class="card">
-    <div class="c-head"><span class="num">!</span><div><h2>شلون تتم العملية؟</h2><p>الرسوم والتأمين</p></div></div>
-    <div class="row"><span>مدة المزاد</span><strong>60 دقيقة</strong></div>
+    <div class="c-head"><span class="num">📋</span><div><h2>مراجعة أخيرة</h2><p>اضغط «تعديل» لأي قسم</p></div></div>
+    <div id="review"></div>
+  </section>
+
+  <section class="card">
+    <div class="c-head"><span class="num">%</span><div><h2>اكتمال إعلانك</h2><p>كل ما زادت التفاصيل، زادت ثقة المزايدين</p></div></div>
+    <div class="meter">
+      <div class="ring"><svg viewBox="0 0 62 62"><circle class="bg" cx="31" cy="31" r="25"/><circle class="fg" id="mFg" cx="31" cy="31" r="25"/></svg><b id="mPct">0%</b></div>
+      <div><b class="t" id="mTitle">أكمل بياناتك</b><p id="mSub">—</p></div>
+    </div>
+    <div class="miss" id="miss"></div>
+  </section>
+
+  <section class="card">
+    <div class="c-head"><span class="num">⏱</span><div><h2>شنو يصير بعد النشر؟</h2><p>الخطوات بالترتيب</p></div></div>
+    <ol class="tl">
+      <li><span class="n">1</span><div><b>ينحفظ مزادك كمسودة</b><p>ما يظهر لأي أحد بعد، وننقلك مباشرة لصفحة التأمين.</p></div></li>
+      <li><span class="n">2</span><div><b>تدفع تأمين البائع 5,000 د.ع</b><p>تختار طريقة الدفع وترفع صورة الإيصال. التأمين قابل للاسترداد وليس رسم نشر.</p></div></li>
+      <li><span class="n">3</span><div><b>الإدارة تراجع الإثبات</b><p>بعد الموافقة يبدأ مزادك تلقائياً.</p></div></li>
+      <li><span class="n">4</span><div><b>مزادك يشتغل ساعة كاملة</b><p>المزايدون يتنافسون، وعند الإكمال تُحسب أجرة المنصة 3,000 د.ع على البائع.</p></div></li>
+    </ol>
+    <div class="row" style="margin-top:14px"><span>مدة المزاد</span><strong>60 دقيقة</strong></div>
     <div class="row"><span>تأمين البائع</span><strong>5,000 د.ع</strong></div>
     <div class="row"><span>تأمين المزايد</span><strong>5,000 د.ع</strong></div>
     <div class="row"><span>أجرة المنصة عند الإكمال</span><strong>3,000 د.ع للبائع</strong></div>
-    <div class="notice"><i>!</i><div><b>نشر المزاد يحتاج تأمين البائع</b><p>بعد الضغط على نشر، ينشأ المزاد كمسودة ويُنشأ طلب تأمين البائع بقيمة 5,000 د.ع. بعد رفع إثبات الدفع وموافقة الأدمن يبدأ المزاد لمدة ساعة.</p></div></div>
-    <div class="row" style="margin-top:12px"><span>الجهاز</span><strong id="rDevice">—</strong></div>
-    <div class="row"><span>السعر الابتدائي</span><strong id="rPrice">—</strong></div>
-    <div class="row"><span>الصور</span><strong id="rPhotos">0</strong></div>
     <div id="msg" class="msg"></div>
   </section>
 </div>
 
 </form>
 </main>
+
+<!-- نافذة اختيار الموديل -->
+<div class="sheet" id="sheet">
+  <div class="sheet-ov" id="sheetOv"></div>
+  <div class="sheet-box">
+    <div class="sheet-h">
+      <div class="grab"></div>
+      <div class="top"><h3 id="sheetTitle">اختر الموديل</h3><button class="cls" id="sheetCls" type="button" aria-label="إغلاق">×</button></div>
+      <input class="in" id="sheetQ" placeholder="ابحث عن موديل..." autocomplete="off">
+    </div>
+    <div class="sheet-list" id="sheetList"></div>
+  </div>
+</div>
 
 <!-- الشريط السفلي -->
 <div class="bar">
@@ -371,7 +599,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
 <div class="done" id="done">
   <svg viewBox="0 0 110 110">
     <circle cx="55" cy="55" r="46"/>
-    <circle class="ring" cx="55" cy="55" r="46"/>
+    <circle class="ringd" cx="55" cy="55" r="46"/>
     <path class="tick" d="M36 57l13 13 26-28"/>
   </svg>
   <h2>تم إنشاء مزادك كمسودة</h2>
@@ -390,9 +618,15 @@ const $ = id => document.getElementById(id);
 const form = $("form");
 const MAX_PHOTOS = 6;
 const MAX_MB = 12;
-const STEPS = ["الجهاز", "الحالة", "الصور", "السعر والنشر"];
+const TOTAL = 5;
+const STEPS = ["الجهاز", "الحالة", "الفحص", "الصور", "السعر والنشر"];
 
-const state = { user:null, step:1, files:[], busy:false, done:false, v:{}, batteryTouched:false, deviceId:null, imagesDone:false, auctionId:null };
+const state = {
+  user:null, step:1, files:[], busy:false, done:false,
+  v:{}, acc:new Set(), works:{}, replaced:false,
+  modelOther:false, colorOther:false, batteryTouched:false,
+  deviceId:null, imagesDone:false, auctionId:null
+};
 
 const val = id => $(id).value.trim();
 const money = n => Number(n || 0).toLocaleString("en-US") + " د.ع";
@@ -407,37 +641,108 @@ function toast(t){
   clearTimeout(toastT);
   toastT = setTimeout(() => e.classList.remove("show"), 2600);
 }
-
-function showMsg(t, type = "err"){
-  const m = $("msg");
-  m.textContent = t;
-  m.className = "msg show " + type;
-}
+function showMsg(t, type = "err"){ const m = $("msg"); m.textContent = t; m.className = "msg show " + type; }
 function hideMsg(){ $("msg").className = "msg"; }
 
 /* أي تعديل بعد فشل جزئي يلغي التكملة من نفس النقطة */
-function invalidate(){
-  // لا نمسح معرّفات المراحل الناجحة حتى لا ننشئ جهازاً أو مزاداً مكرراً.
-}
+function invalidate(){ state.deviceId = null; state.imagesDone = false; state.auctionId = null; }
 
 /* ================================================================
-   الخيارات (chips)
+   البيانات: الشركات والموديلات والألوان
    ================================================================ */
+const BRANDS = ["Apple","Samsung","Xiaomi","Google","Huawei","OPPO","HONOR","OnePlus","realme","Motorola","Sony","Nokia","Tecno","Infinix","أخرى"];
+
+const MODELS = {
+  Apple:["iPhone 18 Pro Max","iPhone 18 Pro","iPhone 18","iPhone 17 Pro Max","iPhone 17 Pro","iPhone 17 Air","iPhone 17","iPhone 17e","iPhone 16 Pro Max","iPhone 16 Pro","iPhone 16 Plus","iPhone 16","iPhone 16e","iPhone 15 Pro Max","iPhone 15 Pro","iPhone 15 Plus","iPhone 15","iPhone 14 Pro Max","iPhone 14 Pro","iPhone 14 Plus","iPhone 14","iPhone 13 Pro Max","iPhone 13 Pro","iPhone 13","iPhone 13 mini","iPhone 12 Pro Max","iPhone 12 Pro","iPhone 12","iPhone 12 mini","iPhone 11 Pro Max","iPhone 11 Pro","iPhone 11","iPhone XS Max","iPhone XS","iPhone XR","iPhone X","iPhone 8 Plus","iPhone 8","iPhone 7 Plus","iPhone 7","iPhone 6s Plus","iPhone 6s","iPhone 6 Plus","iPhone 6","iPhone SE 3","iPhone SE 2","iPhone SE"],
+  Samsung:["Galaxy S26 Ultra","Galaxy S26+","Galaxy S26","Galaxy S25 Ultra","Galaxy S25 Edge","Galaxy S25+","Galaxy S25","Galaxy S24 Ultra","Galaxy S24+","Galaxy S24","Galaxy S23 Ultra","Galaxy S23+","Galaxy S23","Galaxy S22 Ultra","Galaxy S22+","Galaxy S22","Galaxy S21 Ultra","Galaxy S21+","Galaxy S21","Galaxy S20 Ultra","Galaxy S20+","Galaxy S20","Galaxy Note 20 Ultra","Galaxy Note 20","Galaxy Z Fold7","Galaxy Z Flip7","Galaxy Z Fold6","Galaxy Z Flip6","Galaxy Z Fold5","Galaxy Z Flip5","Galaxy A57","Galaxy A37","Galaxy A56","Galaxy A36","Galaxy A55","Galaxy A35","Galaxy A54","Galaxy A34","Galaxy A53","Galaxy A33","Galaxy A52","Galaxy A32","Galaxy A51","Galaxy A31","Galaxy A72","Galaxy A71","Galaxy A70","Galaxy A50","Galaxy A30","Galaxy M56","Galaxy M55","Galaxy M54","Galaxy M53","Galaxy M52","Galaxy M51"],
+  Xiaomi:["Xiaomi 17 Ultra","Xiaomi 17 Pro","Xiaomi 17","Xiaomi 15 Ultra","Xiaomi 15 Pro","Xiaomi 15","Xiaomi 14 Ultra","Xiaomi 14 Pro","Xiaomi 14","Xiaomi 13 Ultra","Xiaomi 13 Pro","Xiaomi 13","Xiaomi 12S Ultra","Xiaomi 12 Pro","Xiaomi 12","Redmi Note 17 Pro+","Redmi Note 17 Pro","Redmi Note 17","Redmi Note 16 Pro+","Redmi Note 16 Pro","Redmi Note 16","Redmi Note 15 Pro+","Redmi Note 15 Pro","Redmi Note 15","Redmi Note 14 Pro+","Redmi Note 14 Pro","Redmi Note 14","Redmi Note 13 Pro+","Redmi Note 13 Pro","Redmi Note 13","Redmi Note 12 Pro+","Redmi Note 12 Pro","Redmi Note 12","POCO F8 Ultra","POCO F8 Pro","POCO F8","POCO F7 Ultra","POCO F7 Pro","POCO F7","POCO F6 Pro","POCO F6","POCO X8 Pro","POCO X8","POCO X7 Pro","POCO X7","Redmi 15","Redmi 14C","Redmi 13"],
+  Google:["Pixel 10 Pro XL","Pixel 10 Pro","Pixel 10","Pixel 9 Pro XL","Pixel 9 Pro","Pixel 9","Pixel 8 Pro","Pixel 8","Pixel 7 Pro","Pixel 7","Pixel 6 Pro","Pixel 6","Pixel 5","Pixel 4 XL","Pixel 4"],
+  Huawei:["Mate 80 Pro","Mate 80","Mate 70 Pro","Mate 70","Mate 60 Pro","Mate 60","Mate 50 Pro","Mate 50","Pura 80 Pro","Pura 80","P70 Pro","P70","P60 Pro","P60","P50 Pro","P50","Nova 14 Pro","Nova 14","Nova 13 Pro","Nova 13","Nova 12 Pro","Nova 12"],
+  OPPO:["Find X9 Ultra","Find X9 Pro","Find X9","Find X8 Ultra","Find X8 Pro","Find X8","Find X7 Ultra","Find X7","Find X6 Pro","Find X6","Reno 15 Pro","Reno 15","Reno 14 Pro","Reno 14","Reno 13 Pro","Reno 13","Reno 12 Pro","Reno 12","Reno 11 Pro","Reno 11","A6 Pro","A5 Pro","A4 Pro"],
+  HONOR:["Magic8 Pro","Magic8","Magic7 Pro","Magic7","Magic6 Pro","Magic6","Magic V5","Magic V3","Magic V2","HONOR 600 Pro","HONOR 600","HONOR 400 Pro","HONOR 400","HONOR 200 Pro","HONOR 200","HONOR 100 Pro","HONOR 100","X60 Pro","X50 Pro","X50"],
+  OnePlus:["OnePlus 14","OnePlus 13","OnePlus 12","OnePlus 11","OnePlus 10 Pro","OnePlus 9 Pro","OnePlus 9","OnePlus Nord 6","OnePlus Nord 5","OnePlus Nord 4","OnePlus Nord 3","OnePlus Open","OnePlus Open 2"],
+  realme:["GT 8 Pro","GT 8","GT 7 Pro","GT 7","GT 6","GT 5 Pro","GT 5","GT Neo 7","GT Neo 6","realme 15 Pro","realme 15","realme 14 Pro+","realme 14 Pro","realme 14","realme 13 Pro+","realme 13 Pro","realme 13","C75","C65","C55"],
+  Motorola:["Edge 70 Ultra","Edge 70 Pro","Edge 70","Edge 60 Ultra","Edge 60 Pro","Edge 60","Edge 50 Ultra","Edge 50 Pro","Edge 50","Razr 70 Ultra","Razr 70","Razr 60 Ultra","Razr 60","Moto G75","Moto G85","Moto G55"],
+  Sony:["Xperia 1 VII","Xperia 1 VI","Xperia 1 V","Xperia 5 V","Xperia 5 IV","Xperia 10 VII","Xperia 10 VI","Xperia 10 V"],
+  Nokia:["Nokia X60","Nokia X50","Nokia X30","Nokia G60","Nokia G50","Nokia G42","Nokia C32","Nokia C22"],
+  Tecno:["Phantom V Fold2","Phantom V Fold","Phantom V Flip2","Phantom V Flip","Camon 40 Pro","Camon 40","Camon 30 Pro","Camon 30","Spark 40 Pro+","Spark 40 Pro","Spark 40","Spark 30 Pro","Spark 30"],
+  Infinix:["Note 50 Pro+","Note 50 Pro","Note 50","Note 40 Pro+","Note 40 Pro","Note 40","GT 30 Pro","GT 30","GT 20 Pro","Zero 40","Zero 30","Hot 60 Pro+","Hot 60 Pro","Hot 60","Hot 50 Pro+","Hot 50 Pro","Hot 50"]
+};
+
+/* عناوين المجموعات داخل قائمة الموديلات */
+function groupOf(brand, m){
+  if (brand === "Apple"){
+    const x = m.match(/iPhone\s(\d+|SE|X)/);
+    if (!x) return "";
+    return x[1] === "SE" ? "iPhone SE" : x[1] === "X" ? "iPhone X / XS / XR" : "iPhone " + x[1];
+  }
+  if (brand === "Samsung"){
+    const x = m.match(/Galaxy\s(Note|S|Z|A|M)/);
+    if (!x) return "";
+    return ({ S:"Galaxy S", Note:"Galaxy Note", Z:"Galaxy Z (Fold / Flip)", A:"Galaxy A", M:"Galaxy M" })[x[1]];
+  }
+  if (brand === "Xiaomi"){
+    if (/^Redmi Note/.test(m)) return "Redmi Note";
+    if (/^Redmi/.test(m)) return "Redmi";
+    if (/^POCO/.test(m)) return "POCO";
+    return "Xiaomi";
+  }
+  return "";
+}
+
+const BRAND_COLORS = {
+  Apple:["أسود","أبيض","فضي","ذهبي","أزرق","أخضر","وردي","بنفسجي","أحمر"],
+  Samsung:["أسود","أبيض","فضي","رمادي","أزرق","أخضر","بنفسجي","وردي"],
+  Xiaomi:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
+  Google:["أسود","أبيض","رمادي","أزرق","أخضر","وردي"],
+  Huawei:["أسود","أبيض","فضي","ذهبي","أزرق","أخضر","بنفسجي"],
+  OPPO:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
+  HONOR:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
+  OnePlus:["أسود","أبيض","فضي","أخضر","أزرق"],
+  realme:["أسود","أبيض","ذهبي","فضي","أزرق","أخضر"],
+  Motorola:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
+  Sony:["أسود","أبيض","فضي","أزرق","أخضر","بنفسجي"],
+  Nokia:["أسود","أبيض","أزرق","رمادي","أخضر"],
+  Tecno:["أسود","أبيض","أزرق","أخضر","بنفسجي"],
+  Infinix:["أسود","أبيض","فضي","أزرق","أخضر","ذهبي"],
+  "أخرى":["أسود","أبيض","فضي","ذهبي","أزرق","أخضر","أحمر"]
+};
+
 const OPTS = {
-  brand:["Apple","Samsung","Xiaomi","Google","Huawei","OPPO","HONOR","OnePlus","realme","Motorola","Tecno","Infinix","أخرى"],
   storage:["32GB","64GB","128GB","256GB","512GB","1TB"],
   condition:["جديد","ممتاز","جيد جداً","جيد","متوسط"],
   screen:["أصلية","خدوش خفيفة","خدوش واضحة","مبدلة","مكسورة"],
-  cameras:["تعمل بالكامل","فيها مشكلة"],
-  biometric:["يعمل","لا يعمل","غير موجود"],
-  replacedPick:["لا يوجد","نعم"]
+  body:["نظيف","خدوش","ضربات"],
+  back:["ممتاز","نظيف","خدوش خفيفة","فيه كسور"],
+  warranty:["لا يوجد","أقل من 3 أشهر","3 إلى 12 شهر","أكثر من سنة"]
 };
-const COLORS = ["أسود","أبيض","فضي","ذهبي","أزرق","أخضر","بنفسجي","وردي","أحمر"];
+const ACC = ["الشاحن","العلبة","كفر وحماية","الفاتورة"];
+
+const WORKS = [
+  { k:"bio",    t:"Face ID / البصمة",   h:"فتح القفل بالوجه أو الإصبع" },
+  { k:"cam",    t:"الكاميرات",           h:"الأمامية والخلفية والفلاش" },
+  { k:"touch",  t:"اللمس والشاشة",      h:"الشاشة تستجيب بكل مكان" },
+  { k:"audio",  t:"السماعات والمايك",   h:"الصوت والمكالمات" },
+  { k:"charge", t:"الشحن والمنفذ",      h:"الجهاز يشحن بشكل طبيعي" },
+  { k:"net",    t:"الشبكة والواي فاي",  h:"الشريحة والإنترنت والبلوتوث" }
+];
+WORKS.forEach(w => state.works[w.k] = true);
+
+/* ================================================================
+   بناء الواجهة
+   ================================================================ */
+$("tiles").innerHTML = BRANDS.map(b => `<button type="button" class="tile" data-brand="${esc(b)}">${esc(b)}</button>`).join("");
 
 Object.entries(OPTS).forEach(([g, list]) => {
   $("ch-" + g).innerHTML = list.map(v => `<button type="button" class="opt" data-g="${g}" data-v="${esc(v)}" aria-pressed="false">${esc(v)}</button>`).join("");
 });
-$("ch-color").innerHTML = COLORS.map(c => `<button type="button" class="opt sm" data-color="${esc(c)}">${esc(c)}</button>`).join("");
+$("ch-acc").innerHTML = ACC.map(v => `<button type="button" class="opt" data-acc="${esc(v)}" aria-pressed="false">${esc(v)}</button>`).join("");
+
+$("works").innerHTML = WORKS.map(w => `
+  <label class="tg" data-k="${w.k}">
+    <div><b>${esc(w.t)}</b><small>يعمل ✓</small></div>
+    <input type="checkbox" data-w="${w.k}" checked><i></i>
+  </label>`).join("");
 
 function syncChips(g){
   document.querySelectorAll(`.opt[data-g="${g}"]`).forEach(b => {
@@ -447,44 +752,221 @@ function syncChips(g){
   });
 }
 
-function syncColorChips(){
-  const c = val("color");
-  document.querySelectorAll(".opt[data-color]").forEach(b => b.classList.toggle("on", b.dataset.color === c));
+function renderColors(){
+  const brand = state.v.brand;
+  const box = $("ch-color");
+  if (!brand){ box.innerHTML = '<span class="help" style="margin:0">اختر الشركة أولاً</span>'; return; }
+  const list = BRAND_COLORS[brand] || BRAND_COLORS["أخرى"];
+  box.innerHTML = list.map(c => `<button type="button" class="opt" data-color="${esc(c)}">${esc(c)}</button>`).join("") +
+    `<button type="button" class="opt" data-color="__other__">لون آخر</button>`;
+  syncColorChips();
 }
 
-document.addEventListener("click", e => {
-  const b = e.target.closest(".opt[data-g]");
-  if (b){
-    const g = b.dataset.g, v = b.dataset.v;
-    state.v[g] = state.v[g] === v ? null : v;      // ضغطة ثانية تلغي الاختيار
-    syncChips(g);
-    $("ch-" + g).classList.remove("invalid");
-    if (g === "brand") $("brandOther").style.display = state.v.brand === "أخرى" ? "" : "none";
-    if (g === "replacedPick") $("replaced").style.display = state.v.replacedPick === "نعم" ? "" : "none";
-    invalidate(); updateBattery(); sync();
-    return;
-  }
-  const c = e.target.closest(".opt[data-color]");
-  if (c){
-    $("color").value = $("color").value.trim() === c.dataset.color ? "" : c.dataset.color;
-    syncColorChips(); invalidate(); sync();
-  }
-});
+function syncColorChips(){
+  document.querySelectorAll(".opt[data-color]").forEach(b => {
+    const v = b.dataset.color;
+    b.classList.toggle("on", v === "__other__" ? state.colorOther : (!state.colorOther && state.v.color === v));
+  });
+  $("colorCustom").style.display = state.colorOther ? "" : "none";
+}
 
 /* ================================================================
    قيم الحقول
    ================================================================ */
-const getBrand = () => state.v.brand === "أخرى" ? val("brandOther") : (state.v.brand || "");
-const isApple = () => /^apple$/i.test(getBrand()) || /iphone|ايفون/i.test(val("model"));
+const isOtherBrand = () => state.v.brand === "أخرى";
+const getBrand = () => isOtherBrand() ? val("brandOther") : (state.v.brand || "");
+const getModel = () => (isOtherBrand() || state.modelOther) ? val("modelCustom") : (state.v.model || "");
+const getColor = () => state.colorOther ? val("colorCustom") : (state.v.color || "");
+const isApple = () => state.v.brand === "Apple" && /iphone/i.test(getModel());
 
 function updateBattery(){
   const show = isApple();
   const f = $("batField");
   const was = f.style.display !== "none";
   f.style.display = show ? "" : "none";
-  if (show && !was){ f.style.animation = "none"; void f.offsetWidth; f.style.animation = "up .4s"; }
+  if (show && !was){ f.style.animation = "none"; void f.offsetWidth; f.style.animation = ""; }
+}
+const batteryValue = () => (isApple() && state.batteryTouched) ? $("battery").value + "%" : null;
+
+function updateModelUI(){
+  const btn = $("modelBtn"), custom = $("modelCustom");
+  const brand = state.v.brand;
+  const showCustom = brand && (isOtherBrand() || state.modelOther);
+  btn.style.display = (brand && !isOtherBrand()) ? "" : (brand ? "none" : "");
+  btn.disabled = !brand;
+  custom.style.display = showCustom ? "" : "none";
+  const m = state.v.model;
+  btn.classList.toggle("has", !!m && !state.modelOther);
+  $("modelTxt").textContent = !brand ? "اختر الشركة أولاً" : (state.modelOther ? "موديل مكتوب يدوياً" : (m || "اختر الموديل"));
 }
 
+/* ================================================================
+   الضغطات (شركة، خيارات، ألوان، ملحقات)
+   ================================================================ */
+document.addEventListener("click", e => {
+  /* الشركة */
+  const t = e.target.closest(".tile");
+  if (t){
+    const b = t.dataset.brand;
+    if (state.v.brand !== b){
+      state.v.brand = b; state.v.model = null; state.modelOther = false;
+      state.v.color = null; state.colorOther = false;
+      $("modelCustom").value = ""; $("colorCustom").value = "";
+    }
+    document.querySelectorAll(".tile").forEach(x => x.classList.toggle("on", x.dataset.brand === b));
+    $("tiles").classList.remove("invalid");
+    $("brandOther").style.display = isOtherBrand() ? "" : "none";
+    renderColors(); updateModelUI(); updateBattery(); invalidate(); sync();
+    return;
+  }
+
+  /* اختيار واحد */
+  const o = e.target.closest(".opt[data-g]");
+  if (o){
+    const g = o.dataset.g, v = o.dataset.v;
+    state.v[g] = state.v[g] === v ? null : v;     // ضغطة ثانية تلغي الاختيار
+    syncChips(g);
+    $("ch-" + g).classList.remove("invalid");
+    invalidate(); sync();
+    return;
+  }
+
+  /* اللون */
+  const c = e.target.closest(".opt[data-color]");
+  if (c){
+    const v = c.dataset.color;
+    if (v === "__other__"){ state.colorOther = !state.colorOther; if (state.colorOther) state.v.color = null; }
+    else { state.colorOther = false; state.v.color = state.v.color === v ? null : v; }
+    syncColorChips();
+    if (state.colorOther) setTimeout(() => $("colorCustom").focus(), 50);
+    invalidate(); sync();
+    return;
+  }
+
+  /* الملحقات (اختيار متعدد) */
+  const a = e.target.closest(".opt[data-acc]");
+  if (a){
+    const v = a.dataset.acc;
+    state.acc.has(v) ? state.acc.delete(v) : state.acc.add(v);
+    a.classList.toggle("on", state.acc.has(v));
+    a.setAttribute("aria-pressed", state.acc.has(v));
+    invalidate(); sync();
+  }
+});
+
+/* ================================================================
+   نافذة اختيار الموديل
+   ================================================================ */
+function openSheet(){
+  const brand = state.v.brand;
+  if (!brand || isOtherBrand()) return;
+  $("sheetTitle").textContent = "موديلات " + brand;
+  $("sheetQ").value = "";
+  renderSheet("");
+  $("sheet").classList.add("show");
+  document.body.classList.add("lock");
+}
+function closeSheet(){
+  $("sheet").classList.remove("show");
+  document.body.classList.remove("lock");
+  $("sheetQ").blur();
+}
+
+function renderSheet(q){
+  const brand = state.v.brand;
+  const all = MODELS[brand] || [];
+  const query = q.trim().toLowerCase();
+  const list = query ? all.filter(m => m.toLowerCase().includes(query)) : all;
+
+  const grouped = list.some(m => groupOf(brand, m));
+  let html = "", last = null;
+
+  list.forEach(m => {
+    if (grouped && !query){
+      const g = groupOf(brand, m);
+      if (g !== last){ html += `<div class="gh">${esc(g)}</div>`; last = g; }
+    }
+    const on = !state.modelOther && state.v.model === m;
+    html += `<button type="button" class="mi${on ? " on" : ""}" data-m="${esc(m)}">${esc(m)}</button>`;
+  });
+
+  if (!list.length) html = '<div class="none">ما لكينا هذا الموديل بالقائمة</div>';
+  html += '<button type="button" class="mi other" data-other="1">✎ موديلي مو موجود، أكتبه بنفسي</button>';
+  $("sheetList").innerHTML = html;
+}
+
+$("modelBtn").addEventListener("click", openSheet);
+$("sheetOv").addEventListener("click", closeSheet);
+$("sheetCls").addEventListener("click", closeSheet);
+$("sheetQ").addEventListener("input", e => renderSheet(e.target.value));
+
+$("sheetList").addEventListener("click", e => {
+  const m = e.target.closest("[data-m]");
+  if (m){
+    state.v.model = m.dataset.m;
+    state.modelOther = false;
+    $("modelCustom").value = "";
+    $("modelBtn").classList.remove("invalid");
+    closeSheet(); updateModelUI(); updateBattery(); invalidate(); sync();
+    return;
+  }
+  if (e.target.closest("[data-other]")){
+    state.modelOther = true;
+    state.v.model = null;
+    closeSheet(); updateModelUI(); updateBattery(); invalidate(); sync();
+    setTimeout(() => $("modelCustom").focus(), 300);
+  }
+});
+
+/* ================================================================
+   مفاتيح التشغيل والإيقاف
+   ================================================================ */
+function paintWork(k){
+  const row = document.querySelector(`.tg[data-k="${k}"]`);
+  const on = state.works[k];
+  row.classList.toggle("off", !on);
+  row.querySelector("small").textContent = on ? "يعمل ✓" : "لا يعمل ✕";
+  row.querySelector("input").checked = on;
+}
+
+$("works").addEventListener("change", e => {
+  const k = e.target.dataset.w;
+  if (!k) return;
+  state.works[k] = e.target.checked;
+  paintWork(k); invalidate(); sync();
+});
+
+$("allWork").addEventListener("click", () => {
+  WORKS.forEach(w => { state.works[w.k] = true; paintWork(w.k); });
+  invalidate(); sync(); toast("تم تعيين كل الوظائف: تعمل");
+});
+
+$("repSw").addEventListener("change", e => {
+  state.replaced = e.target.checked;
+  $("repFold").classList.toggle("open", state.replaced);
+  $("repRow").classList.toggle("off", !state.replaced);
+  $("repSt").textContent = state.replaced ? "نعم، انفتح أو تبدلت قطع" : "لا، الجهاز أصلي";
+  $("repSt").style.color = state.replaced ? "var(--hot)" : "var(--ok)";
+  if (state.replaced) setTimeout(() => $("replaced").focus(), 350);
+  invalidate(); sync();
+});
+$("repSt").style.color = "var(--ok)";
+
+/* زر إظهار/إخفاء التعليمات */
+const HELP_KEY = "mzad_sell_help";
+(function(){
+  let on = true;
+  try{ on = localStorage.getItem(HELP_KEY) !== "0"; }catch{}
+  $("helpSw").checked = on;
+  document.body.classList.toggle("nohelp", !on);
+})();
+$("helpSw").addEventListener("change", e => {
+  document.body.classList.toggle("nohelp", !e.target.checked);
+  try{ localStorage.setItem(HELP_KEY, e.target.checked ? "1" : "0"); }catch{}
+});
+
+/* البطارية */
+$("battery").style.setProperty("--p-fill", "75%");
 $("battery").addEventListener("input", e => {
   state.batteryTouched = true;
   const o = $("batOut");
@@ -493,25 +975,18 @@ $("battery").addEventListener("input", e => {
   e.target.style.setProperty("--p-fill", ((e.target.value - 60) / 40 * 100) + "%");
   invalidate(); sync();
 });
-$("battery").style.setProperty("--p-fill", "75%");
-
-const batteryValue = () => (isApple() && state.batteryTouched) ? $("battery").value + "%" : null;
-const replacedValue = () => state.v.replacedPick === "لا يوجد" ? "لا يوجد" : state.v.replacedPick === "نعم" ? (val("replaced") || "نعم") : null;
 
 $("notes").addEventListener("input", e => $("nCount").textContent = e.target.value.length);
 
-/* تنسيق السعر */
 $("price").addEventListener("input", e => {
   const n = numOf(e.target.value);
   e.target.value = n ? n.toLocaleString("en-US") : "";
   e.target.classList.remove("invalid");
 });
 
-/* أي كتابة بالنموذج */
 form.addEventListener("input", e => {
   if (e.target.classList?.contains("in")) e.target.classList.remove("invalid");
-  if (e.target.id === "color") syncColorChips();
-  if (e.target.id === "model" || e.target.id === "brandOther") updateBattery();
+  if (e.target.id === "modelCustom" || e.target.id === "brandOther") updateBattery();
   invalidate(); sync();
 });
 
@@ -521,7 +996,7 @@ form.addEventListener("input", e => {
 function renderPhotos(){
   $("photos").innerHTML =
     state.files.map((f, i) => `
-      <div class="thumb${f.fresh ? " thumb-enter" : ""}">
+      <div class="thumb${f.fresh ? " in" : ""}">
         <img src="${f.url}" alt="صورة ${i + 1}">
         ${i === 0 ? '<span class="cv">الغلاف</span>' : `<button type="button" class="mk" data-act="cover" data-i="${i}" aria-label="تعيين كغلاف">★</button>`}
         <button type="button" class="x" data-act="del" data-i="${i}" aria-label="حذف">×</button>
@@ -580,21 +1055,69 @@ async function shrink(file){
 }
 
 /* ================================================================
-   المعاينة والملخص
+   الملخص والمعاينة ومؤشر الاكتمال
    ================================================================ */
 const PH_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M9.5 5.5h5"/><path d="M11 18.5h2"/></svg>';
-let lastCover = null, lastSpecs = null;
+let lastCover = null, lastSpecs = null, lastPct = -1;
+
+const titleOf = () => {
+  const b = getBrand(), m = getModel();
+  return m && b && m.toLowerCase().startsWith(b.toLowerCase()) ? m : [b, m].filter(Boolean).join(" ");
+};
+const offWorks = () => WORKS.filter(w => !state.works[w.k]);
+
+function renderReview(){
+  const v = state.v, off = offWorks();
+  const cond = [v.condition, v.screen && "شاشة " + v.screen, v.body && "هيكل " + v.body, v.back && "ظهر " + v.back].filter(Boolean).join(" • ");
+  const rows = [
+    ["الجهاز", titleOf() || "—", "", 1],
+    ["المواصفات", [v.storage, getColor(), batteryValue() && "بطارية " + batteryValue()].filter(Boolean).join(" • ") || "—", "", 1],
+    ["الحالة", cond || "—", "", 2],
+    ["الفحص", off.length ? "لا يعمل: " + off.map(w => w.t).join("، ") : "كل الوظائف تعمل ✓", off.length ? "bad" : "good", 3],
+    ["الصيانة", state.replaced ? ("انفتح / تبدلت قطع" + (val("replaced") ? ": " + val("replaced") : "")) : "الجهاز أصلي ✓", state.replaced ? "bad" : "good", 3],
+    ["الصور", state.files.length + " صور", "", 4]
+  ];
+  $("review").innerHTML = rows.map(([k, t, cls, s]) => `
+    <div class="rv"><span class="k">${esc(k)}</span><span class="v ${cls}">${esc(t)}</span><button type="button" class="edit" data-go="${s}">تعديل</button></div>`).join("");
+}
+
+$("review").addEventListener("click", e => {
+  const b = e.target.closest("[data-go]");
+  if (b) goStep(+b.dataset.go);
+});
+
+function renderMeter(){
+  const v = state.v;
+  const items = [
+    ["الشركة", !!getBrand()], ["الموديل", !!getModel()], ["السعة", !!v.storage], ["اللون", !!getColor()],
+    ["الحالة العامة", !!v.condition], ["حالة الشاشة", !!v.screen], ["حالة الهيكل", !!v.body], ["حالة الظهر", !!v.back],
+    ["3 صور أو أكثر", state.files.length >= 3], ["الضمان", !!v.warranty], ["ملاحظات", val("notes").length > 0],
+    ["السعر", numOf($("price").value) > 0]
+  ];
+  if (isApple()) items.push(["صحة البطارية", state.batteryTouched]);
+
+  const done = items.filter(i => i[1]).length;
+  const pct = Math.round(done / items.length * 100);
+  const missing = items.filter(i => !i[1]).map(i => i[0]);
+
+  if (pct !== lastPct){
+    lastPct = pct;
+    $("mFg").style.strokeDashoffset = 157 - 157 * pct / 100;
+    $("mPct").textContent = pct + "%";
+  }
+  $("mTitle").textContent = pct >= 90 ? "إعلان ممتاز 👌" : pct >= 70 ? "إعلان جيد" : "أكمل بياناتك";
+  $("mSub").textContent = missing.length ? "تفاصيل أكثر = ثقة أكثر ومزايدين أكثر" : "كل البيانات مكتملة";
+  $("miss").innerHTML = missing.slice(0, 5).map(m => `<span>+ ${esc(m)}</span>`).join("");
+}
 
 function sync(){
-  const brand = getBrand(), model = val("model");
   const price = numOf($("price").value);
+  const title = titleOf();
 
-  const title = model && brand && model.toLowerCase().startsWith(brand.toLowerCase())
-    ? model : [brand, model].filter(Boolean).join(" ");
   $("pvTitle").textContent = title || "اسم الجهاز";
   $("pvPrice").textContent = price ? money(price) : "—";
 
-  const specs = [state.v.storage, val("color"), batteryValue() ? "بطارية " + batteryValue() : ""].filter(Boolean).slice(0, 3);
+  const specs = [state.v.storage, getColor(), batteryValue() ? "بطارية " + batteryValue() : ""].filter(Boolean).slice(0, 3);
   const key = specs.join("|");
   if (key !== lastSpecs){
     lastSpecs = key;
@@ -607,10 +1130,7 @@ function sync(){
     $("pvMedia").innerHTML = cover ? `<img src="${cover}" alt="">` : `<div class="ph">${PH_ICON}</div>`;
   }
 
-  $("rDevice").textContent = title || "—";
-  $("rPrice").textContent = price ? money(price) : "—";
-  $("rPhotos").textContent = state.files.length;
-
+  if (state.step === 5){ renderReview(); renderMeter(); }
   renderBar();
 }
 
@@ -618,6 +1138,7 @@ function sync(){
    الخطوات والتحقق
    ================================================================ */
 function flag(el){
+  if (!el) return;
   el.classList.remove("invalid");
   void el.offsetWidth;
   el.classList.add("invalid");
@@ -625,17 +1146,21 @@ function flag(el){
 
 function validateStep(n){
   if (n === 1){
-    if (!getBrand()){
-      flag(state.v.brand === "أخرى" ? $("brandOther") : $("ch-brand"));
-      toast("اختر الشركة"); return false;
+    if (!getBrand()){ flag(isOtherBrand() ? $("brandOther") : $("tiles")); toast("اختر الشركة"); return false; }
+    if (!getModel()){
+      flag(state.modelOther || isOtherBrand() ? $("modelCustom") : $("modelBtn"));
+      toast("اختر الموديل"); return false;
     }
-    if (!val("model")){ flag($("model")); $("model").focus(); toast("اكتب الموديل"); return false; }
+    if (!state.v.storage){ flag($("ch-storage")); toast("اختر السعة"); return false; }
   }
-  if (n === 3 && !state.files.length){
-    const t = $("addTile"); if (t) flag(t);
-    toast("أضف صورة وحدة على الأقل"); return false;
+  if (n === 2){
+    if (!state.v.condition){ flag($("ch-condition")); toast("اختر الحالة العامة"); return false; }
+    if (!state.v.screen){ flag($("ch-screen")); toast("اختر حالة الشاشة"); return false; }
   }
-  if (n === 4 && numOf($("price").value) <= 0){
+  if (n === 4 && !state.files.length){
+    flag($("addTile")); toast("أضف صورة وحدة على الأقل"); return false;
+  }
+  if (n === 5 && numOf($("price").value) <= 0){
     flag($("price")); $("price").focus(); toast("اكتب السعر الابتدائي"); return false;
   }
   return true;
@@ -646,18 +1171,19 @@ function renderProgress(){
     s.classList.toggle("done", i + 1 < state.step);
     s.classList.toggle("active", i + 1 === state.step);
   });
-  $("pCount").textContent = `الخطوة ${state.step} من 4`;
+  $("pCount").textContent = `الخطوة ${state.step} من ${TOTAL}`;
   $("pName").textContent = STEPS[state.step - 1];
 }
 
 function renderBar(){
-  const last = state.step === 4;
+  const last = state.step === TOTAL;
   $("bPrev").classList.toggle("off", state.step === 1);
   $("bText").textContent = last ? "نشر المزاد" : "التالي";
-  $("bNext").classList.toggle("ready", last && !state.busy && getBrand() && val("model") && state.files.length && numOf($("price").value) > 0);
+  $("bNext").classList.toggle("ready", last && !state.busy && !!getBrand() && !!getModel() && state.files.length > 0 && numOf($("price").value) > 0);
 }
 
 function goStep(n){
+  if (n < 1 || n > TOTAL) return;
   const dir = n > state.step ? "fwd" : "bwd";
   document.querySelectorAll(".step").forEach(s => s.classList.remove("active", "fwd", "bwd"));
   document.querySelector(`.step[data-step="${n}"]`).classList.add("active", dir);
@@ -666,10 +1192,14 @@ function goStep(n){
   window.scrollTo({ top:0, behavior:"smooth" });
 }
 
+document.querySelectorAll("#prog .seg").forEach((s, i) => {
+  s.addEventListener("click", () => { if (i + 1 < state.step) goStep(i + 1); });
+});
+
 $("bPrev").addEventListener("click", () => { if (state.step > 1) goStep(state.step - 1); });
 $("bNext").addEventListener("click", () => {
   if (state.busy || state.done) return;
-  if (state.step < 4){
+  if (state.step < TOTAL){
     if (validateStep(state.step)) goStep(state.step + 1);
   } else {
     publish();
@@ -677,7 +1207,7 @@ $("bNext").addEventListener("click", () => {
 });
 
 /* ================================================================
-   الربط بقاعدة البيانات (نفس الدوال بدون تغيير)
+   الربط بقاعدة البيانات (نفس الدوال والمعاملات)
    ================================================================ */
 async function auth(){
   const { data, error } = await supabase.auth.getUser();
@@ -695,52 +1225,55 @@ const extFor = (blob, file) => {
 };
 
 async function uploadImages(deviceId){
-  // احفظ كل مرحلة ناجحة حتى لا تتكرر الصور عند إعادة المحاولة.
+  const rows = [];
   for (let i = 0; i < state.files.length; i++){
-    const item = state.files[i];
-    const file = item.file;
-    if (!item.storagePath){
-      const blob = await shrink(file);
-      const path = state.user.id + "/" + deviceId + "/" + crypto.randomUUID() + "." + extFor(blob, file);
-      const up = await supabase.storage.from("device-images").upload(path, blob, {
-        upsert:false,
-        contentType:blob.type || file.type || "image/jpeg"
-      });
-      if (up.error) throw up.error;
-      item.storagePath = path;
-    }
-    if (!item.rowInserted){
-      const ins = await supabase.from("mzad_device_images").insert({
-        device_id:deviceId,
-        storage_path:item.storagePath,
-        sort_order:i,
-        is_primary:i === 0
-      });
-      if (ins.error) throw ins.error;
-      item.rowInserted = true;
-    }
+    const file = state.files[i].file;
+    const blob = await shrink(file);
+    const path = state.user.id + "/" + deviceId + "/" + crypto.randomUUID() + "." + extFor(blob, file);
+    const up = await supabase.storage.from("device-images").upload(path, blob, { upsert:false, contentType:blob.type || file.type || "image/jpeg" });
+    if (up.error) throw up.error;
+    rows.push({ device_id:deviceId, storage_path:path, sort_order:i, is_primary:i === 0 });
+  }
+  if (rows.length){
+    const ins = await supabase.from("mzad_device_images").insert(rows);
+    if (ins.error) throw ins.error;
   }
 }
+
+/* تحويل الإدخالات الجديدة إلى المعاملات الموجودة أصلاً */
+const cameraValue    = () => state.works.cam ? "تعمل بالكامل" : "فيها مشكلة";
+const biometricValue = () => state.works.bio ? "يعمل" : "لا يعمل";
+const faultsValue    = () => { const o = offWorks(); return o.length ? "لا يعمل: " + o.map(w => w.t).join("، ") : null; };
+const bodyBackValue  = () => {
+  const p = [state.v.body && "الهيكل: " + state.v.body, state.v.back && "الظهر: " + state.v.back].filter(Boolean);
+  return p.length ? p.join(" | ") : null;
+};
+const replacedValue  = () => state.replaced ? (val("replaced") || "نعم") : "لا يوجد";
+const accessoriesValue = () => state.acc.size ? [...state.acc].join("، ") : "بدون ملحقات";
+const notesValue = () => {
+  const p = [val("notes"), state.v.warranty ? "الضمان: " + state.v.warranty : ""].filter(Boolean);
+  return p.length ? p.join("\n") : null;
+};
 
 async function createDevice(){
   const r = await supabase.rpc("mzad_create_device", {
     p_brand: getBrand(),
-    p_model: val("model"),
+    p_model: getModel(),
     p_storage: state.v.storage || null,
-    p_color: val("color") || null,
+    p_color: getColor() || null,
     p_condition_grade: state.v.condition || null,
     p_battery_health: batteryValue(),
     p_replaced_parts: replacedValue(),
     p_screen_condition: state.v.screen || null,
-    p_camera_condition: state.v.cameras || null,
-    p_biometric_condition: state.v.biometric || null,
+    p_camera_condition: cameraValue(),
+    p_biometric_condition: biometricValue(),
     p_sim_network: null,
     p_imei: null,
     p_serial_number: null,
-    p_scratches_dents: null,
-    p_faults: null,
-    p_accessories: null,
-    p_seller_notes: val("notes") || null
+    p_scratches_dents: bodyBackValue(),
+    p_faults: faultsValue(),
+    p_accessories: accessoriesValue(),
+    p_seller_notes: notesValue()
   });
   if (r.error) throw r.error;
   return typeof r.data === "string" ? r.data : (r.data?.device_id || r.data?.id);
@@ -772,13 +1305,11 @@ const ERRORS = {
 /* ================================================================
    النشر
    ================================================================ */
-function showSuccess(){ $("done").classList.add("show"); }
-
 async function publish(){
   if (state.busy) return;
 
-  /* نتأكد من كل الخطوات قبل الإرسال ونرجع للخطوة الناقصة */
-  for (const n of [1, 3, 4]){
+  /* نتأكد من كل الخطوات ونرجع للخطوة الناقصة */
+  for (const n of [1, 2, 4, 5]){
     if (!validateStep(n)){ if (n !== state.step) goStep(n); return; }
   }
 
@@ -791,7 +1322,7 @@ async function publish(){
     if (!(await auth())) return;
 
     const price = numOf($("price").value);
-    if (!getBrand() || !val("model") || !price || !state.files.length) throw new Error("REQUIRED_FIELDS");
+    if (!getBrand() || !getModel() || !price || !state.files.length) throw new Error("REQUIRED_FIELDS");
 
     /* كل مرحلة تنحفظ، فإذا فشل شي نكمل من نفس النقطة بدون تكرار */
     if (!state.deviceId){
@@ -811,7 +1342,7 @@ async function publish(){
     if (dep.error) throw dep.error;
 
     state.done = true;
-    showSuccess();
+    $("done").classList.add("show");
     setTimeout(() => location.href = "auction-seller-deposit.html?auction=" + encodeURIComponent(state.auctionId), 1700);
 
   }catch(e){
@@ -841,6 +1372,8 @@ document.addEventListener("focusout", () => setTimeout(() => { if (!isText(docum
    ================================================================ */
 $("back").addEventListener("click", () => history.length > 1 ? history.back() : location.href = "home.html");
 
+renderColors();
+updateModelUI();
 renderPhotos();
 renderProgress();
 updateBattery();
