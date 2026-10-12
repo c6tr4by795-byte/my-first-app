@@ -527,9 +527,22 @@ async function loadMethods(){
 }
 
 /* طلب الدفع: نعيد استخدام نفس الطلب إذا نفس الطريقة (حتى ما ننشئ طلبات مكررة) */
+function normalizePaymentRequest(data){
+  const value = Array.isArray(data) ? (data[0] || {}) : (data || {});
+  if (typeof value === "string") return { id:value };
+  const id = value.id || value.request_id || value.payment_request_id || value.paymentRequestId;
+  return id ? {
+    ...value,
+    id,
+    request_number: value.request_number || value.payment_request_number || null,
+    amount_iqd: value.amount_iqd ?? state.deposit?.amount_iqd,
+    status: value.status || "pending"
+  } : null;
+}
+
 async function ensureRequest(){
   if (!state.deposit?.id) throw new Error("DEPOSIT_NOT_FOUND");
-  if (!state.method?.id)  throw new Error("PAYMENT_METHOD_REQUIRED");
+  if (!state.method?.id) throw new Error("PAYMENT_METHOD_REQUIRED");
 
   if (state.request?.id && state.requestMethodId === state.method.id) return;
 
@@ -539,8 +552,25 @@ async function ensureRequest(){
   });
   if (r.error) throw r.error;
 
-  state.request = typeof r.data === "string" ? { id: r.data } : r.data;
+  // بعض إصدارات RPC ترجع request_id داخل صف أو مصفوفة، وليس id مباشرة.
+  state.request = normalizePaymentRequest(r.data);
   state.requestMethodId = state.method.id;
+
+  // احتياط: الدالة قد تنشئ الطلب وتُرجع قيمة فارغة؛ نبحث عن الطلب المفتوح نفسه.
+  if (!state.request?.id){
+    const existing = await supabase.from("mzad_payment_requests")
+      .select("id,request_number,amount_iqd,status,payment_method_id")
+      .eq("deposit_id", state.deposit.id)
+      .eq("user_id", state.user.id)
+      .eq("payment_method_id", state.method.id)
+      .in("status", ["pending","proof_submitted"])
+      .order("created_at", { ascending:false })
+      .limit(1)
+      .maybeSingle();
+    if (existing.error) throw existing.error;
+    if (existing.data) state.request = normalizePaymentRequest(existing.data);
+  }
+
   if (!state.request?.id) throw new Error("PAYMENT_REQUEST_NOT_FOUND");
 }
 
