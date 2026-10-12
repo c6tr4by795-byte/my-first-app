@@ -655,11 +655,11 @@ $("submit").addEventListener("click", async () => {
     });
     if (proof.error) throw proof.error;
 
-    await loadDeposit();
-    showMsg("تم إرسال إثبات الدفع بنجاح. بانتظار موافقة الإدارة.", "ok");
-    $("submitText").textContent = "تم إرسال الإثبات";
-    showSuccess();
-    startPoll();
+    // بعد حفظ الإثبات بنجاح، افتح صفحة تأكيد مستقلة تعرض رقم الطلب ومعاينة الإعلان.
+    const statusUrl = "auction-request-status.html?auction=" + encodeURIComponent(auctionId)
+      + "&request=" + encodeURIComponent(state.request.id);
+    location.href = statusUrl;
+    return;
 
   }catch(e){
     console.error("DEPOSIT PROOF ERROR:", e);
