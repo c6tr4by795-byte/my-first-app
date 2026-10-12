@@ -1,220 +1,690 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#ffffff">
-<title>تأمين البائع | MZAD PHONE</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#6246d9">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>تأمين البائع — MZAD PHONE</title>
 <style>
-:root{--pink:#E91D4F;--turq:#32B8C4;--bg:#F7F8FA;--ink:#171A1F;--muted:#747B86;--line:#E7E9ED;--cream:#FFFDF8;--green:#138A5B;--red:#C62F4D;--yellow:#946100}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;background:var(--bg);color:var(--ink);font-family:Cairo,sans-serif}.app{max-width:520px;min-height:100vh;margin:auto;padding-bottom:40px}.top{height:68px;display:flex;align-items:center;justify-content:center;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}.back{position:absolute;right:14px;width:42px;height:42px;border:1px solid var(--line);border-radius:14px;background:#fff;font-size:22px}.logo{font-size:19px;font-weight:900}.logo b{color:var(--pink)}.sub{display:block;font-size:7px;letter-spacing:3px;color:var(--muted);text-align:center;direction:ltr}.content{padding:20px 14px}.card{background:#fff;border:1px solid var(--line);border-radius:24px;padding:18px;margin-bottom:14px;box-shadow:0 12px 32px rgba(20,24,31,.07)}.badge{display:inline-flex;padding:7px 11px;border-radius:999px;background:#FFF0F4;color:var(--pink);font-size:9px;font-weight:900}h1{font-size:27px;margin:10px 0 5px;font-weight:900}.lead{font-size:10px;line-height:1.9;color:var(--muted);margin:0}.amount{text-align:center;padding:22px 10px;background:var(--cream);border:1px solid var(--line);border-radius:20px;margin-top:15px}.amount small{display:block;font-size:9px;color:var(--muted)}.amount strong{display:block;font-size:30px;margin-top:5px;color:var(--pink)}.title{font-size:15px;font-weight:900;margin-bottom:12px}.methods{display:grid;gap:9px}.method{width:100%;border:1px solid var(--line);background:#fff;border-radius:16px;padding:13px;text-align:right;font-family:inherit}.method.selected{border-color:var(--pink);background:#FFF5F7}.method b{display:block;font-size:11px}.method span{display:block;margin-top:3px;font-size:8px;color:var(--muted)}.method-details{margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);font-size:9px;line-height:1.8;color:#555}.method-details strong{display:block;color:var(--ink);font-size:12px;direction:ltr;text-align:right;word-break:break-all}.method-details em{display:block;font-style:normal;color:var(--muted);margin-top:3px}input{width:100%;height:50px;border:1px solid var(--line);border-radius:15px;background:#FAFBFC;padding:0 13px;font-family:inherit;outline:0;font-size:11px}input:focus{border-color:var(--turq);background:#fff}.file{height:auto;padding:13px;background:#fff}.btn{width:100%;height:55px;border:0;border-radius:17px;background:linear-gradient(135deg,var(--pink),#F0446D);color:#fff;font-family:inherit;font-size:12px;font-weight:900;margin-top:12px}.btn:disabled{opacity:.45}.notice{padding:13px;border-radius:16px;background:#FFF9EA;border:1px solid #F2E2B7;font-size:9px;line-height:1.8;color:#766542}.msg{display:none;margin-top:10px;padding:11px;border-radius:13px;text-align:center;font-size:9px;font-weight:800}.msg.show{display:block}.err{background:#FFF0F3;color:var(--red)}.ok{background:#ECFAF4;color:var(--green)}.wait{background:#FFF9EA;color:var(--yellow)}.status{text-align:center;padding:15px;border-radius:17px;background:#F5F7F9;font-size:10px;font-weight:800;color:var(--muted);line-height:1.8}.hidden{display:none!important}.row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px dashed #E5E7EB;font-size:9px}.row:last-child{border:0}.row span{color:var(--muted)}.row strong{text-align:left}.spin{display:inline-block;width:13px;height:13px;border:2px solid #DDE5E8;border-top-color:var(--turq);border-radius:50%;vertical-align:-2px;margin-left:6px;animation:s .7s linear infinite}@keyframes s{to{transform:rotate(360deg)}}
+/* ============ المتغيرات ============ */
+:root{
+  --bg:#f9f8fd;--ink:#17202a;--muted:#6b7280;--line:#ece8fb;--edge:#ddd8f8;
+  --p:#6246d9;--p-dark:#4a34b8;--p-soft:#f3f0ff;--hot:#e8590c;--ok:#1e8a5a;--ok-soft:#e8f6ef;--warn:#946100;--warn-soft:#fff8e6;--bad:#c62f4d;--bad-soft:#fff0f3;
+  --safe-bottom:env(safe-area-inset-bottom,0px)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+button,input{font:inherit;color:inherit}
+button{border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--p);outline-offset:2px}
+.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(40px + var(--safe-bottom));overflow-x:clip}
+
+/* ============ أنميشن ============ */
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes shimmer{to{background-position:-200% 0}}
+@keyframes pop{50%{transform:scale(1.12)}}
+@keyframes rot{to{transform:rotate(360deg)}}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(98,70,217,.45)}70%{box-shadow:0 0 0 9px rgba(98,70,217,0)}100%{box-shadow:0 0 0 0 rgba(98,70,217,0)}}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+header{animation:fade .5s backwards}
+.reveal{animation:up .6s cubic-bezier(.2,.8,.3,1) backwards}
+.page>.reveal:nth-of-type(1){animation-delay:.05s}
+.page>.reveal:nth-of-type(2){animation-delay:.12s}
+.page>.reveal:nth-of-type(3){animation-delay:.19s}
+.page>.reveal:nth-of-type(4){animation-delay:.26s}
+.page>.reveal:nth-of-type(5){animation-delay:.33s}
+.icon-btn,.method,.btn,.drop,.copy{transition:transform .18s ease,border-color .25s,background .25s,box-shadow .25s}
+.icon-btn:active,.method:active,.drop:active,.copy:active{transform:scale(.97)}
+
+/* ============ الهيدر ============ */
+header{margin-inline:-14px;padding:0 14px 18px;background:linear-gradient(145deg,#fff 0%,#f7f5ff 55%,#ece8ff 100%);
+  border-radius:0 0 26px 26px;border-bottom:1px solid var(--line);box-shadow:0 10px 26px rgba(23,32,42,.06)}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 2px 0}
+.brand-mini{display:flex;flex-direction:column;align-items:center;line-height:.9}
+.brand-mini strong{font-size:16px;letter-spacing:-.03em}
+.brand-mini span{font-size:7px;font-weight:800;letter-spacing:.15em;color:#8a96a3;margin-top:3px}
+.icon-btn{width:39px;height:34px;display:grid;place-items:center;border:1px solid var(--edge);border-radius:12px;background:#fff;color:var(--p);box-shadow:0 7px 18px rgba(23,32,42,.045)}
+.icon-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.spacer{width:39px}
+.head-copy{margin:16px 2px 14px}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;background:#fff;border:1px solid var(--edge);color:var(--p-dark);font-size:10px;font-weight:900}
+.badge:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--p);animation:ping 1.8s infinite}
+h1{margin:10px 0 4px;font-size:24px;font-weight:950;letter-spacing:-.035em}
+.lead{margin:0;font-size:11px;font-weight:700;line-height:1.9;color:var(--muted)}
+.amount{position:relative;overflow:hidden;text-align:center;padding:18px 10px;border-radius:20px;color:#fff;
+  background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 14px 28px -10px rgba(98,70,217,.55)}
+.amount:before{content:"";position:absolute;width:120px;height:120px;border-radius:50%;top:-50px;inset-inline-end:-30px;background:rgba(255,255,255,.14)}
+.amount small{position:relative;display:block;font-size:10px;font-weight:800;color:#ffffffcc}
+.amount strong{position:relative;display:block;margin-top:4px;font-size:30px;font-weight:950;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+
+/* ============ البطاقات ============ */
+.card{margin-top:14px;padding:16px;border-radius:22px;background:#fff;border:1px solid var(--edge);box-shadow:0 10px 24px -10px rgba(98,70,217,.22)}
+.card.locked .lockable{opacity:.5;pointer-events:none}
+.c-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.num{width:28px;height:28px;flex:0 0 28px;border-radius:10px;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:950;
+  background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 5px 12px rgba(98,70,217,.28)}
+.c-head h2{margin:0;font-size:16px;font-weight:950;letter-spacing:-.02em}
+.c-head p{margin:1px 0 0;font-size:10px;font-weight:700;color:var(--muted)}
+
+/* ============ شريط المراحل ============ */
+.steps{display:flex;align-items:flex-start;justify-content:space-between;padding:4px 2px 2px}
+.stp{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center}
+.stp:not(:last-child):after{content:"";position:absolute;top:15px;inset-inline-start:calc(50% + 20px);inset-inline-end:calc(-50% + 20px);height:3px;border-radius:3px;background:#e4defa}
+.stp.done:not(:last-child):after{background:linear-gradient(90deg,var(--p),#8b6cf0)}
+.dot{position:relative;z-index:1;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:950;
+  background:#fff;border:2px solid #e4defa;color:#a99cf0;transition:.35s}
+.stp.active .dot{border-color:var(--p);color:var(--p);animation:ping 1.8s infinite}
+.stp.done .dot{background:var(--p);border-color:var(--p);color:#fff;font-size:0}
+.stp.done .dot:after{content:"✓";font-size:15px;animation:pop .4s}
+.stp span{font-size:10px;font-weight:850;color:var(--muted);line-height:1.4}
+.stp.active span,.stp.done span{color:var(--p-dark)}
+.status{display:flex;align-items:center;gap:9px;margin-top:14px;padding:12px;border-radius:14px;background:var(--p-soft);border:1px solid #e4defa;
+  font-size:11px;font-weight:800;line-height:1.7;color:#4b5563}
+.status.ok{background:var(--ok-soft);border-color:#bfe8d3;color:var(--ok)}
+.status.err{background:var(--bad-soft);border-color:#f6c7d1;color:var(--bad)}
+.status.wait{background:var(--warn-soft);border-color:#f2e2b7;color:var(--warn)}
+
+/* ============ الملخص ============ */
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px dashed #e9e5f8;font-size:11px;font-weight:700}
+.row:last-child{border:0;padding-bottom:0}
+.row span{color:var(--muted)}
+.row strong{font-weight:900;text-align:end}
+.pill{display:inline-flex;padding:4px 10px;border-radius:999px;background:var(--p-soft);color:var(--p-dark);font-size:10px;font-weight:900}
+.pill.live{background:var(--ok-soft);color:var(--ok)}
+
+/* ============ طرق الدفع ============ */
+.methods{display:grid;gap:10px}
+.method{position:relative;width:100%;text-align:start;padding:13px 14px;border-radius:18px;background:#fff;border:1.5px solid var(--line)}
+.method b{display:block;font-size:13px;font-weight:900;padding-inline-end:30px}
+.method .lbl{display:block;margin-top:3px;font-size:10px;font-weight:700;color:var(--muted)}
+.method .tick{position:absolute;top:13px;inset-inline-end:13px;width:22px;height:22px;border-radius:50%;border:2px solid #d6d2ea;display:grid;place-items:center;transition:.25s}
+.method.selected{border-color:var(--p);background:var(--p-soft);box-shadow:0 8px 20px -10px rgba(98,70,217,.45)}
+.method.selected .tick{background:var(--p);border-color:var(--p)}
+.method.selected .tick:after{content:"✓";color:#fff;font-size:12px;font-weight:950;animation:pop .35s}
+.details{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.3,1,.4,1)}
+.method.selected .details{grid-template-rows:1fr}
+.details>div{overflow:hidden}
+.d-in{margin-top:11px;padding-top:11px;border-top:1px dashed #cfc6f3}
+.acc{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.acc strong{font-size:14px;font-weight:950;direction:ltr;word-break:break-all;text-align:start}
+.copy{flex:0 0 auto;padding:7px 12px;border-radius:10px;background:#fff;border:1px solid var(--edge);color:var(--p-dark);font-size:10px;font-weight:900}
+.d-in em{display:block;margin-top:8px;font-style:normal;font-size:10px;font-weight:700;line-height:1.8;color:#4b5563}
+
+/* ============ الحقول والرفع ============ */
+.lbl-f{display:block;margin-bottom:6px;font-size:11px;font-weight:900;color:#374151}
+.lbl-f i{font-style:normal;color:var(--hot)}
+.lbl-f small{font-weight:700;color:#9ca3af}
+.in{width:100%;height:46px;border:1.5px solid #e4defa;border-radius:14px;background:#fff;padding:0 14px;outline:none;font-weight:700;transition:.25s}
+.in:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.10)}
+.in::placeholder{color:#a8b0bb;font-weight:600}
+.field+.field{margin-top:14px}
+.drop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:118px;padding:14px;border-radius:18px;
+  border:2px dashed #c9bff7;background:var(--p-soft);color:var(--p-dark);text-align:center;cursor:pointer;font-size:11px;font-weight:900}
+.drop svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;animation:floaty 2.6s ease-in-out infinite}
+@keyframes floaty{50%{transform:translateY(-5px)}}
+.drop small{font-size:10px;font-weight:700;color:var(--muted)}
+.drop input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.drop.invalid{border-color:var(--hot);animation:shake .4s}
+.preview{display:none;align-items:center;gap:12px;padding:10px;border-radius:18px;background:#fff;border:1.5px solid var(--edge);animation:up .4s}
+.preview.show{display:flex}
+.preview img{width:64px;height:64px;border-radius:12px;object-fit:cover;border:1px solid var(--line);background:var(--p-soft)}
+.preview .meta{flex:1;min-width:0}
+.preview b{display:block;font-size:12px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.preview small{font-size:10px;font-weight:700;color:var(--muted)}
+.preview .x{width:32px;height:32px;border-radius:50%;background:var(--p-soft);color:#6b7280;display:grid;place-items:center;font-size:18px}
+.notice{margin-top:14px;padding:12px;border-radius:14px;background:var(--warn-soft);border:1px solid #f2e2b7;font-size:10.5px;font-weight:700;line-height:1.9;color:#766542}
+.notice b{color:#5f4a1a;font-weight:950}
+.notice.soft{background:var(--p-soft);border-color:#e4defa;color:#4b5563}
+.notice.soft b{color:var(--p-dark)}
+
+/* ============ الأزرار والرسائل ============ */
+.btn{width:100%;height:54px;margin-top:14px;border-radius:17px;color:#fff;font-size:15px;font-weight:950;
+  background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 12px 26px rgba(98,70,217,.35)}
+.btn:active{transform:scale(.97)}
+.btn.ready{animation:glow 2s ease-in-out infinite}
+@keyframes glow{50%{box-shadow:0 12px 36px rgba(98,70,217,.65),0 0 0 6px rgba(98,70,217,.13)}}
+.btn:disabled{opacity:.5;box-shadow:none;animation:none;cursor:not-allowed}
+.btn .spin{display:none;width:20px;height:20px;border-radius:50%;border:3px solid #ffffff66;border-top-color:#fff;animation:rot .7s linear infinite;margin:auto}
+.btn.busy .t{display:none}
+.btn.busy .spin{display:block}
+.msg{display:none;margin-top:12px;padding:11px;border-radius:13px;text-align:center;font-size:11px;font-weight:800;line-height:1.7}
+.msg.show{display:block;animation:up .35s}
+.msg.err{background:var(--bad-soft);color:var(--bad)}
+.msg.ok{background:var(--ok-soft);color:var(--ok)}
+.msg.wait{background:var(--warn-soft);color:var(--warn)}
+
+/* ============ هيكل التحميل ============ */
+.sk{height:44px;border-radius:14px;background:linear-gradient(90deg,#f1eefb 25%,#faf8ff 50%,#f1eefb 75%);background-size:200% 100%;animation:shimmer 1.4s linear infinite}
+.sk+.sk{margin-top:9px}
+.empty{padding:16px;border-radius:14px;background:var(--p-soft);text-align:center;font-size:11px;font-weight:800;color:var(--muted)}
+
+/* ============ النجاح + التوست ============ */
+.done{position:fixed;inset:0;z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#f9f8fdf7;text-align:center;padding:24px}
+.done.show{display:flex;animation:fade .3s}
+.done svg{width:104px;height:104px}
+.done.show svg{animation:pop2 .6s cubic-bezier(.3,1.5,.5,1)}
+@keyframes pop2{from{transform:scale(.4)}to{transform:scale(1)}}
+.done circle{fill:none;stroke:#e4defa;stroke-width:6}
+.done .ring{stroke:var(--p);stroke-dasharray:289;stroke-dashoffset:289;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center}
+.done.show .ring{animation:draw .8s ease-out forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.done .tick{fill:none;stroke:var(--ok);stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60}
+.done.show .tick{animation:tick .4s .6s ease-out forwards}
+@keyframes tick{to{stroke-dashoffset:0}}
+.done h2{margin:0;font-size:21px;font-weight:950}
+.done p{margin:0;font-size:12px;font-weight:700;color:var(--muted)}
+.done.show h2{animation:up .5s .5s both}
+.done.show p{animation:up .5s .7s both}
+.toast{position:fixed;left:50%;bottom:calc(24px + var(--safe-bottom));transform:translateX(-50%) translateY(16px);max-width:calc(100% - 40px);padding:10px 14px;border-radius:13px;
+  background:#1e2c30;color:#fff;font-size:11px;font-weight:800;box-shadow:0 14px 34px rgba(24,44,49,.14);opacity:0;pointer-events:none;transition:.3s cubic-bezier(.3,1.4,.5,1);z-index:250;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%)}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<div class="app">
-<header class="top">
-<button class="back" id="back">‹</button>
-<div><div class="logo">MZ<b>AD</b> PHONE</div><span class="sub">SELLER DEPOSIT</span></div>
+
+<main class="page">
+
+<header>
+  <div class="topbar">
+    <button class="icon-btn" id="back" type="button" aria-label="رجوع"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    <div class="brand-mini"><strong>MZAD</strong><span>PHONE</span></div>
+    <span class="spacer"></span>
+  </div>
+
+  <div class="head-copy">
+    <span class="badge">تأمين البائع</span>
+    <h1>أكمل تأمين المزاد</h1>
+    <p class="lead">المزاد موجود كمسودة. بعد دفع التأمين ورفع الإثبات وموافقة الإدارة يبدأ المزاد تلقائياً لمدة ساعة.</p>
+  </div>
+
+  <div class="amount"><small>تأمين قابل للاسترداد</small><strong id="amount">—</strong></div>
 </header>
 
-<main class="content">
-<section class="card">
-<span class="badge">تأمين البائع</span>
-<h1>أكمل تأمين المزاد</h1>
-<p class="lead">المزاد موجود كمسودة. بعد دفع التأمين ورفع الإثبات وموافقة الإدارة يبدأ المزاد تلقائياً لمدة ساعة.</p>
-<div class="amount"><small>تأمين قابل للاسترداد</small><strong id="amount">5,000 د.ع</strong></div>
+<!-- المراحل + الحالة -->
+<section class="card reveal">
+  <div class="steps" id="steps">
+    <div class="stp active" data-s="1"><div class="dot">1</div><span>اختيار طريقة الدفع</span></div>
+    <div class="stp" data-s="2"><div class="dot">2</div><span>رفع الإثبات</span></div>
+    <div class="stp" data-s="3"><div class="dot">3</div><span>موافقة الإدارة</span></div>
+  </div>
+  <div id="status" class="status wait">جاري تحميل الحالة...</div>
 </section>
 
-<section class="card">
-<div class="title">ملخص المزاد</div>
-<div class="row"><span>رقم المزاد</span><strong id="auctionNo">—</strong></div>
-<div class="row"><span>الجهاز</span><strong id="deviceName">—</strong></div>
-<div class="row"><span>السعر الابتدائي</span><strong id="startPrice">—</strong></div>
+<!-- ملخص المزاد -->
+<section class="card reveal">
+  <div class="c-head"><span class="num">★</span><div><h2>ملخص المزاد</h2><p>بيانات مزادك الحالي</p></div></div>
+  <div id="summary"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
 </section>
 
-<section class="card">
-<div class="title">طريقة الدفع</div>
-<div class="notice" style="margin-bottom:10px"><b>اختر الطريقة المناسبة:</b> MasterCard أو Zain Cash أو التواصل مع منصة MZAD PHONE. بعد التحويل، ارفع صورة الإيصال حتى تتم المراجعة.</div>
-<div id="methods" class="methods"><div class="status"><span class="spin"></span>جاري تحميل طرق الدفع...</div></div>
+<!-- طرق الدفع -->
+<section class="card reveal" id="cMethods">
+  <div class="c-head"><span class="num">1</span><div><h2>طريقة الدفع</h2><p>اختر الطريقة المناسبة ثم حوّل المبلغ</p></div></div>
+  <div class="lockable">
+    <div class="notice soft" style="margin:0 0 12px">MasterCard أو Zain Cash أو التواصل مع منصة MZAD PHONE. بعد التحويل، ارفع صورة الإيصال حتى تتم المراجعة.</div>
+    <div id="methods" class="methods"><div class="sk"></div><div class="sk"></div></div>
+  </div>
 </section>
 
-<section class="card">
-<div class="title">بيانات إثبات الدفع</div>
-<label style="display:block;font-size:9px;font-weight:800;margin-bottom:7px">رقم العملية / المرجع</label>
-<input id="reference" placeholder="اختياري">
-<div style="margin-top:12px">
-<label style="display:block;font-size:9px;font-weight:800;margin-bottom:7px">صورة إثبات الدفع <span style="color:var(--pink)">*</span></label>
-<input id="proof" class="file" type="file" accept="image/*">
-</div>
-<div class="notice" style="margin-top:13px"><b>مهم:</b> بعد إرسال الإثبات يراجعه الأدمن. المزاد لا يصبح Live ولا يظهر للعامة قبل الموافقة. <br><br><b>الاسترداد:</b> مبلغ التأمين منفصل عن سعر الجهاز، وبعد انتهاء المزاد واستيفاء شروط الاسترداد المحددة من المنصة يصبح المبلغ مستحقاً للاسترداد. في التحويل اليدوي قد تتم عملية الإرجاع بواسطة المنصة وتُسجل في النظام بعد تنفيذها.</div>
-<button id="submit" class="btn" disabled>إرسال إثبات الدفع</button>
-<div id="msg" class="msg"></div>
+<!-- إثبات الدفع -->
+<section class="card reveal" id="cProof">
+  <div class="c-head"><span class="num">2</span><div><h2>إثبات الدفع</h2><p>صورة الإيصال ضرورية للمراجعة</p></div></div>
+
+  <div class="lockable">
+    <div class="field">
+      <label class="lbl-f" for="reference">رقم العملية / المرجع <small>اختياري</small></label>
+      <input class="in" id="reference" placeholder="مثلاً: رقم الحوالة" autocomplete="off">
+    </div>
+
+    <div class="field">
+      <span class="lbl-f">صورة إثبات الدفع <i>*</i></span>
+      <label class="drop" id="drop">
+        <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0-4 4m4-4 4 4"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+        اضغط لاختيار صورة الإيصال
+        <small>صورة فقط، بحد أقصى 10MB</small>
+        <input id="proof" type="file" accept="image/*">
+      </label>
+      <div class="preview" id="preview">
+        <img id="pvImg" alt="">
+        <div class="meta"><b id="pvName">—</b><small id="pvSize">—</small></div>
+        <button class="x" id="pvRemove" type="button" aria-label="حذف">×</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="notice"><b>مهم:</b> بعد إرسال الإثبات يراجعه الأدمن. المزاد لا يصبح Live ولا يظهر للعامة قبل الموافقة.</div>
+
+  <button id="submit" class="btn" type="button" disabled><span class="t" id="submitText">إرسال إثبات الدفع</span><span class="spin"></span></button>
+  <div id="msg" class="msg"></div>
 </section>
 
-<section class="card">
-<div class="title">حالة المزاد والتأمين</div>
-<div class="notice" style="margin-bottom:10px">تأمين البائع <b>5,000 د.ع</b> هو تأمين قابل للاسترداد وليس رسماً على النشر. مدة المزاد ساعة واحدة بعد موافقة الإدارة وبدء المزاد.</div>
-<div id="status" class="status"><span class="spin"></span>جاري تحميل الحالة...</div>
+<!-- معلومات مهمة -->
+<section class="card reveal">
+  <div class="c-head"><span class="num">!</span><div><h2>معلومات التأمين</h2><p>اقرأها قبل الدفع</p></div></div>
+  <div class="notice soft" style="margin:0 0 10px">تأمين البائع <b id="amount2">—</b> هو تأمين قابل للاسترداد وليس رسماً على النشر. مدة المزاد ساعة واحدة بعد موافقة الإدارة وبدء المزاد.</div>
+  <div class="notice soft" style="margin:0"><b>الاسترداد:</b> مبلغ التأمين منفصل عن سعر الجهاز، وبعد انتهاء المزاد واستيفاء شروط الاسترداد المحددة من المنصة يصبح المبلغ مستحقاً للاسترداد. في التحويل اليدوي قد تتم عملية الإرجاع بواسطة المنصة وتُسجل في النظام بعد تنفيذها.</div>
 </section>
+
 </main>
+
+<div class="done" id="done">
+  <svg viewBox="0 0 110 110">
+    <circle cx="55" cy="55" r="46"/>
+    <circle class="ring" cx="55" cy="55" r="46"/>
+    <path class="tick" d="M36 57l13 13 26-28"/>
+  </svg>
+  <h2>تم إرسال الإثبات</h2>
+  <p>بانتظار موافقة الإدارة…</p>
 </div>
+
+<div class="toast" id="toast"></div>
 
 <script type="module">
-import {supabase} from "./js/supabase.js";
+import { supabase } from "./js/supabase.js";
 
-const $=id=>document.getElementById(id);
-const auctionId=new URLSearchParams(location.search).get("auction")||new URLSearchParams(location.search).get("id");
-const state={user:null,auction:null,deposit:null,request:null,method:null,busy:false,timer:null};
+/* ================================================================
+   الأساسيات
+   ================================================================ */
+const $ = id => document.getElementById(id);
+const qs = new URLSearchParams(location.search);
+const auctionId = qs.get("auction") || qs.get("id");
 
-const money=n=>Number(n||0).toLocaleString("en-US")+" د.ع";
-function show(t,type="err"){$("msg").textContent=t;$("msg").className="msg show "+type}
-function setStatus(t,type="wait"){$("status").textContent=t;$("status").className="status "+type}
-function errorText(code){
- const map={
- AUTH_REQUIRED:"يجب تسجيل الدخول.",
- AUCTION_NOT_FOUND:"المزاد غير موجود.",
- ACCESS_DENIED:"لا تملك صلاحية هذا المزاد.",
- DEPOSIT_NOT_FOUND:"تعذر العثور على تأمين البائع.",
- PAYMENT_METHOD_REQUIRED:"اختر طريقة الدفع.",
- DEPOSITS_DISABLED:"نظام التأمينات متوقف حالياً.",
- DEPOSIT_ALREADY_APPROVED:"التأمين معتمد بالفعل.",
- AMOUNT_MISMATCH:"قيمة إثبات الدفع غير صحيحة.",
- PAYMENT_REQUEST_NOT_FOUND:"تعذر إنشاء طلب الدفع.",
- USER_SELL_RESTRICTED:"حسابك مقيّد من البيع حالياً."
- };
- return map[code]||("تعذر تنفيذ العملية. "+code);
+const state = { user:null, auction:null, deposit:null, request:null, requestMethodId:null, method:null, file:null, busy:false, poll:null };
+
+const money = n => Number(n || 0).toLocaleString("en-US") + " د.ع";
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+let toastT;
+function toast(t){
+  const e = $("toast");
+  e.textContent = t;
+  e.classList.add("show");
+  clearTimeout(toastT);
+  toastT = setTimeout(() => e.classList.remove("show"), 2400);
 }
 
-async function auth(){
- const {data,error}=await supabase.auth.getUser();
- if(error||!data.user){location.href="index.html?login=1&returnTo="+encodeURIComponent("auction-seller-deposit.html?auction="+auctionId);return false}
- state.user=data.user;return true;
+function showMsg(t, type = "err"){
+  const m = $("msg");
+  m.textContent = t;
+  m.className = "msg show " + type;
+}
+function hideMsg(){ $("msg").className = "msg"; }
+
+function setStatus(t, type = "wait"){
+  $("status").textContent = t;
+  $("status").className = "status " + type;
 }
 
-async function loadAuction(){
- const r=await supabase.from("mzad_auctions")
- .select("id,auction_number,device_id,seller_user_id,starting_price_iqd,current_price_iqd,status,starts_at,ends_at")
- .eq("id",auctionId).maybeSingle();
- if(r.error)throw r.error;
- if(!r.data)throw new Error("AUCTION_NOT_FOUND");
- if(r.data.seller_user_id!==state.user.id)throw new Error("ACCESS_DENIED");
- state.auction=r.data;
-
- const d=await supabase.from("mzad_devices")
- .select("brand,model,storage,color,mzad_id")
- .eq("id",r.data.device_id).maybeSingle();
- if(!d.error&&d.data){
-  state.auction.device=d.data;
-  $("deviceName").textContent=[d.data.brand,d.data.model,d.data.storage].filter(Boolean).join(" ")||"جهاز";
- }
- $("auctionNo").textContent=r.data.auction_number||"—";
- $("startPrice").textContent=money(r.data.starting_price_iqd);
+const ERRORS = {
+  AUTH_REQUIRED:"يجب تسجيل الدخول.",
+  AUCTION_NOT_FOUND:"المزاد غير موجود.",
+  ACCESS_DENIED:"لا تملك صلاحية هذا المزاد.",
+  DEPOSIT_NOT_FOUND:"تعذر العثور على تأمين البائع.",
+  PAYMENT_METHOD_REQUIRED:"اختر طريقة الدفع.",
+  DEPOSITS_DISABLED:"نظام التأمينات متوقف حالياً.",
+  DEPOSIT_ALREADY_APPROVED:"التأمين معتمد بالفعل.",
+  AMOUNT_MISMATCH:"قيمة إثبات الدفع غير صحيحة.",
+  PAYMENT_REQUEST_NOT_FOUND:"تعذر إنشاء طلب الدفع.",
+  USER_SELL_RESTRICTED:"حسابك مقيّد من البيع حالياً."
+};
+function errorText(e){
+  const code = String(e?.message || e || "UNKNOWN_ERROR");
+  for (const k of Object.keys(ERRORS)) if (code.includes(k)) return ERRORS[k];
+  return "تعذر تنفيذ العملية. " + code;
 }
 
-async function loadDeposit(){
- const r=await supabase.from("mzad_deposits")
- .select("id,deposit_number,amount_iqd,status,eligible_to_bid,paid_at,approved_at,refunded_at,auction_id")
- .eq("auction_id",auctionId)
- .eq("user_id",state.user.id)
- .eq("deposit_type","auction_seller")
- .order("created_at",{ascending:false})
- .limit(1).maybeSingle();
- if(r.error)throw r.error;
- if(!r.data){
-  const c=await supabase.rpc("mzad_create_auction_deposit",{p_auction_id:auctionId,p_role:"seller"});
-  if(c.error)throw c.error;
-  return loadDeposit();
- }
- state.deposit=r.data;
- $("amount").textContent=money(r.data.amount_iqd);
- renderStatus();
- return r.data;
+/* ================================================================
+   حالات التأمين والمزاد
+   ================================================================ */
+const LOCKED = ["approved","proof_submitted","refunded","forfeited","cancelled"];
+const AUCTION_LABELS = { draft:"مسودة", pending:"بانتظار الموافقة", pending_deposit:"بانتظار التأمين", live:"مباشر", ended:"منتهي", cancelled:"ملغي" };
+
+const isLive   = () => state.auction?.status === "live";
+const isLocked = () => isLive() || LOCKED.includes(state.deposit?.status);
+
+/* المرحلة الحالية: 1 دفع، 2 إثبات، 3 مراجعة */
+function stage(){
+  const d = state.deposit?.status;
+  if (isLive() || d === "approved") return 4;      // الكل مكتمل
+  if (d === "proof_submitted") return 3;
+  if (state.method) return 2;
+  return 1;
 }
 
-async function loadMethods(){
- const r=await supabase.rpc("mzad_get_enabled_payment_methods");
- if(r.error)throw r.error;
- const methods=Array.isArray(r.data)?r.data:[];
- const box=$("methods");box.innerHTML="";
- if(!methods.length){box.innerHTML="<div class='status'>لا توجد طريقة دفع مفعلة حالياً.</div>";return}
- methods.forEach(m=>{
-  const b=document.createElement("button");
-  b.type="button";b.className="method";
-  b.innerHTML="<b>"+(m.name_ar||"طريقة دفع")+"</b><span>"+(m.account_label||"")+"</span><div class=\"method-details\"><strong>"+(m.account_identifier||"سيتم إدخال الرقم من إدارة المنصة")+"</strong><em>"+(m.instructions_ar||"اتبع تعليمات المنصة ثم احتفظ بإثبات الدفع.")+"</em></div>";
-  b.onclick=()=>{document.querySelectorAll(".method").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");state.method=m;refresh()};
-  box.appendChild(b);
- });
-}
-
-async function createRequest(){
- if(!state.deposit?.id)throw new Error("DEPOSIT_NOT_FOUND");
- if(!state.method?.id)throw new Error("PAYMENT_METHOD_REQUIRED");
- const r=await supabase.rpc("mzad_create_deposit_payment_request",{p_deposit_id:state.deposit.id,p_payment_method_id:state.method.id});
- if(r.error)throw r.error;
- state.request=typeof r.data==="string"?{id:r.data}:r.data;
- if(!state.request?.id)throw new Error("PAYMENT_REQUEST_NOT_FOUND");
-}
-
-function refresh(){
- $("submit").disabled=state.busy||!state.method||!$("proof").files.length||["approved","refunded","forfeited","cancelled"].includes(state.deposit?.status);
+function renderSteps(){
+  const s = stage();
+  document.querySelectorAll("#steps .stp").forEach(el => {
+    const n = +el.dataset.s;
+    el.classList.toggle("done", n < s);
+    el.classList.toggle("active", n === s);
+  });
 }
 
 function renderStatus(){
- const d=state.deposit,a=state.auction;
- if(a.status==="live"){setStatus("تمت الموافقة وبدأ المزاد. ينتهي عند: "+new Date(a.ends_at).toLocaleString("ar-IQ"),"ok");$("submit").disabled=true;return}
- if(d.status==="approved"){setStatus("تم اعتماد تأمين البائع. المزاد في طور التفعيل.","ok");$("submit").disabled=true;return}
- if(d.status==="proof_submitted"){setStatus("تم إرسال الإثبات. بانتظار مراجعة الإدارة.","wait");$("submit").disabled=true;return}
- if(d.status==="rejected"){setStatus("تم رفض إثبات الدفع. يمكنك إرسال إثبات جديد.","err");}
- else setStatus("بانتظار دفع تأمين البائع وإرسال الإثبات.","wait");
- refresh();
+  const d = state.deposit, a = state.auction;
+  if (!d || !a) return;
+
+  if (isLive()){
+    setStatus("تمت الموافقة وبدأ المزاد. ينتهي عند: " + new Date(a.ends_at).toLocaleString("ar-IQ"), "ok");
+  } else if (d.status === "approved"){
+    setStatus("تم اعتماد تأمين البائع. المزاد في طور التفعيل.", "ok");
+  } else if (d.status === "proof_submitted"){
+    setStatus("تم إرسال الإثبات. بانتظار مراجعة الإدارة.", "wait");
+  } else if (d.status === "rejected"){
+    setStatus("تم رفض إثبات الدفع. يمكنك إرسال إثبات جديد.", "err");
+  } else {
+    setStatus("بانتظار دفع تأمين البائع وإرسال الإثبات.", "wait");
+  }
+
+  const locked = isLocked();
+  $("cMethods").classList.toggle("locked", locked);
+  $("cProof").classList.toggle("locked", locked);
+  renderSteps();
+  refresh();
 }
 
-$("submit").onclick=async()=>{
- if(state.busy)return;
- state.busy=true;$("submit").textContent="جاري إرسال الإثبات...";refresh();
- try{
-  await createRequest();
-  const file=$("proof").files[0];
-  const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,"-");
-  const path=state.user.id+"/"+state.request.id+"-"+Date.now()+"-"+safe;
-  const up=await supabase.storage.from("mzad-payment-proofs").upload(path,file,{upsert:false,cacheControl:"3600",contentType:file.type||"image/jpeg"});
-  if(up.error)throw up.error;
-  const proof=await supabase.rpc("mzad_submit_deposit_proof",{
-   p_request_id:state.request.id,
-   p_reference_number:$("reference").value.trim()||null,
-   p_proof_storage_path:path,
-   p_paid_amount_iqd:Number(state.deposit.amount_iqd),
-   p_paid_at:new Date().toISOString()
-  });
-  if(proof.error)throw proof.error;
-  await loadDeposit();
-  show("تم إرسال إثبات الدفع بنجاح. بانتظار موافقة الإدارة.","ok");
-  $("submit").textContent="تم إرسال الإثبات";
- }catch(e){
-  console.error(e);show(errorText(e?.message||"UNKNOWN_ERROR"));
-  state.busy=false;$("submit").textContent="إرسال إثبات الدفع";refresh();
-  return;
- }
- state.busy=false;refresh();
-};
+function renderSummary(){
+  const a = state.auction;
+  if (!a) return;
+  const dev = a.device;
+  const name = dev ? ([dev.brand, dev.model, dev.storage].filter(Boolean).join(" ") || "جهاز") : "جهاز";
+  const label = AUCTION_LABELS[a.status] || a.status || "—";
 
-$("proof").onchange=refresh;
-$("back").onclick=()=>history.length>1?history.back():location.href="home.html";
+  $("summary").innerHTML = `
+    <div class="row"><span>رقم المزاد</span><strong>${esc(a.auction_number || "—")}</strong></div>
+    <div class="row"><span>الجهاز</span><strong>${esc(name)}</strong></div>
+    <div class="row"><span>السعر الابتدائي</span><strong>${esc(money(a.starting_price_iqd))}</strong></div>
+    <div class="row"><span>حالة المزاد</span><strong><span class="pill${a.status === "live" ? " live" : ""}">${esc(label)}</span></strong></div>`;
+}
+
+function refresh(){
+  const ok = !state.busy && !!state.method && !!state.file && !isLocked();
+  const btn = $("submit");
+  btn.disabled = !ok;
+  btn.classList.toggle("ready", ok);
+}
+
+/* ================================================================
+   البيانات (Supabase)
+   ================================================================ */
+async function auth(){
+  const { data, error } = await supabase.auth.getUser();
+  if (error || !data.user){
+    location.href = "index.html?login=1&returnTo=" + encodeURIComponent("auction-seller-deposit.html?auction=" + auctionId);
+    return false;
+  }
+  state.user = data.user;
+  return true;
+}
+
+async function fetchAuction(){
+  const r = await supabase.from("mzad_auctions")
+    .select("id,auction_number,device_id,seller_user_id,starting_price_iqd,current_price_iqd,status,starts_at,ends_at")
+    .eq("id", auctionId).maybeSingle();
+  if (r.error) throw r.error;
+  if (!r.data) throw new Error("AUCTION_NOT_FOUND");
+  if (r.data.seller_user_id !== state.user.id) throw new Error("ACCESS_DENIED");
+  return r.data;
+}
+
+async function loadAuction(){
+  const a = await fetchAuction();
+  const d = await supabase.from("mzad_devices")
+    .select("brand,model,storage,color,mzad_id")
+    .eq("id", a.device_id).maybeSingle();
+  if (!d.error && d.data) a.device = d.data;
+  state.auction = a;
+  renderSummary();
+}
+
+async function loadDeposit(retry = true){
+  const r = await supabase.from("mzad_deposits")
+    .select("id,deposit_number,amount_iqd,status,eligible_to_bid,paid_at,approved_at,refunded_at,auction_id")
+    .eq("auction_id", auctionId)
+    .eq("user_id", state.user.id)
+    .eq("deposit_type", "auction_seller")
+    .order("created_at", { ascending: false })
+    .limit(1).maybeSingle();
+  if (r.error) throw r.error;
+
+  if (!r.data){
+    if (!retry) throw new Error("DEPOSIT_NOT_FOUND");
+    const c = await supabase.rpc("mzad_create_auction_deposit", { p_auction_id: auctionId, p_role: "seller" });
+    if (c.error) throw c.error;
+    return loadDeposit(false);                 // محاولة وحدة فقط
+  }
+
+  state.deposit = r.data;
+  $("amount").textContent  = money(r.data.amount_iqd);
+  $("amount2").textContent = money(r.data.amount_iqd);
+
+  /* إذا انرفض الإثبات، نبدأ بطلب دفع جديد */
+  if (r.data.status === "rejected"){ state.request = null; state.requestMethodId = null; }
+
+  renderStatus();
+  return r.data;
+}
+
+async function loadMethods(){
+  const r = await supabase.rpc("mzad_get_enabled_payment_methods");
+  if (r.error) throw r.error;
+  const methods = Array.isArray(r.data) ? r.data : [];
+  const box = $("methods");
+
+  if (!methods.length){
+    box.innerHTML = '<div class="empty">لا توجد طريقة دفع مفعلة حالياً.</div>';
+    return;
+  }
+
+  box.innerHTML = methods.map((m, i) => `
+    <button type="button" class="method" data-i="${i}">
+      <span class="tick"></span>
+      <b>${esc(m.name_ar || "طريقة دفع")}</b>
+      <span class="lbl">${esc(m.account_label || "")}</span>
+      <div class="details"><div><div class="d-in">
+        <div class="acc">
+          <strong>${esc(m.account_identifier || "سيتم إدخال الرقم من إدارة المنصة")}</strong>
+          ${m.account_identifier ? `<span class="copy" data-copy="${esc(m.account_identifier)}">نسخ</span>` : ""}
+        </div>
+        <em>${esc(m.instructions_ar || "اتبع تعليمات المنصة ثم احتفظ بإثبات الدفع.")}</em>
+      </div></div></div>
+    </button>`).join("");
+
+  box.querySelectorAll(".method").forEach(el => {
+    el.addEventListener("click", e => {
+      if (e.target.closest(".copy")) return;       // زر النسخ لا يغيّر الاختيار
+      box.querySelectorAll(".method").forEach(x => x.classList.remove("selected"));
+      el.classList.add("selected");
+      state.method = methods[+el.dataset.i];
+      hideMsg();
+      renderSteps();
+      refresh();
+    });
+  });
+
+  box.addEventListener("click", async e => {
+    const c = e.target.closest(".copy");
+    if (!c) return;
+    e.stopPropagation();
+    const text = c.dataset.copy;
+    try{
+      await navigator.clipboard.writeText(text);
+    }catch{
+      const t = document.createElement("textarea");
+      t.value = text; document.body.appendChild(t); t.select();
+      try{ document.execCommand("copy"); }catch{}
+      t.remove();
+    }
+    toast("تم نسخ الرقم");
+  });
+}
+
+/* طلب الدفع: نعيد استخدام نفس الطلب إذا نفس الطريقة (حتى ما ننشئ طلبات مكررة) */
+async function ensureRequest(){
+  if (!state.deposit?.id) throw new Error("DEPOSIT_NOT_FOUND");
+  if (!state.method?.id)  throw new Error("PAYMENT_METHOD_REQUIRED");
+
+  if (state.request?.id && state.requestMethodId === state.method.id) return;
+
+  const r = await supabase.rpc("mzad_create_deposit_payment_request", {
+    p_deposit_id: state.deposit.id,
+    p_payment_method_id: state.method.id
+  });
+  if (r.error) throw r.error;
+
+  state.request = typeof r.data === "string" ? { id: r.data } : r.data;
+  state.requestMethodId = state.method.id;
+  if (!state.request?.id) throw new Error("PAYMENT_REQUEST_NOT_FOUND");
+}
+
+/* ================================================================
+   رفع الصورة (معاينة + تحقق)
+   ================================================================ */
+const fmtSize = b => b > 1048576 ? (b / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(b / 1024)) + " KB";
+
+function clearFile(){
+  if (state.file?.url) URL.revokeObjectURL(state.file.url);
+  state.file = null;
+  $("proof").value = "";
+  $("preview").classList.remove("show");
+  $("drop").style.display = "";
+  refresh();
+}
+
+$("proof").addEventListener("change", e => {
+  const f = e.target.files[0];
+  if (!f) return;
+
+  if (!f.type.startsWith("image/")){ toast("اختر صورة فقط"); clearFile(); return; }
+  if (f.size > 10e6){ toast("حجم الصورة أكبر من 10MB"); clearFile(); return; }
+
+  if (state.file?.url) URL.revokeObjectURL(state.file.url);
+  const url = URL.createObjectURL(f);
+  state.file = { file: f, url };
+
+  $("pvImg").src = url;
+  $("pvName").textContent = f.name;
+  $("pvSize").textContent = fmtSize(f.size);
+  $("preview").classList.add("show");
+  $("drop").style.display = "none";
+  $("drop").classList.remove("invalid");
+  hideMsg();
+  renderSteps();
+  refresh();
+});
+
+$("pvRemove").addEventListener("click", clearFile);
+
+/* ================================================================
+   الإرسال
+   ================================================================ */
+function showSuccess(){
+  const d = $("done");
+  d.classList.add("show");
+  setTimeout(() => d.classList.remove("show"), 2200);
+}
+
+$("submit").addEventListener("click", async () => {
+  if (state.busy) return;
+
+  if (!state.file){
+    $("drop").classList.add("invalid");
+    toast("ارفع صورة إثبات الدفع أولاً");
+    return;
+  }
+
+  state.busy = true;
+  $("submit").classList.add("busy");
+  hideMsg();
+  refresh();
+
+  try{
+    await ensureRequest();
+
+    const file = state.file.file;
+    const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
+    const path = state.user.id + "/" + state.request.id + "-" + Date.now() + "-" + safe;
+
+    const up = await supabase.storage.from("mzad-payment-proofs")
+      .upload(path, file, { upsert:false, cacheControl:"3600", contentType:file.type || "image/jpeg" });
+    if (up.error) throw up.error;
+
+    const proof = await supabase.rpc("mzad_submit_deposit_proof", {
+      p_request_id: state.request.id,
+      p_reference_number: $("reference").value.trim() || null,
+      p_proof_storage_path: path,
+      p_paid_amount_iqd: Number(state.deposit.amount_iqd),
+      p_paid_at: new Date().toISOString()
+    });
+    if (proof.error) throw proof.error;
+
+    await loadDeposit();
+    showMsg("تم إرسال إثبات الدفع بنجاح. بانتظار موافقة الإدارة.", "ok");
+    $("submitText").textContent = "تم إرسال الإثبات";
+    showSuccess();
+    startPoll();
+
+  }catch(e){
+    console.error("DEPOSIT PROOF ERROR:", e);
+    showMsg(errorText(e));
+  }finally{
+    state.busy = false;
+    $("submit").classList.remove("busy");
+    refresh();
+  }
+});
+
+/* ================================================================
+   تحديث تلقائي أثناء انتظار موافقة الإدارة
+   ================================================================ */
+function startPoll(){
+  clearInterval(state.poll);
+  state.poll = setInterval(async () => {
+    if (document.hidden) return;
+    if (state.deposit?.status !== "proof_submitted"){ clearInterval(state.poll); return; }
+    try{
+      const fresh = await fetchAuction();
+      state.auction = { ...state.auction, ...fresh };
+      renderSummary();
+      await loadDeposit();
+    }catch(e){ console.error("POLL ERROR:", e); }
+  }, 12000);
+}
+
+/* ================================================================
+   التشغيل
+   ================================================================ */
+$("back").addEventListener("click", () => history.length > 1 ? history.back() : location.href = "home.html");
 
 async function start(){
- try{
-  if(!await auth())return;
-  if(!auctionId)throw new Error("AUCTION_NOT_FOUND");
-  await loadAuction();
-  await loadDeposit();
-  await loadMethods();
- }catch(e){console.error(e);show(errorText(e?.message||"UNKNOWN_ERROR"));setStatus(errorText(e?.message||"UNKNOWN_ERROR"),"err")}
+  try{
+    if (!await auth()) return;
+    if (!auctionId) throw new Error("AUCTION_NOT_FOUND");
+
+    await loadAuction();
+    await loadDeposit();
+    await loadMethods();
+
+    if (state.deposit?.status === "proof_submitted") startPoll();
+  }catch(e){
+    console.error("START ERROR:", e);
+    const t = errorText(e);
+    setStatus(t, "err");
+    showMsg(t);
+    $("summary").innerHTML = '<div class="empty">' + esc(t) + "</div>";
+    $("methods").innerHTML = "";
+  }
 }
 
 start();
 </script>
+
 </body>
 </html>
