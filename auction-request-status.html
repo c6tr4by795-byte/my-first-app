@@ -179,9 +179,9 @@ function phaseOf(){
   if (a.status==="ended") return "ended";
   if (a.status==="cancelled" || d?.status==="cancelled") return "cancelled";
   if (d?.status==="refunded" || d?.status==="forfeited") return "closed";
-  if (d?.status==="approved") return "approved";
-  if (d?.status==="rejected") return "rejected";
-  if (d?.status==="proof_submitted") return "review";
+  if (d?.status==="approved" || S.pr?.status==="approved") return "approved";
+  if (d?.status==="proof_submitted" || S.pr?.status==="proof_submitted") return "review";
+  if (d?.status==="rejected" || S.pr?.status==="rejected") return "rejected";
   return "unpaid";
 }
 
