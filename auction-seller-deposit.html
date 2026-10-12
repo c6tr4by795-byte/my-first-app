@@ -138,10 +138,6 @@ h1{margin:16px 2px 4px;font-size:23px;font-weight:950;letter-spacing:-.03em}
     </label>
     <div class="pv" id="pv"><img id="pvImg" alt=""><div class="meta"><b id="pvName">—</b><small id="pvSize">—</small></div><button class="x" id="pvX" type="button" aria-label="حذف">×</button></div>
   </div>
-  <div class="fld">
-    <label class="lbl" for="ref">رقم العملية <small>(اختياري)</small></label>
-    <input class="in" id="ref" placeholder="رقم الحوالة إن وجد" autocomplete="off">
-  </div>
   <div class="safe"><span>🔒</span><div><b>تأمينك محفوظ.</b> هو ليس رسم نشر، ويرجع لك كامل بعد انتهاء المزاد. لن ينشر مزادك قبل موافقة الإدارة.</div></div>
   <button id="submit" class="btn" type="button" disabled><span class="t">إرسال وتتبع الطلب</span><span class="sp"></span></button>
   <div id="msg" class="msg"></div>
@@ -200,7 +196,9 @@ async function loadDeposit(retry = true){
   st.dep = r.data;
   $("amount").textContent = money(r.data.amount_iqd);
   /* أي حالة غير "بانتظار الدفع أو المرفوض" تروح مباشرة لصفحة المتابعة */
-  if (a.data.status === "live" || ["proof_submitted","approved","refunded","forfeited","cancelled"].includes(r.data.status)){
+  const pq = await supabase.from("mzad_payment_requests").select("status").eq("deposit_id", r.data.id).eq("user_id", st.user.id).order("created_at",{ascending:false}).limit(1).maybeSingle();
+  const sent = pq.data?.status === "proof_submitted" || pq.data?.status === "approved";
+  if (a.data.status === "live" || sent || ["proof_submitted","approved","refunded","forfeited","cancelled"].includes(r.data.status)){
     location.replace("auction-request-status.html?auction=" + encodeURIComponent(auctionId));
     return null;
   }
@@ -286,7 +284,7 @@ $("submit").addEventListener("click", async () => {
     const up = await supabase.storage.from("mzad-payment-proofs").upload(path, file, { upsert:false, cacheControl:"3600", contentType:file.type || "image/jpeg" });
     if (up.error) throw up.error;
     const pr = await supabase.rpc("mzad_submit_deposit_proof",{
-      p_request_id:st.req, p_reference_number:$("ref").value.trim() || null, p_proof_storage_path:path,
+      p_request_id:st.req, p_reference_number:null, p_proof_storage_path:path,
       p_paid_amount_iqd:Number(st.dep.amount_iqd), p_paid_at:new Date().toISOString()
     });
     if (pr.error) throw pr.error;
