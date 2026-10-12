@@ -265,6 +265,65 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
 .kb .toast{bottom:24px}
 
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ===== أحجام الخطوط والمسافات ===== */
+body{font-size:15px}
+.lead{font-size:13.5px;line-height:1.9}
+h1{font-size:27px}
+.badge{font-size:12px}
+.plabel{font-size:12.5px;margin-top:9px}
+.card{margin-top:18px;padding:22px 18px;border-radius:26px;box-shadow:0 8px 28px -14px rgba(98,70,217,.2)}
+.c-head{margin-bottom:22px;gap:12px}
+.num{width:34px;height:34px;flex-basis:34px;font-size:16px;border-radius:12px}
+.c-head h2{font-size:19px}
+.c-head p{font-size:12.5px;margin-top:3px}
+.field+.field{margin-top:28px}
+.lbl{font-size:15px;margin-bottom:12px}
+.lbl small{font-size:12px}
+.in,.ta{font-size:16px;border-radius:16px}
+.in{height:56px}
+.ta{min-height:120px}
+.chips{gap:10px}
+.opt{padding:13px 20px;font-size:15px}
+.pick{height:60px;font-size:16px;border-radius:16px;padding:0 16px}
+.pick svg{width:20px;height:20px;flex-basis:20px}
+.tg{padding:18px 2px}
+.tg b{font-size:16px}
+.tg small{font-size:13px;margin-top:4px}
+.tg i{width:52px;height:30px;flex-basis:52px}
+.tg i:after{width:24px;height:24px}
+.tg input:checked+i:after{transform:translateX(-22px)}
+.tg:active i:after{width:28px}
+.link-btn{font-size:13.5px;padding:10px 18px;margin-top:14px}
+.bat output{font-size:17px;min-width:70px;padding:9px 0}
+.bat output.idle{font-size:13px}
+.batrep{padding:15px 16px;border-radius:14px;background:var(--warn-soft);border:1px solid #f2e2b7;color:var(--warn);font-size:15px;font-weight:900}
+.hint,.help{font-size:13px}
+.count{font-size:12px}
+.rv{padding:15px 0}
+.rv .k{flex-basis:74px;font-size:12.5px}
+.rv .v{font-size:14.5px}
+.edit{font-size:12.5px;padding:8px 15px}
+.row{font-size:13.5px;padding:13px 0}
+.guide{padding:16px}
+.guide b{font-size:15px}
+.guide p{font-size:13px}
+.meter b.t{font-size:16px}
+.meter p{font-size:12.5px}
+.miss span{font-size:12px;padding:6px 12px}
+.tl b{font-size:14.5px}
+.tl p{font-size:12.5px}
+.mi{font-size:16px;padding:16px 14px}
+.gh{font-size:12.5px}
+.sheet-h h3{font-size:18px}
+.b-next{font-size:17px;height:56px}
+.b-back{height:56px}
+.toast,.msg{font-size:13.5px}
+.done h2{font-size:24px}
+.done p{font-size:14px}
+.add{font-size:12.5px}
+.thumb .cv{font-size:10.5px}
+.thumb .mk{font-size:11px;height:28px}
 </style>
 </head>
 <body>
@@ -302,7 +361,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
 
     <div class="field">
       <span class="lbl">الشركة <i>*</i></span>
-      <div class="tiles" id="tiles"></div>
+      <button class="pick" id="brandBtn" type="button"><span id="brandTxt">اختر الشركة</span><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
       <input class="in sub-in" id="brandOther" placeholder="اكتب اسم الشركة" maxlength="40" style="display:none">
     </div>
 
@@ -314,7 +373,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
 
     <div class="field">
       <span class="lbl">السعة <i>*</i></span>
-      <div class="chips" id="ch-storage"></div>
+      <button class="pick" id="storageBtn" type="button"><span id="storageTxt">اختر السعة</span><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
     </div>
 
     <div class="field">
@@ -327,17 +386,36 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
 
 <div class="step" data-step="2">
   <section class="card">
-    <div class="c-head"><span class="num">2</span><div><h2>حالة الجهاز</h2><p>كل الحقول مطلوبة</p></div></div>
+    <div class="c-head"><span class="num">2</span><div><h2>شكل الجهاز</h2><p>الحالة من برا</p></div></div>
     <div class="field"><span class="lbl">الحالة العامة <i>*</i></span><div class="chips" id="ch-condition"></div></div>
     <div class="field"><span class="lbl">الشاشة <i>*</i></span><div class="chips" id="ch-screen"></div></div>
     <div class="field"><span class="lbl">الهيكل والإطار <i>*</i></span><div class="chips" id="ch-body"></div></div>
     <div class="field"><span class="lbl">الظهر <i>*</i></span><div class="chips" id="ch-back"></div></div>
+  </section>
+
+  <section class="card">
+    <div class="c-head"><div><h2>الكاميرات</h2><p>حالة العدسة والزجاج</p></div></div>
     <div class="field"><span class="lbl">الكاميرا الأمامية <i>*</i></span><div class="chips" id="ch-camF"></div></div>
     <div class="field"><span class="lbl">الكاميرا الخلفية <i>*</i></span><div class="chips" id="ch-camB"></div></div>
-    <div class="field" id="batField" style="display:none">
-      <span class="lbl">صحة البطارية <i>*</i></span>
-      <div class="bat"><input type="range" id="battery" min="60" max="100" value="90"><output id="batOut" class="idle">لم تحدد</output></div>
-    </div>
+  </section>
+
+  <section class="card">
+    <div class="c-head"><div><h2>القطع المبدّلة</h2><p>هل انفتح الجهاز أو تبدلت فيه قطع؟</p></div></div>
+    <label class="tg warn" id="repRow">
+      <div><b>انفتح الجهاز أو تبدلت فيه قطع</b><small id="repSt">لا، الجهاز أصلي</small></div>
+      <input type="checkbox" id="repSw"><i></i>
+    </label>
+    <div class="fold" id="repFold"><div>
+      <div class="field" style="margin-top:20px"><span class="lbl">القطع اللي تبدلت <i>*</i></span><div class="chips" id="ch-rep"></div>
+        <input class="in" id="replaced" placeholder="قطع أخرى (إذا موجودة)" maxlength="200"></div>
+      <div class="field"><span class="lbl">جودة القطع المبدّلة <i>*</i></span><div class="chips" id="ch-quality"></div></div>
+    </div></div>
+  </section>
+
+  <section class="card" id="batField" style="display:none">
+    <div class="c-head"><div><h2>البطارية</h2><p>صحة البطارية</p></div></div>
+    <div class="bat" id="batSlider"><input type="range" id="battery" min="60" max="100" value="90"><output id="batOut" class="idle">لم تحدد</output></div>
+    <div class="batrep" id="batRep" style="display:none">البطارية مبدّلة</div>
   </section>
 </div>
 
@@ -346,18 +424,6 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
     <div class="c-head"><span class="num">3</span><div><h2>فحص الوظائف</h2><p>المفتاح مشغّل = يعمل</p></div></div>
     <div id="works"></div>
     <button class="link-btn" id="allWork" type="button">كل الوظائف تعمل</button>
-  </section>
-
-  <section class="card">
-    <div class="c-head"><div><h2>القطع المبدّلة</h2><p>مطلوب</p></div></div>
-    <label class="tg warn" id="repRow">
-      <div><b>انفتح الجهاز أو تبدلت فيه قطع</b><small id="repSt">لا، الجهاز أصلي</small></div>
-      <input type="checkbox" id="repSw"><i></i>
-    </label>
-    <div class="fold" id="repFold"><div>
-      <div class="chips" id="ch-rep" style="margin-top:12px"></div>
-      <input class="in" id="replaced" placeholder="قطع أخرى (إذا موجودة)" maxlength="200">
-    </div></div>
   </section>
 
   <section class="card">
@@ -573,15 +639,16 @@ const BRAND_COLORS = {
   "أخرى":["أسود","أبيض","فضي","ذهبي","أزرق","أخضر","أحمر"]
 };
 
+const STORAGE = ["32GB","64GB","128GB","256GB","512GB","1TB"];
 const CAM = ["سليمة","خدوش خفيفة","خدوش واضحة","مكسورة"];
 const OPTS = {
-  storage:["32GB","64GB","128GB","256GB","512GB","1TB"],
   condition:["جديد","ممتاز","جيد","متوسط"],
   screen:["سليمة","خدوش خفيفة","خدوش واضحة","مكسورة"],
   body:["نظيف","خدوش خفيفة","خدوش واضحة","ضربات وانبعاج"],
   back:["نظيف","خدوش خفيفة","خدوش واضحة","مكسور"],
   camF:CAM,
   camB:CAM,
+  quality:["أصلية في الغالب","بديلة بجودة عالية","بديلة عادية"],
   warranty:["لا يوجد","أقل من 3 أشهر","3 إلى 12 شهر","أكثر من سنة"]
 };
 const NOACC = "بدون ملحقات";
@@ -600,7 +667,6 @@ const WORKS = [
 WORKS.forEach(w => state.works[w.k] = true);
 
 /* ===== بناء الواجهة ===== */
-$("tiles").innerHTML = BRANDS.map(b => `<button type="button" class="tile" data-brand="${esc(b)}">${esc(b)}</button>`).join("");
 
 Object.entries(OPTS).forEach(([g, list]) => {
   $("ch-" + g).innerHTML = list.map(v => `<button type="button" class="opt" data-g="${g}" data-v="${esc(v)}" aria-pressed="false">${esc(v)}</button>`).join("");
@@ -647,14 +713,37 @@ const getModel = () => (isOtherBrand() || state.modelOther) ? val("modelCustom")
 const getColor = () => state.colorOther ? val("colorCustom") : (state.v.color || "");
 const isApple = () => state.v.brand === "Apple" && /iphone/i.test(getModel());
 
+const batteryReplaced = () => state.replaced && state.rep.has("البطارية");
 function updateBattery(){
   const show = isApple();
   const f = $("batField");
   const was = f.style.display !== "none";
   f.style.display = show ? "" : "none";
+  $("batSlider").style.display = batteryReplaced() ? "none" : "";
+  $("batRep").style.display = batteryReplaced() ? "" : "none";
   if (show && !was){ f.style.animation = "none"; void f.offsetWidth; f.style.animation = ""; }
 }
-const batteryValue = () => (isApple() && state.batteryTouched) ? $("battery").value + "%" : null;
+const batteryValue = () => !isApple() ? null : batteryReplaced() ? "مبدلة" : (state.batteryTouched ? $("battery").value + "%" : null);
+
+function updateBrandUI(){
+  const b = state.v.brand;
+  $("brandTxt").textContent = !b ? "اختر الشركة" : (isOtherBrand() ? "شركة ثانية" : b);
+  $("brandBtn").classList.toggle("has", !!b);
+}
+function updateStorageUI(){
+  $("storageTxt").textContent = state.v.storage || "اختر السعة";
+  $("storageBtn").classList.toggle("has", !!state.v.storage);
+}
+function selectBrand(b){
+  if (state.v.brand !== b){
+    state.v.brand = b; state.v.model = null; state.modelOther = false;
+    state.v.color = null; state.colorOther = false;
+    $("modelCustom").value = ""; $("colorCustom").value = "";
+  }
+  $("brandBtn").classList.remove("invalid");
+  $("brandOther").style.display = isOtherBrand() ? "" : "none";
+  updateBrandUI(); renderColors(); updateModelUI(); updateBattery(); invalidate(); sync();
+}
 
 function updateModelUI(){
   const btn = $("modelBtn"), custom = $("modelCustom");
@@ -670,21 +759,6 @@ function updateModelUI(){
 
 /* ===== الضغطات ===== */
 document.addEventListener("click", e => {
-  const t = e.target.closest(".tile");
-  if (t){
-    const b = t.dataset.brand;
-    if (state.v.brand !== b){
-      state.v.brand = b; state.v.model = null; state.modelOther = false;
-      state.v.color = null; state.colorOther = false;
-      $("modelCustom").value = ""; $("colorCustom").value = "";
-    }
-    document.querySelectorAll(".tile").forEach(x => x.classList.toggle("on", x.dataset.brand === b));
-    $("tiles").classList.remove("invalid");
-    $("brandOther").style.display = isOtherBrand() ? "" : "none";
-    renderColors(); updateModelUI(); updateBattery(); invalidate(); sync();
-    return;
-  }
-
   const o = e.target.closest(".opt[data-g]");
   if (o){
     const g = o.dataset.g, v = o.dataset.v;
@@ -730,6 +804,7 @@ document.addEventListener("click", e => {
     const v = r.dataset.rep;
     state.rep.has(v) ? state.rep.delete(v) : state.rep.add(v);
     $("ch-rep").classList.remove("invalid");
+    updateBattery();
     r.classList.toggle("on", state.rep.has(v));
     r.setAttribute("aria-pressed", state.rep.has(v));
     invalidate(); sync();
@@ -737,10 +812,12 @@ document.addEventListener("click", e => {
 });
 
 /* ===== نافذة الموديل ===== */
-function openSheet(){
-  const brand = state.v.brand;
-  if (!brand || isOtherBrand()) return;
-  $("sheetTitle").textContent = "موديلات " + brand;
+let sheetKind = "model";
+function openSheet(kind){
+  if (kind === "model" && (!state.v.brand || isOtherBrand())) return;
+  sheetKind = kind;
+  $("sheetTitle").textContent = kind === "brand" ? "اختر الشركة" : kind === "storage" ? "اختر السعة" : "موديلات " + state.v.brand;
+  $("sheetQ").style.display = kind === "model" ? "" : "none";
   $("sheetQ").value = "";
   renderSheet("");
   $("sheet").classList.add("show");
@@ -753,6 +830,14 @@ function closeSheet(){
 }
 
 function renderSheet(q){
+  if (sheetKind !== "model"){
+    const list = sheetKind === "brand" ? BRANDS.filter(b => b !== "أخرى") : STORAGE;
+    const cur = sheetKind === "brand" ? state.v.brand : state.v.storage;
+    let h = list.map(m => `<button type="button" class="mi${cur === m ? " on" : ""}" data-m="${esc(m)}">${esc(m)}</button>`).join("");
+    if (sheetKind === "brand") h += '<button type="button" class="mi other" data-other="1">شركة ثانية، أكتبها بنفسي</button>';
+    $("sheetList").innerHTML = h;
+    return;
+  }
   const brand = state.v.brand;
   const all = MODELS[brand] || [];
   const query = q.trim().toLowerCase();
@@ -775,7 +860,9 @@ function renderSheet(q){
   $("sheetList").innerHTML = html;
 }
 
-$("modelBtn").addEventListener("click", openSheet);
+$("brandBtn").addEventListener("click", () => openSheet("brand"));
+$("storageBtn").addEventListener("click", () => openSheet("storage"));
+$("modelBtn").addEventListener("click", () => openSheet("model"));
 $("sheetOv").addEventListener("click", closeSheet);
 $("sheetCls").addEventListener("click", closeSheet);
 $("sheetQ").addEventListener("input", e => renderSheet(e.target.value));
@@ -783,6 +870,13 @@ $("sheetQ").addEventListener("input", e => renderSheet(e.target.value));
 $("sheetList").addEventListener("click", e => {
   const m = e.target.closest("[data-m]");
   if (m){
+    if (sheetKind === "brand"){ closeSheet(); selectBrand(m.dataset.m); return; }
+    if (sheetKind === "storage"){
+      state.v.storage = m.dataset.m;
+      $("storageBtn").classList.remove("invalid");
+      closeSheet(); updateStorageUI(); invalidate(); sync();
+      return;
+    }
     state.v.model = m.dataset.m;
     state.modelOther = false;
     $("modelCustom").value = "";
@@ -791,6 +885,11 @@ $("sheetList").addEventListener("click", e => {
     return;
   }
   if (e.target.closest("[data-other]")){
+    if (sheetKind === "brand"){
+      closeSheet(); selectBrand("أخرى");
+      setTimeout(() => $("brandOther").focus(), 300);
+      return;
+    }
     state.modelOther = true;
     state.v.model = null;
     closeSheet(); updateModelUI(); updateBattery(); invalidate(); sync();
@@ -825,7 +924,7 @@ $("repSw").addEventListener("change", e => {
   $("repRow").classList.toggle("off", !state.replaced);
   $("repSt").textContent = state.replaced ? "نعم، انفتح أو تبدلت قطع" : "لا، الجهاز أصلي";
   $("repSt").style.color = state.replaced ? "var(--hot)" : "var(--ok)";
-  invalidate(); sync();
+  updateBattery(); invalidate(); sync();
 });
 $("repSt").style.color = "var(--ok)";
 
@@ -930,7 +1029,8 @@ const replacedValue = () => {
   if (!state.replaced) return "لا يوجد";
   const p = [...state.rep];
   if (val("replaced")) p.push(val("replaced"));
-  return p.join("، ") || "نعم";
+  const parts = p.join("، ") || "نعم";
+  return state.v.quality ? parts + " | جودة القطع: " + state.v.quality : parts;
 };
 
 function renderReview(){
@@ -941,7 +1041,7 @@ function renderReview(){
     ["المواصفات", [v.storage, getColor(), batteryValue() && "بطارية " + batteryValue()].filter(Boolean).join(" • ") || "—", "", 1],
     ["الحالة", cond || "—", "", 2],
     ["الفحص", off.length ? "لا يعمل: " + off.map(w => w.t).join("، ") : "كل الوظائف تعمل", off.length ? "bad" : "good", 3],
-    ["القطع", state.replaced ? "مبدّل: " + replacedValue() : "الجهاز أصلي", state.replaced ? "bad" : "good", 3],
+    ["القطع", state.replaced ? "مبدّل: " + replacedValue() : "الجهاز أصلي", state.replaced ? "bad" : "good", 2],
     ["الصور", state.files.length + " صور", "", 4]
   ];
   $("review").innerHTML = rows.map(([k, t, cls, s]) => `
@@ -962,7 +1062,7 @@ function renderMeter(){
     ["3 صور أو أكثر", state.files.length >= 3], ["الضمان", !!v.warranty], ["ملاحظات", val("notes").length > 0],
     ["السعر", numOf($("price").value) > 0]
   ];
-  if (isApple()) items.push(["صحة البطارية", state.batteryTouched]);
+  if (isApple()) items.push(["صحة البطارية", state.batteryTouched || batteryReplaced()]);
 
   const done = items.filter(i => i[1]).length;
   const pct = Math.round(done / items.length * 100);
@@ -1008,29 +1108,33 @@ function flag(el){
   el.classList.remove("invalid");
   void el.offsetWidth;
   el.classList.add("invalid");
+  try{ el.scrollIntoView({ block:"center", behavior:"smooth" }); }catch{}
 }
 
 function validateStep(n){
-  const need = (ok, el, msg) => { if (ok) return true; flag(el); toast(msg); return false; };
+  const need = (el, msg) => { flag(el); toast(msg); return false; };
   if (n === 1){
-    if (!getBrand()) return need(false, isOtherBrand() ? $("brandOther") : $("tiles"), "اختر الشركة");
-    if (!getModel()) return need(false, state.modelOther || isOtherBrand() ? $("modelCustom") : $("modelBtn"), "اختر الموديل");
-    if (!state.v.storage) return need(false, $("ch-storage"), "اختر السعة");
-    if (!getColor()) return need(false, state.colorOther ? $("colorCustom") : $("ch-color"), "اختر اللون");
+    if (!getBrand()) return need(isOtherBrand() ? $("brandOther") : $("brandBtn"), "اختر الشركة");
+    if (!getModel()) return need(state.modelOther || isOtherBrand() ? $("modelCustom") : $("modelBtn"), "اختر الموديل");
+    if (!state.v.storage) return need($("storageBtn"), "اختر السعة");
+    if (!getColor()) return need(state.colorOther ? $("colorCustom") : $("ch-color"), "اختر اللون");
   }
   if (n === 2){
     const list = [["condition","الحالة العامة"],["screen","حالة الشاشة"],["body","حالة الهيكل"],["back","حالة الظهر"],["camF","حالة الكاميرا الأمامية"],["camB","حالة الكاميرا الخلفية"]];
     for (const [k, t] of list){
-      if (!state.v[k]) return need(false, $("ch-" + k), "اختر " + t);
+      if (!state.v[k]) return need($("ch-" + k), "اختر " + t);
     }
-    if (isApple() && !state.batteryTouched) return need(false, $("battery"), "حدد صحة البطارية");
+    if (state.replaced){
+      if (!state.rep.size && !val("replaced")) return need($("ch-rep"), "اختر القطع المبدّلة");
+      if (!state.v.quality) return need($("ch-quality"), "اختر جودة القطع المبدّلة");
+    }
+    if (isApple() && !batteryReplaced() && !state.batteryTouched) return need($("battery"), "حدد صحة البطارية");
   }
   if (n === 3){
-    if (state.replaced && !state.rep.size && !val("replaced")) return need(false, $("ch-rep"), "اختر القطع المبدّلة");
-    if (!state.v.warranty) return need(false, $("ch-warranty"), "اختر الضمان");
-    if (!state.acc.size) return need(false, $("ch-acc"), "اختر الملحقات");
+    if (!state.v.warranty) return need($("ch-warranty"), "اختر الضمان");
+    if (!state.acc.size) return need($("ch-acc"), "اختر الملحقات");
   }
-  if (n === 4 && !state.files.length) return need(false, $("addTile"), "أضف صورة وحدة على الأقل");
+  if (n === 4 && !state.files.length) return need($("addTile"), "أضف صورة وحدة على الأقل");
   if (n === 5 && numOf($("price").value) <= 0){
     flag($("price")); $("price").focus(); toast("اكتب السعر الابتدائي"); return false;
   }
@@ -1236,6 +1340,8 @@ document.addEventListener("focusout", () => setTimeout(() => { if (!isText(docum
 $("back").addEventListener("click", () => history.length > 1 ? history.back() : location.href = "home.html");
 
 renderColors();
+updateBrandUI();
+updateStorageUI();
 updateModelUI();
 renderPhotos();
 renderProgress();
