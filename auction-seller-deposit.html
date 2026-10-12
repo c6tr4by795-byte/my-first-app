@@ -6,282 +6,202 @@
 <meta name="theme-color" content="#6246d9">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>تأمين البائع — MZAD PHONE</title>
+<title>دفع تأمين النشر — MZAD PHONE</title>
 <style>
-/* ============ المتغيرات ============ */
 :root{
-  --bg:#f9f8fd;--ink:#17202a;--muted:#6b7280;--line:#ece8fb;--edge:#ddd8f8;
-  --p:#6246d9;--p-dark:#4a34b8;--p-soft:#f3f0ff;--hot:#e8590c;--ok:#1e8a5a;--ok-soft:#e8f6ef;--warn:#946100;--warn-soft:#fff8e6;--bad:#c62f4d;--bad-soft:#fff0f3;
+  --bg:#faf9fe;--ink:#1b2330;--muted:#6f7787;--line:#eeeaf9;--edge:#e2dcf6;
+  --p:#6246d9;--p-dark:#4a34b8;--p-soft:#f4f1ff;--hot:#e8590c;--ok:#1e8a5a;--ok-soft:#eaf7f0;--warn:#8a5d00;--warn-soft:#fff8e6;--bad:#c62f4d;--bad-soft:#fff1f4;
   --safe-bottom:env(safe-area-inset-bottom,0px)
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+[hidden]{display:none!important}
 body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 button,input{font:inherit;color:inherit}
 button{border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+a{color:inherit;text-decoration:none}
 :focus-visible{outline:3px solid var(--p);outline-offset:2px}
-.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(40px + var(--safe-bottom));overflow-x:clip}
+.wrap{width:min(100%,520px);margin:0 auto;padding:0 14px}
+.page{padding-bottom:calc(40px + var(--safe-bottom))}
 
-/* ============ أنميشن ============ */
-@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
-@keyframes shimmer{to{background-position:-200% 0}}
-@keyframes pop{50%{transform:scale(1.12)}}
 @keyframes rot{to{transform:rotate(360deg)}}
-@keyframes ping{0%{box-shadow:0 0 0 0 rgba(98,70,217,.45)}70%{box-shadow:0 0 0 9px rgba(98,70,217,0)}100%{box-shadow:0 0 0 0 rgba(98,70,217,0)}}
-@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
-header{animation:fade .5s backwards}
-.reveal{animation:up .6s cubic-bezier(.2,.8,.3,1) backwards}
-.page>.reveal:nth-of-type(1){animation-delay:.05s}
-.page>.reveal:nth-of-type(2){animation-delay:.12s}
-.page>.reveal:nth-of-type(3){animation-delay:.19s}
-.page>.reveal:nth-of-type(4){animation-delay:.26s}
-.page>.reveal:nth-of-type(5){animation-delay:.33s}
-.icon-btn,.method,.btn,.drop,.copy{transition:transform .18s ease,border-color .25s,background .25s,box-shadow .25s}
-.icon-btn:active,.method:active,.drop:active,.copy:active{transform:scale(.97)}
+@keyframes sheet{from{transform:translateY(100%)}to{transform:none}}
+@keyframes shimmer{to{background-position:-200% 0}}
+.card,.intro{animation:up .45s ease backwards}
+.card:nth-of-type(2){animation-delay:.08s}
+.btn,.opt,.icon-btn,.copy{transition:transform .18s ease,background .2s,border-color .2s}
+.btn:active,.opt:active,.icon-btn:active,.copy:active{transform:scale(.98)}
 
-/* ============ الهيدر ============ */
-header{margin-inline:-14px;padding:0 14px 18px;background:linear-gradient(145deg,#fff 0%,#f7f5ff 55%,#ece8ff 100%);
-  border-radius:0 0 26px 26px;border-bottom:1px solid var(--line);box-shadow:0 10px 26px rgba(23,32,42,.06)}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 2px 0}
+/* ===== الهيدر ===== */
+header{background:linear-gradient(180deg,#fff 0%,#f6f3ff 100%);border-bottom:1px solid var(--line);border-radius:0 0 24px 24px;padding-bottom:18px}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding-top:12px}
 .brand-mini{display:flex;flex-direction:column;align-items:center;line-height:.9}
 .brand-mini strong{font-size:16px;letter-spacing:-.03em}
 .brand-mini span{font-size:7px;font-weight:800;letter-spacing:.15em;color:#8a96a3;margin-top:3px}
-.icon-btn{width:39px;height:34px;display:grid;place-items:center;border:1px solid var(--edge);border-radius:12px;background:#fff;color:var(--p);box-shadow:0 7px 18px rgba(23,32,42,.045)}
+.icon-btn{width:39px;height:34px;display:grid;place-items:center;border:1px solid var(--edge);border-radius:12px;background:#fff;color:var(--p)}
 .icon-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-.spacer{width:39px}
-.head-copy{margin:16px 2px 14px}
-.badge{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;background:#fff;border:1px solid var(--edge);color:var(--p-dark);font-size:10px;font-weight:900}
-.badge:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--p);animation:ping 1.8s infinite}
-h1{margin:10px 0 4px;font-size:24px;font-weight:950;letter-spacing:-.035em}
-.lead{margin:0;font-size:11px;font-weight:700;line-height:1.9;color:var(--muted)}
-.amount{position:relative;overflow:hidden;text-align:center;padding:18px 10px;border-radius:20px;color:#fff;
-  background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 14px 28px -10px rgba(98,70,217,.55)}
-.amount:before{content:"";position:absolute;width:120px;height:120px;border-radius:50%;top:-50px;inset-inline-end:-30px;background:rgba(255,255,255,.14)}
-.amount small{position:relative;display:block;font-size:10px;font-weight:800;color:#ffffffcc}
-.amount strong{position:relative;display:block;margin-top:4px;font-size:30px;font-weight:950;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.icon-btn b{font-size:17px;font-weight:950}
 
-/* ============ البطاقات ============ */
-.card{margin-top:14px;padding:16px;border-radius:22px;background:#fff;border:1px solid var(--edge);box-shadow:0 10px 24px -10px rgba(98,70,217,.22)}
-.card.locked .lockable{opacity:.5;pointer-events:none}
-.c-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.num{width:28px;height:28px;flex:0 0 28px;border-radius:10px;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:950;
-  background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 5px 12px rgba(98,70,217,.28)}
-.c-head h2{margin:0;font-size:16px;font-weight:950;letter-spacing:-.02em}
-.c-head p{margin:1px 0 0;font-size:10px;font-weight:700;color:var(--muted)}
+.intro{margin-top:16px}
+.chip{display:inline-block;padding:5px 11px;border-radius:999px;background:#fff;border:1px solid var(--edge);color:var(--p-dark);font-size:10px;font-weight:900}
+h1{margin:10px 0 6px;font-size:23px;font-weight:950;letter-spacing:-.035em}
+.lead{margin:0;font-size:12px;font-weight:700;line-height:1.9;color:var(--muted)}
+.amount{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding:13px 15px;border-radius:18px;background:#fff;border:1px solid var(--edge)}
+.amount small{display:block;font-size:11px;font-weight:800;color:var(--muted)}
+.amount span{display:block;margin-top:2px;font-size:10.5px;font-weight:700;color:#9ca3af}
+.amount strong{font-size:26px;font-weight:950;color:var(--p-dark);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.meta{margin:10px 2px 0;font-size:11px;font-weight:700;color:var(--muted)}
 
-/* ============ شريط المراحل ============ */
-.steps{display:flex;align-items:flex-start;justify-content:space-between;padding:4px 2px 2px}
-.stp{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center}
-.stp:not(:last-child):after{content:"";position:absolute;top:15px;inset-inline-start:calc(50% + 20px);inset-inline-end:calc(-50% + 20px);height:3px;border-radius:3px;background:#e4defa}
-.stp.done:not(:last-child):after{background:linear-gradient(90deg,var(--p),#8b6cf0)}
-.dot{position:relative;z-index:1;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:950;
-  background:#fff;border:2px solid #e4defa;color:#a99cf0;transition:.35s}
-.stp.active .dot{border-color:var(--p);color:var(--p);animation:ping 1.8s infinite}
-.stp.done .dot{background:var(--p);border-color:var(--p);color:#fff;font-size:0}
-.stp.done .dot:after{content:"✓";font-size:15px;animation:pop .4s}
-.stp span{font-size:10px;font-weight:850;color:var(--muted);line-height:1.4}
-.stp.active span,.stp.done span{color:var(--p-dark)}
-.status{display:flex;align-items:center;gap:9px;margin-top:14px;padding:12px;border-radius:14px;background:var(--p-soft);border:1px solid #e4defa;
-  font-size:11px;font-weight:800;line-height:1.7;color:#4b5563}
-.status.ok{background:var(--ok-soft);border-color:#bfe8d3;color:var(--ok)}
-.status.err{background:var(--bad-soft);border-color:#f6c7d1;color:var(--bad)}
-.status.wait{background:var(--warn-soft);border-color:#f2e2b7;color:var(--warn)}
+/* ===== البطاقات ===== */
+.card{margin-top:14px;padding:16px;border-radius:20px;background:#fff;border:1px solid var(--line);box-shadow:0 1px 2px rgba(23,32,42,.04)}
+.c-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.num{width:26px;height:26px;flex:0 0 26px;border-radius:50%;display:grid;place-items:center;background:var(--p-soft);color:var(--p-dark);font-size:12px;font-weight:950}
+.c-head h2{margin:0;font-size:15.5px;font-weight:950}
+.c-head p{margin:1px 0 0;font-size:10.5px;font-weight:700;color:var(--muted)}
+.note{margin-top:14px;padding:12px 14px;border-radius:14px;font-size:11.5px;font-weight:800;line-height:1.8}
+.note.bad{background:var(--bad-soft);color:var(--bad)}
 
-/* ============ الملخص ============ */
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px dashed #e9e5f8;font-size:11px;font-weight:700}
-.row:last-child{border:0;padding-bottom:0}
-.row span{color:var(--muted)}
-.row strong{font-weight:900;text-align:end}
-.pill{display:inline-flex;padding:4px 10px;border-radius:999px;background:var(--p-soft);color:var(--p-dark);font-size:10px;font-weight:900}
-.pill.live{background:var(--ok-soft);color:var(--ok)}
-
-/* ============ طرق الدفع ============ */
+/* ===== طرق الدفع ===== */
 .methods{display:grid;gap:10px}
-.method{position:relative;width:100%;text-align:start;padding:13px 14px;border-radius:18px;background:#fff;border:1.5px solid var(--line)}
-.method b{display:block;font-size:13px;font-weight:900;padding-inline-end:30px}
-.method .lbl{display:block;margin-top:3px;font-size:10px;font-weight:700;color:var(--muted)}
-.method .tick{position:absolute;top:13px;inset-inline-end:13px;width:22px;height:22px;border-radius:50%;border:2px solid #d6d2ea;display:grid;place-items:center;transition:.25s}
-.method.selected{border-color:var(--p);background:var(--p-soft);box-shadow:0 8px 20px -10px rgba(98,70,217,.45)}
-.method.selected .tick{background:var(--p);border-color:var(--p)}
-.method.selected .tick:after{content:"✓";color:#fff;font-size:12px;font-weight:950;animation:pop .35s}
-.details{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.3,1,.4,1)}
-.method.selected .details{grid-template-rows:1fr}
-.details>div{overflow:hidden}
-.d-in{margin-top:11px;padding-top:11px;border-top:1px dashed #cfc6f3}
+.opt{position:relative;display:block;width:100%;text-align:start;padding:13px 14px;border-radius:16px;background:#fff;border:1.5px solid var(--line);cursor:pointer}
+.opt-top{display:flex;align-items:center;gap:12px}
+.rd{width:20px;height:20px;flex:0 0 20px;border-radius:50%;border:2px solid #d6d2ea;display:grid;place-items:center;transition:.2s}
+.opt.on{border-color:var(--p);background:var(--p-soft)}
+.opt.on .rd{border-color:var(--p);background:var(--p)}
+.opt.on .rd:after{content:"";width:7px;height:7px;border-radius:50%;background:#fff}
+.mi{width:38px;height:38px;flex:0 0 38px;border-radius:12px;display:grid;place-items:center;background:var(--p-soft);color:var(--p-dark)}
+.opt.on .mi{background:#fff}
+.mi svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tx b{display:block;font-size:14px;font-weight:900}
+.tx small{display:block;margin-top:2px;font-size:10.5px;font-weight:700;color:var(--muted)}
+.det{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
+.opt.on .det{grid-template-rows:1fr}
+.det>div{overflow:hidden}
+.det-in{margin-top:12px;padding-top:12px;border-top:1px dashed #d4cbf5}
+.kv+.kv{margin-top:12px}
+.kv small{display:block;font-size:10.5px;font-weight:800;color:var(--muted);margin-bottom:4px}
+.kv>strong{font-size:15px;font-weight:950}
 .acc{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.acc strong{font-size:14px;font-weight:950;direction:ltr;word-break:break-all;text-align:start}
-.copy{flex:0 0 auto;padding:7px 12px;border-radius:10px;background:#fff;border:1px solid var(--edge);color:var(--p-dark);font-size:10px;font-weight:900}
-.d-in em{display:block;margin-top:8px;font-style:normal;font-size:10px;font-weight:700;line-height:1.8;color:#4b5563}
+.acc strong{font-size:16px;font-weight:950;direction:ltr;text-align:start;word-break:break-all;letter-spacing:.02em}
+.copy{flex:0 0 auto;padding:7px 14px;border-radius:10px;background:#fff;border:1px solid var(--edge);color:var(--p-dark);font-size:11px;font-weight:900}
+.copy.ok{background:var(--ok-soft);border-color:#bfe8d3;color:var(--ok)}
+.ins{margin:12px 0 0;font-size:11px;font-weight:700;line-height:1.9;color:#4b5563}
+.empty{padding:16px;border-radius:14px;background:var(--p-soft);text-align:center;font-size:12px;font-weight:800;color:var(--muted)}
+.sk{height:62px;border-radius:16px;background:linear-gradient(90deg,#f1eefb 25%,#faf8ff 50%,#f1eefb 75%);background-size:200% 100%;animation:shimmer 1.4s linear infinite}
+.sk+.sk{margin-top:10px}
 
-/* ============ الحقول والرفع ============ */
-.lbl-f{display:block;margin-bottom:6px;font-size:11px;font-weight:900;color:#374151}
-.lbl-f i{font-style:normal;color:var(--hot)}
-.lbl-f small{font-weight:700;color:#9ca3af}
-.in{width:100%;height:46px;border:1.5px solid #e4defa;border-radius:14px;background:#fff;padding:0 14px;outline:none;font-weight:700;transition:.25s}
-.in:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.10)}
-.in::placeholder{color:#a8b0bb;font-weight:600}
-.field+.field{margin-top:14px}
-.drop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:118px;padding:14px;border-radius:18px;
-  border:2px dashed #c9bff7;background:var(--p-soft);color:var(--p-dark);text-align:center;cursor:pointer;font-size:11px;font-weight:900}
-.drop svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;animation:floaty 2.6s ease-in-out infinite}
-@keyframes floaty{50%{transform:translateY(-5px)}}
-.drop small{font-size:10px;font-weight:700;color:var(--muted)}
+/* ===== رفع الصورة ===== */
+.drop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:120px;padding:14px;border-radius:16px;
+  border:2px dashed #cfc6f3;background:var(--p-soft);color:var(--p-dark);text-align:center;cursor:pointer;font-size:12px;font-weight:900;transition:.2s}
+.drop svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.drop small{font-size:10.5px;font-weight:700;color:var(--muted)}
 .drop input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
-.drop.invalid{border-color:var(--hot);animation:shake .4s}
-.preview{display:none;align-items:center;gap:12px;padding:10px;border-radius:18px;background:#fff;border:1.5px solid var(--edge);animation:up .4s}
-.preview.show{display:flex}
-.preview img{width:64px;height:64px;border-radius:12px;object-fit:cover;border:1px solid var(--line);background:var(--p-soft)}
-.preview .meta{flex:1;min-width:0}
+.drop.invalid{border-color:var(--hot)}
+.preview{display:none;align-items:center;gap:12px;padding:10px;border-radius:16px;background:#fff;border:1.5px solid var(--edge)}
+.preview.show{display:flex;animation:up .35s}
+.preview img{width:62px;height:62px;border-radius:12px;object-fit:cover;background:var(--p-soft)}
+.preview .m{flex:1;min-width:0}
 .preview b{display:block;font-size:12px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.preview small{font-size:10px;font-weight:700;color:var(--muted)}
-.preview .x{width:32px;height:32px;border-radius:50%;background:var(--p-soft);color:#6b7280;display:grid;place-items:center;font-size:18px}
-.notice{margin-top:14px;padding:12px;border-radius:14px;background:var(--warn-soft);border:1px solid #f2e2b7;font-size:10.5px;font-weight:700;line-height:1.9;color:#766542}
-.notice b{color:#5f4a1a;font-weight:950}
-.notice.soft{background:var(--p-soft);border-color:#e4defa;color:#4b5563}
-.notice.soft b{color:var(--p-dark)}
+.preview small{font-size:10.5px;font-weight:700;color:var(--muted)}
+.preview .x{width:32px;height:32px;border-radius:50%;background:var(--p-soft);color:#6b7280;font-size:18px;display:grid;place-items:center}
 
-/* ============ الأزرار والرسائل ============ */
-.btn{width:100%;height:54px;margin-top:14px;border-radius:17px;color:#fff;font-size:15px;font-weight:950;
-  background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 12px 26px rgba(98,70,217,.35)}
-.btn:active{transform:scale(.97)}
-.btn.ready{animation:glow 2s ease-in-out infinite}
-@keyframes glow{50%{box-shadow:0 12px 36px rgba(98,70,217,.65),0 0 0 6px rgba(98,70,217,.13)}}
-.btn:disabled{opacity:.5;box-shadow:none;animation:none;cursor:not-allowed}
-.btn .spin{display:none;width:20px;height:20px;border-radius:50%;border:3px solid #ffffff66;border-top-color:#fff;animation:rot .7s linear infinite;margin:auto}
+/* ===== الإرسال ===== */
+.btn{display:flex;align-items:center;justify-content:center;width:100%;height:54px;margin-top:16px;border-radius:16px;color:#fff;font-size:15px;font-weight:950;background:var(--p);box-shadow:0 8px 20px rgba(98,70,217,.28)}
+.btn:disabled{opacity:.45;box-shadow:none;cursor:not-allowed}
+.btn .spin{display:none;width:20px;height:20px;border-radius:50%;border:3px solid #ffffff66;border-top-color:#fff;animation:rot .7s linear infinite}
 .btn.busy .t{display:none}
 .btn.busy .spin{display:block}
-.msg{display:none;margin-top:12px;padding:11px;border-radius:13px;text-align:center;font-size:11px;font-weight:800;line-height:1.7}
-.msg.show{display:block;animation:up .35s}
-.msg.err{background:var(--bad-soft);color:var(--bad)}
-.msg.ok{background:var(--ok-soft);color:var(--ok)}
-.msg.wait{background:var(--warn-soft);color:var(--warn)}
+.hint{margin:10px 4px 0;text-align:center;font-size:11px;font-weight:700;color:var(--muted)}
+.foot{margin:14px 6px 0;text-align:center;font-size:11px;font-weight:700;line-height:1.9;color:var(--muted)}
+.msg{display:none;margin-top:12px;padding:11px;border-radius:13px;text-align:center;font-size:11.5px;font-weight:800;line-height:1.7;background:var(--bad-soft);color:var(--bad)}
+.msg.show{display:block;animation:up .3s}
 
-/* ============ هيكل التحميل ============ */
-.sk{height:44px;border-radius:14px;background:linear-gradient(90deg,#f1eefb 25%,#faf8ff 50%,#f1eefb 75%);background-size:200% 100%;animation:shimmer 1.4s linear infinite}
-.sk+.sk{margin-top:9px}
-.empty{padding:16px;border-radius:14px;background:var(--p-soft);text-align:center;font-size:11px;font-weight:800;color:var(--muted)}
+/* ===== نافذة المساعدة ===== */
+.sheet{position:fixed;inset:0;z-index:300;display:none}
+.sheet.show{display:block}
+.ov{position:absolute;inset:0;background:rgba(23,32,42,.45);animation:fade .2s}
+.box{position:absolute;left:0;right:0;bottom:0;max-width:520px;margin:0 auto;padding:10px 18px calc(22px + var(--safe-bottom));border-radius:24px 24px 0 0;background:#fff;animation:sheet .3s cubic-bezier(.2,.9,.3,1)}
+.grab{width:42px;height:4px;border-radius:99px;background:#d9d6e8;margin:0 auto 16px}
+.box h3{margin:0 0 6px;font-size:16px;font-weight:950}
+.box p{margin:0;font-size:12px;font-weight:700;line-height:1.9;color:var(--muted)}
+.acts{display:grid;gap:9px;margin-top:16px}
+.acts a,.acts button{display:flex;align-items:center;justify-content:center;height:50px;border-radius:14px;font-size:14px;font-weight:900}
+.acts .call{background:var(--p);color:#fff}
+.acts .wa{background:var(--ok-soft);color:var(--ok)}
+.acts .close{background:var(--p-soft);color:var(--p-dark)}
 
-/* ============ النجاح + التوست ============ */
-.done{position:fixed;inset:0;z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#f9f8fdf7;text-align:center;padding:24px}
-.done.show{display:flex;animation:fade .3s}
-.done svg{width:104px;height:104px}
-.done.show svg{animation:pop2 .6s cubic-bezier(.3,1.5,.5,1)}
-@keyframes pop2{from{transform:scale(.4)}to{transform:scale(1)}}
-.done circle{fill:none;stroke:#e4defa;stroke-width:6}
-.done .ring{stroke:var(--p);stroke-dasharray:289;stroke-dashoffset:289;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center}
-.done.show .ring{animation:draw .8s ease-out forwards}
-@keyframes draw{to{stroke-dashoffset:0}}
-.done .tick{fill:none;stroke:var(--ok);stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60}
-.done.show .tick{animation:tick .4s .6s ease-out forwards}
-@keyframes tick{to{stroke-dashoffset:0}}
-.done h2{margin:0;font-size:21px;font-weight:950}
-.done p{margin:0;font-size:12px;font-weight:700;color:var(--muted)}
-.done.show h2{animation:up .5s .5s both}
-.done.show p{animation:up .5s .7s both}
-.toast{position:fixed;left:50%;bottom:calc(24px + var(--safe-bottom));transform:translateX(-50%) translateY(16px);max-width:calc(100% - 40px);padding:10px 14px;border-radius:13px;
-  background:#1e2c30;color:#fff;font-size:11px;font-weight:800;box-shadow:0 14px 34px rgba(24,44,49,.14);opacity:0;pointer-events:none;transition:.3s cubic-bezier(.3,1.4,.5,1);z-index:250;text-align:center}
+.toast{position:fixed;left:50%;bottom:calc(24px + var(--safe-bottom));transform:translateX(-50%) translateY(14px);max-width:calc(100% - 40px);padding:10px 14px;border-radius:13px;
+  background:#1e2c30;color:#fff;font-size:11.5px;font-weight:800;opacity:0;pointer-events:none;transition:.25s;z-index:400;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%)}
-
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 
-<main class="page">
-
 <header>
-  <div class="topbar">
-    <button class="icon-btn" id="back" type="button" aria-label="رجوع"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-    <div class="brand-mini"><strong>MZAD</strong><span>PHONE</span></div>
-    <span class="spacer"></span>
-  </div>
+  <div class="wrap">
+    <div class="topbar">
+      <button class="icon-btn" id="back" type="button" aria-label="رجوع"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      <div class="brand-mini"><strong>MZAD</strong><span>PHONE</span></div>
+      <button class="icon-btn" id="helpBtn" type="button" aria-label="مساعدة"><b>؟</b></button>
+    </div>
 
-  <div class="head-copy">
-    <span class="badge">تأمين البائع</span>
-    <h1>أكمل تأمين المزاد</h1>
-    <p class="lead">المزاد موجود كمسودة. بعد دفع التأمين ورفع الإثبات وموافقة الإدارة يبدأ المزاد تلقائياً لمدة ساعة.</p>
+    <div class="intro">
+      <span class="chip">آخر خطوة قبل النشر</span>
+      <h1>ادفع تأمين النشر</h1>
+      <p class="lead">حوّل المبلغ ثم أرسل صورة الإيصال. ندقق التحويل خلال ساعة كحد أقصى، وبعدها ينشر مزادك تلقائياً.</p>
+      <div class="amount">
+        <div><small>مبلغ التأمين</small><span>يرجع لك بعد انتهاء المزاد</span></div>
+        <strong id="amount">—</strong>
+      </div>
+      <p class="meta" id="meta"></p>
+    </div>
   </div>
-
-  <div class="amount"><small>تأمين قابل للاسترداد</small><strong id="amount">—</strong></div>
 </header>
 
-<!-- المراحل + الحالة -->
-<section class="card reveal">
-  <div class="steps" id="steps">
-    <div class="stp active" data-s="1"><div class="dot">1</div><span>اختيار طريقة الدفع</span></div>
-    <div class="stp" data-s="2"><div class="dot">2</div><span>رفع الإثبات</span></div>
-    <div class="stp" data-s="3"><div class="dot">3</div><span>موافقة الإدارة</span></div>
-  </div>
-  <div id="status" class="status wait">جاري تحميل الحالة...</div>
-</section>
+<main class="wrap page">
 
-<!-- ملخص المزاد -->
-<section class="card reveal">
-  <div class="c-head"><span class="num">★</span><div><h2>ملخص المزاد</h2><p>بيانات مزادك الحالي</p></div></div>
-  <div id="summary"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
-</section>
+  <div class="note bad" id="notice" hidden>تم رفض الإيصال السابق. ارفع صورة أوضح للتحويل وأرسلها من جديد.</div>
 
-<!-- طرق الدفع -->
-<section class="card reveal" id="cMethods">
-  <div class="c-head"><span class="num">1</span><div><h2>طريقة الدفع</h2><p>اختر الطريقة المناسبة ثم حوّل المبلغ</p></div></div>
-  <div class="lockable">
-    <div class="notice soft" style="margin:0 0 12px">MasterCard أو Zain Cash أو التواصل مع منصة MZAD PHONE. بعد التحويل، ارفع صورة الإيصال حتى تتم المراجعة.</div>
-    <div id="methods" class="methods"><div class="sk"></div><div class="sk"></div></div>
-  </div>
-</section>
+  <section class="card">
+    <div class="c-head"><span class="num">1</span><div><h2>اختر طريقة الدفع</h2><p>بعد الاختيار تظهر معلومات التحويل</p></div></div>
+    <div class="methods" id="methods"><div class="sk"></div><div class="sk"></div></div>
+  </section>
 
-<!-- إثبات الدفع -->
-<section class="card reveal" id="cProof">
-  <div class="c-head"><span class="num">2</span><div><h2>إثبات الدفع</h2><p>صورة الإيصال ضرورية للمراجعة</p></div></div>
-
-  <div class="lockable">
-    <div class="field">
-      <label class="lbl-f" for="reference">رقم العملية / المرجع <small>اختياري</small></label>
-      <input class="in" id="reference" placeholder="مثلاً: رقم الحوالة" autocomplete="off">
+  <section class="card">
+    <div class="c-head"><span class="num">2</span><div><h2>صورة التحويل</h2><p>صورة واضحة للإيصال بعد الدفع</p></div></div>
+    <label class="drop" id="drop">
+      <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0-4 4m4-4 4 4"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+      اضغط لاختيار صورة الإيصال
+      <small>صورة فقط</small>
+      <input id="proof" type="file" accept="image/*">
+    </label>
+    <div class="preview" id="preview">
+      <img id="pvImg" alt="">
+      <div class="m"><b id="pvName">—</b><small id="pvSize">—</small></div>
+      <button class="x" id="pvRemove" type="button" aria-label="حذف">×</button>
     </div>
+  </section>
 
-    <div class="field">
-      <span class="lbl-f">صورة إثبات الدفع <i>*</i></span>
-      <label class="drop" id="drop">
-        <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0-4 4m4-4 4 4"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
-        اضغط لاختيار صورة الإيصال
-        <small>صورة فقط، بحد أقصى 10MB</small>
-        <input id="proof" type="file" accept="image/*">
-      </label>
-      <div class="preview" id="preview">
-        <img id="pvImg" alt="">
-        <div class="meta"><b id="pvName">—</b><small id="pvSize">—</small></div>
-        <button class="x" id="pvRemove" type="button" aria-label="حذف">×</button>
-      </div>
-    </div>
-  </div>
+  <button id="submit" class="btn" type="button" disabled><span class="t">إرسال للتدقيق</span><span class="spin"></span></button>
+  <p class="hint" id="hint">اختر طريقة الدفع أولاً.</p>
+  <div class="msg" id="msg"></div>
 
-  <div class="notice"><b>مهم:</b> بعد إرسال الإثبات يراجعه الأدمن. المزاد لا يصبح Live ولا يظهر للعامة قبل الموافقة.</div>
-
-  <button id="submit" class="btn" type="button" disabled><span class="t" id="submitText">إرسال إثبات الدفع</span><span class="spin"></span></button>
-  <div id="msg" class="msg"></div>
-</section>
-
-<!-- معلومات مهمة -->
-<section class="card reveal">
-  <div class="c-head"><span class="num">!</span><div><h2>معلومات التأمين</h2><p>اقرأها قبل الدفع</p></div></div>
-  <div class="notice soft" style="margin:0 0 10px">تأمين البائع <b id="amount2">—</b> هو تأمين قابل للاسترداد وليس رسماً على النشر. مدة المزاد ساعة واحدة بعد موافقة الإدارة وبدء المزاد.</div>
-  <div class="notice soft" style="margin:0"><b>الاسترداد:</b> مبلغ التأمين منفصل عن سعر الجهاز، وبعد انتهاء المزاد واستيفاء شروط الاسترداد المحددة من المنصة يصبح المبلغ مستحقاً للاسترداد. في التحويل اليدوي قد تتم عملية الإرجاع بواسطة المنصة وتُسجل في النظام بعد تنفيذها.</div>
-</section>
-
+  <p class="foot">التأمين مبلغ مسترد وليس رسماً على النشر. بعد إرسال الإيصال تظهر لك صفحة فيها رقم طلبك وحالته.</p>
 </main>
 
-<div class="done" id="done">
-  <svg viewBox="0 0 110 110">
-    <circle cx="55" cy="55" r="46"/>
-    <circle class="ring" cx="55" cy="55" r="46"/>
-    <path class="tick" d="M36 57l13 13 26-28"/>
-  </svg>
-  <h2>تم إرسال الإثبات</h2>
-  <p>بانتظار موافقة الإدارة…</p>
+<!-- نافذة المساعدة -->
+<div class="sheet" id="sheet">
+  <div class="ov" id="ov"></div>
+  <div class="box">
+    <div class="grab"></div>
+    <h3>تحتاج مساعدة؟</h3>
+    <p>إذا صارت مشكلة بالتحويل أو برفع الإيصال، تواصل مع إدارة المنصة وراح نساعدك.</p>
+    <div class="acts" id="acts"></div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -290,13 +210,18 @@ h1{margin:10px 0 4px;font-size:24px;font-weight:950;letter-spacing:-.035em}
 import { supabase } from "./js/supabase.js";
 
 /* ================================================================
+   إعدادات المنصة
+   ================================================================ */
+const SUPPORT_PHONE = "";   // اكتب رقم المنصة لاحقاً بصيغة دولية بدون +، مثال: 9647XXXXXXXXX
+
+/* ================================================================
    الأساسيات
    ================================================================ */
 const $ = id => document.getElementById(id);
 const qs = new URLSearchParams(location.search);
 const auctionId = qs.get("auction") || qs.get("id");
 
-const state = { user:null, auction:null, deposit:null, request:null, requestMethodId:null, method:null, file:null, busy:false, poll:null };
+const state = { user:null, auction:null, deposit:null, request:null, requestMethodId:null, method:null, file:null, busy:false };
 
 const money = n => Number(n || 0).toLocaleString("en-US") + " د.ع";
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -307,20 +232,10 @@ function toast(t){
   e.textContent = t;
   e.classList.add("show");
   clearTimeout(toastT);
-  toastT = setTimeout(() => e.classList.remove("show"), 2400);
+  toastT = setTimeout(() => e.classList.remove("show"), 2200);
 }
-
-function showMsg(t, type = "err"){
-  const m = $("msg");
-  m.textContent = t;
-  m.className = "msg show " + type;
-}
-function hideMsg(){ $("msg").className = "msg"; }
-
-function setStatus(t, type = "wait"){
-  $("status").textContent = t;
-  $("status").className = "status " + type;
-}
+function showMsg(t){ const m = $("msg"); m.textContent = t; m.classList.add("show"); }
+function hideMsg(){ $("msg").classList.remove("show"); }
 
 const ERRORS = {
   AUTH_REQUIRED:"يجب تسجيل الدخول.",
@@ -337,82 +252,14 @@ const ERRORS = {
 function errorText(e){
   const code = String(e?.message || e || "UNKNOWN_ERROR");
   for (const k of Object.keys(ERRORS)) if (code.includes(k)) return ERRORS[k];
-  return "تعذر تنفيذ العملية. " + code;
+  return "تعذر تنفيذ العملية. حاول مرة ثانية، وإذا استمرت المشكلة تواصل مع المنصة.";
 }
+
+const statusUrl = () => "auction-request-status.html?auction=" + encodeURIComponent(auctionId)
+  + (state.request?.id ? "&request=" + encodeURIComponent(state.request.id) : "");
 
 /* ================================================================
-   حالات التأمين والمزاد
-   ================================================================ */
-const LOCKED = ["approved","proof_submitted","refunded","forfeited","cancelled"];
-const AUCTION_LABELS = { draft:"مسودة", pending:"بانتظار الموافقة", pending_deposit:"بانتظار التأمين", live:"مباشر", ended:"منتهي", cancelled:"ملغي" };
-
-const isLive   = () => state.auction?.status === "live";
-const isLocked = () => isLive() || LOCKED.includes(state.deposit?.status);
-
-/* المرحلة الحالية: 1 دفع، 2 إثبات، 3 مراجعة */
-function stage(){
-  const d = state.deposit?.status;
-  if (isLive() || d === "approved") return 4;      // الكل مكتمل
-  if (d === "proof_submitted") return 3;
-  if (state.method) return 2;
-  return 1;
-}
-
-function renderSteps(){
-  const s = stage();
-  document.querySelectorAll("#steps .stp").forEach(el => {
-    const n = +el.dataset.s;
-    el.classList.toggle("done", n < s);
-    el.classList.toggle("active", n === s);
-  });
-}
-
-function renderStatus(){
-  const d = state.deposit, a = state.auction;
-  if (!d || !a) return;
-
-  if (isLive()){
-    setStatus("تمت الموافقة وبدأ المزاد. ينتهي عند: " + new Date(a.ends_at).toLocaleString("ar-IQ"), "ok");
-  } else if (d.status === "approved"){
-    setStatus("تم اعتماد تأمين البائع. المزاد في طور التفعيل.", "ok");
-  } else if (d.status === "proof_submitted"){
-    setStatus("تم إرسال الإثبات. بانتظار مراجعة الإدارة.", "wait");
-  } else if (d.status === "rejected"){
-    setStatus("تم رفض إثبات الدفع. يمكنك إرسال إثبات جديد.", "err");
-  } else {
-    setStatus("بانتظار دفع تأمين البائع وإرسال الإثبات.", "wait");
-  }
-
-  const locked = isLocked();
-  $("cMethods").classList.toggle("locked", locked);
-  $("cProof").classList.toggle("locked", locked);
-  renderSteps();
-  refresh();
-}
-
-function renderSummary(){
-  const a = state.auction;
-  if (!a) return;
-  const dev = a.device;
-  const name = dev ? ([dev.brand, dev.model, dev.storage].filter(Boolean).join(" ") || "جهاز") : "جهاز";
-  const label = AUCTION_LABELS[a.status] || a.status || "—";
-
-  $("summary").innerHTML = `
-    <div class="row"><span>رقم المزاد</span><strong>${esc(a.auction_number || "—")}</strong></div>
-    <div class="row"><span>الجهاز</span><strong>${esc(name)}</strong></div>
-    <div class="row"><span>السعر الابتدائي</span><strong>${esc(money(a.starting_price_iqd))}</strong></div>
-    <div class="row"><span>حالة المزاد</span><strong><span class="pill${a.status === "live" ? " live" : ""}">${esc(label)}</span></strong></div>`;
-}
-
-function refresh(){
-  const ok = !state.busy && !!state.method && !!state.file && !isLocked();
-  const btn = $("submit");
-  btn.disabled = !ok;
-  btn.classList.toggle("ready", ok);
-}
-
-/* ================================================================
-   البيانات (Supabase)
+   البيانات
    ================================================================ */
 async function auth(){
   const { data, error } = await supabase.auth.getUser();
@@ -424,53 +271,40 @@ async function auth(){
   return true;
 }
 
-async function fetchAuction(){
+async function loadAuction(){
   const r = await supabase.from("mzad_auctions")
-    .select("id,auction_number,device_id,seller_user_id,starting_price_iqd,current_price_iqd,status,starts_at,ends_at")
+    .select("id,auction_number,device_id,seller_user_id,status")
     .eq("id", auctionId).maybeSingle();
   if (r.error) throw r.error;
   if (!r.data) throw new Error("AUCTION_NOT_FOUND");
   if (r.data.seller_user_id !== state.user.id) throw new Error("ACCESS_DENIED");
-  return r.data;
-}
+  state.auction = r.data;
 
-async function loadAuction(){
-  const a = await fetchAuction();
-  const d = await supabase.from("mzad_devices")
-    .select("brand,model,storage,color,mzad_id")
-    .eq("id", a.device_id).maybeSingle();
-  if (!d.error && d.data) a.device = d.data;
-  state.auction = a;
-  renderSummary();
+  const d = await supabase.from("mzad_devices").select("brand,model,storage").eq("id", r.data.device_id).maybeSingle();
+  const name = d.data ? [d.data.brand, d.data.model, d.data.storage].filter(Boolean).join(" ") : "";
+  $("meta").textContent = [r.data.auction_number ? "مزاد " + r.data.auction_number : "", name].filter(Boolean).join(" · ");
 }
 
 async function loadDeposit(retry = true){
   const r = await supabase.from("mzad_deposits")
-    .select("id,deposit_number,amount_iqd,status,eligible_to_bid,paid_at,approved_at,refunded_at,auction_id")
-    .eq("auction_id", auctionId)
-    .eq("user_id", state.user.id)
-    .eq("deposit_type", "auction_seller")
-    .order("created_at", { ascending: false })
-    .limit(1).maybeSingle();
+    .select("id,deposit_number,amount_iqd,status,auction_id")
+    .eq("auction_id", auctionId).eq("user_id", state.user.id).eq("deposit_type", "auction_seller")
+    .order("created_at", { ascending:false }).limit(1).maybeSingle();
   if (r.error) throw r.error;
 
   if (!r.data){
     if (!retry) throw new Error("DEPOSIT_NOT_FOUND");
     const c = await supabase.rpc("mzad_create_auction_deposit", { p_auction_id: auctionId, p_role: "seller" });
     if (c.error) throw c.error;
-    return loadDeposit(false);                 // محاولة وحدة فقط
+    return loadDeposit(false);
   }
-
   state.deposit = r.data;
-  $("amount").textContent  = money(r.data.amount_iqd);
-  $("amount2").textContent = money(r.data.amount_iqd);
-
-  /* إذا انرفض الإثبات، نبدأ بطلب دفع جديد */
-  if (r.data.status === "rejected"){ state.request = null; state.requestMethodId = null; }
-
-  renderStatus();
+  $("amount").textContent = money(r.data.amount_iqd);
   return r.data;
 }
+
+/* طرق الدفع المفعّلة (تتحكم بها الإدارة من قاعدة البيانات) */
+const CARD_ICON = '<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M3 10h18"/><path d="M7 15h3"/></svg>';
 
 async function loadMethods(){
   const r = await supabase.rpc("mzad_get_enabled_payment_methods");
@@ -479,71 +313,67 @@ async function loadMethods(){
   const box = $("methods");
 
   if (!methods.length){
-    box.innerHTML = '<div class="empty">لا توجد طريقة دفع مفعلة حالياً.</div>';
+    box.innerHTML = '<div class="empty">لا توجد طريقة دفع متاحة حالياً. حاول لاحقاً أو تواصل مع المنصة.</div>';
     return;
   }
 
+  const amount = money(state.deposit.amount_iqd);
   box.innerHTML = methods.map((m, i) => `
-    <button type="button" class="method" data-i="${i}">
-      <span class="tick"></span>
-      <b>${esc(m.name_ar || "طريقة دفع")}</b>
-      <span class="lbl">${esc(m.account_label || "")}</span>
-      <div class="details"><div><div class="d-in">
-        <div class="acc">
-          <strong>${esc(m.account_identifier || "سيتم إدخال الرقم من إدارة المنصة")}</strong>
-          ${m.account_identifier ? `<span class="copy" data-copy="${esc(m.account_identifier)}">نسخ</span>` : ""}
+    <div class="opt" role="radio" aria-checked="false" tabindex="0" data-i="${i}">
+      <div class="opt-top">
+        <span class="rd"></span>
+        <span class="mi">${CARD_ICON}</span>
+        <span class="tx"><b>${esc(m.name_ar || "طريقة دفع")}</b>${m.account_label ? `<small>${esc(m.account_label)}</small>` : ""}</span>
+      </div>
+      <div class="det"><div><div class="det-in">
+        <div class="kv"><small>حوّل إلى</small>
+          <div class="acc"><strong>${esc(m.account_identifier || "—")}</strong>${m.account_identifier ? `<button class="copy" type="button" data-copy="${esc(m.account_identifier)}">نسخ</button>` : ""}</div>
         </div>
-        <em>${esc(m.instructions_ar || "اتبع تعليمات المنصة ثم احتفظ بإثبات الدفع.")}</em>
+        <div class="kv"><small>المبلغ المطلوب</small><strong>${esc(amount)}</strong></div>
+        ${m.instructions_ar ? `<p class="ins">${esc(m.instructions_ar)}</p>` : ""}
       </div></div></div>
-    </button>`).join("");
+    </div>`).join("");
 
-  box.querySelectorAll(".method").forEach(el => {
-    el.addEventListener("click", e => {
-      if (e.target.closest(".copy")) return;       // زر النسخ لا يغيّر الاختيار
-      box.querySelectorAll(".method").forEach(x => x.classList.remove("selected"));
-      el.classList.add("selected");
-      state.method = methods[+el.dataset.i];
-      hideMsg();
-      renderSteps();
-      refresh();
-    });
-  });
-
-  box.addEventListener("click", async e => {
-    const c = e.target.closest(".copy");
-    if (!c) return;
-    e.stopPropagation();
-    const text = c.dataset.copy;
-    try{
-      await navigator.clipboard.writeText(text);
-    }catch{
-      const t = document.createElement("textarea");
-      t.value = text; document.body.appendChild(t); t.select();
-      try{ document.execCommand("copy"); }catch{}
-      t.remove();
-    }
-    toast("تم نسخ الرقم");
+  const pick = el => {
+    box.querySelectorAll(".opt").forEach(x => { x.classList.remove("on"); x.setAttribute("aria-checked", "false"); });
+    el.classList.add("on");
+    el.setAttribute("aria-checked", "true");
+    state.method = methods[+el.dataset.i];
+    hideMsg(); refresh();
+  };
+  box.querySelectorAll(".opt").forEach(el => {
+    el.addEventListener("click", e => { if (!e.target.closest(".copy")) pick(el); });
+    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); pick(el); } });
   });
 }
 
-/* طلب الدفع: نعيد استخدام نفس الطلب إذا نفس الطريقة (حتى ما ننشئ طلبات مكررة) */
-function normalizePaymentRequest(data){
-  const value = Array.isArray(data) ? (data[0] || {}) : (data || {});
-  if (typeof value === "string") return { id:value };
-  const id = value.id || value.request_id || value.payment_request_id || value.paymentRequestId;
-  return id ? {
-    ...value,
-    id,
-    request_number: value.request_number || value.payment_request_number || null,
-    amount_iqd: value.amount_iqd ?? state.deposit?.amount_iqd,
-    status: value.status || "pending"
-  } : null;
+document.addEventListener("click", async e => {
+  const b = e.target.closest("[data-copy]");
+  if (!b) return;
+  e.stopPropagation();
+  const text = b.dataset.copy;
+  try{ await navigator.clipboard.writeText(text); }
+  catch{
+    const t = document.createElement("textarea");
+    t.value = text; document.body.appendChild(t); t.select();
+    try{ document.execCommand("copy"); }catch{}
+    t.remove();
+  }
+  b.textContent = "تم النسخ"; b.classList.add("ok");
+  setTimeout(() => { b.textContent = "نسخ"; b.classList.remove("ok"); }, 1400);
+});
+
+/* طلب الدفع: نعيد استخدام نفس الطلب إذا نفس الطريقة (بدون تكرار) */
+function normalizeRequest(data){
+  const v = Array.isArray(data) ? (data[0] || {}) : (data || {});
+  if (typeof v === "string") return { id:v };
+  const id = v.id || v.request_id || v.payment_request_id || v.paymentRequestId;
+  return id ? { ...v, id } : null;
 }
 
 async function ensureRequest(){
   if (!state.deposit?.id) throw new Error("DEPOSIT_NOT_FOUND");
-  if (!state.method?.id) throw new Error("PAYMENT_METHOD_REQUIRED");
-
+  if (!state.method?.id)  throw new Error("PAYMENT_METHOD_REQUIRED");
   if (state.request?.id && state.requestMethodId === state.method.id) return;
 
   const r = await supabase.rpc("mzad_create_deposit_payment_request", {
@@ -552,32 +382,37 @@ async function ensureRequest(){
   });
   if (r.error) throw r.error;
 
-  // بعض إصدارات RPC ترجع request_id داخل صف أو مصفوفة، وليس id مباشرة.
-  state.request = normalizePaymentRequest(r.data);
+  state.request = normalizeRequest(r.data);
   state.requestMethodId = state.method.id;
 
-  // احتياط: الدالة قد تنشئ الطلب وتُرجع قيمة فارغة؛ نبحث عن الطلب المفتوح نفسه.
   if (!state.request?.id){
-    const existing = await supabase.from("mzad_payment_requests")
-      .select("id,request_number,amount_iqd,status,payment_method_id")
-      .eq("deposit_id", state.deposit.id)
-      .eq("user_id", state.user.id)
-      .eq("payment_method_id", state.method.id)
-      .in("status", ["pending","proof_submitted"])
-      .order("created_at", { ascending:false })
-      .limit(1)
-      .maybeSingle();
-    if (existing.error) throw existing.error;
-    if (existing.data) state.request = normalizePaymentRequest(existing.data);
+    const ex = await supabase.from("mzad_payment_requests")
+      .select("id,request_number,status")
+      .eq("deposit_id", state.deposit.id).eq("user_id", state.user.id).eq("payment_method_id", state.method.id)
+      .in("status", ["pending", "proof_submitted"])
+      .order("created_at", { ascending:false }).limit(1).maybeSingle();
+    if (ex.error) throw ex.error;
+    if (ex.data) state.request = normalizeRequest(ex.data);
   }
-
   if (!state.request?.id) throw new Error("PAYMENT_REQUEST_NOT_FOUND");
 }
 
 /* ================================================================
-   رفع الصورة (معاينة + تحقق)
+   صورة التحويل
    ================================================================ */
 const fmtSize = b => b > 1048576 ? (b / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(b / 1024)) + " KB";
+
+async function shrink(file){
+  try{
+    const bmp = await createImageBitmap(file);
+    const s = Math.min(1, 1800 / Math.max(bmp.width, bmp.height));
+    const c = document.createElement("canvas");
+    c.width = Math.round(bmp.width * s);
+    c.height = Math.round(bmp.height * s);
+    c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+    return await new Promise(r => c.toBlob(b => r(b || file), "image/jpeg", .85));
+  }catch{ return file; }
+}
 
 function clearFile(){
   if (state.file?.url) URL.revokeObjectURL(state.file.url);
@@ -591,76 +426,62 @@ function clearFile(){
 $("proof").addEventListener("change", e => {
   const f = e.target.files[0];
   if (!f) return;
-
   if (!f.type.startsWith("image/")){ toast("اختر صورة فقط"); clearFile(); return; }
-  if (f.size > 10e6){ toast("حجم الصورة أكبر من 10MB"); clearFile(); return; }
+  if (f.size > 15e6){ toast("حجم الصورة كبير، اختر صورة أصغر"); clearFile(); return; }
 
   if (state.file?.url) URL.revokeObjectURL(state.file.url);
   const url = URL.createObjectURL(f);
-  state.file = { file: f, url };
-
+  state.file = { file:f, url };
   $("pvImg").src = url;
   $("pvName").textContent = f.name;
   $("pvSize").textContent = fmtSize(f.size);
   $("preview").classList.add("show");
   $("drop").style.display = "none";
   $("drop").classList.remove("invalid");
-  hideMsg();
-  renderSteps();
-  refresh();
+  hideMsg(); refresh();
 });
-
 $("pvRemove").addEventListener("click", clearFile);
+
+function refresh(){
+  const ok = !state.busy && !!state.method && !!state.file;
+  $("submit").disabled = !ok;
+  $("hint").textContent = !state.method ? "اختر طريقة الدفع أولاً." : !state.file ? "ارفع صورة التحويل." : "جاهز للإرسال.";
+}
 
 /* ================================================================
    الإرسال
    ================================================================ */
-function showSuccess(){
-  const d = $("done");
-  d.classList.add("show");
-  setTimeout(() => d.classList.remove("show"), 2200);
-}
-
 $("submit").addEventListener("click", async () => {
   if (state.busy) return;
-
-  if (!state.file){
-    $("drop").classList.add("invalid");
-    toast("ارفع صورة إثبات الدفع أولاً");
-    return;
-  }
+  if (!state.file){ $("drop").classList.add("invalid"); toast("ارفع صورة التحويل أولاً"); return; }
 
   state.busy = true;
   $("submit").classList.add("busy");
-  hideMsg();
-  refresh();
+  hideMsg(); refresh();
 
   try{
     await ensureRequest();
 
     const file = state.file.file;
-    const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
-    const path = state.user.id + "/" + state.request.id + "-" + Date.now() + "-" + safe;
+    const blob = await shrink(file);
+    const ext = blob.type === "image/jpeg" ? "jpg" : ((file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg");
+    const path = state.user.id + "/" + state.request.id + "-" + Date.now() + "." + ext;
 
     const up = await supabase.storage.from("mzad-payment-proofs")
-      .upload(path, file, { upsert:false, cacheControl:"3600", contentType:file.type || "image/jpeg" });
+      .upload(path, blob, { upsert:false, cacheControl:"3600", contentType:blob.type || "image/jpeg" });
     if (up.error) throw up.error;
 
     const proof = await supabase.rpc("mzad_submit_deposit_proof", {
       p_request_id: state.request.id,
-      p_reference_number: $("reference").value.trim() || null,
+      p_reference_number: null,
       p_proof_storage_path: path,
       p_paid_amount_iqd: Number(state.deposit.amount_iqd),
       p_paid_at: new Date().toISOString()
     });
     if (proof.error) throw proof.error;
 
-    // بعد حفظ الإثبات بنجاح، افتح صفحة تأكيد مستقلة تعرض رقم الطلب ومعاينة الإعلان.
-    const statusUrl = "auction-request-status.html?auction=" + encodeURIComponent(auctionId)
-      + "&request=" + encodeURIComponent(state.request.id);
-    location.href = statusUrl;
+    location.replace(statusUrl());
     return;
-
   }catch(e){
     console.error("DEPOSIT PROOF ERROR:", e);
     showMsg(errorText(e));
@@ -672,21 +493,19 @@ $("submit").addEventListener("click", async () => {
 });
 
 /* ================================================================
-   تحديث تلقائي أثناء انتظار موافقة الإدارة
+   نافذة المساعدة
    ================================================================ */
-function startPoll(){
-  clearInterval(state.poll);
-  state.poll = setInterval(async () => {
-    if (document.hidden) return;
-    if (state.deposit?.status !== "proof_submitted"){ clearInterval(state.poll); return; }
-    try{
-      const fresh = await fetchAuction();
-      state.auction = { ...state.auction, ...fresh };
-      renderSummary();
-      await loadDeposit();
-    }catch(e){ console.error("POLL ERROR:", e); }
-  }, 12000);
+function openHelp(){
+  const phone = String(SUPPORT_PHONE || "").replace(/\D/g, "");
+  $("acts").innerHTML =
+    (phone ? `<a class="call" href="tel:+${phone}">اتصال بالمنصة</a><a class="wa" href="https://wa.me/${phone}" target="_blank" rel="noopener">مراسلة واتساب</a>` : "") +
+    '<button class="close" id="hClose" type="button">تمام</button>';
+  $("hClose").addEventListener("click", closeHelp);
+  $("sheet").classList.add("show");
 }
+function closeHelp(){ $("sheet").classList.remove("show"); }
+$("helpBtn").addEventListener("click", openHelp);
+$("ov").addEventListener("click", closeHelp);
 
 /* ================================================================
    التشغيل
@@ -700,16 +519,22 @@ async function start(){
 
     await loadAuction();
     await loadDeposit();
-    await loadMethods();
 
-    if (state.deposit?.status === "proof_submitted") startPoll();
+    /* إذا أرسل الإثبات قبل، أو المزاد تقدّم، نوديه لصفحة الحالة */
+    const done = ["proof_submitted", "approved", "refunded", "forfeited", "cancelled"];
+    if (done.includes(state.deposit.status) || ["live", "ended", "cancelled"].includes(state.auction.status)){
+      location.replace(statusUrl());
+      return;
+    }
+
+    if (state.deposit.status === "rejected") $("notice").hidden = false;
+
+    await loadMethods();
+    refresh();
   }catch(e){
     console.error("START ERROR:", e);
-    const t = errorText(e);
-    setStatus(t, "err");
-    showMsg(t);
-    $("summary").innerHTML = '<div class="empty">' + esc(t) + "</div>";
-    $("methods").innerHTML = "";
+    $("methods").innerHTML = '<div class="empty">' + esc(errorText(e)) + "</div>";
+    showMsg(errorText(e));
   }
 }
 
