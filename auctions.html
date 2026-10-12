@@ -3,1965 +3,269 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<meta name="theme-color" content="#ffffff">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="MZAD PHONE">
+<meta name="theme-color" content="#6246d9">
 <title>MZAD PHONE — المزادات</title>
-
 <style>
-:root{
-  --bg:#f9f8fd; --ink:#17202a; --muted:#6b7280; --line:#ece8fb;
-  --primary:#176b87; --purple:#6246d9; --purple-dark:#4a34b8; --purple-soft:#f3f0ff; --edge:#e0daf8;
-  --hot:#e8590c; --safe-bottom:env(safe-area-inset-bottom,0px);
-}
+:root{--bg:#f9f8fd;--ink:#17202a;--muted:#6b7280;--line:#ece8fb;--edge:#e0daf8;--p:#6246d9;--pd:#4a34b8;--ps:#f3f0ff;--hot:#e8590c;--sb:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
-  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-button,input{font:inherit}
-button{border:0;background:none;color:inherit;cursor:pointer}
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+button,input{font:inherit}button{border:0;background:none;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
 a{text-decoration:none;color:inherit}
-:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
-.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(92px + var(--safe-bottom))}
-
-/* header */
-header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg,#fff 0%,#f7f5ff 55%,#ece8ff 100%);
-  border-radius:0 0 24px 24px;border-bottom:1px solid var(--line);box-shadow:0 10px 26px rgba(23,32,42,.05)}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 2px 0}
-.brand-mini{display:flex;flex-direction:column;align-items:center;line-height:.9}
-.brand-mini strong{font-size:16px;letter-spacing:-.03em}
-.brand-mini span{font-size:7px;font-weight:800;letter-spacing:.15em;color:#8a96a3;margin-top:3px}
-.icon-btn{width:39px;height:34px;display:grid;place-items:center;border:1px solid var(--edge);border-radius:12px;background:#fff;
-  color:var(--purple);box-shadow:0 7px 18px rgba(23,32,42,.045)}
-.icon-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-.spacer{width:39px}
-.head-copy{margin:14px 2px 12px}
-.head-copy h1{margin:0;font-size:22px;letter-spacing:-.035em;font-weight:950}
-.head-copy p{margin:3px 0 0;font-size:11px;font-weight:700;color:var(--muted)}
-
-.search-wrap{position:relative}
-.search{width:100%;height:45px;border:1px solid var(--edge);border-radius:15px;background:#fff;padding:0 44px 0 42px;outline:none;color:var(--ink);
-  box-shadow:0 8px 22px rgba(98,70,217,.10)}
-.search::placeholder{color:#9ba6aa}
+:focus-visible{outline:3px solid var(--p);outline-offset:2px}
+.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(92px + var(--sb))}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes blink{50%{opacity:.3}}
+header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg,#fff,#ece8ff);border-radius:0 0 24px 24px;border-bottom:1px solid var(--line)}
+.top{display:flex;align-items:center;justify-content:space-between;padding:12px 2px 0}
+.ib{width:39px;height:34px;display:grid;place-items:center;border:1px solid var(--edge);border-radius:12px;background:#fff;color:var(--p)}
+.ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.brand{display:flex;flex-direction:column;align-items:center;line-height:.9}
+.brand b{font-size:16px;letter-spacing:-.03em}.brand span{font-size:7px;font-weight:800;letter-spacing:.15em;color:#8a96a3;margin-top:3px}
+h1{margin:14px 2px 0;font-size:22px;font-weight:950;letter-spacing:-.035em}
+.sub{margin:3px 2px 12px;font-size:11px;font-weight:700;color:var(--muted)}
+.sw{position:relative}
+.search{width:100%;height:45px;border:1px solid var(--edge);border-radius:15px;background:#fff;padding:0 44px 0 42px;outline:none;color:var(--ink);box-shadow:0 8px 22px rgba(98,70,217,.1)}
 .search:focus{border-color:#a99cf0}
-.search-icon{position:absolute;inset-inline-end:14px;top:50%;transform:translateY(-50%);width:21px;height:21px;pointer-events:none;color:var(--purple);
-  fill:none;stroke:currentColor;stroke-width:1.9}
-.search-clear{position:absolute;inset-inline-start:10px;top:50%;transform:translateY(-50%);width:33px;height:33px;border-radius:11px;background:var(--purple-soft);
-  display:grid;place-items:center;opacity:0;pointer-events:none;color:var(--purple-dark)}
-.search-clear svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.9}
-.search-wrap.has-value .search-clear{opacity:1;pointer-events:auto}
-
-/* filters */
-.filters{display:flex;gap:8px;overflow-x:auto;padding:14px 2px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.si{position:absolute;inset-inline-end:14px;top:50%;transform:translateY(-50%);width:21px;height:21px;pointer-events:none;color:var(--p);fill:none;stroke:currentColor;stroke-width:1.9}
+.clr{position:absolute;inset-inline-start:10px;top:50%;transform:translateY(-50%);width:33px;height:33px;border-radius:11px;background:var(--ps);display:grid;place-items:center;opacity:0;pointer-events:none;color:var(--pd)}
+.clr svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.9}
+.sw.has .clr{opacity:1;pointer-events:auto}
+.filters{display:flex;gap:8px;overflow-x:auto;padding:14px 2px 4px;scrollbar-width:none}
 .filters::-webkit-scrollbar{display:none}
-.fchip{flex:0 0 auto;padding:8px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:11px;font-weight:800;color:#4b5563;white-space:nowrap}
-.fchip.active{background:var(--purple-soft);border-color:#c9bff7;color:var(--purple-dark);font-weight:900}
+.chip{flex:0 0 auto;padding:8px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:11px;font-weight:800;color:#4b5563;white-space:nowrap}
+.chip.on{background:var(--ps);border-color:#c9bff7;color:var(--pd);font-weight:900}
 .result{margin:10px 4px 8px;font-size:11px;font-weight:800;color:var(--muted)}
-
-/* auction cards */
 .list{display:flex;flex-direction:column;gap:10px}
-.a-card{position:relative;display:flex;gap:12px;padding:10px;border-radius:20px;background:#fff;border:1px solid var(--line);
-  box-shadow:0 8px 20px rgba(98,70,217,.07);cursor:pointer;-webkit-tap-highlight-color:transparent}
-.a-card:active{transform:scale(.99)}
-.a-card.done{opacity:.65}
-.a-img{position:relative;flex:0 0 116px;height:142px;border-radius:15px;overflow:hidden;display:grid;place-items:center;
-  background:linear-gradient(145deg,#fff,#f1edff);border:1px solid var(--line)}
-.a-img img{width:100%;height:100%;object-fit:cover}
-.a-img svg{height:76%;width:auto;filter:drop-shadow(0 8px 10px rgba(74,52,184,.22))}
-.fav{position:absolute;top:6px;inset-inline-start:6px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;
-  background:rgba(255,255,255,.97);color:#7b7f84;box-shadow:0 5px 13px rgba(23,32,42,.11)}
+.c{position:relative;display:flex;gap:12px;padding:10px;border-radius:20px;background:#fff;border:1px solid var(--line);box-shadow:0 8px 20px rgba(98,70,217,.07);cursor:pointer;animation:up .4s backwards;-webkit-tap-highlight-color:transparent}
+.c:active{transform:scale(.99)}
+.img{position:relative;flex:0 0 116px;height:142px;border-radius:15px;overflow:hidden;display:grid;place-items:center;background:linear-gradient(160deg,#7b61e8,#3b2a92)}
+.img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.img svg{width:34px;height:34px;opacity:.55}
+.fav{position:absolute;top:6px;inset-inline-start:6px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.97);color:#7b7f84;box-shadow:0 5px 13px rgba(23,32,42,.11)}
 .fav svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.fav.active{color:var(--purple)}
-.fav.active svg{fill:var(--purple)}
-.pill{position:absolute;bottom:6px;inset-inline:6px;padding:3px 0;border-radius:9px;background:rgba(255,255,255,.96);color:var(--purple-dark);
-  text-align:center;font-size:10.5px;font-weight:950;direction:ltr;font-variant-numeric:tabular-nums;box-shadow:0 4px 10px rgba(23,32,42,.08)}
+.fav.on{color:var(--p)}.fav.on svg{fill:var(--p)}
+.pill{position:absolute;bottom:6px;inset-inline:6px;padding:3px 0;border-radius:9px;background:rgba(255,255,255,.96);color:var(--pd);text-align:center;font-size:10.5px;font-weight:950;direction:ltr;font-variant-numeric:tabular-nums}
 .pill.hot{background:#fff4ec;color:var(--hot)}
-
-.a-body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between;padding:2px 0}
-.a-title{margin:0;font-size:14.5px;font-weight:900;line-height:1.3;letter-spacing:-.02em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.a-meta{margin-top:3px;font-size:10px;font-weight:750;color:var(--muted);line-height:1.5}
-.a-tags{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
-.tag{padding:3px 8px;border-radius:8px;background:var(--purple-soft);color:var(--purple-dark);font-size:9px;font-weight:900}
-.a-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid #f1eefb}
+.body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between;padding:2px 0}
+.t{margin:0;font-size:14.5px;font-weight:900;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.meta{margin-top:3px;font-size:10px;font-weight:750;color:var(--muted)}
+.tags{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.tag{padding:3px 8px;border-radius:8px;background:var(--ps);color:var(--pd);font-size:9.5px;font-weight:900}
+.foot{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid #f1eefb}
 .lbl{display:block;font-size:9px;font-weight:800;color:var(--muted)}
-.a-price{font-size:16px;font-weight:950;color:var(--purple-dark);letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
-.a-price small{font-size:9px;font-weight:800;color:var(--muted);margin-inline-start:3px}
-.go{flex:0 0 auto;height:36px;padding:0 16px;border-radius:12px;color:#fff;font-size:12px;font-weight:950;
-  background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 6px 14px rgba(98,70,217,.28)}
-.a-card.done .go{background:#9ca3af;box-shadow:none}
-
+.price{font-size:16px;font-weight:950;color:var(--pd);font-variant-numeric:tabular-nums;white-space:nowrap}
+.price small{font-size:9px;font-weight:800;color:var(--muted);margin-inline-start:3px}
+.go{height:36px;padding:0 16px;border-radius:12px;color:#fff;font-size:12px;font-weight:950;background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 6px 14px rgba(98,70,217,.28)}
 .empty{padding:34px 18px;text-align:center;border-radius:20px;background:#fff;border:1px dashed #cfc7f3}
-.empty h3{margin:0 0 4px;font-size:15px;font-weight:900}
-.empty p{margin:0;font-size:11px;font-weight:700;color:var(--muted);line-height:1.7}
-
-/* bottom nav */
-.bottom-wrap{position:fixed;left:0;right:0;bottom:-7px;width:100%;padding:7px 10px calc(7px + var(--safe-bottom));z-index:100;pointer-events:none}
-.bottom-nav{width:min(100%,520px);margin:0 auto;min-height:64px;padding:5px;border-radius:20px;background:rgba(255,255,255,.97);border:1px solid #e7ecef;
-  box-shadow:0 10px 28px rgba(23,32,42,.10);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);pointer-events:auto;
-  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;align-items:center}
-.nav-item{min-width:0;min-height:52px;padding:4px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:15px;color:#7e8992}
-.nav-item.active{color:var(--purple-dark);background:var(--purple-soft)}
-.nav-icon{width:20px;height:20px;flex:0 0 20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.nav-item>span:not(.add-button){font-size:8.5px;line-height:1;font-weight:900;white-space:nowrap}
-.add-button{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;color:#fff;
-  background:linear-gradient(145deg,#176b87,#32b8c4);box-shadow:0 6px 14px rgba(23,107,135,.18)}
-.add-button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
-
-.toast{position:fixed;left:50%;bottom:calc(88px + var(--safe-bottom));transform:translateX(-50%) translateY(16px);max-width:calc(100% - 40px);
-  padding:10px 14px;border-radius:13px;background:#1e2c30;color:#fff;font-size:11px;font-weight:800;box-shadow:0 14px 34px rgba(24,44,49,.12);
-  opacity:0;pointer-events:none;transition:.25s ease;z-index:120;text-align:center}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-@media (prefers-reduced-motion:reduce){.toast,.a-card{transition:none}.a-card:active{transform:none}}
-@media (max-width:360px){.a-img{flex-basis:100px}.a-price{font-size:14.5px}.go{padding:0 12px}}
+.empty h3{margin:0 0 4px;font-size:15px;font-weight:900}.empty p{margin:0;font-size:11px;font-weight:700;color:var(--muted);line-height:1.7}
+.sk{height:162px;border-radius:20px;background:#f1eefb}
+.bw{position:fixed;left:0;right:0;bottom:-7px;padding:7px 10px calc(7px + var(--sb));z-index:100;pointer-events:none}
+.nav{width:min(100%,520px);margin:0 auto;min-height:64px;padding:5px;border-radius:20px;background:rgba(255,255,255,.97);border:1px solid #e7ecef;box-shadow:0 10px 28px rgba(23,32,42,.1);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);pointer-events:auto;display:grid;grid-template-columns:repeat(5,1fr);gap:3px;align-items:center}
+.ni{min-height:52px;padding:4px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:15px;color:#7e8992}
+.ni.on{color:var(--pd);background:var(--ps)}
+.ni svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ni span.l{font-size:8.5px;line-height:1;font-weight:900;white-space:nowrap}
+.add{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;color:#fff;background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 6px 14px rgba(98,70,217,.25)}
+.add svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.toast{position:fixed;left:50%;bottom:calc(88px + var(--sb));transform:translateX(-50%) translateY(16px);padding:10px 14px;border-radius:13px;background:#1e2c30;color:#fff;font-size:11px;font-weight:800;opacity:0;pointer-events:none;transition:.25s;z-index:120}
+.toast.show{opacity:1;transform:translateX(-50%)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
-
 <body>
-
 <main class="page">
-
 <header>
-
-  <div class="topbar">
-
-    <button
-      class="icon-btn"
-      id="back"
-      type="button"
-      aria-label="رجوع"
-    >
-      <svg viewBox="0 0 24 24">
-        <path d="M9 5l7 7-7 7"/>
-      </svg>
-    </button>
-
-    <div class="brand-mini">
-      <strong>MZAD</strong>
-      <span>PHONE</span>
-    </div>
-
-    <span class="spacer"></span>
-
+  <div class="top">
+    <button class="ib" id="back" type="button" aria-label="رجوع"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    <div class="brand"><b>MZAD</b><span>PHONE</span></div>
+    <span style="width:39px"></span>
   </div>
-
-  <div class="head-copy">
-    <h1>المزادات الحالية</h1>
-    <p>تابع الأجهزة وزايد قبل ما ينتهي الوقت</p>
+  <h1>المزادات الحالية</h1>
+  <p class="sub">تابع الأجهزة وزايد قبل ما ينتهي الوقت</p>
+  <div class="sw" id="sw">
+    <svg class="si" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+    <input id="search" class="search" type="search" autocomplete="off" inputmode="search" placeholder='ابحث عن مزاد، مثل "iPhone 15"' aria-label="البحث عن مزاد">
+    <button id="clear" class="clr" type="button" aria-label="مسح"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17"/></svg></button>
   </div>
-
-  <div class="search-wrap" id="searchWrap">
-
-    <svg
-      class="search-icon"
-      viewBox="0 0 24 24"
-    >
-      <circle cx="11" cy="11" r="7"/>
-      <path d="m20 20-4-4"/>
-    </svg>
-
-    <input
-      id="search"
-      class="search"
-      type="search"
-      autocomplete="off"
-      inputmode="search"
-      placeholder='ابحث عن مزاد، مثل "iPhone 15"'
-      aria-label="البحث عن مزاد"
-    >
-
-    <button
-      id="clear"
-      class="search-clear"
-      type="button"
-      aria-label="مسح البحث"
-    >
-      <svg viewBox="0 0 24 24">
-        <path d="M7 7l10 10M17 7 7 17"/>
-      </svg>
-    </button>
-
-  </div>
-
 </header>
-
-<div
-  class="filters"
-  id="filters"
-  role="tablist"
-  aria-label="ترتيب المزادات"
->
-
-  <button class="fchip active" data-f="all" role="tab" aria-selected="true">
-    الكل
-  </button>
-
-  <button class="fchip" data-f="soon" role="tab" aria-selected="false">
-    تنتهي قريباً
-  </button>
-
-  <button class="fchip" data-f="new" role="tab" aria-selected="false">
-    الأحدث
-  </button>
-
-  <button class="fchip" data-f="low" role="tab" aria-selected="false">
-    الأقل سعراً
-  </button>
-
-  <button class="fchip" data-f="high" role="tab" aria-selected="false">
-    الأعلى سعراً
-  </button>
-
+<div class="filters" id="filters">
+  <button class="chip on" data-f="all">الكل</button>
+  <button class="chip" data-f="soon">تنتهي قريباً</button>
+  <button class="chip" data-f="new">الأحدث</button>
+  <button class="chip" data-f="low">الأقل سعراً</button>
+  <button class="chip" data-f="high">الأعلى سعراً</button>
 </div>
-
 <div class="result" id="result"></div>
-
-<section
-  class="list"
-  id="list"
-  aria-live="polite"
-></section>
-
+<section class="list" id="list" aria-live="polite"></section>
 </main>
 
-
-<div class="bottom-wrap">
-
-  <nav class="bottom-nav">
-
-    <a class="nav-item" href="home.html">
-      <svg class="nav-icon" viewBox="0 0 24 24">
-        <path d="m3 10 9-7 9 7"/>
-        <path d="M5 9v11h14V9"/>
-        <path d="M9 20v-6h6v6"/>
-      </svg>
-      <span>الرئيسية</span>
-    </a>
-
-    <a class="nav-item" href="market.html">
-      <svg class="nav-icon" viewBox="0 0 24 24">
-        <rect x="4" y="4" width="16" height="16" rx="3"/>
-        <path d="M8 9h8M8 13h8M8 17h5"/>
-      </svg>
-      <span>الأجهزة</span>
-    </a>
-
-    <a class="nav-item" href="sell.html">
-      <span class="add-button">
-        <svg viewBox="0 0 24 24">
-          <path d="M12 5v14M5 12h14"/>
-        </svg>
-      </span>
-      <span>إضافة</span>
-    </a>
-
-    <a class="nav-item" href="favorites.html">
-      <svg class="nav-icon" viewBox="0 0 24 24">
-        <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
-      </svg>
-      <span>المفضلة</span>
-    </a>
-
-    <a class="nav-item" href="profile.html">
-      <svg class="nav-icon" viewBox="0 0 24 24">
-        <circle cx="12" cy="8" r="3"/>
-        <path d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5"/>
-      </svg>
-      <span>حسابي</span>
-    </a>
-
-  </nav>
-
-</div>
-
+<div class="bw"><nav class="nav">
+  <a class="ni" href="home.html"><svg class="i" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></svg><span class="l">الرئيسية</span></a>
+  <a class="ni on" href="auctions.html"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg><span class="l">المزادات</span></a>
+  <a class="ni" href="sell.html"><span class="add"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span class="l">إضافة</span></a>
+  <a class="ni" href="favorites.html"><svg class="i" viewBox="0 0 24 24"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/></svg><span class="l">المفضلة</span></a>
+  <a class="ni" href="profile.html"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5"/></svg><span class="l">حسابي</span></a>
+</nav></div>
 <div class="toast" id="toast" role="status"></div>
 
-
 <script type="module">
-
-/* =========================================================
-   SUPABASE
-========================================================= */
-
-import {
-  supabase
-} from "./js/supabase.js?v=auctions-final-2";
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-const $ = id =>
-  document.getElementById(id);
-
-
-const fmt = n =>
-  Number(n || 0).toLocaleString("en-US");
-
-
-const escapeHtml = value =>
-  String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-
-/* =========================================================
-   STATE
-========================================================= */
-
-let AUCTIONS = [];
-let filter = "all";
-let query = "";
-let toastT = null;
-let loading = false;
-
-
-/* =========================================================
-   FAVORITES
-========================================================= */
-
-const FAVORITE_KEY = "mzad_favorite_auctions";
-
-
-function getFavorites(){
-
-  try{
-
-    const raw =
-      localStorage.getItem(FAVORITE_KEY);
-
-    if(!raw){
-      return new Set();
-    }
-
-    const parsed =
-      JSON.parse(raw);
-
-    if(!Array.isArray(parsed)){
-      return new Set();
-    }
-
-    return new Set(
-      parsed.map(id => String(id))
-    );
-
-  }catch{
-
-    return new Set();
-
-  }
-
-}
-
-
-function saveFavorites(set){
-
-  try{
-
-    localStorage.setItem(
-      FAVORITE_KEY,
-      JSON.stringify([...set])
-    );
-
-  }catch{}
-
-}
-
-
-let favs = getFavorites();
-
-
-/* =========================================================
-   SEARCH NORMALIZATION
-========================================================= */
-
-const norm = value =>
-  String(value || "")
-    .toLowerCase()
-    .normalize("NFKC")
-    .replace(/[أإآٱ]/g,"ا")
-    .replace(/ة/g,"ه")
-    .replace(/ى/g,"ي")
-    .replace(/ؤ/g,"و")
-    .replace(/ئ/g,"ي")
-    .replace(/ايفون/g,"iphone")
-    .replace(/اىفون/g,"iphone")
-    .replace(/اي فون/g,"iphone")
-    .replace(/ايفن/g,"iphone")
-    .replace(/سامسونج/g,"samsung")
-    .replace(/سامسنج/g,"samsung")
-    .replace(/شاومي/g,"xiaomi")
-    .replace(/شياومي/g,"xiaomi")
-    .replace(/جوجل/g,"google")
-    .replace(/قوقل/g,"google")
-    .replace(/بكسل/g,"pixel")
-    .replace(/ون بلس/g,"oneplus")
-    .replace(/ون بلاس/g,"oneplus")
-    .replace(/\s+/g," ")
-    .trim();
-
-
-/* =========================================================
-   IMAGE PARSER
-========================================================= */
-
-function parseImages(value){
-
-  if(!value){
-    return [];
-  }
-
-  let data = value;
-
-  if(typeof data === "string"){
-
-    try{
-
-      data = JSON.parse(data);
-
-    }catch{
-
-      data =
-        data
-          .split(",")
-          .map(x => x.trim())
-          .filter(Boolean);
-
-    }
-
-  }
-
-  if(!Array.isArray(data)){
-
-    if(typeof data === "object"){
-
-      data = Object.values(data);
-
-    }else{
-
-      data = [data];
-
-    }
-
-  }
-
-  return data
-    .map(item => {
-
-      if(!item){
-        return "";
-      }
-
-      if(typeof item === "string"){
-        return item.trim();
-      }
-
-      if(typeof item === "object"){
-
-        return (
-          item.url ||
-          item.path ||
-          item.src ||
-          item.publicUrl ||
-          item.public_url ||
-          ""
-        );
-
-      }
-
-      return "";
-
-    })
-    .filter(Boolean);
-
-}
-
-
-function imageUrl(path){
-
-  if(!path){
-    return "";
-  }
-
-  if(
-    path.startsWith("http://") ||
-    path.startsWith("https://") ||
-    path.startsWith("data:")
-  ){
-
-    return path;
-
-  }
-
-  const clean =
-    path
-      .replace(/^\/+/,"")
-      .replace(/^device-images\//,"");
-
-  const { data } =
-    supabase
-      .storage
-      .from("device-images")
-      .getPublicUrl(clean);
-
-  return data?.publicUrl || "";
-
-}
-
-
-/* =========================================================
-   AUCTION TIME
-========================================================= */
-
-function endTimeOf(auction){
-
-  /*
-    الأولوية:
-    1) auction_ends_at
-    2) created_at + duration_hours
-  */
-
-  if(auction?.auction_ends_at){
-
-    const direct =
-      new Date(
-        auction.auction_ends_at
-      ).getTime();
-
-    if(Number.isFinite(direct)){
-      return direct;
-    }
-
-  }
-
-
-  const created =
-    new Date(
-      auction?.created_at || ""
-    ).getTime();
-
-  const duration =
-    Number(
-      auction?.duration_hours
-    );
-
-
-  if(
-    Number.isFinite(created) &&
-    Number.isFinite(duration) &&
-    duration > 0
-  ){
-
-    return (
-      created +
-      duration * 60 * 60 * 1000
-    );
-
-  }
-
-
-  return null;
-
-}
-
-
-function isEnded(auction){
-
-  const end =
-    endTimeOf(auction);
-
-  if(
-    end !== null &&
-    end <= Date.now()
-  ){
-
-    return true;
-
-  }
-
-  const status =
-    String(
-      auction?.auction_status || ""
-    )
-      .trim()
-      .toLowerCase();
-
-
-  if(
-    [
-      "ended",
-      "closed",
-      "finished",
-      "expired"
-    ].includes(status)
-  ){
-
-    return true;
-
-  }
-
-
-  return false;
-
-}
-
-
-function isActive(auction){
-
-  return !isEnded(auction);
-
-}
-
-
-function timeText(left){
-
-  if(left <= 0){
-    return "انتهى";
-  }
-
-  const D = 24 * 60 * 60 * 1000;
-  const H = 60 * 60 * 1000;
-  const M = 60 * 1000;
-
-  const p = n =>
-    String(n).padStart(2,"0");
-
-
-  if(left >= D){
-
-    const days =
-      Math.floor(left / D);
-
-    const hours =
-      Math.floor((left % D) / H);
-
-    return `${days} يوم ${p(hours)}:00`;
-
-  }
-
-
-  return `
-    ${p(Math.floor(left / H))}:${p(
-      Math.floor((left % H) / M)
-    )}:${p(
-      Math.floor((left % M) / 1000)
-    )}
-  `.trim();
-
-}
-
-
-/* =========================================================
-   CURRENT PRICE
-========================================================= */
-
-function currentPrice(auction){
-
-  return Number(
-    auction?.auction_current_price ??
-    auction?.auction_start_price ??
-    auction?.price ??
-    0
-  );
-
-}
-
-
-/* =========================================================
-   BID COUNT
-========================================================= */
-
-function bidCount(auction){
-
-  return Number(
-    auction?.bid_count ||
-    auction?.bids_count ||
-    auction?.auction_bid_count ||
-    0
-  );
-
-}
-
-
-/* =========================================================
-   LOAD BID COUNTS
-========================================================= */
-
-async function loadBidCounts(){
-
-  if(!AUCTIONS.length){
-    return;
-  }
-
-  const ids =
-    AUCTIONS
-      .map(a => a.id)
-      .filter(
-        id =>
-          id !== null &&
-          id !== undefined &&
-          id !== ""
-      );
-
-
-  if(!ids.length){
-    return;
-  }
-
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-      await supabase
-        .from("auction_bids")
-        .select(`
-          auction_id,
-          amount
-        `)
-        .in("auction_id",ids);
-
-
-    if(error){
-
-      console.error(
-        "AUCTION BID COUNTS ERROR:",
-        error
-      );
-
-      return;
-
-    }
-
-
-    const counts = new Map();
-
-
-    for(
-      const row of data || []
-    ){
-
-      const key =
-        String(row.auction_id);
-
-      counts.set(
-        key,
-        (counts.get(key) || 0) + 1
-      );
-
-    }
-
-
-    AUCTIONS =
-      AUCTIONS.map(
-        auction => ({
-          ...auction,
-          bid_count:
-            counts.get(
-              String(auction.id)
-            ) || 0
-        })
-      );
-
-
-  }catch(error){
-
-    console.error(
-      "BID COUNT LOAD ERROR:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   LOAD REAL AUCTIONS
-========================================================= */
-
+import { supabase } from "./js/supabase.js";
+const $ = id => document.getElementById(id);
+const fmt = n => Number(n||0).toLocaleString("en-US");
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let AU = [], filter = "all", query = "", tt, loading = false;
+
+/* المفضلة */
+const FK = "mzad_favorite_auctions";
+const getFavs = () => { try{ const p = JSON.parse(localStorage.getItem(FK) || "[]"); return new Set(Array.isArray(p) ? p.map(String) : []); }catch{ return new Set(); } };
+const favs = getFavs();
+const saveFavs = () => { try{ localStorage.setItem(FK, JSON.stringify([...favs])); }catch{} };
+
+/* بحث عربي/إنجليزي */
+const norm = v => String(v||"").toLowerCase().normalize("NFKC")
+  .replace(/[أإآٱ]/g,"ا").replace(/ة/g,"ه").replace(/ى/g,"ي")
+  .replace(/اي ?فون|ايفن|اىفون/g,"iphone").replace(/سامسو?نج/g,"samsung").replace(/شي?اومي/g,"xiaomi")
+  .replace(/[جق]وجل/g,"google").replace(/بكسل/g,"pixel").replace(/ون بل[اس]س?/g,"oneplus").replace(/\s+/g," ").trim();
+
+const endOf = a => new Date(a.ends_at).getTime();
+const timeText = left => {
+  if (left <= 0) return "انتهى";
+  const D=864e5, H=36e5, M=6e4, p=n=>String(n).padStart(2,"0");
+  if (left >= D) return Math.floor(left/D) + " يوم " + p(Math.floor(left%D/H)) + ":00";
+  return p(Math.floor(left/H)) + ":" + p(Math.floor(left%H/M)) + ":" + p(Math.floor(left%M/1000));
+};
+
+/* الجلب: المزادات المباشرة + الأجهزة + الصور + عدد المزايدات */
 async function fetchAuctions(){
+  const a = await supabase.from("mzad_auctions")
+    .select("id,auction_number,device_id,starting_price_iqd,current_price_iqd,status,ends_at,created_at")
+    .eq("status","live").gt("ends_at", new Date().toISOString()).order("created_at",{ascending:false}).limit(100);
+  if (a.error) throw a.error;
+  const list = a.data || [];
+  if (!list.length) return [];
+  const devIds = [...new Set(list.map(x => x.device_id).filter(Boolean))];
+  const ids = list.map(x => x.id);
 
-  /*
-    الاستعلام الأساسي.
-    duration_hours أضيف حتى نقدر
-    نحسب نهاية المزاد إذا auction_ends_at
-    غير موجود.
-  */
+  const [d, im, b] = await Promise.all([
+    supabase.from("mzad_devices").select("id,brand,model,storage,color,condition_grade,battery_health").in("id", devIds),
+    supabase.from("mzad_device_images").select("device_id,storage_path,is_primary,sort_order").in("device_id", devIds).order("sort_order",{ascending:true}),
+    supabase.from("mzad_auction_bids").select("auction_id").in("auction_id", ids).eq("accepted", true)
+  ]);
+  const devs = new Map((d.data||[]).map(x => [x.id, x]));
+  const bids = new Map();
+  (b.data||[]).forEach(r => bids.set(r.auction_id, (bids.get(r.auction_id)||0) + 1));
 
-  const response =
-    await supabase
-      .from("devices")
-      .select(`
-        id,
-        created_at,
-        brand,
-        model,
-        storage,
-        color,
-        battery_health,
-        condition,
-        price,
-        images,
-        location,
-        sale_type,
-        seller_name,
-        auction_start_price,
-        auction_current_price,
-        auction_bid_step,
-        duration_hours,
-        auction_ends_at,
-        auction_status,
-        notes
-      `)
-      .eq(
-        "sale_type",
-        "auction"
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      )
-      .limit(100);
-
-
-  if(!response.error){
-
-    return response.data || [];
-
+  const pick = new Map();
+  (im.data||[]).forEach(r => { const cur = pick.get(r.device_id); if (!cur || (r.is_primary && !cur.is_primary)) pick.set(r.device_id, r); });
+  const paths = [...pick.values()].map(r => r.storage_path);
+  const urls = new Map();
+  if (paths.length){
+    try{
+      const s = await supabase.storage.from("device-images").createSignedUrls(paths, 3600);
+      (s.data||[]).forEach(r => { if (r.signedUrl) urls.set(r.path, r.signedUrl); });
+    }catch(e){ console.error("IMG:", e); }
   }
-
-
-  console.error(
-    "FULL AUCTION QUERY ERROR:",
-    response.error
-  );
-
-
-  /*
-    Fallback:
-    إذا duration_hours أو أحد أعمدة المزاد
-    غير متاح في قاعدة البيانات، نستمر
-    بتحميل المزادات الأساسية.
-  */
-
-  const fallback =
-    await supabase
-      .from("devices")
-      .select(`
-        id,
-        created_at,
-        brand,
-        model,
-        storage,
-        color,
-        battery_health,
-        condition,
-        price,
-        images,
-        location,
-        sale_type,
-        seller_name,
-        auction_start_price,
-        auction_current_price,
-        auction_bid_step,
-        auction_ends_at,
-        auction_status,
-        notes
-      `)
-      .eq(
-        "sale_type",
-        "auction"
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      )
-      .limit(100);
-
-
-  if(!fallback.error){
-
-    return fallback.data || [];
-
-  }
-
-
-  console.error(
-    "FALLBACK AUCTION QUERY ERROR:",
-    fallback.error
-  );
-
-
-  /*
-    آخر fallback حتى إذا بعض أعمدة المزاد
-    غير موجودة، تظهر الأجهزة التي sale_type
-    فيها auction.
-  */
-
-  const basic =
-    await supabase
-      .from("devices")
-      .select(`
-        id,
-        created_at,
-        brand,
-        model,
-        storage,
-        color,
-        condition,
-        price,
-        images,
-        location,
-        sale_type,
-        seller_name,
-        notes
-      `)
-      .eq(
-        "sale_type",
-        "auction"
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      )
-      .limit(100);
-
-
-  if(basic.error){
-
-    throw basic.error;
-
-  }
-
-
-  return basic.data || [];
-
+  return list.map(x => ({ ...x, dev: devs.get(x.device_id) || {}, bids: bids.get(x.id) || 0, img: urls.get(pick.get(x.device_id)?.storage_path) || "" }));
 }
 
-
-/* =========================================================
-   LOAD
-========================================================= */
-
-async function loadAuctions(){
-
-  if(loading){
-    return;
-  }
-
-  loading = true;
-
+async function load(first){
+  if (loading) return; loading = true;
   try{
-
-    $("result").textContent =
-      "جاري تحميل المزادات...";
-
-    $("list").innerHTML = "";
-
-
-    AUCTIONS =
-      await fetchAuctions();
-
-
-    await loadBidCounts();
-
-
+    if (first){ $("result").textContent = "جاري تحميل المزادات..."; $("list").innerHTML = '<div class="sk"></div><div class="sk"></div>'; }
+    AU = await fetchAuctions();
     render();
-
-
-  }catch(error){
-
-    console.error(
-      "AUCTIONS LOAD ERROR:",
-      error
-    );
-
-    AUCTIONS = [];
-
-    $("result").textContent = "";
-
-    $("list").innerHTML = `
-
-      <div class="empty">
-
-        <h3>
-          تعذر تحميل المزادات
-        </h3>
-
-        <p>
-          تأكد من الاتصال أو حاول مرة ثانية.
-        </p>
-
-      </div>
-
-    `;
-
-    toast(
-      "تعذر تحميل المزادات"
-    );
-
-
-  }finally{
-
-    loading = false;
-
-  }
-
+  }catch(e){
+    console.error("AUCTIONS ERROR:", e);
+    if (first){ $("result").textContent = ""; $("list").innerHTML = '<div class="empty"><h3>تعذر تحميل المزادات</h3><p>تأكد من الاتصال وحاول مرة ثانية.</p></div>'; }
+  }finally{ loading = false; }
 }
-
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-function matchesSearch(auction){
-
-  if(!query){
-    return true;
-  }
-
-  const text =
-    [
-      auction.brand,
-      auction.model,
-      auction.storage,
-      auction.color,
-      auction.condition,
-      auction.location,
-      auction.seller_name,
-      auction.notes
-    ]
-      .filter(Boolean)
-      .join(" ");
-
-
-  return norm(text)
-    .includes(
-      norm(query)
-    );
-
-}
-
-
-/* =========================================================
-   VISIBLE
-========================================================= */
 
 function visible(){
-
-  /*
-    صفحة "المزادات الحالية"
-    تعرض المزادات الفعالة فقط.
-  */
-
-  let list =
-    AUCTIONS
-      .filter(isActive)
-      .filter(matchesSearch);
-
-
-  if(filter === "soon"){
-
-    const now =
-      Date.now();
-
-    const thirtyMinutes =
-      30 * 60 * 1000;
-
-
-    list =
-      list.filter(
-        auction => {
-
-          const end =
-            endTimeOf(
-              auction
-            );
-
-          return (
-            end !== null &&
-            end > now &&
-            end - now <= thirtyMinutes
-          );
-
-        }
-      );
-
-
-    list =
-      [...list].sort(
-        (a,b) =>
-          endTimeOf(a) -
-          endTimeOf(b)
-      );
-
-  }
-
-
-  if(filter === "new"){
-
-    list =
-      [...list].sort(
-        (a,b) =>
-          new Date(
-            b.created_at || 0
-          ).getTime() -
-          new Date(
-            a.created_at || 0
-          ).getTime()
-      );
-
-  }
-
-
-  if(filter === "low"){
-
-    list =
-      [...list].sort(
-        (a,b) =>
-          currentPrice(a) -
-          currentPrice(b)
-      );
-
-  }
-
-
-  if(filter === "high"){
-
-    list =
-      [...list].sort(
-        (a,b) =>
-          currentPrice(b) -
-          currentPrice(a)
-      );
-
-  }
-
-
-  return list;
-
+  const now = Date.now();
+  let l = AU.filter(a => endOf(a) > now).filter(a => !query || norm([a.dev.brand,a.dev.model,a.dev.storage,a.dev.color,a.dev.condition_grade].filter(Boolean).join(" ")).includes(norm(query)));
+  if (filter === "soon") l = l.filter(a => endOf(a) - now <= 30*6e4).sort((a,b) => endOf(a) - endOf(b));
+  if (filter === "new")  l = [...l].sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+  if (filter === "low")  l = [...l].sort((a,b) => a.current_price_iqd - b.current_price_iqd);
+  if (filter === "high") l = [...l].sort((a,b) => b.current_price_iqd - a.current_price_iqd);
+  return l;
 }
 
-
-/* =========================================================
-   FALLBACK PHONE
-========================================================= */
-
-const tones = [
-  "#6246d9",
-  "#8b6cf0",
-  "#4a34b8",
-  "#7c5cf0"
-];
-
-
-function phone(c){
-
-  return `
-    <svg
-      viewBox="0 0 120 240"
-      aria-hidden="true"
-    >
-
-      <rect
-        x="4"
-        y="4"
-        width="112"
-        height="232"
-        rx="22"
-        fill="#1d2430"
-      />
-
-      <rect
-        x="10"
-        y="10"
-        width="100"
-        height="220"
-        rx="17"
-        fill="${c}"
-      />
-
-      <rect
-        x="44"
-        y="16"
-        width="32"
-        height="9"
-        rx="4.5"
-        fill="#0c0f11"
-      />
-
-    </svg>
-  `;
-
-}
-
-
-/* =========================================================
-   RENDER
-========================================================= */
+const PH = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>';
+const HEART = '<svg viewBox="0 0 24 24"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/></svg>';
 
 function render(){
-
-  const list =
-    visible();
-
-
-  $("result").textContent =
-    `${list.length} مزاد`;
-
-
-  if(!list.length){
-
-    $("list").innerHTML = `
-
-      <div class="empty">
-
-        <h3>
-          لا توجد مزادات مطابقة
-        </h3>
-
-        <p>
-          ${
-            AUCTIONS.filter(isActive).length
-              ? "جرب كلمة بحث ثانية أو ارجع لعرض الكل."
-              : "لا توجد مزادات منشورة حالياً."
-          }
-        </p>
-
-      </div>
-
-    `;
-
+  const l = visible();
+  $("result").textContent = l.length + " مزاد";
+  if (!l.length){
+    $("list").innerHTML = `<div class="empty"><h3>لا توجد مزادات مطابقة</h3><p>${AU.length ? "جرب كلمة بحث ثانية أو ارجع لعرض الكل." : "لا توجد مزادات منشورة حالياً."}</p></div>`;
     return;
-
   }
-
-
-  $("list").innerHTML =
-    list
-      .map(
-        (auction,index) =>
-          renderCard(
-            auction,
-            index
-          )
-      )
-      .join("");
-
-
+  $("list").innerHTML = l.map((a,i) => {
+    const d = a.dev, id = String(a.id);
+    const title = [d.brand,d.model].filter(Boolean).join(" ") || "جهاز";
+    const meta = [d.storage,d.color].filter(Boolean).join(" • ");
+    return `<article class="c" data-id="${esc(id)}" tabindex="0" role="link" aria-label="${esc(title)}" style="animation-delay:${Math.min(i,6)*.05}s">
+      <div class="img">${a.img ? `<img src="${esc(a.img)}" alt="${esc(title)}" loading="${i<2?"eager":"lazy"}" onerror="this.remove()">` : PH}
+        <button class="fav${favs.has(id)?" on":""}" type="button" aria-label="المفضلة">${HEART}</button>
+        <span class="pill" data-id="${esc(id)}"></span>
+      </div>
+      <div class="body"><div>
+        <h3 class="t">${esc(title)}</h3>
+        ${meta ? `<div class="meta">${esc(meta)}</div>` : ""}
+        <div class="tags">${d.condition_grade ? `<span class="tag">${esc(d.condition_grade)}</span>` : ""}<span class="tag">${a.bids} مزايدة</span></div>
+      </div>
+      <div class="foot"><div><span class="lbl">السعر الحالي</span><div class="price">${fmt(a.current_price_iqd ?? a.starting_price_iqd)}<small>د.ع</small></div></div><button class="go" type="button">زايد</button></div></div>
+    </article>`;
+  }).join("");
   tick();
-
 }
-
-
-/* =========================================================
-   CARD
-========================================================= */
-
-function renderCard(
-  auction,
-  index
-){
-
-  const id =
-    String(
-      auction.id
-    );
-
-
-  const images =
-    parseImages(
-      auction.images
-    );
-
-
-  const firstImage =
-    images.length
-      ? imageUrl(images[0])
-      : "";
-
-
-  const title =
-    [
-      auction.brand,
-      auction.model
-    ]
-      .filter(Boolean)
-      .join(" ") ||
-    "جهاز";
-
-
-  const meta =
-    [
-      auction.storage,
-      auction.color,
-      auction.location
-    ]
-      .filter(Boolean)
-      .join(" • ") ||
-    "داخل النجف";
-
-
-  const condition =
-    auction.condition ||
-    "غير محدد";
-
-
-  const price =
-    currentPrice(
-      auction
-    );
-
-
-  const bids =
-    bidCount(
-      auction
-    );
-
-
-  const image =
-    firstImage
-      ? `
-        <img
-          src="${escapeHtml(firstImage)}"
-          alt="${escapeHtml(title)}"
-          loading="${index < 2 ? "eager" : "lazy"}"
-          decoding="async"
-          draggable="false"
-          onerror="this.style.display='none'"
-        >
-      `
-      : phone(
-          tones[
-            index % tones.length
-          ]
-        );
-
-
-  return `
-
-    <article
-      class="a-card"
-      data-id="${escapeHtml(id)}"
-      tabindex="0"
-      role="link"
-      aria-label="${escapeHtml(title)}"
-    >
-
-      <div class="a-img">
-
-        ${image}
-
-        <button
-          class="fav${
-            favs.has(id)
-              ? " active"
-              : ""
-          }"
-          type="button"
-          aria-label="${
-            favs.has(id)
-              ? "إزالة من المفضلة"
-              : "إضافة إلى المفضلة"
-          }"
-        >
-
-          <svg viewBox="0 0 24 24">
-            <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
-          </svg>
-
-        </button>
-
-
-        <span
-          class="pill"
-          data-id="${escapeHtml(id)}"
-          data-end="${escapeHtml(
-            auction.auction_ends_at || ""
-          )}"
-        ></span>
-
-      </div>
-
-
-      <div class="a-body">
-
-        <div>
-
-          <h3 class="a-title">
-            ${escapeHtml(title)}
-          </h3>
-
-          <div class="a-meta">
-            ${escapeHtml(meta)}
-          </div>
-
-          <div class="a-tags">
-
-            <span class="tag">
-              ${escapeHtml(condition)}
-            </span>
-
-            <span class="tag">
-              ${bids} مزايدة
-            </span>
-
-          </div>
-
-        </div>
-
-
-        <div class="a-foot">
-
-          <div>
-
-            <span class="lbl">
-              السعر الحالي
-            </span>
-
-            <div class="a-price">
-
-              ${fmt(price)}
-
-              <small>
-                د.ع
-              </small>
-
-            </div>
-
-          </div>
-
-
-          <button
-            class="go"
-            type="button"
-          >
-            زايد
-          </button>
-
-        </div>
-
-      </div>
-
-    </article>
-
-  `;
-
-}
-
-
-/* =========================================================
-   TICK
-========================================================= */
 
 function tick(){
-
-  const now =
-    Date.now();
-
-
-  document
-    .querySelectorAll(".pill")
-    .forEach(
-      el => {
-
-        const id =
-          el.dataset.id;
-
-
-        const auction =
-          AUCTIONS.find(
-            item =>
-              String(item.id) ===
-              String(id)
-          );
-
-
-        if(!auction){
-          return;
-        }
-
-
-        const end =
-          endTimeOf(
-            auction
-          );
-
-
-        /*
-          إذا ما قدرنا نحدد وقت النهاية،
-          نخلي المكان بدون وقت بدل 00:00:00.
-        */
-
-        if(!Number.isFinite(end)){
-
-          el.textContent =
-            "";
-
-          return;
-
-        }
-
-
-        /*
-          نحدّث data-end أيضاً
-          إذا حسبنا النهاية من duration_hours.
-        */
-
-        el.dataset.end =
-          new Date(end).toISOString();
-
-
-        const left =
-          end - now;
-
-
-        el.textContent =
-          timeText(left);
-
-
-        /*
-          أحمر قبل النهاية بـ 5 دقائق.
-        */
-
-        el.classList.toggle(
-          "hot",
-          left > 0 &&
-          left <= 5 * 60 * 1000
-        );
-
-
-        const card =
-          el.closest(".a-card");
-
-
-        if(card){
-
-          const done =
-            left <= 0;
-
-
-          card.classList.toggle(
-            "done",
-            done
-          );
-
-
-          const button =
-            card.querySelector(".go");
-
-
-          if(button){
-
-            button.disabled =
-              done;
-
-            button.textContent =
-              done
-                ? "انتهى"
-                : "زايد";
-
-          }
-
-        }
-
-      }
-    );
-
+  const now = Date.now();
+  let ended = false;
+  document.querySelectorAll(".pill").forEach(el => {
+    const a = AU.find(x => String(x.id) === el.dataset.id); if (!a) return;
+    const left = endOf(a) - now;
+    el.textContent = timeText(left);
+    el.classList.toggle("hot", left > 0 && left <= 5*6e4);
+    if (left <= 0) ended = true;
+  });
+  if (ended) render();           // يشيل المزاد المنتهي من القائمة
 }
 
-
-/* =========================================================
-   CARD CLICK
-========================================================= */
-
-$("list").addEventListener(
-  "click",
-  event => {
-
-    const fav =
-      event.target.closest(".fav");
-
-
-    if(fav){
-
-      event.preventDefault();
-      event.stopPropagation();
-
-
-      const card =
-        fav.closest(".a-card");
-
-
-      if(!card){
-        return;
-      }
-
-
-      const id =
-        String(
-          card.dataset.id
-        );
-
-
-      const on =
-        !favs.has(id);
-
-
-      if(on){
-        favs.add(id);
-      }else{
-        favs.delete(id);
-      }
-
-
-      saveFavorites(favs);
-
-
-      fav.classList.toggle(
-        "active",
-        on
-      );
-
-
-      fav.setAttribute(
-        "aria-label",
-        on
-          ? "إزالة من المفضلة"
-          : "إضافة إلى المفضلة"
-      );
-
-
-      toast(
-        on
-          ? "تمت إضافة المزاد إلى المفضلة"
-          : "تمت إزالة المزاد من المفضلة"
-      );
-
-
-      return;
-
-    }
-
-
-    const card =
-      event.target.closest(".a-card");
-
-
-    if(!card){
-      return;
-    }
-
-
-    const id =
-      card.dataset.id;
-
-
-    if(!id){
-      return;
-    }
-
-
-    location.href =
-      `auction-details.html?id=${encodeURIComponent(id)}`;
-
+const open = id => { if (id) location.href = "auction-details.html?auction=" + encodeURIComponent(id); };
+$("list").addEventListener("click", e => {
+  const f = e.target.closest(".fav");
+  const card = e.target.closest(".c"); if (!card) return;
+  if (f){
+    e.stopPropagation();
+    const id = card.dataset.id, on = !favs.has(id);
+    on ? favs.add(id) : favs.delete(id); saveFavs();
+    f.classList.toggle("on", on);
+    toast(on ? "تمت الإضافة للمفضلة" : "تمت الإزالة من المفضلة");
+    return;
   }
-);
-
-
-/* =========================================================
-   KEYBOARD
-========================================================= */
-
-$("list").addEventListener(
-  "keydown",
-  event => {
-
-    if(event.key !== "Enter"){
-      return;
-    }
-
-
-    const card =
-      event.target.closest(".a-card");
-
-
-    if(!card){
-      return;
-    }
-
-
-    const id =
-      card.dataset.id;
-
-
-    if(id){
-
-      location.href =
-        `auction-details.html?id=${encodeURIComponent(id)}`;
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   FILTERS
-========================================================= */
-
-$("filters").addEventListener(
-  "click",
-  event => {
-
-    const button =
-      event.target.closest(".fchip");
-
-
-    if(!button){
-      return;
-    }
-
-
-    filter =
-      button.dataset.f;
-
-
-    document
-      .querySelectorAll(".fchip")
-      .forEach(
-        chip => {
-
-          const active =
-            chip === button;
-
-          chip.classList.toggle(
-            "active",
-            active
-          );
-
-          chip.setAttribute(
-            "aria-selected",
-            active
-          );
-
-        }
-      );
-
-
-    render();
-
-  }
-);
-
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-function syncSearch(){
-
-  $("searchWrap")
-    .classList
-    .toggle(
-      "has-value",
-      $("search")
-        .value
-        .trim()
-        .length > 0
-    );
-
-}
-
-
-$("search").addEventListener(
-  "input",
-  event => {
-
-    query =
-      event.target
-        .value
-        .trim();
-
-
-    syncSearch();
-    render();
-
-  }
-);
-
-
-$("clear").addEventListener(
-  "click",
-  () => {
-
-    $("search").value = "";
-    query = "";
-
-    syncSearch();
-    render();
-
-    $("search").focus();
-
-  }
-);
-
-
-/* =========================================================
-   BACK
-========================================================= */
-
-$("back").addEventListener(
-  "click",
-  () => {
-
-    if(window.history.length > 1){
-
-      window.history.back();
-
-    }else{
-
-      location.href =
-        "home.html";
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-function toast(message){
-
-  const el =
-    $("toast");
-
-
-  el.textContent =
-    message;
-
-
-  el.classList.add(
-    "show"
-  );
-
-
-  clearTimeout(
-    toastT
-  );
-
-
-  toastT =
-    setTimeout(
-      () => {
-
-        el.classList.remove(
-          "show"
-        );
-
-      },
-      2200
-    );
-
-}
-
-
-/* =========================================================
-   REFRESH
-========================================================= */
-
-async function refreshAuctions(){
-
-  try{
-
-    const data =
-      await fetchAuctions();
-
-
-    AUCTIONS =
-      data || [];
-
-
-    await loadBidCounts();
-
-
-    render();
-
-
-  }catch(error){
-
-    console.error(
-      "AUCTION REFRESH ERROR:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   START
-========================================================= */
-
-loadAuctions();
-
-
-/*
-  العداد:
-  كل ثانية.
-*/
-const timer =
-  setInterval(
-    tick,
-    1000
-  );
-
-
-/*
-  البيانات:
-  كل 15 ثانية.
-*/
-const refreshTimer =
-  setInterval(
-    refreshAuctions,
-    15000
-  );
-
-
-/* =========================================================
-   CLEANUP
-========================================================= */
-
-window.addEventListener(
-  "pagehide",
-  () => {
-
-    clearInterval(timer);
-    clearInterval(refreshTimer);
-
-  }
-);
-
+  open(card.dataset.id);
+});
+$("list").addEventListener("keydown", e => { if (e.key === "Enter") open(e.target.closest(".c")?.dataset.id); });
+
+$("filters").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if (!b) return;
+  filter = b.dataset.f;
+  document.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c === b));
+  render();
+});
+const sync = () => $("sw").classList.toggle("has", $("search").value.trim().length > 0);
+$("search").addEventListener("input", e => { query = e.target.value.trim(); sync(); render(); });
+$("clear").addEventListener("click", () => { $("search").value = ""; query = ""; sync(); render(); $("search").focus(); });
+$("back").addEventListener("click", () => history.length > 1 ? history.back() : location.href = "home.html");
+
+function toast(m){ const el = $("toast"); el.textContent = m; el.classList.add("show"); clearTimeout(tt); tt = setTimeout(() => el.classList.remove("show"), 2000); }
+
+load(true);
+const t1 = setInterval(tick, 1000);
+const t2 = setInterval(() => { if (!document.hidden) load(false); }, 15000);
+addEventListener("pagehide", () => { clearInterval(t1); clearInterval(t2); });
 </script>
-
 </body>
 </html>
