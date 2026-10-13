@@ -260,7 +260,14 @@ async function loadMethods(){
     const template = PLATFORM.find(p => p.re.test((m.name_ar||"") + " " + (m.code||"") + " " + (m.name_en||"")));
     const recipient = String(m.recipient_identifier || "").trim();
     if (!template || !recipient) return null;
-    return { m, p: { ...template, label: String(m.recipient_name || template.label), num: recipient, copy: recipient } };
+    const configuredInstructions = String(m.instructions_ar || "").split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+    return { m, p: {
+      ...template,
+      label: esc(String(m.recipient_name || template.label)),
+      num: esc(recipient),
+      copy: esc(recipient),
+      how: (configuredInstructions.length ? configuredInstructions : template.how).map(esc)
+    } };
   }).filter(Boolean);
   const box = $("methods");
   if (!list.length){ box.innerHTML = '<div class="empty">لا توجد طريقة تحويل مفعلة حالياً. كلمنا على +964 783 800 3991</div>'; return; }
