@@ -165,14 +165,21 @@ begin
    reviewer_user_id=v_user,reviewer_note=coalesce(p_note,''),reviewed_at=now() where id=p.id;
  update public.mzad_payment_requests set status=case when p_approve then 'approved' else 'rejected' end where id=q.id;
  update public.mzad_deposits set status=case when p_approve then 'approved' else 'rejected' end,
-   eligible_to_bid=(p_approve and payer_role='buyer') where id=d.id;
+   eligible_to_bid=(p_approve and d.operation_type='auction' and d.payer_role='buyer') where id=d.id;
  if p_approve and d.operation_type='auction' and d.payer_role='seller' then
    update public.mzad_auctions a set status='live',starts_at=now(),
      ends_at=now()+make_interval(secs=>coalesce((select (value_json #>> '{}')::integer from public.mzad_settings where key='auction_duration_seconds'),3600)),
      original_ends_at=now()+make_interval(secs=>coalesce((select (value_json #>> '{}')::integer from public.mzad_settings where key='auction_duration_seconds'),3600))
-   where a.id=d.auction_id and a.status in ('draft','pending_review')
-     and exists(select 1 from public.mzad_devices dv where dv.id=a.device_id and dv.verification_status='approved');
+   where a.id=d.auction_id and a.seller_user_id=d.user_id
+     and a.status in ('draft','pending_review')
+     and exists(select 1 from public.mzad_devices dv where dv.id=a.device_id
+       and dv.owner_user_id=d.user_id and dv.verification_status='approved');
    if not found then raise exception 'DEVICE_NOT_VERIFIED_OR_AUCTION_STATE_INVALID'; end if;
+ end if;
+ if not p_approve and d.operation_type='direct_sale' and d.payer_role='buyer' then
+   update public.mzad_direct_sales
+     set status='active',buyer_user_id=null,reserved_at=null,updated_at=now()
+     where id=d.direct_sale_id and status='reserved' and buyer_user_id=d.user_id;
  end if;
  insert into public.mzad_audit_logs(actor_user_id,action,entity_type,entity_id,before_json,after_json)
  values(v_user,case when p_approve then 'deposit_approved' else 'deposit_rejected' end,'deposit',d.id::text,
