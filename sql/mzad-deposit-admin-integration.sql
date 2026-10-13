@@ -79,18 +79,17 @@ declare
   v_sale public.mzad_direct_sales%rowtype;
   v_deposit uuid;
   v_amount bigint;
+  v_device_locked boolean;
 begin
   if v_user is null then raise exception 'AUTH_REQUIRED'; end if;
   select * into v_sale from public.mzad_direct_sales where id = p_direct_sale_id for update;
   if not found then raise exception 'DIRECT_SALE_NOT_FOUND'; end if;
   if v_sale.seller_user_id = v_user then raise exception 'SELLER_CANNOT_BUY_OWN_DEVICE'; end if;
   if v_sale.status not in ('active','reserved') then raise exception 'DIRECT_SALE_NOT_AVAILABLE'; end if;
-  -- An auction draft reserves the device before it becomes publicly live.
-  -- Do not allow direct-sale deposit/reservation to race against that lock.
-  if exists (
-    select 1 from public.mzad_devices dv
-     where dv.id=v_sale.device_id and dv.locked_for_auction=true
-  ) or exists (
+  -- Serialize against auction-draft creation by taking the same device-row lock.
+  select dv.locked_for_auction into v_device_locked
+    from public.mzad_devices dv where dv.id=v_sale.device_id for update;
+  if coalesce(v_device_locked,false) or exists (
     select 1 from public.mzad_auctions a
      where a.device_id=v_sale.device_id
        and a.status in ('draft','pending_review','scheduled','live')
