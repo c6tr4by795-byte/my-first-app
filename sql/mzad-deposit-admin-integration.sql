@@ -385,7 +385,12 @@ begin
    insert into public.mzad_transactions(transaction_number,operation_type,auction_id,device_id,seller_user_id,buyer_user_id,final_price_iqd,status)
    select public.mzad_generate_number('TRX'),'auction',a.id,a.device_id,a.seller_user_id,b.bidder_user_id,b.amount_iqd,'open'
    where not exists(select 1 from public.mzad_transactions t where t.auction_id=a.id and t.status not in ('cancelled','disputed'));
-   if not found then raise exception 'AUCTION_TRANSACTION_NOT_CREATED'; end if;
+   if not exists(select 1 from public.mzad_transactions t where t.auction_id=a.id
+      and t.status not in ('cancelled','disputed')
+      and t.buyer_user_id=b.bidder_user_id and t.seller_user_id=a.seller_user_id
+      and t.final_price_iqd=b.amount_iqd) then
+     raise exception 'AUCTION_TRANSACTION_NOT_CREATED';
+   end if;
    insert into public.mzad_transaction_fees(transaction_id,payer_role,amount_iqd,status)
    select t.id,roles.payer_role,3000,'pending'
    from public.mzad_transactions t
