@@ -35,6 +35,12 @@ begin
   select * into d from public.mzad_devices where id=p_device_id for update;
   if not found then raise exception 'DEVICE_NOT_FOUND'; end if;
 
+  -- The approval gate must run inside this privileged RPC, not as a UI-only check.
+  -- Deploy sql/mzad-verification-approval-gate.sql before this migration.
+  if p_decision='approved' then
+    perform public.mzad_admin_require_inspection_report(p_device_id);
+  end if;
+
   if nullif(btrim(coalesce(d.imei,'')),'') is not null then
     select exists(select 1 from public.mzad_devices x
       where x.id<>d.id and x.imei=btrim(d.imei)
