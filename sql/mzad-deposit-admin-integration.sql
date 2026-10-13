@@ -217,16 +217,35 @@ end $$;
 create or replace function public.mzad_mark_deposit_refunded(p_deposit_id uuid,p_note text default null)
 returns boolean language plpgsql security definer set search_path = public
 as $$
-declare d public.mzad_deposits%rowtype; v_user uuid:=auth.uid();
+declare
+ d public.mzad_deposits%rowtype;
+ v_user uuid:=auth.uid();
+ v_target_status text;
 begin
  if v_user is null or not public.mzad_is_admin() then raise exception 'ADMIN_REQUIRED'; end if;
  select * into d from public.mzad_deposits where id=p_deposit_id for update;
  if not found then raise exception 'DEPOSIT_NOT_FOUND'; end if;
  if d.status='refunded' then raise exception 'ALREADY_REFUNDED'; end if;
- if d.status not in ('approved','refund_pending') then raise exception 'DEPOSIT_NOT_REFUNDABLE'; end if;
- update public.mzad_deposits set status='refunded',refunded_at=now(),refund_reason=coalesce(p_note,'تم التحقق من إعادة المبلغ فعلياً') where id=d.id;
+ if d.status<>'refund_pending' then raise exception 'REFUND_REVIEW_REQUIRED'; end if;
+ if d.operation_type='auction' then
+   select status into v_target_status from public.mzad_auctions where id=d.auction_id for update;
+   if v_target_status is null then raise exception 'AUCTION_NOT_FOUND'; end if;
+   if v_target_status not in ('ended','cancelled','archived') then raise exception 'AUCTION_NOT_FINISHED'; end if;
+ elsif d.operation_type='direct_sale' then
+   select status into v_target_status from public.mzad_direct_sales where id=d.direct_sale_id for update;
+   if v_target_status is null then raise exception 'DIRECT_SALE_NOT_FOUND'; end if;
+   if v_target_status not in ('completed','cancelled','expired') then raise exception 'DIRECT_SALE_NOT_FINISHED'; end if;
+ else
+   raise exception 'INVALID_DEPOSIT_OPERATION';
+ end if;
+ update public.mzad_deposits set status='refunded',refunded_at=now(),
+   refund_reason=coalesce(nullif(btrim(p_note),''),'تم التحقق من إعادة المبلغ فعلياً'),updated_at=now()
+ where id=d.id and status='refund_pending';
+ if not found then raise exception 'REFUND_STATE_CHANGED'; end if;
  insert into public.mzad_audit_logs(actor_user_id,action,entity_type,entity_id,before_json,after_json)
- values(v_user,'deposit_refunded','deposit',d.id::text,jsonb_build_object('status',d.status),jsonb_build_object('status','refunded','note',p_note));
+ values(v_user,'deposit_refunded','deposit',d.id::text,
+   jsonb_build_object('status',d.status,'operation_type',d.operation_type,'target_status',v_target_status),
+   jsonb_build_object('status','refunded','note',p_note,'confirmed_by_admin',v_user));
  return true;
 end $$;
 
