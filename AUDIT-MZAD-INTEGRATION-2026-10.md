@@ -114,3 +114,9 @@ The following source changes have since been committed to this same draft branch
 3. Attempt device approval without an approved inspection report; expect rejection. Add an approved report and valid checklist; expect success.
 4. Finish an auction twice and under concurrent calls; verify exactly one correct active transaction and one buyer/seller fee row each.
 5. Exercise seller deposit pending/rejected/approved transitions and verify the auction never goes live before approved device verification and approved seller deposit.
+
+
+### Auction cancellation payment cleanup — 2026-10-14
+- Commits `6ad490e8c5a31e906a7479bb42e11358051719e2` and `34f10aff769c5597aef179687b3001c2e78525d6` update `mzad_cancel_auction` so approved deposits move to `refund_pending` (not falsely marked refunded), while pending/proof-submitted/under-review deposits are cancelled, bid eligibility is cleared, their pending payment requests are cancelled, and pending proof records are rejected with an admin review note.
+- The follow-up commit corrects the proof cleanup filter to select deposits before their status is changed to `cancelled`.
+- This is a source-level fix. It still needs staging migration and tests covering approved, pending, proof-submitted, under-review, and already-rejected deposits; verify all related payment requests/proofs end in consistent states.
