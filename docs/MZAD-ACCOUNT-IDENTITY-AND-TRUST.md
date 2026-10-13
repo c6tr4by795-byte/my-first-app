@@ -26,3 +26,7 @@ Status: design notes for implementation; database migration for stable account c
 - Users cannot read other users' code rows directly.
 - Deleting/closing an account follows the platform's documented retention policy.
 - Migration and RLS are tested in staging before production.
+
+
+## Trust badge policy added
+A separate specification now defines the difference between a registered account, verified phone/identity, seller trust badge, and device-specific MZAD VERIFIED status. Proposed seller badge thresholds are explicitly marked as requiring product-owner approval; no badge should be displayed until its server-side eligibility logic is implemented and tested.
