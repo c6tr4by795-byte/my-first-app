@@ -79,11 +79,21 @@ begin
     raise exception 'DEVICE_LOCKED';
   end if;
 
+  -- A device cannot be offered for direct sale and auction at the same time.
+  if exists (
+    select 1
+      from public.mzad_direct_sales s
+     where s.device_id = p_device_id
+       and s.status in ('active', 'reserved', 'pending_handover')
+  ) then
+    raise exception 'DEVICE_ALREADY_LISTED_FOR_DIRECT_SALE';
+  end if;
+
   if exists (
     select 1
       from public.mzad_auctions a
      where a.device_id = p_device_id
-       and a.status in ('draft', 'scheduled', 'live', 'ended')
+       and a.status in ('draft', 'pending_review', 'scheduled', 'live', 'ended')
   ) then
     raise exception 'AUCTION_ALREADY_EXISTS';
   end if;
