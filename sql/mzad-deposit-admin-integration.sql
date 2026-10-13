@@ -252,6 +252,9 @@ begin
    if d.payer_role='buyer' and v_target_status='ended' and exists(
      select 1 from public.mzad_auctions a
      where a.id=d.auction_id and a.winner_user_id=d.user_id
+   ) and not exists(
+     select 1 from public.mzad_transactions t
+     where t.auction_id=d.auction_id and t.buyer_user_id=d.user_id and t.status='completed'
    ) then
      raise exception 'WINNER_DEPOSIT_HELD_UNTIL_SETTLEMENT';
    end if;
