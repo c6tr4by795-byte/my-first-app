@@ -242,7 +242,7 @@ const row = (k,v) => `<div class="row"><span>${esc(k)}</span><strong>${esc(v)}</
 function renderInfo(){
   const a=S.a, dep=S.dep, pr=S.pr;
   $("cInfo").hidden = false;
-  const no = pr ? (pr.request_number || pr.id) : "";
+  const no = pr ? (pr.invoice_number || pr.id) : "";
   $("reqno").innerHTML = no
     ? `<div><small>رقم الطلب</small><strong>${esc(no)}</strong></div><button class="copy" type="button" data-copy="${esc(no)}">نسخ</button>`
     : `<div><small>رقم الطلب</small><strong>لم يُرسل بعد</strong></div>`;
@@ -311,7 +311,7 @@ async function fetchAll(){
   S.a = a;
   S.dep = must(await supabase.from("mzad_deposits").select("id,deposit_number,amount_iqd,status,created_at,updated_at")
     .eq("auction_id",auctionId).eq("user_id",S.user.id).eq("operation_type","auction").eq("payer_role","seller").order("created_at",{ascending:false}).limit(1).maybeSingle());
-  const cols = "id,request_number,status,created_at";
+  const cols = "id,invoice_number,status,created_at";
   S.pr = null;
   if (requestId) S.pr = must(await supabase.from("mzad_payment_requests").select(cols).eq("id",requestId).eq("user_id",S.user.id).maybeSingle());
   if (!S.pr && S.dep) S.pr = must(await supabase.from("mzad_payment_requests").select(cols).eq("deposit_id",S.dep.id).eq("user_id",S.user.id).order("created_at",{ascending:false}).limit(1).maybeSingle());
