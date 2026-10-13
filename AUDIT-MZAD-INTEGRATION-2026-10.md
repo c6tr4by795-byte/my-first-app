@@ -62,3 +62,20 @@ The following source changes have since been committed to this same draft branch
 3. The new transaction page is read-only; appointment creation, handover confirmation, fee collection status, and completion transitions still need controlled RPCs and UI.
 4. The current branch's Vercel status has been pending during this pass. No successful preview build or live end-to-end test is claimed.
 5. Do not merge or apply the SQL migration to production until staging tests pass, including duplicate requests, rejected proof, wrong amount, two simultaneous buyers, self-purchase, unverified device, cancellation, and double-refund attempts.
+
+
+## Progress update — transaction workflow wiring
+
+- Added `admin/transactions.html` to list transactions for admins, show the current appointment and device, record buyer/seller 3,000 IQD fees as paid only after an explicit confirmation, and invoke the existing admin-only platform handover confirmation RPC.
+- Repaired the transaction page's broken render expression and connected its appointment form to the new `mzad_schedule_handover` RPC.
+- Added server-side scheduling guards: the actor must be a transaction party or admin, the handover point must be active, the time must be in the future, an active appointment must not already exist, and scheduling is blocked after any handover confirmation has begun.
+- Verified by source inspection that the SQL migration has no remaining malformed `as $` / `end $;` delimiter patterns and that the transaction page's `load()` block has balanced braces. This is not a substitute for PostgreSQL execution or browser/E2E testing.
+- Vercel preview checks were still pending at the last status query; no successful deployment or live Supabase test is claimed.
+
+## Remaining work before production
+
+1. Run the SQL migration in a staging Supabase project after comparing every referenced column/function to the deployed schema.
+2. Run browser tests for the admin transaction page, appointment scheduling, cash-fee recording, and completion requirements.
+3. Test direct-sale reservation concurrency and auction bidding with two separate user accounts.
+4. Confirm storage bucket policies allow owners to upload only into their own proof path and restrict proof reads to authorized users/admins.
+5. Review refunds and forfeiture rules against real business policy before enabling them in production.
