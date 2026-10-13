@@ -399,6 +399,44 @@ begin
  return true;
 end $$;
 
+create or replace function public.mzad_schedule_handover(
+ p_transaction_id uuid,p_handover_point_id uuid,p_scheduled_at timestamptz,p_notes text default null
+) returns uuid
+language plpgsql security definer set search_path = public
+as $
+declare
+ v_user uuid:=auth.uid();
+ t public.mzad_transactions%rowtype;
+ p public.mzad_handover_points%rowtype;
+ v_appointment uuid;
+begin
+ if v_user is null then raise exception 'AUTH_REQUIRED'; end if;
+ select * into t from public.mzad_transactions where id=p_transaction_id for update;
+ if not found then raise exception 'TRANSACTION_NOT_FOUND'; end if;
+ if t.buyer_user_id<>v_user and t.seller_user_id<>v_user and not public.mzad_is_admin() then
+   raise exception 'TRANSACTION_ACCESS_DENIED';
+ end if;
+ if t.status not in ('open','appointment_pending','seller_arrived','buyer_arrived') then
+   raise exception 'TRANSACTION_NOT_SCHEDULABLE';
+ end if;
+ if p_scheduled_at is null or p_scheduled_at<=now() then raise exception 'APPOINTMENT_TIME_MUST_BE_FUTURE'; end if;
+ select * into p from public.mzad_handover_points where id=p_handover_point_id and is_active=true;
+ if not found then raise exception 'HANDOVER_POINT_UNAVAILABLE'; end if;
+ if exists(select 1 from public.mzad_handover_appointments
+   where transaction_id=t.id and status in ('scheduled','confirmed','seller_arrived','buyer_arrived')) then
+   raise exception 'ACTIVE_APPOINTMENT_EXISTS';
+ end if;
+ insert into public.mzad_handover_appointments(transaction_id,handover_point_id,scheduled_at,status,staff_user_id,notes)
+ values(t.id,p.id,p_scheduled_at,'scheduled',case when public.mzad_is_admin() then v_user else null end,nullif(btrim(p_notes),''))
+ returning id into v_appointment;
+ update public.mzad_transactions set status='appointment_pending',updated_at=now() where id=t.id;
+ insert into public.mzad_audit_logs(actor_user_id,action,entity_type,entity_id,before_json,after_json)
+ values(v_user,'handover_appointment_scheduled','transaction',t.id::text,
+  jsonb_build_object('status',t.status),
+  jsonb_build_object('appointment_id',v_appointment,'handover_point_id',p.id,'scheduled_at',p_scheduled_at));
+ return v_appointment;
+end $;
+
 create or replace function public.mzad_confirm_handover(
  p_transaction_id uuid,p_action text
 ) returns boolean
@@ -531,6 +569,8 @@ revoke all on function public.mzad_cancel_auction(uuid,text) from public, anon;
 grant execute on function public.mzad_cancel_auction(uuid,text) to authenticated;
 revoke all on function public.mzad_finish_auction(uuid) from public, anon;
 grant execute on function public.mzad_finish_auction(uuid) to authenticated;
+revoke all on function public.mzad_schedule_handover(uuid,uuid,timestamptz,text) from public, anon;
+grant execute on function public.mzad_schedule_handover(uuid,uuid,timestamptz,text) to authenticated;
 revoke all on function public.mzad_confirm_handover(uuid,text) from public, anon;
 grant execute on function public.mzad_confirm_handover(uuid,text) to authenticated;
 revoke all on function public.mzad_admin_mark_transaction_fee_paid(uuid,text,text) from public, anon;
