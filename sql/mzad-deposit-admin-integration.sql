@@ -353,7 +353,9 @@ begin
   where payment_request_id in (
     select q.id from public.mzad_payment_requests q
      join public.mzad_deposits d on d.id=q.deposit_id
-    where d.auction_id=a.id and d.status='cancelled'
+    where d.auction_id=a.id
+      and d.status in ('pending','proof_submitted','under_review')
+      and q.status in ('pending','proof_submitted')
   ) and status='pending';
 
  update public.mzad_payment_requests q
