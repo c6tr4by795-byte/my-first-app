@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#ffffff">
+<title>نشاطي — MZAD PHONE</title>
+<style>
+:root{--bg:#f8f8fc;--ink:#17202a;--muted:#6b7280;--edge:#e6e3ef;--p:#e91d4f;--teal:#32b8c4;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif}.page{width:min(100%,560px);margin:auto;padding:0 14px 32px}.head{position:sticky;top:0;z-index:3;background:#fff;padding:14px 0;border-bottom:1px solid var(--edge)}.top{display:flex;align-items:center;justify-content:space-between}.back{width:40px;height:38px;border:1px solid var(--edge);border-radius:12px;background:#fff;font-size:20px;color:var(--p)}.brand{text-align:center}.brand b{font-size:15px}.brand small{display:block;color:var(--muted);font-size:10px;margin-top:3px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:13px;padding:4px;border:1px solid var(--edge);border-radius:14px;background:#fff}.tab{border:0;border-radius:10px;padding:10px 5px;background:transparent;font-weight:900;color:var(--muted)}.tab.on{background:var(--p);color:#fff}.list{display:grid;gap:11px;margin-top:15px}.card{background:#fff;border:1px solid var(--edge);border-radius:17px;padding:14px;box-shadow:0 6px 18px -15px #555}.row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px dashed var(--edge);font-size:12px}.row:last-child{border:0}.row span{color:var(--muted)}.row b{text-align:left;overflow-wrap:anywhere}.pill{display:inline-block;padding:4px 8px;border-radius:99px;background:#fce8ed;color:var(--p);font-size:10px;font-weight:900}.title{font-size:14px;font-weight:950;margin-bottom:7px}.empty,.error{padding:28px 15px;text-align:center;border:1px dashed #d9d4e5;background:#fff;border-radius:17px;color:var(--muted);font-size:12px;line-height:1.8}.error{color:#c62f4d}.loading{padding:28px;text-align:center;color:var(--muted);font-size:12px}.price{color:var(--p);font-size:15px;font-weight:950}
+</style></head>
+<body><main class="page"><header class="head"><div class="top"><button class="back" id="back" aria-label="رجوع">›</button><div class="brand"><b>MZAD PHONE</b><small>مزاداتي ومشترياتي</small></div><span style="width:40px"></span></div><div class="tabs"><button class="tab" id="auctionsTab">مزاداتي</button><button class="tab" id="purchasesTab">مشترياتي</button></div></header><section id="list" class="list"><div class="loading">جاري تحميل بياناتك…</div></section></main>
+<script type="module">
+import {supabase} from "./js/supabase.js";
+const $=id=>document.getElementById(id),params=new URLSearchParams(location.search);
+let tab=params.get("tab")==="purchases"?"purchases":"auctions",user=null,busy=false;
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=v=>Number(v||0).toLocaleString("en-US")+" د.ع";
+const date=v=>{const d=new Date(v);return isNaN(d)?"—":d.toLocaleString("ar-IQ",{dateStyle:"medium",timeStyle:"short"})};
+const auctionStatus={draft:"مسودة",pending_review:"بانتظار المراجعة",scheduled:"مجدول",live:"مباشر",ended:"منتهي",cancelled:"ملغي",archived:"مؤرشف"};
+const txStatus={open:"بانتظار التنسيق",appointment_pending:"بانتظار الموعد",seller_arrived:"وصل البائع",buyer_arrived:"وصل المشتري",inspection:"فحص الجهاز",payment_pending:"بانتظار الدفع",handover_pending:"بانتظار التسليم",completed:"مكتملة",cancelled:"ملغاة",disputed:"قيد النزاع"};
+function card(title,rows,price,link){return '<article class="card"><div class="title">'+esc(title)+'</div>'+rows.map(r=>'<div class="row"><span>'+esc(r[0])+'</span><b>'+esc(r[1])+'</b></div>').join("")+(price?'<div class="row"><span>السعر</span><b class="price">'+esc(money(price))+'</b></div>':"")+(link?'<div style="margin-top:10px"><a href="'+esc(link)+'" style="color:var(--p);font-weight:900;font-size:12px;text-decoration:none">عرض التفاصيل ←</a></div>':"")+'</article>'}
+function renderTabs(){$("auctionsTab").classList.toggle("on",tab==="auctions");$("purchasesTab").classList.toggle("on",tab==="purchases")}
+async function load(){
+ if(busy)return;busy=true;renderTabs();$("list").innerHTML='<div class="loading">جاري تحميل بياناتك…</div>';
+ try{
+  if(!user){const a=await supabase.auth.getUser();if(a.error)throw a.error;if(!a.data.user){location.href="index.html?login=1&returnTo="+encodeURIComponent(location.pathname+location.search);return}user=a.data.user}
+  if(tab==="auctions"){
+   const [ar,sr]=await Promise.all([
+    supabase.from("mzad_auctions").select("id,auction_number,device_id,status,starting_price_iqd,current_price_iqd,ends_at,created_at").eq("seller_user_id",user.id).order("created_at",{ascending:false}).limit(100),
+    supabase.from("mzad_direct_sales").select("id,sale_number,device_id,status,asking_price_iqd,created_at").eq("seller_user_id",user.id).order("created_at",{ascending:false}).limit(100)
+   ]);
+   if(ar.error)throw ar.error;if(sr.error)throw sr.error;
+   const auctions=ar.data||[],sales=sr.data||[],ids=[...new Set([...auctions.map(x=>x.device_id),...sales.map(x=>x.device_id)].filter(Boolean))];
+   const dr=ids.length?await supabase.from("mzad_devices").select("id,brand,model,storage").in("id",ids):{data:[],error:null};if(dr.error)throw dr.error;
+   const dm=new Map((dr.data||[]).map(d=>[d.id,[d.brand,d.model,d.storage].filter(Boolean).join(" ")]));
+   const all=[...auctions.map(a=>({kind:"مزاد",id:a.id,number:a.auction_number,device:dm.get(a.device_id)||"جهاز",status:auctionStatus[a.status]||a.status,price:a.current_price_iqd??a.starting_price_iqd,date:a.created_at,link:"my-auction.html?auction="+encodeURIComponent(a.id)})),...sales.map(s=>({kind:"بيع مباشر",id:s.id,number:s.sale_number,device:dm.get(s.device_id)||"جهاز",status:s.status==="active"?"متاح":s.status==="reserved"?"محجوز":s.status==="pending_handover"?"بانتظار التسليم":s.status==="completed"?"مكتمل":s.status==="cancelled"?"ملغي":s.status,price:s.asking_price_iqd,date:s.created_at,link:"direct.html?id="+encodeURIComponent(s.device_id)}))].sort((a,b)=>new Date(b.date)-new Date(a.date));
+   $("list").innerHTML=all.length?all.map(x=>card(x.device,[[ "النوع",x.kind],["رقم الإعلان",x.number||"—"],["الحالة",x.status],["تاريخ الإضافة",date(x.date)]],x.price,x.link)).join(""):'<div class="empty">ما عندك مزادات أو إعلانات بيع مسجلة بهذا الحساب حالياً.</div>';
+  }else{
+   const r=await supabase.from("mzad_transactions").select("id,transaction_number,operation_type,auction_id,direct_sale_id,device_id,seller_user_id,buyer_user_id,final_price_iqd,status,created_at").eq("buyer_user_id",user.id).order("created_at",{ascending:false}).limit(100);if(r.error)throw r.error;
+   const rows=r.data||[],ids=[...new Set(rows.map(x=>x.device_id).filter(Boolean))];
+   const dr=ids.length?await supabase.from("mzad_devices").select("id,brand,model,storage").in("id",ids):{data:[],error:null};if(dr.error)throw dr.error;
+   const dm=new Map((dr.data||[]).map(d=>[d.id,[d.brand,d.model,d.storage].filter(Boolean).join(" ")]));
+   $("list").innerHTML=rows.length?rows.map(x=>card(dm.get(x.device_id)||"جهاز",[[ "رقم المعاملة",x.transaction_number||"—"],["نوع العملية",x.operation_type==="auction"?"فوز بمزاد":"شراء مباشر"],["الحالة",txStatus[x.status]||x.status],["تاريخ الإنشاء",date(x.created_at)]],x.final_price_iqd,"transaction.html?id="+encodeURIComponent(x.id))).join(""):'<div class="empty">ما عندك مشتريات أو معاملات مسجلة بهذا الحساب حالياً.</div>';
+  }
+ }catch(e){console.error("MY ACTIVITY",e);$("list").innerHTML='<div class="error">تعذر تحميل البيانات. '+esc(e.message||e)+'<div style="margin-top:12px"><button id="retry" style="background:var(--p);color:white;padding:9px 18px;border-radius:10px;font-weight:900">إعادة المحاولة</button></div></div>';$("retry")?.addEventListener("click",load)}
+ finally{busy=false}
+}
+$("auctionsTab").addEventListener("click",()=>{tab="auctions";history.replaceState(null,"",location.pathname+"?tab=auctions");load()});
+$("purchasesTab").addEventListener("click",()=>{tab="purchases";history.replaceState(null,"",location.pathname+"?tab=purchases");load()});
+$("back").addEventListener("click",()=>history.length>1?history.back():location.href="profile.html");
+load();
+</script></body></html>
