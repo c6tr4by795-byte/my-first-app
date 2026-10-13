@@ -2,6 +2,16 @@
 -- Apply only after backing up production and confirming mzad-foundation-v2.sql is the active schema.
 begin;
 
+-- Generate non-guessable human-readable references without relying on another migration.
+create or replace function public.mzad_generate_number(p_prefix text)
+returns text language plpgsql volatile security definer set search_path = public
+as $
+begin
+  return upper(coalesce(nullif(regexp_replace(p_prefix, '[^A-Za-z0-9]', '', 'g'), ''), 'MZ'))
+    || '-' || to_char(clock_timestamp(), 'YYMMDDHH24MISS')
+    || '-' || upper(substr(encode(gen_random_bytes(5), 'hex'), 1, 10));
+end $;
+
 -- Compatibility columns used by existing UI are replaced by canonical foundation names.
 -- No service-role key is used in browser code.
 
@@ -98,10 +108,6 @@ begin
  returning id into v_id;
  update public.mzad_payment_requests set status='proof_submitted' where id=q.id;
  update public.mzad_deposits set status='proof_submitted',paid_at=coalesce(p_paid_at,now()) where id=d.id;
- insert into public.mzad_notifications(user_id,title,body,created_at)
- select au.user_id,'إثبات تأمين جديد','يوجد إثبات دفع جديد يحتاج مراجعة الإدارة.',now()
- from public.mzad_admin_users au where au.is_active=true
- on conflict do nothing;
  return v_id;
 end $$;
 
@@ -135,9 +141,6 @@ begin
  insert into public.mzad_audit_logs(actor_user_id,action,entity_type,entity_id,before_json,after_json)
  values(v_user,case when p_approve then 'deposit_approved' else 'deposit_rejected' end,'deposit',d.id::text,
    jsonb_build_object('status',d.status),jsonb_build_object('status',case when p_approve then 'approved' else 'rejected' end,'note',p_note));
- insert into public.mzad_notifications(user_id,title,body,created_at)
- values(d.user_id,case when p_approve then 'تم اعتماد التأمين' else 'تم رفض إثبات التأمين' end,
-   coalesce(nullif(p_note,''),case when p_approve then 'تمت مراجعة إثبات الدفع واعتماده.' else 'يرجى مراجعة إثبات الدفع وإعادة إرساله.' end),now());
  return true;
 end $$;
 
