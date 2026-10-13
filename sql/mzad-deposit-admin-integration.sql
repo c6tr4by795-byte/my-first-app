@@ -238,6 +238,12 @@ begin
    if v_target_status is null or v_target_status not in ('ended','cancelled','archived') then
      raise exception 'AUCTION_NOT_FINISHED';
    end if;
+   if d.payer_role='buyer' and v_target_status='ended' and exists(
+     select 1 from public.mzad_auctions a
+     where a.id=d.auction_id and a.winner_user_id=d.user_id
+   ) then
+     raise exception 'WINNER_DEPOSIT_HELD_UNTIL_SETTLEMENT';
+   end if;
  elsif d.operation_type='direct_sale' then
    select status into v_target_status from public.mzad_direct_sales where id=d.direct_sale_id for update;
    if v_target_status is null or v_target_status not in ('completed','cancelled','expired') then
