@@ -135,7 +135,7 @@ async function loadBids(){
 }
 
 async function loadResult(){
- const r=await supabase.from("mzad_auction_results").select("*").eq("auction_id",auctionId).order("created_at",{ascending:false}).limit(1).maybeSingle();
+ const r=await supabase.from("mzad_auction_results").select("*").eq("auction_id",auctionId).order("determined_at",{ascending:false}).limit(1).maybeSingle();
  if(!r.error)state.result=r.data||null;
 }
 
@@ -191,7 +191,7 @@ function renderResult(){
  if(!ended&&!state.result){$("resultCard").classList.add("hidden");return}
  $("resultCard").classList.remove("hidden");
  const r=state.result;
- $("resultStatus").textContent=r?.status||"بانتظار تسجيل النتيجة";
+ $("resultStatus").textContent=({sold:"تم البيع",no_winner:"لا يوجد فائز",cancelled:"ملغي",disputed:"قيد النزاع"}[r?.result_status])||"بانتظار تسجيل النتيجة";
  $("winner").textContent=r?.winner_user_id?"تم تحديد الفائز":"—";
  $("finalPrice").textContent=money(r?.final_price_iqd??state.auction.final_price_iqd??state.auction.current_price_iqd);
 }
