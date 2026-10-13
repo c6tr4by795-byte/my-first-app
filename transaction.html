@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#ffffff"><title>تفاصيل المعاملة — MZAD PHONE</title>
+<style>
+:root{--bg:#f8f8fc;--ink:#17202a;--muted:#6b7280;--edge:#e6e3ef;--p:#e91d4f;--teal:#32b8c4;--ok:#1e8a5a;--warn:#a35b00}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif}.page{width:min(100%,560px);margin:auto;padding:0 14px 34px}.head{position:sticky;top:0;background:#fff;z-index:3;border-bottom:1px solid var(--edge);padding:13px 0}.top{display:flex;align-items:center;justify-content:space-between}.back{width:40px;height:38px;border:1px solid var(--edge);border-radius:12px;background:#fff;color:var(--p);font-size:20px}.brand{text-align:center}.brand b{font-size:15px}.brand small{display:block;font-size:10px;color:var(--muted);margin-top:3px}.card{margin-top:14px;padding:15px;background:#fff;border:1px solid var(--edge);border-radius:18px}.h{font-size:15px;font-weight:950;margin:0 0 8px}.sub{color:var(--muted);font-size:11px;line-height:1.8}.row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dashed var(--edge);font-size:12px}.row:last-child{border:0}.row span{color:var(--muted)}.row b{text-align:left;overflow-wrap:anywhere}.price{color:var(--p);font-size:16px}.pill{display:inline-block;border-radius:99px;padding:5px 9px;background:#fce8ed;color:var(--p);font-size:10px;font-weight:900}.step{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--edge);font-size:12px;line-height:1.7}.step:last-child{border:0}.dot{flex:0 0 9px;width:9px;height:9px;margin-top:5px;border-radius:50%;background:var(--teal)}.empty,.error{padding:26px 15px;text-align:center;background:#fff;border:1px dashed var(--edge);border-radius:17px;margin-top:15px;color:var(--muted);font-size:12px;line-height:1.8}.error{color:#c62f4d}
+</style></head><body><main class="page"><header class="head"><div class="top"><button id="back" class="back" aria-label="رجوع">›</button><div class="brand"><b>MZAD PHONE</b><small>تفاصيل المعاملة والتسليم</small></div><span style="width:40px"></span></div></header><div id="app"><div class="empty">جاري تحميل تفاصيل المعاملة…</div></div></main>
+<script type="module">
+import {supabase} from "./js/supabase.js";
+const $=id=>document.getElementById(id),id=new URLSearchParams(location.search).get("id");
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=v=>Number(v||0).toLocaleString("en-US")+" د.ع";
+const date=v=>{if(!v)return "لم يحدد بعد";const d=new Date(v);return isNaN(d)?"—":d.toLocaleString("ar-IQ",{dateStyle:"medium",timeStyle:"short"})};
+const states={open:"بانتظار التنسيق",appointment_pending:"بانتظار الموعد",seller_arrived:"وصل البائع",buyer_arrived:"وصل المشتري",inspection:"فحص الجهاز",payment_pending:"بانتظار الدفع",handover_pending:"بانتظار التسليم",completed:"مكتملة",cancelled:"ملغاة",disputed:"قيد النزاع"};
+function row(k,v,cl=""){return '<div class="row"><span>'+esc(k)+'</span><b class="'+cl+'">'+esc(v)+'</b></div>'}
+async function load(){
+ if(!id)throw new Error("رابط المعاملة غير صحيح");
+ const ur=await supabase.auth.getUser();if(ur.error)throw ur.error;
+ if(!ur.data.user){location.href="index.html?login=1&returnTo="+encodeURIComponent(location.pathname+location.search);return}
+ const user=ur.data.user;
+ const tr=await supabase.from("mzad_transactions").select("*").eq("id",id).maybeSingle();if(tr.error)throw tr.error;if(!tr.data)throw new Error("المعاملة غير موجودة أو لا تملك صلاحية عرضها");
+ const t=tr.data;if(t.buyer_user_id!==user.id&&t.seller_user_id!==user.id)throw new Error("هذه المعاملة ليست مرتبطة بحسابك");
+ const [dr,ar,sr,pr,hr]=await Promise.all([
+  supabase.from("mzad_devices").select("id,brand,model,storage,mzad_id,verification_status").eq("id",t.device_id).maybeSingle(),
+  t.auction_id?supabase.from("mzad_auctions").select("auction_number,status,winner_user_id,final_price_iqd").eq("id",t.auction_id).maybeSingle():Promise.resolve({data:null,error:null}),
+  t.direct_sale_id?supabase.from("mzad_direct_sales").select("sale_number,status,asking_price_iqd").eq("id",t.direct_sale_id).maybeSingle():Promise.resolve({data:null,error:null}),
+  supabase.from("mzad_handover_appointments").select("scheduled_at,status,handover_point_id,notes").eq("transaction_id",t.id).order("created_at",{ascending:false}).limit(1).maybeSingle(),
+  supabase.from("mzad_handover_records").select("handover_at,seller_confirmed,buyer_confirmed,platform_confirmed,seller_payment_confirmed,buyer_device_received").eq("transaction_id",t.id).maybeSingle()
+ ]);
+ for(const x of [dr,ar,sr,pr,hr])if(x.error)throw x.error;
+ const d=dr.data||{},a=ar.data,s=sr.data,p=pr.data,h=hr.data;
+ let point=null;if(p?.handover_point_id){const x=await supabase.from("mzad_handover_points").select("name_ar,address_ar,phone").eq("id",p.handover_point_id).maybeSingle();if(!x.error)point=x.data}
+ const status=states[t.status]||t.status||"—";
+ const timeline=[["تم إنشاء المعاملة",true],["تحديد موعد التسليم",!!p&&p.status!=="cancelled"],["تأكيد حضور الطرفين",!!h&&(h.seller_confirmed&&h.buyer_confirmed)],["تأكيد استلام الجهاز",!!h?.buyer_device_received],["اكتمال المعاملة",t.status==="completed"]];
+ $("app").innerHTML='<section class="card"><h2 class="h">'+esc([d.brand,d.model,d.storage].filter(Boolean).join(" ")||"تفاصيل الجهاز")+'</h2><span class="pill">'+esc(status)+'</span><div style="margin-top:10px">'+row("رقم المعاملة",t.transaction_number||"—")+row("نوع العملية",t.operation_type==="auction"?"شراء عن طريق مزاد":"شراء مباشر")+row("معرّف الجهاز",d.mzad_id||d.id||"—")+row("حالة توثيق الجهاز",d.verification_status||"—")+row("تاريخ المعاملة",date(t.created_at))+row("سعر الجهاز",money(t.final_price_iqd),"price")+'</div></section><section class="card"><h2 class="h">موعد ومكان التسليم</h2>'+row("موعد التسليم",date(p?.scheduled_at))+row("حالة الموعد",p?.status||"لم يتم تحديد موعد")+(point?row("نقطة التسليم",point.name_ar+" — "+point.address_ar):"")+ (point?.phone?row("هاتف نقطة التسليم",point.phone):"")+(p?.notes?row("ملاحظات",p.notes):"")+'<p class="sub">هذه الصفحة تعرض حالة المعاملة فقط. لا تدفع ثمن الجهاز إلكترونياً من هذه الصفحة؛ اتبع إجراء التسليم المعتمد وتأكد من فحص الجهاز قبل إتمام الدفع.</p></section><section class="card"><h2 class="h">متابعة التسليم</h2>'+timeline.map(x=>'<div class="step"><span class="dot" style="background:'+(x[1]?'var(--ok)':'var(--edge)')+'"></span><div>'+esc(x[0])+'<div class="sub">'+(x[1]?"تم تسجيل هذه المرحلة":"لم تكتمل هذه المرحلة بعد")+'</div></div></div>').join("")+(h?'<div style="margin-top:8px">'+row("تأكيد البائع",h.seller_confirmed?"تم":"بانتظار")+row("تأكيد المشتري",h.buyer_confirmed?"تم":"بانتظار")+row("تأكيد الإدارة",h.platform_confirmed?"تم":"بانتظار")+'</div>':"")+'</section>';
+}
+$("back").addEventListener("click",()=>history.length>1?history.back():location.href="my-activity.html?tab=purchases");
+load().catch(e=>{$("app").innerHTML='<div class="error">'+esc(e.message||e)+'</div>';console.error("TRANSACTION PAGE",e)});
+</script></body></html>
