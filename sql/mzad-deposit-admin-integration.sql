@@ -399,6 +399,33 @@ begin
  return true;
 end $$;
 
+create or replace function public.mzad_admin_mark_transaction_fee_paid(
+ p_transaction_id uuid,p_payer_role text,p_payment_reference text default null
+) returns boolean
+language plpgsql security definer set search_path = public
+as $
+declare
+ v_user uuid:=auth.uid();
+ f public.mzad_transaction_fees%rowtype;
+begin
+ if v_user is null or not public.mzad_is_admin() then raise exception 'ADMIN_REQUIRED'; end if;
+ if p_payer_role not in ('buyer','seller') then raise exception 'INVALID_PAYER_ROLE'; end if;
+ select * into f from public.mzad_transaction_fees
+  where transaction_id=p_transaction_id and payer_role=p_payer_role for update;
+ if not found then raise exception 'TRANSACTION_FEE_NOT_FOUND'; end if;
+ if f.status='paid' then raise exception 'FEE_ALREADY_PAID'; end if;
+ if f.status<>'pending' then raise exception 'FEE_NOT_PAYABLE'; end if;
+ update public.mzad_transaction_fees
+  set status='paid',paid_at=now(),payment_reference=nullif(btrim(p_payment_reference),'')
+  where id=f.id and status='pending';
+ if not found then raise exception 'FEE_STATE_CHANGED'; end if;
+ insert into public.mzad_audit_logs(actor_user_id,action,entity_type,entity_id,before_json,after_json)
+ values(v_user,'transaction_fee_marked_paid','transaction_fee',f.id::text,
+  jsonb_build_object('status',f.status,'payer_role',f.payer_role,'amount_iqd',f.amount_iqd),
+  jsonb_build_object('status','paid','payment_reference',nullif(btrim(p_payment_reference),''),'confirmed_by_admin',v_user));
+ return true;
+end $;
+
 create or replace function public.mzad_admin_update_setting(p_key text,p_value jsonb,p_description_ar text default null)
 returns boolean language plpgsql security definer set search_path = public
 as $$
@@ -435,6 +462,8 @@ revoke all on function public.mzad_cancel_auction(uuid,text) from public, anon;
 grant execute on function public.mzad_cancel_auction(uuid,text) to authenticated;
 revoke all on function public.mzad_finish_auction(uuid) from public, anon;
 grant execute on function public.mzad_finish_auction(uuid) to authenticated;
+revoke all on function public.mzad_admin_mark_transaction_fee_paid(uuid,text,text) from public, anon;
+grant execute on function public.mzad_admin_mark_transaction_fee_paid(uuid,text,text) to authenticated;
 revoke all on function public.mzad_admin_update_setting(text,jsonb,text) from public, anon;
 grant execute on function public.mzad_admin_update_setting(text,jsonb,text) to authenticated;
 
