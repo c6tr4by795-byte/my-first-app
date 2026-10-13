@@ -4248,22 +4248,51 @@
             }
 
 
-            if(
-              normalizeSaleType(
-                device.sale_type
-              ) === "مزاد"
-            ){
+            try{
+              const isAuction = normalizeSaleType(device.sale_type) === "مزاد";
+              if(isAuction){
+                const {data: auctions,error: auctionError} = await supabase
+                  .from("mzad_auctions")
+                  .select("id,status,seller_user_id")
+                  .eq("device_id",device.id)
+                  .eq("status","live")
+                  .limit(2);
+                if(auctionError) throw auctionError;
+                if(!auctions || auctions.length !== 1){
+                  showToast(auctions?.length > 1
+                    ? "يوجد أكثر من مزاد مرتبط بهذا الجهاز، تواصل مع الإدارة"
+                    : "هذا الجهاز غير مرتبط بمزاد مباشر حالياً");
+                  return;
+                }
+                if(auctions[0].seller_user_id === data.session.user.id){
+                  showToast("ما تگدر تزايد على مزادك");
+                  return;
+                }
+                window.location.href = `auction-deposit.html?auction=${encodeURIComponent(auctions[0].id)}`;
+                return;
+              }
 
-              showToast(
-                "المزاد راح نربطه بالخطوة الخاصة بالمزايدة"
-              );
-
-            }else{
-
-              showToast(
-                "شراء الجهاز راح نربطه بخطوة الشراء"
-              );
-
+              const {data: sales,error: saleError} = await supabase
+                .from("mzad_direct_sales")
+                .select("id,status,seller_user_id")
+                .eq("device_id",device.id)
+                .eq("status","active")
+                .limit(2);
+              if(saleError) throw saleError;
+              if(!sales || sales.length !== 1){
+                showToast(sales?.length > 1
+                  ? "يوجد أكثر من إعلان بيع مرتبط بهذا الجهاز، تواصل مع الإدارة"
+                  : "هذا الجهاز غير مرتبط بإعلان بيع مباشر متاح حالياً");
+                return;
+              }
+              if(sales[0].seller_user_id === data.session.user.id){
+                showToast("ما تگدر تشتري جهازك");
+                return;
+              }
+              window.location.href = `direct-deposit.html?sale=${encodeURIComponent(sales[0].id)}`;
+            }catch(error){
+              console.error("DEVICE PURCHASE ROUTE ERROR",error);
+              showToast("تعذر فتح خطوة الشراء. تأكد من ربط الجهاز بإعلان المزاد أو البيع المباشر.");
             }
 
           }
