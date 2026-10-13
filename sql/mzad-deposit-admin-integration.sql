@@ -292,6 +292,68 @@ begin
  return true;
 end $$;
 
+create or replace function public.mzad_cancel_auction(p_auction_id uuid,p_reason text default null)
+returns boolean language plpgsql security definer set search_path = public
+as $
+declare
+ a public.mzad_auctions%rowtype;
+ v_user uuid:=auth.uid();
+begin
+ if v_user is null or not public.mzad_is_admin() then raise exception 'ADMIN_REQUIRED'; end if;
+ select * into a from public.mzad_auctions where id=p_auction_id for update;
+ if not found then raise exception 'AUCTION_NOT_FOUND'; end if;
+ if a.status not in ('draft','pending_review','scheduled','live') then raise exception 'AUCTION_NOT_CANCELLABLE'; end if;
+ update public.mzad_auctions set status='cancelled',updated_at=now() where id=a.id;
+ insert into public.mzad_auction_results(auction_id,winner_user_id,final_price_iqd,result_status)
+ values(a.id,null,null,'cancelled')
+ on conflict(auction_id) do update set winner_user_id=null,final_price_iqd=null,result_status='cancelled',determined_at=now();
+ update public.mzad_devices set locked_for_auction=false,updated_at=now() where id=a.device_id;
+ update public.mzad_deposits set status='refund_pending',refund_requested_at=now(),
+   refund_reason=coalesce(nullif(btrim(p_reason),''),'تم إلغاء المزاد'),updated_at=now()
+ where auction_id=a.id and status='approved';
+ insert into public.mzad_auction_events(auction_id,event_type,actor_user_id,payload_json)
+ values(a.id,'admin_cancelled',v_user,jsonb_build_object('reason',p_reason,'previous_status',a.status));
+ insert into public.mzad_audit_logs(actor_user_id,action,entity_type,entity_id,before_json,after_json)
+ values(v_user,'auction_cancelled','auction',a.id::text,jsonb_build_object('status',a.status),
+   jsonb_build_object('status','cancelled','reason',p_reason));
+ return true;
+end $;
+
+create or replace function public.mzad_finish_auction(p_auction_id uuid)
+returns boolean language plpgsql security definer set search_path = public
+as $
+declare
+ a public.mzad_auctions%rowtype;
+ b public.mzad_auction_bids%rowtype;
+ v_user uuid:=auth.uid();
+ v_result text;
+begin
+ if v_user is null or not public.mzad_is_admin() then raise exception 'ADMIN_REQUIRED'; end if;
+ select * into a from public.mzad_auctions where id=p_auction_id for update;
+ if not found then raise exception 'AUCTION_NOT_FOUND'; end if;
+ if a.status<>'live' then raise exception 'AUCTION_NOT_LIVE'; end if;
+ select * into b from public.mzad_auction_bids
+  where auction_id=a.id and accepted=true
+  order by amount_iqd desc,placed_at asc limit 1;
+ if found then v_result:='sold'; else v_result:='no_winner'; end if;
+ update public.mzad_auctions set status='ended',ends_at=least(coalesce(ends_at,now()),now()),
+   winner_user_id=case when v_result='sold' then b.bidder_user_id else null end,
+   final_price_iqd=case when v_result='sold' then b.amount_iqd else null end,
+   updated_at=now() where id=a.id;
+ insert into public.mzad_auction_results(auction_id,winner_user_id,final_price_iqd,result_status)
+ values(a.id,case when v_result='sold' then b.bidder_user_id else null end,
+   case when v_result='sold' then b.amount_iqd else null end,v_result)
+ on conflict(auction_id) do update set winner_user_id=excluded.winner_user_id,
+   final_price_iqd=excluded.final_price_iqd,result_status=excluded.result_status,determined_at=now();
+ insert into public.mzad_auction_events(auction_id,event_type,actor_user_id,payload_json)
+ values(a.id,'admin_finished',v_user,jsonb_build_object('result',v_result,'winner_user_id',case when v_result='sold' then b.bidder_user_id else null end,
+   'final_price_iqd',case when v_result='sold' then b.amount_iqd else null end));
+ insert into public.mzad_audit_logs(actor_user_id,action,entity_type,entity_id,before_json,after_json)
+ values(v_user,'auction_finished','auction',a.id::text,jsonb_build_object('status',a.status),
+   jsonb_build_object('status','ended','result',v_result));
+ return true;
+end $;
+
 create or replace function public.mzad_admin_update_setting(p_key text,p_value jsonb,p_description_ar text default null)
 returns boolean language plpgsql security definer set search_path = public
 as $$
@@ -324,6 +386,10 @@ revoke all on function public.mzad_request_deposit_refund(uuid,text) from public
 grant execute on function public.mzad_request_deposit_refund(uuid,text) to authenticated;
 revoke all on function public.mzad_mark_deposit_refunded(uuid,text) from public, anon;
 grant execute on function public.mzad_mark_deposit_refunded(uuid,text) to authenticated;
+revoke all on function public.mzad_cancel_auction(uuid,text) from public, anon;
+grant execute on function public.mzad_cancel_auction(uuid,text) to authenticated;
+revoke all on function public.mzad_finish_auction(uuid) from public, anon;
+grant execute on function public.mzad_finish_auction(uuid) to authenticated;
 revoke all on function public.mzad_admin_update_setting(text,jsonb,text) from public, anon;
 grant execute on function public.mzad_admin_update_setting(text,jsonb,text) to authenticated;
 
