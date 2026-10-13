@@ -43,3 +43,22 @@ A new branch `fix/mzad-auction-deposits-admin-2026-10` was created. It contains 
 5. Build the "My Auctions" page from the signed-in user's auctions and status.
 6. Verify storage upload/read policies and ensure only authorized admins can view payment proof images.
 7. Test end-to-end with two ordinary users and one admin, including duplicate proof, wrong amount, double refund, rejected proof, unverified device, expired auction, and concurrent bids.
+
+
+## Progress update — 2026-10-13
+
+The following source changes have since been committed to this same draft branch:
+
+- The device page now routes auction items to `auction-deposit.html` and direct-sale items to `direct-deposit.html`, with checks for an active matching listing and seller self-purchase/self-bidding.
+- The profile's “مزاداتي” and “مشترياتي” actions now open `my-activity.html`; that page reads the signed-in user's auction listings, direct-sale listings, and buyer transactions.
+- Added `transaction.html` as a read-only transaction and handover-status view. It verifies the current user is the buyer or seller before displaying the record.
+- The seller auction page now reads auction result rows by `determined_at` and displays the schema's `result_status`.
+- The SQL draft adds audited admin cancellation/finalization, staged refund request/confirmation, transaction creation on eligible purchase confirmation/auction finalization, and pending 3,000 IQD fee records for both buyer and seller. These are source edits only and have not been executed against the database.
+
+## Remaining blockers before production
+
+1. The bid submission action itself still needs a verified, connected flow and server-side eligibility/price validation.
+2. The SQL draft must be checked against the *actual* deployed schema, all relevant RLS policies, and existing function signatures. A local foundation file alone does not establish production compatibility.
+3. The new transaction page is read-only; appointment creation, handover confirmation, fee collection status, and completion transitions still need controlled RPCs and UI.
+4. The current branch's Vercel status has been pending during this pass. No successful preview build or live end-to-end test is claimed.
+5. Do not merge or apply the SQL migration to production until staging tests pass, including duplicate requests, rejected proof, wrong amount, two simultaneous buyers, self-purchase, unverified device, cancellation, and double-refund attempts.
