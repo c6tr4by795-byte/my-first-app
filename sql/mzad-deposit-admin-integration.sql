@@ -156,6 +156,23 @@ begin
  select * into d from public.mzad_deposits where id=p_deposit_id for update;
  if not found then raise exception 'DEPOSIT_NOT_FOUND'; end if;
  if d.status not in ('proof_submitted','under_review','pending') then raise exception 'INVALID_DEPOSIT_STATE'; end if;
+ if not p_approve then
+   update public.mzad_payment_proofs
+     set status='rejected',reviewer_user_id=v_user,reviewer_note=coalesce(p_note,''),reviewed_at=now()
+     where payment_request_id in (select id from public.mzad_payment_requests where deposit_id=d.id)
+       and status='pending';
+   update public.mzad_payment_requests set status='rejected'
+     where deposit_id=d.id and status in ('pending','proof_submitted');
+   update public.mzad_deposits set status='rejected',eligible_to_bid=false where id=d.id;
+   if d.operation_type='direct_sale' and d.payer_role='buyer' then
+     update public.mzad_direct_sales set status='active',buyer_user_id=null,reserved_at=null,updated_at=now()
+       where id=d.direct_sale_id and status='reserved' and buyer_user_id=d.user_id;
+   end if;
+   insert into public.mzad_audit_logs(actor_user_id,action,entity_type,entity_id,before_json,after_json)
+     values(v_user,'deposit_rejected','deposit',d.id::text,jsonb_build_object('status',d.status),
+       jsonb_build_object('status','rejected','note',p_note));
+   return true;
+ end if;
  select * into q from public.mzad_payment_requests where deposit_id=d.id order by created_at desc limit 1 for update;
  if not found then raise exception 'PAYMENT_REQUEST_NOT_FOUND'; end if;
  select * into p from public.mzad_payment_proofs where payment_request_id=q.id order by created_at desc limit 1 for update;
