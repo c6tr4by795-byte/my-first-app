@@ -120,3 +120,10 @@ The following source changes have since been committed to this same draft branch
 - Commits `6ad490e8c5a31e906a7479bb42e11358051719e2` and `34f10aff769c5597aef179687b3001c2e78525d6` update `mzad_cancel_auction` so approved deposits move to `refund_pending` (not falsely marked refunded), while pending/proof-submitted/under-review deposits are cancelled, bid eligibility is cleared, their pending payment requests are cancelled, and pending proof records are rejected with an admin review note.
 - The follow-up commit corrects the proof cleanup filter to select deposits before their status is changed to `cancelled`.
 - This is a source-level fix. It still needs staging migration and tests covering approved, pending, proof-submitted, under-review, and already-rejected deposits; verify all related payment requests/proofs end in consistent states.
+
+
+### Auction/direct-sale device exclusivity — 2026-10-14
+- Commit `da951eee7b74f5a0ae5d7e24e430793242ade125` adds a guard to direct-sale deposit creation: a device locked for auction or associated with a draft/pending-review/scheduled/live auction cannot be reserved for direct sale.
+- Commit `8146389408e67e67aeec281f9fecfb21813627ed` strengthens that guard by locking the device row before checking auction state, serializing the direct-sale reservation path against auction-draft creation's device-row lock.
+- Commit `ecfa0cd7b36e1a62e869f2c6f477e8a7f38cb269` prevents auction-draft creation when the same device has an active, reserved, or pending-handover direct-sale listing.
+- These are SQL source changes only. Verify against the actual deployed schema and exercise concurrent transactions in staging before applying to production. This review did not verify the direct-sale listing creation RPC or all possible paths that mutate listing status.
