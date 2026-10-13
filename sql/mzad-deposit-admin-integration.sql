@@ -222,7 +222,7 @@ end $$;
 
 create or replace function public.mzad_request_deposit_refund(p_deposit_id uuid,p_note text default null)
 returns boolean language plpgsql security definer set search_path = public
-as $
+as $$
 declare
  d public.mzad_deposits%rowtype;
  v_user uuid:=auth.uid();
@@ -261,7 +261,7 @@ begin
    jsonb_build_object('status',d.status),
    jsonb_build_object('status','refund_pending','note',p_note,'target_status',v_target_status));
  return true;
-end $;
+end $$;
 
 create or replace function public.mzad_mark_deposit_refunded(p_deposit_id uuid,p_note text default null)
 returns boolean language plpgsql security definer set search_path = public
@@ -300,7 +300,7 @@ end $$;
 
 create or replace function public.mzad_cancel_auction(p_auction_id uuid,p_reason text default null)
 returns boolean language plpgsql security definer set search_path = public
-as $
+as $$
 declare
  a public.mzad_auctions%rowtype;
  v_user uuid:=auth.uid();
@@ -323,11 +323,11 @@ begin
  values(v_user,'auction_cancelled','auction',a.id::text,jsonb_build_object('status',a.status),
    jsonb_build_object('status','cancelled','reason',p_reason));
  return true;
-end $;
+end $$;
 
 create or replace function public.mzad_finish_auction(p_auction_id uuid)
 returns boolean language plpgsql security definer set search_path = public
-as $
+as $$
 declare
  a public.mzad_auctions%rowtype;
  b public.mzad_auction_bids%rowtype;
@@ -358,7 +358,7 @@ begin
  values(v_user,'auction_finished','auction',a.id::text,jsonb_build_object('status',a.status),
    jsonb_build_object('status','ended','result',v_result));
  return true;
-end $;
+end $$;
 
 create or replace function public.mzad_admin_update_setting(p_key text,p_value jsonb,p_description_ar text default null)
 returns boolean language plpgsql security definer set search_path = public
