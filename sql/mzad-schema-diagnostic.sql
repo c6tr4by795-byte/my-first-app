@@ -76,3 +76,50 @@ where n.nspname = 'public'
     'mzad_confirm_handover'
   )
 order by p.proname, arguments;
+
+-- 5) Storage bucket and object policies used by the proof-upload UI.
+-- These queries are read-only. If permission errors occur, run as the project owner.
+select id, name, public, file_size_limit, allowed_mime_types
+from storage.buckets
+where id = 'mzad-payment-proofs' or name = 'mzad-payment-proofs';
+
+select schemaname, tablename, policyname, permissive, roles, cmd, qual, with_check
+from pg_policies
+where schemaname = 'storage'
+  and tablename = 'objects'
+  and (
+    coalesce(qual, '') ilike '%mzad-payment-proofs%'
+    or coalesce(with_check, '') ilike '%mzad-payment-proofs%'
+    or policyname ilike '%mzad%proof%'
+  )
+order by policyname;
+
+-- 6) Verify whether the browser-facing payment/deposit tables have RLS enabled.
+-- Policies must be reviewed separately; RLS being enabled alone does not prove safe access.
+select n.nspname as schema_name, c.relname as table_name,
+       c.relrowsecurity as rls_enabled, c.relforcerowsecurity as rls_forced
+from pg_class c
+join pg_namespace n on n.oid = c.relnamespace
+where n.nspname = 'public'
+  and c.relname in (
+    'mzad_deposits',
+    'mzad_payment_requests',
+    'mzad_payment_proofs',
+    'mzad_payment_methods',
+    'mzad_direct_sales',
+    'mzad_auctions'
+  )
+order by c.relname;
+
+select schemaname, tablename, policyname, permissive, roles, cmd, qual, with_check
+from pg_policies
+where schemaname = 'public'
+  and tablename in (
+    'mzad_deposits',
+    'mzad_payment_requests',
+    'mzad_payment_proofs',
+    'mzad_payment_methods',
+    'mzad_direct_sales',
+    'mzad_auctions'
+  )
+order by tablename, policyname;
