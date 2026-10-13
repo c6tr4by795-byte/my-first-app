@@ -97,7 +97,7 @@ The following source changes have since been committed to this same draft branch
 - `sql/auction-draft-flow.sql` creates an auction row with status `draft` but does not set `mzad_devices.locked_for_auction = true` in the same transaction.
 - The draft function rejects a device only when its lock flag is already true and checks existing auctions in `draft`, `scheduled`, `live`, or `ended`; it does not itself reserve the device when creating the draft.
 - Risk: another listing/sale path that relies on the device lock may race with a pending auction draft. This must be checked against all device-creation and direct-sale RPCs before changing the lifecycle.
-- Proposed fix is **not applied**: reserve the device atomically when the draft is created, then explicitly release it on cancellation/no-sale paths and retain it through a successful sale until handover completes. Do not apply a one-line lock without auditing every exit path, or devices could remain permanently locked.
+- Fix applied in commit `1cd82d0fb730bffd90be3d41cf0925f59efe5831`: reserve the device atomically when the draft is created. Source review confirms the admin cancellation path unlocks the device and the no-winner completion path unlocks it; sold devices remain locked for the transaction/handover flow. Still requires staging tests and a review of every other direct-sale/listing RPC against the lock flag.
 
 ### Verification gate follow-up
 - Commit `8c4dcf8a0c3371791869e3bbc2d1488682ae21a8` calls `mzad_admin_require_inspection_report` from the privileged verification-review RPC when approving a device.
