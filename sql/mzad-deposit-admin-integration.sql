@@ -657,6 +657,7 @@ declare
   v_user uuid := auth.uid();
   v_method_type text;
   v_id uuid;
+  v_method_count integer := 0;
   v_before jsonb := '{}'::jsonb;
 begin
   if v_user is null or not public.mzad_is_admin() then
@@ -681,6 +682,13 @@ begin
   end if;
 
   perform pg_advisory_xact_lock(hashtext('mzad_payment_methods:' || v_method_type));
+
+  select count(*) into v_method_count
+  from public.mzad_payment_methods
+  where method_type = v_method_type;
+  if v_method_count > 1 then
+    raise exception 'PAYMENT_METHOD_DUPLICATE_ROWS: %', v_method_type;
+  end if;
 
   select id, jsonb_build_object(
       'method_type', method_type,
