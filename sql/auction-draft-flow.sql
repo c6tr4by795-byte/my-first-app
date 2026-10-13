@@ -10,29 +10,24 @@ on conflict (key) do update
 set value_json = 'true'::jsonb,
     updated_at = now();
 
--- Prepare payment methods with Arabic instructions, but keep them disabled until
--- the platform account/card numbers are entered later by the Super Admin.
+-- Seed payment methods using the canonical foundation schema.
+-- Keep every method disabled until the Super Admin enters and verifies the recipient details.
 insert into public.mzad_payment_methods
-  (code, name_ar, provider, account_label, account_identifier, instructions_ar, is_enabled, display_order)
-values
-  ('mastercard', 'ماستركارد', 'mastercard', 'رقم بطاقة الاستلام', '',
-   'حوّل مبلغ التأمين الظاهر في الفاتورة إلى بطاقة المنصة. اكتب رقم المرجع إن ظهر، وارفع صورة واضحة للإيصال. لا يبدأ المزاد قبل مراجعة الإدارة والموافقة على الإثبات.',
-   false, 1),
-  ('zain_cash', 'زين كاش', 'zain_cash', 'رقم محفظة زين كاش', '',
-   'حوّل مبلغ التأمين الظاهر في الفاتورة إلى محفظة زين كاش التابعة للمنصة. اكتب رقم العملية وارفع صورة واضحة للإيصال. لا يبدأ المزاد قبل مراجعة الإدارة والموافقة على الإثبات.',
-   false, 2),
-  ('phone_transfer', 'تحويل إلى رقم الهاتف', 'phone', 'رقم الهاتف المستلم', '',
-   'حوّل مبلغ التأمين إلى رقم الهاتف المعتمد من إدارة المنصة، ثم اكتب رقم العملية وارفع صورة الإيصال. لا يبدأ المزاد قبل مراجعة الإدارة والموافقة على الإثبات.',
-   false, 3),
-  ('bank_transfer', 'تحويل مصرفي', 'bank', 'بيانات الحساب المصرفي', '',
-   'حوّل مبلغ التأمين إلى الحساب المصرفي المعتمد من إدارة المنصة. أرفق رقم التحويل وصورة الإيصال، وانتظر موافقة الإدارة قبل بدء المزاد.',
-   false, 4)
-on conflict (code) do update
-set name_ar = excluded.name_ar,
-    provider = excluded.provider,
-    account_label = excluded.account_label,
-    instructions_ar = excluded.instructions_ar,
-    display_order = excluded.display_order;
+  (method_type, display_name_ar, recipient_name, recipient_identifier, instructions_ar, is_enabled, sort_order)
+select x.method_type, x.display_name_ar, x.recipient_name, '', x.instructions_ar, false, x.sort_order
+from (values
+  ('mastercard'::text, 'ماستركارد'::text, 'رقم بطاقة الاستلام'::text,
+   'حوّل مبلغ التأمين الظاهر في الفاتورة إلى بطاقة المنصة. اكتب رقم المرجع إن ظهر، وارفع صورة واضحة للإيصال. لا يبدأ المزاد قبل مراجعة الإدارة والموافقة على الإثبات.'::text, 1),
+  ('zain_cash'::text, 'زين كاش'::text, 'رقم محفظة زين كاش'::text,
+   'حوّل مبلغ التأمين الظاهر في الفاتورة إلى محفظة زين كاش التابعة للمنصة. اكتب رقم العملية وارفع صورة واضحة للإيصال. لا يبدأ المزاد قبل مراجعة الإدارة والموافقة على الإثبات.'::text, 2),
+  ('phone_account'::text, 'تحويل إلى رقم الهاتف'::text, 'رقم الهاتف المستلم'::text,
+   'حوّل مبلغ التأمين إلى رقم الهاتف المعتمد من إدارة المنصة، ثم اكتب رقم العملية وارفع صورة واضحة للإيصال. انتظر موافقة الإدارة قبل بدء المزاد.'::text, 3),
+  ('other'::text, 'تحويل مصرفي أو طريقة أخرى'::text, 'بيانات الحساب المستلم'::text,
+   'استخدم بيانات الحساب المعتمدة من الإدارة فقط. أرفق رقم التحويل وصورة الإيصال وانتظر موافقة الإدارة.'::text, 4)
+) as x(method_type,display_name_ar,recipient_name,instructions_ar,sort_order)
+where not exists (
+  select 1 from public.mzad_payment_methods m where m.method_type=x.method_type
+);
 
 create or replace function public.mzad_create_auction_draft(
   p_device_id uuid,
