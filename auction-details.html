@@ -3,144 +3,253 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<meta name="theme-color" content="#6246d9">
+<meta name="theme-color" content="#f6f4fc">
 <title>تفاصيل المزاد — MZAD PHONE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f9f8fd;--ink:#17202a;--muted:#6b7280;--edge:#e4defa;--p:#6246d9;--pd:#4a34b8;--ps:#f3f0ff;--ok:#1e8a5a;--oks:#e8f6ef;--bad:#c62f4d;--bads:#fff0f3;--hot:#e8590c;--sb:env(safe-area-inset-bottom,0px)}
+:root{--bg:#f6f4fc;--ink:#1b1740;--muted:#6c6f8a;--line:#e8e4f7;--p:#6246d9;--p2:#8b6cf0;--pd:#3c2a9e;--ps:#f1eeff;--night:#150d42;--night2:#2d1b7a;--gold:#e0bd6a;--ok:#17805a;--oks:#e6f6ee;--hot:#e8590c;--bad:#c62f4d;--bads:#fff0f3;--sb:env(safe-area-inset-bottom,0px);--st:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
-body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);font-family:"Tajawal",-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;-webkit-font-smoothing:antialiased}
 button,input{font:inherit;color:inherit}button{border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
 a{color:inherit;text-decoration:none}
-:focus-visible{outline:3px solid var(--p);outline-offset:2px}
-.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(110px + var(--sb));overflow-x:clip}
-@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-@keyframes blink{50%{opacity:.3}}
+:focus-visible{outline:3px solid var(--p2);outline-offset:2px}
+.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(150px + var(--sb));overflow-x:clip}
+[hidden]{display:none!important}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes blink{50%{opacity:.35}}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
 @keyframes rot{to{transform:rotate(360deg)}}
-@keyframes flash{from{background:#e8f6ef}to{background:#fff}}
-.rv{animation:up .5s cubic-bezier(.2,.8,.3,1) backwards}
-header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg,#fff,#ece8ff);border-radius:0 0 24px 24px;border-bottom:1px solid #ece8fb}
-.top{display:flex;align-items:center;justify-content:space-between;padding:12px 2px 0}
-.ib{width:39px;height:34px;display:grid;place-items:center;border:1px solid var(--edge);border-radius:12px;background:#fff;color:var(--p)}
+@keyframes flash{from{background:#e6f6ee}to{background:#faf9ff}}
+@keyframes pop{0%{transform:scale(.9);color:var(--gold)}100%{transform:none}}
+@keyframes warn{50%{background:rgba(251,146,60,.42)}}
+@keyframes ping{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.16,1.38);opacity:0}}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+@keyframes sweep{0%,55%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
+
+/* الرأس */
+.top{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;margin-inline:-14px;padding:calc(10px + var(--st)) 14px 10px;background:rgba(246,244,252,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.ib{width:40px;height:38px;display:grid;place-items:center;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--pd)}
 .ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .brand{display:flex;flex-direction:column;align-items:center;line-height:.9}
-.brand b{font-size:16px;letter-spacing:-.03em}.brand span{font-size:7px;font-weight:800;letter-spacing:.15em;color:#8a96a3;margin-top:3px}
-.card{margin-top:14px;padding:16px;border-radius:22px;background:#fff;border:1px solid var(--edge);box-shadow:0 10px 24px -14px rgba(98,70,217,.25)}
-.ch{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.num{width:28px;height:28px;flex:0 0 28px;border-radius:10px;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:950;background:linear-gradient(145deg,#6246d9,#8b6cf0)}
-.ch h2{margin:0;font-size:15px;font-weight:950}
+.brand b{font-size:17px;font-weight:900;letter-spacing:-.02em}
+.brand span{font-size:7px;font-weight:800;letter-spacing:.2em;color:#9a7a2a;margin-top:3px}
+.lb-badge{min-width:40px;display:flex;justify-content:flex-end}
+.badge{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--oks);color:var(--ok);font-size:11.5px;font-weight:800}
+.badge:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;animation:blink 1.4s infinite}
+.badge.off{background:#eceaf3;color:var(--muted)}.badge.off:before{animation:none}
 
-/* الجهاز */
-.photo{position:relative;aspect-ratio:4/3;border-radius:18px;overflow:hidden;background:linear-gradient(160deg,#7b61e8,#3b2a92);display:grid;place-items:center}
-.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.photo svg{width:56px;height:56px;opacity:.5}
-.gal{position:absolute;inset:0;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+#pg{animation:fade .5s}
+
+/* المعرض */
+.gw{position:relative;border-radius:26px;overflow:hidden;background:linear-gradient(160deg,#7b61e8,#2d1b7a);box-shadow:0 22px 40px -26px rgba(45,27,122,.8)}
+.gal{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;aspect-ratio:1/1;max-height:62dvh;width:100%}
 .gal::-webkit-scrollbar{display:none}
-.photo .gal img{position:relative;flex:0 0 100%;width:100%;height:100%;object-fit:cover;scroll-snap-align:center}
-.cnt{position:absolute;bottom:10px;inset-inline-start:10px;padding:3px 10px;border-radius:999px;background:rgba(23,32,42,.6);color:#fff;font-size:10.5px;font-weight:900}
-.ins .row strong{max-width:62%;text-align:end;line-height:1.7}
-.ins .row.warn strong{color:var(--bad)}
-.ins-note{margin-top:10px;padding:10px 12px;border-radius:13px;background:var(--ps);font-size:11px;font-weight:700;line-height:1.8;color:#4b5563}
-.live{position:absolute;top:10px;inset-inline-end:10px;display:flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.95);font-size:10px;font-weight:900;color:var(--ok)}
-.live:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;animation:blink 1.4s infinite}
-.live.off{color:var(--muted)}.live.off:before{animation:none}
-h1{margin:14px 0 6px;font-size:21px;font-weight:950;letter-spacing:-.03em}
-.sp{display:flex;flex-wrap:wrap;gap:6px}
-.sp span{padding:4px 10px;border-radius:9px;background:var(--ps);color:var(--pd);font-size:10.5px;font-weight:900}
+.gi{position:relative;flex:0 0 100%;height:100%;scroll-snap-align:center;padding:0;overflow:hidden}
+.gi img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .45s;display:block}
+.gi img.ok{opacity:1}
+.gal.none{display:grid;place-items:center}
+.gal.none svg{width:60px;height:60px;opacity:.5}
+.cnt{position:absolute;bottom:12px;inset-inline-end:12px;padding:5px 12px;border-radius:999px;background:rgba(21,13,66,.7);backdrop-filter:blur(8px);color:#fff;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;direction:ltr}
+.zoom{position:absolute;bottom:12px;inset-inline-start:12px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.92);color:var(--pd);font-size:11.5px;font-weight:800;pointer-events:none}
+.thumbs{display:flex;gap:8px;overflow-x:auto;margin-top:10px;scrollbar-width:none}
+.thumbs::-webkit-scrollbar{display:none}
+.th{flex:0 0 62px;height:62px;border-radius:14px;overflow:hidden;border:2px solid transparent;opacity:.65;transition:opacity .2s,border-color .2s;padding:0}
+.th img{width:100%;height:100%;object-fit:cover;display:block}
+.th.on{border-color:var(--p);opacity:1}
 
-/* السعر والعداد */
-.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:10px}
-.box{padding:14px 12px;border-radius:18px;text-align:center}
-.box small{display:block;font-size:10px;font-weight:800}
-.box strong{display:block;margin-top:4px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-.pr{background:linear-gradient(145deg,#6246d9,#8b6cf0);color:#fff}
-.pr small{opacity:.85}.pr strong{font-size:24px;font-weight:950}.pr em{font-style:normal;font-size:10px;font-weight:800;opacity:.85}
-.tm{background:var(--oks);color:var(--ok)}.tm strong{font-size:20px;font-weight:950;direction:ltr}
-.tm.u{background:#fff4ec;color:var(--hot)}.tm.e{background:#f1f2f5;color:var(--muted)}
-.top-bidder{display:none;margin-top:10px;padding:10px 12px;border-radius:14px;font-size:11.5px;font-weight:900;text-align:center}
-.top-bidder.show{display:block}.top-bidder.me{background:var(--oks);color:var(--ok)}.top-bidder.other{background:var(--bads);color:var(--bad)}
+h1{margin:20px 2px 10px;font-size:25px;font-weight:900;letter-spacing:-.02em;line-height:1.3}
+.sp{display:flex;flex-wrap:wrap;gap:7px;margin:0 2px}
+.sp span{padding:6px 13px;border-radius:999px;background:var(--ps);color:var(--pd);font-size:12px;font-weight:700}
 
-/* قوائم */
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px dashed #e9e5f8;font-size:12px;font-weight:700}
-.row:last-child{border:0;padding-bottom:0}.row:first-of-type{padding-top:0}
-.row span{color:var(--muted)}.row strong{font-weight:900}
-.bid{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px dashed #e9e5f8}
-.bid:last-child{border:0}
-.bid.new{animation:flash 1.6s}
-.bn{width:28px;height:28px;flex:0 0 28px;border-radius:50%;background:var(--ps);color:var(--pd);display:grid;place-items:center;font-size:11px;font-weight:950}
-.bid:first-child .bn{background:var(--p);color:#fff}
-.bw{flex:1;font-size:12px;font-weight:900}.bw small{display:block;margin-top:1px;font-size:10px;font-weight:700;color:var(--muted)}
-.ba{font-size:13px;font-weight:950;color:var(--pd);white-space:nowrap}
-.empty{padding:14px;border-radius:14px;background:var(--ps);text-align:center;font-size:12px;font-weight:800;color:var(--muted)}
+/* لوحة السعر والوقت */
+.panel{position:relative;margin-top:18px;padding:22px 18px 18px;border-radius:28px;color:#fff;overflow:hidden;background:radial-gradient(120% 90% at 100% 0%,#4a34b8 0%,transparent 60%),linear-gradient(160deg,#150d42,#2d1b7a 60%,#3c2a9e);box-shadow:0 26px 46px -24px rgba(45,27,122,.8)}
+.panel:before{content:"";position:absolute;inset-inline:0;top:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.pl{font-size:12.5px;font-weight:500;opacity:.78}
+.pv{display:flex;align-items:baseline;gap:8px;margin-top:2px}
+.pv strong{font-size:46px;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.pv em{font-style:normal;font-size:15px;font-weight:700;color:var(--gold)}
+.pv.pop strong{animation:pop .7s cubic-bezier(.2,1.4,.4,1)}
+.stt{margin-top:14px;padding:11px 14px;border-radius:15px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.1)}
+.stt:before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;flex:none}
+.stt.none{color:rgba(255,255,255,.8)}.stt.none:before{opacity:.5}
+.stt.me{background:rgba(52,211,153,.2);color:#a7f3d0}
+.stt.out{background:rgba(251,146,60,.22);color:#fed7aa}
+.clock{margin-top:18px}
+.cl-l{font-size:12.5px;font-weight:500;opacity:.78;margin-bottom:9px}
+.seg{display:flex;gap:8px;direction:ltr}
+.sg{flex:1;padding:11px 4px 9px;border-radius:15px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.08);text-align:center}
+.sg b{display:block;font-size:28px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.1}
+.sg small{display:block;margin-top:3px;font-size:10.5px;font-weight:500;opacity:.72}
+.clock.u .sg{background:rgba(251,146,60,.26);border-color:rgba(251,146,60,.55);animation:warn 1s infinite}
+.clock.e .sg{opacity:.45}
+.pm{display:flex;justify-content:space-between;gap:10px;margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.12);font-size:12px;font-weight:500;color:rgba(255,255,255,.75)}
+.pm b{color:#fff;font-weight:800;margin-inline-start:4px}
 
-/* تأمين المشاركة */
-.dep{display:flex;gap:10px;font-size:11.5px;font-weight:700;line-height:1.9;color:#4b5563}
-.dep b{color:var(--pd);font-weight:950}
-.cta{display:flex;align-items:center;justify-content:center;width:100%;height:50px;margin-top:12px;border-radius:15px;background:var(--ps);border:1.5px solid #c9bff7;color:var(--pd);font-size:14px;font-weight:950}
+/* الأقسام */
+.sec{margin-top:16px;padding:18px;border-radius:24px;background:#fff;border:1px solid var(--line);box-shadow:0 16px 32px -24px rgba(45,27,122,.45)}
+.sh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px}
+.sh h2{margin:0;font-size:17px;font-weight:900}
+.sh small{font-size:11.5px;font-weight:500;color:var(--muted)}
+.grp{margin:16px 0 4px;font-size:12px;font-weight:800;color:var(--pd)}
+.grp:first-of-type{margin-top:0}
+.row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:12px 0;border-bottom:1px solid #f0edfa;font-size:13.5px}
+.row:last-child{border-bottom:0;padding-bottom:0}
+.row span{color:var(--muted);font-weight:500;flex:none}
+.row strong{font-weight:800;text-align:end;line-height:1.7}
+.row.warn{margin-top:6px;padding:12px 14px;border:0;border-radius:14px;background:var(--bads);border-inline-start:4px solid var(--bad)}
+.row.warn span{color:var(--bad);font-weight:700}.row.warn strong{color:#8f1d36}
+.note{margin-top:14px;padding:12px 14px;border-radius:14px;background:var(--ps);font-size:12px;font-weight:500;line-height:1.9;color:#4a4d6e}
+
+/* المزايدون */
+.bd{display:flex;align-items:center;gap:12px;padding:12px 14px;margin-top:8px;border-radius:16px;background:#faf9ff;border:1px solid var(--line)}
+.bd.top{background:linear-gradient(135deg,#fff8e6,#fffdf6);border-color:#ecd9a0}
+.bd.me{border-color:#b9a8f6}
+.bd.new{animation:flash 1.8s}
+.rk{width:34px;height:34px;flex:none;border-radius:50%;background:var(--ps);color:var(--pd);font-size:14px;font-weight:900;display:grid;place-items:center}
+.bd.top .rk{background:var(--gold);color:#4a3300}
+.who{flex:1;min-width:0}
+.who b{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800}
+.tg{padding:2px 8px;border-radius:999px;background:#f6e6b4;color:#6b4d00;font-size:10px;font-weight:800}
+.ago{display:block;margin-top:1px;font-size:11.5px;font-weight:500;color:var(--muted)}
+.amt{font-size:17px;font-weight:900;color:var(--pd);font-variant-numeric:tabular-nums;white-space:nowrap}
+.amt i{font-style:normal;font-size:11px;font-weight:700;color:var(--muted);margin-inline-start:3px}
+.empty{padding:20px 14px;border-radius:16px;background:var(--ps);text-align:center;font-size:13px;font-weight:700;color:var(--muted);line-height:1.8}
+.lnk{width:100%;height:48px;margin-top:12px;border-radius:15px;background:var(--ps);color:var(--pd);font-size:13.5px;font-weight:800}
+.lnk:active{background:#e6dfff}
+
+/* الخطوات */
+.stp{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid #f0edfa}
+.stp:last-child{border-bottom:0;padding-bottom:0}
+.sn{width:32px;height:32px;flex:none;border-radius:50%;background:var(--ps);color:var(--pd);font-size:14px;font-weight:900;display:grid;place-items:center}
+.stp.done .sn{background:var(--ok);color:#fff}
+.stp b{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800}
+.stp b em{font-style:normal;padding:2px 9px;border-radius:999px;background:var(--oks);color:var(--ok);font-size:10.5px;font-weight:800}
+.stp p{margin:3px 0 0;font-size:12.5px;font-weight:500;color:var(--muted);line-height:1.8}
 
 /* شريط المزايدة */
-.bar{position:fixed;inset-inline:0;bottom:0;z-index:40;padding:10px 14px calc(10px + var(--sb));background:rgba(255,255,255,.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--edge);box-shadow:0 -10px 26px rgba(98,70,217,.08)}
+.bar{position:fixed;inset-inline:0;bottom:0;z-index:40;padding:12px 14px calc(12px + var(--sb));background:rgba(255,255,255,.95);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid var(--line);box-shadow:0 -16px 32px rgba(45,27,122,.1)}
 .bar-in{width:min(100%,520px);margin:0 auto}
-.min{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:11px;font-weight:800;color:var(--muted)}
-.min b{color:var(--pd);font-weight:950}
-.min button{padding:4px 10px;border-radius:9px;background:var(--ps);color:var(--pd);font-size:10.5px;font-weight:900}
-.bid-row{display:flex;gap:8px}
-.in{flex:1;min-width:0;height:50px;border:1.5px solid var(--edge);border-radius:15px;padding:0 14px;outline:none;font-size:17px;font-weight:950;text-align:center;background:#fff;font-variant-numeric:tabular-nums}
-.in:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)}
-.btn{flex:0 0 130px;height:50px;border-radius:15px;color:#fff;font-size:14px;font-weight:950;background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 10px 22px rgba(98,70,217,.3)}
-.btn:active{transform:scale(.97)}.btn:disabled{opacity:.45;box-shadow:none}
-.bar .note{padding:10px;border-radius:13px;background:var(--ps);text-align:center;font-size:12px;font-weight:800;color:var(--pd)}
-.msg{display:none;margin-top:8px;padding:9px;border-radius:12px;text-align:center;font-size:11.5px;font-weight:800;line-height:1.7}
-.msg.show{display:block}.msg.err{background:var(--bads);color:var(--bad)}.msg.ok{background:var(--oks);color:var(--ok)}
+.bt{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;font-size:12px;font-weight:500;color:var(--muted)}
+.bt b{color:var(--pd);font-weight:900}
+.bt button{padding:5px 12px;border-radius:10px;background:var(--ps);color:var(--pd);font-size:11.5px;font-weight:800}
+.br{display:flex;gap:10px;align-items:center}
+.stepper{flex:1;min-width:0;display:flex;align-items:center;height:56px;border:1.5px solid var(--line);border-radius:17px;background:#fff;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.stepper:focus-within{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.12)}
+.st{flex:0 0 46px;height:100%;font-size:24px;font-weight:700;color:var(--p);background:var(--ps);line-height:1}
+.st:active{background:#e3dcff}
+.in{flex:1;min-width:0;height:100%;border:0;outline:0;text-align:center;font-size:20px;font-weight:900;font-variant-numeric:tabular-nums;background:transparent}
+.bw{position:relative;flex:0 0 136px}
+.bw:before{content:"";position:absolute;inset:0;border-radius:17px;background:rgba(98,70,217,.55);animation:ping 2s ease-out infinite;pointer-events:none}
+.bw.busy:before{display:none}
+.btn{position:relative;overflow:hidden;width:100%;height:56px;border-radius:17px;color:#fff;font-size:16px;font-weight:900;background:linear-gradient(145deg,#4a34b8,#7a5cf0);box-shadow:0 14px 26px -10px rgba(98,70,217,.8);animation:beat 2s ease-in-out infinite}
+.btn:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.4) 50%,transparent 70%);animation:sweep 3s ease-in-out infinite}
+.btn:active{animation:none;transform:scale(.96)}
+.btn:disabled{animation:none;opacity:.7}
+.btn:disabled:after{display:none}
+.bar .nt{padding:14px;border-radius:15px;background:var(--ps);text-align:center;font-size:13.5px;font-weight:800;color:var(--pd)}
+.msg{display:none;margin-top:9px;padding:10px;border-radius:12px;text-align:center;font-size:12.5px;font-weight:700;line-height:1.7;background:var(--bads);color:var(--bad)}
+.msg.show{display:block}
 
-.ld{text-align:center;padding:60px 0;font-size:12px;font-weight:800;color:var(--muted)}
-.sp2{display:inline-block;width:18px;height:18px;border:3px solid var(--edge);border-top-color:var(--p);border-radius:50%;vertical-align:middle;margin-inline-end:8px;animation:rot .7s linear infinite}
-.err-pg{text-align:center;padding:50px 10px}.err-pg h2{margin:0 0 6px;font-size:17px;font-weight:950}.err-pg p{margin:0 0 14px;font-size:12px;font-weight:700;color:var(--muted);line-height:1.8}
-.err-pg a,.err-pg button{display:inline-block;padding:11px 22px;border-radius:13px;background:var(--p);color:#fff;font-size:13px;font-weight:900}
-[hidden]{display:none!important}
+/* النوافذ السفلية */
+.sbg{position:fixed;inset:0;z-index:100;display:flex;align-items:flex-end;justify-content:center;background:rgba(18,10,48,.58);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .25s,visibility 0s .25s}
+.sbg.open{opacity:1;visibility:visible;transition-delay:0s}
+.sheet{width:min(100%,520px);max-height:88dvh;overflow-y:auto;padding:10px 20px calc(20px + var(--sb));background:#fff;border-radius:28px 28px 0 0;transform:translateY(100%);transition:transform .38s cubic-bezier(.2,.9,.3,1)}
+.sbg.open .sheet{transform:none}
+.grab{width:44px;height:5px;margin:0 auto 16px;border-radius:99px;background:#ddd8f2}
+.sheet h3{margin:0 0 8px;font-size:20px;font-weight:900}
+.sd{margin:0 0 16px;font-size:13.5px;font-weight:500;line-height:1.9;color:#4a4d6e}
+.sd b{color:var(--pd);font-weight:900}
+.big{margin:6px 0 4px;font-size:42px;font-weight:900;color:var(--pd);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.big small{font-size:15px;font-weight:700;color:var(--muted);margin-inline-start:6px}
+.mine{margin-bottom:6px;padding:11px 14px;border-radius:14px;background:var(--ps);font-size:13px;font-weight:700;color:var(--pd)}
+.mine b{font-weight:900}
+.b2{display:flex;align-items:center;justify-content:center;width:100%;height:56px;margin-top:14px;border-radius:17px;color:#fff;font-size:16px;font-weight:900;background:linear-gradient(145deg,#4a34b8,#7a5cf0);box-shadow:0 14px 26px -12px rgba(98,70,217,.8)}
+.b2:disabled{opacity:.7}
+.b3{display:block;width:100%;height:50px;margin-top:6px;border-radius:15px;color:var(--muted);font-size:14px;font-weight:700}
+
+/* عارض الصور */
+.lb{position:fixed;inset:0;z-index:110;background:#0d0828;opacity:0;visibility:hidden;transition:opacity .25s,visibility 0s .25s}
+.lb.open{opacity:1;visibility:visible;transition-delay:0s}
+.lb-t{display:flex;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.lb-t::-webkit-scrollbar{display:none}
+.lb-s{flex:0 0 100%;height:100%;scroll-snap-align:center;display:grid;place-items:center;padding:calc(64px + var(--st)) 0 calc(40px + var(--sb))}
+.lb-s img{max-width:100%;max-height:100%;object-fit:contain}
+.lb-x{position:absolute;top:calc(14px + var(--st));inset-inline-start:14px;z-index:2;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.14);color:#fff}
+.lb-x svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.lb-c{position:absolute;top:calc(22px + var(--st));inset-inline-end:18px;z-index:2;color:#fff;font-size:13px;font-weight:700;direction:ltr}
+
+.toast{position:fixed;left:50%;bottom:calc(150px + var(--sb));transform:translateX(-50%) translateY(16px);max-width:92%;padding:12px 18px;border-radius:15px;background:var(--night);color:#fff;font-size:13px;font-weight:700;text-align:center;opacity:0;pointer-events:none;transition:.28s;z-index:120}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.toast.ok{background:var(--ok)}
+
+/* تحميل وخطأ */
+.ld{padding-top:4px}
+.sk{border-radius:26px;background:linear-gradient(100deg,#eeeafa 30%,#f8f6ff 50%,#eeeafa 70%);background-size:300% 100%;animation:shimmer 1.6s linear infinite}
+.err-pg{text-align:center;padding:60px 10px}
+.err-pg h2{margin:0 0 8px;font-size:19px;font-weight:900}
+.err-pg p{margin:0 0 16px;font-size:13px;font-weight:500;color:var(--muted);line-height:1.8}
+.err-pg a,.err-pg button{display:inline-block;padding:12px 26px;border-radius:14px;background:var(--p);color:#fff;font-size:14px;font-weight:800}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <main class="page">
-<header>
-  <div class="top">
-    <button class="ib" id="back" type="button" aria-label="رجوع"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-    <div class="brand"><b>MZAD</b><span>PHONE</span></div>
-    <span style="width:39px"></span>
-  </div>
+<header class="top">
+  <button class="ib" id="back" type="button" aria-label="رجوع"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+  <div class="brand"><b>MZAD</b><span>PHONE</span></div>
+  <div class="lb-badge"><span class="badge off" id="liveBadge" hidden></span></div>
 </header>
 
-<div class="ld" id="ld"><span class="sp2"></span>جاري تحميل المزاد...</div>
+<div class="ld" id="ld"><div class="sk" style="aspect-ratio:1/1"></div><div class="sk" style="height:30px;margin-top:20px;width:60%;border-radius:10px"></div><div class="sk" style="height:250px;margin-top:20px"></div></div>
 <div class="err-pg" id="errPg" hidden></div>
 
 <div id="pg" hidden>
-  <section class="card rv">
-    <div class="photo" id="photo"></div>
-    <h1 id="title">—</h1>
-    <div class="sp" id="specs"></div>
-  </section>
-
-  <section class="card rv">
-    <div class="hero">
-      <div class="box pr"><small>السعر الحالي</small><strong id="price">—</strong><em>دينار عراقي</em></div>
-      <div class="box tm" id="tm"><small id="tmL">الوقت المتبقي</small><strong id="clock">--:--:--</strong></div>
+  <section>
+    <div class="gw">
+      <div class="gal" id="gal" dir="ltr"></div>
+      <span class="cnt" id="cnt" hidden></span>
+      <span class="zoom" id="zoom" hidden>اضغط للتكبير</span>
     </div>
-    <div class="top-bidder" id="topB"></div>
+    <div class="thumbs" id="thumbs" dir="ltr" hidden></div>
   </section>
 
-  <section class="card rv ins" id="insCard" hidden>
-    <div class="ch"><span class="num">🔍</span><h2>تقرير الفحص</h2></div>
+  <h1 id="title">—</h1>
+  <div class="sp" id="specs"></div>
+
+  <section class="panel">
+    <div class="pl">السعر الحالي</div>
+    <div class="pv" id="pv"><strong id="price">—</strong><em>د.ع</em></div>
+    <div class="stt none" id="stt" hidden></div>
+    <div class="clock" id="clock">
+      <div class="cl-l" id="clL">ينتهي المزاد بعد</div>
+      <div class="seg" id="seg"></div>
+    </div>
+    <div class="pm"><span>عدد المزايدات<b id="pCnt">0</b></span><span>أقل زيادة<b id="pInc">—</b></span></div>
+  </section>
+
+  <section class="sec" id="insCard" hidden>
+    <div class="sh"><h2>تقرير الفحص</h2><small>اقرأه قبل ما تزايد</small></div>
     <div id="ins"></div>
-    <div class="ins-note">يُفحص الجهاز عند التسليم بنقطة المنصة. اقرأ العيوب جيداً قبل المزايدة.</div>
+    <div class="note">يُفحص الجهاز عند التسليم بنقطة المنصة. اقرأ العيوب جيداً قبل المزايدة.</div>
   </section>
 
-  <section class="card rv">
-    <div class="ch"><span class="num">⚡</span><h2>آخر المزايدات</h2></div>
+  <section class="sec">
+    <div class="sh"><h2>المزايدون</h2><small id="bidsSub">الأعلى أولاً</small></div>
     <div id="bids"></div>
+    <button class="lnk" id="allBids" type="button" hidden></button>
   </section>
 
-  <section class="card rv">
-    <div class="ch"><span class="num">i</span><h2>معلومات المزاد</h2></div>
+  <section class="sec" id="howCard" hidden>
+    <div class="sh"><h2>كيف تزايد</h2><small>ثلاث خطوات بسيطة</small></div>
+    <div class="stp"><span class="sn">1</span><div><b>شاهد الصور وتقرير الفحص</b><p>اعرف حالة الجهاز والعيوب قبل ما تزايد.</p></div></div>
+    <div class="stp" id="how2"><span class="sn">2</span><div><b>أكمل تأمين المشاركة <em id="how2t" hidden>تم</em></b><p>5,000 د.ع قابلة للاسترداد، تدفعها مرة وحدة فقط.</p></div></div>
+    <div class="stp"><span class="sn">3</span><div><b>اكتب مبلغك وزايد</b><p>اضغط زايد الآن وتابع ترتيبك بين المزايدين.</p></div></div>
+  </section>
+
+  <section class="sec">
+    <div class="sh"><h2>معلومات المزاد</h2></div>
     <div class="row"><span>رقم المزاد</span><strong id="aNo">—</strong></div>
     <div class="row"><span>السعر الابتدائي</span><strong id="aStart">—</strong></div>
     <div class="row"><span>أقل زيادة</span><strong id="aInc">—</strong></div>
@@ -148,13 +257,8 @@ h1{margin:14px 0 6px;font-size:21px;font-weight:950;letter-spacing:-.03em}
     <div class="row"><span>ينتهي</span><strong id="aEnd">—</strong></div>
   </section>
 
-  <section class="card rv" id="depCard">
-    <div class="dep"><span style="font-size:20px">🔒</span><div><b>تأمين المشاركة 5,000 د.ع</b><br>مبلغ قابل للاسترداد وليس سعر الجهاز ولا رسماً للمنصة. تحتاجه مرة وحدة قبل أول مزايدة.</div></div>
-    <a class="cta" id="depBtn" href="#" hidden>إكمال تأمين المشاركة</a>
-  </section>
-
-  <section class="card rv" id="resCard" hidden>
-    <div class="ch"><span class="num">✓</span><h2>نتيجة المزاد</h2></div>
+  <section class="sec" id="resCard" hidden>
+    <div class="sh"><h2>نتيجة المزاد</h2></div>
     <div class="row"><span>الحالة</span><strong id="rSt">—</strong></div>
     <div class="row"><span>السعر النهائي</span><strong id="rPr">—</strong></div>
   </section>
@@ -163,153 +267,359 @@ h1{margin:14px 0 6px;font-size:21px;font-weight:950;letter-spacing:-.03em}
 
 <div class="bar" id="bar" hidden><div class="bar-in" id="barIn"></div></div>
 
+<div class="sbg" id="sbg" aria-hidden="true"><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+
+<div class="lb" id="lb" aria-hidden="true">
+  <button class="lb-x" id="lbX" type="button" aria-label="إغلاق"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  <span class="lb-c" id="lbC"></span>
+  <div class="lb-t" id="lbT" dir="ltr"></div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
 <script type="module">
 import { supabase } from "./js/supabase.js";
 const $ = id => document.getElementById(id);
 const qs = new URLSearchParams(location.search);
 const auctionId = qs.get("auction") || qs.get("id");
-const S = { user:null, a:null, d:null, imgs:[], bids:[], count:0, elig:false, result:null, busy:false, poll:null, seen:new Set(), loaded:false, refetched:false };
+const S = { user:null, a:null, d:null, imgs:[], bids:[], count:0, elig:false, result:null, busy:false, amount:0,
+  barKey:"", sig:"", days:null, live:null, n:0, sheet:"", loaded:false, polling:false, refetched:false, lastPrice:null, seen:new Set() };
 
 const money = n => Number(n||0).toLocaleString("en-US");
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmtT = v => { const d=new Date(v); return isNaN(d) ? "—" : d.toLocaleString("ar-IQ",{dateStyle:"medium",timeStyle:"short"}); };
 const must = r => { if (r.error) throw r.error; return r.data; };
+const toEn = s => String(s).replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
+const DEPOSIT = 5000;
 
 const BID_ERR = { AUTH_REQUIRED:"يجب تسجيل الدخول أولاً.", SELLER_CANNOT_BID:"لا يمكنك المزايدة على مزادك.", AUCTION_NOT_LIVE:"المزاد غير مفتوح حالياً.", AUCTION_ALREADY_ENDED:"انتهى المزاد.", BUYER_DEPOSIT_NOT_APPROVED:"تأمين المشاركة غير معتمد بعد.", BID_TOO_LOW:"المبلغ أقل من الحد المطلوب." };
 const bidErr = e => { const m = String(e?.message||""); for (const k in BID_ERR) if (m.includes(k)) return BID_ERR[k]; return "تعذر تسجيل المزايدة، حاول مرة ثانية."; };
 
 const isLive = () => S.a?.status === "live" && new Date(S.a.ends_at).getTime() > Date.now();
+const incr = () => Number(S.a.bid_increment_iqd) || 1000;
 const minBid = () => Number(S.a.current_price_iqd || S.a.starting_price_iqd || 0) + Number(S.a.bid_increment_iqd || 0);
 const isSeller = () => S.a.seller_user_id === S.user.id;
 
-async function load(){
+const who = id => {
+  if (id === S.user.id) return "أنت";
+  let h = 0; const s = String(id);
+  for (let i = 0; i < s.length; i++) h = (h*31 + s.charCodeAt(i)) >>> 0;
+  return "مزايد " + (100 + h % 900);
+};
+const ago = v => {
+  const s = Math.floor((Date.now() - new Date(v).getTime())/1000);
+  if (isNaN(s)) return "—";
+  if (s < 45) return "الآن";
+  if (s < 3600) return "قبل " + Math.max(1, Math.round(s/60)) + " دقيقة";
+  if (s < 86400) return "قبل " + Math.round(s/3600) + " ساعة";
+  return fmtT(v);
+};
+
+/* ============ التحميل ============ */
+async function loadStatic(){
+  const d = await supabase.from("mzad_devices").select("*").eq("id", S.a.device_id).maybeSingle();
+  S.d = d.data || null;
+  try{
+    const im = (await supabase.from("mzad_device_images").select("storage_path,is_primary,sort_order").eq("device_id", S.a.device_id).order("sort_order",{ascending:true}).limit(8)).data || [];
+    im.sort((x,y) => (y.is_primary?1:0) - (x.is_primary?1:0));
+    if (im.length){
+      const sg = await supabase.storage.from("device-images").createSignedUrls(im.map(x => x.storage_path), 3600);
+      S.imgs = (sg.data || []).map(x => x.signedUrl).filter(Boolean);
+    }
+  }catch(e){ console.error("IMG:", e); }
+}
+
+async function loadLive(){
   const a = must(await supabase.from("mzad_auctions").select("*").eq("id", auctionId).maybeSingle());
   if (!a) throw new Error("NOT_FOUND");
-  S.a = a;
-  /* مزاد مسودة/بانتظار الموافقة: للبائع صفحة المتابعة، وللبقية غير متاح */
   if (!["live","ended"].includes(a.status)){
     if (a.seller_user_id === S.user.id){ location.replace("auction-request-status.html?auction=" + encodeURIComponent(a.id)); return false; }
     throw new Error("UNAVAILABLE");
   }
-  if (!S.d){
-    const d = await supabase.from("mzad_devices").select("*").eq("id", a.device_id).maybeSingle();
-    S.d = d.data || null;
-    try{
-      const im = (await supabase.from("mzad_device_images").select("storage_path,is_primary,sort_order").eq("device_id", a.device_id).order("sort_order",{ascending:true}).limit(8)).data || [];
-      im.sort((x,y) => (y.is_primary?1:0) - (x.is_primary?1:0));
-      if (im.length){
-        const sg = await supabase.storage.from("device-images").createSignedUrls(im.map(x => x.storage_path), 3600);
-        S.imgs = (sg.data || []).map(x => x.signedUrl).filter(Boolean);
-      }
-    }catch(e){ console.error("IMG:", e); }
-  }
-  const b = await supabase.from("mzad_auction_bids").select("id,amount_iqd,bidder_user_id,created_at", { count:"exact" }).eq("auction_id", auctionId).eq("accepted", true).order("amount_iqd",{ascending:false}).limit(10);
+  S.a = a;
+  const ended = a.status === "ended" || new Date(a.ends_at).getTime() <= Date.now();
+  const [b, e, r] = await Promise.all([
+    supabase.from("mzad_auction_bids").select("id,amount_iqd,bidder_user_id,created_at", { count:"exact" }).eq("auction_id", auctionId).eq("accepted", true).order("amount_iqd",{ascending:false}).limit(30),
+    S.elig ? null : supabase.from("mzad_auction_eligibility").select("eligible").eq("auction_id", auctionId).eq("user_id", S.user.id).maybeSingle(),
+    ended ? supabase.from("mzad_auction_results").select("*").eq("auction_id", auctionId).order("created_at",{ascending:false}).limit(1) : null
+  ]);
   S.bids = b.error ? [] : (b.data || []); S.count = b.count ?? S.bids.length;
-  const e = await supabase.from("mzad_auction_eligibility").select("eligible").eq("auction_id", auctionId).eq("user_id", S.user.id).maybeSingle();
-  S.elig = e.data?.eligible === true;
-  const r = await supabase.from("mzad_auction_results").select("*").eq("auction_id", auctionId).order("created_at",{ascending:false}).limit(1);
-  S.result = r.data?.[0] || null;
+  if (e) S.elig = e.data?.eligible === true;
+  S.result = r?.data?.[0] || null;
   return true;
 }
 
+/* ============ رسم الجزء الثابت (مرة وحدة، حتى ما ترجف الصور) ============ */
 const PH = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>';
-function render(){
-  const a=S.a, d=S.d, live=isLive();
+
+function renderStatic(){
+  const a = S.a, d = S.d;
   const name = d ? ([d.brand,d.model].filter(Boolean).join(" ") || "جهاز") : "جهاز";
   $("title").textContent = name;
-  $("specs").innerHTML = d ? [d.storage,d.color,d.condition_grade,d.battery_health?"بطارية "+d.battery_health:null].filter(Boolean).map(s=>`<span>${esc(s)}</span>`).join("") : "";
-  $("photo").innerHTML = (S.imgs.length ? `<div class="gal" id="gal">${S.imgs.map(u => `<img src="${esc(u)}" alt="" onerror="this.remove()">`).join("")}</div>` + (S.imgs.length > 1 ? `<span class="cnt" id="cnt">1 / ${S.imgs.length}</span>` : "") : PH) + `<span class="live${live?"":" off"}">${live?"مباشر":"انتهى"}</span>`;
-  const g = $("gal"); if (g && $("cnt")) g.addEventListener("scroll", () => { $("cnt").textContent = (Math.round(Math.abs(g.scrollLeft) / g.clientWidth) + 1) + " / " + S.imgs.length; });
-  renderInspect();
-  $("price").textContent = money(a.current_price_iqd ?? a.starting_price_iqd);
+  document.title = name + " — MZAD PHONE";
+  $("specs").innerHTML = d ? [d.storage,d.color,d.condition_grade,d.battery_health?"بطارية "+(/^\d+$/.test(String(d.battery_health))?d.battery_health+"%":d.battery_health):null].filter(Boolean).map(s=>`<span>${esc(s)}</span>`).join("") : "";
+
+  const gal = $("gal");
+  if (S.imgs.length){
+    gal.innerHTML = S.imgs.map((u,i) => `<button class="gi" type="button" data-i="${i}" aria-label="تكبير الصورة ${i+1}"><img src="${esc(u)}" alt="${esc(name)}" ${i?'loading="lazy" ':''}decoding="async" onload="this.classList.add('ok')" onerror="this.closest('.gi').remove()"></button>`).join("");
+    $("zoom").hidden = false;
+    if (S.imgs.length > 1){
+      $("cnt").hidden = false; $("cnt").textContent = "1 / " + S.imgs.length;
+      $("thumbs").hidden = false;
+      $("thumbs").innerHTML = S.imgs.map((u,i) => `<button class="th${i?"":" on"}" type="button" data-i="${i}" aria-label="الصورة ${i+1}"><img src="${esc(u)}" alt="" loading="lazy" onerror="this.closest('.th').remove()"></button>`).join("");
+    }
+  }else{ gal.classList.add("none"); gal.innerHTML = PH; }
+
+  let raf;
+  gal.addEventListener("scroll", () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => setActive(Math.round(gal.scrollLeft / gal.clientWidth))); }, { passive:true });
+  gal.addEventListener("click", e => { const g = e.target.closest(".gi"); if (g) openLB(Number(g.dataset.i)); });
+  $("thumbs").addEventListener("click", e => { const t = e.target.closest(".th"); if (t) gal.scrollTo({ left:Number(t.dataset.i) * gal.clientWidth, behavior:"smooth" }); });
+
   $("aNo").textContent = a.auction_number || a.id;
   $("aStart").textContent = money(a.starting_price_iqd) + " د.ع";
   $("aInc").textContent = money(a.bid_increment_iqd) + " د.ع";
-  $("aCnt").textContent = S.count;
+  $("pInc").textContent = money(a.bid_increment_iqd) + " د.ع";
+  renderInspect();
+}
+
+function setActive(i){
+  const n = S.imgs.length; if (!n) return;
+  i = Math.max(0, Math.min(n-1, i));
+  $("cnt").textContent = (i+1) + " / " + n;
+  document.querySelectorAll(".th").forEach((t,k) => t.classList.toggle("on", k === i));
+  const on = document.querySelector(".th.on"); if (on) on.scrollIntoView({ block:"nearest", inline:"nearest", behavior:"smooth" });
+}
+
+function renderInspect(){
+  const d = S.d || {};
+  const val = k => (d[k] !== undefined && d[k] !== null && String(d[k]).trim() !== "") ? String(d[k]) : null;
+  const A = [["condition_grade","الحالة"],["battery_health","صحة البطارية"],["screen_condition","الشاشة"],["camera_condition","الكاميرا"],["biometric_condition","البصمة / الوجه"],["sim_network","الشبكة"]];
+  const B = [["replaced_parts","أجزاء مستبدلة"],["accessories","الملحقات"],["seller_notes","ملاحظات البائع"]];
+  const W = [["scratches_dents","خدوش وصدمات"],["faults","الأعطال"]];
+  const row = ([k,l], warn) => { let v = val(k); if (v === null) return ""; if (k === "battery_health" && /^\d+$/.test(v)) v += "%"; return `<div class="row${warn?" warn":""}"><span>${l}</span><strong>${esc(v)}</strong></div>`; };
+  const a = A.map(x => row(x)).join(""), b = B.map(x => row(x)).join(""), w = W.map(x => row(x, true)).join("");
+  const html = (a ? `<div class="grp">حالة الجهاز</div>${a}` : "") + (w || b ? `<div class="grp">العيوب والملاحظات</div>${w}${b}` : "");
+  $("insCard").hidden = !html;
+  $("ins").innerHTML = html;
+}
+
+/* ============ رسم الجزء الحي (يحدّث النصوص فقط بدون إعادة بناء الصور) ============ */
+const bidRow = (b, i, isNew) => {
+  const me = b.bidder_user_id === S.user.id;
+  return `<div class="bd${i===0?" top":""}${me?" me":""}${isNew?" new":""}"><span class="rk">${i+1}</span><div class="who"><b>${esc(who(b.bidder_user_id))}${i===0?'<span class="tg">الأعلى</span>':""}</b><span class="ago" data-t="${esc(b.created_at)}">${esc(ago(b.created_at))}</span></div><span class="amt">${money(b.amount_iqd)}<i>د.ع</i></span></div>`;
+};
+
+function renderLive(){
+  const a = S.a, live = isLive();
+  const price = a.current_price_iqd ?? a.starting_price_iqd;
+  $("price").textContent = money(price);
+  if (S.loaded && S.lastPrice !== null && price !== S.lastPrice){ const pv = $("pv"); pv.classList.remove("pop"); void pv.offsetWidth; pv.classList.add("pop"); }
+  S.lastPrice = price;
+  $("pCnt").textContent = S.count; $("aCnt").textContent = S.count;
   $("aEnd").textContent = fmtT(a.ends_at);
 
-  /* أعلى مزايد */
-  const tb = $("topB"), top = S.bids[0];
-  if (top && live){ const me = top.bidder_user_id === S.user.id; tb.className = "top-bidder show " + (me?"me":"other"); tb.textContent = me ? "✓ أنت أعلى مزايد حالياً" : "تم تجاوزك. زايد لتبقى بالمقدمة"; }
-  else tb.className = "top-bidder";
+  /* حالة المزايد */
+  const tb = $("stt"), top = S.bids[0];
+  if (live){
+    tb.hidden = false;
+    if (!top){ tb.className = "stt none"; tb.textContent = "لا توجد مزايدات بعد، كن أول مزايد"; }
+    else if (top.bidder_user_id === S.user.id){ tb.className = "stt me"; tb.textContent = "أنت صاحب أعلى مزايدة حالياً"; }
+    else if (S.bids.some(b => b.bidder_user_id === S.user.id)){ tb.className = "stt out"; tb.textContent = "تم تجاوزك. زايد لتعود للمقدمة"; }
+    else { tb.className = "stt none"; tb.textContent = "المزاد مفتوح، زايد لتدخل المنافسة"; }
+  }else tb.hidden = true;
 
-  /* قائمة المزايدات */
-  $("bids").innerHTML = S.bids.length ? S.bids.map((b,i)=>{
-    const isNew = S.loaded && !S.seen.has(b.id);
-    return `<div class="bid${isNew?" new":""}"><span class="bn">${i+1}</span><div class="bw">${b.bidder_user_id===S.user.id?"مزايدتك":(i===0?"أعلى مزايد":"مزايد")}<small>${esc(fmtT(b.created_at))}</small></div><span class="ba">${money(b.amount_iqd)} د.ع</span></div>`;
-  }).join("") : '<div class="empty">ما أحد زايد لحد الآن. كون أول مزايد!</div>';
-  S.bids.forEach(b => S.seen.add(b.id));
+  /* قائمة المزايدين: تُبنى فقط إذا تغيرت */
+  const sig = S.count + "|" + S.bids.map(b => b.id + ":" + b.amount_iqd).join(",");
+  if (sig !== S.sig){
+    S.sig = sig;
+    $("bids").innerHTML = S.bids.length
+      ? S.bids.slice(0,3).map((b,i) => bidRow(b, i, S.loaded && !S.seen.has(b.id))).join("")
+      : '<div class="empty">ما أحد زايد لحد الآن. كن أول مزايد.</div>';
+    $("allBids").hidden = S.count <= 3;
+    $("allBids").textContent = "عرض كل المزايدين (" + S.count + ")";
+    $("bidsSub").textContent = S.count ? S.count + " مزايدة، الأعلى أولاً" : "الأعلى أولاً";
+    S.bids.forEach(b => S.seen.add(b.id));
+    if (S.sheet === "bidders") $("sheet").innerHTML = biddersHtml();
+  }
 
   /* النتيجة */
   const showRes = a.status === "ended" || !!S.result;
   $("resCard").hidden = !showRes;
   if (showRes){ $("rSt").textContent = S.result?.status || S.result?.result_status || "انتهى المزاد"; $("rPr").textContent = money(S.result?.final_price_iqd ?? S.result?.winning_amount_iqd ?? a.current_price_iqd) + " د.ع"; }
 
-  /* التأمين + الشريط السفلي */
-  const need = !S.elig && live && !isSeller();
-  $("depCard").hidden = S.elig || isSeller() || !live;
-  $("depBtn").hidden = !need;
-  $("depBtn").href = "auction-deposit.html?auction=" + encodeURIComponent(a.id);
+  /* الخطوات */
+  $("howCard").hidden = !live || isSeller();
+  $("how2").classList.toggle("done", S.elig);
+  $("how2t").hidden = !S.elig;
+
   renderBar(live);
-  tick();
+  tick(true);
 }
 
-function renderInspect(){
-  const d = S.d || {};
-  const F = [["condition_grade","الحالة"],["battery_health","صحة البطارية"],["screen_condition","الشاشة"],["camera_condition","الكاميرا"],["biometric_condition","البصمة / الوجه"],["sim_network","الشبكة"],["replaced_parts","أجزاء مستبدلة"],["scratches_dents","خدوش وصدمات",1],["faults","الأعطال",1],["accessories","الملحقات"],["seller_notes","ملاحظات البائع"]];
-  const rows = F.filter(([k]) => d[k] !== undefined && d[k] !== null && String(d[k]).trim() !== "")
-    .map(([k,l,w]) => `<div class="row${w?" warn":""}"><span>${l}</span><strong>${esc(k==="battery_health" && /^\d+$/.test(String(d[k])) ? d[k] + "%" : d[k])}</strong></div>`).join("");
-  $("insCard").hidden = !rows;
-  $("ins").innerHTML = rows;
-}
-
+/* ============ الشريط السفلي ============ */
 function renderBar(live){
-  const bar=$("bar"), box=$("barIn");
+  const bar = $("bar"), box = $("barIn");
   bar.hidden = false;
-  if (!live){ box.innerHTML = '<div class="note">انتهى وقت المزايدة</div>'; return; }
-  if (isSeller()){ box.innerHTML = '<div class="note">هذا مزادك. تابع المزايدات من هنا</div>'; return; }
-  if (!S.elig){ box.innerHTML = '<a class="btn" style="display:flex;align-items:center;justify-content:center;width:100%" href="auction-deposit.html?auction='+encodeURIComponent(S.a.id)+'">أكمل التأمين لتزايد</a>'; return; }
-  const prev = $("bidIn")?.value || "";
-  box.innerHTML = `<div class="min"><span>أقل مزايدة: <b>${money(minBid())}</b> د.ع</span><button id="useMin" type="button">استخدم الحد الأدنى</button></div>
-    <div class="bid-row"><input class="in" id="bidIn" inputmode="numeric" autocomplete="off" placeholder="${money(minBid())}" value="${esc(prev)}"><button class="btn" id="bidBtn" type="button">${S.busy?"جاري...":"زايد الآن"}</button></div>
-    <div class="msg" id="msg"></div>`;
-  $("bidBtn").disabled = S.busy;
-  $("bidIn").addEventListener("input", e => { e.target.value = e.target.value.replace(/\D/g,""); });
-  $("useMin").addEventListener("click", () => { $("bidIn").value = minBid(); });
-  $("bidBtn").addEventListener("click", placeBid);
+  const key = !live ? "end" : isSeller() ? "seller" : "bid";
+  if (key !== S.barKey){
+    S.barKey = key;
+    if (key === "end"){ box.innerHTML = '<div class="nt">انتهى وقت المزايدة</div>'; return; }
+    if (key === "seller"){ box.innerHTML = '<div class="nt">هذا مزادك. تابع المزايدات من هنا</div>'; return; }
+    S.amount = minBid();
+    box.innerHTML = `<div class="bt"><span>أقل مزايدة <b id="minTxt"></b> د.ع</span><button id="useMin" type="button">استخدم الحد الأدنى</button></div>
+      <div class="br">
+        <div class="stepper"><button class="st" id="dec" type="button" aria-label="إنقاص">−</button><input class="in" id="bidIn" inputmode="numeric" autocomplete="off" dir="ltr" aria-label="مبلغ المزايدة"><button class="st" id="inc" type="button" aria-label="زيادة">+</button></div>
+        <div class="bw" id="bw"><button class="btn" id="bidBtn" type="button">زايد الآن</button></div>
+      </div>
+      <div class="msg" id="msg" role="alert"></div>`;
+    const inp = $("bidIn");
+    inp.addEventListener("input", () => { const dg = toEn(inp.value).replace(/\D/g,""); S.amount = Number(dg || 0); inp.value = dg ? money(S.amount) : ""; hideMsg(); });
+    $("dec").addEventListener("click", () => { S.amount = Math.max(minBid(), (S.amount || minBid()) - incr()); syncIn(); hideMsg(); });
+    $("inc").addEventListener("click", () => { S.amount = (S.amount || minBid()) + incr(); syncIn(); hideMsg(); });
+    $("useMin").addEventListener("click", () => { S.amount = minBid(); syncIn(); hideMsg(); });
+    $("bidBtn").addEventListener("click", startBid);
+    syncIn();
+  }
+  if (key === "bid"){
+    const min = minBid();
+    $("minTxt").textContent = money(min);
+    if (S.amount < min && document.activeElement !== $("bidIn")){ S.amount = min; syncIn(); }
+    $("bidBtn").disabled = S.busy;
+    $("bw").classList.toggle("busy", S.busy);
+  }
 }
-const say = (t, type="err") => { const m=$("msg"); if (m){ m.textContent=t; m.className="msg show "+type; } };
+const syncIn = () => { const i = $("bidIn"); if (i) i.value = S.amount ? money(S.amount) : ""; };
+const say = t => { const m = $("msg"); if (m){ m.textContent = t; m.className = "msg show"; } };
+const hideMsg = () => $("msg")?.classList.remove("show");
 
-async function placeBid(){
+/* ============ النوافذ السفلية ============ */
+function openSheet(html, mode){
+  $("sheet").innerHTML = html; S.sheet = mode;
+  $("sbg").classList.add("open"); $("sbg").setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+}
+function closeSheet(){
+  $("sbg").classList.remove("open"); $("sbg").setAttribute("aria-hidden","true");
+  S.sheet = ""; document.body.style.overflow = "";
+}
+$("sbg").addEventListener("click", e => { if (e.target === $("sbg")) closeSheet(); });
+$("sheet").addEventListener("click", e => {
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  if (b.dataset.act === "close") closeSheet();
+  if (b.dataset.act === "go") submitBid();
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape"){ closeSheet(); closeLB(); } });
+
+function openDeposit(){
+  openSheet(`<div class="grab"></div>
+    <h3>خطوة وحدة قبل أول مزايدة</h3>
+    <p class="sd">لتزايد على هذا المزاد نحتاج تأمين مشاركة بمبلغ <b>${money(DEPOSIT)} د.ع</b>. هو مبلغ قابل للاسترداد، وليس سعر الجهاز ولا رسماً للمنصة، وتدفعه مرة وحدة فقط.</p>
+    <div class="stp"><span class="sn">1</span><div><b>أكمل تأمين المشاركة</b></div></div>
+    <div class="stp"><span class="sn">2</span><div><b>ارجع لهذا المزاد</b></div></div>
+    <div class="stp"><span class="sn">3</span><div><b>اكتب مبلغك وزايد</b></div></div>
+    <a class="b2" href="auction-deposit.html?auction=${encodeURIComponent(S.a.id)}">إكمال تأمين المشاركة</a>
+    <button class="b3" type="button" data-act="close">ليس الآن</button>`, "deposit");
+}
+
+function openConfirm(){
+  openSheet(`<div class="grab"></div>
+    <h3>تأكيد المزايدة</h3>
+    <div class="big">${money(S.amount)}<small>د.ع</small></div>
+    <p class="sd">تأكد من المبلغ قبل التأكيد. بعد تسجيل مزايدتك يصبح هذا هو السعر الحالي للمزاد.</p>
+    <button class="b2" type="button" data-act="go" id="goBtn">تأكيد وزايد</button>
+    <button class="b3" type="button" data-act="close">رجوع</button>`, "confirm");
+}
+
+function biddersHtml(){
+  const my = S.bids.findIndex(b => b.bidder_user_id === S.user.id);
+  return `<div class="grab"></div>
+    <h3>المزايدون</h3>
+    <p class="sd">مرتبون من الأعلى إلى الأقل. العدد الكلي ${S.count}${S.count > S.bids.length ? "، ونعرض هنا أعلى " + S.bids.length : ""}.</p>
+    ${my >= 0 ? `<div class="mine">ترتيبك الحالي: <b>${my+1}</b> من ${S.count}</div>` : ""}
+    <div>${S.bids.map((b,i) => bidRow(b, i, false)).join("")}</div>
+    <button class="b3" type="button" data-act="close" style="margin-top:14px">إغلاق</button>`;
+}
+$("allBids").addEventListener("click", () => openSheet(biddersHtml(), "bidders"));
+
+/* ============ المزايدة ============ */
+function startBid(){
   if (S.busy) return;
-  const amount = Number($("bidIn").value), min = minBid();
-  if (!amount || amount < min){ say("أقل مبلغ مسموح: " + money(min) + " د.ع"); return; }
-  S.busy = true; $("bidBtn").disabled = true; $("bidBtn").textContent = "جاري...";
+  const min = minBid();
+  if (!S.amount || S.amount < min){ say("أقل مبلغ مسموح: " + money(min) + " د.ع"); return; }
+  if (!S.elig){ openDeposit(); return; }
+  openConfirm();
+}
+
+async function submitBid(){
+  if (S.busy) return;
+  const amount = S.amount;
+  S.busy = true;
+  const g = $("goBtn"); if (g){ g.disabled = true; g.textContent = "جاري تسجيل مزايدتك..."; }
   try{
     must(await supabase.rpc("mzad_place_bid", { p_auction_id:auctionId, p_amount_iqd:amount }));
-    await load(); S.busy = false; render(); say("تم تسجيل مزايدتك ✓", "ok");
-    setTimeout(()=>$("msg")?.classList.remove("show"), 2500);
+    await loadLive();
+    S.busy = false; closeSheet();
+    S.amount = minBid(); syncIn(); renderLive();
+    const mine = S.bids[0]?.bidder_user_id === S.user.id;
+    toast(mine ? "تم تسجيل مزايدتك. أنت الأعلى الآن" : "تم تسجيل مزايدتك", "ok");
+    navigator.vibrate?.(30);
   }catch(e){
-    console.error("BID ERROR:", e); S.busy = false;
-    try{ await load(); }catch{}
-    render(); say(bidErr(e));
+    console.error("BID ERROR:", e);
+    S.busy = false; closeSheet();
+    try{ await loadLive(); }catch{}
+    renderLive();
+    if (String(e?.message||"").includes("BUYER_DEPOSIT_NOT_APPROVED")){ S.elig = false; openDeposit(); }
+    else say(bidErr(e));
   }
 }
 
-const fmtLeft = ms => { if (ms<=0) return "00:00:00"; const s=Math.floor(ms/1000), p=n=>String(n).padStart(2,"0"); return p(Math.floor(s/3600))+":"+p(Math.floor(s%3600/60))+":"+p(s%60); };
-function tick(){
+let tt;
+function toast(m, kind){ const el = $("toast"); el.textContent = m; el.className = "toast show" + (kind ? " " + kind : ""); clearTimeout(tt); tt = setTimeout(() => el.classList.remove("show"), 2600); }
+
+/* ============ العداد ============ */
+const segHtml = (k, l) => `<div class="sg"><b id="s${k}">00</b><small>${l}</small></div>`;
+function tick(force){
   if (!S.a) return;
   const left = new Date(S.a.ends_at).getTime() - Date.now();
   const live = S.a.status === "live" && left > 0;
-  $("clock").textContent = live ? fmtLeft(left) : "انتهى";
-  $("tmL").textContent = live ? "الوقت المتبقي" : "المزاد";
-  $("tm").className = "box tm" + (!live ? " e" : left < 300e3 ? " u" : "");
+  const total = Math.max(0, Math.floor(left/1000));
+  const d = Math.floor(total/86400), h = Math.floor(total%86400/3600), m = Math.floor(total%3600/60), s = total%60;
+  const wantD = d > 0;
+  if (wantD !== S.days){ S.days = wantD; $("seg").innerHTML = (wantD ? segHtml("D","يوم") : "") + segHtml("H","ساعة") + segHtml("M","دقيقة") + segHtml("S","ثانية"); }
+  const set = (k, v) => { const e = $("s"+k); if (e) e.textContent = String(v).padStart(2,"0"); };
+  if (wantD) set("D", d);
+  set("H", h); set("M", m); set("S", s);
+  $("clL").textContent = live ? "ينتهي المزاد بعد" : "انتهى المزاد";
+  $("clock").className = "clock" + (!live ? " e" : left < 300e3 ? " u" : "");
+  const bd = $("liveBadge"); bd.hidden = false; bd.className = "badge" + (live ? "" : " off"); bd.textContent = live ? "مباشر" : "انتهى";
+  if (S.live !== null && S.live !== live && !force) renderBar(live);
+  S.live = live;
   if (!live && S.a.status === "live" && !S.refetched){ S.refetched = true; refresh(); }
+  if (++S.n % 20 === 0) document.querySelectorAll("[data-t]").forEach(el => { el.textContent = ago(el.dataset.t); });
 }
 setInterval(tick, 1000);
 
-async function refresh(){ try{ if (S.busy) return; if (await load()) render(); }catch(e){ console.error("REFRESH:", e); } }
+async function refresh(){
+  if (S.busy || S.polling) return;
+  S.polling = true;
+  try{ if (await loadLive()) renderLive(); }catch(e){ console.error("REFRESH:", e); }
+  finally{ S.polling = false; }
+}
 
+/* ============ عارض الصور ============ */
+function openLB(i){
+  const t = $("lbT");
+  t.innerHTML = S.imgs.map(u => `<div class="lb-s"><img src="${esc(u)}" alt=""></div>`).join("");
+  $("lb").classList.add("open"); $("lb").setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+  const upd = () => { $("lbC").textContent = (Math.round(t.scrollLeft / t.clientWidth) + 1) + " / " + S.imgs.length; };
+  t.onscroll = upd;
+  requestAnimationFrame(() => { t.scrollLeft = i * t.clientWidth; upd(); });
+}
+function closeLB(){ $("lb").classList.remove("open"); $("lb").setAttribute("aria-hidden","true"); if (!S.sheet) document.body.style.overflow = ""; }
+$("lbX").addEventListener("click", closeLB);
+
+/* ============ الأخطاء والبدء ============ */
 function fail(t, p, link, detail){
   $("ld").hidden = true; $("pg").hidden = true; $("bar").hidden = true; $("errPg").hidden = false;
   $("errPg").innerHTML = `<h2>${esc(t)}</h2><p>${esc(p)}</p>` + (detail ? `<p dir="ltr" style="font-size:10px;color:#9ca3af;word-break:break-all">${esc(detail)}</p>` : "") + (link ? '<a href="auctions.html">رجوع للمزادات</a>' : '<button id="rt" type="button">إعادة المحاولة</button>');
@@ -324,10 +634,11 @@ $("back").addEventListener("click", () => history.length > 1 ? history.back() : 
     const { data, error } = await supabase.auth.getUser();
     if (error || !data.user){ location.href = "index.html?login=1&returnTo=" + encodeURIComponent(location.pathname + location.search); return; }
     S.user = data.user;
-    if (!await load()) return;
+    if (!await loadLive()) return;
+    await loadStatic();
     $("ld").hidden = true; $("pg").hidden = false;
-    render(); S.loaded = true;
-    S.poll = setInterval(() => { if (!document.hidden) refresh(); }, 8000);
+    renderStatic(); renderLive(); S.loaded = true;
+    setInterval(() => { if (!document.hidden) refresh(); }, 5000);
     document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
   }catch(e){
     console.error("DETAILS ERROR:", e);
