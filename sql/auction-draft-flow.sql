@@ -128,6 +128,12 @@ begin
   )
   returning id into v_auction_id;
 
+  -- Reserve the device inside this transaction while the auction awaits deposit/review.
+  update public.mzad_devices
+     set locked_for_auction = true,
+         updated_at = now()
+   where id = p_device_id;
+
   return v_auction_id;
 end;
 $$;
