@@ -145,7 +145,7 @@ begin
  if q.status not in ('pending','rejected') or d.status not in ('pending','rejected') then raise exception 'DEPOSIT_NOT_PAYABLE'; end if;
  if q.expires_at is not null and q.expires_at<=now() then raise exception 'PAYMENT_REQUEST_EXPIRED'; end if;
  if p_proof_storage_path is null or btrim(p_proof_storage_path)='' then raise exception 'PROOF_REQUIRED'; end if;
- if position(v_user::text in p_proof_storage_path)<>1 then raise exception 'INVALID_PROOF_PATH'; end if;
+ if p_proof_storage_path not like v_user::text || '/%' then raise exception 'INVALID_PROOF_PATH'; end if;
  if q.status='proof_submitted' or d.status in ('proof_submitted','under_review') then raise exception 'PROOF_ALREADY_PENDING'; end if;
  if p_paid_amount_iqd is null or p_paid_amount_iqd<>d.amount_iqd then raise exception 'AMOUNT_MISMATCH'; end if;
  if nullif(trim(coalesce(p_proof_storage_path,'')),'') is null then raise exception 'PROOF_REQUIRED'; end if;
