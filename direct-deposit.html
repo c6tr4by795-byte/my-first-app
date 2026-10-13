@@ -261,7 +261,8 @@ async function loadMethods(){
   const all = Array.isArray(r.data) ? r.data : [];
   // Only show methods with an administrator-configured recipient; never display stale hard-coded account details.
   const list = all.map(m => {
-    const template = PLATFORM.find(p => p.re.test((m.name_ar||"") + " " + (m.code||"") + " " + (m.name_en||"")));
+    const methodText = (m.name_ar||"") + " " + (m.code||"") + " " + (m.name_en||"");
+    const template = PLATFORM.find(p => p.re.test(methodText)) || (/^(bank|phone|other)$/i.test(String(m.code||"")) ? { name: String(m.name_ar||m.name_en||"طريقة دفع"), sub:"طريقة دفع معتمدة من الإدارة", icon:ICON.wallet, label:"بيانات المستلم", num:"", copy:"", how:[] } : null);
     const recipient = String(m.recipient_identifier || "").trim();
     if (!template || !recipient) return null;
     const configuredInstructions = String(m.instructions_ar || "").split(/\r?\n/).map(x => x.trim()).filter(Boolean);
