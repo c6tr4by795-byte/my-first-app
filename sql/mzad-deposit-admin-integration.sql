@@ -98,6 +98,7 @@ begin
     values(v_user,'direct_sale_deposit_created','deposit',v_deposit::text,jsonb_build_object('direct_sale_id',v_sale.id,'amount_iqd',v_amount));
   return v_deposit;
 end $;
+
 create or replace function public.mzad_create_deposit_payment_request(p_deposit_id uuid,p_payment_method_id uuid)
 returns uuid language plpgsql security definer set search_path = public
 as $$
