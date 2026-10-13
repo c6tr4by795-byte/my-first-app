@@ -86,13 +86,17 @@ async function load(){
   const au=aids.length?await supabase.from("mzad_auctions").select("*").in("id",aids):{data:[],error:null};
   if(au.error)throw au.error;
   const auctions=au.data||[],am=new Map(auctions.map(x=>[x.id,x]));
+  const sids=[...new Set(deps.map(x=>x.direct_sale_id).filter(Boolean))];
+  const ds=sids.length?await supabase.from("mzad_direct_sales").select("*").in("id",sids):{data:[],error:null};
+  if(ds.error)throw ds.error;
+  const sales=ds.data||[],sm=new Map(sales.map(x=>[x.id,x]));
 
-  const vids=[...new Set(auctions.map(x=>x.device_id).filter(Boolean))];
+  const vids=[...new Set([...auctions.map(x=>x.device_id),...sales.map(x=>x.device_id)].filter(Boolean))];
   const dv=vids.length?await supabase.from("mzad_devices").select("*").in("id",vids):{data:[],error:null};
   if(dv.error)throw dv.error;
   const devices=dv.data||[],vm=new Map(devices.map(x=>[x.id,x]));
 
-  const mids=[...new Set(reqs.map(x=>x.payment_method_id).filter(Boolean))];
+  const mids=[...new Set(deps.map(x=>x.payment_method_id).filter(Boolean))];
   const mt=mids.length?await supabase.from("mzad_payment_methods").select("*").in("id",mids):{data:[],error:null};
   if(mt.error)throw mt.error;
   const methods=mt.data||[],mm=new Map(methods.map(x=>[x.id,x]));
@@ -103,13 +107,15 @@ async function load(){
    const q=rm.get(p.payment_request_id)||{};
    const d=dm.get(q.deposit_id)||{};
    const a=am.get(d.auction_id)||{};
-   const v=vm.get(a.device_id)||{};
-   const m=mm.get(q.payment_method_id)||{};
+   const sale=sm.get(d.direct_sale_id)||{};
+   const target=a.id?a:sale;
+   const v=vm.get(target.device_id)||{};
+   const m=mm.get(d.payment_method_id)||{};
    const type=(String(d.operation_type||"").toLowerCase()==="auction" ? "auction_" : "direct_") + String(d.payer_role||"").toLowerCase();
    const isSeller=type==="auction_seller";
    const isBuyer=type==="auction_buyer";
    const name=[v.brand,v.model,v.storage].filter(Boolean).join(" ")||"تأمين";
-   const roleLabel=isSeller?"تأمين بائع المزاد":isBuyer?"تأمين مزايد":"تأمين";
+   const roleLabel=isSeller?"تأمين بائع المزاد":isBuyer?"تأمين مزايد":d.operation_type==="direct_sale"?"تأمين مشتري مباشر":"تأمين";
    const note=isSeller
     ?'<div class="seller-note"><b>مهم:</b> عند الاعتماد، مسودة هذا المزاد ستتحول إلى <b>LIVE</b> ويبدأ العداد تلقائياً لمدة ساعة. لا يوجد اعتماد آخر من هذه الصفحة لتشغيل المزاد.</div>'
     :isBuyer
