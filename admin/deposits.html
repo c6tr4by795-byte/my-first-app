@@ -65,14 +65,14 @@ async function load(){
 
   const p=await supabase.from("mzad_payment_proofs")
    .select("*")
-   .eq("review_status","pending")
+   .eq("status","pending")
    .order("created_at",{ascending:true});
   if(p.error)throw p.error;
 
   const proofs=p.data||[];
   if(!proofs.length){$("list").innerHTML='<div class="empty">لا توجد إثباتات بانتظار المراجعة.</div>';return}
 
-  const rids=[...new Set(proofs.map(x=>x.request_id).filter(Boolean))];
+  const rids=[...new Set(proofs.map(x=>x.payment_request_id).filter(Boolean))];
   const rq=await supabase.from("mzad_payment_requests").select("*").in("id",rids);
   if(rq.error)throw rq.error;
   const reqs=rq.data||[],rm=new Map(reqs.map(x=>[x.id,x]));
@@ -100,12 +100,12 @@ async function load(){
   const urls=await Promise.all(proofs.map(x=>signed(x.proof_storage_path)));
 
   $("list").innerHTML=proofs.map((p,i)=>{
-   const q=rm.get(p.request_id)||{};
+   const q=rm.get(p.payment_request_id)||{};
    const d=dm.get(q.deposit_id)||{};
    const a=am.get(d.auction_id)||{};
    const v=vm.get(a.device_id)||{};
    const m=mm.get(q.payment_method_id)||{};
-   const type=String(d.deposit_type||"").toLowerCase();
+   const type=(String(d.operation_type||"").toLowerCase()==="auction" ? "auction_" : "direct_") + String(d.payer_role||"").toLowerCase();
    const isSeller=type==="auction_seller";
    const isBuyer=type==="auction_buyer";
    const name=[v.brand,v.model,v.storage].filter(Boolean).join(" ")||"تأمين";
@@ -117,7 +117,7 @@ async function load(){
     :"";
 
    return '<article class="item" data-deposit="'+esc(d.id||"")+'">'+
-    '<div class="head"><div><div class="title">'+esc(name)+'</div><div class="muted">طلب: '+esc(q.request_number||q.id)+'<br>الإثبات: '+esc(p.id)+'<br>أُرسل: '+date(p.created_at)+'</div></div>'+
+    '<div class="head"><div><div class="title">'+esc(name)+'</div><div class="muted">طلب: '+esc(q.invoice_number||q.id)+'<br>الإثبات: '+esc(p.id)+'<br>أُرسل: '+date(p.created_at)+'</div></div>'+
     '<span class="badge '+(isSeller?"seller":isBuyer?"buyer":"other")+'">'+esc(roleLabel)+'</span></div>'+
     '<div class="grid">'+
     '<div class="cell"><small>المطلوب</small><b>'+money(q.amount_iqd||d.amount_iqd)+'</b></div>'+
