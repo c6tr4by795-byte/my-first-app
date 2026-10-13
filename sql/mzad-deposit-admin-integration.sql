@@ -85,9 +85,10 @@ begin
      and payer_role = 'buyer' and status not in ('rejected','cancelled','refunded','forfeited')
    order by created_at desc limit 1;
   if v_deposit is not null then return v_deposit; end if;
-  select coalesce((value_json #>> '{}')::bigint,5000) into v_amount
+  select (value_json #>> '{}')::bigint into v_amount
     from public.mzad_settings where key = 'direct_buyer_deposit_iqd';
   v_amount := coalesce(v_amount,5000);
+  if v_amount <> 5000 then raise exception 'INVALID_DIRECT_DEPOSIT_SETTING'; end if;
   if v_sale.status = 'active' then
     update public.mzad_direct_sales set status='reserved', buyer_user_id=v_user, reserved_at=now(), updated_at=now() where id=v_sale.id;
   end if;
