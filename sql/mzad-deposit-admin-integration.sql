@@ -161,6 +161,12 @@ begin
  select * into p from public.mzad_payment_proofs where payment_request_id=q.id order by created_at desc limit 1 for update;
  if not found then raise exception 'PAYMENT_PROOF_NOT_FOUND'; end if;
  if p.status<>'pending' then raise exception 'PROOF_ALREADY_REVIEWED'; end if;
+ if p_approve and (q.status<>'proof_submitted' or d.status not in ('proof_submitted','under_review')) then
+   raise exception 'PROOF_NOT_READY_FOR_APPROVAL';
+ end if;
+ if p_approve and coalesce(p.paid_amount_iqd,0)<>d.amount_iqd then
+   raise exception 'AMOUNT_MISMATCH';
+ end if;
  update public.mzad_payment_proofs set status=case when p_approve then 'approved' else 'rejected' end,
    reviewer_user_id=v_user,reviewer_note=coalesce(p_note,''),reviewed_at=now() where id=p.id;
  update public.mzad_payment_requests set status=case when p_approve then 'approved' else 'rejected' end where id=q.id;
