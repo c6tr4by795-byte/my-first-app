@@ -657,6 +657,7 @@ declare
   v_user uuid := auth.uid();
   v_method_type text;
   v_id uuid;
+  v_before jsonb := '{}'::jsonb;
 begin
   if v_user is null or not public.mzad_is_admin() then
     raise exception 'ADMIN_REQUIRED';
@@ -681,7 +682,16 @@ begin
 
   perform pg_advisory_xact_lock(hashtext('mzad_payment_methods:' || v_method_type));
 
-  select id into v_id
+  select id, jsonb_build_object(
+      'method_type', method_type,
+      'display_name_ar', display_name_ar,
+      'recipient_name', recipient_name,
+      'recipient_identifier', recipient_identifier,
+      'instructions_ar', instructions_ar,
+      'is_enabled', is_enabled,
+      'sort_order', sort_order
+    )
+    into v_id, v_before
   from public.mzad_payment_methods
   where method_type = v_method_type
   order by created_at, id
@@ -713,8 +723,11 @@ begin
   insert into public.mzad_audit_logs (
     actor_user_id, action, entity_type, entity_id, before_json, after_json
   ) values (
-    v_user, 'payment_method_upserted', 'payment_method', v_id::text, '{}'::jsonb,
+    v_user, 'payment_method_upserted', 'payment_method', v_id::text, coalesce(v_before, '{}'::jsonb),
     jsonb_build_object('method_type', v_method_type, 'display_name_ar', btrim(p_name_ar),
+      'recipient_name', nullif(btrim(coalesce(p_account_label, '')), ''),
+      'recipient_identifier', nullif(btrim(coalesce(p_account_identifier, '')), ''),
+      'instructions_ar', nullif(btrim(coalesce(p_instructions_ar, '')), ''),
       'is_enabled', coalesce(p_is_enabled, false), 'sort_order', coalesce(p_display_order, 0))
   );
 
