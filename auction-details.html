@@ -4,3087 +4,480 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="MZAD PHONE">
 <title>MZAD PHONE — تفاصيل المزاد</title>
-
 <style>
-:root{
-  --bg:#f9f8fd; --ink:#17202a; --muted:#6b7280; --line:#ece8fb;
-  --primary:#176b87; --primary-soft:#e8f3f6; --purple:#6246d9; --purple-dark:#4a34b8; --purple-soft:#f3f0ff; --edge:#e0daf8;
-  --ok:#1e8a5a; --hot:#e8590c; --gold:#b9791a; --safe-bottom:env(safe-area-inset-bottom,0px);
-}
-
-*{box-sizing:border-box}
-
-html{scroll-behavior:smooth}
-
-body{
-  margin:0;
-  min-height:100dvh;
-  background:var(--bg);
-  color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
-  -webkit-font-smoothing:antialiased;
-  text-rendering:optimizeLegibility
-}
-
-button{
-  font:inherit;
-  border:0;
-  background:none;
-  color:inherit;
-  cursor:pointer
-}
-
-:focus-visible{
-  outline:3px solid var(--purple);
-  outline-offset:2px
-}
-
-.page{
-  width:min(100%,520px);
-  margin:0 auto;
-  padding:0 14px calc(40px + var(--safe-bottom))
-}
-
-/* header */
-
-header{
-  margin-inline:-14px;
-  padding:0 14px 14px;
-  background:linear-gradient(145deg,#fff 0%,#f7f5ff 55%,#ece8ff 100%);
-  border-radius:0 0 24px 24px;
-  border-bottom:1px solid var(--line);
-  box-shadow:0 10px 26px rgba(23,32,42,.05)
-}
-
-.topbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding:12px 2px 0
-}
-
-.brand-mini{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  line-height:.9
-}
-
-.brand-mini strong{
-  font-size:16px;
-  letter-spacing:-.03em
-}
-
-.brand-mini span{
-  font-size:7px;
-  font-weight:800;
-  letter-spacing:.15em;
-  color:#8a96a3;
-  margin-top:3px
-}
-
-.icon-btn{
-  width:39px;
-  height:34px;
-  display:grid;
-  place-items:center;
-  border:1px solid var(--edge);
-  border-radius:12px;
-  background:#fff;
-  color:var(--purple);
-  box-shadow:0 7px 18px rgba(23,32,42,.045)
-}
-
-.icon-btn svg{
-  width:20px;
-  height:20px;
-  fill:none;
-  stroke:currentColor;
-  stroke-width:1.9;
-  stroke-linecap:round;
-  stroke-linejoin:round
-}
-
-#fav[aria-pressed="true"] svg{
-  fill:var(--purple)
-}
-
-/* gallery */
-
-.gallery{
-  margin-top:12px;
-  border-radius:22px;
-  overflow:hidden;
-  border:1px solid var(--edge);
-  box-shadow:0 12px 28px rgba(98,70,217,.10)
-}
-
-.slides{
-  display:flex;
-  overflow-x:auto;
-  scroll-snap-type:x mandatory;
-  scrollbar-width:none;
-  overscroll-behavior-x:contain
-}
-
-.slides::-webkit-scrollbar{
-  display:none
-}
-
-.slide{
-  flex:0 0 100%;
-  scroll-snap-align:center;
-  scroll-snap-stop:always;
-  aspect-ratio:1/.82;
-  display:grid;
-  place-items:center;
-  overflow:hidden
-}
-
-.slide svg{
-  height:80%;
-  width:auto;
-  filter:drop-shadow(0 14px 18px rgba(74,52,184,.22))
-}
-
-.slide img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  display:block
-}
-
-.dots{
-  display:flex;
-  justify-content:center;
-  gap:6px;
-  margin-top:9px
-}
-
-.dot{
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:#d6d2ea;
-  transition:.2s ease
-}
-
-.dot.active{
-  width:19px;
-  border-radius:999px;
-  background:var(--purple)
-}
-
-/* title */
-
-.title{
-  margin:14px 2px 0
-}
-
-.title h1{
-  margin:0;
-  font-size:21px;
-  line-height:1.25;
-  letter-spacing:-.035em;
-  font-weight:950
-}
-
-.sub{
-  margin:3px 0 0;
-  color:var(--muted);
-  font-size:12px;
-  font-weight:700
-}
-
-.chips{
-  display:flex;
-  flex-wrap:wrap;
-  gap:7px;
-  margin:10px 2px 0
-}
-
-.chip{
-  display:inline-flex;
-  align-items:center;
-  gap:5px;
-  min-height:26px;
-  padding:0 10px;
-  border-radius:999px;
-  font-size:10px;
-  font-weight:900;
-  color:var(--purple-dark);
-  background:var(--purple-soft)
-}
-
-.chip.ver{
-  background:#fff;
-  border:1px solid #9edfe3;
-  color:var(--primary)
-}
-
-.chip svg{
-  width:13px;
-  height:13px;
-  fill:none;
-  stroke:currentColor;
-  stroke-width:1.8;
-  stroke-linecap:round;
-  stroke-linejoin:round
-}
-
-/* auction */
-
-.auction{
-  margin-top:14px;
-  padding:14px;
-  border-radius:24px;
-  border:1px solid var(--edge);
-  background:
-    radial-gradient(circle at 100% 0,rgba(98,70,217,.10),transparent 55%),
-    linear-gradient(145deg,#fff 0%,#f7f5ff 60%,#efebff 100%);
-  box-shadow:0 14px 32px rgba(98,70,217,.10)
-}
-
-.a-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px
-}
-
-.live{
-  display:inline-flex;
-  align-items:center;
-  gap:7px;
-  min-height:26px;
-  padding:0 10px;
-  border-radius:999px;
-  background:#fff;
-  border:1px solid var(--edge);
-  font-size:10px;
-  font-weight:900;
-  color:var(--purple-dark)
-}
-
-.live:before{
-  content:"";
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:var(--ok)
-}
-
-.auction.hot .live:before{
-  background:var(--hot)
-}
-
-.auction.ended .live:before{
-  background:#9ca3af
-}
-
-.a-count{
-  font-size:10px;
-  font-weight:800;
-  color:var(--muted)
-}
-
-.a-grid{
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:14px;
-  align-items:end;
-  margin-top:14px;
-  padding-bottom:14px;
-  border-bottom:1px solid var(--line)
-}
-
-.label{
-  display:block;
-  font-size:10px;
-  font-weight:800;
-  color:var(--muted);
-  margin-bottom:3px
-}
-
-.price{
-  font-size:28px;
-  font-weight:950;
-  color:var(--purple-dark);
-  line-height:1.15;
-  letter-spacing:-.03em;
-  font-variant-numeric:tabular-nums;
-  white-space:nowrap
-}
-
-.price small{
-  font-size:11px;
-  font-weight:800;
-  color:var(--muted);
-  margin-inline-start:4px;
-  letter-spacing:0
-}
-
-.price.bump{
-  animation:bump .4s ease
-}
-
-@keyframes bump{
-  40%{transform:scale(1.05)}
-}
-
-.tdig{
-  direction:ltr;
-  display:flex;
-  align-items:center;
-  gap:4px;
-  font-variant-numeric:tabular-nums
-}
-
-.tdig span{
-  width:38px;
-  padding:6px 0;
-  text-align:center;
-  border-radius:11px;
-  background:#fff;
-  border:1px solid var(--edge);
-  font-size:20px;
-  font-weight:950;
-  line-height:1.1;
-  color:var(--ink)
-}
-
-.tdig i{
-  font-style:normal;
-  font-weight:900;
-  color:#b9b1e6
-}
-
-.auction.hot .tdig span{
-  background:#fff4ec;
-  border-color:#ffd2b8;
-  color:var(--hot)
-}
-
-.auction.hot .tdig i{
-  color:var(--hot);
-  animation:blink 1s steps(1) infinite
-}
-
-@keyframes blink{
-  50%{opacity:.15}
-}
-
-.auction.ended .tdig span{
-  opacity:.6
-}
-
-.a-bid{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:14px;
-  padding:16px 4px 12px
-}
-
-.nextbox b{
-  display:block;
-  font-size:21px;
-  font-weight:950;
-  letter-spacing:-.02em;
-  line-height:1.3;
-  font-variant-numeric:tabular-nums;
-  white-space:nowrap
-}
-
-.nextbox b small{
-  font-size:10px;
-  font-weight:800;
-  color:var(--muted);
-  margin-inline-start:3px
-}
-
-.nextbox em{
-  display:inline-block;
-  margin-top:3px;
-  padding:2px 10px;
-  border-radius:9px;
-  background:var(--purple-soft);
-  color:var(--purple-dark);
-  font-style:normal;
-  font-size:10px;
-  font-weight:900
-}
-
-.bid-btn{
-  position:relative;
-  flex:0 0 auto;
-  width:88px;
-  height:88px;
-  border-radius:50%;
-  border:4px solid #fff;
-  color:#fff;
-  font-size:18px;
-  font-weight:950;
-  background:linear-gradient(145deg,#6246d9,#8b6cf0);
-  box-shadow:0 12px 26px rgba(98,70,217,.38);
-  -webkit-tap-highlight-color:transparent
-}
-
-.bid-btn:after{
-  content:"";
-  position:absolute;
-  inset:-4px;
-  border-radius:50%;
-  border:3px solid #8b6cf0;
-  opacity:0;
-  pointer-events:none
-}
-
-.bid-btn.pulse{
-  animation:press .45s ease
-}
-
-.bid-btn.pulse:after{
-  animation:ring .7s ease-out
-}
-
-@keyframes press{
-  0%{transform:scale(1)}
-  35%{transform:scale(.86)}
-  70%{transform:scale(1.08)}
-  100%{transform:scale(1)}
-}
-
-@keyframes ring{
-  0%{opacity:.85;transform:scale(1)}
-  100%{opacity:0;transform:scale(1.6)}
-}
-
-.bid-btn:disabled{
-  opacity:.55;
-  cursor:not-allowed;
-  background:#9ca3af;
-  box-shadow:none
-}
-
-.live-row{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  width:100%;
-  padding:9px 12px;
-  border-radius:15px;
-  background:#fff;
-  border:1px solid var(--line);
-  text-align:start
-}
-
-.stack{
-  display:flex;
-  flex:0 0 auto;
-  min-width:26px
-}
-
-.av{
-  width:26px;
-  height:26px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  font-size:11px;
-  font-weight:950;
-  color:#fff;
-  border:2px solid #fff;
-  margin-inline-start:-9px
-}
-
-.av:first-child{
-  margin-inline-start:0
-}
-
-.ticker{
-  flex:1;
-  min-width:0;
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
-  font-size:11px;
-  font-weight:800;
-  color:#374151
-}
-
-.ticker b{
-  font-weight:950;
-  color:var(--ink)
-}
-
-.ticker.swap>span{
-  display:block;
-  animation:slide .45s ease
-}
-
-@keyframes slide{
-  from{opacity:0;transform:translateY(9px)}
-  to{opacity:1;transform:none}
-}
-
-.chev{
-  width:16px;
-  height:16px;
-  flex:0 0 auto;
-  color:var(--purple);
-  fill:none;
-  stroke:currentColor;
-  stroke-width:2.2;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-  transition:transform .25s
-}
-
-.live-row[aria-expanded="true"] .chev{
-  transform:rotate(180deg)
-}
-
-.panel{
-  max-height:0;
-  overflow:hidden;
-  transition:max-height .3s ease
-}
-
-.panel.open{
-  max-height:250px;
-  overflow-y:auto
-}
-
-.panel h3{
-  margin:0;
-  padding:12px 4px 2px;
-  font-size:11px;
-  font-weight:900;
-  color:var(--muted)
-}
-
-.panel ul{
-  list-style:none;
-  margin:0;
-  padding:0
-}
-
-.panel li{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:9px 4px;
-  border-bottom:1px solid var(--line)
-}
-
-.panel li:last-child{
-  border-bottom:0
-}
-
-.panel .av{
-  margin:0;
-  width:30px;
-  height:30px;
-  font-size:12px
-}
-
-.panel .who{
-  flex:1;
-  min-width:0;
-  font-size:12px;
-  font-weight:900;
-  line-height:1.35
-}
-
-.panel .who span{
-  display:block;
-  font-size:9px;
-  font-weight:700;
-  color:#9ca3af
-}
-
-.panel li b{
-  font-size:12px;
-  font-weight:950;
-  font-variant-numeric:tabular-nums;
-  color:var(--purple-dark)
-}
-
-.panel li.lead b{
-  color:var(--gold)
-}
-
-.panel li.lead .who:after{
-  content:"الأعلى";
-  display:inline-block;
-  margin-top:2px;
-  padding:1px 7px;
-  border-radius:8px;
-  background:#fdf3e1;
-  color:var(--gold);
-  font-size:8.5px
-}
-
-.note{
-  margin:10px 2px 0;
-  font-size:10px;
-  font-weight:700;
-  color:var(--muted);
-  line-height:1.7;
-  text-align:center
-}
-
-/* cards */
-
-.card{
-  margin-top:12px;
-  padding:14px;
-  border-radius:18px;
-  background:#fff;
-  border:1px solid var(--line);
-  box-shadow:0 8px 20px rgba(23,32,42,.05)
-}
-
-.card h2{
-  margin:0 0 8px;
-  font-size:15px;
-  font-weight:900;
-  letter-spacing:-.02em
-}
-
-table{
-  width:100%;
-  border-collapse:collapse
-}
-
-th,td{
-  text-align:start;
-  padding:9px 0;
-  border-bottom:1px solid #f1eefb;
-  font-size:12px;
-  font-weight:800
-}
-
-th{
-  width:42%;
-  color:var(--muted);
-  font-weight:700
-}
-
-tr:last-child th,
-tr:last-child td{
-  border-bottom:0
-}
-
-td.good{
-  color:var(--ok)
-}
-
-/* seller */
-
-.seller{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px
-}
-
-.seller-info{
-  min-width:0;
-  flex:1
-}
-
-.seller p{
-  margin:0;
-  line-height:1.45
-}
-
-.seller b{
-  font-size:13px;
-  font-weight:900
-}
-
-.seller span{
-  display:block;
-  font-size:10px;
-  font-weight:700;
-  color:var(--muted)
-}
-
-.seller-status{
-  flex:0 0 auto;
-  padding:7px 10px;
-  border-radius:999px;
-  background:var(--purple-soft);
-  color:var(--purple-dark);
-  font-size:9px;
-  font-weight:900;
-  white-space:nowrap
-}
-
-/* notes */
-
-.notes-card{
-  margin-top:12px
-}
-
-.notes-text{
-  margin:0;
-  white-space:pre-wrap;
-  word-break:break-word;
-  font-size:12px;
-  line-height:1.8;
-  font-weight:700;
-  color:#374151
-}
-
-@media (prefers-reduced-motion:reduce){
-  .bid-btn.pulse,
-  .bid-btn.pulse:after,
-  .price.bump,
-  .ticker.swap>span,
-  .auction.hot .tdig i{
-    animation:none
-  }
-
-  .dot,
-  .toast,
-  .panel,
-  .chev{
-    transition:none
-  }
-}
-
-@media (max-width:360px){
-
-  .price{
-    font-size:24px
-  }
-
-  .tdig span{
-    width:34px;
-    font-size:18px
-  }
-
-  .bid-btn{
-    width:80px;
-    height:80px
-  }
-
-}
-
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:calc(24px + var(--safe-bottom));
-  transform:translateX(-50%) translateY(16px);
-  max-width:calc(100% - 40px);
-  padding:10px 14px;
-  border-radius:13px;
-  background:#1e2c30;
-  color:#fff;
-  font-size:11px;
-  font-weight:800;
-  box-shadow:0 14px 34px rgba(24,44,49,.12);
-  opacity:0;
-  pointer-events:none;
-  transition:.25s ease;
-  z-index:120;
-  text-align:center
-}
-
-.toast.show{
-  opacity:1;
-  transform:translateX(-50%) translateY(0)
-}
+:root{--bg:#f9f8fd;--ink:#17202a;--muted:#6b7280;--line:#ece8fb;--p:#6246d9;--pd:#4a34b8;--ps:#f3f0ff;--edge:#e0daf8;--ok:#1e8a5a;--hot:#e8590c;--gold:#b9791a;--bad:#c62f4d;--sb:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;border:0;background:none;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--p);outline-offset:2px}
+[hidden]{display:none!important}
+.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(40px + var(--sb))}
+header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg,#fff,#f7f5ff 55%,#ece8ff);border-radius:0 0 24px 24px;border-bottom:1px solid var(--line);box-shadow:0 10px 26px rgba(23,32,42,.05)}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 2px 0}
+.brand{display:flex;flex-direction:column;align-items:center;line-height:.9}
+.brand strong{font-size:16px;letter-spacing:-.03em}.brand span{font-size:7px;font-weight:800;letter-spacing:.15em;color:#8a96a3;margin-top:3px}
+.ib{width:39px;height:34px;display:grid;place-items:center;border:1px solid var(--edge);border-radius:12px;background:#fff;color:var(--p);box-shadow:0 7px 18px rgba(23,32,42,.045)}
+.ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+#fav[aria-pressed=true] svg{fill:var(--p)}
+.gallery{margin-top:12px;border-radius:22px;overflow:hidden;border:1px solid var(--edge);box-shadow:0 12px 28px rgba(98,70,217,.1);background:#fff}
+.slides{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+.slides::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always;aspect-ratio:1/.82;display:grid;place-items:center;overflow:hidden;background:linear-gradient(145deg,#fff,#f3f0ff)}
+.slide img{width:100%;height:100%;object-fit:contain;display:block}
+.slide svg{height:50%;width:auto;opacity:.35}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:9px}
+.dot{width:6px;height:6px;border-radius:50%;background:#d6d2ea;transition:.2s}
+.dot.on{width:19px;border-radius:999px;background:var(--p)}
+.title{margin:14px 2px 0}
+.title h1{margin:0;font-size:21px;line-height:1.25;letter-spacing:-.035em;font-weight:900}
+.sub{margin:3px 0 0;color:var(--muted);font-size:12px;font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin:10px 2px 0}
+.chip{display:inline-flex;align-items:center;gap:5px;min-height:26px;padding:0 10px;border-radius:999px;font-size:11px;font-weight:800;color:var(--pd);background:var(--ps)}
+.chip.ver{background:#fff;border:1px solid #9edfe3;color:#176b87}
+.chip svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.auction{margin-top:14px;padding:14px;border-radius:24px;border:1px solid var(--edge);background:radial-gradient(circle at 100% 0,rgba(98,70,217,.1),transparent 55%),linear-gradient(145deg,#fff,#f7f5ff 60%,#efebff);box-shadow:0 14px 32px rgba(98,70,217,.1)}
+.a-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.live{display:inline-flex;align-items:center;gap:7px;min-height:26px;padding:0 10px;border-radius:999px;background:#fff;border:1px solid var(--edge);font-size:10px;font-weight:900;color:var(--pd)}
+.live:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ok)}
+.auction.hot .live:before{background:var(--hot)}.auction.ended .live:before{background:#9ca3af}
+.a-count{font-size:10px;font-weight:800;color:var(--muted)}
+.a-grid{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:end;margin-top:14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.label{display:block;font-size:10px;font-weight:800;color:var(--muted);margin-bottom:3px}
+.price{font-size:28px;font-weight:900;color:var(--pd);line-height:1.15;letter-spacing:-.03em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.price small{font-size:11px;font-weight:800;color:var(--muted);margin-inline-start:4px}
+.price.bump{animation:bump .4s}
+@keyframes bump{40%{transform:scale(1.05)}}
+.tdig{direction:ltr;display:flex;align-items:center;gap:4px;font-variant-numeric:tabular-nums}
+.tdig span{min-width:38px;padding:6px 4px;text-align:center;border-radius:11px;background:#fff;border:1px solid var(--edge);font-size:20px;font-weight:900;line-height:1.1}
+.tdig i{font-style:normal;font-weight:900;color:#b9b1e6}
+.auction.hot .tdig span{background:#fff4ec;border-color:#ffd2b8;color:var(--hot)}
+.auction.hot .tdig i{color:var(--hot);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:.15}}
+.auction.ended .tdig span{opacity:.6}
+.a-bid{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 4px 12px}
+.nextbox b{display:block;font-size:21px;font-weight:900;letter-spacing:-.02em;line-height:1.3;font-variant-numeric:tabular-nums;white-space:nowrap}
+.nextbox b small{font-size:10px;font-weight:800;color:var(--muted);margin-inline-start:3px}
+.nextbox em{display:inline-block;margin-top:3px;padding:2px 10px;border-radius:9px;background:var(--ps);color:var(--pd);font-style:normal;font-size:10px;font-weight:900}
+.bid-btn{position:relative;flex:0 0 auto;width:88px;height:88px;border-radius:50%;border:4px solid #fff;color:#fff;font-size:18px;font-weight:900;background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 12px 26px rgba(98,70,217,.38)}
+.bid-btn:after{content:"";position:absolute;inset:-4px;border-radius:50%;border:3px solid #8b6cf0;opacity:0;pointer-events:none}
+.bid-btn.pulse{animation:press .45s}.bid-btn.pulse:after{animation:ring .7s ease-out}
+@keyframes press{35%{transform:scale(.86)}70%{transform:scale(1.08)}}
+@keyframes ring{0%{opacity:.85}100%{opacity:0;transform:scale(1.6)}}
+.bid-btn:disabled{opacity:.55;cursor:not-allowed;background:#9ca3af;box-shadow:none;font-size:15px}
+.live-row{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border-radius:15px;background:#fff;border:1px solid var(--line);text-align:start}
+.stack{display:flex;flex:0 0 auto;min-width:26px}
+.av{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:900;color:#fff;border:2px solid #fff;margin-inline-start:-9px}
+.av:first-child{margin-inline-start:0}
+.ticker{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:11px;font-weight:800;color:#374151}
+.ticker b{font-weight:900;color:var(--ink)}
+.chev{width:16px;height:16px;flex:0 0 auto;color:var(--p);fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s}
+.live-row[aria-expanded=true] .chev{transform:rotate(180deg)}
+.panel{max-height:0;overflow:hidden;transition:max-height .3s}
+.panel.open{max-height:260px;overflow-y:auto}
+.panel h3{margin:0;padding:12px 4px 2px;font-size:11px;font-weight:900;color:var(--muted)}
+.panel ul{list-style:none;margin:0;padding:0}
+.panel li{display:flex;align-items:center;gap:10px;padding:9px 4px;border-bottom:1px solid var(--line)}
+.panel li:last-child{border-bottom:0}
+.panel .av{margin:0;width:30px;height:30px;font-size:12px}
+.who{flex:1;min-width:0;font-size:12px;font-weight:900;line-height:1.4}
+.who span{display:block;font-size:9px;font-weight:700;color:#9ca3af}
+.panel li b{font-size:12px;font-weight:900;font-variant-numeric:tabular-nums;color:var(--pd)}
+.panel li.lead b{color:var(--gold)}
+.tg{display:inline-block;margin-inline-start:6px;padding:1px 7px;border-radius:8px;background:#fdf3e1;color:var(--gold);font-size:9px}
+.all{width:100%;margin-top:6px;height:40px;border-radius:12px;background:var(--ps);color:var(--pd);font-size:12px;font-weight:800}
+.note{margin:10px 2px 0;font-size:11px;font-weight:800;color:var(--muted);line-height:1.7;text-align:center}
+.note.me{color:var(--ok)}.note.out{color:var(--hot)}
+.card{margin-top:12px;padding:14px;border-radius:18px;background:#fff;border:1px solid var(--line);box-shadow:0 8px 20px rgba(23,32,42,.05)}
+.card h2{margin:0 0 4px;font-size:15px;font-weight:900}
+.card .hint{margin:0 0 6px;font-size:11px;font-weight:700;color:var(--muted)}
+.g{margin:14px 0 2px;font-size:11px;font-weight:900;color:var(--pd)}
+.g:first-of-type{margin-top:8px}
+.r{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:10px 0;border-bottom:1px solid #f1eefb;font-size:12.5px}
+.r:last-child{border-bottom:0;padding-bottom:0}
+.r span{flex:none;color:var(--muted);font-weight:700}
+.r strong{font-weight:800;text-align:end;line-height:1.7}
+.r.ok strong{color:var(--ok)}
+.r.bad{margin-top:6px;padding:10px 12px;border:0;border-radius:12px;background:#fff0f3;border-inline-start:4px solid var(--bad)}
+.r.bad span{color:var(--bad)}.r.bad strong{color:#8f1d36}
+.fine{margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--ps);font-size:11px;font-weight:700;line-height:1.8;color:#4a4d6e}
+.sbg{position:fixed;inset:0;z-index:100;display:flex;align-items:flex-end;justify-content:center;background:rgba(18,10,48,.55);opacity:0;visibility:hidden;transition:opacity .25s,visibility 0s .25s}
+.sbg.open{opacity:1;visibility:visible;transition-delay:0s}
+.sheet{width:min(100%,520px);max-height:88dvh;overflow-y:auto;padding:10px 20px calc(20px + var(--sb));background:#fff;border-radius:26px 26px 0 0;transform:translateY(100%);transition:transform .35s cubic-bezier(.2,.9,.3,1)}
+.sbg.open .sheet{transform:none}
+.grab{width:44px;height:5px;margin:0 auto 16px;border-radius:99px;background:#ddd8f2}
+.sheet h3{margin:0 0 8px;font-size:19px;font-weight:900}
+.sd{margin:0 0 14px;font-size:13px;font-weight:600;line-height:1.9;color:#4a4d6e}.sd b{color:var(--pd)}
+.amtbox{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:6px 0 10px}
+.amtbox .big{flex:1;text-align:center;font-size:34px;font-weight:900;color:var(--pd);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.amtbox .big small{font-size:13px;color:var(--muted);margin-inline-start:5px}
+.st{width:48px;height:48px;border-radius:50%;background:var(--ps);color:var(--p);font-size:24px;font-weight:700}
+.b2{display:flex;align-items:center;justify-content:center;width:100%;height:54px;margin-top:12px;border-radius:16px;color:#fff;font-size:16px;font-weight:900;background:linear-gradient(145deg,#4a34b8,#7a5cf0);box-shadow:0 14px 26px -12px rgba(98,70,217,.8)}
+.b2:disabled{opacity:.7}
+.b3{display:block;width:100%;height:48px;margin-top:6px;border-radius:14px;color:var(--muted);font-size:14px;font-weight:700}
+.msg{margin-top:10px;padding:10px;border-radius:12px;text-align:center;font-size:12px;font-weight:800;line-height:1.7;background:#fff0f3;color:var(--bad)}
+.stp{display:flex;gap:12px;align-items:center;padding:8px 0}
+.sn{width:30px;height:30px;flex:none;border-radius:50%;background:var(--ps);color:var(--pd);font-size:13px;font-weight:900;display:grid;place-items:center}
+.stp b{font-size:13.5px;font-weight:800}
+.toast{position:fixed;left:50%;bottom:calc(24px + var(--sb));transform:translateX(-50%) translateY(16px);max-width:calc(100% - 40px);padding:10px 14px;border-radius:13px;background:#1e2c30;color:#fff;font-size:12px;font-weight:800;opacity:0;pointer-events:none;transition:.25s;z-index:120;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%)}.toast.ok{background:var(--ok)}
+.err{text-align:center;padding:70px 10px}.err h2{margin:0 0 8px;font-size:19px}.err p{margin:0 0 16px;font-size:13px;color:var(--muted)}
+.err a,.err button{display:inline-block;padding:12px 26px;border-radius:14px;background:var(--p);color:#fff;font-size:14px;font-weight:800}
+.sk{height:240px;margin-top:12px;border-radius:22px;background:linear-gradient(100deg,#eeeafa 30%,#f8f6ff 50%,#eeeafa 70%);background-size:300% 100%;animation:sh 1.6s linear infinite}
+@keyframes sh{to{background-position:-200% 0}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(max-width:360px){.price{font-size:24px}.tdig span{min-width:34px;font-size:18px}.bid-btn{width:80px;height:80px}}
 </style>
 </head>
-
 <body>
-
 <main class="page">
-
 <header>
-
   <div class="topbar">
-
-    <button class="icon-btn" id="back" type="button" aria-label="رجوع">
-      <svg viewBox="0 0 24 24">
-        <path d="M9 5l7 7-7 7"/>
-      </svg>
-    </button>
-
-    <div class="brand-mini">
-      <strong>MZAD</strong>
-      <span>PHONE</span>
-    </div>
-
-    <button
-      class="icon-btn"
-      id="fav"
-      type="button"
-      aria-pressed="false"
-      aria-label="إضافة إلى المفضلة"
-    >
-      <svg viewBox="0 0 24 24">
-        <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
-      </svg>
-    </button>
-
+    <button class="ib" id="back" type="button" aria-label="رجوع"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    <div class="brand"><strong>MZAD</strong><span>PHONE</span></div>
+    <button class="ib" id="fav" type="button" aria-pressed="false" aria-label="إضافة إلى المفضلة"><svg viewBox="0 0 24 24"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/></svg></button>
   </div>
-
-  <section class="gallery" aria-label="صور الجهاز">
-    <div class="slides" id="slides"></div>
-  </section>
-
-  <div class="dots" id="dots"></div>
-
+  <section class="gallery" aria-label="صور الجهاز"><div class="slides" id="slides" dir="ltr"></div></section>
+  <div class="dots" id="dots" dir="ltr"></div>
 </header>
 
-<div class="title">
+<div id="ld"><div class="sk"></div><div class="sk" style="height:200px"></div></div>
+<div class="err" id="errPg" hidden></div>
 
-  <h1 id="name"></h1>
+<div id="pg" hidden>
+  <div class="title"><h1 id="name"></h1><p class="sub" id="sub"></p></div>
+  <div class="chips" id="chips"></div>
 
-  <p class="sub" id="sub"></p>
-
-</div>
-
-<div class="chips">
-
-  <span class="chip ver">
-
-    <svg viewBox="0 0 24 24">
-      <path d="M12 3 5 6v5c0 4.5 3 7.8 7 10 4-2.2 7-5.5 7-10V6l-7-3Z"/>
-      <path d="m9 12 2 2 4-4"/>
-    </svg>
-
-    MZAD VERIFIED
-
-  </span>
-
-  <span class="chip" id="cond"></span>
-
-</div>
-
-<section class="auction" id="auction">
-
-  <div class="a-top">
-
-    <span class="live" id="liveBadge">
-      مزاد مستمر
-    </span>
-
-    <span class="a-count" id="count"></span>
-
-  </div>
-
-  <div class="a-grid">
-
-    <div>
-
-      <span class="label">
-        السعر الحالي
-      </span>
-
-      <div class="price" id="priceBox">
-
-        <span id="price"></span>
-
-        <small>د.ع</small>
-
-      </div>
-
+  <section class="auction" id="auction">
+    <div class="a-top"><span class="live" id="liveBadge">مزاد مستمر</span><span class="a-count" id="count"></span></div>
+    <div class="a-grid">
+      <div><span class="label">السعر الحالي</span><div class="price" id="priceBox"><span id="price"></span><small>د.ع</small></div></div>
+      <div role="timer"><span class="label" id="endLabel">الوقت المتبقي</span>
+        <div class="tdig"><span id="hh">00</span><i>:</i><span id="mm">00</span><i>:</i><span id="ss">00</span></div></div>
     </div>
-
-    <div role="timer">
-
-      <span class="label" id="endLabel">
-        الوقت المتبقي
-      </span>
-
-      <div class="tdig">
-
-        <span id="hh">00</span>
-
-        <i>:</i>
-
-        <span id="mm">00</span>
-
-        <i>:</i>
-
-        <span id="ss">00</span>
-
-      </div>
-
+    <div class="a-bid">
+      <div class="nextbox"><span class="label">مزايدتك القادمة</span><b><span id="next"></span><small>د.ع</small></b><em id="stepTag"></em></div>
+      <button class="bid-btn" id="bid" type="button" aria-label="زايد الآن">زايد</button>
     </div>
-
-  </div>
-
-  <div class="a-bid">
-
-    <div class="nextbox">
-
-      <span class="label">
-        مزايدتك القادمة
-      </span>
-
-      <b>
-
-        <span id="next"></span>
-
-        <small>د.ع</small>
-
-      </b>
-
-      <em id="stepTag"></em>
-
-    </div>
-
-    <button
-      class="bid-btn"
-      id="bid"
-      type="button"
-      aria-label="زايد الآن"
-    >
-      زايد
+    <button class="live-row" id="liveRow" type="button" aria-expanded="false" aria-controls="panel">
+      <span class="stack" id="stack"></span><span class="ticker" id="ticker"></span>
+      <svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
     </button>
+    <div class="panel" id="panel" role="region" aria-label="المزايدون"><h3 id="panelHead"></h3><ul id="bidders"></ul><button class="all" id="allBids" type="button" hidden></button></div>
+    <p class="note" id="note"></p>
+  </section>
 
-  </div>
+  <section class="card" id="insCard" hidden>
+    <h2>تقرير الفحص</h2><p class="hint">اقرأه قبل ما تزايد</p>
+    <div id="ins"></div>
+    <div class="fine">يُفحص الجهاز عند التسليم بنقطة المنصة. اقرأ العيوب جيداً قبل المزايدة.</div>
+  </section>
 
-  <button
-    class="live-row"
-    id="liveRow"
-    type="button"
-    aria-expanded="false"
-    aria-controls="panel"
-  >
+  <section class="card"><h2>معلومات المزاد</h2>
+    <div class="r"><span>رقم المزاد</span><strong id="aNo"></strong></div>
+    <div class="r"><span>السعر الابتدائي</span><strong id="aStart"></strong></div>
+    <div class="r"><span>أقل زيادة</span><strong id="aInc"></strong></div>
+    <div class="r"><span>ينتهي</span><strong id="aEnd"></strong></div>
+  </section>
 
-    <span class="stack" id="stack"></span>
-
-    <span class="ticker" id="ticker">
-      <span id="tickText"></span>
-    </span>
-
-    <svg class="chev" viewBox="0 0 24 24">
-      <path d="M6 9l6 6 6-6"/>
-    </svg>
-
-  </button>
-
-  <div
-    class="panel"
-    id="panel"
-    role="region"
-    aria-label="المزايدون"
-  >
-
-    <h3 id="panelHead"></h3>
-
-    <ul id="bidders"></ul>
-
-  </div>
-
-  <p class="note" id="note"></p>
-
-</section>
-
-<section class="card">
-
-  <h2>
-    مواصفات الجهاز
-  </h2>
-
-  <table id="specs"></table>
-
-</section>
-
-<section class="card notes-card" id="notesCard" style="display:none">
-
-  <h2>
-    ملاحظات
-  </h2>
-
-  <p
-    class="notes-text"
-    id="notesText"
-  ></p>
-
-</section>
-
-<section class="card">
-
-  <h2>
-    البائع
-  </h2>
-
-  <div class="seller">
-
-    <div class="seller-info">
-
-      <p>
-        <b id="sName"></b>
-        <span id="sInfo"></span>
-      </p>
-
-    </div>
-
-    <span
-      class="seller-status"
-      id="sStatus"
-    >
-      مستخدم جديد
-    </span>
-
-  </div>
-
-</section>
-
+  <section class="card" id="resCard" hidden><h2>نتيجة المزاد</h2>
+    <div class="r"><span>الحالة</span><strong id="rSt"></strong></div>
+    <div class="r"><span>السعر النهائي</span><strong id="rPr"></strong></div>
+  </section>
+</div>
 </main>
 
-<div
-  class="toast"
-  id="toast"
-  role="status"
-></div>
-
+<div class="sbg" id="sbg" aria-hidden="true"><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" role="status"></div>
 
 <script type="module">
-
-import {
-  supabase
-} from "./js/supabase.js?v=auction-details-final-6";
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
+import { supabase } from "./js/supabase.js";
 const $ = id => document.getElementById(id);
-
-const fmt = n => Number(n || 0).toLocaleString("en-US");
-
-const escapeHtml = value =>
-  String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-
-/* =========================================================
-   AUCTION ID
-========================================================= */
-
-const params = new URLSearchParams(window.location.search);
-
-const auctionId = params.get("id")?.trim() || "";
-
-
-let auction = null;
-let bids = [];
-let ended = false;
-let locked = false;
-let toastT = null;
-let timerInterval = null;
-let refreshInterval = null;
-
-/* وقت نهاية يرجع من الـ RPC بعد التمديد */
-let endOverride = 0;
-
-/* بيانات البائع من جدول المستخدمين (إن وُجدت وسمحت الصلاحيات) */
-let sellerProfile = null;
-
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-function toast(message){
-
-  const el = $("toast");
-
-  el.textContent = String(message || "");
-
-  el.classList.add("show");
-
-  clearTimeout(toastT);
-
-  toastT = setTimeout(() => {
-    el.classList.remove("show");
-  }, 2600);
-
-}
-
-
-/* =========================================================
-   RELATIVE TIME
-========================================================= */
-
-function ago(value){
-
-  if(!value){
-    return "";
-  }
-
-  const time = new Date(value).getTime();
-
-  if(!Number.isFinite(time)){
-    return "";
-  }
-
-  const diff = Math.max(0, Date.now() - time);
-
-  const minutes = Math.floor(diff / 60000);
-
-  if(minutes < 1){
-    return "الآن";
-  }
-
-  if(minutes < 60){
-    return `منذ ${minutes} دقيقة`;
-  }
-
-  const hours = Math.floor(minutes / 60);
-
-  if(hours < 24){
-    return `منذ ${hours} ساعة`;
-  }
-
-  const days = Math.floor(hours / 24);
-
-  return `منذ ${days} يوم`;
-
-}
-
-
-/* =========================================================
-   BIDDER COLORS
-========================================================= */
-
-function colorOf(name){
-
-  const colors = [
-    "#6246d9",
-    "#176b87",
-    "#e8590c",
-    "#1e8a5a",
-    "#b9791a",
-    "#c2255c"
-  ];
-
-  const text = String(name || "مستخدم");
-
-  const total = [...text].reduce(
-    (sum,char) => sum + char.charCodeAt(0),
-    0
-  );
-
-  return colors[total % colors.length];
-
-}
-
-
-function av(name){
-
-  const text = String(name || "مستخدم");
-
-  return `
-    <span
-      class="av"
-      style="background:${colorOf(text)}"
-    >
-      ${escapeHtml(text.trim()[0] || "م")}
-    </span>
-  `;
-
-}
-
-
-/* =========================================================
-   IMAGES
-========================================================= */
-
-function parseImages(value){
-
-  if(!value){
-    return [];
-  }
-
-  let data = value;
-
-  if(typeof data === "string"){
-
-    try{
-
-      data = JSON.parse(data);
-
-    }catch{
-
-      data = data
-        .split(",")
-        .map(x => x.trim())
-        .filter(Boolean);
-
-    }
-
-  }
-
-  if(!Array.isArray(data)){
-
-    if(typeof data === "object"){
-
-      data = Object.values(data);
-
-    }else{
-
-      data = [data];
-
-    }
-
-  }
-
-  return data
-    .map(item => {
-
-      if(!item){
-        return "";
-      }
-
-      if(typeof item === "string"){
-        return item.trim();
-      }
-
-      if(typeof item === "object"){
-
-        return (
-          item.url ||
-          item.path ||
-          item.src ||
-          item.publicUrl ||
-          item.public_url ||
-          ""
-        );
-
-      }
-
-      return "";
-
-    })
-    .filter(Boolean);
-
-}
-
-
-function imageUrl(path){
-
-  if(!path){
-    return "";
-  }
-
-  if(
-    path.startsWith("http://") ||
-    path.startsWith("https://") ||
-    path.startsWith("data:")
-  ){
-
-    return path;
-
-  }
-
-  const clean = path
-    .replace(/^\/+/,"")
-    .replace(/^device-images\//,"");
-
-  const { data } = supabase
-    .storage
-    .from("device-images")
-    .getPublicUrl(clean);
-
-  return data?.publicUrl || "";
-
-}
-
-
-function valueText(value){
-
-  if(value === null || value === undefined){
-    return "";
-  }
-
-  if(typeof value === "string"){
-    return value.trim();
-  }
-
-  if(Array.isArray(value)){
-    return value.join("، ");
-  }
-
-  if(typeof value === "object"){
-
-    return Object.values(value)
-      .filter(Boolean)
-      .join("، ");
-
-  }
-
-  return String(value);
-
-}
-
-
-/* =========================================================
-   PARSE NOTES
-========================================================= */
-
-function parseStoredNotes(raw){
-
-  const text = valueText(raw);
-
-  if(!text){
-
-    return {
-      userNotes:"",
-      meta:{}
-    };
-
-  }
-
-  const markers = [
-    "— معلومات الحالة —",
-    "-- معلومات الحالة --",
-    "معلومات الحالة"
-  ];
-
-  let markerIndex = -1;
-  let markerLength = 0;
-
-  for(const marker of markers){
-
-    const index = text.indexOf(marker);
-
-    if(index >= 0){
-
-      markerIndex = index;
-      markerLength = marker.length;
-
-      break;
-
-    }
-
-  }
-
-
-  const userNotes =
-    markerIndex >= 0
-      ? text.slice(0,markerIndex).trim()
-      : text.trim();
-
-
-  const internal =
-    markerIndex >= 0
-      ? text.slice(markerIndex + markerLength).trim()
-      : "";
-
-
-  const meta = {};
-
-
-  internal
-    .split("\n")
-    .map(line => line.trim())
-    .filter(Boolean)
-    .forEach(line => {
-
-      const match = line.match(/^([^:：]+)\s*[:：]\s*(.*)$/);
-
-      if(!match){
-        return;
-      }
-
-      meta[match[1].trim()] = match[2].trim();
-
-    });
-
-
-  return {
-    userNotes,
-    meta
-  };
-
-}
-
-
-/* =========================================================
-   AUCTION META
-   صفحة البيع (sell-auction.html) تحفظ بيانات المزاد
-   كسطر JSON داخل notes بعد العلامة MZAD_AUCTION_META
-   وليس في أعمدة auction_* (غير موجودة في الجدول).
-========================================================= */
-
-function parseAuctionMeta(raw){
-
-  const text = valueText(raw);
-
-  const marker = "MZAD_AUCTION_META";
-
-  const at = text.indexOf(marker);
-
-  if(at < 0){
-    return {};
-  }
-
-  const rest = text.slice(at + marker.length);
-
-  const s = rest.indexOf("{");
-  const e = rest.lastIndexOf("}");
-
-  if(s < 0 || e < s){
-    return {};
-  }
-
+const auctionId = new URLSearchParams(location.search).get("auction") || new URLSearchParams(location.search).get("id");
+const S = { user:null, a:null, d:null, imgs:[], bids:[], count:0, elig:false, result:null, busy:false, amount:0, sheet:"", sig:"", lastPrice:null, refetched:false, polling:false, loaded:false };
+const DEPOSIT = 5000;
+const money = n => Number(n||0).toLocaleString("en-US");
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmtT = v => { const d = new Date(v); return isNaN(d) ? "—" : d.toLocaleString("ar-IQ",{dateStyle:"medium",timeStyle:"short"}); };
+const must = r => { if (r.error) throw r.error; return r.data; };
+
+const BID_ERR = { AUTH_REQUIRED:"يجب تسجيل الدخول أولاً.", SELLER_CANNOT_BID:"لا يمكنك المزايدة على مزادك.", AUCTION_NOT_LIVE:"المزاد غير مفتوح حالياً.", AUCTION_ALREADY_ENDED:"انتهى المزاد.", BUYER_DEPOSIT_NOT_APPROVED:"تأمين المشاركة غير معتمد بعد.", BID_TOO_LOW:"المبلغ أقل من الحد المطلوب." };
+const bidErr = e => { const m = String(e?.message||""); for (const k in BID_ERR) if (m.includes(k)) return BID_ERR[k]; return "تعذر تسجيل المزايدة، حاول مرة ثانية."; };
+
+const isLive = () => S.a?.status === "live" && new Date(S.a.ends_at).getTime() > Date.now();
+const incr = () => Number(S.a.bid_increment_iqd) || 1000;
+const minBid = () => Number(S.a.current_price_iqd || S.a.starting_price_iqd || 0) + Number(S.a.bid_increment_iqd || 0);
+const isSeller = () => S.a.seller_user_id === S.user.id;
+const mine = b => b.bidder_user_id === S.user.id;
+
+const who = id => {
+  if (id === S.user.id) return "أنت";
+  let h = 0; const s = String(id);
+  for (let i = 0; i < s.length; i++) h = (h*31 + s.charCodeAt(i)) >>> 0;
+  return "مزايد " + (100 + h % 900);
+};
+const COLORS = ["#6246d9","#176b87","#e8590c","#1e8a5a","#b9791a","#c2255c"];
+const av = id => `<span class="av" style="background:${COLORS[[...String(id)].reduce((s,c)=>s+c.charCodeAt(0),0) % COLORS.length]}">${esc(who(id).slice(-1))}</span>`;
+const ago = v => {
+  const s = Math.floor((Date.now() - new Date(v).getTime())/1000);
+  if (isNaN(s)) return "";
+  if (s < 45) return "الآن";
+  if (s < 3600) return "قبل " + Math.max(1, Math.round(s/60)) + " دقيقة";
+  if (s < 86400) return "قبل " + Math.round(s/3600) + " ساعة";
+  return fmtT(v);
+};
+let tt;
+function toast(m, kind){ const el = $("toast"); el.textContent = m; el.className = "toast show" + (kind ? " " + kind : ""); clearTimeout(tt); tt = setTimeout(() => el.classList.remove("show"), 2600); }
+
+/* ============ التحميل ============ */
+async function loadStatic(){
+  S.d = (await supabase.from("mzad_devices").select("*").eq("id", S.a.device_id).maybeSingle()).data || null;
   try{
-
-    const obj = JSON.parse(rest.slice(s, e + 1));
-
-    return obj && typeof obj === "object" ? obj : {};
-
-  }catch{
-
-    return {};
-
-  }
-
-}
-
-
-function auctionMeta(){
-  return parseAuctionMeta(auction?.notes);
-}
-
-
-function toTime(value){
-
-  if(!value){
-    return NaN;
-  }
-
-  return new Date(value).getTime();
-
-}
-
-
-/* =========================================================
-   END TIME
-========================================================= */
-
-function getEndTime(){
-
-  if(!auction){
-    return null;
-  }
-
-  const meta = auctionMeta();
-
-  /*
-    1) auction_ends_at (عمود، إن وُجد)
-    2) meta.ends_at (المحفوظ في notes عند النشر)
-    3) created_at + duration_hours (عمود أو من meta)
-  */
-
-  let base = toTime(auction.auction_ends_at);
-
-  if(!Number.isFinite(base)){
-    base = toTime(meta.ends_at);
-  }
-
-  if(!Number.isFinite(base)){
-
-    const created = toTime(auction.created_at);
-
-    const duration =
-      Number(auction.duration_hours) ||
-      Number(meta.duration_hours) ||
-      0;
-
-    if(Number.isFinite(created) && duration > 0){
-      base = created + duration * 60 * 60 * 1000;
+    const im = (await supabase.from("mzad_device_images").select("storage_path,is_primary,sort_order").eq("device_id", S.a.device_id).order("sort_order",{ascending:true}).limit(8)).data || [];
+    im.sort((x,y) => (y.is_primary?1:0) - (x.is_primary?1:0));
+    if (im.length){
+      const sg = await supabase.storage.from("device-images").createSignedUrls(im.map(x => x.storage_path), 3600);
+      S.imgs = (sg.data || []).map(x => x.signedUrl).filter(Boolean);
     }
-
-  }
-
-  /*
-    وقت النهاية الممدد القادم من الـ RPC
-    يغلب إذا كان أبعد.
-  */
-
-  if(Number.isFinite(base)){
-    return Math.max(base, endOverride || 0);
-  }
-
-  if(endOverride){
-    return endOverride;
-  }
-
-  return null;
-
+  }catch(e){ console.error("IMG:", e); }
 }
 
-
-/* =========================================================
-   INITIAL LOAD
-========================================================= */
-
-if(!auctionId){
-
-  $("name").textContent = "المزاد غير موجود";
-
-  $("sub").textContent = "لم يتم تحديد الجهاز";
-
-  $("bid").disabled = true;
-
-}else{
-
-  loadAuction();
-
-}
-
-
-/* =========================================================
-   SELLER PROFILE
-   محاولة قراءة بيانات البائع الحقيقية عن طريق seller_id.
-   إذا لم تنجح (الجدول غير موجود أو الصلاحيات تمنع)
-   لا نعرض بيانات وهمية.
-========================================================= */
-
-async function loadSeller(){
-
-  sellerProfile = null;
-
-  const sid = auction?.seller_id;
-
-  if(!sid){
-    return;
+async function loadLive(){
+  const a = must(await supabase.from("mzad_auctions").select("*").eq("id", auctionId).maybeSingle());
+  if (!a) throw new Error("NOT_FOUND");
+  if (!["live","ended"].includes(a.status)){
+    if (a.seller_user_id === S.user.id){ location.replace("auction-request-status.html?auction=" + encodeURIComponent(a.id)); return false; }
+    throw new Error("UNAVAILABLE");
   }
-
-  try{
-
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", sid)
-      .maybeSingle();
-
-    if(error){
-
-      console.warn("SELLER PROFILE LOAD:", error.message);
-
-      return;
-
-    }
-
-    sellerProfile = data || null;
-
-  }catch(error){
-
-    console.warn("SELLER PROFILE ERROR:", error);
-
-  }
-
-}
-
-
-function pickFirst(obj, keys){
-
-  if(!obj){
-    return "";
-  }
-
-  for(const key of keys){
-
-    const value = String(obj[key] ?? "").trim();
-
-    if(value){
-      return value;
-    }
-
-  }
-
-  return "";
-
-}
-
-
-/* =========================================================
-   LOAD AUCTION
-========================================================= */
-
-async function loadAuction(){
-
-  try{
-
-    $("name").textContent = "جاري تحميل المزاد...";
-
-    $("sub").textContent = "";
-
-
-    const { data, error } = await supabase
-      .from("devices")
-      .select("*")
-      .eq("id", auctionId)
-      .maybeSingle();
-
-
-    if(error){
-
-      console.error("AUCTION LOAD ERROR:", error);
-
-      throw error;
-
-    }
-
-
-    if(!data){
-
-      throw new Error("المزاد غير موجود أو لم يعد متاحاً");
-
-    }
-
-
-    auction = data;
-
-
-    await Promise.all([
-      loadBids(),
-      loadSeller()
-    ]);
-
-    renderBody();
-
-    renderGallery();
-
-    renderBids(false);
-
-    tick();
-
-    startLiveRefresh();
-
-    checkFavorite();
-
-
-  }catch(error){
-
-    console.error("AUCTION DETAILS LOAD ERROR:", error);
-
-    $("name").textContent = "تعذر تحميل المزاد";
-
-    $("sub").textContent = "تأكد من أن المزاد موجود أو أن الرابط صحيح";
-
-    $("bid").disabled = true;
-
-    toast("تعذر تحميل بيانات المزاد");
-
-  }
-
-}
-
-
-/* =========================================================
-   LOAD BIDS
-========================================================= */
-
-async function loadBids(){
-
-  if(!auction?.id){
-
-    bids = [];
-
-    return;
-
-  }
-
-
-  const { data, error } = await supabase
-    .from("auction_bids")
-    .select(`
-      id,
-      auction_id,
-      user_id,
-      bidder_name,
-      amount,
-      created_at
-    `)
-    .eq("auction_id", auction.id)
-    .order("amount", { ascending:false })
-    .order("created_at", { ascending:false })
-    .limit(100);
-
-
-  if(error){
-
-    console.error("AUCTION BIDS LOAD ERROR:", error);
-
-    bids = [];
-
-    return;
-
-  }
-
-
-  bids = data || [];
-
-}
-
-
-/* =========================================================
-   GALLERY
-========================================================= */
-
-function renderGallery(){
-
-  const images = parseImages(auction?.images)
-    .map(imageUrl)
-    .filter(Boolean)
-    .slice(0,6);
-
-
-  const slides = $("slides");
-
-  const dots = $("dots");
-
-
-  if(!images.length){
-
-    slides.innerHTML = `
-      <div
-        class="slide"
-        style="
-          background:
-          linear-gradient(
-            145deg,
-            #fff,
-            #f3f0ff
-          )
-        "
-      >
-        <div
-          style="
-            font-size:14px;
-            font-weight:900;
-            color:#8a96a3;
-          "
-        >
-          MZAD PHONE
-        </div>
-      </div>
-    `;
-
-    dots.innerHTML = "";
-
-    return;
-
-  }
-
-
-  slides.innerHTML = images
-    .map(
-      (src,index) => `
-        <div
-          class="slide"
-          style="background:#fff"
-        >
-
-          <img
-            src="${escapeHtml(src)}"
-            alt="${escapeHtml(
-              auction?.model ||
-              "صورة الجهاز"
-            )} - صورة ${index + 1}"
-            loading="${index === 0 ? "eager" : "lazy"}"
-            decoding="async"
-            draggable="false"
-            onerror="this.style.display='none'"
-          >
-
-        </div>
-      `
-    )
-    .join("");
-
-
-  dots.innerHTML = images
-    .map(
-      (_,index) =>
-        `<span class="dot${index ? "" : " active"}"></span>`
-    )
-    .join("");
-
-}
-
-
-$("slides").addEventListener(
-  "scroll",
-  event => {
-
-    const el = event.target;
-
-    const width = el.clientWidth;
-
-    if(!width){
-      return;
-    }
-
-
-    const index = Math.round(
-      Math.abs(el.scrollLeft) / width
-    );
-
-
-    [...$("dots").children].forEach(
-      (dot,k) => {
-
-        dot.classList.toggle("active", k === index);
-
-      }
-    );
-
-  },
-  {
-    passive:true
-  }
-);
-
-
-/* =========================================================
-   PRICE
-========================================================= */
-
-function startPrice(){
-
-  const meta = auctionMeta();
-
-  return Number(
-    auction.auction_start_price ??
-    meta.start_price ??
-    auction.price ??
-    0
-  );
-
-}
-
-
-function currentPrice(){
-
-  if(bids.length){
-
-    return Number(
-      bids[0].amount ||
-      auction.auction_current_price ||
-      startPrice() ||
-      0
-    );
-
-  }
-
-
-  const meta = auctionMeta();
-
-  return Number(
-    auction.auction_current_price ??
-    meta.current_price ??
-    startPrice() ??
-    0
-  );
-
-}
-
-
-/*
-  شرائح الزيادة (نفس المعلن في صفحة البيع):
-  أقل من 300 ألف: 5,000
-  300 إلى أقل من 750 ألف: 10,000
-  750 ألف إلى أقل من 1.5 مليون: 15,000
-  1.5 إلى أقل من 3 ملايين: 25,000
-  3 ملايين فأكثر: 50,000
-*/
-function stepForPrice(p){
-
-  p = Number(p) || 0;
-
-  if(p < 300000){
-    return 5000;
-  }
-
-  if(p < 750000){
-    return 10000;
-  }
-
-  if(p < 1500000){
-    return 15000;
-  }
-
-  if(p < 3000000){
-    return 25000;
-  }
-
-  return 50000;
-
-}
-
-
-function bidStep(){
-
-  const column = Number(auction.auction_bid_step || 0);
-
-  if(column > 0){
-    return column;
-  }
-
-  /*
-    دالة place_auction_bid تستخدم auction_bid_step
-    وإذا كان فارغاً تستخدم 10000 ثابتة.
-    نطابقها تماماً حتى لا ترفض الدالة المبلغ.
-  */
-
-  return 10000;
-
-}
-
-
-function nextBid(){
-
-  return currentPrice() + bidStep();
-
-}
-
-
-/* =========================================================
-   BODY
-========================================================= */
-
-function renderBody(){
-
-  const title = [
-    auction.brand,
-    auction.model
-  ]
-    .filter(Boolean)
-    .join(" ");
-
-
-  const subtitle = [
-    auction.storage,
-    auction.color,
-    auction.location
-  ]
-    .filter(Boolean)
-    .join(" • ");
-
-
-  $("name").textContent = title || "جهاز";
-
-
-  $("sub").textContent = subtitle;
-
-
-  $("cond").textContent = auction.condition || "غير محدد";
-
-
-  $("price").textContent = fmt(currentPrice());
-
-
-  $("count").textContent = `${bids.length} مزايدة`;
-
-
-  $("stepTag").textContent = `+${fmt(bidStep())} د.ع`;
-
-
-  $("next").textContent = fmt(nextBid());
-
-
-  $("note").textContent =
-    `كل مزايدة ثابتة ${fmt(bidStep())} د.ع، وأي مزايدة بآخر 30 ثانية تمدد المزاد دقيقة كاملة`;
-
-
-  renderSpecs();
-
-  renderNotes();
-
-  renderSeller();
-
-}
-
-
-/* =========================================================
-   SPECS
-========================================================= */
-
-function renderSpecs(){
-
-  const rows = [];
-
-  const parsed = parseStoredNotes(auction.notes);
-
-  const meta = parsed.meta;
-
-
-  if(auction.brand || auction.model){
-
-    rows.push([
-      "الجهاز",
-      [
-        auction.brand,
-        auction.model
-      ]
-        .filter(Boolean)
-        .join(" ")
-    ]);
-
-  }
-
-
-  if(auction.storage){
-
-    rows.push([
-      "السعة",
-      auction.storage
-    ]);
-
-  }
-
-
-  if(auction.battery_health){
-
-    rows.push([
-      "البطارية",
-      auction.battery_health
-    ]);
-
-  }else if(meta["صحة البطارية"]){
-
-    rows.push([
-      "البطارية",
-      meta["صحة البطارية"]
-    ]);
-
-  }
-
-
-  if(auction.color){
-
-    rows.push([
-      "اللون",
-      auction.color
-    ]);
-
-  }
-
-
-  if(auction.screen_condition){
-
-    rows.push([
-      "الشاشة",
-      auction.screen_condition
-    ]);
-
-  }
-
-
-  if(auction.body_condition){
-
-    rows.push([
-      "الهيكل",
-      auction.body_condition
-    ]);
-
-  }
-
-
-  if(auction.face_id){
-
-    rows.push([
-      "Face ID / Touch ID",
-      auction.face_id,
-      true
-    ]);
-
-  }
-
-
-  if(auction.cameras){
-
-    rows.push([
-      "الكاميرات",
-      auction.cameras,
-      true
-    ]);
-
-  }
-
-
-  if(auction.charging){
-
-    rows.push([
-      "الشحن",
-      auction.charging,
-      true
-    ]);
-
-  }
-
-
-  if(!auction.face_id && meta["يعمل"]){
-
-    const works = meta["يعمل"];
-
-
-    if(
-      works.includes("Face ID") ||
-      works.includes("البصمة")
-    ){
-
-      rows.push([
-        "Face ID / Touch ID",
-        "يعمل",
-        true
-      ]);
-
-    }
-
-  }
-
-
-  if(
-    !auction.cameras &&
-    meta["يعمل"] &&
-    meta["يعمل"].includes("الكاميرات")
-  ){
-
-    rows.push([
-      "الكاميرات",
-      "تعمل",
-      true
-    ]);
-
-  }
-
-
-  if(
-    !auction.charging &&
-    meta["يعمل"] &&
-    meta["يعمل"].includes("الشحن والمنفذ")
-  ){
-
-    rows.push([
-      "الشحن",
-      "يعمل",
-      true
-    ]);
-
-  }
-
-
-  /*
-    القطع المستبدلة:
-    صفحة البيع تحفظها في notes بالسطر
-    "انفتح الجهاز أو تبدلت قطع: ..." وفقط إذا فُعّل المفتاح.
-    إذا لم يُفعّل لا يوجد السطر فتظهر "لا توجد قطع مستبدلة".
-    وإذا فُعّل ولم يكتب البائع تفاصيل، القيمة المحفوظة "نعم".
-  */
-
-  let replacedParts =
-    valueText(auction.replaced_parts) ||
-    valueText(meta["انفتح الجهاز أو تبدلت قطع"]);
-
-
-  if(replacedParts === "نعم"){
-    replacedParts = "نعم، بدون تحديد القطع";
-  }
-
-
-  rows.push([
-    "فك أو تبديل قطع",
-    replacedParts || "لا توجد قطع مستبدلة"
+  S.a = a;
+  const ended = a.status === "ended" || new Date(a.ends_at).getTime() <= Date.now();
+  const [b, e, r] = await Promise.all([
+    supabase.from("mzad_auction_bids").select("id,amount_iqd,bidder_user_id,created_at", { count:"exact" }).eq("auction_id", auctionId).eq("accepted", true).order("amount_iqd",{ascending:false}).limit(30),
+    S.elig ? null : supabase.from("mzad_auction_eligibility").select("eligible").eq("auction_id", auctionId).eq("user_id", S.user.id).maybeSingle(),
+    ended ? supabase.from("mzad_auction_results").select("*").eq("auction_id", auctionId).order("created_at",{ascending:false}).limit(1) : null
   ]);
-
-
-  $("specs").innerHTML = rows
-    .map(
-      ([key,value,good]) => `
-
-        <tr>
-
-          <th>
-            ${escapeHtml(key)}
-          </th>
-
-          <td class="${good ? "good" : ""}">
-
-            ${escapeHtml(value)}
-
-          </td>
-
-        </tr>
-
-      `
-    )
-    .join("");
-
+  S.bids = b.error ? [] : (b.data || []); S.count = b.count ?? S.bids.length;
+  if (e) S.elig = e.data?.eligible === true;
+  S.result = r?.data?.[0] || null;
+  return true;
 }
 
+/* ============ الجزء الثابت: الصور والمواصفات ============ */
+const PH = '<svg viewBox="0 0 24 24" fill="none" stroke="#6246d9" stroke-width="1.5"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>';
+function renderStatic(){
+  const a = S.a, d = S.d || {};
+  const name = [d.brand, d.model].filter(Boolean).join(" ") || "جهاز";
+  $("name").textContent = name; document.title = name + " — MZAD PHONE";
+  $("sub").textContent = "مزاد رقم " + (a.auction_number || a.id);
 
-/* =========================================================
-   NOTES
-========================================================= */
+  const bat = d.battery_health ? "بطارية " + (/^\d+$/.test(String(d.battery_health)) ? d.battery_health + "%" : d.battery_health) : null;
+  $("chips").innerHTML = '<span class="chip ver"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 7.8 7 10 4-2.2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg>MZAD VERIFIED</span>'
+    + [d.condition_grade, d.storage, d.color, bat].filter(Boolean).map(x => `<span class="chip">${esc(x)}</span>`).join("");
 
-function renderNotes(){
+  $("slides").innerHTML = S.imgs.length
+    ? S.imgs.map((u,i) => `<div class="slide"><img src="${esc(u)}" alt="${esc(name)} - ${i+1}" ${i?'loading="lazy" ':""}decoding="async" draggable="false" onerror="this.style.display='none'"></div>`).join("")
+    : `<div class="slide">${PH}</div>`;
+  $("dots").innerHTML = S.imgs.length > 1 ? S.imgs.map((_,i) => `<span class="dot${i?"":" on"}"></span>`).join("") : "";
 
-  const parsed = parseStoredNotes(auction?.notes);
+  $("aNo").textContent = a.auction_number || a.id;
+  $("aStart").textContent = money(a.starting_price_iqd) + " د.ع";
+  $("aInc").textContent = money(a.bid_increment_iqd) + " د.ع";
+  $("stepTag").textContent = "+" + money(a.bid_increment_iqd) + " د.ع";
 
+  /* تقرير الفحص: مجموعتان واضحتان، وصف + قيمة، بدون نقاط */
+  const val = k => (d[k] != null && String(d[k]).trim() !== "") ? String(d[k]) : null;
+  const row = ([k,l], cls) => { let v = val(k); if (v === null) return ""; if (k === "battery_health" && /^\d+$/.test(v)) v += "%"; return `<div class="r${cls?" "+cls:""}"><span>${l}</span><strong>${esc(v)}</strong></div>`; };
+  const A = [["condition_grade","الحالة"],["battery_health","صحة البطارية"],["screen_condition","الشاشة"],["camera_condition","الكاميرا"],["biometric_condition","البصمة / الوجه"],["sim_network","الشبكة"]].map(x => row(x)).join("");
+  const W = [["scratches_dents","خدوش وصدمات"],["faults","الأعطال"]].map(x => row(x,"bad")).join("");
+  const B = [["replaced_parts","أجزاء مستبدلة"],["accessories","الملحقات"],["seller_notes","ملاحظات البائع"]].map(x => row(x)).join("");
+  const html = (A ? `<div class="g">حالة الجهاز</div>${A}` : "") + (W || B ? `<div class="g">العيوب والملاحظات</div>${W}${B}` : "");
+  $("insCard").hidden = !html; $("ins").innerHTML = html;
+}
+$("slides").addEventListener("scroll", e => {
+  const el = e.target, w = el.clientWidth; if (!w) return;
+  const i = Math.round(Math.abs(el.scrollLeft) / w);
+  [...$("dots").children].forEach((x,k) => x.classList.toggle("on", k === i));
+}, { passive:true });
 
-  const userNotes = parsed.userNotes;
+/* ============ الجزء الحي ============ */
+function renderLive(){
+  const a = S.a, live = isLive(), top = S.bids[0];
+  const price = a.current_price_iqd ?? a.starting_price_iqd;
+  $("price").textContent = money(price);
+  if (S.loaded && S.lastPrice !== null && price !== S.lastPrice){ const b = $("priceBox"); b.classList.remove("bump"); void b.offsetWidth; b.classList.add("bump"); }
+  S.lastPrice = price;
+  $("count").textContent = S.count + " مزايدة";
+  $("next").textContent = money(minBid());
+  $("aEnd").textContent = fmtT(a.ends_at);
 
+  /* حالة المزايد */
+  const n = $("note");
+  if (!live){ n.className = "note"; n.textContent = ""; }
+  else if (!top){ n.className = "note"; n.textContent = "لا توجد مزايدات بعد، كن أول مزايد"; }
+  else if (mine(top)){ n.className = "note me"; n.textContent = "أنت صاحب أعلى مزايدة حالياً"; }
+  else if (S.bids.some(mine)){ n.className = "note out"; n.textContent = "تم تجاوزك، زايد لتعود للمقدمة"; }
+  else { n.className = "note"; n.textContent = "المزاد مفتوح، زايد لتدخل المنافسة"; }
 
-  const card = $("notesCard");
-
-
-  const text = $("notesText");
-
-
-  if(!userNotes){
-
-    card.style.display = "none";
-
-    text.textContent = "";
-
-    return;
-
+  /* المزايدون */
+  const sig = S.count + "|" + S.bids.map(b => b.id + ":" + b.amount_iqd).join(",");
+  if (sig !== S.sig){
+    S.sig = sig;
+    const seen = new Set(), uniq = S.bids.filter(b => !seen.has(b.bidder_user_id) && seen.add(b.bidder_user_id));
+    $("stack").innerHTML = uniq.slice(0,3).map(b => av(b.bidder_user_id)).join("");
+    $("ticker").innerHTML = top ? `<b>${esc(who(top.bidder_user_id))}</b> زايد ${money(top.amount_iqd)} د.ع، ${esc(ago(top.created_at))}` : "لا توجد مزايدات بعد";
+    $("panelHead").textContent = `المزايدون (${S.count})`;
+    $("bidders").innerHTML = S.bids.slice(0,10).map((b,i) => `<li class="${i?"":"lead"}">${av(b.bidder_user_id)}<span class="who">${esc(who(b.bidder_user_id))}${i?"":'<span class="tg" style="display:inline">الأعلى</span>'}<span>${esc(ago(b.created_at))}</span></span><b>${money(b.amount_iqd)} د.ع</b></li>`).join("");
+    $("allBids").hidden = S.count <= 10 && S.bids.length <= 10;
+    $("allBids").textContent = "عرض كل المزايدين (" + S.count + ")";
+    if (S.sheet === "bidders") $("sheet").innerHTML = biddersHtml();
   }
 
+  /* النتيجة */
+  const showRes = a.status === "ended" || !!S.result;
+  $("resCard").hidden = !showRes;
+  if (showRes){ $("rSt").textContent = S.result?.status || S.result?.result_status || "انتهى المزاد"; $("rPr").textContent = money(S.result?.final_price_iqd ?? S.result?.winning_amount_iqd ?? a.current_price_iqd) + " د.ع"; }
 
-  card.style.display = "";
-
-  text.textContent = userNotes;
-
+  /* الزر */
+  const btn = $("bid");
+  btn.disabled = !live || isSeller() || S.busy;
+  btn.textContent = !live ? "انتهى" : isSeller() ? "مزادك" : "زايد";
+  tick();
 }
 
+/* ============ الزر والنوافذ ============ */
+function openSheet(html, mode){ $("sheet").innerHTML = html; S.sheet = mode; $("sbg").classList.add("open"); $("sbg").setAttribute("aria-hidden","false"); document.body.style.overflow = "hidden"; }
+function closeSheet(){ $("sbg").classList.remove("open"); $("sbg").setAttribute("aria-hidden","true"); S.sheet = ""; document.body.style.overflow = ""; }
+$("sbg").addEventListener("click", e => { if (e.target === $("sbg")) closeSheet(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeSheet(); });
+$("sheet").addEventListener("click", e => {
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  const k = b.dataset.act;
+  if (k === "close") closeSheet();
+  else if (k === "go") submitBid();
+  else if (k === "inc"){ S.amount += incr(); amtUpd(); }
+  else if (k === "dec"){ S.amount = Math.max(minBid(), S.amount - incr()); amtUpd(); }
+});
+const amtUpd = () => { const b = $("bigAmt"); if (b) b.innerHTML = money(S.amount) + "<small>د.ع</small>"; };
 
-/* =========================================================
-   SELLER
-========================================================= */
-
-function renderSeller(){
-
-  const realName =
-    String(auction?.seller_name || "").trim() ||
-    pickFirst(sellerProfile, [
-      "full_name",
-      "name",
-      "display_name",
-      "username"
-    ]);
-
-
-  const phone =
-    String(auction?.seller_phone || "").trim() ||
-    pickFirst(sellerProfile, [
-      "phone",
-      "phone_number"
-    ]);
-
-
-  const location = String(auction?.location || "").trim();
-
-
-  let name = realName;
-
-
-  /*
-    إذا الاسم موجود نعرضه، وإلا الرقم إن وُجد،
-    وإذا لا شيء متاح نعرض "مستخدم MZAD PHONE".
-  */
-
-  if(!name && phone){
-    name = phone;
-  }
-
-
-  if(!name){
-    name = "مستخدم MZAD PHONE";
-  }
-
-
-  $("sName").textContent = name;
-
-
-  const infoParts = [];
-
-
-  if(realName){
-    infoParts.push("عضو في MZAD PHONE");
-  }
-
-
-  if(location){
-    infoParts.push(location);
-  }
-
-
-  if(!infoParts.length && phone){
-    infoParts.push("عضو في MZAD PHONE");
-  }
-
-
-  $("sInfo").textContent =
-    infoParts.join(" • ") ||
-    "عضو في MZAD PHONE";
-
-
-  $("sStatus").textContent = "مستخدم جديد";
-
+function openDeposit(){
+  openSheet(`<div class="grab"></div><h3>خطوة وحدة قبل أول مزايدة</h3>
+    <p class="sd">لتزايد على هذا المزاد نحتاج تأمين مشاركة بمبلغ <b>${money(DEPOSIT)} د.ع</b>. هو مبلغ قابل للاسترداد، وليس سعر الجهاز ولا رسماً للمنصة، وتدفعه مرة وحدة فقط.</p>
+    <div class="stp"><span class="sn">1</span><b>أكمل تأمين المشاركة</b></div>
+    <div class="stp"><span class="sn">2</span><b>ارجع لهذا المزاد</b></div>
+    <div class="stp"><span class="sn">3</span><b>زايد من الزر الدائري</b></div>
+    <a class="b2" href="auction-deposit.html?auction=${encodeURIComponent(S.a.id)}">إكمال تأمين المشاركة</a>
+    <button class="b3" type="button" data-act="close">ليس الآن</button>`, "deposit");
 }
-
-
-/* =========================================================
-   UNIQUE BIDDERS
-========================================================= */
-
-function uniqueBidders(){
-
-  const seen = new Set();
-
-  const result = [];
-
-
-  for(const bid of bids){
-
-    const key =
-      bid.user_id ||
-      bid.bidder_name ||
-      bid.id;
-
-
-    if(seen.has(key)){
-      continue;
-    }
-
-
-    seen.add(key);
-
-    result.push(bid);
-
-  }
-
-
-  return result;
-
+function openConfirm(){
+  openSheet(`<div class="grab"></div><h3>تأكيد المزايدة</h3>
+    <div class="amtbox"><button class="st" type="button" data-act="dec" aria-label="إنقاص">−</button><div class="big" id="bigAmt">${money(S.amount)}<small>د.ع</small></div><button class="st" type="button" data-act="inc" aria-label="زيادة">+</button></div>
+    <p class="sd">تأكد من المبلغ قبل التأكيد. بعد تسجيل مزايدتك يصبح هذا هو السعر الحالي للمزاد.</p>
+    <div id="sMsg"></div>
+    <button class="b2" type="button" data-act="go" id="goBtn">تأكيد وزايد</button>
+    <button class="b3" type="button" data-act="close">رجوع</button>`, "confirm");
 }
-
-
-/* =========================================================
-   RENDER BIDS
-========================================================= */
-
-function renderBids(animate=false){
-
-  const unique = uniqueBidders();
-
-
-  $("stack").innerHTML = unique
-    .slice(0,3)
-    .map(b => av(b.bidder_name || "مستخدم"))
-    .join("");
-
-
-  const top = bids[0];
-
-
-  if(top){
-
-    $("tickText").innerHTML =
-      `<b>${escapeHtml(
-        top.bidder_name || "مستخدم"
-      )}</b> زايد ${fmt(
-        top.amount
-      )} د.ع • ${ago(
-        top.created_at
-      )}`;
-
-  }else{
-
-    $("tickText").textContent = "لا توجد مزايدات بعد";
-
-  }
-
-
-  if(animate){
-
-    const ticker = $("ticker");
-
-    ticker.classList.remove("swap");
-
-    void ticker.offsetWidth;
-
-    ticker.classList.add("swap");
-
-  }
-
-
-  $("panelHead").textContent = `المزايدون (${bids.length})`;
-
-
-  $("bidders").innerHTML = bids
-    .slice(0,20)
-    .map(
-      (b,index) => `
-
-        <li class="${index === 0 ? "lead" : ""}">
-
-          ${av(b.bidder_name || "مستخدم")}
-
-          <span class="who">
-
-            ${escapeHtml(b.bidder_name || "مستخدم")}
-
-            <span>
-              ${escapeHtml(ago(b.created_at))}
-            </span>
-
-          </span>
-
-          <b>
-            ${fmt(b.amount)} د.ع
-          </b>
-
-        </li>
-
-      `
-    )
-    .join("");
-
-
-  $("count").textContent = `${bids.length} مزايدة`;
-
-
-  $("price").textContent = fmt(currentPrice());
-
-
-  $("next").textContent = fmt(nextBid());
-
-
-  $("stepTag").textContent = `+${fmt(bidStep())} د.ع`;
-
+function biddersHtml(){
+  const my = S.bids.findIndex(mine);
+  return `<div class="grab"></div><h3>المزايدون</h3>
+    <p class="sd">مرتبون من الأعلى إلى الأقل. العدد الكلي ${S.count}${S.count > S.bids.length ? "، ونعرض هنا أعلى " + S.bids.length : ""}.${my >= 0 ? ` ترتيبك الحالي: <b>${my+1}</b>` : ""}</p>
+    <ul style="list-style:none;margin:0;padding:0">${S.bids.map((b,i) => `<li style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)">${av(b.bidder_user_id)}<span class="who">${esc(who(b.bidder_user_id))}${i?"":'<span class="tg">الأعلى</span>'}<span>${esc(ago(b.created_at))}</span></span><b style="color:var(--pd)">${money(b.amount_iqd)} د.ع</b></li>`).join("")}</ul>
+    <button class="b3" type="button" data-act="close" style="margin-top:12px">إغلاق</button>`;
 }
+$("allBids").addEventListener("click", () => openSheet(biddersHtml(), "bidders"));
+$("liveRow").onclick = e => { const o = $("panel").classList.toggle("open"); e.currentTarget.setAttribute("aria-expanded", o); };
 
-
-/* =========================================================
-   BIDDERS PANEL
-========================================================= */
-
-$("liveRow").onclick = event => {
-
-  const open = $("panel").classList.toggle("open");
-
-  event.currentTarget.setAttribute("aria-expanded", open);
-
+/* ============ المزايدة ============ */
+$("bid").onclick = () => {
+  if (S.busy || !isLive() || isSeller()) return;
+  const b = $("bid"); b.classList.remove("pulse"); void b.offsetWidth; b.classList.add("pulse");
+  S.amount = minBid();
+  S.elig ? openConfirm() : openDeposit();
 };
 
+async function submitBid(){
+  if (S.busy) return;
+  const amount = S.amount;
+  if (amount < minBid()){ S.amount = minBid(); amtUpd(); $("sMsg").innerHTML = `<div class="msg">أقل مبلغ مسموح: ${money(minBid())} د.ع</div>`; return; }
+  S.busy = true;
+  const g = $("goBtn"); if (g){ g.disabled = true; g.textContent = "جاري تسجيل مزايدتك..."; }
+  try{
+    must(await supabase.rpc("mzad_place_bid", { p_auction_id:auctionId, p_amount_iqd:amount }));
+    await loadLive();
+    S.busy = false; closeSheet(); renderLive();
+    toast(S.bids[0] && mine(S.bids[0]) ? "تم تسجيل مزايدتك. أنت الأعلى الآن" : "تم تسجيل مزايدتك", "ok");
+    navigator.vibrate?.(30);
+  }catch(e){
+    console.error("BID ERROR:", e);
+    S.busy = false;
+    try{ await loadLive(); }catch{}
+    if (String(e?.message||"").includes("BUYER_DEPOSIT_NOT_APPROVED")){ S.elig = false; renderLive(); openDeposit(); return; }
+    closeSheet(); renderLive(); toast(bidErr(e));
+  }
+}
 
-/* =========================================================
-   TIMER
-========================================================= */
-
+/* ============ العداد ============ */
 function tick(){
+  if (!S.a) return;
+  const left = new Date(S.a.ends_at).getTime() - Date.now();
+  const live = S.a.status === "live" && left > 0;
+  const t = Math.max(0, Math.floor(left/1000)), p = n => String(n).padStart(2,"0");
+  $("hh").textContent = p(Math.floor(t/3600)); $("mm").textContent = p(Math.floor(t%3600/60)); $("ss").textContent = p(t%60);
+  $("auction").classList.toggle("hot", live && left <= 300e3);
+  $("auction").classList.toggle("ended", !live);
+  $("liveBadge").textContent = live ? "مزاد مستمر" : "انتهى المزاد";
+  $("endLabel").textContent = live ? "الوقت المتبقي" : "انتهى المزاد";
+  if (!live && S.a.status === "live" && !S.refetched){ S.refetched = true; refresh(); }
+  if (!live && !$("bid").disabled){ $("bid").disabled = true; $("bid").textContent = "انتهى"; }
+}
+setInterval(tick, 1000);
 
-  if(!auction){
-    return;
-  }
-
-
-  const end = getEndTime();
-
-
-  if(!end){
-
-    $("hh").textContent = "00";
-
-    $("mm").textContent = "00";
-
-    $("ss").textContent = "00";
-
-    $("endLabel").textContent = "وقت الانتهاء غير محدد";
-
-    $("bid").disabled = true;
-
-    return;
-
-  }
-
-
-  const left = Math.max(
-    0,
-    Math.ceil((end - Date.now()) / 1000)
-  );
-
-
-  const p = n => String(n).padStart(2,"0");
-
-
-  $("hh").textContent = p(Math.floor(left / 3600));
-
-
-  $("mm").textContent = p(Math.floor((left % 3600) / 60));
-
-
-  $("ss").textContent = p(left % 60);
-
-
-  $("auction").classList.toggle(
-    "hot",
-    left > 0 && left <= 5 * 60
-  );
-
-
-  if(left <= 0){
-
-    finish();
-
-    return;
-
-  }
-
-
-  ended = false;
-
-
-  $("auction").classList.remove("ended");
-
-
-  $("liveBadge").textContent = "مزاد مستمر";
-
-
-  $("endLabel").textContent = "الوقت المتبقي";
-
-
-  if(!locked){
-
-    $("bid").disabled = false;
-
-    $("bid").textContent = "زايد";
-
-  }
-
+async function refresh(){
+  if (S.busy || S.polling) return;
+  S.polling = true;
+  try{ if (await loadLive()) renderLive(); }catch(e){ console.error("REFRESH:", e); }
+  finally{ S.polling = false; }
 }
 
+/* ============ المفضلة والرجوع ============ */
+const favKey = () => "mzad_favorite_auction_" + auctionId;
+function favSet(on){ $("fav").setAttribute("aria-pressed", on); $("fav").setAttribute("aria-label", on ? "إزالة من المفضلة" : "إضافة إلى المفضلة"); }
+try{ favSet(localStorage.getItem(favKey()) === "1"); }catch{}
+$("fav").onclick = () => {
+  const on = $("fav").getAttribute("aria-pressed") !== "true";
+  try{ on ? localStorage.setItem(favKey(), "1") : localStorage.removeItem(favKey()); }catch{}
+  favSet(on); toast(on ? "تمت إضافة المزاد إلى المفضلة" : "تمت إزالة المزاد من المفضلة");
+};
+$("back").onclick = () => history.length > 1 ? history.back() : location.href = "auctions.html";
 
-/* =========================================================
-   FINISH
-========================================================= */
-
-function finish(){
-
-  if(ended){
-    return;
-  }
-
-
-  ended = true;
-
-
-  $("auction").classList.remove("hot");
-
-
-  $("auction").classList.add("ended");
-
-
-  $("liveBadge").textContent = "انتهى المزاد";
-
-
-  $("endLabel").textContent = "انتهى المزاد";
-
-
-  $("bid").disabled = true;
-
-
-  $("bid").textContent = "انتهى";
-
+/* ============ الأخطاء والبدء ============ */
+function fail(t, p, link, detail){
+  $("ld").hidden = true; $("pg").hidden = true; $("errPg").hidden = false;
+  $("errPg").innerHTML = `<h2>${esc(t)}</h2><p>${esc(p)}</p>` + (detail ? `<p dir="ltr" style="font-size:10px;word-break:break-all">${esc(detail)}</p>` : "") + (link ? '<a href="auctions.html">رجوع للمزادات</a>' : '<button id="rt" type="button">إعادة المحاولة</button>');
+  $("rt")?.addEventListener("click", () => location.reload());
 }
 
-
-/* =========================================================
-   LIVE REFRESH
-========================================================= */
-
-async function refreshAuctionData(){
-
-  if(!auction?.id){
-    return;
-  }
-
-
+(async () => {
   try{
-
-    const { data, error } = await supabase
-      .from("devices")
-      .select("*")
-      .eq("id", auction.id)
-      .maybeSingle();
-
-
-    if(error){
-
-      console.error("AUCTION REFRESH ERROR:", error);
-
-      return;
-
-    }
-
-
-    if(data){
-
-      auction = {
-        ...auction,
-        ...data
-      };
-
-    }
-
-
-    await loadBids();
-
-
-    renderBody();
-
-    renderBids(true);
-
-    tick();
-
-
-  }catch(error){
-
-    console.error("LIVE REFRESH ERROR:", error);
-
+    if (!auctionId) throw new Error("NO_ID");
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data.user){ location.href = "index.html?login=1&returnTo=" + encodeURIComponent(location.pathname + location.search); return; }
+    S.user = data.user;
+    if (!await loadLive()) return;
+    await loadStatic();
+    $("ld").hidden = true; $("pg").hidden = false;
+    renderStatic(); renderLive(); S.loaded = true;
+    setInterval(() => { if (!document.hidden) refresh(); }, 5000);
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
+    setInterval(() => { document.querySelectorAll(".who>span:last-child").length && (S.sig = ""); }, 60000);
+  }catch(e){
+    console.error("DETAILS ERROR:", e);
+    const m = String(e?.message||"");
+    if (m === "NO_ID" || m === "NOT_FOUND") fail("المزاد غير موجود","الرابط غير صحيح أو أن المزاد حُذف.",true);
+    else if (m === "UNAVAILABLE") fail("المزاد غير متاح","هذا المزاد لم ينشر بعد.",true);
+    else fail("تعذر تحميل المزاد","تأكد من الاتصال وحاول مرة ثانية.",false,(e?.code||"")+" "+m);
   }
-
-}
-
-
-function startLiveRefresh(){
-
-  clearInterval(refreshInterval);
-
-
-  refreshInterval = setInterval(
-    refreshAuctionData,
-    5000
-  );
-
-}
-
-
-/* =========================================================
-   PLACE BID
-========================================================= */
-
-$("bid").onclick = async () => {
-
-  if(!auction?.id){
-
-    toast("المزاد غير موجود");
-
-    return;
-
-  }
-
-
-  if(ended){
-
-    toast("انتهى المزاد");
-
-    return;
-
-  }
-
-
-  if(locked){
-    return;
-  }
-
-
-  locked = true;
-
-
-  const button = $("bid");
-
-
-  button.classList.remove("pulse");
-
-
-  void button.offsetWidth;
-
-
-  button.classList.add("pulse");
-
-
-  try{
-
-    button.disabled = true;
-
-
-    const {
-      data: sessionData,
-      error: sessionError
-    } = await supabase.auth.getSession();
-
-
-    if(sessionError){
-      throw sessionError;
-    }
-
-
-    const user = sessionData?.session?.user || null;
-
-
-    if(!user){
-
-      toast("يجب تسجيل الدخول أولاً حتى تستطيع المزايدة");
-
-      return;
-
-    }
-
-
-    const end = getEndTime();
-
-
-    if(end && Date.now() >= end){
-
-      finish();
-
-      toast("انتهى المزاد");
-
-      return;
-
-    }
-
-
-    const amount = Number(nextBid());
-
-
-    if(!Number.isFinite(amount) || amount <= 0){
-
-      toast("قيمة المزايدة غير صحيحة");
-
-      return;
-
-    }
-
-
-    const { data, error } = await supabase.rpc(
-      "place_auction_bid",
-      {
-        p_auction_id: String(auction.id),
-        p_amount: amount
-      }
-    );
-
-
-    if(error){
-
-      console.error("PLACE AUCTION BID ERROR:", error);
-
-
-      let message = error?.message || "تعذر تسجيل المزايدة";
-
-
-      if(message.includes("المبلغ المطلوب")){
-        message = "قيمة المزايدة غير صحيحة";
-      }
-
-
-      if(message.includes("المزاد غير نشط")){
-        message = "هذا المزاد غير نشط";
-      }
-
-
-      if(message.includes("انتهى المزاد")){
-        message = "انتهى المزاد";
-      }
-
-
-      if(message.includes("تسجيل الدخول")){
-        message = "يجب تسجيل الدخول أولاً";
-      }
-
-
-      toast(message);
-
-      /* قد تكون المزايدة تغيرت من شخص آخر: حدّث الأرقام */
-      refreshAuctionData();
-
-      return;
-
-    }
-
-
-    let result = data;
-
-
-    if(Array.isArray(result)){
-      result = result[0] || null;
-    }
-
-
-    if(result && typeof result === "object"){
-
-      const hasSuccessField = Object.prototype.hasOwnProperty.call(
-        result,
-        "success"
-      );
-
-
-      if(hasSuccessField && result.success !== true){
-
-        toast(result.message || "لم يتم تسجيل المزايدة");
-
-        refreshAuctionData();
-
-        return;
-
-      }
-
-    }
-
-
-    if(result && result.amount){
-
-      auction.auction_current_price = Number(result.amount);
-
-    }else{
-
-      auction.auction_current_price = amount;
-
-    }
-
-
-    /*
-      إذا الـ RPC رجع وقت نهاية جديد بعد التمديد
-      نعتمده مباشرة. (الاسم المستخدم فعلياً
-      في الكود الأصلي: ends_at)
-    */
-
-    const returnedEnd = toTime(
-      result?.ends_at ||
-      result?.auction_ends_at
-    );
-
-
-    if(Number.isFinite(returnedEnd)){
-
-      endOverride = Math.max(endOverride, returnedEnd);
-
-    }
-
-
-    await loadBids();
-
-
-    renderBody();
-
-    renderBids(true);
-
-    tick();
-
-
-    const priceBox = $("priceBox");
-
-
-    priceBox.classList.remove("bump");
-
-
-    void priceBox.offsetWidth;
-
-
-    priceBox.classList.add("bump");
-
-
-    if(result && result.extended === true){
-
-      toast("تمت المزايدة بنجاح وتم تمديد المزاد دقيقة كاملة");
-
-    }else{
-
-      toast("تمت المزايدة بنجاح");
-
-    }
-
-
-    /* مزامنة فورية مع قاعدة البيانات */
-    refreshAuctionData();
-
-
-  }catch(error){
-
-    console.error("BID ERROR:", error);
-
-
-    toast(
-      error?.message ||
-      "حدث خطأ أثناء المزايدة"
-    );
-
-
-  }finally{
-
-    locked = false;
-
-
-    if(!ended){
-
-      $("bid").disabled = false;
-
-      $("bid").textContent = "زايد";
-
-    }
-
-  }
-
-};
-
-
-/* =========================================================
-   FAVORITE
-========================================================= */
-
-function favoriteKey(){
-
-  return `mzad_favorite_auction_${auction?.id}`;
-
-}
-
-
-function checkFavorite(){
-
-  if(!auction?.id){
-    return;
-  }
-
-
-  const saved = localStorage.getItem(favoriteKey()) === "1";
-
-
-  $("fav").setAttribute(
-    "aria-pressed",
-    saved ? "true" : "false"
-  );
-
-
-  $("fav").setAttribute(
-    "aria-label",
-    saved
-      ? "إزالة من المفضلة"
-      : "إضافة إلى المفضلة"
-  );
-
-}
-
-
-$("fav").onclick = event => {
-
-  if(!auction?.id){
-    return;
-  }
-
-
-  const button = event.currentTarget;
-
-
-  const on = button.getAttribute("aria-pressed") !== "true";
-
-
-  if(on){
-
-    localStorage.setItem(favoriteKey(), "1");
-
-  }else{
-
-    localStorage.removeItem(favoriteKey());
-
-  }
-
-
-  button.setAttribute(
-    "aria-pressed",
-    on ? "true" : "false"
-  );
-
-
-  button.setAttribute(
-    "aria-label",
-    on
-      ? "إزالة من المفضلة"
-      : "إضافة إلى المفضلة"
-  );
-
-
-  toast(
-    on
-      ? "تمت إضافة المزاد إلى المفضلة"
-      : "تمت إزالة المزاد من المفضلة"
-  );
-
-};
-
-
-/* =========================================================
-   BACK
-========================================================= */
-
-$("back").onclick = () => {
-
-  if(document.referrer && history.length > 1){
-
-    history.back();
-
-  }else{
-
-    location.href = "auctions.html";
-
-  }
-
-};
-
-
-/* =========================================================
-   START TIMER
-========================================================= */
-
-timerInterval = setInterval(tick, 1000);
-
-
-/* =========================================================
-   CLEANUP
-========================================================= */
-
-window.addEventListener(
-  "pagehide",
-  () => {
-
-    clearInterval(timerInterval);
-
-    clearInterval(refreshInterval);
-
-  }
-);
-
+})();
 </script>
-
 </body>
 </html>
