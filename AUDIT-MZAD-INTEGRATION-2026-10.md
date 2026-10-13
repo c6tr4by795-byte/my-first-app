@@ -79,3 +79,13 @@ The following source changes have since been committed to this same draft branch
 3. Test direct-sale reservation concurrency and auction bidding with two separate user accounts.
 4. Confirm storage bucket policies allow owners to upload only into their own proof path and restrict proof reads to authorized users/admins.
 5. Review refunds and forfeiture rules against real business policy before enabling them in production.
+
+
+## Implementation progress — device verification controls
+
+- Added `sql/mzad-device-verification-controls.sql` on the working branch.
+- The migration defines an admin-only RPC for explicit device verification decisions (`approved`, `rejected`, `needs_changes`, `under_review`).
+- Approval requires a non-empty checklist object. Rejection/change requests require a reason. Duplicate IMEI/serial values in other relevant listings block approval and create review evidence; the RPC does not automatically ban a user.
+- Each review stores a device event and an audit-log entry with the prior state, decision, reason, checklist, and duplicate flags.
+- This is a backend foundation only. It has not been applied to Supabase, and the current admin UI has not yet been wired to this RPC. The checklist JSON's semantics must be defined in the admin UI before approval can be considered reliable.
+- Important limitation: a duplicate check performed at review time is not a global uniqueness constraint; concurrent submissions can still race. A future pass should add a normalized-identifier strategy and appropriate uniqueness/locking only after product policy for reused/repaired devices is agreed.
