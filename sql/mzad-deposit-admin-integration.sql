@@ -416,8 +416,13 @@ begin
  if t.buyer_user_id<>v_user and t.seller_user_id<>v_user and not public.mzad_is_admin() then
    raise exception 'TRANSACTION_ACCESS_DENIED';
  end if;
- if t.status not in ('open','appointment_pending','seller_arrived','buyer_arrived') then
+ if t.status not in ('open','appointment_pending') then
    raise exception 'TRANSACTION_NOT_SCHEDULABLE';
+ end if;
+ if exists(select 1 from public.mzad_handover_records h
+   where h.transaction_id=t.id and (h.seller_confirmed or h.buyer_confirmed
+     or h.seller_payment_confirmed or h.buyer_device_received or h.platform_confirmed)) then
+   raise exception 'HANDOVER_ALREADY_STARTED';
  end if;
  if p_scheduled_at is null or p_scheduled_at<=now() then raise exception 'APPOINTMENT_TIME_MUST_BE_FUTURE'; end if;
  select * into p from public.mzad_handover_points where id=p_handover_point_id and is_active=true;
