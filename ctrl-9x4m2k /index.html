@@ -1,1 +1,357 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#6246d9">
+<meta name="robots" content="noindex,nofollow">
+<title>إدارة المزادات — MZAD PHONE</title>
+<style>
+:root{--bg:#f9f8fd;--ink:#17202a;--muted:#6b7280;--edge:#e4defa;--p:#6246d9;--pd:#4a34b8;--ps:#f3f0ff;--ok:#1e8a5a;--oks:#e8f6ef;--bad:#c62f4d;--bads:#fff0f3;--hot:#e8590c;--sb:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+button,textarea{font:inherit;color:inherit}button{border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--p);outline-offset:2px}
+.page{width:min(100%,560px);margin:0 auto;padding:0 14px calc(40px + var(--sb));overflow-x:clip}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes rot{to{transform:rotate(360deg)}}
+header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg,#fff,#ece8ff);border-radius:0 0 24px 24px;border-bottom:1px solid #ece8fb;position:sticky;top:0;z-index:30}
+.top{display:flex;align-items:center;justify-content:space-between;padding:12px 2px 0}
+.ib{width:39px;height:34px;display:grid;place-items:center;border:1px solid var(--edge);border-radius:12px;background:#fff;color:var(--p)}
+.ib svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.ib.spin svg{animation:rot .7s linear infinite}
+.brand{text-align:center;line-height:1}.brand b{font-size:16px;letter-spacing:-.03em}.brand small{display:block;margin-top:3px;font-size:9px;font-weight:900;color:var(--p)}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px;padding:4px;border-radius:15px;background:#fff;border:1px solid var(--edge)}
+.tab{padding:9px 4px;border-radius:11px;font-size:11.5px;font-weight:900;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:5px}
+.tab.on{background:var(--p);color:#fff}
+.tab i{font-style:normal;min-width:18px;padding:1px 5px;border-radius:9px;background:var(--ps);color:var(--pd);font-size:10px}
+.tab.on i{background:rgba(255,255,255,.25);color:#fff}
+.tab i.z{opacity:.5}
+.list{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+.card{padding:14px;border-radius:20px;background:#fff;border:1px solid var(--edge);box-shadow:0 10px 24px -16px rgba(98,70,217,.3);animation:up .4s backwards}
+.hd{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.hd h3{margin:0;font-size:14.5px;font-weight:950;line-height:1.4}
+.hd small{display:block;margin-top:2px;font-size:10.5px;font-weight:700;color:var(--muted)}
+.pill{flex:0 0 auto;padding:4px 10px;border-radius:999px;background:var(--ps);color:var(--pd);font-size:10px;font-weight:900}
+.pill.ok{background:var(--oks);color:var(--ok)}.pill.hot{background:#fff4ec;color:var(--hot)}
+.rows{margin-top:10px}
+.r{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed #e9e5f8;font-size:12px;font-weight:700}
+.r:last-child{border:0}.r span{color:var(--muted)}.r strong{font-weight:900;text-align:end;overflow-wrap:anywhere}
+.r strong.ltr{direction:ltr}
+.cp{padding:3px 9px;margin-inline-start:6px;border-radius:8px;background:var(--ps);color:var(--pd);font-size:10px;font-weight:900}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.acts.one{grid-template-columns:1fr}
+.b{height:44px;border-radius:13px;font-size:13px;font-weight:950;display:flex;align-items:center;justify-content:center;transition:transform .15s}
+.b:active{transform:scale(.97)}.b:disabled{opacity:.5}
+.b.main{color:#fff;background:linear-gradient(145deg,#6246d9,#8b6cf0)}
+.b.ok{color:#fff;background:var(--ok)}
+.b.no{background:var(--bads);color:var(--bad)}
+.b.alt{background:var(--ps);color:var(--pd);grid-column:1/-1}
+.cd{font-variant-numeric:tabular-nums;direction:ltr}.cd.late{color:var(--bad)}
+.empty{padding:34px 18px;text-align:center;border-radius:20px;background:#fff;border:1px dashed #cfc7f3}
+.empty h3{margin:0 0 4px;font-size:15px;font-weight:900}.empty p{margin:0;font-size:11.5px;font-weight:700;color:var(--muted);line-height:1.8}
+.sk{height:150px;border-radius:20px;background:#f1eefb}
+.warn{margin-top:14px;padding:12px;border-radius:14px;background:var(--bads);color:var(--bad);font-size:12px;font-weight:800;line-height:1.8;word-break:break-word}
+.ov{position:fixed;inset:0;z-index:100;background:rgba(23,32,42,.5);display:none;align-items:flex-end;justify-content:center}
+.ov.show{display:flex}
+.sheet{width:min(100%,560px);padding:18px 16px calc(18px + var(--sb));border-radius:24px 24px 0 0;background:#fff;animation:up .3s}
+.sheet h3{margin:0 0 4px;font-size:16px;font-weight:950}.sheet p{margin:0 0 12px;font-size:12px;font-weight:700;color:var(--muted);line-height:1.8}
+.sheet textarea{width:100%;min-height:80px;padding:12px;border:1.5px solid var(--edge);border-radius:14px;outline:none;resize:none;font-weight:700}
+.sheet textarea:focus{border-color:#a99cf0}
+.sheet .acts{margin-top:12px}
+.img-ov img{max-width:94%;max-height:86dvh;border-radius:16px;background:#fff}
+.img-ov{align-items:center}
+.toast{position:fixed;left:50%;bottom:calc(24px + var(--sb));transform:translateX(-50%) translateY(16px);max-width:calc(100% - 32px);padding:10px 14px;border-radius:13px;background:#1e2c30;color:#fff;font-size:12px;font-weight:800;opacity:0;pointer-events:none;transition:.3s;z-index:200;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.mfa{text-align:center;margin-top:20px}
+.mfa h3{margin:0 0 6px;font-size:17px;font-weight:950}.mfa p{margin:0 0 12px;font-size:12px;font-weight:700;color:var(--muted);line-height:1.9}
+.mfa .qr{width:180px;height:180px;margin:0 auto 10px;padding:8px;border-radius:16px;border:1px solid var(--edge);background:#fff}
+.mfa .sec{display:inline-block;margin-bottom:12px;padding:6px 12px;border-radius:10px;background:var(--ps);font-size:11px;font-weight:800;direction:ltr;word-break:break-all;color:var(--pd)}
+.mfa input{width:100%;height:54px;border:1.5px solid var(--edge);border-radius:15px;text-align:center;font-size:24px;font-weight:950;letter-spacing:.4em;outline:none;direction:ltr}
+.mfa input:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)}
+.mfa .b{width:100%;margin-top:10px}.mfa .er{margin-top:10px;font-size:12px;font-weight:800;color:var(--bad)}
+[hidden]{display:none!important}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="page">
+<header>
+  <div class="top">
+    <button class="ib" id="back" type="button" aria-label="رجوع"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    <div class="brand"><b>MZAD PHONE</b><small>لوحة الإدارة</small></div>
+    <button class="ib" id="reload" type="button" aria-label="تحديث"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.5-5.8M20 4v5h-5"/></svg></button>
+  </div>
+  <div class="tabs" id="tabs">
+    <button class="tab on" data-t="review">المراجعة <i id="n1" class="z">0</i></button>
+    <button class="tab" data-t="live">المباشرة <i id="n2" class="z">0</i></button>
+    <button class="tab" data-t="refund">الاسترداد <i id="n3" class="z">0</i></button>
+  </div>
+</header>
+<section class="card mfa" id="mfa" hidden>
+  <h3 id="mT">التحقق بخطوتين</h3><p id="mP"></p>
+  <div id="mQ" hidden><img class="qr" id="mImg" alt=""><br><span class="sec" id="mSec"></span></div>
+  <input id="mCode" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="000000">
+  <button class="b main" id="mBtn" type="button">تأكيد</button>
+  <div class="er" id="mErr"></div>
+</section>
+<div id="warn" class="warn" hidden></div>
+<section class="list" id="list"><div class="sk"></div><div class="sk"></div></section>
+</main>
 
+<div class="ov" id="ov"><div class="sheet">
+  <h3 id="sT"></h3><p id="sP"></p>
+  <textarea id="sR" placeholder="السبب (يظهر في السجل)"></textarea>
+  <div class="acts"><button class="b alt" id="sNo" type="button" style="grid-column:auto">إلغاء</button><button class="b main" id="sYes" type="button">تأكيد</button></div>
+</div></div>
+<div class="ov img-ov" id="iov"><img id="iimg" alt=""></div>
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { supabase } from "../js/supabase.js";
+const $ = id => document.getElementById(id);
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = n => Number(n||0).toLocaleString("en-US") + " د.ع";
+const fmtT = v => { const d = new Date(v); return isNaN(d) ? "—" : d.toLocaleString("ar-IQ",{dateStyle:"medium",timeStyle:"short"}); };
+const must = r => { if (r.error) throw r.error; return r.data; };
+let tt; const toast = t => { const e=$("toast"); e.textContent=t; e.classList.add("show"); clearTimeout(tt); tt=setTimeout(()=>e.classList.remove("show"),2600); };
+
+const D = { tab:"review", review:[], live:[], refund:[], busy:false, ready:false };
+const TYPE = { auction_seller:"تأمين بائع", auction_buyer:"تأمين مزايد", direct_buyer:"شراء مباشر" };
+const AST = { live:"مباشر", ended:"منتهي", cancelled:"ملغي", draft:"مسودة", pending:"بانتظار الموافقة", pending_deposit:"بانتظار التأمين" };
+const REVIEW_MS = 3600e3;
+
+/* ---------- الجلب ---------- */
+async function loadAll(){
+  const dep = must(await supabase.from("mzad_deposits").select("id,deposit_number,user_id,auction_id,deposit_type,amount_iqd,status,created_at,refund_reason")
+    .in("status", ["proof_submitted","approved","refundable"]).order("created_at",{ascending:true}).limit(200));
+  const liveA = must(await supabase.from("mzad_auctions").select("id,auction_number,device_id,seller_user_id,current_price_iqd,starting_price_iqd,status,ends_at").eq("status","live").order("ends_at",{ascending:true}).limit(100));
+
+  const pend = dep.filter(d => d.status === "proof_submitted");
+  const aids = [...new Set([...dep.map(d => d.auction_id), ...liveA.map(a => a.id)].filter(Boolean))];
+  const auctions = aids.length ? must(await supabase.from("mzad_auctions").select("id,auction_number,device_id,status,final_price_iqd,winner_user_id").in("id", aids)) : [];
+  const am = new Map(auctions.map(a => [a.id, a]));
+
+  const devIds = [...new Set(auctions.map(a => a.device_id).filter(Boolean))];
+  const devs = devIds.length ? (await supabase.from("mzad_devices").select("id,brand,model,storage").in("id", devIds)).data || [] : [];
+  const dm = new Map(devs.map(d => [d.id, [d.brand,d.model,d.storage].filter(Boolean).join(" ")]));
+
+  const reqs = pend.length ? (await supabase.from("mzad_payment_requests").select("id,request_number,deposit_id,payment_method_id,status,created_at").in("deposit_id", pend.map(d => d.id)).order("created_at",{ascending:false})).data || [] : [];
+  const rm = new Map(); reqs.forEach(r => { if (!rm.has(r.deposit_id)) rm.set(r.deposit_id, r); });
+  let mm = new Map();
+  try{ const m = (await supabase.rpc("mzad_get_enabled_payment_methods")).data || []; mm = new Map(m.map(x => [x.id, x.name_ar])); }catch{}
+
+  const dn = a => a ? (dm.get(a.device_id) || "جهاز") : "—";
+  D.review = pend.map(d => { const a = am.get(d.auction_id), r = rm.get(d.id); return { d, a, r, dev:dn(a), method:mm.get(r?.payment_method_id) || "" }; })
+    .sort((x,y) => new Date(x.r?.created_at || x.d.created_at) - new Date(y.r?.created_at || y.d.created_at));
+  D.live = liveA.map(a => ({ a, dev:dn(am.get(a.id) || a) }));
+  D.refund = dep.filter(d => ["approved","refundable"].includes(d.status)).map(d => ({ d, a:am.get(d.auction_id) }))
+    .filter(x => x.a && ["ended","cancelled"].includes(x.a.status)).map(x => ({ ...x, dev:dn(x.a) }));
+}
+
+/* ---------- العرض ---------- */
+const row = (k, v, cls="", copy="") => `<div class="r"><span>${esc(k)}</span><strong class="${cls}">${esc(v)}${copy ? `<button class="cp" type="button" data-copy="${esc(copy)}">نسخ</button>` : ""}</strong></div>`;
+const short = id => String(id||"").slice(0,8);
+
+function cardReview(x, i){
+  const { d, a, r } = x;
+  const t0 = r?.created_at || d.created_at;
+  return `<article class="card" style="animation-delay:${Math.min(i,6)*.04}s">
+    <div class="hd"><div><h3>${esc(x.dev)}</h3><small>${esc(TYPE[d.deposit_type] || d.deposit_type)} • ${esc(d.deposit_number || "")}</small></div><span class="pill hot">${money(d.amount_iqd)}</span></div>
+    <div class="rows">
+      ${row("رقم الطلب", r?.request_number || "—", "ltr")}
+      ${row("المزاد", a?.auction_number || "—", "ltr")}
+      ${x.method ? row("طريقة الدفع", x.method) : ""}
+      ${row("المستخدم", short(d.user_id), "ltr", d.user_id)}
+      ${row("أرسل", fmtT(t0))}
+      <div class="r"><span>وقت المراجعة</span><strong class="cd" data-t0="${esc(t0)}">--:--:--</strong></div>
+    </div>
+    <div class="acts">
+      <button class="b alt" data-a="proof" data-id="${esc(r?.id||"")}" data-u="${esc(d.user_id)}" type="button">🧾 عرض صورة الإيصال</button>
+      <button class="b no" data-a="reject" data-id="${esc(d.id)}" type="button">رفض</button>
+      <button class="b ok" data-a="approve" data-id="${esc(d.id)}" data-t="${esc(d.deposit_type)}" type="button">موافقة</button>
+    </div></article>`;
+}
+function cardLive(x, i){
+  const a = x.a;
+  return `<article class="card" style="animation-delay:${Math.min(i,6)*.04}s">
+    <div class="hd"><div><h3>${esc(x.dev)}</h3><small>${esc(a.auction_number || "")}</small></div><span class="pill ok">مباشر</span></div>
+    <div class="rows">
+      ${row("السعر الحالي", money(a.current_price_iqd ?? a.starting_price_iqd))}
+      ${row("ينتهي", fmtT(a.ends_at))}
+      <div class="r"><span>المتبقي</span><strong class="cd" data-end="${esc(a.ends_at)}">--:--:--</strong></div>
+    </div>
+    <div class="acts">
+      <button class="b no" data-a="cancel" data-id="${esc(a.id)}" type="button">إلغاء المزاد</button>
+      <button class="b main" data-a="finish" data-id="${esc(a.id)}" type="button">إنهاء الآن</button>
+    </div></article>`;
+}
+function cardRefund(x, i){
+  const { d, a } = x;
+  return `<article class="card" style="animation-delay:${Math.min(i,6)*.04}s">
+    <div class="hd"><div><h3>${esc(x.dev)}</h3><small>${esc(TYPE[d.deposit_type] || d.deposit_type)} • ${esc(d.deposit_number || "")}</small></div><span class="pill">${esc(AST[a.status] || a.status)}</span></div>
+    <div class="rows">
+      ${row("المبلغ المستحق", money(d.amount_iqd))}
+      ${row("المزاد", a.auction_number || "—", "ltr")}
+      ${row("المستخدم", short(d.user_id), "ltr", d.user_id)}
+      ${a.final_price_iqd ? row("السعر النهائي", money(a.final_price_iqd)) : ""}
+    </div>
+    <div class="acts one"><button class="b main" data-a="refunded" data-id="${esc(d.id)}" type="button">تم إرجاع المبلغ للمستخدم</button></div></article>`;
+}
+
+const EMPTY = {
+  review:["لا توجد طلبات للمراجعة","كل الطلبات تمت معالجتها 🎉"],
+  live:["لا توجد مزادات مباشرة","المزادات المنشورة تظهر هنا."],
+  refund:["لا توجد تأمينات للاسترداد","تظهر بعد انتهاء أو إلغاء المزاد."]
+};
+function render(){
+  const t = D.tab, items = D[t];
+  ["review","live","refund"].forEach((k,i) => { const n = $("n"+(i+1)); n.textContent = D[k].length; n.classList.toggle("z", !D[k].length); });
+  document.querySelectorAll(".tab").forEach(b => b.classList.toggle("on", b.dataset.t === t));
+  const fn = { review:cardReview, live:cardLive, refund:cardRefund }[t];
+  $("list").innerHTML = items.length ? items.map(fn).join("") : `<div class="empty"><h3>${EMPTY[t][0]}</h3><p>${EMPTY[t][1]}</p></div>`;
+  tick();
+}
+
+const fmtLeft = ms => { const s = Math.floor(Math.abs(ms)/1000), p = n => String(n).padStart(2,"0"); return p(Math.floor(s/3600))+":"+p(Math.floor(s%3600/60))+":"+p(s%60); };
+function tick(){
+  const now = Date.now();
+  document.querySelectorAll("[data-t0]").forEach(el => {
+    const left = new Date(el.dataset.t0).getTime() + REVIEW_MS - now;
+    el.textContent = left > 0 ? fmtLeft(left) : "تأخر " + fmtLeft(left);
+    el.classList.toggle("late", left <= 0);
+  });
+  document.querySelectorAll("[data-end]").forEach(el => { el.textContent = fmtLeft(Math.max(0, new Date(el.dataset.end).getTime() - now)); });
+}
+setInterval(tick, 1000);
+
+/* ---------- نافذة التأكيد ---------- */
+function ask({ title, text, reason, yes, danger }){
+  return new Promise(res => {
+    $("sT").textContent = title; $("sP").textContent = text;
+    $("sR").hidden = !reason; $("sR").value = "";
+    $("sYes").textContent = yes; $("sYes").className = "b " + (danger ? "no" : "main");
+    $("ov").classList.add("show");
+    const done = v => { $("ov").classList.remove("show"); $("sYes").onclick = $("sNo").onclick = $("ov").onclick = null; res(v); };
+    $("sYes").onclick = () => done({ note: $("sR").value.trim() });
+    $("sNo").onclick = () => done(null);
+    $("ov").onclick = e => { if (e.target === $("ov")) done(null); };
+  });
+}
+
+async function showProof(reqId, userId){
+  if (!reqId){ toast("لا يوجد طلب دفع مرتبط"); return; }
+  try{
+    const l = await supabase.storage.from("mzad-payment-proofs").list(userId, { limit:20, search:reqId });
+    if (l.error) throw l.error;
+    const f = (l.data || []).filter(x => x.name.startsWith(reqId)).sort((a,b) => (b.created_at||"").localeCompare(a.created_at||""))[0];
+    if (!f){ toast("لم أجد صورة لهذا الطلب"); return; }
+    const s = await supabase.storage.from("mzad-payment-proofs").createSignedUrl(userId + "/" + f.name, 600);
+    if (s.error) throw s.error;
+    $("iimg").src = s.data.signedUrl; $("iov").classList.add("show");
+  }catch(e){ console.error("PROOF:", e); toast("تعذر عرض الصورة: " + (e.message || e)); }
+}
+$("iov").addEventListener("click", () => { $("iov").classList.remove("show"); $("iimg").removeAttribute("src"); });
+
+/* ---------- الإجراءات ---------- */
+const ACT = {
+  approve: async (id, el) => {
+    const r = await ask({ title:"تأكيد الموافقة", text: el.dataset.t === "auction_seller" ? "سيعتمد تأمين البائع وينشر المزاد لمدة ساعة." : "سيعتمد التأمين ويصبح المستخدم مؤهلاً.", yes:"موافقة" });
+    if (r) must(await supabase.rpc("mzad_approve_deposit", { p_deposit_id:id, p_approve:true, p_note:r.note || null }));
+    return !!r && "تمت الموافقة ✓";
+  },
+  reject: async id => {
+    const r = await ask({ title:"رفض الإثبات", text:"سيتمكن المستخدم من إرسال إثبات جديد.", reason:true, yes:"رفض", danger:true });
+    if (r) must(await supabase.rpc("mzad_approve_deposit", { p_deposit_id:id, p_approve:false, p_note:r.note || "مرفوض" }));
+    return !!r && "تم الرفض";
+  },
+  cancel: async id => {
+    const r = await ask({ title:"إلغاء المزاد", text:"سيلغى المزاد فوراً ولا يمكن التراجع.", reason:true, yes:"إلغاء المزاد", danger:true });
+    if (r) must(await supabase.rpc("mzad_cancel_auction", { p_auction_id:id, p_reason:r.note || "إلغاء من الإدارة" }));
+    return !!r && "تم إلغاء المزاد";
+  },
+  finish: async id => {
+    const r = await ask({ title:"إنهاء المزاد الآن", text:"سيُحسم المزاد لأعلى مزايد حالياً.", yes:"إنهاء" });
+    if (r) must(await supabase.rpc("mzad_finish_auction", { p_auction_id:id }));
+    return !!r && "تم إنهاء المزاد";
+  },
+  refunded: async id => {
+    const r = await ask({ title:"تأكيد الاسترداد", text:"اضغط تأكيد بعد ما تحوّل المبلغ فعلاً للمستخدم.", yes:"تم الإرجاع" });
+    if (r) must(await supabase.rpc("mzad_mark_deposit_refunded", { p_deposit_id:id }));
+    return !!r && "تم تسجيل الاسترداد ✓";
+  }
+};
+
+$("list").addEventListener("click", async e => {
+  const c = e.target.closest("[data-copy]");
+  if (c){ try{ await navigator.clipboard.writeText(c.dataset.copy); toast("تم النسخ"); }catch{ toast("تعذر النسخ"); } return; }
+  const b = e.target.closest("[data-a]"); if (!b || D.busy) return;
+  if (b.dataset.a === "proof"){ showProof(b.dataset.id, b.dataset.u); return; }
+  D.busy = true; b.disabled = true;
+  try{
+    const msg = await ACT[b.dataset.a](b.dataset.id, b);
+    if (msg){ toast(msg); await reload(); }
+  }catch(err){ console.error("ACTION:", err); toast("فشل: " + (err.message || err)); }
+  finally{ D.busy = false; b.disabled = false; }
+});
+
+$("tabs").addEventListener("click", e => { const b = e.target.closest(".tab"); if (!b) return; D.tab = b.dataset.t; render(); });
+
+async function reload(){
+  $("reload").classList.add("spin");
+  try{ await loadAll(); $("warn").hidden = true; render(); }
+  catch(e){ console.error("LOAD:", e); $("warn").hidden = false; $("warn").textContent = "تعذر تحميل البيانات: " + (e.message || e) + (e.code === "42501" ? " — ينقصك صلاحية قراءة (RLS) للأدمن." : ""); }
+  finally{ $("reload").classList.remove("spin"); }
+}
+$("reload").addEventListener("click", reload);
+$("back").addEventListener("click", () => history.length > 1 ? history.back() : location.href = "../home.html");
+
+async function gate(){
+  const a = must(await supabase.auth.mfa.getAuthenticatorAssuranceLevel());
+  if (a.currentLevel === "aal2") return true;
+  const fl = must(await supabase.auth.mfa.listFactors());
+  let factor = (fl.totp || []).find(f => f.status === "verified"), qr = "", secret = "";
+  if (!factor){
+    for (const f of (fl.all || []).filter(f => f.status !== "verified")) await supabase.auth.mfa.unenroll({ factorId:f.id });
+    const en = must(await supabase.auth.mfa.enroll({ factorType:"totp", friendlyName:"MZAD Admin " + Date.now() }));
+    factor = { id:en.id }; qr = en.totp.qr_code; secret = en.totp.secret;
+  }
+  $("tabs").hidden = true; $("list").hidden = true; $("mfa").hidden = false;
+  if (qr){
+    $("mT").textContent = "تفعيل التحقق بخطوتين";
+    $("mP").textContent = "امسح الرمز بتطبيق Google Authenticator أو Microsoft Authenticator، ثم اكتب الرمز المكوّن من 6 أرقام.";
+    $("mQ").hidden = false; $("mImg").src = qr; $("mSec").textContent = secret;
+  }else{
+    $("mP").textContent = "اكتب الرمز الظاهر بتطبيق المصادقة.";
+  }
+  return new Promise(res => {
+    const go = async () => {
+      const code = $("mCode").value.replace(/\D/g,"");
+      if (code.length !== 6){ $("mErr").textContent = "اكتب 6 أرقام"; return; }
+      $("mBtn").disabled = true; $("mErr").textContent = "";
+      const r = await supabase.auth.mfa.challengeAndVerify({ factorId:factor.id, code });
+      $("mBtn").disabled = false;
+      if (r.error){ $("mErr").textContent = "الرمز غير صحيح، حاول مرة ثانية"; $("mCode").value = ""; return; }
+      res(true);
+    };
+    $("mBtn").onclick = go;
+    $("mCode").addEventListener("keydown", e => { if (e.key === "Enter") go(); });
+  });
+}
+
+(async () => {
+  const u = await supabase.auth.getUser();
+  if (u.error || !u.data.user){ location.href = "../index.html?login=1&returnTo=" + encodeURIComponent(location.pathname); return; }
+  try{
+    await gate();
+    $("mfa").hidden = true; $("tabs").hidden = false; $("list").hidden = false;
+    const a = await supabase.rpc("mzad_is_admin");
+    if (a.error) throw a.error;
+    if (a.data !== true){ $("list").innerHTML = '<div class="empty"><h3>غير مصرح</h3><p>هذه الصفحة للإدارة فقط.</p></div>'; return; }
+  }catch(e){ console.error("GATE:", e); $("mfa").hidden = true; $("list").hidden = false; $("list").innerHTML = '<div class="empty"><h3>تعذر التحقق</h3><p>' + esc(e.message || e) + '</p></div>'; return; }
+  await reload(); D.ready = true;
+  setInterval(() => { if (!document.hidden && !D.busy && !$("ov").classList.contains("show")) reload(); }, 15000);
+})();
+</script>
+</body>
+</html>
