@@ -160,3 +160,29 @@ select indexname, indexdef
 from pg_indexes
 where schemaname = 'public' and tablename = 'mzad_payment_methods'
 order by indexname;
+
+-- 9) Detect duplicate payment-method types and enabled methods with no recipient.
+-- Read-only data checks; resolve results manually before applying any cleanup.
+select method_type, count(*) as row_count,
+       array_agg(id order by created_at, id) as method_ids
+from public.mzad_payment_methods
+group by method_type
+having count(*) > 1
+order by method_type;
+
+select id, method_type, display_name_ar, is_enabled, sort_order
+from public.mzad_payment_methods
+where is_enabled = true
+  and nullif(btrim(coalesce(recipient_identifier, '')), '') is null
+order by method_type, sort_order, created_at;
+
+-- 10) Audit-log table availability and policies needed by the admin upsert RPC.
+select table_name, ordinal_position, column_name, data_type, is_nullable
+from information_schema.columns
+where table_schema = 'public' and table_name = 'mzad_audit_logs'
+order by ordinal_position;
+
+select schemaname, tablename, policyname, permissive, roles, cmd, qual, with_check
+from pg_policies
+where schemaname = 'public' and tablename = 'mzad_audit_logs'
+order by policyname;
