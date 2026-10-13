@@ -209,6 +209,17 @@ begin
        and dv.owner_user_id=d.user_id and dv.verification_status='approved');
    if not found then raise exception 'DEVICE_NOT_VERIFIED_OR_AUCTION_STATE_INVALID'; end if;
  end if;
+ if p_approve and d.operation_type='direct_sale' and d.payer_role='buyer' then
+   insert into public.mzad_transactions(transaction_number,operation_type,direct_sale_id,device_id,seller_user_id,buyer_user_id,final_price_iqd,status)
+   select public.mzad_generate_number('TRX'),'direct_sale',s.id,s.device_id,s.seller_user_id,d.user_id,s.asking_price_iqd,'open'
+   from public.mzad_direct_sales s
+   where s.id=d.direct_sale_id and s.status='reserved' and s.buyer_user_id=d.user_id
+     and s.seller_user_id<>d.user_id
+     and not exists(select 1 from public.mzad_transactions t where t.direct_sale_id=s.id and t.status not in ('cancelled','disputed'));
+   if not found then raise exception 'DIRECT_SALE_TRANSACTION_NOT_CREATED'; end if;
+   update public.mzad_direct_sales set status='pending_handover',updated_at=now()
+     where id=d.direct_sale_id and status='reserved' and buyer_user_id=d.user_id;
+ end if;
  if not p_approve and d.operation_type='direct_sale' and d.payer_role='buyer' then
    update public.mzad_direct_sales
      set status='active',buyer_user_id=null,reserved_at=null,updated_at=now()
@@ -354,6 +365,12 @@ begin
  insert into public.mzad_auction_events(auction_id,event_type,actor_user_id,payload_json)
  values(a.id,'admin_finished',v_user,jsonb_build_object('result',v_result,'winner_user_id',case when v_result='sold' then b.bidder_user_id else null end,
    'final_price_iqd',case when v_result='sold' then b.amount_iqd else null end));
+ if v_result='sold' and b.bidder_user_id<>a.seller_user_id then
+   insert into public.mzad_transactions(transaction_number,operation_type,auction_id,device_id,seller_user_id,buyer_user_id,final_price_iqd,status)
+   select public.mzad_generate_number('TRX'),'auction',a.id,a.device_id,a.seller_user_id,b.bidder_user_id,b.amount_iqd,'open'
+   where not exists(select 1 from public.mzad_transactions t where t.auction_id=a.id and t.status not in ('cancelled','disputed'));
+   if not found then raise exception 'AUCTION_TRANSACTION_NOT_CREATED'; end if;
+ end if;
  insert into public.mzad_audit_logs(actor_user_id,action,entity_type,entity_id,before_json,after_json)
  values(v_user,'auction_finished','auction',a.id::text,jsonb_build_object('status',a.status),
    jsonb_build_object('status','ended','result',v_result));
