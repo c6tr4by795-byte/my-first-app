@@ -33,6 +33,13 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 .photo{position:relative;aspect-ratio:4/3;border-radius:18px;overflow:hidden;background:linear-gradient(160deg,#7b61e8,#3b2a92);display:grid;place-items:center}
 .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .photo svg{width:56px;height:56px;opacity:.5}
+.gal{position:absolute;inset:0;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.gal::-webkit-scrollbar{display:none}
+.photo .gal img{position:relative;flex:0 0 100%;width:100%;height:100%;object-fit:cover;scroll-snap-align:center}
+.cnt{position:absolute;bottom:10px;inset-inline-start:10px;padding:3px 10px;border-radius:999px;background:rgba(23,32,42,.6);color:#fff;font-size:10.5px;font-weight:900}
+.ins .row strong{max-width:62%;text-align:end;line-height:1.7}
+.ins .row.warn strong{color:var(--bad)}
+.ins-note{margin-top:10px;padding:10px 12px;border-radius:13px;background:var(--ps);font-size:11px;font-weight:700;line-height:1.8;color:#4b5563}
 .live{position:absolute;top:10px;inset-inline-end:10px;display:flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.95);font-size:10px;font-weight:900;color:var(--ok)}
 .live:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;animation:blink 1.4s infinite}
 .live.off{color:var(--muted)}.live.off:before{animation:none}
@@ -121,6 +128,12 @@ h1{margin:14px 0 6px;font-size:21px;font-weight:950;letter-spacing:-.03em}
     <div class="top-bidder" id="topB"></div>
   </section>
 
+  <section class="card rv ins" id="insCard" hidden>
+    <div class="ch"><span class="num">🔍</span><h2>تقرير الفحص</h2></div>
+    <div id="ins"></div>
+    <div class="ins-note">يُفحص الجهاز عند التسليم بنقطة المنصة. اقرأ العيوب جيداً قبل المزايدة.</div>
+  </section>
+
   <section class="card rv">
     <div class="ch"><span class="num">⚡</span><h2>آخر المزايدات</h2></div>
     <div id="bids"></div>
@@ -155,7 +168,7 @@ import { supabase } from "./js/supabase.js";
 const $ = id => document.getElementById(id);
 const qs = new URLSearchParams(location.search);
 const auctionId = qs.get("auction") || qs.get("id");
-const S = { user:null, a:null, d:null, img:"", bids:[], count:0, elig:false, result:null, busy:false, poll:null, seen:new Set(), loaded:false, refetched:false };
+const S = { user:null, a:null, d:null, imgs:[], bids:[], count:0, elig:false, result:null, busy:false, poll:null, seen:new Set(), loaded:false, refetched:false };
 
 const money = n => Number(n||0).toLocaleString("en-US");
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -182,11 +195,11 @@ async function load(){
     const d = await supabase.from("mzad_devices").select("*").eq("id", a.device_id).maybeSingle();
     S.d = d.data || null;
     try{
-      const im = (await supabase.from("mzad_device_images").select("storage_path,is_primary,sort_order").eq("device_id", a.device_id).order("sort_order",{ascending:true}).limit(6)).data || [];
+      const im = (await supabase.from("mzad_device_images").select("storage_path,is_primary,sort_order").eq("device_id", a.device_id).order("sort_order",{ascending:true}).limit(8)).data || [];
+      im.sort((x,y) => (y.is_primary?1:0) - (x.is_primary?1:0));
       if (im.length){
-        const p = (im.find(x=>x.is_primary) || im[0]).storage_path;
-        const s = await supabase.storage.from("device-images").createSignedUrl(p, 3600);
-        S.img = s.data?.signedUrl || supabase.storage.from("device-images").getPublicUrl(p).data?.publicUrl || "";
+        const sg = await supabase.storage.from("device-images").createSignedUrls(im.map(x => x.storage_path), 3600);
+        S.imgs = (sg.data || []).map(x => x.signedUrl).filter(Boolean);
       }
     }catch(e){ console.error("IMG:", e); }
   }
@@ -205,7 +218,9 @@ function render(){
   const name = d ? ([d.brand,d.model].filter(Boolean).join(" ") || "جهاز") : "جهاز";
   $("title").textContent = name;
   $("specs").innerHTML = d ? [d.storage,d.color,d.condition_grade,d.battery_health?"بطارية "+d.battery_health:null].filter(Boolean).map(s=>`<span>${esc(s)}</span>`).join("") : "";
-  $("photo").innerHTML = (S.img ? `<img src="${esc(S.img)}" alt="" onerror="this.remove()">` : PH) + `<span class="live${live?"":" off"}">${live?"مباشر":"انتهى"}</span>`;
+  $("photo").innerHTML = (S.imgs.length ? `<div class="gal" id="gal">${S.imgs.map(u => `<img src="${esc(u)}" alt="" onerror="this.remove()">`).join("")}</div>` + (S.imgs.length > 1 ? `<span class="cnt" id="cnt">1 / ${S.imgs.length}</span>` : "") : PH) + `<span class="live${live?"":" off"}">${live?"مباشر":"انتهى"}</span>`;
+  const g = $("gal"); if (g && $("cnt")) g.addEventListener("scroll", () => { $("cnt").textContent = (Math.round(Math.abs(g.scrollLeft) / g.clientWidth) + 1) + " / " + S.imgs.length; });
+  renderInspect();
   $("price").textContent = money(a.current_price_iqd ?? a.starting_price_iqd);
   $("aNo").textContent = a.auction_number || a.id;
   $("aStart").textContent = money(a.starting_price_iqd) + " د.ع";
@@ -237,6 +252,15 @@ function render(){
   $("depBtn").href = "auction-deposit.html?auction=" + encodeURIComponent(a.id);
   renderBar(live);
   tick();
+}
+
+function renderInspect(){
+  const d = S.d || {};
+  const F = [["condition_grade","الحالة"],["battery_health","صحة البطارية"],["screen_condition","الشاشة"],["camera_condition","الكاميرا"],["biometric_condition","البصمة / الوجه"],["sim_network","الشبكة"],["replaced_parts","أجزاء مستبدلة"],["scratches_dents","خدوش وصدمات",1],["faults","الأعطال",1],["accessories","الملحقات"],["seller_notes","ملاحظات البائع"]];
+  const rows = F.filter(([k]) => d[k] !== undefined && d[k] !== null && String(d[k]).trim() !== "")
+    .map(([k,l,w]) => `<div class="row${w?" warn":""}"><span>${l}</span><strong>${esc(k==="battery_health" && /^\d+$/.test(String(d[k])) ? d[k] + "%" : d[k])}</strong></div>`).join("");
+  $("insCard").hidden = !rows;
+  $("ins").innerHTML = rows;
 }
 
 function renderBar(live){
