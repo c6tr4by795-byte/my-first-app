@@ -240,6 +240,9 @@ async function ensureDeposit(){
   if (c.error) throw c.error;
   await loadDeposit();
   if (!st.dep) throw new Error("DEPOSIT_NOT_FOUND");
+  // Clear stale request/proof state from the previous rejected attempt.
+  await loadRequestAndProof();
+  $("amount").textContent = money(amountNow());
 }
 async function loadRequestAndProof(){
   st.req = null; st.proof = null;
