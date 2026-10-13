@@ -45,6 +45,12 @@ begin
   if p_role not in ('buyer','seller') then raise exception 'INVALID_DEPOSIT_ROLE'; end if;
   if p_role='seller' and v_a.seller_user_id<>v_user and not public.mzad_is_admin() then raise exception 'ACCESS_DENIED'; end if;
   if p_role='buyer' and v_a.seller_user_id=v_user then raise exception 'SELLER_CANNOT_DEPOSIT'; end if;
+  if p_role='buyer' and v_a.status<>'live' then raise exception 'AUCTION_NOT_LIVE'; end if;
+  if p_role='seller' and v_a.status not in ('draft','pending_review') then raise exception 'SELLER_DEPOSIT_WINDOW_CLOSED'; end if;
+  if p_role='seller' and not exists (
+    select 1 from public.mzad_devices dv
+    where dv.id=v_a.device_id and dv.owner_user_id=v_a.seller_user_id
+  ) then raise exception 'DEVICE_OWNER_MISMATCH'; end if;
   if p_role='seller' then
     select coalesce((value_json #>> '{}')::bigint,5000) into v_amount from public.mzad_settings where key='auction_seller_deposit_iqd';
   else
