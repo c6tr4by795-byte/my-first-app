@@ -123,3 +123,40 @@ where schemaname = 'public'
     'mzad_auctions'
   )
 order by tablename, policyname;
+
+-- 7) Payment-method schema and admin upsert routine diagnostics.
+-- The admin page calls mzad_admin_upsert_payment_method; do not assume it exists
+-- or assume the table has legacy columns such as code/account_identifier.
+select table_name, ordinal_position, column_name, data_type, udt_name, is_nullable
+from information_schema.columns
+where table_schema = 'public'
+  and table_name = 'mzad_payment_methods'
+order by ordinal_position;
+
+select n.nspname as schema_name, p.proname as function_name,
+       pg_get_function_identity_arguments(p.oid) as arguments,
+       pg_get_function_result(p.oid) as result_type,
+       p.prosecdef as security_definer
+from pg_proc p
+join pg_namespace n on n.oid = p.pronamespace
+where n.nspname = 'public'
+  and p.proname in (
+    'mzad_admin_upsert_payment_method',
+    'mzad_get_enabled_payment_methods',
+    'mzad_is_admin'
+  )
+order by p.proname, arguments;
+
+-- 8) Constraints/indexes on payment methods, to identify a safe upsert key.
+select c.conname as constraint_name, c.contype as constraint_type,
+       pg_get_constraintdef(c.oid) as definition
+from pg_constraint c
+join pg_class t on t.oid = c.conrelid
+join pg_namespace n on n.oid = t.relnamespace
+where n.nspname = 'public' and t.relname = 'mzad_payment_methods'
+order by c.contype, c.conname;
+
+select indexname, indexdef
+from pg_indexes
+where schemaname = 'public' and tablename = 'mzad_payment_methods'
+order by indexname;
