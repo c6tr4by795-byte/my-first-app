@@ -184,7 +184,7 @@ async function loadDeposit(retry = true){
   if (a.data.seller_user_id !== st.user.id) throw new Error("ACCESS_DENIED");
 
   const r = await supabase.from("mzad_deposits").select("id,amount_iqd,status")
-    .eq("auction_id", auctionId).eq("user_id", st.user.id).eq("deposit_type","auction_seller")
+    .eq("auction_id", auctionId).eq("user_id", st.user.id).eq("operation_type","auction").eq("payer_role","seller")
     .order("created_at",{ascending:false}).limit(1).maybeSingle();
   if (r.error) throw r.error;
   if (!r.data){
