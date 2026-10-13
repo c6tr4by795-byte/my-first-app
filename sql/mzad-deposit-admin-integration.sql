@@ -129,13 +129,17 @@ create or replace function public.mzad_submit_deposit_proof(
  p_request_id uuid,p_reference_number text,p_proof_storage_path text,p_paid_amount_iqd bigint,p_paid_at timestamptz default now()
 ) returns uuid language plpgsql security definer set search_path = public
 as $$
-declare v_user uuid:=auth.uid(); q public.mzad_payment_requests%rowtype; d public.mzad_deposits%rowtype; v_id uuid;
+declare v_user uuid:=auth.uid(); q public.mzad_payment_requests%rowtype; d public.mzad_deposits%rowtype; v_id uuid; v_prefix text;
 begin
  if v_user is null then raise exception 'AUTH_REQUIRED'; end if;
  select * into q from public.mzad_payment_requests where id=p_request_id for update;
  if not found or (q.user_id<>v_user and not public.mzad_is_admin()) then raise exception 'PAYMENT_REQUEST_NOT_FOUND'; end if;
  select * into d from public.mzad_deposits where id=q.deposit_id for update;
  if not found or d.user_id<>v_user then raise exception 'DEPOSIT_NOT_FOUND'; end if;
+ if q.status not in ('pending','rejected') or d.status not in ('pending','rejected') then raise exception 'DEPOSIT_NOT_PAYABLE'; end if;
+ if q.expires_at is not null and q.expires_at<=now() then raise exception 'PAYMENT_REQUEST_EXPIRED'; end if;
+ if p_proof_storage_path is null or btrim(p_proof_storage_path)='' then raise exception 'PROOF_REQUIRED'; end if;
+ if position(v_user::text in p_proof_storage_path)<>1 then raise exception 'INVALID_PROOF_PATH'; end if;
  if q.status='proof_submitted' or d.status in ('proof_submitted','under_review') then raise exception 'PROOF_ALREADY_PENDING'; end if;
  if p_paid_amount_iqd is null or p_paid_amount_iqd<>d.amount_iqd then raise exception 'AMOUNT_MISMATCH'; end if;
  if nullif(trim(coalesce(p_proof_storage_path,'')),'') is null then raise exception 'PROOF_REQUIRED'; end if;
