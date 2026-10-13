@@ -231,7 +231,9 @@ async function loadDeposit(){
   st.dep = r.data?.[0] || null;
 }
 async function ensureDeposit(){
-  if (st.dep) return;
+  // Reuse an in-flight/valid deposit, but allow a fresh attempt after a terminal rejection/cancellation.
+  if (st.dep && !["rejected","cancelled","refunded","forfeited"].includes(st.dep.status)) return;
+  st.dep = null;
   const c = await supabase.rpc("mzad_create_auction_deposit",{ p_auction_id:auctionId, p_role:"buyer" });
   if (c.error) throw c.error;
   await loadDeposit();
