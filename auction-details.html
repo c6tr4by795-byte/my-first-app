@@ -202,7 +202,7 @@ const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt
 const fmtT = v => { const d = new Date(v); return isNaN(d) ? "—" : d.toLocaleString("ar-IQ",{dateStyle:"medium",timeStyle:"short"}); };
 const must = r => { if (r.error) throw r.error; return r.data; };
 
-const BID_ERR = { AUTH_REQUIRED:"يجب تسجيل الدخول أولاً.", SELLER_CANNOT_BID:"لا يمكنك المزايدة على مزادك.", AUCTION_NOT_LIVE:"المزاد غير مفتوح حالياً.", AUCTION_ALREADY_ENDED:"انتهى المزاد.", BUYER_DEPOSIT_NOT_APPROVED:"تأمين المشاركة غير معتمد بعد.", BID_TOO_LOW:"المبلغ أقل من الحد المطلوب." };
+const BID_ERR = { AUTH_REQUIRED:"يجب تسجيل الدخول أولاً.", SELLER_CANNOT_BID:"لا يمكنك المزايدة على مزادك.", AUCTION_NOT_LIVE:"المزاد غير مفتوح حالياً.", AUCTION_ALREADY_ENDED:"انتهى المزاد.", AUCTION_ENDED:"انتهى المزاد.", BUYER_DEPOSIT_NOT_APPROVED:"تأمين المشاركة غير معتمد بعد.", BUYER_DEPOSIT_REQUIRED:"يجب اعتماد تأمين المشاركة قبل المزايدة.", BID_TOO_LOW:"المبلغ أقل من الحد المطلوب.", BID_TOO_LOW:"المبلغ أقل من الحد المطلوب.", BID_INCREMENT_INVALID:"قيمة المزايدة غير صحيحة." };
 const bidErr = e => { const m = String(e?.message||""); for (const k in BID_ERR) if (m.includes(k)) return BID_ERR[k]; return "تعذر تسجيل المزايدة، حاول مرة ثانية."; };
 
 const isLive = () => S.a?.status === "live" && new Date(S.a.ends_at).getTime() > Date.now();
@@ -411,7 +411,7 @@ async function submitBid(){
     console.error("BID ERROR:", e);
     S.busy = false;
     try{ await loadLive(); }catch{}
-    if (String(e?.message||"").includes("BUYER_DEPOSIT_NOT_APPROVED")){ S.elig = false; renderLive(); openDeposit(); return; }
+    if (String(e?.message||"").includes("BUYER_DEPOSIT_NOT_APPROVED") || String(e?.message||"").includes("BUYER_DEPOSIT_REQUIRED")){ S.elig = false; renderLive(); openDeposit(); return; }
     closeSheet(); renderLive(); toast(bidErr(e));
   }
 }
