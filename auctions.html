@@ -58,6 +58,7 @@ h1{margin:14px 2px 0;font-size:22px;font-weight:950;letter-spacing:-.035em}
 .go{height:36px;padding:0 16px;border-radius:12px;color:#fff;font-size:12px;font-weight:950;background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 6px 14px rgba(98,70,217,.28)}
 .empty{padding:34px 18px;text-align:center;border-radius:20px;background:#fff;border:1px dashed #cfc7f3}
 .empty h3{margin:0 0 4px;font-size:15px;font-weight:900}.empty p{margin:0;font-size:11px;font-weight:700;color:var(--muted);line-height:1.7}
+.tz{margin-top:8px;padding:6px 9px;border-radius:9px;background:var(--ps);color:var(--pd);font-size:10px;font-weight:900;display:flex;align-items:center;gap:5px}
 .sk{height:162px;border-radius:20px;background:#f1eefb}
 .bw{position:fixed;left:0;right:0;bottom:-7px;padding:7px 10px calc(7px + var(--sb));z-index:100;pointer-events:none}
 .nav{width:min(100%,520px);margin:0 auto;min-height:64px;padding:5px;border-radius:20px;background:rgba(255,255,255,.97);border:1px solid #e7ecef;box-shadow:0 10px 28px rgba(23,32,42,.1);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);pointer-events:auto;display:grid;grid-template-columns:repeat(5,1fr);gap:3px;align-items:center}
@@ -138,7 +139,7 @@ const timeText = left => {
 /* الجلب: المزادات المباشرة + الأجهزة + الصور + عدد المزايدات */
 async function fetchAuctions(){
   const a = await supabase.from("mzad_auctions")
-    .select("id,auction_number,device_id,starting_price_iqd,current_price_iqd,status,ends_at,created_at")
+    .select("id,auction_number,device_id,starting_price_iqd,current_price_iqd,bid_increment_iqd,status,ends_at,created_at")
     .eq("status","live").gt("ends_at", new Date().toISOString()).order("created_at",{ascending:false}).limit(100);
   if (a.error) throw a.error;
   const list = a.data || [];
@@ -212,9 +213,10 @@ function render(){
       <div class="body"><div>
         <h3 class="t">${esc(title)}</h3>
         ${meta ? `<div class="meta">${esc(meta)}</div>` : ""}
-        <div class="tags">${d.condition_grade ? `<span class="tag">${esc(d.condition_grade)}</span>` : ""}<span class="tag">${a.bids} مزايدة</span></div>
+        <div class="tags">${d.condition_grade ? `<span class="tag">${esc(d.condition_grade)}</span>` : ""}${d.battery_health ? `<span class="tag">🔋 ${esc(/^\d+$/.test(String(d.battery_health)) ? d.battery_health + "%" : d.battery_health)}</span>` : ""}<span class="tag">${a.bids} مزايدة</span></div>
+        <div class="tz">🔍 صور الجهاز وتقرير الفحص والعيوب داخل المزاد</div>
       </div>
-      <div class="foot"><div><span class="lbl">السعر الحالي</span><div class="price">${fmt(a.current_price_iqd ?? a.starting_price_iqd)}<small>د.ع</small></div></div><button class="go" type="button">زايد</button></div></div>
+      <div class="foot"><div><span class="lbl">السعر الحالي</span><div class="price">${fmt(a.current_price_iqd ?? a.starting_price_iqd)}<small>د.ع</small></div><span class="lbl">بدأ من ${fmt(a.starting_price_iqd)}</span></div><button class="go" type="button">عرض وزايد</button></div></div>
     </article>`;
   }).join("");
   tick();
