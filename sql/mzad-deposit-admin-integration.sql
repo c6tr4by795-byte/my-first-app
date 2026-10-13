@@ -67,7 +67,7 @@ end $$;
 -- Direct-sale buyer deposit. Seller deposits are never required for direct sales.
 create or replace function public.mzad_create_direct_sale_deposit(p_direct_sale_id uuid)
 returns uuid language plpgsql security definer set search_path = public
-as $
+as $function$
 declare
   v_user uuid := auth.uid();
   v_sale public.mzad_direct_sales%rowtype;
@@ -97,7 +97,7 @@ begin
   insert into public.mzad_audit_logs(actor_user_id,action,entity_type,entity_id,after_json)
     values(v_user,'direct_sale_deposit_created','deposit',v_deposit::text,jsonb_build_object('direct_sale_id',v_sale.id,'amount_iqd',v_amount));
   return v_deposit;
-end $;
+end $function$;
 
 create or replace function public.mzad_create_deposit_payment_request(p_deposit_id uuid,p_payment_method_id uuid)
 returns uuid language plpgsql security definer set search_path = public
