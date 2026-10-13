@@ -64,6 +64,40 @@ begin
   return v_dep;
 end $$;
 
+-- Direct-sale buyer deposit. Seller deposits are never required for direct sales.
+create or replace function public.mzad_create_direct_sale_deposit(p_direct_sale_id uuid)
+returns uuid language plpgsql security definer set search_path = public
+as $
+declare
+  v_user uuid := auth.uid();
+  v_sale public.mzad_direct_sales%rowtype;
+  v_deposit uuid;
+  v_amount bigint;
+begin
+  if v_user is null then raise exception 'AUTH_REQUIRED'; end if;
+  select * into v_sale from public.mzad_direct_sales where id = p_direct_sale_id for update;
+  if not found then raise exception 'DIRECT_SALE_NOT_FOUND'; end if;
+  if v_sale.seller_user_id = v_user then raise exception 'SELLER_CANNOT_BUY_OWN_DEVICE'; end if;
+  if v_sale.status not in ('active','reserved') then raise exception 'DIRECT_SALE_NOT_AVAILABLE'; end if;
+  if v_sale.status = 'reserved' and v_sale.buyer_user_id is distinct from v_user then raise exception 'DIRECT_SALE_RESERVED'; end if;
+  select id into v_deposit from public.mzad_deposits
+   where direct_sale_id = v_sale.id and user_id = v_user and operation_type = 'direct_sale'
+     and payer_role = 'buyer' and status not in ('rejected','cancelled','refunded','forfeited')
+   order by created_at desc limit 1;
+  if v_deposit is not null then return v_deposit; end if;
+  select coalesce((value_json #>> '{}')::bigint,5000) into v_amount
+    from public.mzad_settings where key = 'direct_buyer_deposit_iqd';
+  v_amount := coalesce(v_amount,5000);
+  if v_sale.status = 'active' then
+    update public.mzad_direct_sales set status='reserved', buyer_user_id=v_user, reserved_at=now(), updated_at=now() where id=v_sale.id;
+  end if;
+  insert into public.mzad_deposits(deposit_number,user_id,operation_type,direct_sale_id,payer_role,amount_iqd,status,eligible_to_bid)
+    values(public.mzad_generate_number('DEP'),v_user,'direct_sale',v_sale.id,'buyer',v_amount,'pending',false)
+    returning id into v_deposit;
+  insert into public.mzad_audit_logs(actor_user_id,action,entity_type,entity_id,after_json)
+    values(v_user,'direct_sale_deposit_created','deposit',v_deposit::text,jsonb_build_object('direct_sale_id',v_sale.id,'amount_iqd',v_amount));
+  return v_deposit;
+end $;
 create or replace function public.mzad_create_deposit_payment_request(p_deposit_id uuid,p_payment_method_id uuid)
 returns uuid language plpgsql security definer set search_path = public
 as $$
@@ -180,6 +214,8 @@ revoke all on function public.mzad_get_enabled_payment_methods() from public, an
 grant execute on function public.mzad_get_enabled_payment_methods() to authenticated;
 revoke all on function public.mzad_create_auction_deposit(uuid,text) from public, anon;
 grant execute on function public.mzad_create_auction_deposit(uuid,text) to authenticated;
+revoke all on function public.mzad_create_direct_sale_deposit(uuid) from public, anon;
+grant execute on function public.mzad_create_direct_sale_deposit(uuid) to authenticated;
 revoke all on function public.mzad_create_deposit_payment_request(uuid,uuid) from public, anon;
 grant execute on function public.mzad_create_deposit_payment_request(uuid,uuid) to authenticated;
 revoke all on function public.mzad_submit_deposit_proof(uuid,text,text,bigint,timestamptz) from public, anon;
