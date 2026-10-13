@@ -399,6 +399,75 @@ begin
  return true;
 end $$;
 
+create or replace function public.mzad_confirm_handover(
+ p_transaction_id uuid,p_action text
+) returns boolean
+language plpgsql security definer set search_path = public
+as $
+declare
+ v_user uuid:=auth.uid();
+ t public.mzad_transactions%rowtype;
+ h public.mzad_handover_records%rowtype;
+ v_role text;
+ v_admin boolean:=false;
+begin
+ if v_user is null then raise exception 'AUTH_REQUIRED'; end if;
+ select * into t from public.mzad_transactions where id=p_transaction_id for update;
+ if not found then raise exception 'TRANSACTION_NOT_FOUND'; end if;
+ v_admin:=public.mzad_is_admin();
+ if t.buyer_user_id<>v_user and t.seller_user_id<>v_user and not v_admin then
+   raise exception 'TRANSACTION_ACCESS_DENIED';
+ end if;
+ if t.status in ('cancelled','disputed','completed') then raise exception 'TRANSACTION_NOT_ACTIVE'; end if;
+ select * into h from public.mzad_handover_records where transaction_id=t.id for update;
+ if not found then
+   insert into public.mzad_handover_records(transaction_id)
+   values(t.id) returning * into h;
+ end if;
+ if p_action='seller_arrived' then
+   if v_user<>t.seller_user_id and not v_admin then raise exception 'SELLER_REQUIRED'; end if;
+   update public.mzad_handover_records set seller_confirmed=true,seller_confirmed_at=coalesce(seller_confirmed_at,now()),updated_at=now() where transaction_id=t.id;
+   update public.mzad_transactions set status='seller_arrived',updated_at=now() where id=t.id and status in ('open','appointment_pending','seller_arrived');
+ elsif p_action='buyer_arrived' then
+   if v_user<>t.buyer_user_id and not v_admin then raise exception 'BUYER_REQUIRED'; end if;
+   update public.mzad_handover_records set buyer_confirmed=true,buyer_confirmed_at=coalesce(buyer_confirmed_at,now()),updated_at=now() where transaction_id=t.id;
+   update public.mzad_transactions set status='buyer_arrived',updated_at=now() where id=t.id and status in ('open','appointment_pending','seller_arrived','buyer_arrived');
+ elsif p_action='seller_payment_confirmed' then
+   if v_user<>t.seller_user_id and not v_admin then raise exception 'SELLER_REQUIRED'; end if;
+   update public.mzad_handover_records set seller_payment_confirmed=true,updated_at=now() where transaction_id=t.id;
+ elsif p_action='buyer_device_received' then
+   if v_user<>t.buyer_user_id and not v_admin then raise exception 'BUYER_REQUIRED'; end if;
+   update public.mzad_handover_records set buyer_device_received=true,updated_at=now() where transaction_id=t.id;
+ elsif p_action='platform_confirm' then
+   if not v_admin then raise exception 'ADMIN_REQUIRED'; end if;
+   if not exists(select 1 from public.mzad_handover_appointments ap where ap.transaction_id=t.id and ap.status<>'cancelled') then
+     raise exception 'ACTIVE_APPOINTMENT_REQUIRED';
+   end if;
+   update public.mzad_handover_records set platform_confirmed=true,platform_confirmed_at=coalesce(platform_confirmed_at,now()),staff_user_id=v_user,updated_at=now() where transaction_id=t.id;
+ else
+   raise exception 'INVALID_HANDOVER_ACTION';
+ end if;
+ select * into h from public.mzad_handover_records where transaction_id=t.id;
+ if h.seller_confirmed and h.buyer_confirmed and h.platform_confirmed
+    and h.seller_payment_confirmed and h.buyer_device_received
+    and exists(select 1 from public.mzad_transaction_fees f where f.transaction_id=t.id and f.payer_role='buyer' and f.status in ('paid','waived'))
+    and exists(select 1 from public.mzad_transaction_fees f where f.transaction_id=t.id and f.payer_role='seller' and f.status in ('paid','waived')) then
+   update public.mzad_transactions set status='completed',updated_at=now() where id=t.id;
+   update public.mzad_handover_records set handover_at=coalesce(handover_at,now()),updated_at=now() where transaction_id=t.id;
+   if t.auction_id is not null then
+     update public.mzad_auctions set status='archived' where id=t.auction_id and status='ended';
+   end if;
+   if t.direct_sale_id is not null then
+     update public.mzad_direct_sales set status='completed',updated_at=now() where id=t.direct_sale_id and status='pending_handover';
+   end if;
+ end if;
+ insert into public.mzad_audit_logs(actor_user_id,action,entity_type,entity_id,before_json,after_json)
+ values(v_user,'handover_action_'||p_action,'transaction',t.id::text,
+  jsonb_build_object('status',t.status),
+  jsonb_build_object('action',p_action,'transaction_status',(select status from public.mzad_transactions where id=t.id)));
+ return true;
+end $;
+
 create or replace function public.mzad_admin_mark_transaction_fee_paid(
  p_transaction_id uuid,p_payer_role text,p_payment_reference text default null
 ) returns boolean
@@ -462,6 +531,8 @@ revoke all on function public.mzad_cancel_auction(uuid,text) from public, anon;
 grant execute on function public.mzad_cancel_auction(uuid,text) to authenticated;
 revoke all on function public.mzad_finish_auction(uuid) from public, anon;
 grant execute on function public.mzad_finish_auction(uuid) to authenticated;
+revoke all on function public.mzad_confirm_handover(uuid,text) from public, anon;
+grant execute on function public.mzad_confirm_handover(uuid,text) to authenticated;
 revoke all on function public.mzad_admin_mark_transaction_fee_paid(uuid,text,text) from public, anon;
 grant execute on function public.mzad_admin_mark_transaction_fee_paid(uuid,text,text) to authenticated;
 revoke all on function public.mzad_admin_update_setting(text,jsonb,text) from public, anon;
