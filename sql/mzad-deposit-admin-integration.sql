@@ -341,9 +341,31 @@ begin
  values(a.id,null,null,'cancelled')
  on conflict(auction_id) do update set winner_user_id=null,final_price_iqd=null,result_status='cancelled',determined_at=now();
  update public.mzad_devices set locked_for_auction=false,updated_at=now() where id=a.device_id;
+ -- Approved deposits require a tracked refund; unpaid/unapproved deposits are cancelled.
  update public.mzad_deposits set status='refund_pending',refund_requested_at=now(),
    refund_reason=coalesce(nullif(btrim(p_reason),''),'تم إلغاء المزاد'),updated_at=now()
  where auction_id=a.id and status='approved';
+
+ update public.mzad_payment_proofs
+    set status='rejected',reviewer_user_id=v_user,
+        reviewer_note=coalesce(nullif(btrim(p_reason),''),'تم إلغاء المزاد؛ أُلغي طلب الدفع'),
+        reviewed_at=now()
+  where payment_request_id in (
+    select q.id from public.mzad_payment_requests q
+     join public.mzad_deposits d on d.id=q.deposit_id
+    where d.auction_id=a.id and d.status='cancelled'
+  ) and status='pending';
+
+ update public.mzad_payment_requests q
+    set status='cancelled',updated_at=now()
+  where q.deposit_id in (
+    select d.id from public.mzad_deposits d
+     where d.auction_id=a.id and d.status in ('pending','proof_submitted','under_review')
+  ) and q.status in ('pending','proof_submitted');
+
+ update public.mzad_deposits
+    set status='cancelled',eligible_to_bid=false,updated_at=now()
+  where auction_id=a.id and status in ('pending','proof_submitted','under_review');
  insert into public.mzad_auction_events(auction_id,event_type,actor_user_id,payload_json)
  values(a.id,'admin_cancelled',v_user,jsonb_build_object('reason',p_reason,'previous_status',a.status));
  insert into public.mzad_audit_logs(actor_user_id,action,entity_type,entity_id,before_json,after_json)
