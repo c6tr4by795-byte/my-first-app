@@ -290,7 +290,7 @@ async function ensureRequest(){
   let id = typeof v === "string" ? v : (v.id || v.request_id || v.payment_request_id);
   if (!id){
     const x = await supabase.from("mzad_payment_requests").select("id")
-      .eq("deposit_id",st.dep.id).eq("user_id",st.user.id).eq("payment_method_id",st.method.id)
+      .eq("deposit_id",st.dep.id).eq("user_id",st.user.id)
       .in("status",["pending","proof_submitted"]).order("created_at",{ascending:false}).limit(1).maybeSingle();
     if (x.error) throw x.error;
     id = x.data?.id;
