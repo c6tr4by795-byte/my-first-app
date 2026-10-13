@@ -85,6 +85,16 @@ begin
   if not found then raise exception 'DIRECT_SALE_NOT_FOUND'; end if;
   if v_sale.seller_user_id = v_user then raise exception 'SELLER_CANNOT_BUY_OWN_DEVICE'; end if;
   if v_sale.status not in ('active','reserved') then raise exception 'DIRECT_SALE_NOT_AVAILABLE'; end if;
+  -- An auction draft reserves the device before it becomes publicly live.
+  -- Do not allow direct-sale deposit/reservation to race against that lock.
+  if exists (
+    select 1 from public.mzad_devices dv
+     where dv.id=v_sale.device_id and dv.locked_for_auction=true
+  ) or exists (
+    select 1 from public.mzad_auctions a
+     where a.device_id=v_sale.device_id
+       and a.status in ('draft','pending_review','scheduled','live')
+  ) then raise exception 'DEVICE_RESERVED_FOR_AUCTION'; end if;
   if v_sale.status = 'reserved' and v_sale.buyer_user_id is distinct from v_user then raise exception 'DIRECT_SALE_RESERVED'; end if;
   select id into v_deposit from public.mzad_deposits
    where direct_sale_id = v_sale.id and user_id = v_user and operation_type = 'direct_sale'
