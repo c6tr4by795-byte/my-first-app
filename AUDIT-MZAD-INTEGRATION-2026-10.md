@@ -89,3 +89,28 @@ The following source changes have since been committed to this same draft branch
 - Each review stores a device event and an audit-log entry with the prior state, decision, reason, checklist, and duplicate flags.
 - This is a backend foundation only. It has not been applied to Supabase, and the current admin UI has not yet been wired to this RPC. The checklist JSON's semantics must be defined in the admin UI before approval can be considered reliable.
 - Important limitation: a duplicate check performed at review time is not a global uniqueness constraint; concurrent submissions can still race. A future pass should add a normalized-identifier strategy and appropriate uniqueness/locking only after product policy for reused/repaired devices is agreed.
+
+
+## Follow-up review — 2026-10-14
+
+### Auction draft device lock
+- `sql/auction-draft-flow.sql` creates an auction row with status `draft` but does not set `mzad_devices.locked_for_auction = true` in the same transaction.
+- The draft function rejects a device only when its lock flag is already true and checks existing auctions in `draft`, `scheduled`, `live`, or `ended`; it does not itself reserve the device when creating the draft.
+- Risk: another listing/sale path that relies on the device lock may race with a pending auction draft. This must be checked against all device-creation and direct-sale RPCs before changing the lifecycle.
+- Proposed fix is **not applied**: reserve the device atomically when the draft is created, then explicitly release it on cancellation/no-sale paths and retain it through a successful sale until handover completes. Do not apply a one-line lock without auditing every exit path, or devices could remain permanently locked.
+
+### Verification gate follow-up
+- Commit `8c4dcf8a0c3371791869e3bbc2d1488682ae21a8` calls `mzad_admin_require_inspection_report` from the privileged verification-review RPC when approving a device.
+- The migration dependency order is `sql/mzad-verification-approval-gate.sql` first, then `sql/mzad-device-verification-controls.sql`.
+- This remains repository-level evidence only; neither migration has been confirmed applied to Supabase, and the actual deployed schema has not been queried.
+
+### Auction completion guard follow-up
+- Commit `61fd206edb78dfe3c41fa9db0485363829a75903` changes the transaction guard to validate the existing active transaction against auction, buyer, seller, and final price after the insert attempt.
+- CI/Vercel was still pending at the last status check. No live database or end-to-end test is claimed.
+
+### Required staging checks before release
+1. Create a draft; confirm device lock is set and another sale/auction path rejects the same device.
+2. Cancel the draft and verify the device unlocks; test no-winner and sold auctions separately.
+3. Attempt device approval without an approved inspection report; expect rejection. Add an approved report and valid checklist; expect success.
+4. Finish an auction twice and under concurrent calls; verify exactly one correct active transaction and one buyer/seller fee row each.
+5. Exercise seller deposit pending/rejected/approved transitions and verify the auction never goes live before approved device verification and approved seller deposit.
