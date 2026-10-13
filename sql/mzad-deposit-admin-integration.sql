@@ -5,12 +5,12 @@ begin;
 -- Generate non-guessable human-readable references without relying on another migration.
 create or replace function public.mzad_generate_number(p_prefix text)
 returns text language plpgsql volatile security definer set search_path = public
-as $
+as $$
 begin
   return upper(coalesce(nullif(regexp_replace(p_prefix, '[^A-Za-z0-9]', '', 'g'), ''), 'MZ'))
     || '-' || to_char(clock_timestamp(), 'YYMMDDHH24MISS')
     || '-' || upper(substr(encode(gen_random_bytes(5), 'hex'), 1, 10));
-end $;
+end $$;
 
 -- Compatibility columns used by existing UI are replaced by canonical foundation names.
 -- No service-role key is used in browser code.
