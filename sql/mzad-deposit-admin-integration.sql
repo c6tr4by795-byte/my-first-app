@@ -142,6 +142,9 @@ begin
  if not found or (q.user_id<>v_user and not public.mzad_is_admin()) then raise exception 'PAYMENT_REQUEST_NOT_FOUND'; end if;
  select * into d from public.mzad_deposits where id=q.deposit_id for update;
  if not found or d.user_id<>v_user then raise exception 'DEPOSIT_NOT_FOUND'; end if;
+ if d.operation_type='auction' and exists (
+   select 1 from public.mzad_auctions a where a.id=d.auction_id and a.status='cancelled'
+ ) then raise exception 'AUCTION_CANCELLED'; end if;
  if q.status not in ('pending','rejected') or d.status not in ('pending','rejected') then raise exception 'DEPOSIT_NOT_PAYABLE'; end if;
  if q.expires_at is not null and q.expires_at<=now() then raise exception 'PAYMENT_REQUEST_EXPIRED'; end if;
  if p_proof_storage_path is null or btrim(p_proof_storage_path)='' then raise exception 'PROOF_REQUIRED'; end if;
@@ -165,6 +168,9 @@ begin
  if v_user is null or not public.mzad_is_admin() then raise exception 'ADMIN_REQUIRED'; end if;
  select * into d from public.mzad_deposits where id=p_deposit_id for update;
  if not found then raise exception 'DEPOSIT_NOT_FOUND'; end if;
+ if d.operation_type='auction' and exists (
+   select 1 from public.mzad_auctions a where a.id=d.auction_id and a.status='cancelled'
+ ) then raise exception 'AUCTION_CANCELLED'; end if;
  if d.status not in ('proof_submitted','under_review','pending') then raise exception 'INVALID_DEPOSIT_STATE'; end if;
  if not p_approve then
    update public.mzad_payment_proofs
