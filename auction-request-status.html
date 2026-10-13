@@ -310,7 +310,7 @@ async function fetchAll(){
   if (a.seller_user_id !== S.user.id) throw new Error("هذا المزاد لا يتبع حسابك.");
   S.a = a;
   S.dep = must(await supabase.from("mzad_deposits").select("id,deposit_number,amount_iqd,status,created_at,updated_at")
-    .eq("auction_id",auctionId).eq("user_id",S.user.id).eq("deposit_type","auction_seller").order("created_at",{ascending:false}).limit(1).maybeSingle());
+    .eq("auction_id",auctionId).eq("user_id",S.user.id).eq("operation_type","auction").eq("payer_role","seller").order("created_at",{ascending:false}).limit(1).maybeSingle());
   const cols = "id,request_number,status,created_at";
   S.pr = null;
   if (requestId) S.pr = must(await supabase.from("mzad_payment_requests").select(cols).eq("id",requestId).eq("user_id",S.user.id).maybeSingle());
