@@ -398,6 +398,12 @@ begin
    where t.auction_id=a.id and t.status not in ('cancelled','disputed')
    on conflict(transaction_id,payer_role) do nothing;
  end if;
+ -- No-winner auctions release the device for relisting. Sold devices stay locked
+ -- until the transaction/handover flow is completed.
+ if v_result='no_winner' then
+   update public.mzad_devices set locked_for_auction=false,updated_at=now()
+    where id=a.device_id;
+ end if;
  insert into public.mzad_audit_logs(actor_user_id,action,entity_type,entity_id,before_json,after_json)
  values(v_user,'auction_finished','auction',a.id::text,jsonb_build_object('status',a.status),
    jsonb_build_object('status','ended','result',v_result));
