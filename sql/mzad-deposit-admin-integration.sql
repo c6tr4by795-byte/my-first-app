@@ -217,6 +217,13 @@ begin
      and s.seller_user_id<>d.user_id
      and not exists(select 1 from public.mzad_transactions t where t.direct_sale_id=s.id and t.status not in ('cancelled','disputed'));
    if not found then raise exception 'DIRECT_SALE_TRANSACTION_NOT_CREATED'; end if;
+   insert into public.mzad_transaction_fees(transaction_id,payer_role,amount_iqd,status)
+   select t.id,roles.payer_role,3000,'pending'
+   from public.mzad_transactions t
+   cross join (values('buyer'::text),('seller'::text)) as roles(payer_role)
+   where t.direct_sale_id=d.direct_sale_id and t.buyer_user_id=d.user_id
+     and t.status not in ('cancelled','disputed')
+   on conflict(transaction_id,payer_role) do nothing;
    update public.mzad_direct_sales set status='pending_handover',updated_at=now()
      where id=d.direct_sale_id and status='reserved' and buyer_user_id=d.user_id;
  end if;
@@ -373,6 +380,12 @@ begin
    select public.mzad_generate_number('TRX'),'auction',a.id,a.device_id,a.seller_user_id,b.bidder_user_id,b.amount_iqd,'open'
    where not exists(select 1 from public.mzad_transactions t where t.auction_id=a.id and t.status not in ('cancelled','disputed'));
    if not found then raise exception 'AUCTION_TRANSACTION_NOT_CREATED'; end if;
+   insert into public.mzad_transaction_fees(transaction_id,payer_role,amount_iqd,status)
+   select t.id,roles.payer_role,3000,'pending'
+   from public.mzad_transactions t
+   cross join (values('buyer'::text),('seller'::text)) as roles(payer_role)
+   where t.auction_id=a.id and t.status not in ('cancelled','disputed')
+   on conflict(transaction_id,payer_role) do nothing;
  end if;
  insert into public.mzad_audit_logs(actor_user_id,action,entity_type,entity_id,before_json,after_json)
  values(v_user,'auction_finished','auction',a.id::text,jsonb_build_object('status',a.status),
