@@ -220,6 +220,43 @@ begin
  return true;
 end $$;
 
+create or replace function public.mzad_request_deposit_refund(p_deposit_id uuid,p_note text default null)
+returns boolean language plpgsql security definer set search_path = public
+as $
+declare
+ d public.mzad_deposits%rowtype;
+ v_user uuid:=auth.uid();
+ v_target_status text;
+begin
+ if v_user is null or not public.mzad_is_admin() then raise exception 'ADMIN_REQUIRED'; end if;
+ select * into d from public.mzad_deposits where id=p_deposit_id for update;
+ if not found then raise exception 'DEPOSIT_NOT_FOUND'; end if;
+ if d.status='refund_pending' then return true; end if;
+ if d.status<>'approved' then raise exception 'DEPOSIT_NOT_REFUNDABLE'; end if;
+ if d.operation_type='auction' then
+   select status into v_target_status from public.mzad_auctions where id=d.auction_id for update;
+   if v_target_status is null or v_target_status not in ('ended','cancelled','archived') then
+     raise exception 'AUCTION_NOT_FINISHED';
+   end if;
+ elsif d.operation_type='direct_sale' then
+   select status into v_target_status from public.mzad_direct_sales where id=d.direct_sale_id for update;
+   if v_target_status is null or v_target_status not in ('completed','cancelled','expired') then
+     raise exception 'DIRECT_SALE_NOT_FINISHED';
+   end if;
+ else
+   raise exception 'INVALID_DEPOSIT_OPERATION';
+ end if;
+ update public.mzad_deposits set status='refund_pending',refund_requested_at=now(),
+   refund_reason=coalesce(nullif(btrim(p_note),''),'تمت أهلية التأمين للاسترداد'),updated_at=now()
+ where id=d.id and status='approved';
+ if not found then raise exception 'REFUND_STATE_CHANGED'; end if;
+ insert into public.mzad_audit_logs(actor_user_id,action,entity_type,entity_id,before_json,after_json)
+ values(v_user,'deposit_refund_requested','deposit',d.id::text,
+   jsonb_build_object('status',d.status),
+   jsonb_build_object('status','refund_pending','note',p_note,'target_status',v_target_status));
+ return true;
+end $;
+
 create or replace function public.mzad_mark_deposit_refunded(p_deposit_id uuid,p_note text default null)
 returns boolean language plpgsql security definer set search_path = public
 as $$
@@ -283,6 +320,8 @@ revoke all on function public.mzad_submit_deposit_proof(uuid,text,text,bigint,ti
 grant execute on function public.mzad_submit_deposit_proof(uuid,text,text,bigint,timestamptz) to authenticated;
 revoke all on function public.mzad_approve_deposit(uuid,boolean,text) from public, anon;
 grant execute on function public.mzad_approve_deposit(uuid,boolean,text) to authenticated;
+revoke all on function public.mzad_request_deposit_refund(uuid,text) from public, anon;
+grant execute on function public.mzad_request_deposit_refund(uuid,text) to authenticated;
 revoke all on function public.mzad_mark_deposit_refunded(uuid,text) from public, anon;
 grant execute on function public.mzad_mark_deposit_refunded(uuid,text) to authenticated;
 revoke all on function public.mzad_admin_update_setting(text,jsonb,text) from public, anon;
