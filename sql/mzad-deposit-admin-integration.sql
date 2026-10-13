@@ -466,7 +466,7 @@ begin
   jsonb_build_object('status',t.status),
   jsonb_build_object('action',p_action,'transaction_status',(select status from public.mzad_transactions where id=t.id)));
  return true;
-end $;
+ end $$;
 
 create or replace function public.mzad_admin_mark_transaction_fee_paid(
  p_transaction_id uuid,p_payer_role text,p_payment_reference text default null
@@ -493,7 +493,7 @@ begin
   jsonb_build_object('status',f.status,'payer_role',f.payer_role,'amount_iqd',f.amount_iqd),
   jsonb_build_object('status','paid','payment_reference',nullif(btrim(p_payment_reference),''),'confirmed_by_admin',v_user));
  return true;
-end $;
+ end $$;
 
 create or replace function public.mzad_admin_update_setting(p_key text,p_value jsonb,p_description_ar text default null)
 returns boolean language plpgsql security definer set search_path = public
