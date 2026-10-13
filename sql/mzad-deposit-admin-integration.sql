@@ -174,6 +174,9 @@ begin
    update public.mzad_payment_requests set status='rejected'
      where deposit_id=d.id and status in ('pending','proof_submitted');
    update public.mzad_deposits set status='rejected',eligible_to_bid=false where id=d.id;
+   if d.operation_type='auction' and d.payer_role='buyer' then
+     perform public.mzad_refresh_bid_eligibility(d.auction_id,d.user_id);
+   end if;
    if d.operation_type='direct_sale' and d.payer_role='buyer' then
      update public.mzad_direct_sales set status='active',buyer_user_id=null,reserved_at=null,updated_at=now()
        where id=d.direct_sale_id and status='reserved' and buyer_user_id=d.user_id;
@@ -199,6 +202,9 @@ begin
  update public.mzad_payment_requests set status=case when p_approve then 'approved' else 'rejected' end where id=q.id;
  update public.mzad_deposits set status=case when p_approve then 'approved' else 'rejected' end,
    eligible_to_bid=(p_approve and d.operation_type='auction' and d.payer_role='buyer') where id=d.id;
+ if d.operation_type='auction' and d.payer_role='buyer' then
+   perform public.mzad_refresh_bid_eligibility(d.auction_id,d.user_id);
+ end if;
  if p_approve and d.operation_type='auction' and d.payer_role='seller' then
    update public.mzad_auctions a set status='live',starts_at=now(),
      ends_at=now()+make_interval(secs=>coalesce((select (value_json #>> '{}')::integer from public.mzad_settings where key='auction_duration_seconds'),3600)),
