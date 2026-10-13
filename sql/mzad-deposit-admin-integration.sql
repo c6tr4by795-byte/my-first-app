@@ -634,3 +634,93 @@ revoke all on function public.mzad_admin_update_setting(text,jsonb,text) from pu
 grant execute on function public.mzad_admin_update_setting(text,jsonb,text) to authenticated;
 
 commit;
+
+
+-- Admin-only upsert used by admin/payment-methods.html.
+-- Uses the canonical mzad_payment_methods columns from mzad-foundation-v2.sql.
+-- Advisory lock serializes first-time creation by method type, avoiding concurrent duplicate inserts.
+create or replace function public.mzad_admin_upsert_payment_method(
+  p_code text,
+  p_name_ar text,
+  p_provider text,
+  p_account_label text,
+  p_account_identifier text,
+  p_instructions_ar text,
+  p_is_enabled boolean,
+  p_display_order integer
+) returns uuid
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_user uuid := auth.uid();
+  v_method_type text;
+  v_id uuid;
+begin
+  if v_user is null or not public.mzad_is_admin() then
+    raise exception 'ADMIN_REQUIRED';
+  end if;
+
+  v_method_type := case lower(coalesce(p_code, ''))
+    when 'mastercard' then 'mastercard'
+    when 'zain_cash' then 'zain_cash'
+    when 'phone' then 'phone_account'
+    when 'phone_account' then 'phone_account'
+    when 'platform_contact' then 'other'
+    when 'other' then 'other'
+    else null
+  end;
+
+  if v_method_type is null then raise exception 'INVALID_PAYMENT_METHOD_TYPE'; end if;
+  if nullif(btrim(coalesce(p_name_ar, '')), '') is null then raise exception 'PAYMENT_METHOD_NAME_REQUIRED'; end if;
+  if coalesce(p_is_enabled, false)
+     and nullif(btrim(coalesce(p_account_identifier, '')), '') is null then
+    raise exception 'PAYMENT_RECIPIENT_REQUIRED';
+  end if;
+
+  perform pg_advisory_xact_lock(hashtext('mzad_payment_methods:' || v_method_type));
+
+  select id into v_id
+  from public.mzad_payment_methods
+  where method_type = v_method_type
+  order by created_at, id
+  limit 1
+  for update;
+
+  if v_id is null then
+    insert into public.mzad_payment_methods (
+      method_type, display_name_ar, recipient_name, recipient_identifier,
+      instructions_ar, is_enabled, sort_order, updated_at
+    ) values (
+      v_method_type, btrim(p_name_ar), nullif(btrim(coalesce(p_account_label, '')), ''),
+      nullif(btrim(coalesce(p_account_identifier, '')), ''),
+      nullif(btrim(coalesce(p_instructions_ar, '')), ''),
+      coalesce(p_is_enabled, false), coalesce(p_display_order, 0), now()
+    ) returning id into v_id;
+  else
+    update public.mzad_payment_methods
+    set display_name_ar = btrim(p_name_ar),
+        recipient_name = nullif(btrim(coalesce(p_account_label, '')), ''),
+        recipient_identifier = nullif(btrim(coalesce(p_account_identifier, '')), ''),
+        instructions_ar = nullif(btrim(coalesce(p_instructions_ar, '')), ''),
+        is_enabled = coalesce(p_is_enabled, false),
+        sort_order = coalesce(p_display_order, 0),
+        updated_at = now()
+    where id = v_id;
+  end if;
+
+  insert into public.mzad_audit_logs (
+    actor_user_id, action, entity_type, entity_id, before_json, after_json
+  ) values (
+    v_user, 'payment_method_upserted', 'payment_method', v_id::text, '{}'::jsonb,
+    jsonb_build_object('method_type', v_method_type, 'display_name_ar', btrim(p_name_ar),
+      'is_enabled', coalesce(p_is_enabled, false), 'sort_order', coalesce(p_display_order, 0))
+  );
+
+  return v_id;
+end;
+$$;
+
+revoke all on function public.mzad_admin_upsert_payment_method(text,text,text,text,text,text,boolean,integer) from public, anon;
+grant execute on function public.mzad_admin_upsert_payment_method(text,text,text,text,text,text,boolean,integer) to authenticated;
