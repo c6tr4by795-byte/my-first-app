@@ -403,7 +403,7 @@ create or replace function public.mzad_schedule_handover(
  p_transaction_id uuid,p_handover_point_id uuid,p_scheduled_at timestamptz,p_notes text default null
 ) returns uuid
 language plpgsql security definer set search_path = public
-as $
+ as $$
 declare
  v_user uuid:=auth.uid();
  t public.mzad_transactions%rowtype;
@@ -435,13 +435,13 @@ begin
   jsonb_build_object('status',t.status),
   jsonb_build_object('appointment_id',v_appointment,'handover_point_id',p.id,'scheduled_at',p_scheduled_at));
  return v_appointment;
-end $;
+ end $$;
 
 create or replace function public.mzad_confirm_handover(
  p_transaction_id uuid,p_action text
 ) returns boolean
 language plpgsql security definer set search_path = public
-as $
+ as $$
 declare
  v_user uuid:=auth.uid();
  t public.mzad_transactions%rowtype;
@@ -510,7 +510,7 @@ create or replace function public.mzad_admin_mark_transaction_fee_paid(
  p_transaction_id uuid,p_payer_role text,p_payment_reference text default null
 ) returns boolean
 language plpgsql security definer set search_path = public
-as $
+ as $$
 declare
  v_user uuid:=auth.uid();
  f public.mzad_transaction_fees%rowtype;
