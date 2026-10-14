@@ -254,10 +254,10 @@ async function loadLive(){
   if (!S.viewRegistered) { try { const vr = await supabase.rpc("mzad_register_auction_view", { p_auction_id: auctionId }); if (!vr.error) { S.views = Number(vr.data)||0; S.viewRegistered = true; } } catch(e) { console.warn("VIEW COUNT:",e); } }
   const [vc, rc] = await Promise.all([
     supabase.rpc("mzad_get_auction_view_count", { p_auction_id: auctionId }),
-    supabase.from("mzad_deposits").select("id", {count:"exact",head:true}).eq("auction_id",auctionId).eq("deposit_type","auction_buyer").in("status",["proof_submitted","approved"])
+    supabase.rpc("mzad_get_auction_reservation_count", { p_auction_id: auctionId })
   ]);
   if (!vc.error) S.views = Number(vc.data)||0;
-  if (!rc.error) S.reservations = rc.count||0;
+  if (!rc.error) S.reservations = Number(rc.data)||0;
   const ended = a.status === "ended" || (a.status === "live" && new Date(a.ends_at).getTime() <= Date.now());
   const [b, e, r] = await Promise.all([
     supabase.from("mzad_auction_bids").select("id,amount_iqd,bidder_user_id,created_at", { count:"exact" }).eq("auction_id", auctionId).eq("accepted", true).order("amount_iqd",{ascending:false}).limit(30),
