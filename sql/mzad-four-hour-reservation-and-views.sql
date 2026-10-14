@@ -52,17 +52,34 @@ language sql
 stable
 security definer
 set search_path = public
-as $$
+as $
   select count(*)::bigint
   from public.mzad_auction_views
   where auction_id = p_auction_id
     and exists (select 1 from public.mzad_auctions a where a.id = p_auction_id);
-$$;
+$;
+
+create or replace function public.mzad_get_auction_reservation_count(p_auction_id uuid)
+returns bigint
+language sql
+stable
+security definer
+set search_path = public
+as $
+  select count(distinct d.user_id)::bigint
+  from public.mzad_deposits d
+  where d.auction_id = p_auction_id
+    and d.deposit_type = 'auction_buyer'
+    and d.status not in ('rejected','cancelled','refunded','forfeited')
+    and exists (select 1 from public.mzad_auctions a where a.id = p_auction_id);
+$;
 
 revoke all on function public.mzad_register_auction_view(uuid) from public, anon;
 grant execute on function public.mzad_register_auction_view(uuid) to authenticated;
 revoke all on function public.mzad_get_auction_view_count(uuid) from public, anon;
 grant execute on function public.mzad_get_auction_view_count(uuid) to authenticated;
+revoke all on function public.mzad_get_auction_reservation_count(uuid) from public, anon;
+grant execute on function public.mzad_get_auction_reservation_count(uuid) to authenticated;
 
 -- Once the seller deposit is approved, keep the auction scheduled for 4 hours.
 -- Existing lifecycle cron moves scheduled auctions to live at starts_at.
