@@ -266,10 +266,10 @@ async function loadMethods(){
     const template = PLATFORM.find(p => p.re.test(methodText)) || (/^(bank|phone|other)$/i.test(String(m.code||"")) ? { name: String(m.name_ar||m.name_en||"طريقة دفع"), sub:"طريقة دفع معتمدة من الإدارة", icon:ICON.wallet, label:"بيانات المستلم", num:"", copy:"", how:[] } : null);
     const recipient = String(m.recipient_identifier || m.account_identifier || "").trim();
     if (!template || !recipient) return null;
-    const configuredInstructions = String(m.instructions_ar || "").split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+    const configuredInstructions = String(m.instructions_ar || m.instructions || "").split(/\r?\n/).map(x => x.trim()).filter(Boolean);
     return { m, p: {
       ...template,
-      label: esc(String(m.recipient_name || m.account_label || template.label)),
+      label: esc(String(m.recipient_name || m.account_name || m.account_label || template.label)),
       num: esc(recipient),
       copy: esc(recipient),
       how: (configuredInstructions.length ? configuredInstructions : template.how).map(esc)
@@ -428,6 +428,7 @@ $("back").addEventListener("click", () => history.length > 1 ? history.back() : 
     if (!await auth()) return;
     await loadAuction();
     await loadDeposit();
+    await ensureDeposit();
     await loadRequestAndProof();
     await loadMethods();
     $("amount").textContent = money(amountNow());
