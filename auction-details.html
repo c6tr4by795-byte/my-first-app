@@ -195,7 +195,7 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 import { supabase } from "./js/supabase.js";
 const $ = id => document.getElementById(id);
 const auctionId = new URLSearchParams(location.search).get("auction") || new URLSearchParams(location.search).get("id");
-const S = { user:null, a:null, d:null, imgs:[], bids:[], count:0, elig:false, result:null, busy:false, amount:0, sheet:"", sig:"", lastPrice:null, refetched:false, polling:false, loaded:false };
+const S = { user:null, a:null, d:null, imgs:[], bids:[], count:0, elig:false, result:null, views:0, reservations:0, busy:false, amount:0, sheet:"", sig:"", lastPrice:null, refetched:false, polling:false, loaded:false, viewRegistered:false };
 const DEPOSIT = 5000;
 const money = n => Number(n||0).toLocaleString("en-US");
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -246,12 +246,19 @@ async function loadStatic(){
 async function loadLive(){
   const a = must(await supabase.from("mzad_auctions").select("*").eq("id", auctionId).maybeSingle());
   if (!a) throw new Error("NOT_FOUND");
-  if (!["live","ended"].includes(a.status)){
+  if (!["live","ended","scheduled"].includes(a.status)){
     if (a.seller_user_id === S.user.id){ location.replace("auction-request-status.html?auction=" + encodeURIComponent(a.id)); return false; }
     throw new Error("UNAVAILABLE");
   }
   S.a = a;
-  const ended = a.status === "ended" || new Date(a.ends_at).getTime() <= Date.now();
+  if (!S.viewRegistered) { try { const vr = await supabase.rpc("mzad_register_auction_view", { p_auction_id: auctionId }); if (!vr.error) { S.views = Number(vr.data)||0; S.viewRegistered = true; } } catch(e) { console.warn("VIEW COUNT:",e); } }
+  const [vc, rc] = await Promise.all([
+    supabase.rpc("mzad_get_auction_view_count", { p_auction_id: auctionId }),
+    supabase.from("mzad_deposits").select("id", {count:"exact",head:true}).eq("auction_id",auctionId).eq("deposit_type","auction_buyer").in("status",["proof_submitted","approved"])
+  ]);
+  if (!vc.error) S.views = Number(vc.data)||0;
+  if (!rc.error) S.reservations = rc.count||0;
+  const ended = a.status === "ended" || (a.status === "live" && new Date(a.ends_at).getTime() <= Date.now());
   const [b, e, r] = await Promise.all([
     supabase.from("mzad_auction_bids").select("id,amount_iqd,bidder_user_id,created_at", { count:"exact" }).eq("auction_id", auctionId).eq("accepted", true).order("amount_iqd",{ascending:false}).limit(30),
     S.elig ? null : supabase.from("mzad_auction_eligibility").select("eligible").eq("auction_id", auctionId).eq("user_id", S.user.id).maybeSingle(),
@@ -307,13 +314,14 @@ function renderLive(){
   $("price").textContent = money(price);
   if (S.loaded && S.lastPrice !== null && price !== S.lastPrice){ const b = $("priceBox"); b.classList.remove("bump"); void b.offsetWidth; b.classList.add("bump"); }
   S.lastPrice = price;
-  $("count").textContent = S.count + " مزايدة";
+  $("count").textContent = S.count + " مزايدة · " + S.reservations + " حجز · " + S.views + " مشاهدة";
   $("next").textContent = money(minBid());
   $("aEnd").textContent = fmtT(a.ends_at);
 
   /* حالة المزايد */
   const n = $("note");
-  if (!live){ n.className = "note"; n.textContent = ""; }
+  if (a.status === "scheduled" && new Date(a.starts_at).getTime() > Date.now()){ n.className = "note"; n.textContent = "المزاد بانتظار البداية؛ تگدر تكمل تأمين المشاركة خلال فترة الحجز."; }
+  else if (!live){ n.className = "note"; n.textContent = ""; }
   else if (!top){ n.className = "note"; n.textContent = "لا توجد مزايدات بعد، كن أول مزايد"; }
   else if (mine(top)){ n.className = "note me"; n.textContent = "أنت صاحب أعلى مزايدة حالياً"; }
   else if (S.bids.some(mine)){ n.className = "note out"; n.textContent = "تم تجاوزك، زايد لتعود للمقدمة"; }
@@ -340,8 +348,9 @@ function renderLive(){
 
   /* الزر */
   const btn = $("bid");
+  const waiting = a.status === "scheduled" && new Date(a.starts_at).getTime() > Date.now();
   btn.disabled = !live || isSeller() || S.busy;
-  btn.textContent = !live ? "انتهى" : isSeller() ? "مزادك" : "زايد";
+  btn.textContent = waiting ? "قريباً" : !live ? "انتهى" : isSeller() ? "مزادك" : "زايد";
   tick();
 }
 
@@ -419,14 +428,16 @@ async function submitBid(){
 /* ============ العداد ============ */
 function tick(){
   if (!S.a) return;
-  const left = new Date(S.a.ends_at).getTime() - Date.now();
+  const waiting = S.a.status === "scheduled" && new Date(S.a.starts_at).getTime() > Date.now();
+  const target = waiting ? S.a.starts_at : S.a.ends_at;
+  const left = new Date(target).getTime() - Date.now();
   const live = S.a.status === "live" && left > 0;
   const t = Math.max(0, Math.floor(left/1000)), p = n => String(n).padStart(2,"0");
   $("hh").textContent = p(Math.floor(t/3600)); $("mm").textContent = p(Math.floor(t%3600/60)); $("ss").textContent = p(t%60);
   $("auction").classList.toggle("hot", live && left <= 300e3);
   $("auction").classList.toggle("ended", !live);
-  $("liveBadge").textContent = live ? "مزاد مستمر" : "انتهى المزاد";
-  $("endLabel").textContent = live ? "الوقت المتبقي" : "انتهى المزاد";
+  $("liveBadge").textContent = waiting ? "يبدأ بعد قليل" : live ? "مزاد مستمر" : S.a.status === "scheduled" ? "موعد المزاد" : "انتهى المزاد";
+  $("endLabel").textContent = waiting ? "يبدأ بعد" : live ? "الوقت المتبقي" : S.a.status === "scheduled" ? "موعد البداية" : "انتهى المزاد";
   if (!live && S.a.status === "live" && !S.refetched){ S.refetched = true; refresh(); }
   if (!live && !$("bid").disabled){ $("bid").disabled = true; $("bid").textContent = "انتهى"; }
 }
