@@ -163,7 +163,7 @@ const norm = v => String(v||"").toLowerCase().normalize("NFKC")
   .replace(/اي ?فون|ايفن|اىفون/g,"iphone").replace(/سامسو?نج/g,"samsung").replace(/شي?اومي/g,"xiaomi")
   .replace(/[جق]وجل/g,"google").replace(/بكسل/g,"pixel").replace(/ون بل[اس]س?/g,"oneplus").replace(/\s+/g," ").trim();
 
-const endOf = a => new Date(a.ends_at).getTime();
+const endOf = a => new Date(a.status === "scheduled" ? a.starts_at : a.ends_at).getTime();
 const p2 = n => String(n).padStart(2,"0");
 const timeText = left => {
   if (left <= 0) return "انتهى";
@@ -175,8 +175,8 @@ const timeText = left => {
 /* الجلب: يجلب فقط الجديد (أجهزة/صور) ويعيد استخدام الروابط الموقعة حتى لا تتغير الصور */
 async function fetchAuctions(){
   const a = await supabase.from("mzad_auctions")
-    .select("id,auction_number,device_id,starting_price_iqd,current_price_iqd,bid_increment_iqd,status,ends_at,created_at")
-    .eq("status","live").gt("ends_at", new Date().toISOString()).order("created_at",{ascending:false}).limit(100);
+    .select("id,auction_number,device_id,starting_price_iqd,current_price_iqd,bid_increment_iqd,status,starts_at,ends_at,created_at")
+    .in("status",["live","scheduled"]).order("created_at",{ascending:false}).limit(100);
   if (a.error) throw a.error;
   const list = a.data || [];
   if (!list.length) return [];
@@ -259,9 +259,9 @@ function makeCard(a, i){
   el.style.animationDelay = Math.min(i,5)*.06 + "s";
   el.addEventListener("animationend", () => el.classList.remove("enter"), { once:true });
   el.innerHTML = `<div class="im">${PH}
-      <span class="lv">مباشر</span>
+      <span class="lv">${a.status === "scheduled" ? "حجز مفتوح" : "مباشر"}</span>
       <button class="fav${favs.has(id)?" on":""}" type="button" aria-label="المفضلة">${HEART}</button>
-      <span class="pill"><small>ينتهي بعد</small><b></b></span>
+      <span class="pill"><small>${a.status === "scheduled" ? "يبدأ بعد" : "ينتهي بعد"}</small><b></b></span>
     </div>
     <div class="cb">
       <h3 class="t">${esc(title)}</h3>
@@ -284,7 +284,7 @@ function updateCard(el, a){
     pe.textContent = price;
     if (!first){ const pv = pe.parentElement; pv.classList.remove("flash"); void pv.offsetWidth; pv.classList.add("flash"); }
   }
-  const bt = a.bids + " مزايدة";
+  const bt = a.bids + " مزايدة" + (a.status === "scheduled" ? " · الحجز مفتوح" : "");
   const be = el.querySelector("[data-bids]"); if (be.textContent !== bt) be.textContent = bt;
   timerOne(el, a);
 }
@@ -292,6 +292,7 @@ function updateCard(el, a){
 function timerOne(el, a){
   const left = endOf(a) - Date.now();
   const pill = el.querySelector(".pill");
+  pill.querySelector("small").textContent = a.status === "scheduled" && left > 0 ? "يبدأ بعد" : "ينتهي بعد";
   pill.querySelector("b").textContent = timeText(left);
   pill.classList.toggle("hot", left > 0 && left <= 5*6e4);
   return left <= 0;
@@ -301,7 +302,7 @@ function showEmpty(t, p){ $("eT").textContent = t; $("eP").textContent = p; $("e
 
 function render(){
   const l = visible();
-  $("result").textContent = l.length + (l.length === 1 ? " مزاد مباشر" : " مزاد مباشر");
+  $("result").textContent = l.length + " مزاد";
   const list = $("list");
   const alive = new Set(AU.map(a => String(a.id)));
   [...els.keys()].forEach(k => { if (!alive.has(k)) els.delete(k); });
