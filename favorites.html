@@ -1604,8 +1604,20 @@ const toast =
   document.getElementById("toast");
 
 
-const FAVORITES_KEY =
-  "mzad_phone_favorites";
+// لكل حساب قائمة مفضلة محلية مستقلة؛ لا تشارك بين الحسابات على الجهاز نفسه.
+let FAVORITES_KEY = "mzad_phone_favorites:guest";
+async function initFavoriteScope(){
+  try{
+    const {data,error}=await supabase.auth.getUser();
+    if(error) throw error;
+    FAVORITES_KEY = data?.user?.id
+      ? "mzad_phone_favorites:user:" + data.user.id
+      : "mzad_phone_favorites:guest";
+  }catch(error){
+    console.warn("FAVORITES SCOPE:",error);
+    FAVORITES_KEY = "mzad_phone_favorites:guest";
+  }
+}
 
 
 let toastTimer;
@@ -2599,7 +2611,7 @@ document
    START
 ===================================================== */
 
-loadFavorites();
+initFavoriteScope().finally(() => loadFavorites());
 
 </script>
 
