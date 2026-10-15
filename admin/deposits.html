@@ -111,7 +111,7 @@ async function load(){
    const name=[v.brand,v.model,v.storage].filter(Boolean).join(" ")||"تأمين";
    const roleLabel=isSeller?"تأمين بائع المزاد":isBuyer?"تأمين مزايد":"تأمين";
    const note=isSeller
-    ?'<div class="seller-note"><b>مهم:</b> عند الاعتماد، مسودة هذا المزاد ستتحول إلى <b>LIVE</b> ويبدأ العداد تلقائياً لمدة ساعة. لا يوجد اعتماد آخر من هذه الصفحة لتشغيل المزاد.</div>'
+    ?'<div class="seller-note"><b>مهم:</b> عند الاعتماد، يدخل المزاد فترة انتظار ثابتة 4 ساعات. يفتح للحجز خلال الانتظار، ثم تبدأ المزايدة تلقائياً حسب مدة المزاد المختارة.</div>'
     :isBuyer
     ?'<div class="buyer-note"><b>مهم:</b> عند الاعتماد، يحصل المزايد على أهلية المزايدة فقط. لا يتغير سعر الجهاز ولا يُعتبر التأمين دفعة من سعر الشراء.</div>'
     :"";
@@ -149,7 +149,7 @@ async function review(card,approve){
  if(approve){
   const role=card.querySelector(".badge")?.textContent||"";
   const ok=confirm(role.includes("بائع")
-   ?"تأكيد اعتماد تأمين البائع؟\n\nعند النجاح سيبدأ المزاد تلقائياً لمدة ساعة."
+   ?"تأكيد اعتماد تأمين البائع؟\n\nعند الاعتماد تبدأ فترة انتظار 4 ساعات قبل افتتاح المزايدة."
    :"تأكيد اعتماد التأمين؟");
   if(!ok)return;
  }
@@ -159,7 +159,7 @@ async function review(card,approve){
  try{
   const r=await supabase.rpc("mzad_approve_deposit",{p_deposit_id:id,p_approve:approve,p_note:note});
   if(r.error)throw r.error;
-  show(approve?"تم اعتماد التأمين بنجاح. إذا كان تأمين بائع، فالمزاد أصبح Live تلقائياً.":"تم رفض الإثبات.");
+  show(approve?"تم اعتماد التأمين بنجاح. تأمين البائع يبدأ فترة انتظار 4 ساعات، وتأمين المشتري يفعّل أهليته بعد اعتماد الطلب.":"تم رفض الإثبات.");
   await load();
  }catch(e){
   console.error(e);
