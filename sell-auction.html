@@ -977,6 +977,13 @@ $("price").addEventListener("input", e => {
   e.target.classList.remove("invalid");
 });
 
+document.querySelectorAll("[data-duration]").forEach(b => {
+  b.addEventListener("click", () => {
+    state.durationHours = Number(b.dataset.duration);
+    sync();
+  });
+});
+
 form.addEventListener("input", e => {
   if (e.target.classList?.contains("in")) e.target.classList.remove("invalid");
   if (e.target.id === "modelCustom" || e.target.id === "brandOther") updateBattery();
