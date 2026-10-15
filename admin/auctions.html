@@ -234,7 +234,9 @@ let toastTimer;
 
 function toast(t){$("toast").textContent=t;$("toast").classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").classList.remove("show"),2800)}
 
-const D={tab:"sale",sale:[],purchase:[],live:[],refund:[],busy:false,debug:{deposits:0,proofs:0,userId:"",aal:"unknown",admin:false}};
+const validTabs=["sale","purchase","refund","live"];
+const requestedTab=new URLSearchParams(location.search).get("tab");
+const D={tab:validTabs.includes(requestedTab)?requestedTab:"sale",sale:[],purchase:[],live:[],refund:[],busy:false,requestCodeMap:new Map(),buyerCodeMap:new Map(),debug:{deposits:0,proofs:0,userId:"",aal:"unknown",admin:false}};
 
 const TYPE={auction_seller:"تأمين البيع — بائع المزاد",auction_buyer:"تأمين الشراء — مشتري المزاد",direct_buyer:"تأمين الشراء المباشر"};
 
@@ -311,14 +313,14 @@ async function loadAll(){
     requestCodeRows=requestIds.length?must(await supabase.from("mzad_request_codes")
       .select("request_id,code").in("request_id",requestIds)):[];
   }catch(e){console.warn("أكواد الطلب غير متاحة في لوحة الإدارة",e)}
-  const requestCodeMap=new Map(requestCodeRows.map(x=>[x.request_id,x.code]));
+  D.requestCodeMap=new Map(requestCodeRows.map(x=>[x.request_id,x.code]));
   const buyerIds=[...new Set(pend.map(d=>d.user_id).filter(Boolean))];
   let buyerCodeRows=[];
   try{
     buyerCodeRows=buyerIds.length?must(await supabase.from("mzad_buyer_codes")
       .select("user_id,code").in("user_id",buyerIds)):[];
   }catch(e){console.warn("أكواد المشتري غير متاحة في لوحة الإدارة",e)}
-  const buyerCodeMap=new Map(buyerCodeRows.map(x=>[x.user_id,x.code]));
+  D.buyerCodeMap=new Map(buyerCodeRows.map(x=>[x.user_id,x.code]));
 
   let mm=new Map();
 
@@ -336,7 +338,7 @@ async function loadAll(){
 
     const a=am.get(d.auction_id),r=rm.get(d.id);
 
-    return {d,a,r,dev:name(a),method:mm.get(r&&r.payment_method_id)||""};
+    return {d,a,r,dev:name(a),method:mm.get(r&&r.payment_method_id)||"",requestCode:r&&D.requestCodeMap.get(r.id)||"—",buyerCode:D.buyerCodeMap.get(d.user_id)||"—"};
 
   };
 
@@ -356,13 +358,15 @@ async function loadAll(){
 
   // الاسترداد مشترك
 
-  D.refund=deps.filter(d=>["approved","refundable"].includes(d.status))
-
-    .map(d=>({d,a:am.get(d.auction_id)}))
-
-    .filter(x=>x.a&&["ended","cancelled"].includes(x.a.status))
-
-    .map(x=>({...x,dev:name(x.a)}));
+  D.refund=deps.filter(d=>{
+    if(d.status==="refundable") return true;
+    if(d.status!=="approved" || !d.auction_id) return false;
+    const auction=am.get(d.auction_id);
+    return !!auction && ["ended","cancelled"].includes(auction.status);
+  }).map(d=>{
+    const a=am.get(d.auction_id);
+    return {d,a,dev:a?name(a):"تأمين بدون مزاد"};
+  });
 
 }
 
@@ -377,8 +381,8 @@ function reviewCard(x,i){
     '<div class="rows">'+
 
     row("رقم طلب الدفع",r&&r.request_number||"—","ltr")+
-    row("كود الطلب DP",r&&requestCodeMap.get(r.id)||"—","ltr")+
-    row("كود المشتري MZ",buyerCodeMap.get(d.user_id)||"—","ltr")+
+    row("كود الطلب DP",x.requestCode||"—","ltr")+
+    row("كود المستخدم MZ",x.buyerCode||"—","ltr")+
 
     row("رقم المزاد",a&&a.auction_number||"—","ltr")+
 
@@ -426,7 +430,7 @@ function refundCard(x,i){
 
   return '<article class="card" style="animation-delay:'+Math.min(i,6)*.04+'s">'+
 
-    '<div class="hd"><div><h3>'+esc(x.dev)+'</h3><small>'+esc(TYPE[d.deposit_type]||d.deposit_type)+' • '+esc(d.deposit_number||"")+'</small></div><span class="pill">'+esc(AST[a.status]||a.status)+'</span></div>'+
+    '<div class="hd"><div><h3>'+esc(x.dev)+'</h3><small>'+esc(TYPE[d.deposit_type]||d.deposit_type)+' • '+esc(d.deposit_number||"")+'</small></div><span class="pill">'+esc(a?(AST[a.status]||a.status):"جاهز للاسترداد")+'</span></div>'+
 
     '<div class="rows">'+row("مبلغ التأمين",money(d.amount_iqd))+
 
