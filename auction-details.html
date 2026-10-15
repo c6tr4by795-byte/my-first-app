@@ -484,9 +484,23 @@ async function refresh(){
 }
 
 /* ============ المفضلة والرجوع ============ */
-const favKey = () => "mzad_favorite_auction_" + auctionId;
+// لا تشارك حالة المفضلة بين حسابات مختلفة على المتصفح نفسه.
+let favoriteUserScope = "guest";
+const favKey = () => "mzad_favorite_auction:" + favoriteUserScope + ":" + auctionId;
 function favSet(on){ $("fav").setAttribute("aria-pressed", on); $("fav").setAttribute("aria-label", on ? "إزالة من المفضلة" : "إضافة إلى المفضلة"); }
-try{ favSet(localStorage.getItem(favKey()) === "1"); }catch{}
+async function initAuctionFavorite(){
+  try{
+    const {data,error}=await supabase.auth.getUser();
+    if(error) throw error;
+    favoriteUserScope=data?.user?.id || "guest";
+  }catch(error){
+    console.warn("AUCTION FAVORITE SCOPE:",error);
+    favoriteUserScope="guest";
+  }
+  try{ favSet(localStorage.getItem(favKey()) === "1"); }catch{}
+}
+$("fav").disabled = true;
+initAuctionFavorite().finally(() => { $("fav").disabled = false; });
 $("fav").onclick = () => {
   const on = $("fav").getAttribute("aria-pressed") !== "true";
   try{ on ? localStorage.setItem(favKey(), "1") : localStorage.removeItem(favKey()); }catch{}
