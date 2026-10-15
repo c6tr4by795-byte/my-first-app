@@ -126,6 +126,16 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 .err a,.err button{display:inline-block;padding:12px 26px;border-radius:14px;background:var(--p);color:#fff;font-size:14px;font-weight:800}
 .sk{height:240px;margin-top:12px;border-radius:22px;background:linear-gradient(100deg,#eeeafa 30%,#f8f6ff 50%,#eeeafa 70%);background-size:300% 100%;animation:sh 1.6s linear infinite}
 @keyframes sh{to{background-position:-200% 0}}
+.auction.soon .live:before{background:var(--gold)}
+.auction.soon .tdig span{background:#fdf6e8;border-color:#f1dcae;color:var(--gold)}
+.auction.soon .tdig i{color:var(--gold)}
+.stats{display:flex;gap:8px;margin-top:12px}
+.stat{flex:1;display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:14px;background:#fff;border:1px solid var(--line)}
+.stat svg{width:18px;height:18px;flex:0 0 18px;fill:none;stroke:var(--p);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.stat b{display:block;font-size:16px;font-weight:900;line-height:1.1;font-variant-numeric:tabular-nums;color:var(--pd)}
+.stat small{display:block;margin-top:1px;font-size:10px;font-weight:800;color:var(--muted)}
+.bid-btn.rsv{font-size:15px}
+.bid-btn.done{background:linear-gradient(145deg,#1e8a5a,#34b27f);box-shadow:0 12px 26px rgba(30,138,90,.32);font-size:14px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media(max-width:360px){.price{font-size:24px}.tdig span{min-width:34px;font-size:18px}.bid-btn{width:80px;height:80px}}
 </style>
@@ -151,6 +161,10 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 
   <section class="auction" id="auction">
     <div class="a-top"><span class="live" id="liveBadge">مزاد مستمر</span><span class="a-count" id="count"></span></div>
+    <div class="stats" id="stats">
+      <div class="stat"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 7.8 7 10 4-2.2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg><div><b id="stRes">0</b><small>حاجز</small></div></div>
+      <div class="stat"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg><div><b id="stView">0</b><small>مشاهد</small></div></div>
+    </div>
     <div class="a-grid">
       <div><span class="label">السعر الحالي</span><div class="price" id="priceBox"><span id="price"></span><small>د.ع</small></div></div>
       <div role="timer"><span class="label" id="endLabel">الوقت المتبقي</span>
@@ -178,6 +192,7 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
     <div class="r"><span>رقم المزاد</span><strong id="aNo"></strong></div>
     <div class="r"><span>السعر الابتدائي</span><strong id="aStart"></strong></div>
     <div class="r"><span>أقل زيادة</span><strong id="aInc"></strong></div>
+    <div class="r" id="aBeginRow" hidden><span>يفتح</span><strong id="aBegin"></strong></div>
     <div class="r"><span>ينتهي</span><strong id="aEnd"></strong></div>
   </section>
 
@@ -195,7 +210,7 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 import { supabase } from "./js/supabase.js";
 const $ = id => document.getElementById(id);
 const auctionId = new URLSearchParams(location.search).get("auction") || new URLSearchParams(location.search).get("id");
-const S = { user:null, a:null, d:null, imgs:[], bids:[], count:0, elig:false, result:null, busy:false, amount:0, sheet:"", sig:"", lastPrice:null, refetched:false, polling:false, loaded:false };
+const S = { user:null, a:null, d:null, imgs:[], bids:[], count:0, elig:false, result:null, busy:false, amount:0, sheet:"", sig:"", lastPrice:null, refetched:false, polling:false, loaded:false, stats:{ reserved:0, viewers:0 }, activating:false };
 const DEPOSIT = 5000;
 const money = n => Number(n||0).toLocaleString("en-US");
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -206,6 +221,8 @@ const BID_ERR = { AUTH_REQUIRED:"يجب تسجيل الدخول أولاً.", SE
 const bidErr = e => { const m = String(e?.message||""); for (const k in BID_ERR) if (m.includes(k)) return BID_ERR[k]; return "تعذر تسجيل المزايدة، حاول مرة ثانية."; };
 
 const isLive = () => S.a?.status === "live" && new Date(S.a.ends_at).getTime() > Date.now();
+/* مزاد معتمد وينتظر الافتتاح: الحجز مفتوح والمزايدة لا */
+const isSoon = () => S.a?.status === "scheduled" && !!S.a.starts_at && new Date(S.a.starts_at).getTime() > Date.now();
 const incr = () => Number(S.a.bid_increment_iqd) || 1000;
 const minBid = () => Number(S.a.current_price_iqd || S.a.starting_price_iqd || 0) + Number(S.a.bid_increment_iqd || 0);
 const isSeller = () => S.a.seller_user_id === S.user.id;
@@ -246,17 +263,19 @@ async function loadStatic(){
 async function loadLive(){
   const a = must(await supabase.from("mzad_auctions").select("*").eq("id", auctionId).maybeSingle());
   if (!a) throw new Error("NOT_FOUND");
-  if (!["live","ended"].includes(a.status)){
+  if (!["live","ended","scheduled"].includes(a.status)){
     if (a.seller_user_id === S.user.id){ location.replace("auction-request-status.html?auction=" + encodeURIComponent(a.id)); return false; }
     throw new Error("UNAVAILABLE");
   }
   S.a = a;
   const ended = a.status === "ended" || new Date(a.ends_at).getTime() <= Date.now();
-  const [b, e, r] = await Promise.all([
+  const [b, e, r, sx] = await Promise.all([
     supabase.from("mzad_auction_bids").select("id,amount_iqd,bidder_user_id,created_at", { count:"exact" }).eq("auction_id", auctionId).eq("accepted", true).order("amount_iqd",{ascending:false}).limit(30),
     S.elig ? null : supabase.from("mzad_auction_eligibility").select("eligible").eq("auction_id", auctionId).eq("user_id", S.user.id).maybeSingle(),
-    ended ? supabase.from("mzad_auction_results").select("*").eq("auction_id", auctionId).order("created_at",{ascending:false}).limit(1) : null
+    ended ? supabase.from("mzad_auction_results").select("*").eq("auction_id", auctionId).order("created_at",{ascending:false}).limit(1) : null,
+    supabase.rpc("mzad_auction_stats", { p_auction_id:auctionId })
   ]);
+  if (sx && !sx.error && sx.data) S.stats = { reserved:Number(sx.data.reserved)||0, viewers:Number(sx.data.viewers)||0 };
   S.bids = b.error ? [] : (b.data || []); S.count = b.count ?? S.bids.length;
   if (e) S.elig = e.data?.eligible === true;
   S.result = r?.data?.[0] || null;
@@ -308,12 +327,17 @@ function renderLive(){
   if (S.loaded && S.lastPrice !== null && price !== S.lastPrice){ const b = $("priceBox"); b.classList.remove("bump"); void b.offsetWidth; b.classList.add("bump"); }
   S.lastPrice = price;
   $("count").textContent = S.count + " مزايدة";
+  $("stRes").textContent = money(S.stats.reserved);
+  $("stView").textContent = money(S.stats.viewers);
   $("next").textContent = money(minBid());
   $("aEnd").textContent = fmtT(a.ends_at);
+  $("aBeginRow").hidden = !a.starts_at;
+  if (a.starts_at) $("aBegin").textContent = fmtT(a.starts_at);
 
   /* حالة المزايد */
   const n = $("note");
-  if (!live){ n.className = "note"; n.textContent = ""; }
+  if (isSoon()){ n.className = "note" + (S.elig ? " me" : ""); n.textContent = S.elig ? "تم حجز مكانك. تدخل مباشرة وقت الافتتاح" : "احجز مكانك بتأمين المشاركة، وتدخل مباشرة عند الافتتاح"; }
+  else if (!live){ n.className = "note"; n.textContent = ""; }
   else if (!top){ n.className = "note"; n.textContent = "لا توجد مزايدات بعد، كن أول مزايد"; }
   else if (mine(top)){ n.className = "note me"; n.textContent = "أنت صاحب أعلى مزايدة حالياً"; }
   else if (S.bids.some(mine)){ n.className = "note out"; n.textContent = "تم تجاوزك، زايد لتعود للمقدمة"; }
@@ -340,8 +364,12 @@ function renderLive(){
 
   /* الزر */
   const btn = $("bid");
-  btn.disabled = !live || isSeller() || S.busy;
-  btn.textContent = !live ? "انتهى" : isSeller() ? "مزادك" : "زايد";
+  const soon = isSoon();
+  btn.disabled = (!live && !soon) || isSeller() || S.busy;
+  btn.classList.toggle("rsv", soon && !S.elig && !isSeller());
+  btn.classList.toggle("done", soon && S.elig && !isSeller());
+  btn.textContent = isSeller() ? "مزادك" : soon ? (S.elig ? "تم الحجز ✓" : "احجز") : live ? "زايد" : (a.status === "scheduled" ? "يفتح الآن" : "انتهى");
+  btn.setAttribute("aria-label", soon ? (S.elig ? "تم حجز مكانك" : "احجز مكانك") : "زايد الآن");
   tick();
 }
 
@@ -361,11 +389,12 @@ $("sheet").addEventListener("click", e => {
 const amtUpd = () => { const b = $("bigAmt"); if (b) b.innerHTML = money(S.amount) + "<small>د.ع</small>"; };
 
 function openDeposit(){
-  openSheet(`<div class="grab"></div><h3>خطوة وحدة قبل أول مزايدة</h3>
-    <p class="sd">لتزايد على هذا المزاد نحتاج تأمين مشاركة بمبلغ <b>${money(DEPOSIT)} د.ع</b>. هو مبلغ قابل للاسترداد، وليس سعر الجهاز ولا رسماً للمنصة، وتدفعه مرة وحدة فقط.</p>
+  const soon = isSoon();
+  openSheet(`<div class="grab"></div><h3>${soon ? "احجز مكانك بالمزاد" : "خطوة وحدة قبل أول مزايدة"}</h3>
+    <p class="sd">${soon ? "الحجز يتم بدفع تأمين المشاركة" : "لتزايد على هذا المزاد نحتاج تأمين مشاركة"} بمبلغ <b>${money(DEPOSIT)} د.ع</b>. هو مبلغ قابل للاسترداد، وليس سعر الجهاز ولا رسماً للمنصة، وتدفعه مرة وحدة فقط.${soon ? " بعد موافقة الإدارة يُسجَّل حجزك وتدخل مباشرة عند الافتتاح." : ""}</p>
     <div class="stp"><span class="sn">1</span><b>أكمل تأمين المشاركة</b></div>
     <div class="stp"><span class="sn">2</span><b>ارجع لهذا المزاد</b></div>
-    <div class="stp"><span class="sn">3</span><b>زايد من الزر الدائري</b></div>
+    <div class="stp"><span class="sn">3</span><b>${soon ? "زايد من الزر الدائري عند الافتتاح" : "زايد من الزر الدائري"}</b></div>
     <a class="b2" href="auction-deposit.html?auction=${encodeURIComponent(S.a.id)}">إكمال تأمين المشاركة</a>
     <button class="b3" type="button" data-act="close">ليس الآن</button>`, "deposit");
 }
@@ -389,7 +418,12 @@ $("liveRow").onclick = e => { const o = $("panel").classList.toggle("open"); e.c
 
 /* ============ المزايدة ============ */
 $("bid").onclick = () => {
-  if (S.busy || !isLive() || isSeller()) return;
+  if (S.busy || isSeller()) return;
+  if (isSoon()){
+    if (S.elig) toast("حجزك مؤكد. تفتح المزايدة عند الافتتاح", "ok"); else openDeposit();
+    return;
+  }
+  if (!isLive()) return;
   const b = $("bid"); b.classList.remove("pulse"); void b.offsetWidth; b.classList.add("pulse");
   S.amount = minBid();
   S.elig ? openConfirm() : openDeposit();
@@ -419,16 +453,26 @@ async function submitBid(){
 /* ============ العداد ============ */
 function tick(){
   if (!S.a) return;
-  const left = new Date(S.a.ends_at).getTime() - Date.now();
+  const sched = S.a.status === "scheduled";
+  const toStart = sched && S.a.starts_at ? new Date(S.a.starts_at).getTime() - Date.now() : -1;
+  const soon = sched && toStart > 0;
+  const left = soon ? toStart : new Date(S.a.ends_at).getTime() - Date.now();
   const live = S.a.status === "live" && left > 0;
   const t = Math.max(0, Math.floor(left/1000)), p = n => String(n).padStart(2,"0");
   $("hh").textContent = p(Math.floor(t/3600)); $("mm").textContent = p(Math.floor(t%3600/60)); $("ss").textContent = p(t%60);
   $("auction").classList.toggle("hot", live && left <= 300e3);
-  $("auction").classList.toggle("ended", !live);
-  $("liveBadge").textContent = live ? "مزاد مستمر" : "انتهى المزاد";
-  $("endLabel").textContent = live ? "الوقت المتبقي" : "انتهى المزاد";
+  $("auction").classList.toggle("soon", soon);
+  $("auction").classList.toggle("ended", !live && !soon && !sched);
+  $("liveBadge").textContent = soon ? "الحجز مفتوح" : live ? "مزاد مستمر" : sched ? "يفتح الآن" : "انتهى المزاد";
+  $("endLabel").textContent = soon ? "يفتح بعد" : live ? "الوقت المتبقي" : sched ? "يفتح الآن" : "انتهى المزاد";
+  /* حان وقت الافتتاح: نفعّل المزاد ثم نحدّث الصفحة */
+  if (sched && !soon && !S.activating){ S.activating = true; activate(); }
   if (!live && S.a.status === "live" && !S.refetched){ S.refetched = true; refresh(); }
-  if (!live && !$("bid").disabled){ $("bid").disabled = true; $("bid").textContent = "انتهى"; }
+  if (!live && !soon && !sched && !$("bid").disabled){ $("bid").disabled = true; $("bid").textContent = "انتهى"; }
+}
+async function activate(){
+  try{ await supabase.rpc("mzad_activate_due_auctions"); await refresh(); }catch(e){ console.warn("ACTIVATE:", e); }
+  setTimeout(() => { S.activating = false; }, 5000);
 }
 setInterval(tick, 1000);
 
@@ -463,6 +507,8 @@ function fail(t, p, link, detail){
     const { data, error } = await supabase.auth.getUser();
     if (error || !data.user){ location.href = "index.html?login=1&returnTo=" + encodeURIComponent(location.pathname + location.search); return; }
     S.user = data.user;
+    /* تسجيل المشاهدة (مرة وحدة لكل مشتري)؛ لو ما انشغّل الـ SQL بعد لا يؤثر على الصفحة */
+    try{ const v = await supabase.rpc("mzad_register_auction_view", { p_auction_id:auctionId }); if (v.error) console.warn("VIEW:", v.error.message); }catch(e){ console.warn("VIEW:", e); }
     if (!await loadLive()) return;
     await loadStatic();
     $("ld").hidden = true; $("pg").hidden = false;
