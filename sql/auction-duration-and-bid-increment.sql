@@ -131,14 +131,24 @@ grant execute on function public.mzad_create_auction_draft(uuid, bigint, integer
 
 -- When the seller deposit is approved and the auction actually becomes live,
 -- start the selected duration then (not while the draft is waiting for review).
+-- Admin approval starts a fixed four-hour reservation window.
+-- The auction's selected duration begins only when the scheduled auction is activated.
 create or replace function public.mzad_apply_selected_auction_duration()
 returns trigger
 language plpgsql
 set search_path = public
 as $$
 begin
-  if new.status = 'live' and old.status is distinct from 'live' then
-    new.starts_at := now();
+  if new.status = 'scheduled' and old.status is distinct from 'scheduled' then
+    new.starts_at := now() + interval '4 hours';
+    new.ends_at := new.starts_at + make_interval(hours => coalesce(new.duration_hours, 1));
+    new.original_ends_at := new.ends_at;
+  elsif new.status = 'live' and old.status is distinct from 'live' then
+    -- Preserve the approved opening time and duration. The activation function
+    -- should only move status to live when starts_at is due.
+    if new.starts_at is null or new.starts_at > now() then
+      raise exception 'AUCTION_OPENING_TIME_NOT_REACHED';
+    end if;
     new.ends_at := new.starts_at + make_interval(hours => coalesce(new.duration_hours, 1));
     new.original_ends_at := new.ends_at;
   end if;
