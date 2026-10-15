@@ -132,6 +132,39 @@ h1{margin:16px 2px 4px;font-size:23px;font-weight:950;letter-spacing:-.03em}
 .err-pg a{display:inline-block;padding:12px 26px;border-radius:14px;background:var(--p);color:#fff;font-size:14px;font-weight:800}
 .toast{position:fixed;left:50%;bottom:calc(24px + var(--sb));transform:translateX(-50%) translateY(16px);max-width:calc(100% - 40px);padding:10px 14px;border-radius:13px;background:#1e2c30;color:#fff;font-size:12px;font-weight:800;opacity:0;pointer-events:none;transition:.3s;z-index:50;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%)}
+/* ===== شاشة النجاح المتحركة بعد الإرسال ===== */
+.fx{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(24px + env(safe-area-inset-top,0px)) 22px calc(28px + var(--sb));color:#fff;text-align:center;overflow:hidden;background:radial-gradient(circle at 50% 16%,rgba(139,108,240,.9),transparent 58%),linear-gradient(160deg,#35258f,#5238c9 55%,#7557ee);opacity:0;visibility:hidden;transition:opacity .45s,visibility 0s .45s}
+.fx.show{opacity:1;visibility:visible;transition-delay:0s}
+.fx .orb{position:absolute;border-radius:50%;background:#cfc4ff;filter:blur(46px);opacity:.3;animation:flt 7s ease-in-out infinite}
+.fx .o1{width:220px;height:220px;top:-60px;inset-inline-start:-70px}
+.fx .o2{width:260px;height:260px;bottom:-90px;inset-inline-end:-80px;animation-delay:-3s}
+@keyframes flt{50%{transform:translateY(-28px) scale(1.1)}}
+@keyframes ping{0%{transform:scale(.8);opacity:.7}100%{transform:scale(1.9);opacity:0}}
+.fx-skip{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));left:16px;padding:8px 18px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:12px;font-weight:900;opacity:0;pointer-events:none;transition:opacity .5s}
+.fx-skip.on{opacity:1;pointer-events:auto}
+.fx-seal{position:relative;width:128px;height:128px;margin-bottom:22px}
+.fx-seal svg{position:absolute;inset:0;width:100%;height:100%}
+.fx-seal .pulse{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(255,255,255,.5);animation:ping 2.4s ease-out infinite}
+.fx-seal .pulse+.pulse{animation-delay:1.2s}
+.fx-seal .ring{fill:rgba(255,255,255,.1);stroke:rgba(255,255,255,.25);stroke-width:5}
+.fx-seal .arc{fill:none;stroke:#fff;stroke-width:5;stroke-linecap:round;stroke-dasharray:327;stroke-dashoffset:327;transform:rotate(-90deg);transform-origin:64px 64px;transition:stroke-dashoffset 1s cubic-bezier(.3,.8,.2,1)}
+.fx-seal .tk{fill:none;stroke:#fff;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:80;stroke-dashoffset:80;transition:stroke-dashoffset .6s .7s ease-out}
+.fx.go .arc,.fx.go .tk{stroke-dashoffset:0}
+.fx h2{margin:0 0 6px;min-height:34px;font-size:25px;font-weight:950;letter-spacing:-.02em}
+.fx h2.typing:after{content:"";display:inline-block;width:2px;height:22px;margin-inline-start:4px;background:#fff;vertical-align:-3px;animation:blink .8s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.fx .fsub{margin:0;font-size:13px;font-weight:700;line-height:1.9;color:rgba(255,255,255,.88);opacity:0;transform:translateY(8px);transition:opacity .6s,transform .6s}
+.fx .fsub.on{opacity:1;transform:none}
+.fx-list{width:min(100%,420px);margin-top:22px;display:grid;gap:10px;text-align:start}
+.fx-i{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:18px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transform:translateY(16px) scale(.98);transition:opacity .55s,transform .55s cubic-bezier(.2,.9,.3,1)}
+.fx-i.on{opacity:1;transform:none}
+.fx-i .ic{width:40px;height:40px;flex:0 0 40px;border-radius:13px;display:grid;place-items:center;background:rgba(255,255,255,.2)}
+.fx-i .ic svg{width:21px;height:21px;fill:none;stroke:#fff;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.fx-i b{display:block;font-size:14px;font-weight:900}
+.fx-i small{display:block;margin-top:2px;font-size:11.5px;font-weight:700;color:rgba(255,255,255,.82);line-height:1.6}
+.fx-bar{width:min(100%,420px);height:5px;margin-top:26px;border-radius:9px;background:rgba(255,255,255,.2);overflow:hidden}
+.fx-bar i{display:block;width:0;height:100%;border-radius:9px;background:#fff}
+.fx-hint{margin:10px 0 0;font-size:11px;font-weight:800;color:rgba(255,255,255,.75)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -190,6 +223,23 @@ h1{margin:16px 2px 4px;font-size:23px;font-weight:950;letter-spacing:-.03em}
 
 <div id="status" hidden></div>
 </main>
+<div class="fx" id="fx" role="dialog" aria-modal="true" aria-label="تم استلام طلبك" hidden>
+  <span class="orb o1"></span><span class="orb o2"></span>
+  <button class="fx-skip" id="fxSkip" type="button" aria-label="تخطي والذهاب للرئيسية">تخطي</button>
+  <div class="fx-seal">
+    <span class="pulse"></span><span class="pulse"></span>
+    <svg viewBox="0 0 128 128" aria-hidden="true"><circle class="ring" cx="64" cy="64" r="52"/><circle class="arc" cx="64" cy="64" r="52"/><path class="tk" d="M40 66 58 84 90 48"/></svg>
+  </div>
+  <h2 id="fxTitle" aria-live="polite"></h2>
+  <p class="fsub" id="fxSub">فريق MZAD PHONE يراجع التحويل الآن</p>
+  <div class="fx-list">
+    <div class="fx-i"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg></span><div><b>راح نتواصل ويّاك</b><small id="fxPhone">بأقل وقت ممكن على رقمك</small></div></div>
+    <div class="fx-i"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 7.8 7 10 4-2.2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg></span><div><b>تأمينك محفوظ</b><small>وراجع لك حسب قواعد المنصة</small></div></div>
+    <div class="fx-i"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 21V4m0 0h11l-2 4 2 4H5"/></svg></span><div><b>بعد الموافقة تدخل المزاد</b><small>نفعّل حسابك للمزايدة ويوصلك إشعار</small></div></div>
+  </div>
+  <div class="fx-bar"><i id="fxBar"></i></div>
+  <p class="fx-hint">نرجّعك للرئيسية بعد لحظات</p>
+</div>
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -197,6 +247,8 @@ import { supabase } from "./js/supabase.js";
 const $ = id => document.getElementById(id);
 const auctionId = new URLSearchParams(location.search).get("auction") || new URLSearchParams(location.search).get("id");
 const BUCKET = "mzad-payment-proofs";
+const HOME = "home.html";      /* صفحة الرئيسية */
+const FX_TOTAL = 8500;         /* مدة شاشة النجاح بالملي ثانية قبل الذهاب للرئيسية */
 const st = { user:null, auction:null, dep:null, req:null, reqId:null, reqMethod:null, proof:null, method:null, file:null, busy:false, phone:"", poll:null, buyerCode:"", reqCode:"", phoneSaved:"" };
 const money = n => Number(n||0).toLocaleString("en-US") + " د.ع";
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -366,7 +418,7 @@ $("submit").addEventListener("click", async () => {
     st.phone = phone;
     await loadDeposit(); await loadRequestAndProof();
     renderState();
-    window.scrollTo({ top:0, behavior:"smooth" });
+    celebrate();
   }catch(e){
     console.error("DEPOSIT PROOF ERROR:", e);
     if (path) { try{ await supabase.storage.from(BUCKET).remove([path]); }catch{} }
@@ -375,6 +427,33 @@ $("submit").addEventListener("click", async () => {
     st.busy = false; $("submit").classList.remove("busy"); refresh();
   }
 });
+
+/* ============ شاشة النجاح: حركة + تطمين، وبعدها الرئيسية (يمكن تخطيها) ============ */
+function typeWrite(el, text, speed){
+  el.textContent = ""; el.classList.add("typing"); let i = 0;
+  const t = setInterval(() => { el.textContent = text.slice(0, ++i); if (i >= text.length){ clearInterval(t); setTimeout(() => el.classList.remove("typing"), 700); } }, speed);
+}
+function celebrate(){
+  const fx = $("fx"); if (!fx || fx.dataset.run) return; fx.dataset.run = "1";
+  $("fxPhone").textContent = st.phone ? "بأقل وقت ممكن على " + st.phone : "بأقل وقت ممكن على رقمك";
+  const T = [], at = (ms, fn) => T.push(setTimeout(fn, ms));
+  let left = false;
+  const leave = () => { if (left) return; left = true; T.forEach(clearTimeout); document.body.style.overflow = ""; location.href = HOME; };
+  document.body.style.overflow = "hidden";
+  fx.hidden = false; void fx.offsetWidth; fx.classList.add("show");
+  const bar = $("fxBar"); bar.style.transition = "width " + FX_TOTAL + "ms linear";
+  requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.width = "100%"; }));
+  at(120,  () => fx.classList.add("go"));
+  at(900,  () => typeWrite($("fxTitle"), "تم استلام طلبك بنجاح", 46));
+  at(1200, () => $("fxSkip").classList.add("on"));
+  at(2000, () => $("fxSub").classList.add("on"));
+  const items = fx.querySelectorAll(".fx-i");
+  [2500, 3800, 5100].forEach((ms, i) => at(ms, () => items[i]?.classList.add("on")));
+  at(FX_TOTAL, leave);
+  $("fxSkip").onclick = leave;
+  document.addEventListener("keydown", e => { if (e.key === "Escape") leave(); });
+  try{ navigator.vibrate?.(25); }catch{}
+}
 
 /* ============ الأكواد ============ */
 async function loadCodes(reqId){
@@ -418,6 +497,8 @@ function renderState(){
       + (st.buyerCode ? `<div class="mine"><span>كودك الخاص</span><strong>${esc(st.buyerCode)}</strong></div>` : "");
     box.innerHTML = `<section class="card rv res"><div class="big wait">🔎</div><h2>جاري تدقيق التفاصيل</h2><p>وصلنا إثبات التحويل وتتم مراجعته الآن. عند الموافقة نتواصل معك ويُفعّل حسابك للمزايدة.</p>${ph}${trk("now","")}
       <div class="help" style="text-align:start"><span class="hi"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg></span><p>تحتاج مساعدة؟<strong>+964 783 800 3991</strong></p><a class="call" href="tel:+9647838003991">اتصال</a></div></section>`;
+    box.querySelector(".res").insertAdjacentHTML("beforeend", '<button class="btn ghost" id="toA2" type="button">الذهاب للرئيسية</button>');
+    $("toA2").onclick = () => { location.href = HOME; };
     startPoll();
     return;
   }
