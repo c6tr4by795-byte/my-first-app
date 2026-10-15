@@ -138,7 +138,7 @@ set search_path = public
 as $$
 begin
   if new.status = 'live' and old.status is distinct from 'live' then
-    new.starts_at := coalesce(new.starts_at, now());
+    new.starts_at := now();
     new.ends_at := new.starts_at + make_interval(hours => coalesce(new.duration_hours, 1));
     new.original_ends_at := new.ends_at;
   end if;
