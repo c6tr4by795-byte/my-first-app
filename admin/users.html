@@ -150,12 +150,7 @@ textarea{min-height:90px;resize:vertical}
 <div id="toast" class="toast"></div>
 
 <script type="module">
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-const supabase = createClient(
-  "https://ldvxctpngkidvatkisae.supabase.co",
-  "sb_publishable_iKh2hmOMdDYt9MmGmCX3jA_Hs-MovkB"
-);
+import { supabase } from "../js/supabase.js";
 
 const $ = id => document.getElementById(id);
 let selectedUser = null;
@@ -182,23 +177,19 @@ function money(v){
 }
 
 async function ensureAdmin(){
-  const { data:{session} } = await supabase.auth.getSession();
+  const { data:{session}, error:sessionError } = await supabase.auth.getSession();
 
-  if(!session){
-    location.href="../index.html";
+  if(sessionError || !session){
+    location.href="../index.html?login=1&returnTo=admin/users.html";
     return false;
   }
 
-  const { data, error } = await supabase
-    .from("mzad_admin_users")
-    .select("user_id,role_id,is_active")
-    .eq("user_id", session.user.id)
-    .eq("is_active", true)
-    .maybeSingle();
+  // استخدم فحص الإدارة المركزي نفسه المستخدم بباقي اللوحة، بما فيه شرط aal2.
+  const { data, error } = await supabase.rpc("mzad_is_admin");
 
-  if(error || !data){
+  if(error || data !== true){
     $("status").className="empty";
-    $("status").textContent="ليس لديك صلاحية دخول لوحة الإدارة.";
+    $("status").textContent="ليس لديك صلاحية دخول لوحة الإدارة. تأكد من حساب الإدارة والتحقق الإضافي.";
     return false;
   }
 
