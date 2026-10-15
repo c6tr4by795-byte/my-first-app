@@ -13,6 +13,9 @@
 <meta name="theme-color" content="#6246d9">
 
 <meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 
 <title>إدارة المزادات والتأمينات — MZAD PHONE</title>
 
@@ -121,6 +124,8 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 .sk{height:150px;border-radius:20px;background:#f1eefb;animation:up .4s}
 
 .warn{margin-top:14px;padding:12px;border-radius:14px;background:var(--bads);color:var(--bad);font-size:12px;font-weight:800;line-height:1.8;word-break:break-word}
+.diag{margin-top:10px;padding:10px 12px;border:1px solid var(--edge);border-radius:12px;background:#fff;color:var(--muted);font-size:11px;line-height:1.8;word-break:break-word}
+.diag b{color:var(--ink)}
 
 .ov{position:fixed;inset:0;z-index:100;background:rgba(23,32,42,.5);display:none;align-items:flex-end;justify-content:center}
 
@@ -181,6 +186,7 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 </header>
 
 <div id="warn" class="warn" hidden></div>
+<div id="diag" class="diag" hidden></div>
 
 <section class="list" id="list"><div class="sk"></div><div class="sk"></div></section>
 
@@ -228,7 +234,7 @@ let toastTimer;
 
 function toast(t){$("toast").textContent=t;$("toast").classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").classList.remove("show"),2800)}
 
-const D={tab:"sale",sale:[],purchase:[],live:[],refund:[],busy:false};
+const D={tab:"sale",sale:[],purchase:[],live:[],refund:[],busy:false,debug:{deposits:0,proofs:0,userId:"",aal:"unknown",admin:false}};
 
 const TYPE={auction_seller:"تأمين البيع — بائع المزاد",auction_buyer:"تأمين الشراء — مشتري المزاد",direct_buyer:"تأمين الشراء المباشر"};
 
@@ -247,6 +253,7 @@ async function loadAll(){
     .select("id,deposit_number,user_id,auction_id,deposit_type,amount_iqd,status,created_at,updated_at,refund_reason")
 
     .order("created_at",{ascending:false}).limit(500));
+  D.debug.deposits=deps.length;
 
   const live=must(await supabase.from("mzad_auctions")
 
@@ -285,6 +292,7 @@ async function loadAll(){
     .select("id,request_id,user_id,review_status,created_at")
     .eq("review_status","pending")
     .order("created_at",{ascending:false}).limit(500));
+  D.debug.proofs=pendingProofs.length;
 
   const proofRequestIds=[...new Set(pendingProofs.map(p=>p.request_id).filter(Boolean))];
   const proofRequests=proofRequestIds.length?must(await supabase.from("mzad_payment_requests")
@@ -703,6 +711,11 @@ $("back").addEventListener("click",()=>history.length>1?history.back():location.
   try{
 
     const u=must(await supabase.auth.getUser());
+    D.debug.userId=u.user?.id||"غير مسجل";
+    try{
+      const assurance=await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+      D.debug.aal=assurance.data?.currentLevel||"unknown";
+    }catch(e){D.debug.aal="تعذر القراءة"}
 
     if(!u.user){
 
@@ -713,6 +726,16 @@ $("back").addEventListener("click",()=>history.length>1?history.back():location.
     }
 
     const a=must(await supabase.rpc("mzad_is_admin"));
+    D.debug.admin=a===true;
+    const showDiag=()=>{
+      const el=$("diag");
+      el.hidden=false;
+      el.innerHTML="<b>تشخيص الجلسة:</b> المستخدم "+esc(String(D.debug.userId).slice(0,8))+
+        " • AAL: "+esc(D.debug.aal)+
+        " • صلاحية الإدارة: "+(D.debug.admin?"نعم":"لا")+
+        " • سجلات التأمين المقروءة: "+esc(D.debug.deposits)+
+        " • الإثباتات المعلقة المقروءة: "+esc(D.debug.proofs);
+    };
 
     if(a!==true){
 
@@ -723,8 +746,12 @@ $("back").addEventListener("click",()=>history.length>1?history.back():location.
     }
 
     await reload();
-
-    setInterval(()=>{if(!document.hidden&&!D.busy&&!$("ov").classList.contains("show"))reload()},20000);
+    showDiag();
+    if(D.debug.deposits===0 || D.debug.proofs===0){
+      $("warn").hidden=false;
+      $("warn").textContent="هذه الجلسة لا تقرأ سجلات التأمين أو إثباتات متوقعة. قارن سطر التشخيص بين المتصفحين؛ لا تغيّر صلاحيات قاعدة البيانات الآن.";
+    }
+    setInterval(()=>{if(!document.hidden&&!D.busy&&!$("ov").classList.contains("show"))reload().then(showDiag)},20000);
 
   }catch(e){
 
