@@ -127,7 +127,6 @@ async function loadAll(){
     .in("status", ["proof_submitted","approved","refundable"]).order("created_at",{ascending:true}).limit(200));
   const liveA = must(await supabase.from("mzad_auctions").select("id,auction_number,device_id,seller_user_id,current_price_iqd,starting_price_iqd,status,ends_at").eq("status","live").order("ends_at",{ascending:true}).limit(100));
 
-  const pend = dep.filter(d => d.status === "proof_submitted");
   const aids = [...new Set([...dep.map(d => d.auction_id), ...liveA.map(a => a.id)].filter(Boolean))];
   const auctions = aids.length ? must(await supabase.from("mzad_auctions").select("id,auction_number,device_id,status,final_price_iqd,winner_user_id").in("id", aids)) : [];
   const am = new Map(auctions.map(a => [a.id, a]));
@@ -136,8 +135,27 @@ async function loadAll(){
   const devs = devIds.length ? (await supabase.from("mzad_devices").select("id,brand,model,storage").in("id", devIds)).data || [] : [];
   const dm = new Map(devs.map(d => [d.id, [d.brand,d.model,d.storage].filter(Boolean).join(" ")]));
 
-  const reqs = pend.length ? (await supabase.from("mzad_payment_requests").select("id,request_number,deposit_id,payment_method_id,status,created_at").in("deposit_id", pend.map(d => d.id)).order("created_at",{ascending:false})).data || [] : [];
+  // اقرأ طلبات الدفع لكل التأمينات، ثم طابقها مع إثباتات التحويل pending.
+  const reqs = dep.length ? must(await supabase.from("mzad_payment_requests")
+    .select("id,request_number,deposit_id,payment_method_id,status,created_at")
+    .in("deposit_id", dep.map(d => d.id)).order("created_at",{ascending:false})) : [];
   const rm = new Map(); reqs.forEach(r => { if (!rm.has(r.deposit_id)) rm.set(r.deposit_id, r); });
+
+  const proofRows = must(await supabase.from("mzad_payment_proofs")
+    .select("id,request_id,review_status,created_at")
+    .eq("review_status","pending").order("created_at",{ascending:false}).limit(500));
+  const proofRequestIds = [...new Set(proofRows.map(p => p.request_id).filter(Boolean))];
+  const proofReqs = proofRequestIds.length ? must(await supabase.from("mzad_payment_requests")
+    .select("id,request_number,deposit_id,payment_method_id,status,created_at")
+    .in("id", proofRequestIds)) : [];
+  const proofDepositIds = new Set(proofReqs.map(r => r.deposit_id).filter(Boolean));
+  proofReqs.forEach(r => { if (!rm.has(r.deposit_id)) rm.set(r.deposit_id, r); });
+
+  const pend = dep.filter(d =>
+    d.status === "proof_submitted" ||
+    rm.get(d.id)?.status === "proof_submitted" ||
+    proofDepositIds.has(d.id)
+  );
   let mm = new Map();
   try{ const m = (await supabase.rpc("mzad_get_enabled_payment_methods")).data || []; mm = new Map(m.map(x => [x.id, x.name_ar])); }catch{}
 
