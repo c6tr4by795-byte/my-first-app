@@ -165,7 +165,7 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 
     <button class="ib" id="back" aria-label="رجوع"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
 
-    <div class="brand"><b>MZAD PHONE</b><small>لوحة الإدارة — إدارة المزادات والتأمينات</small></div>
+    <div class="brand"><b>MZAD PHONE</b><small>لوحة الإدارة — إدارة المزادات والتأمينات · إصدار إصلاح 16-10-2026</small></div>
 
     <button class="ib" id="reload" aria-label="تحديث"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.5-5.8M20 4v5h-5"/></svg></button>
 
@@ -186,7 +186,7 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 </header>
 
 <div id="warn" class="warn" hidden></div>
-<div id="diag" class="diag" hidden></div>
+<div id="diag" class="diag" style="display:block!important;margin:10px 0;padding:12px;border:2px solid #6b4ce6;border-radius:12px;background:#fff;color:#202334;font-size:12px;line-height:1.9">تشخيص الإدارة: جارٍ تحميل البيانات…</div>
 
 <section class="list" id="list"><div class="sk"></div><div class="sk"></div></section>
 
@@ -350,7 +350,7 @@ async function loadAll(){
 
   // تأمين الشراء: مشتري المزاد والشراء المباشر
 
-  D.purchase=pend.filter(d=>d.deposit_type!=="auction_seller" || (am.get(d.auction_id)?.seller_user_id && d.user_id!==am.get(d.auction_id).seller_user_id)).map(makeReview).sort(sortReview);
+  D.purchase=pend.filter(d=>d.deposit_type==="auction_buyer" || d.deposit_type==="direct_buyer" || (d.deposit_type!=="auction_seller" && !!d.user_id) || (am.get(d.auction_id)?.seller_user_id && d.user_id!==am.get(d.auction_id).seller_user_id)).map(makeReview).sort(sortReview);
 
   // المزادات المباشرة تبقى كما كانت
 
