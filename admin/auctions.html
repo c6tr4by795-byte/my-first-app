@@ -246,9 +246,7 @@ async function loadAll(){
 
     .select("id,deposit_number,user_id,auction_id,deposit_type,amount_iqd,status,created_at,updated_at,refund_reason")
 
-    .in("status",["proof_submitted","approved","refundable"])
-
-    .order("created_at",{ascending:true}).limit(200));
+    .order("created_at",{ascending:false}).limit(500));
 
   const live=must(await supabase.from("mzad_auctions")
 
@@ -272,17 +270,18 @@ async function loadAll(){
 
   const dm=new Map(devs.map(d=>[d.id,[d.brand,d.model,d.storage].filter(Boolean).join(" ")]));
 
-  const pend=deps.filter(d=>d.status==="proof_submitted");
-
-  const reqs=pend.length?must(await supabase.from("mzad_payment_requests")
+  const reqs=deps.length?must(await supabase.from("mzad_payment_requests")
 
     .select("id,request_number,deposit_id,payment_method_id,status,created_at")
 
-    .in("deposit_id",pend.map(d=>d.id)).order("created_at",{ascending:false})):[];
+    .in("deposit_id",deps.map(d=>d.id)).order("created_at",{ascending:false})):[];
 
   const rm=new Map();
 
   reqs.forEach(r=>{if(!rm.has(r.deposit_id))rm.set(r.deposit_id,r)});
+
+  // اعرض إثبات التحويل المرسل حتى لو لم تتزامن حالة سجل التأمين.
+  const pend=deps.filter(d=>d.status==="proof_submitted" || rm.get(d.id)?.status==="proof_submitted");
 
   let mm=new Map();
 
