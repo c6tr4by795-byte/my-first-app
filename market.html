@@ -3842,8 +3842,20 @@
        FAVORITES
     ========================================== */
 
-    const FAVORITES_KEY =
-      "mzad_phone_favorites";
+    // افصل المفضلة حسب حساب Supabase الحالي.
+    let FAVORITES_KEY = "mzad_phone_favorites:guest";
+    async function initFavoriteScope(){
+      try{
+        const {data,error}=await supabase.auth.getUser();
+        if(error) throw error;
+        FAVORITES_KEY = data?.user?.id
+          ? "mzad_phone_favorites:user:" + data.user.id
+          : "mzad_phone_favorites:guest";
+      }catch(error){
+        console.warn("FAVORITES SCOPE:",error);
+        FAVORITES_KEY = "mzad_phone_favorites:guest";
+      }
+    }
 
 
     let favoritesCache =
@@ -4671,13 +4683,15 @@
        START
     ========================================== */
 
-    loadFavoritesCache();
-
     readIncomingSearch();
 
     updateFilters();
 
-    loadDevices();
+    // انتظر تحديد الحساب قبل قراءة المفضلة ورسم البطاقات.
+    initFavoriteScope().finally(() => {
+      loadFavoritesCache();
+      loadDevices();
+    });
 
   </script>
 
