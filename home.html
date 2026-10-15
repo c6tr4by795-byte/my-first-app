@@ -2375,8 +2375,20 @@ setInterval(
    المفضلة
 ================================ */
 
-const FAV_KEY =
-  "mzad_favs";
+// افصل المفضلة محلياً لكل حساب حتى لا تنتقل عند تبديل المستخدم.
+let FAV_KEY = "mzad_favs:guest";
+async function initFavoriteScope(){
+  try{
+    const {data,error}=await supabase.auth.getUser();
+    if(error) throw error;
+    FAV_KEY = data?.user?.id
+      ? "mzad_favs:user:" + data.user.id
+      : "mzad_favs:guest";
+  }catch(e){
+    console.warn("FAVORITES SCOPE:",e);
+    FAV_KEY = "mzad_favs:guest";
+  }
+}
 
 const getFavs = () => {
 
@@ -3611,7 +3623,8 @@ bindSearch();
 
 bindCategories();
 
-loadDevices();
+// لا ترسم أزرار المفضلة قبل تحديد هوية الحساب الحالي.
+initFavoriteScope().finally(() => loadDevices());
 
 </script>
 
