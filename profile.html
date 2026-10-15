@@ -33,6 +33,10 @@ button{font:inherit;border:0;cursor:pointer;color:inherit}
 .profile-card{margin-top:14px;padding:15px;border-radius:20px;background:#fff;border:1px solid var(--line);box-shadow:0 6px 18px rgba(23,32,42,.035)}
 .user-head{display:flex;align-items:center;gap:11px}.avatar{width:45px;height:45px;flex:0 0 45px;border-radius:14px;display:grid;place-items:center;background:var(--primarySoft);color:var(--primary);font-size:17px;font-weight:950}.user-main{min-width:0;flex:1}.profile-name{margin:0;font-size:17px;line-height:1.25;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.profile-email{display:block;margin:3px 0 0;color:var(--muted)!important;font-size:10px;line-height:1.4;font-weight:650;direction:ltr;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-decoration:none!important;border:0!important}.profile-status{display:inline-flex;align-items:center;gap:5px;margin-top:6px;color:var(--primary);font-size:9px;font-weight:850}.status-dot{width:6px;height:6px;border-radius:50%;background:#43B98A}
 .profile-details{margin-top:12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.account-detail{padding:9px 10px;border-radius:13px;background:#F8FAFB;border:1px solid #EDF0F2}.detail-label{color:var(--muted2);font-size:8px;font-weight:800;margin-bottom:3px}.detail-value{color:var(--ink);font-size:10px;font-weight:900;direction:ltr;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.personal-code-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.personal-code-value{font-size:15px!important;letter-spacing:.7px;color:#5744CE!important}
+.copy-code-btn{flex-shrink:0;border:0;border-radius:10px;background:#EEEAFE;color:#5744CE;font:inherit;font-size:10px;font-weight:900;padding:8px 11px;cursor:pointer}
+.copy-code-btn:disabled{opacity:.5;cursor:wait}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:9px}.stat{padding:9px 4px;text-align:center;border-radius:13px;background:#fff;border:1px solid var(--line)}.stat-number{font-size:15px;line-height:1;font-weight:950}.stat-label{margin-top:4px;color:var(--muted);font-size:8px;font-weight:800}
 .section{margin-top:22px}.section-heading{margin:0 4px 9px;color:var(--muted);font-size:11px;font-weight:800}.menu-card{background:#fff;border:1px solid var(--line);border-radius:19px;overflow:hidden;box-shadow:0 6px 18px rgba(23,32,42,.035)}
 .menu-item{width:100%;min-height:67px;padding:10px 13px;display:flex;align-items:center;gap:11px;background:#fff;text-align:right;border-bottom:1px solid #F0F2F4;transition:.16s}.menu-item:last-child{border-bottom:0}.menu-item:active{background:#F8FAFB;transform:scale(.994)}
@@ -644,6 +648,26 @@ button{font:inherit;border:0;cursor:pointer;color:inherit}
       </div>
 
     </div>
+
+    <div class="account-detail">
+
+      <div class="detail-label">
+        كودك الخاص في MZAD PHONE
+      </div>
+
+      <div class="personal-code-row">
+        <div
+          class="detail-value personal-code-value"
+          id="personalCode"
+          aria-live="polite">جاري تحميل الكود...</div>
+        <button
+          class="copy-code-btn"
+          id="copyPersonalCode"
+          type="button"
+          disabled>نسخ الكود</button>
+      </div>
+
+    </div>
 </div>
 
 
@@ -992,6 +1016,12 @@ const infoPhone =
 const infoEmail =
   document.getElementById("infoEmail");
 
+const personalCode =
+  document.getElementById("personalCode");
+
+const copyPersonalCode =
+  document.getElementById("copyPersonalCode");
+
 const ratingNumber =
   document.getElementById("ratingNumber");
 
@@ -1123,6 +1153,21 @@ async function loadProfile(){
     infoEmail.textContent =
       email;
 
+    // الكود ثابت لكل مستخدم، وتعيده دالة Supabase نفسها عند كل زيارة.
+    personalCode.textContent = "جاري تحميل الكود...";
+    copyPersonalCode.disabled = true;
+    const { data: codeData, error: codeError } =
+      await supabase.rpc("mzad_get_my_buyer_code");
+
+    if(codeError || typeof codeData !== "string" || !codeData){
+      console.error("Personal code error:", codeError);
+      personalCode.textContent = "تعذر تحميل الكود";
+      showToast("تعذر تحميل كودك الخاص");
+    }else{
+      personalCode.textContent = codeData;
+      copyPersonalCode.disabled = false;
+    }
+
 
     /* LISTINGS COUNT */
 
@@ -1232,6 +1277,29 @@ backBtn.addEventListener(
 
   }
 );
+
+
+/* =====================================================
+   COPY PERSONAL CODE
+===================================================== */
+copyPersonalCode.addEventListener("click", async () => {
+  const code = personalCode.textContent.trim();
+  if(!code || code === "تعذر تحميل الكود" || code === "جاري تحميل الكود...") return;
+  try{
+    await navigator.clipboard.writeText(code);
+    showToast("تم نسخ كودك الخاص");
+  }catch(error){
+    const field = document.createElement("textarea");
+    field.value = code;
+    field.style.position = "fixed";
+    field.style.opacity = "0";
+    document.body.appendChild(field);
+    field.select();
+    const copied = document.execCommand("copy");
+    field.remove();
+    showToast(copied ? "تم نسخ كودك الخاص" : "كودك الخاص: " + code);
+  }
+});
 
 
 /* =====================================================
