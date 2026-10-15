@@ -336,7 +336,7 @@ function renderLive(){
 
   /* حالة المزايد */
   const n = $("note");
-  if (isSoon()){ n.className = "note" + (S.elig ? " me" : ""); n.textContent = S.elig ? "تم حجز مكانك. تدخل مباشرة وقت الافتتاح" : "احجز مكانك بتأمين المشاركة، وتدخل مباشرة عند الافتتاح"; }
+  if (isSoon()){ n.className = "note" + (S.elig ? " me" : ""); n.textContent = S.elig ? "تم حجز مكانك. تدخل مباشرة بعد انتهاء العدّ التنازلي" : "احجز مكانك بتأمين المشاركة خلال فترة الانتظار، وتدخل مباشرة عند الافتتاح بعد 4 ساعات"; }
   else if (!live){ n.className = "note"; n.textContent = ""; }
   else if (!top){ n.className = "note"; n.textContent = "لا توجد مزايدات بعد، كن أول مزايد"; }
   else if (mine(top)){ n.className = "note me"; n.textContent = "أنت صاحب أعلى مزايدة حالياً"; }
@@ -391,7 +391,7 @@ const amtUpd = () => { const b = $("bigAmt"); if (b) b.innerHTML = money(S.amoun
 function openDeposit(){
   const soon = isSoon();
   openSheet(`<div class="grab"></div><h3>${soon ? "احجز مكانك بالمزاد" : "خطوة وحدة قبل أول مزايدة"}</h3>
-    <p class="sd">${soon ? "الحجز يتم بدفع تأمين المشاركة" : "لتزايد على هذا المزاد نحتاج تأمين مشاركة"} بمبلغ <b>${money(DEPOSIT)} د.ع</b>. هو مبلغ قابل للاسترداد، وليس سعر الجهاز ولا رسماً للمنصة، وتدفعه مرة وحدة فقط.${soon ? " بعد موافقة الإدارة يُسجَّل حجزك وتدخل مباشرة عند الافتتاح." : ""}</p>
+    <p class="sd">${soon ? "الحجز يتم بدفع تأمين المشاركة" : "لتزايد على هذا المزاد نحتاج تأمين مشاركة"} بمبلغ <b>${money(DEPOSIT)} د.ع</b>. هو مبلغ قابل للاسترداد، وليس سعر الجهاز ولا رسماً للمنصة، وتدفعه مرة وحدة فقط.${soon ? " بعد موافقة الإدارة تبدأ فترة انتظار 4 ساعات. يُسجَّل حجزك وتدخل مباشرة عند الافتتاح." : ""}</p>
     <div class="stp"><span class="sn">1</span><b>أكمل تأمين المشاركة</b></div>
     <div class="stp"><span class="sn">2</span><b>ارجع لهذا المزاد</b></div>
     <div class="stp"><span class="sn">3</span><b>${soon ? "زايد من الزر الدائري عند الافتتاح" : "زايد من الزر الدائري"}</b></div>
