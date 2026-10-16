@@ -3601,13 +3601,131 @@ $("locationBtn").addEventListener(
     )
 );
 
-$("notificationBtn").addEventListener(
-  "click",
-  () =>
-    showToast(
-      "لا توجد إشعارات جديدة"
-    )
-);
+/* مركز إشعارات المستخدم — يعتمد على جدول mzad_notifications */
+const notificationButton = $("notificationBtn");
+let notificationPanel = null;
+let notificationUnreadCount = 0;
+
+function ensureNotificationPanel(){
+  if(notificationPanel) return notificationPanel;
+  const style = document.createElement("style");
+  style.textContent = `
+    .mzad-notify-panel{position:fixed;z-index:999;top:64px;right:12px;left:12px;width:auto;max-width:480px;margin-inline:auto;max-height:min(72dvh,620px);overflow:auto;background:#fff;border:1px solid #e8e4f7;border-radius:20px;box-shadow:0 18px 55px rgba(24,20,55,.2);padding:14px;direction:rtl}
+    .mzad-notify-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:11px;border-bottom:1px solid #f0edf8}
+    .mzad-notify-title{font-size:15px;font-weight:950;color:#17202a}
+    .mzad-notify-close{width:32px;height:32px;border-radius:10px;background:#f5f3fc;font-size:20px}
+    .mzad-notify-list{display:grid;gap:8px;padding-top:10px}
+    .mzad-notify-item{display:block;width:100%;padding:12px;text-align:right;border:1px solid #eeeaf8;border-radius:14px;background:#fff}
+    .mzad-notify-item.unread{background:#f7f5ff;border-color:#ded7ff}
+    .mzad-notify-item strong{display:block;font-size:12px;font-weight:900}
+    .mzad-notify-item span{display:block;margin-top:5px;font-size:11px;line-height:1.6;color:#626b78;white-space:pre-wrap}
+    .mzad-notify-item time{display:block;margin-top:7px;font-size:9px;color:#8a91a0}
+    .mzad-notify-empty{padding:24px 10px;text-align:center;color:#737b89;font-size:12px;line-height:1.7}
+    .mzad-notify-badge{position:absolute;top:-5px;left:-5px;min-width:17px;height:17px;padding:0 4px;border-radius:20px;background:#e91d4f;color:#fff;font-size:9px;font-weight:900;display:grid;place-items:center}
+    #notificationBtn{position:relative}
+  `;
+  document.head.appendChild(style);
+  notificationPanel = document.createElement("section");
+  notificationPanel.className = "mzad-notify-panel";
+  notificationPanel.hidden = true;
+  notificationPanel.setAttribute("aria-label","مركز الإشعارات");
+  notificationPanel.innerHTML = '<div class="mzad-notify-head"><strong class="mzad-notify-title">الإشعارات</strong><button type="button" class="mzad-notify-close" aria-label="إغلاق">×</button></div><div class="mzad-notify-list"><div class="mzad-notify-empty">جاري تحميل الإشعارات…</div></div>';
+  document.body.appendChild(notificationPanel);
+  notificationPanel.querySelector(".mzad-notify-close").addEventListener("click",()=>{notificationPanel.hidden=true;});
+  document.addEventListener("click",event=>{
+    if(!notificationPanel.hidden && !notificationPanel.contains(event.target) && !notificationButton.contains(event.target)) notificationPanel.hidden=true;
+  });
+  return notificationPanel;
+}
+
+function updateNotificationBadge(count){
+  notificationUnreadCount = Math.max(0, Number(count)||0);
+  let badge = notificationButton.querySelector(".mzad-notify-badge");
+  if(notificationUnreadCount && !badge){
+    badge=document.createElement("span");
+    badge.className="mzad-notify-badge";
+    badge.setAttribute("aria-label","إشعارات غير مقروءة");
+    notificationButton.appendChild(badge);
+  }
+  if(badge){
+    badge.textContent=notificationUnreadCount>99?"99+":String(notificationUnreadCount);
+    badge.hidden=!notificationUnreadCount;
+  }
+}
+
+function notificationDate(value){
+  if(!value) return "";
+  const date=new Date(value);
+  return Number.isNaN(date.getTime())?"":date.toLocaleString("ar-IQ",{dateStyle:"medium",timeStyle:"short"});
+}
+
+async function loadUserNotifications(){
+  const panel=ensureNotificationPanel();
+  const list=panel.querySelector(".mzad-notify-list");
+  list.innerHTML='<div class="mzad-notify-empty">جاري تحميل الإشعارات…</div>';
+  const auth=await supabase.auth.getUser();
+  const user=auth?.data?.user;
+  if(auth?.error || !user){
+    list.innerHTML='<div class="mzad-notify-empty">سجّل الدخول حتى تشوف إشعارات حسابك.</div>';
+    updateNotificationBadge(0);
+    return;
+  }
+  const result=await supabase.from("mzad_notifications")
+    .select("id,title,body,type,link,is_read,created_at")
+    .eq("user_id",user.id)
+    .order("created_at",{ascending:false})
+    .limit(30);
+  if(result.error){
+    console.error("MZAD notifications:",result.error);
+    list.innerHTML='<div class="mzad-notify-empty">نظام الإشعارات يحتاج تفعيل قاعدة البيانات من إعدادات المنصة. جرّب مرة ثانية بعد التفعيل.</div>';
+    return;
+  }
+  const rows=result.data||[];
+  updateNotificationBadge(rows.filter(item=>!item.is_read).length);
+  if(!rows.length){
+    list.innerHTML='<div class="mzad-notify-empty">ما عندك إشعارات حالياً. راح تظهر هنا تحديثات المزاد والطلبات لما تتفعّل أحداث الإشعارات.</div>';
+    return;
+  }
+  list.replaceChildren();
+  rows.forEach(item=>{
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="mzad-notify-item"+(item.is_read?"":" unread");
+    const title=document.createElement("strong");
+    title.textContent=item.title||"تنبيه من مزاد فون";
+    const body=document.createElement("span");
+    body.textContent=item.body||"لديك تحديث جديد في حسابك.";
+    const time=document.createElement("time");
+    time.textContent=notificationDate(item.created_at);
+    button.append(title,body,time);
+    button.addEventListener("click",async()=>{
+      if(!item.is_read){
+        const update=await supabase.from("mzad_notifications").update({is_read:true}).eq("id",item.id).eq("user_id",user.id);
+        if(!update.error){item.is_read=true;button.classList.remove("unread");updateNotificationBadge(Math.max(0,notificationUnreadCount-1));}
+      }
+      if(item.link){
+        try{const target=new URL(item.link,location.origin);if(target.origin===location.origin)location.href=target.href;}catch{}
+      }
+    });
+    list.appendChild(button);
+  });
+}
+
+notificationButton.addEventListener("click",async()=>{
+  const panel=ensureNotificationPanel();
+  panel.hidden=!panel.hidden;
+  if(!panel.hidden) await loadUserNotifications();
+});
+
+/* تحديث عدد غير المقروءة عند فتح الصفحة، بدون إزعاج المستخدم */
+(async()=>{
+  try{
+    const {data:{user}}=await supabase.auth.getUser();
+    if(!user) return;
+    const {count,error}=await supabase.from("mzad_notifications").select("id",{count:"exact",head:true}).eq("user_id",user.id).eq("is_read",false);
+    if(!error) updateNotificationBadge(count||0);
+  }catch(error){console.debug("Notification badge unavailable until migration is applied.");}
+})();
 
 /* ================================
    START
