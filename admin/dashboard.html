@@ -88,7 +88,7 @@ async function loadStats(){
 }
 async function boot(){try{await admin();await Promise.all([loadSettings(),loadStats()])}catch(e){console.error(e);if(e.message!=="AUTH_REQUIRED"&&e.message!=="ADMIN_REQUIRED")fail("تعذر تحميل لوحة الإدارة: "+(e.message||"خطأ"))}}
 document.querySelectorAll("[data-key]").forEach(el=>el.addEventListener("change",async()=>{el.disabled=true;try{await save(el.dataset.key,el.checked);notify("تم حفظ التغيير")}catch(e){el.checked=!el.checked;notify("فشل حفظ التغيير: "+(e.message||"خطأ"),true)}finally{el.disabled=false}}));
-$("saveSettings").onclick=async()=>{const b=$("saveSettings");b.disabled=true;try{for(const k of numericKeys){const v=Number($(k).value);if(!Number.isFinite(v)||v<0)throw Error("قيمة غير صحيحة في "+k);await save(k,v)}notify("تم حفظ إعدادات المزادات والدفع");await loadSettings()}catch(e){notify(e.message||"فشل الحفظ",true)}finally{b.disabled=false}};
+$("saveSettings").onclick=async()=>{const b=$("saveSettings");b.disabled=true;try{const values={};for(const k of numericKeys){const raw=$(k).value.trim();if(raw==="")throw Error("الحقل فارغ: "+k);const v=Number(raw);if(!Number.isFinite(v)||v<0)throw Error("قيمة غير صحيحة في "+k);values[k]=v}for(const k of numericKeys){try{await save(k,values[k])}catch(e){throw Error("فشل حفظ "+k+": "+(e.message||"خطأ"))}}notify("تم حفظ جميع إعدادات المزادات والدفع");await loadSettings()}catch(e){notify(e.message||"فشل الحفظ",true)}finally{b.disabled=false}};
 $("logout").onclick=async()=>{await supabase.auth.signOut();location.href="../admin-login.html"};
 boot();
 </script>
