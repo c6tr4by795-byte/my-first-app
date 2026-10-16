@@ -3717,15 +3717,24 @@ notificationButton.addEventListener("click",async()=>{
   if(!panel.hidden) await loadUserNotifications();
 });
 
-/* تحديث عدد غير المقروءة عند فتح الصفحة، بدون إزعاج المستخدم */
-(async()=>{
+/* تحديث عدّاد الإشعارات عند الدخول ودورياً، من دون إعادة تحميل الصفحة */
+async function refreshNotificationBadge(){
   try{
-    const {data:{user}}=await supabase.auth.getUser();
-    if(!user) return;
-    const {count,error}=await supabase.from("mzad_notifications").select("id",{count:"exact",head:true}).eq("user_id",user.id).eq("is_read",false);
+    const {data:{user},error:authError}=await supabase.auth.getUser();
+    if(authError || !user) { updateNotificationBadge(0); return; }
+    const {count,error}=await supabase.from("mzad_notifications")
+      .select("id",{count:"exact",head:true})
+      .eq("user_id",user.id)
+      .eq("is_read",false);
     if(!error) updateNotificationBadge(count||0);
-  }catch(error){console.debug("Notification badge unavailable until migration is applied.");}
-})();
+  }catch(error){
+    console.debug("Notification badge unavailable until the notifications migration is applied.");
+  }
+}
+refreshNotificationBadge();
+setInterval(()=>{
+  if(!document.hidden) refreshNotificationBadge();
+},45000);
 
 /* ================================
    START
