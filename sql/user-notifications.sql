@@ -55,13 +55,13 @@ begin
     return;
   end if;
 
-  insert into public.mzad_notifications(user_id, title, body, type, link)
+  insert into public.mzad_notifications(user_id, title_ar, body_ar, type, data_json)
   values (
     p_user_id,
     left(p_title, 180),
     left(coalesce(p_body, ''), 1200),
     coalesce(nullif(p_type, ''), 'system'),
-    coalesce(nullif(p_link, ''), '/home.html')
+    jsonb_build_object('link', coalesce(nullif(p_link, ''), '/home.html'))
   );
 end;
 $function$;
@@ -126,42 +126,73 @@ security definer
 set search_path = public
 as $function$
 declare
-  v_title text;
-  v_body text;
-  v_type text;
   v_link text;
 begin
-  if new.status is not distinct from old.status then
-    return new;
+  v_link := '/my-auction.html?id=' || new.id::text;
+
+  if new.status is distinct from old.status then
+    if new.status = 'live' then
+      if new.seller_user_id is not null then
+        perform public.mzad_insert_user_notification(
+          new.seller_user_id,
+          'بدأ مزاد جهازك',
+          'تم فتح المزاد وأصبح متاحاً للمزايدة.',
+          'auction_live',
+          v_link
+        );
+      end if;
+    elsif new.status = 'ended' then
+      if new.seller_user_id is not null then
+        perform public.mzad_insert_user_notification(
+          new.seller_user_id,
+          'انتهى مزاد جهازك',
+          'انتهى المزاد. افتح صفحة المزاد لمراجعة النتيجة والخطوات التالية.',
+          'auction_ended',
+          v_link
+        );
+      end if;
+      if new.winner_user_id is not null and new.winner_user_id is distinct from new.seller_user_id then
+        perform public.mzad_insert_user_notification(
+          new.winner_user_id,
+          'مبروك! أنت الفائز بالمزاد',
+          'انتهى المزاد وتم تسجيلك كفائز. افتح صفحة المزاد لمراجعة خطوات إكمال العملية والمهلة المحددة.',
+          'auction_won',
+          v_link
+        );
+      end if;
+    elsif new.status = 'cancelled' then
+      if new.seller_user_id is not null then
+        perform public.mzad_insert_user_notification(
+          new.seller_user_id,
+          'تم إلغاء مزاد جهازك',
+          'تم إلغاء المزاد. افتح حسابك لمراجعة الحالة والخطوات المتعلقة بالتأمين.',
+          'auction_cancelled',
+          v_link
+        );
+      end if;
+      if new.winner_user_id is not null and new.winner_user_id is distinct from new.seller_user_id then
+        perform public.mzad_insert_user_notification(
+          new.winner_user_id,
+          'تم إلغاء المزاد',
+          'تم إلغاء المزاد الذي شاركت فيه. افتح صفحة المزاد لمراجعة التفاصيل.',
+          'auction_cancelled',
+          v_link
+        );
+      end if;
+    end if;
   end if;
 
-  v_link := '/auction-details.html?id=' || new.id::text;
-
-  if new.status = 'live' then
-    v_title := 'بدأ المزاد';
-    v_body := 'أصبح المزاد متاحاً للمزايدة الآن.';
-    v_type := 'auction_live';
-  elsif new.status = 'ended' then
-    v_title := 'انتهى المزاد';
-    v_body := 'انتهى المزاد. افتح صفحة المزاد لمراجعة النتيجة والخطوات التالية.';
-    v_type := 'auction_ended';
-  elsif new.status = 'cancelled' then
-    v_title := 'تم إلغاء المزاد';
-    v_body := 'تم إلغاء المزاد من المنصة. راجع حسابك لمعرفة أي خطوات متعلقة بالتأمين.';
-    v_type := 'auction_cancelled';
-  else
-    return new;
-  end if;
-
-  if new.seller_user_id is not null then
+  -- If the winner is assigned after the auction was marked ended, notify them then.
+  if new.status = 'ended'
+     and new.winner_user_id is not null
+     and new.winner_user_id is distinct from old.winner_user_id
+     and new.winner_user_id is distinct from new.seller_user_id then
     perform public.mzad_insert_user_notification(
-      new.seller_user_id, v_title, v_body, v_type, v_link
-    );
-  end if;
-
-  if new.winner_user_id is not null and new.winner_user_id is distinct from new.seller_user_id then
-    perform public.mzad_insert_user_notification(
-      new.winner_user_id, v_title, v_body, v_type, v_link
+      new.winner_user_id,
+      'مبروك! أنت الفائز بالمزاد',
+      'انتهى المزاد وتم تسجيلك كفائز. افتح صفحة المزاد لمراجعة خطوات إكمال العملية والمهلة المحددة.',
+      'auction_won',
+      v_link
     );
   end if;
 
@@ -171,7 +202,7 @@ $function$;
 
 drop trigger if exists mzad_notify_auction_status_change on public.mzad_auctions;
 create trigger mzad_notify_auction_status_change
-after update of status on public.mzad_auctions
+after update of status, winner_user_id on public.mzad_auctions
 for each row execute function public.mzad_notify_auction_status_change();
 
 commit;
