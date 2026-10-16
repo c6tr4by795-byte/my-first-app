@@ -3671,7 +3671,7 @@ async function loadUserNotifications(){
     return;
   }
   const result=await supabase.from("mzad_notifications")
-    .select("id,title,body,type,link,is_read,created_at")
+    .select("id,user_id,type,title_ar,body_ar,data_json,is_read,created_at")
     .eq("user_id",user.id)
     .order("created_at",{ascending:false})
     .limit(30);
@@ -3692,9 +3692,9 @@ async function loadUserNotifications(){
     button.type="button";
     button.className="mzad-notify-item"+(item.is_read?"":" unread");
     const title=document.createElement("strong");
-    title.textContent=item.title||"تنبيه من مزاد فون";
+    title.textContent=item.title_ar||"تنبيه من مزاد فون";
     const body=document.createElement("span");
-    body.textContent=item.body||"لديك تحديث جديد في حسابك.";
+    body.textContent=item.body_ar||"لديك تحديث جديد في حسابك.";
     const time=document.createElement("time");
     time.textContent=notificationDate(item.created_at);
     button.append(title,body,time);
@@ -3703,8 +3703,9 @@ async function loadUserNotifications(){
         const update=await supabase.from("mzad_notifications").update({is_read:true}).eq("id",item.id).eq("user_id",user.id);
         if(!update.error){item.is_read=true;button.classList.remove("unread");updateNotificationBadge(Math.max(0,notificationUnreadCount-1));}
       }
-      if(item.link){
-        try{const target=new URL(item.link,location.origin);if(target.origin===location.origin)location.href=target.href;}catch{}
+      const link = item.data_json && typeof item.data_json === "object" ? item.data_json.link : null;
+      if(link){
+        try{const target=new URL(link,location.origin);if(target.origin===location.origin)location.href=target.href;}catch{}
       }
     });
     list.appendChild(button);
@@ -3726,7 +3727,8 @@ async function refreshNotificationBadge(){
       .select("id",{count:"exact",head:true})
       .eq("user_id",user.id)
       .eq("is_read",false);
-    if(!error) updateNotificationBadge(count||0);
+    if(error) console.error("MZAD notification badge:",error);
+    else updateNotificationBadge(count||0);
   }catch(error){
     console.debug("Notification badge unavailable until the notifications migration is applied.");
   }
