@@ -130,70 +130,65 @@ declare
 begin
   v_link := '/my-auction.html?id=' || new.id::text;
 
-  if new.status is distinct from old.status then
-    if new.status = 'live' then
-      if new.seller_user_id is not null then
-        perform public.mzad_insert_user_notification(
-          new.seller_user_id,
-          'بدأ مزاد جهازك',
-          'تم فتح المزاد وأصبح متاحاً للمزايدة.',
-          'auction_live',
-          v_link
-        );
-      end if;
-    elsif new.status = 'ended' then
-      if new.seller_user_id is not null then
-        perform public.mzad_insert_user_notification(
-          new.seller_user_id,
-          'انتهى مزاد جهازك',
-          'انتهى المزاد. افتح صفحة المزاد لمراجعة النتيجة والخطوات التالية.',
-          'auction_ended',
-          v_link
-        );
-      end if;
-      if new.winner_user_id is not null and new.winner_user_id is distinct from new.seller_user_id then
-        perform public.mzad_insert_user_notification(
-          new.winner_user_id,
-          'مبروك! أنت الفائز بالمزاد',
-          'انتهى المزاد وتم تسجيلك كفائز. افتح صفحة المزاد لمراجعة خطوات إكمال العملية والمهلة المحددة.',
-          'auction_won',
-          v_link
-        );
-      end if;
-    elsif new.status = 'cancelled' then
-      if new.seller_user_id is not null then
-        perform public.mzad_insert_user_notification(
-          new.seller_user_id,
-          'تم إلغاء مزاد جهازك',
-          'تم إلغاء المزاد. افتح حسابك لمراجعة الحالة والخطوات المتعلقة بالتأمين.',
-          'auction_cancelled',
-          v_link
-        );
-      end if;
-      if new.winner_user_id is not null and new.winner_user_id is distinct from new.seller_user_id then
-        perform public.mzad_insert_user_notification(
-          new.winner_user_id,
-          'تم إلغاء المزاد',
-          'تم إلغاء المزاد الذي شاركت فيه. افتح صفحة المزاد لمراجعة التفاصيل.',
-          'auction_cancelled',
-          v_link
-        );
-      end if;
+  -- A live notification is only sent when the auction genuinely transitions to live.
+  if new.status = 'live' and old.status is distinct from 'live' then
+    if new.seller_user_id is not null then
+      perform public.mzad_insert_user_notification(
+        new.seller_user_id,
+        'بدأ مزاد جهازك',
+        'تم فتح المزاد وأصبح متاحاً للمزايدة.',
+        'auction_live',
+        v_link
+      );
     end if;
   end if;
 
-  -- If the winner is assigned after the auction was marked ended, notify them then.
-  if new.status = 'ended'
-     and new.winner_user_id is not null
-     and new.winner_user_id is distinct from old.winner_user_id
-     and new.winner_user_id is distinct from new.seller_user_id then
-    perform public.mzad_insert_user_notification(
-      new.winner_user_id,
-      'مبروك! أنت الفائز بالمزاد',
-      'انتهى المزاد وتم تسجيلك كفائز. افتح صفحة المزاد لمراجعة خطوات إكمال العملية والمهلة المحددة.',
-      'auction_won',
-      v_link
-    );
+  -- Ending an auction notifies the seller; it does not by itself declare a winner.
+  if new.status = 'ended' and old.status is distinct from 'ended' then
+    if new.seller_user_id is not null then
+      perform public.mzad_insert_user_notification(
+        new.seller_user_id,
+        'انتهى مزاد جهازك',
+        'انتهى المزاد. افتح صفحة المزاد لمراجعة النتيجة والخطوات التالية.',
+        'auction_ended',
+        v_link
+      );
+    end if;
+
+    -- Only notify a winner when the auction was live and the winner is already
+    -- assigned in the same transition to ended.
+    if old.status = 'live'
+       and new.winner_user_id is not null
+       and new.winner_user_id is distinct from new.seller_user_id then
+      perform public.mzad_insert_user_notification(
+        new.winner_user_id,
+        'مبروك! أنت الفائز بالمزاد',
+        'انتهى المزاد وتم تسجيلك كفائز. افتح صفحة المزاد لمراجعة خطوات إكمال العملية والمهلة المحددة.',
+        'auction_won',
+        v_link
+      );
+    end if;
+  end if;
+
+  if new.status = 'cancelled' and old.status is distinct from 'cancelled' then
+    if new.seller_user_id is not null then
+      perform public.mzad_insert_user_notification(
+        new.seller_user_id,
+        'تم إلغاء مزاد جهازك',
+        'تم إلغاء المزاد. افتح حسابك لمراجعة الحالة والخطوات المتعلقة بالتأمين.',
+        'auction_cancelled',
+        v_link
+      );
+    end if;
+    if new.winner_user_id is not null and new.winner_user_id is distinct from new.seller_user_id then
+      perform public.mzad_insert_user_notification(
+        new.winner_user_id,
+        'تم إلغاء المزاد',
+        'تم إلغاء المزاد الذي شاركت فيه. افتح صفحة المزاد لمراجعة التفاصيل.',
+        'auction_cancelled',
+        v_link
+      );
+    end if;
   end if;
 
   return new;
