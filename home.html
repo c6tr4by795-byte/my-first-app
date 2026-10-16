@@ -3681,7 +3681,22 @@ async function loadUserNotifications(){
     return;
   }
   const rows=result.data||[];
-  updateNotificationBadge(rows.filter(item=>!item.is_read).length);
+  const unreadRows=rows.filter(item=>!item.is_read);
+  if(unreadRows.length){
+    const markAllRead=await supabase.from("mzad_notifications")
+      .update({is_read:true})
+      .eq("user_id",user.id)
+      .eq("is_read",false);
+    if(markAllRead.error){
+      console.error("MZAD mark notifications read on open:",markAllRead.error);
+      updateNotificationBadge(unreadRows.length);
+    }else{
+      rows.forEach(item=>{item.is_read=true;});
+      updateNotificationBadge(0);
+    }
+  }else{
+    updateNotificationBadge(0);
+  }
   if(!rows.length){
     list.innerHTML='<div class="mzad-notify-empty">ما عندك إشعارات حالياً. راح تظهر هنا تحديثات المزاد والطلبات لما تتفعّل أحداث الإشعارات.</div>';
     return;
