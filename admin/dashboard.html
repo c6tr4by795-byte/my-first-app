@@ -238,15 +238,6 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
   </div>
 </section>
 
-<!-- المستخدمون -->
-<section class="panel" id="p-users" hidden>
-  <div class="sec">
-    <div class="sh"><h2>إدارة المستخدمين</h2><small id="uCount"></small></div>
-    <input class="search" id="uSearch" type="search" placeholder="ابحث بالإيميل أو الهاتف أو كود المشتري" autocomplete="off">
-    <div class="list" id="uList"><div class="sk"></div></div>
-  </div>
-</section>
-
 <!-- الإعدادات -->
 <section class="panel" id="p-settings" hidden>
   <div class="sec"><div class="sh"><h2>رسائل للمستخدمين</h2><small>تظهر بالتطبيق خلال ثواني</small></div>
@@ -275,7 +266,6 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
   <button class="tb" data-tab="review" type="button"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 7.8 7 10 4-2.2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg>المراجعة<i id="bdgReview" hidden>0</i></button>
   <button class="tb" data-tab="users" type="button"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>المستخدمون</button>
   <button class="tb" data-tab="auctions" type="button"><svg viewBox="0 0 24 24"><path d="M14 4 8 10l4 4 6-6M7 11 3.5 14.5 9.5 20.5 13 17M16 20h5"/></svg>المزادات</button>
-  <button class="tb" data-tab="users" type="button"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M16 4.8a3.5 3.5 0 0 1 0 6.4M18.5 14.4c1.8.8 3 2.6 3 5.6"/></svg>المستخدمون</button>
   <button class="tb" data-tab="settings" type="button"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>الإعدادات</button>
 </nav></div>
 
@@ -746,21 +736,26 @@ $("annOff").onclick = async () => {
 const RLBL = { bid:"المزايدة", deposit:"التأمين", sell:"البيع" };
 let uTimer;
 async function loadUsers(){
-  const r = await supabase.rpc("mzad_admin_search_users", { p_q:S.uq });
+  const r = await supabase.rpc("mzad_admin_find_users", { p_q:S.uq });
   if(r.error){ $("uList").innerHTML = `<div class="empty">تعذر تحميل المستخدمين<br><small>${esc(rpcErr(r.error))}</small><br>تأكد من تشغيل ملف mzad-admin.sql</div>`; return; }
   S.users = Array.isArray(r.data) ? r.data : []; S.loaded.users = true; renderUsers();
 }
 $("uSearch").addEventListener("input", e => { S.uq = e.target.value.trim(); clearTimeout(uTimer); uTimer = setTimeout(loadUsers, 350); });
 function uState(u){
-  const c = u.controls || {}, live = c.user_id && (!c.until || new Date(c.until) > new Date());
-  return { banned: !!u.banned_until && new Date(u.banned_until) > new Date(), blocked: !!(live && c.blocked), rest: live ? (c.restrictions||[]) : [] };
+  const raw = u.controls || u.restriction || {};
+  const c = Array.isArray(raw) ? { restrictions: raw } : raw;
+  const live = !c.until || new Date(c.until) > new Date();
+  const restrictions = Array.isArray(c.restrictions) ? c.restrictions : [
+    c.no_bid ? "bid" : null, c.no_deposit ? "deposit" : null, c.no_sell ? "sell" : null
+  ].filter(Boolean);
+  return { banned: !!u.banned_until && new Date(u.banned_until) > new Date(), blocked: !!(live && c.blocked), rest: live ? restrictions : [] };
 }
 function renderUsers(){
   $("uCount").textContent = n0(S.users.length)+" مستخدم";
   if(!S.users.length){ $("uList").innerHTML = '<div class="empty">لا توجد نتائج</div>'; return; }
-  $("uList").innerHTML = S.users.map((u,i) => { const st = uState(u), ph = u.contact_phone || u.phone || "";
+  $("uList").innerHTML = S.users.map((u,i) => { const st = uState(u), ph = u.contact_phone || u.phone || "", uid = u.id || u.user_id;
     return `<button class="q" type="button" data-u="${i}"><div class="q-top"><span class="code">${esc(u.buyer_code||"بدون كود")}</span><span class="age">انضم ${ago(u.created_at)}</span></div>
-      <div class="q-name mail">${esc(u.email||ph||String(u.id).slice(0,8))}</div>
+      <div class="q-name mail">${esc(u.email||ph||String(uid||"").slice(0,8))}</div>
       <div class="q-sub">${ph?esc(ph)+" · ":""}آخر دخول ${u.last_sign_in_at?ago(u.last_sign_in_at):"—"} · ${nv(u.bids)} مزايدة</div>
       ${st.banned||st.blocked||st.rest.length ? `<div class="badges">${st.banned?'<span class="badge bad">محظور</span>':""}${st.blocked?'<span class="badge bad">موقوف مؤقتاً</span>':""}${st.rest.map(x=>`<span class="badge warn">مقيّد: ${RLBL[x]||x}</span>`).join("")}</div>`:""}</button>`; }).join("");
 }
@@ -768,7 +763,7 @@ $("uList").addEventListener("click", e => { const b=e.target.closest("[data-u]")
 
 function openUser(u){
   if(!u) return;
-  const st = uState(u), ph = u.contact_phone || u.phone || "", c = u.controls || {};
+  const st = uState(u), ph = u.contact_phone || u.phone || "", c = u.controls || u.restriction || {}, uid = u.id || u.user_id;
   let rest = new Set(st.rest), blocked = st.blocked, dur = 0;
   const kv = (k,v,ltr) => v ? `<div class="kv"><span>${k}</span><strong class="${ltr?"ltr":""}">${esc(v)}</strong></div>` : "";
   const chip = (act,v,label,on,extra="") => `<button class="chip ${extra} ${on?"on":""}" type="button" data-act="${act}" data-v="${v}">${label}</button>`;
@@ -792,7 +787,11 @@ function openUser(u){
       b.disabled = true;
       try{
         const until = (rest.size||blocked) && dur ? new Date(Date.now()+dur*60000).toISOString() : null;
-        const r = await supabase.rpc("mzad_admin_set_user_controls", { p_user:u.id, p_restrictions:[...rest], p_blocked:blocked, p_reason:$("uWhy").value.trim()||null, p_until:until });
+        const r = await supabase.rpc("mzad_admin_set_restriction", {
+          p_user:uid, p_banned:false, p_no_bid:rest.has("bid"),
+          p_no_deposit:rest.has("deposit"), p_no_sell:rest.has("sell"),
+          p_reason:$("uWhy").value.trim()||null, p_hours:dur ? Math.ceil(dur/60) : 0
+        });
         if(r.error) throw r.error;
         closeSheet(false); toast(rest.size||blocked ? "تم تطبيق القيود" : "تم رفع كل القيود","ok"); loadUsers(); loadDash();
       }catch(e){ b.disabled = false; toast("فشل الحفظ: "+userErr(e),"bad"); }
@@ -814,7 +813,7 @@ const userErr = e => ({ CANNOT_TARGET_SELF:"ما تقدر تطبّق هذا عل
 const AUC_ERR = { AUCTION_NOT_LIVE:"المزاد ليس مباشراً", AUCTION_NOT_SCHEDULED:"المزاد ليس بانتظار الافتتاح", AUCTION_HAS_BIDS:"لا يمكن إلغاء مزاد عليه مزايدات", INVALID_MINUTES:"مدة غير صحيحة", AUCTION_NOT_FOUND:"المزاد غير موجود" };
 async function auctionAction(id, action, minutes){
   try{
-    const r = await supabase.rpc("mzad_admin_auction_action", { p_auction:id, p_action:action, p_minutes:minutes||0 });
+    const r = await supabase.rpc("mzad_admin_auction_action", { p_auction_id:id, p_action:action, p_minutes:minutes||0 });
     if(r.error) throw r.error;
     closeSheet(false); toast("تم تنفيذ الأمر","ok"); await Promise.allSettled([loadAuctions(), loadDash()]);
   }catch(e){ toast("فشل الأمر: "+(AUC_ERR[e?.message]||rpcErr(e)),"bad"); }
