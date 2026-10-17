@@ -51,7 +51,12 @@ begin
     'anti_snipe_window_seconds',
     'anti_snipe_extension_seconds',
     'anti_snipe_max_extensions',
-    'deposit_refund_rules'
+    'deposit_refund_rules',
+    'maintenance_message',
+    'maintenance_eta',
+    'announcement_text',
+    'announcement_tone',
+    'announcement_enabled'
   ) then
     raise exception 'SETTING_NOT_ALLOWED';
   end if;
