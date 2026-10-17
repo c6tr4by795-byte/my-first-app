@@ -12,7 +12,7 @@ create or replace function public.mzad_admin_restrict_user(
   p_notes text default null,
   p_expires_at timestamptz default null
 )
-returns jsonb
+returns uuid
 language plpgsql
 security definer
 set search_path = public
@@ -20,31 +20,68 @@ as $function$
 declare
   v_type text := lower(btrim(coalesce(p_restriction_type,'')));
   v_id uuid;
+  v_before jsonb;
 begin
-  if auth.uid() is null then raise exception 'AUTH_REQUIRED'; end if;
-  if not coalesce(public.mzad_is_admin(),false) then raise exception 'ADMIN_REQUIRED'; end if;
-  if p_user_id is null then raise exception 'USER_REQUIRED'; end if;
-  if p_user_id=auth.uid() then raise exception 'CANNOT_RESTRICT_SELF'; end if;
-  if v_type not in ('all','bid','sell','buy','deposit') then raise exception 'INVALID_RESTRICTION_TYPE'; end if;
-  if p_expires_at is not null and p_expires_at<=now() then raise exception 'INVALID_EXPIRY'; end if;
+  if auth.uid() is null then
+    raise exception 'AUTH_REQUIRED';
+  end if;
+  if not coalesce(public.mzad_is_admin(), false) then
+    raise exception 'ADMIN_ONLY';
+  end if;
+  if p_user_id is null then
+    raise exception 'USER_REQUIRED';
+  end if;
+  if p_user_id = auth.uid() then
+    raise exception 'CANNOT_RESTRICT_SELF';
+  end if;
+  if v_type not in ('bid','sell','buy','all','deposit') then
+    raise exception 'INVALID_RESTRICTION_TYPE';
+  end if;
+  if p_expires_at is not null and p_expires_at <= now() then
+    raise exception 'INVALID_EXPIRY';
+  end if;
+  if not exists (
+    select 1 from public.mzad_profiles where user_id = p_user_id
+  ) then
+    raise exception 'USER_NOT_FOUND';
+  end if;
+
+  select coalesce(jsonb_agg(to_jsonb(r)), '[]'::jsonb)
+    into v_before
+  from public.mzad_user_restrictions r
+  where r.user_id = p_user_id and r.is_active is true;
 
   update public.mzad_user_restrictions
-     set is_active=false, updated_at=now()
-   where user_id=p_user_id and restriction_type=v_type and is_active is true;
+     set is_active = false, updated_at = now()
+   where user_id = p_user_id
+     and restriction_type = v_type
+     and is_active is true;
 
   insert into public.mzad_user_restrictions
-    (user_id,restriction_type,reason,notes,starts_at,expires_at,is_active,created_by,created_at,updated_at)
+    (user_id, restriction_type, reason, notes, starts_at, expires_at,
+     is_active, created_by)
   values
-    (p_user_id,v_type,nullif(btrim(coalesce(p_reason,'')),''),
-     nullif(btrim(coalesce(p_notes,'')),''),now(),p_expires_at,true,auth.uid(),now(),now())
+    (p_user_id, v_type, nullif(btrim(coalesce(p_reason,'')), ''),
+     nullif(btrim(coalesce(p_notes,'')), ''), now(), p_expires_at,
+     true, auth.uid())
   returning id into v_id;
 
-  insert into public.mzad_admin_audit(admin_id,action,target,details)
-  values(auth.uid(),'user_restrict',p_user_id::text,
-    jsonb_build_object('restriction_type',v_type,'restriction_id',v_id,
-      'expires_at',p_expires_at,'reason',p_reason,'notes',p_notes));
+  perform public.mzad_write_audit(
+    'admin_user_restricted',
+    'user',
+    p_user_id,
+    v_before,
+    jsonb_build_object(
+      'restriction_id', v_id,
+      'restriction_type', v_type,
+      'reason', p_reason,
+      'notes', p_notes,
+      'expires_at', p_expires_at
+    ),
+    '{}'::jsonb
+  );
 
-  return jsonb_build_object('ok',true,'id',v_id,'restriction_type',v_type,'expires_at',p_expires_at);
+  return v_id;
 end;
 $function$;
 
