@@ -14,6 +14,18 @@ create table if not exists public.mzad_notifications (
   created_at timestamptz not null default now()
 );
 
+-- Compatibility with the notification UI, which reads Arabic fields and JSON metadata.
+alter table public.mzad_notifications
+  add column if not exists title_ar text,
+  add column if not exists body_ar text,
+  add column if not exists data_json jsonb not null default '{}'::jsonb;
+
+update public.mzad_notifications
+set title_ar = coalesce(title_ar, title),
+    body_ar = coalesce(body_ar, body),
+    data_json = coalesce(data_json, case when link is null then '{}'::jsonb else jsonb_build_object('link', link) end)
+where title_ar is null or body_ar is null or data_json is null;
+
 create index if not exists mzad_notifications_user_created_idx
   on public.mzad_notifications (user_id, created_at desc);
 create index if not exists mzad_notifications_user_unread_idx
@@ -55,12 +67,16 @@ begin
     return;
   end if;
 
-  insert into public.mzad_notifications(user_id, title_ar, body_ar, type, data_json)
+  insert into public.mzad_notifications
+    (user_id, title, body, type, link, title_ar, body_ar, data_json)
   values (
     p_user_id,
     left(p_title, 180),
     left(coalesce(p_body, ''), 1200),
     coalesce(nullif(p_type, ''), 'system'),
+    coalesce(nullif(p_link, ''), '/home.html'),
+    left(p_title, 180),
+    left(coalesce(p_body, ''), 1200),
     jsonb_build_object('link', coalesce(nullif(p_link, ''), '/home.html'))
   );
 end;
