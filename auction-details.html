@@ -206,6 +206,7 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 <div class="sbg" id="sbg" aria-hidden="true"><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
 <div class="toast" id="toast" role="status"></div>
 
+<script type="module" src="./js/platform-guard.js"></script>
 <script type="module">
 import { supabase } from "./js/supabase.js";
 const $ = id => document.getElementById(id);
@@ -217,7 +218,7 @@ const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt
 const fmtT = v => { const d = new Date(v); return isNaN(d) ? "—" : d.toLocaleString("ar-IQ",{dateStyle:"medium",timeStyle:"short"}); };
 const must = r => { if (r.error) throw r.error; return r.data; };
 
-const BID_ERR = { AUTH_REQUIRED:"يجب تسجيل الدخول أولاً.", SELLER_CANNOT_BID:"لا يمكنك المزايدة على مزادك.", AUCTION_NOT_LIVE:"المزاد غير مفتوح حالياً.", AUCTION_ALREADY_ENDED:"انتهى المزاد.", BUYER_DEPOSIT_NOT_APPROVED:"تأمين المشاركة غير معتمد بعد.", BID_TOO_LOW:"المبلغ أقل من الحد المطلوب." };
+const BID_ERR = { AUTH_REQUIRED:"يجب تسجيل الدخول أولاً.", SELLER_CANNOT_BID:"لا يمكنك المزايدة على مزادك.", AUCTION_NOT_LIVE:"المزاد غير مفتوح حالياً.", AUCTION_ALREADY_ENDED:"انتهى المزاد.", BUYER_DEPOSIT_NOT_APPROVED:"تأمين المشاركة غير معتمد بعد.", BID_TOO_LOW:"المبلغ أقل من الحد المطلوب.", MAINTENANCE_MODE:"المنصة تحت الصيانة حالياً.", USER_BID_RESTRICTED:"تم تقييد المزايدة على حسابك. تواصل مع الإدارة." };
 const bidErr = e => { const m = String(e?.message||""); for (const k in BID_ERR) if (m.includes(k)) return BID_ERR[k]; return "تعذر تسجيل المزايدة، حاول مرة ثانية."; };
 
 const isLive = () => S.a?.status === "live" && new Date(S.a.ends_at).getTime() > Date.now();
@@ -336,7 +337,7 @@ function renderLive(){
 
   /* حالة المزايد */
   const n = $("note");
-  if (isSoon()){ n.className = "note" + (S.elig ? " me" : ""); n.textContent = S.elig ? "تم حجز مكانك. تدخل مباشرة بعد انتهاء العدّ التنازلي" : "احجز مكانك بتأمين المشاركة خلال فترة الانتظار، وتدخل مباشرة عند الافتتاح بعد 4 ساعات"; }
+  if (isSoon()){ n.className = "note" + (S.elig ? " me" : ""); n.textContent = S.elig ? "تم حجز مكانك. تدخل مباشرة وقت الافتتاح" : "احجز مكانك بتأمين المشاركة، وتدخل مباشرة عند الافتتاح"; }
   else if (!live){ n.className = "note"; n.textContent = ""; }
   else if (!top){ n.className = "note"; n.textContent = "لا توجد مزايدات بعد، كن أول مزايد"; }
   else if (mine(top)){ n.className = "note me"; n.textContent = "أنت صاحب أعلى مزايدة حالياً"; }
@@ -391,7 +392,7 @@ const amtUpd = () => { const b = $("bigAmt"); if (b) b.innerHTML = money(S.amoun
 function openDeposit(){
   const soon = isSoon();
   openSheet(`<div class="grab"></div><h3>${soon ? "احجز مكانك بالمزاد" : "خطوة وحدة قبل أول مزايدة"}</h3>
-    <p class="sd">${soon ? "الحجز يتم بدفع تأمين المشاركة" : "لتزايد على هذا المزاد نحتاج تأمين مشاركة"} بمبلغ <b>${money(DEPOSIT)} د.ع</b>. هو مبلغ قابل للاسترداد، وليس سعر الجهاز ولا رسماً للمنصة، وتدفعه مرة وحدة فقط.${soon ? " بعد موافقة الإدارة تبدأ فترة انتظار 4 ساعات. يُسجَّل حجزك وتدخل مباشرة عند الافتتاح." : ""}</p>
+    <p class="sd">${soon ? "الحجز يتم بدفع تأمين المشاركة" : "لتزايد على هذا المزاد نحتاج تأمين مشاركة"} بمبلغ <b>${money(DEPOSIT)} د.ع</b>. هو مبلغ قابل للاسترداد، وليس سعر الجهاز ولا رسماً للمنصة، وتدفعه مرة وحدة فقط.${soon ? " بعد موافقة الإدارة يُسجَّل حجزك وتدخل مباشرة عند الافتتاح." : ""}</p>
     <div class="stp"><span class="sn">1</span><b>أكمل تأمين المشاركة</b></div>
     <div class="stp"><span class="sn">2</span><b>ارجع لهذا المزاد</b></div>
     <div class="stp"><span class="sn">3</span><b>${soon ? "زايد من الزر الدائري عند الافتتاح" : "زايد من الزر الدائري"}</b></div>
@@ -484,23 +485,9 @@ async function refresh(){
 }
 
 /* ============ المفضلة والرجوع ============ */
-// لا تشارك حالة المفضلة بين حسابات مختلفة على المتصفح نفسه.
-let favoriteUserScope = "guest";
-const favKey = () => "mzad_favorite_auction:" + favoriteUserScope + ":" + auctionId;
+const favKey = () => "mzad_favorite_auction_" + auctionId;
 function favSet(on){ $("fav").setAttribute("aria-pressed", on); $("fav").setAttribute("aria-label", on ? "إزالة من المفضلة" : "إضافة إلى المفضلة"); }
-async function initAuctionFavorite(){
-  try{
-    const {data,error}=await supabase.auth.getUser();
-    if(error) throw error;
-    favoriteUserScope=data?.user?.id || "guest";
-  }catch(error){
-    console.warn("AUCTION FAVORITE SCOPE:",error);
-    favoriteUserScope="guest";
-  }
-  try{ favSet(localStorage.getItem(favKey()) === "1"); }catch{}
-}
-$("fav").disabled = true;
-initAuctionFavorite().finally(() => { $("fav").disabled = false; });
+try{ favSet(localStorage.getItem(favKey()) === "1"); }catch{}
 $("fav").onclick = () => {
   const on = $("fav").getAttribute("aria-pressed") !== "true";
   try{ on ? localStorage.setItem(favKey(), "1") : localStorage.removeItem(favKey()); }catch{}
