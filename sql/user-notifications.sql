@@ -14,17 +14,35 @@ create table if not exists public.mzad_notifications (
   created_at timestamptz not null default now()
 );
 
--- Compatibility with the notification UI, which reads Arabic fields and JSON metadata.
+-- Compatibility across legacy Arabic-only and current notification schemas.
+-- Add nullable compatibility columns first so this also works when the table existed
+-- before title/body/link were introduced.
 alter table public.mzad_notifications
+  add column if not exists title text,
+  add column if not exists body text,
+  add column if not exists link text,
   add column if not exists title_ar text,
   add column if not exists body_ar text,
-  add column if not exists data_json jsonb not null default '{}'::jsonb;
+  add column if not exists data_json jsonb;
 
+-- Backfill both directions: preserve existing Arabic content and populate legacy fields.
 update public.mzad_notifications
-set title_ar = coalesce(title_ar, title),
-    body_ar = coalesce(body_ar, body),
+set title = coalesce(title, title_ar, ''),
+    body = coalesce(body, body_ar, ''),
+    link = coalesce(link, data_json ->> 'link'),
+    title_ar = coalesce(title_ar, title, ''),
+    body_ar = coalesce(body_ar, body, ''),
     data_json = coalesce(data_json, case when link is null then '{}'::jsonb else jsonb_build_object('link', link) end)
-where title_ar is null or body_ar is null or data_json is null;
+where title is null
+   or body is null
+   or title_ar is null
+   or body_ar is null
+   or data_json is null;
+
+alter table public.mzad_notifications
+  alter column title set default '',
+  alter column body set default '',
+  alter column data_json set default '{}'::jsonb;
 
 create index if not exists mzad_notifications_user_created_idx
   on public.mzad_notifications (user_id, created_at desc);
