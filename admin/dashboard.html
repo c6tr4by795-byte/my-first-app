@@ -788,7 +788,7 @@ function openUser(u){
       try{
         const until = (rest.size||blocked) && dur ? new Date(Date.now()+dur*60000).toISOString() : null;
         const r = await supabase.rpc("mzad_admin_set_restriction", {
-          p_user:uid, p_banned:false, p_no_bid:rest.has("bid"),
+          p_user:u.id, p_banned:false, p_no_bid:rest.has("bid"),
           p_no_deposit:rest.has("deposit"), p_no_sell:rest.has("sell"),
           p_reason:$("uWhy").value.trim()||null, p_hours:dur ? Math.ceil(dur/60) : 0
         });
@@ -823,10 +823,9 @@ function openAuction(r){
   const grid = (action, list) => `<div class="chips wrap">${list.map(m => `<button class="chip" type="button" data-act="x" data-a="${action}" data-m="${m}">+${m<60?m+" دقيقة":(m/60)+" ساعة"}</button>`).join("")}</div>`;
   openSheet(`<div class="grab"></div><h3>أوامر المزاد ${esc(a.auction_number||"")}</h3><p class="sd">${esc(deviceName(r.device))} — ${live?"مباشر":"بانتظار الافتتاح"}</p>
     ${live ? `<label class="fl">تمديد وقت المزاد</label>${grid("extend",[5,15,30,60])}` : ""}
-    ${sch ? `<label class="fl">تأجيل الافتتاح</label>${grid("delay",[30,60,120,240])}<button class="b2 gn" data-act="x" data-a="start_now" data-m="0" type="button">فتح المزاد الآن</button><button class="b2 dg" data-act="cancel" type="button">إلغاء المزاد</button>` : ""}
+    ${sch ? `<p class="sd">يمكن فتح المزاد المجدول فوراً. التأجيل والإلغاء غير متاحين إلى أن تُجهّز لهما دوال قاعدة بيانات آمنة.</p><button class="b2 gn" data-act="x" data-a="start_now" data-m="0" type="button">فتح المزاد الآن</button>` : ""}
     <button class="b3" data-act="no" type="button">إغلاق</button>`, {
-    x: b => auctionAction(a.id, b.dataset.a, +b.dataset.m),
-    cancel: async () => { if(await confirmSheet({ title:"إلغاء المزاد", text:"يُلغى المزاد المجدول نهائياً (فقط إذا ما عليه مزايدات).", ok:"إلغاء المزاد", danger:true })) auctionAction(a.id, "cancel", 0); }
+    x: b => auctionAction(a.id, b.dataset.a, +b.dataset.m)
   });
 }
 $("aList").addEventListener("click", e => { const b=e.target.closest("[data-ac]"); if(b){ e.preventDefault(); openAuction(S.auctions[+b.dataset.ac]); } });
