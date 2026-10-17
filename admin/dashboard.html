@@ -276,7 +276,6 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
 
 <script type="module">
 import { supabase } from "../js/supabase.js";
-import { showFrame } from "../js/app-guard.js";
 
 /* ===== إعدادات يمكنك تعديلها ===== */
 const AUCTION_PAGE = "../auction-details.html";   /* صفحة تفاصيل المزاد */
@@ -700,7 +699,16 @@ function maintenanceFlow(){
       <div class="pair"><button class="b2 lt" data-act="prev" type="button">معاينة</button><button class="b2 dg" data-act="go" type="button">تفعيل الصيانة</button></div>
       <button class="b3" data-act="no" type="button">إلغاء</button>`, {
       eta: b => { etaMin = +b.dataset.v; document.querySelectorAll("#mEta .chip").forEach(x => x.classList.toggle("on", x===b)); },
-      prev: () => showFrame("maintenance", { message: $("mMsg").value.trim(), eta: etaIso(), preview:true }),
+      prev: () => {
+        const preview = window.open("", "_blank");
+        if (!preview) { toast("اسمح بفتح النوافذ المنبثقة حتى تشوف المعاينة", "bad"); return; }
+        const message = $("mMsg").value.trim() || "نجري تحديثاً سريعاً على النظام";
+        const eta = etaIso();
+        const etaText = eta ? new Date(eta).toLocaleString("ar-IQ", { dateStyle:"medium", timeStyle:"short" }) : "";
+        preview.document.open();
+        preview.document.write(`<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>معاينة الصيانة — MZAD PHONE</title><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#fff;color:#20242b;font-family:system-ui,-apple-system,sans-serif;padding:24px}.card{width:min(440px,100%);text-align:center;padding:32px 22px;border:1px solid #eee;border-radius:24px;box-shadow:0 12px 40px #0000000a}.logo{font-weight:900;font-size:22px;color:#e91d4f;margin-bottom:28px}.symbol{font-size:48px;margin-bottom:16px}h1{font-size:24px;margin:0 0 12px}p{line-height:1.9;color:#666;margin:0}.eta{margin-top:18px;padding:12px;background:#f7f7f7;border-radius:12px;font-size:14px;color:#555}.tag{margin-top:22px;color:#999;font-size:12px}</style></head><body><main class="card"><div class="logo">MZAD PHONE</div><div class="symbol">🛠️</div><h1>نعتذر عن الإزعاج</h1><p>${esc(message)}</p>${etaText ? `<div class="eta">العودة المتوقعة: ${esc(etaText)}</div>` : ""}<div class="tag">هذه معاينة فقط — وضع الصيانة غير مفعّل</div></main></body></html>`);
+        preview.document.close();
+      },
       go: async b => {
         b.disabled = true;
         try{
