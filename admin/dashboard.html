@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#6246d9">
+<script>window.__MZAD_NO_GUARD=true;</script>
 <title>لوحة الإدارة — MZAD PHONE</title>
 <style>
 :root{--bg:#f9f8fd;--ink:#17202a;--muted:#6b7280;--line:#ece8fb;--edge:#e4defa;--p:#6246d9;--pd:#4a34b8;--ps:#f3f0ff;--ok:#1e8a5a;--oks:#e8f6ef;--bad:#c62f4d;--bads:#fff0f3;--warn:#b9791a;--warns:#fdf3e1;--hot:#e8590c;--sb:env(safe-area-inset-bottom,0px)}
@@ -148,9 +149,30 @@ h1{margin:14px 2px 8px;font-size:23px;font-weight:950;letter-spacing:-.03em}
 textarea.note{width:100%;min-height:68px;margin-top:10px;padding:11px 13px;border:1.5px solid var(--edge);border-radius:14px;outline:none;font-weight:700;resize:vertical}
 textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)}
 
+.b2.sm{height:42px;font-size:13px;margin-top:0}
+.fl{display:block;margin:14px 0 7px;font-size:12px;font-weight:900;color:#374151}
+.chips.wrap{flex-wrap:wrap;overflow:visible}
+.chip.dg.on{background:var(--bad);border-color:var(--bad);box-shadow:0 8px 18px -8px rgba(198,47,77,.6)}
+.inp{width:100%;height:44px;border:1.5px solid var(--edge);border-radius:14px;padding:0 14px;outline:none;font-weight:700;background:#fff}
+.inp:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)}
+.badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.mail{direction:ltr;text-align:start;word-break:break-all}
+.annc{padding:14px}
+.annc .note{margin-top:0}
 .err{display:none;margin-top:14px;padding:12px 14px;border-radius:15px;background:var(--bads);border:1px solid #f3cbd4;color:var(--bad);font-size:12.5px;font-weight:800;line-height:1.8}.err.show{display:block}
 .toast{position:fixed;left:50%;bottom:calc(150px + var(--sb));transform:translateX(-50%) translateY(16px);max-width:calc(100% - 40px);padding:10px 14px;border-radius:13px;background:#1e2c30;color:#fff;font-size:12px;font-weight:800;opacity:0;pointer-events:none;transition:.3s;z-index:120;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%)}.toast.bad{background:var(--bad)}.toast.ok{background:var(--ok)}
+.fm{display:grid;gap:12px;padding:14px}
+.fm label{display:block;margin-bottom:6px;font-size:11.5px;font-weight:900}
+.fm textarea,.fm input[type=datetime-local]{width:100%;border:1.5px solid var(--edge);border-radius:13px;padding:11px 13px;font-weight:700;outline:none;background:#fff;resize:vertical}
+.fm textarea:focus,.fm input:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)}
+.fm hr{border:0;border-top:1px dashed #d9d1f5;margin:4px 0}
+.fm .b2{margin-top:0}
+.rowsw{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid #f1eefb}
+.rowsw:last-of-type{border-bottom:0}.rowsw b{display:block;font-size:13px;font-weight:900}.rowsw small{font-size:10.5px;font-weight:700;color:var(--muted)}
+.hrs{display:flex;gap:7px;flex-wrap:wrap;margin:6px 0 4px}
+.log{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--line);font-size:12px}
+.log:last-child{border-bottom:0}.log b{font-weight:900}.log small{display:block;margin-top:2px;font-size:10.5px;font-weight:700;color:var(--muted);word-break:break-all}.log time{margin-inline-start:auto;flex:0 0 auto;font-size:10.5px;font-weight:800;color:var(--muted)}
 @media(min-width:620px){.kpis{grid-template-columns:repeat(3,1fr)}.kpi.hero{grid-column:span 3}.fields{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:380px){.fields{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -175,6 +197,14 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
   <div class="sec"><div class="sh"><h2>يحتاج انتباهك</h2><small>يُحدَّث تلقائياً</small></div><div class="alerts" id="alerts"><div class="sk" style="height:70px"></div></div></div>
   <div class="sec"><div class="sh"><h2>الأرقام الآن</h2></div><div class="kpis" id="kpis"><div class="sk"></div><div class="sk"></div></div></div>
   <div class="sec"><div class="sh"><h2>تحكم سريع</h2><small>يطبّق فوراً، ويمكن التراجع</small></div><div class="card" id="presets"></div></div>
+  <div class="sec"><div class="sh"><h2>إعلان للمستخدمين</h2><small id="annState"></small></div>
+    <div class="card annc">
+      <textarea class="note" id="annText" maxlength="140" placeholder="اكتب إعلاناً يظهر بأعلى التطبيق لكل المستخدمين"></textarea>
+      <div class="chips" id="annTone" style="margin-top:10px"><button class="chip on" type="button" data-tone="info">معلومة</button><button class="chip" type="button" data-tone="warn">تنبيه</button><button class="chip dg" type="button" data-tone="bad">عاجل</button></div>
+      <div class="pair"><button class="b2 sm" id="annPub" type="button">نشر الإعلان</button><button class="b2 sm lt" id="annOff" type="button">إيقاف الإعلان</button></div>
+    </div>
+  </div>
+  <div class="sec"><div class="sh"><h2>آخر عمليات الإدارة</h2><small>من غيّر شنو</small></div><div class="card" id="audit"><div class="log">جاري التحميل...</div></div></div>
   <div class="sec"><div class="sh"><h2>اختصارات</h2></div>
     <div class="chips" style="flex-wrap:wrap;overflow:visible"><a class="chip" href="payment-methods.html">طرق الدفع</a><a class="chip" href="auctions.html?tab=sale">التأمينات والاسترداد</a><a class="chip" href="../auctions.html">المزادات</a><a class="chip" href="../home.html">الرئيسية</a></div>
   </div>
@@ -190,6 +220,15 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
   </div>
 </section>
 
+<!-- المستخدمون -->
+<section class="panel" id="p-users" hidden>
+  <div class="sec">
+    <div class="sh"><h2>إدارة المستخدمين</h2><small id="uCount"></small></div>
+    <input class="search" id="uSearch" type="search" placeholder="ابحث بالإيميل أو كود المشتري أو رقم الهاتف" autocomplete="off">
+    <div class="list" id="uList"></div>
+  </div>
+</section>
+
 <!-- المزادات -->
 <section class="panel" id="p-auctions" hidden>
   <div class="sec">
@@ -199,8 +238,29 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
   </div>
 </section>
 
+<!-- المستخدمون -->
+<section class="panel" id="p-users" hidden>
+  <div class="sec">
+    <div class="sh"><h2>إدارة المستخدمين</h2><small id="uCount"></small></div>
+    <input class="search" id="uSearch" type="search" placeholder="ابحث بالإيميل أو الهاتف أو كود المشتري" autocomplete="off">
+    <div class="list" id="uList"><div class="sk"></div></div>
+  </div>
+</section>
+
 <!-- الإعدادات -->
 <section class="panel" id="p-settings" hidden>
+  <div class="sec"><div class="sh"><h2>رسائل للمستخدمين</h2><small>تظهر بالتطبيق خلال ثواني</small></div>
+    <div class="card fm" id="msgs">
+      <div><label for="m_msg">رسالة شاشة الصيانة</label><textarea id="m_msg" rows="2" placeholder="مثال: نحدّث النظام لتحسين الأداء، نرجع خلال ساعة."></textarea></div>
+      <div><label for="m_eta">موعد الانتهاء المتوقع (اختياري)</label><input id="m_eta" type="datetime-local"></div>
+      <button class="b2" id="saveMaint" type="button">حفظ رسالة الصيانة</button>
+      <a class="b2 lt" href="../home.html?mzad_preview=maintenance" target="_blank" rel="noopener">معاينة شاشة الصيانة</a>
+      <hr>
+      <div><label for="a_txt">إعلان لكل المستخدمين</label><textarea id="a_txt" rows="2" placeholder="مثال: مزاد iPhone 15 Pro يفتح اليوم الساعة 8 مساءً"></textarea></div>
+      <div><label>نوع الإعلان</label><div class="hrs" id="a_tone"></div></div>
+      <div class="pair"><button class="b2" id="pubAnn" type="button">نشر الإعلان</button><button class="b2 lt" id="hideAnn" type="button">إخفاء</button></div>
+    </div>
+  </div>
   <div class="sec"><div class="sh"><h2>مفاتيح التشغيل</h2><small>الحساسة تطلب تأكيد</small></div><div class="card" id="tCore"></div>
     <div class="adv"><button id="advBtn" type="button"><span>مفاتيح إضافية</span><span id="advArrow">‹</span></button><div class="card" id="tAdv" hidden></div></div>
   </div>
@@ -213,7 +273,9 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
 <div class="tabs"><nav aria-label="أقسام اللوحة">
   <button class="tb on" data-tab="overview" type="button"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg>نظرة عامة</button>
   <button class="tb" data-tab="review" type="button"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 7.8 7 10 4-2.2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg>المراجعة<i id="bdgReview" hidden>0</i></button>
+  <button class="tb" data-tab="users" type="button"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>المستخدمون</button>
   <button class="tb" data-tab="auctions" type="button"><svg viewBox="0 0 24 24"><path d="M14 4 8 10l4 4 6-6M7 11 3.5 14.5 9.5 20.5 13 17M16 20h5"/></svg>المزادات</button>
+  <button class="tb" data-tab="users" type="button"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M16 4.8a3.5 3.5 0 0 1 0 6.4M18.5 14.4c1.8.8 3 2.6 3 5.6"/></svg>المستخدمون</button>
   <button class="tb" data-tab="settings" type="button"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>الإعدادات</button>
 </nav></div>
 
@@ -222,6 +284,7 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
 
 <script type="module">
 import { supabase } from "../js/supabase.js";
+import { showFrame } from "../js/app-guard.js";
 
 /* ===== إعدادات يمكنك تعديلها ===== */
 const AUCTION_PAGE = "../auction-details.html";   /* صفحة تفاصيل المزاد */
@@ -236,6 +299,7 @@ const $ = id => document.getElementById(id);
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const n0 = n => Number(n || 0).toLocaleString("en-US");
 const iqd = n => n0(n) + " د.ع";
+const nv = v => v==null ? "—" : n0(v);
 
 /* ===== التعريفات ===== */
 const CORE = [
@@ -268,7 +332,10 @@ const FIELDS = [
     { k:"anti_snipe_max_extensions",    l:"أقصى عدد تمديدات", u:"c", min:0 } ]}
 ];
 const NUM_KEYS = FIELDS.flatMap(g => g.items.map(i => i.k));
-const ALL_KEYS = [...CORE, ...ADV].map(x => x.k).concat(NUM_KEYS);
+const STR_KEYS = ["maintenance_message","maintenance_eta","announcement_text","announcement_tone","announcement_enabled"];
+const ALL_KEYS = [...CORE, ...ADV].map(x => x.k).concat(NUM_KEYS, STR_KEYS);
+const TONES = [["info","معلومة"],["warn","تنبيه"],["bad","عاجل"],["ok","بشرى"]];
+const ACTION_LABELS = { setting_update:"تعديل إعداد", deposit_approve:"قبول تأمين", deposit_reject:"رفض تأمين", user_restrict:"تقييد مستخدم", user_unrestrict:"رفع قيود مستخدم", auction_extend:"تمديد مزاد", auction_start_now:"فتح مزاد الآن" };
 
 const PRESETS = [
   { id:"stopbid", icon:"⏸️", t:"إيقاف المزايدة فوراً", d:"يمنع أي مزايدة جديدة والمزادات تبقى ظاهرة.", set:{ bidding_enabled:false }, rev:{ bidding_enabled:true }, ask:"سيتوقف تسجيل أي مزايدة جديدة على كل المزادات حتى تعيد تشغيله." },
@@ -282,7 +349,7 @@ const A_STATUS = { live:["مباشر","ok"], scheduled:["بانتظار الاف
 const REQ_STATUS = { pending:["بانتظار الدفع","warn"], proof_submitted:["بانتظار المراجعة","warn"], approved:["مقبول","ok"], rejected:["مرفوض","bad"], cancelled:["ملغى",""], refunded:["مسترد",""] };
 
 /* ===== الحالة ===== */
-const S = { tab:"overview", dash:null, saved:new Map(), tog:{}, queue:[], qf:"pending", qs:"", auctions:[], af:"live", loaded:{}, busy:false, dirty:{} };
+const S = { cfg:{}, users:[], uq:"", tab:"overview", dash:null, saved:new Map(), tog:{}, queue:[], qf:"pending", qs:"", auctions:[], af:"live", loaded:{}, busy:false, dirty:{} };
 
 /* ===== أدوات ===== */
 let tt; function toast(m, kind){ const e=$("toast"); e.textContent=m; e.className="toast show"+(kind?" "+kind:""); clearTimeout(tt); tt=setTimeout(()=>e.classList.remove("show"),2600); }
@@ -297,7 +364,7 @@ const isOn = v => v===true || v?.value===true || v?.enabled===true;
 const numOf = v => typeof v==="number" ? v : (v?.value ?? "");
 const deviceName = d => [d?.brand,d?.model,d?.storage].filter(Boolean).join(" ") || "جهاز";
 const phoneOf = row => row.buyer_phone || (String(row.proof?.reference_number||"").match(/07\d{9}/)||[])[0] || "";
-const waLink = p => "https://wa.me/964" + String(p).replace(/^0/,"");
+const waLink = p => "https://wa.me/" + (/^0/.test(p) ? "964"+String(p).slice(1) : String(p).replace(/\D/g,""));
 const rpcErr = e => e?.message || e?.details || "خطأ غير معروف";
 
 /* ===== النافذة السفلية ===== */
@@ -329,18 +396,70 @@ async function adminGate(){
 /* ===== التحميل ===== */
 async function loadDash(){
   const r = await supabase.rpc("mzad_admin_dashboard");
-  if(r.error){ showErr("تعذر تحميل الأرقام: " + rpcErr(r.error) + " — تأكد من تشغيل ملف mzad-admin.sql"); return; }
-  S.dash = r.data || {}; hideErr();
+  if(r.error){ S.dashErr = true; S.dash = {}; showErr("تعذر تحميل الأرقام: " + rpcErr(r.error) + " — شغّل ملف mzad-admin.sql الجديد كامل"); renderKpis(); renderAlerts(); return; }
+  S.dashErr = false; S.dash = r.data || {}; hideErr();
   renderStatus(); renderAlerts(); renderKpis(); renderBadge();
   $("upd").textContent = "آخر تحديث " + new Date().toLocaleTimeString("ar-IQ",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+}
+async function loadConfig(){
+  const r = await supabase.rpc("mzad_admin_get_config");
+  if(!r.error && r.data && typeof r.data==="object") S.cfg = r.data;
+  renderAnn();
+}
+async function setConfig(k, v){
+  const r = await supabase.rpc("mzad_admin_set_config", { p_key:k, p_value:v });
+  if(r.error) throw r.error;
+  S.cfg[k] = v;
 }
 async function loadSettings(){
   const r = await supabase.from("mzad_settings").select("key,value_json").in("key", ALL_KEYS);
   if(r.error) throw r.error;
   S.saved = new Map((r.data||[]).map(x => [x.key, x.value_json]));
   [...CORE,...ADV].forEach(t => { S.tog[t.k] = isOn(S.saved.get(t.k)); });
-  renderToggles(); renderPresets(); renderFields(); renderStatus(); renderAlerts();
+  renderToggles(); renderPresets(); renderFields(); renderStatus(); renderAlerts(); fillMessages();
 }
+async function loadAudit(){
+  const r = await supabase.from("mzad_admin_audit").select("id,action,target,details,created_at").order("id",{ascending:false}).limit(8);
+  if(r.error){ $("audit").innerHTML = '<div class="log">لا يوجد سجل بعد (شغّل mzad-admin.sql)</div>'; return; }
+  S.audit = r.data || [];
+  $("audit").innerHTML = S.audit.length ? S.audit.map(a => {
+    const d = a.details && typeof a.details==="object" ? Object.entries(a.details).filter(([,v])=>v!==null&&v!=="").map(([k,v])=>k+": "+(typeof v==="object"?JSON.stringify(v):v)).join(" · ") : "";
+    return `<div class="log"><div><b>${esc(ACTION_LABELS[a.action]||a.action)}</b><small>${esc((a.target||"")+(d?" — "+d:""))}</small></div><time>${a.created_at?ago(a.created_at):""}</time></div>`;
+  }).join("") : '<div class="log">ما في عمليات مسجّلة بعد</div>';
+}
+
+/* ===== رسائل الصيانة والإعلانات ===== */
+const strOf = v => typeof v==="string" ? v : (v?.value ?? "");
+const toLocalInput = iso => { const d=new Date(iso); if(!iso||isNaN(d)) return ""; d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,16); };
+function fillMessages(){
+  if(!S.msgTouched){
+    $("m_msg").value = strOf(S.saved.get("maintenance_message"));
+    $("m_eta").value = toLocalInput(strOf(S.saved.get("maintenance_eta")));
+    $("a_txt").value = strOf(S.saved.get("announcement_text"));
+    S.tone = strOf(S.saved.get("announcement_tone")) || "info";
+  }
+  renderTones();
+}
+function renderTones(){ $("a_tone").innerHTML = TONES.map(t => `<button class="chip ${S.tone===t[0]?"on":""}" type="button" data-tone="${t[0]}">${t[1]}</button>`).join(""); }
+$("msgs").addEventListener("input", () => { S.msgTouched = true; });
+$("a_tone").addEventListener("click", e => { const b=e.target.closest("[data-tone]"); if(!b) return; S.tone=b.dataset.tone; S.msgTouched=true; renderTones(); });
+async function withBtn(btn, label, fn){
+  if(S.busy) return; S.busy = true; btn.disabled = true; const old = btn.textContent; btn.textContent = label;
+  try{ await fn(); }catch(e){ toast("فشل الحفظ: "+rpcErr(e),"bad"); }
+  finally{ S.busy = false; btn.disabled = false; btn.textContent = old; }
+}
+$("saveMaint").onclick = () => withBtn($("saveMaint"), "جاري الحفظ...", async () => {
+  const eta = $("m_eta").value ? new Date($("m_eta").value).toISOString() : "";
+  await saveSetting("maintenance_message", $("m_msg").value.trim());
+  await saveSetting("maintenance_eta", eta);
+  S.msgTouched = false; toast("تم حفظ رسالة الصيانة","ok");
+});
+$("pubAnn").onclick = () => withBtn($("pubAnn"), "جاري النشر...", async () => {
+  const t = $("a_txt").value.trim(); if(!t){ toast("اكتب نص الإعلان أولاً","bad"); return; }
+  await saveSetting("announcement_text", t); await saveSetting("announcement_tone", S.tone); await saveSetting("announcement_enabled", true);
+  S.msgTouched = false; toast("تم نشر الإعلان للمستخدمين","ok");
+});
+$("hideAnn").onclick = () => withBtn($("hideAnn"), "...", async () => { await saveSetting("announcement_enabled", false); S.msgTouched = false; toast("تم إخفاء الإعلان","ok"); });
 async function loadQueue(){
   const st = Q_FILTERS.find(f => f[0]===S.qf)[2];
   const r = await supabase.rpc("mzad_admin_deposit_queue", { p_status: st });
@@ -357,6 +476,7 @@ async function refreshActive(){
   const jobs = [loadDash()];
   if(S.tab==="review") jobs.push(loadQueue());
   if(S.tab==="auctions") jobs.push(loadAuctions());
+  if(S.tab==="users") jobs.push(loadUsers());
   await Promise.allSettled(jobs);
 }
 
@@ -378,19 +498,22 @@ function renderAlerts(){
   if(d.pending_proofs>0){ const m = d.oldest_pending_at ? mins(d.oldest_pending_at) : 0; add(m>=30?"bad":"warn","🧾", d.pending_proofs+" تأمين بانتظار المراجعة", d.oldest_pending_at ? "أقدمها "+ago(d.oldest_pending_at)+(m>=30?" — تأخرت":"") : "", "review"); }
   if(d.ending_soon>0) add("","⏳", d.ending_soon+" مزاد ينتهي خلال 10 دقائق","راقب المزايدات والتمديد.","auctions");
   if(d.starting_soon>0) add("","🚀", d.starting_soon+" مزاد يفتح خلال 30 دقيقة","تأكد من جاهزية الحاجزين.","auctions");
-  if(!out.length) add("ok","✅","كل شي يشتغل طبيعي","لا توجد تنبيهات حالياً.");
+  if(S.dashErr) out.unshift({tone:"bad",ic:"⚠️",title:"تعذر تحميل أرقام اللوحة",sub:"شغّل ملف mzad-admin.sql ثم حدّث.",tab:null});
+  else if(!out.length) add("ok","✅","كل شي يشتغل طبيعي","لا توجد تنبيهات حالياً.");
   $("alerts").innerHTML = out.map(a => `<${a.tab?"button type=\"button\"":"div"} class="al ${a.tone}" ${a.tab?`data-go="${a.tab}"`:""}><span class="ai">${a.ic}</span><div><b>${esc(a.title)}</b>${a.sub?`<small>${esc(a.sub)}</small>`:""}</div>${a.tab?'<span class="go">‹</span>':""}</${a.tab?"button":"div"}>`).join("");
 }
 function renderKpis(){
   const d = S.dash || {};
-  const k = (cls, label, val, sub, go) => `<button class="kpi ${cls}" type="button" data-go="${go}"><span>${label}</span><b>${n0(val)}</b>${sub?`<small>${sub}</small>`:""}</button>`;
+  const k = (cls, label, val, sub, go) => `<button class="kpi ${cls}" type="button" data-go="${go}"><span>${label}</span><b>${nv(val)}</b>${sub?`<small>${sub}</small>`:""}</button>`;
   $("kpis").innerHTML =
     k("hero","تأمينات بانتظار المراجعة", d.pending_proofs, d.pending_proofs>0 ? "اضغط للمراجعة الآن" : "لا شي معلّق", "review") +
-    k("","مزادات مباشرة", d.live, "جديد اليوم: "+n0(d.today), "auctions") +
-    k("","بانتظار الافتتاح", d.scheduled, d.starting_soon>0 ? n0(d.starting_soon)+" خلال 30 دقيقة" : "", "auctions") +
+    k("","مزادات مباشرة", d.live, "جديد اليوم: "+nv(d.today), "auctions") +
+    k("","بانتظار الافتتاح", d.scheduled, d.starting_soon>0 ? nv(d.starting_soon)+" خلال 30 دقيقة" : "", "auctions") +
     k("","مزايدات آخر 24 ساعة", d.bids_24h, "", "auctions") +
-    k("","إجمالي الحاجزين", d.reserved_total, "المشاهدون: "+n0(d.viewers_total), "auctions") +
-    k(d.methods===0?"bad":"","طرق دفع مفعّلة", d.methods, "", "overview");
+    k("","إجمالي الحاجزين", d.reserved_total, "المشاهدون: "+nv(d.viewers_total), "auctions") +
+    k(d.methods===0?"bad":"","طرق دفع مفعّلة", d.methods, "", "overview") +
+    k("","المستخدمون", d.users_total, "", "users") +
+    k(d.users_restricted>0?"hot":"","حسابات مقيّدة", d.users_restricted, "", "users");
 }
 function renderBadge(){
   const n = Number(S.dash?.pending_proofs||0), b = $("bdgReview");
@@ -415,11 +538,12 @@ function needsConfirm(t, val){ return t && ((t.danger==="on" && val===true) || (
 async function saveSetting(key, value){
   const r = await supabase.rpc("mzad_admin_update_setting", { p_key:key, p_value:value, p_description_ar:null });
   if(r.error) throw r.error;
-  try{ await supabase.rpc("mzad_admin_log", { p_action:"setting_update", p_target:key, p_details:{ value } }); }catch{}
+  try{ await supabase.rpc("mzad_admin_log", { p_action:"setting_update", p_target:key, p_details:{ value: typeof value==="string" ? value.slice(0,80) : value } }); }catch{}
   S.saved.set(key, value);
 }
 async function changeToggle(key, val){
   const def = [...CORE,...ADV].find(x => x.k===key);
+  if(key==="maintenance_mode" && val===true) return await maintenanceFlow();
   if(needsConfirm(def, val)){
     const ok = await confirmSheet({ title:"تأكيد التغيير", text:`${val?"تفعيل":"إيقاف"} «${def.n}» سيؤثر على المستخدمين مباشرة. هل تريد المتابعة؟`, ok:"نعم، نفّذ", danger:true });
     if(!ok) return false;
@@ -437,6 +561,7 @@ async function onToggle(e){
 $("presets").addEventListener("click", async e => {
   const b = e.target.closest("[data-preset]"); if(!b || S.busy) return;
   const p = PRESETS.find(x => x.id===b.dataset.preset), on = presetActive(p), vals = on ? p.rev : p.set;
+  if(!on && p.id==="maint"){ const ok = await maintenanceFlow(); if(ok) toast("تم تفعيل وضع الصيانة","ok"); await loadSettings().catch(()=>{}); return; }
   if(!on){ const ok = await confirmSheet({ title:p.t, text:p.ask, ok:"تفعيل الآن", danger:true }); if(!ok) return; }
   S.busy = true; b.disabled = true;
   try{ for(const [k,v] of Object.entries(vals)){ await saveSetting(k, v); S.tog[k] = v; } toast(on?"تم الإلغاء":"تم التفعيل","ok"); }
@@ -554,10 +679,12 @@ function renderAuctions(){
   $("aList").innerHTML = S.auctions.map(r => {
     const a = r.auction||{}, st = A_STATUS[a.status] || [a.status||"—",""];
     const timer = a.status==="live" ? `<span data-end="${esc(a.ends_at)}">${left(new Date(a.ends_at)-Date.now())}</span> متبقي` : a.status==="scheduled" && a.starts_at ? `يفتح بعد <span data-start="${esc(a.starts_at)}">${left(new Date(a.starts_at)-Date.now())}</span>` : a.ends_at ? "انتهى "+ago(a.ends_at) : "";
-    return `<a class="q" href="${AUCTION_PAGE}?auction=${encodeURIComponent(a.id)}" target="_blank" rel="noopener"><div class="q-top"><span class="code">${esc(a.auction_number||String(a.id).slice(0,8))}</span><span class="badge ${st[1]}">${st[0]}</span></div>
+    const can = a.status==="live" || a.status==="scheduled", idx = S.auctions.indexOf(r);
+    return `<div class="q"><div class="q-top"><span class="code">${esc(a.auction_number||String(a.id).slice(0,8))}</span><span class="badge ${st[1]}">${st[0]}</span></div>
       <div class="q-name">${esc(deviceName(r.device))}</div><div class="q-sub">${timer}</div>
-      <div class="stt"><span>🔨 ${n0(r.bids)} مزايدة</span><span>🛡️ ${n0(r.reserved)} حاجز</span><span>👁️ ${n0(r.viewers)} مشاهد</span></div>
-      <div class="q-bot"><strong>${iqd(a.current_price_iqd ?? a.starting_price_iqd)}</strong><span class="q-sub">السعر الحالي</span></div></a>`;
+      <div class="stt"><span>🔨 ${nv(r.bids)} مزايدة</span><span>🛡️ ${nv(r.reserved)} حاجز</span><span>👁️ ${nv(r.viewers)} مشاهد</span></div>
+      <div class="q-bot"><strong>${iqd(a.current_price_iqd ?? a.starting_price_iqd)}</strong><span class="q-sub">السعر الحالي</span></div>
+      <div class="pair" style="margin-top:10px"><a class="b2 sm lt" href="${AUCTION_PAGE}?auction=${encodeURIComponent(a.id)}" target="_blank" rel="noopener">فتح المزاد</a>${can?`<button class="b2 sm" type="button" data-ac="${idx}">أوامر</button>`:""}</div></div>`;
   }).join("");
 }
 setInterval(() => {
@@ -565,20 +692,161 @@ setInterval(() => {
   document.querySelectorAll("[data-start]").forEach(el => { el.textContent = left(new Date(el.dataset.start)-Date.now()); });
 }, 1000);
 
+/* ===== وضع الصيانة: رسالة + وقت متوقع + معاينة ===== */
+function maintenanceFlow(){
+  const msg0 = typeof S.cfg.maintenance_message==="string" ? S.cfg.maintenance_message : "";
+  const OPTS = [[0,"بدون وقت"],[30,"30 دقيقة"],[60,"ساعة"],[120,"ساعتين"],[240,"4 ساعات"]];
+  let etaMin = 0; const etaIso = () => etaMin ? new Date(Date.now()+etaMin*60000).toISOString() : "";
+  return new Promise(res => {
+    sheetResolve = res;
+    openSheet(`<div class="grab"></div><h3>تفعيل وضع الصيانة</h3>
+      <p class="sd">يظهر للمستخدمين إطار صيانة متحرك على خلفية بيضاء، ويرجع التطبيق لحاله تلقائياً بمجرد ما تعطّل الصيانة. أنت (كأدمن) تبقى تشوف التطبيق عادي.</p>
+      <label class="fl" for="mMsg">رسالة للمستخدمين (اختياري)</label>
+      <textarea class="note" id="mMsg" maxlength="160" placeholder="مثال: نجري تحديثاً سريعاً على النظام">${esc(msg0)}</textarea>
+      <label class="fl">الوقت المتوقع للرجوع</label>
+      <div class="chips wrap" id="mEta">${OPTS.map(o => `<button class="chip ${o[0]===0?"on":""}" type="button" data-act="eta" data-v="${o[0]}">${o[1]}</button>`).join("")}</div>
+      <div class="pair"><button class="b2 lt" data-act="prev" type="button">معاينة</button><button class="b2 dg" data-act="go" type="button">تفعيل الصيانة</button></div>
+      <button class="b3" data-act="no" type="button">إلغاء</button>`, {
+      eta: b => { etaMin = +b.dataset.v; document.querySelectorAll("#mEta .chip").forEach(x => x.classList.toggle("on", x===b)); },
+      prev: () => showFrame("maintenance", { message: $("mMsg").value.trim(), eta: etaIso(), preview:true }),
+      go: async b => {
+        b.disabled = true;
+        try{
+          await setConfig("maintenance_message", $("mMsg").value.trim() || null);
+          await setConfig("maintenance_eta", etaIso() || null);
+          await saveSetting("maintenance_mode", true); S.tog.maintenance_mode = true;
+          closeSheet(true);
+        }catch(e){ b.disabled = false; toast("فشل التفعيل: "+rpcErr(e)+" — تأكد من تشغيل mzad-admin.sql","bad"); }
+      }
+    });
+  });
+}
+
+/* ===== إعلان للمستخدمين ===== */
+let annTone = "info";
+function renderAnn(){
+  const t = typeof S.cfg.announcement_text==="string" ? S.cfg.announcement_text : "";
+  $("annState").textContent = t ? "منشور الآن" : "لا يوجد إعلان";
+  if(document.activeElement !== $("annText")) $("annText").value = t;
+  if(["info","warn","bad"].includes(S.cfg.announcement_tone)) annTone = S.cfg.announcement_tone;
+  document.querySelectorAll("#annTone .chip").forEach(c => c.classList.toggle("on", c.dataset.tone===annTone));
+}
+$("annTone").addEventListener("click", e => { const c=e.target.closest("[data-tone]"); if(!c) return; annTone=c.dataset.tone; document.querySelectorAll("#annTone .chip").forEach(x => x.classList.toggle("on", x===c)); });
+$("annPub").onclick = async () => {
+  const t = $("annText").value.trim(); if(!t){ toast("اكتب نص الإعلان أولاً","bad"); return; }
+  try{ await setConfig("announcement_text", t); await setConfig("announcement_tone", annTone); renderAnn(); toast("تم نشر الإعلان","ok"); }
+  catch(e){ toast("فشل النشر: "+rpcErr(e),"bad"); }
+};
+$("annOff").onclick = async () => {
+  try{ await setConfig("announcement_text", ""); $("annText").value = ""; renderAnn(); toast("تم إيقاف الإعلان"); }
+  catch(e){ toast("فشل الإيقاف: "+rpcErr(e),"bad"); }
+};
+
+/* ===== المستخدمون ===== */
+const RLBL = { bid:"المزايدة", deposit:"التأمين", sell:"البيع" };
+let uTimer;
+async function loadUsers(){
+  const r = await supabase.rpc("mzad_admin_search_users", { p_q:S.uq });
+  if(r.error){ $("uList").innerHTML = `<div class="empty">تعذر تحميل المستخدمين<br><small>${esc(rpcErr(r.error))}</small><br>تأكد من تشغيل ملف mzad-admin.sql</div>`; return; }
+  S.users = Array.isArray(r.data) ? r.data : []; S.loaded.users = true; renderUsers();
+}
+$("uSearch").addEventListener("input", e => { S.uq = e.target.value.trim(); clearTimeout(uTimer); uTimer = setTimeout(loadUsers, 350); });
+function uState(u){
+  const c = u.controls || {}, live = c.user_id && (!c.until || new Date(c.until) > new Date());
+  return { banned: !!u.banned_until && new Date(u.banned_until) > new Date(), blocked: !!(live && c.blocked), rest: live ? (c.restrictions||[]) : [] };
+}
+function renderUsers(){
+  $("uCount").textContent = n0(S.users.length)+" مستخدم";
+  if(!S.users.length){ $("uList").innerHTML = '<div class="empty">لا توجد نتائج</div>'; return; }
+  $("uList").innerHTML = S.users.map((u,i) => { const st = uState(u), ph = u.contact_phone || u.phone || "";
+    return `<button class="q" type="button" data-u="${i}"><div class="q-top"><span class="code">${esc(u.buyer_code||"بدون كود")}</span><span class="age">انضم ${ago(u.created_at)}</span></div>
+      <div class="q-name mail">${esc(u.email||ph||String(u.id).slice(0,8))}</div>
+      <div class="q-sub">${ph?esc(ph)+" · ":""}آخر دخول ${u.last_sign_in_at?ago(u.last_sign_in_at):"—"} · ${nv(u.bids)} مزايدة</div>
+      ${st.banned||st.blocked||st.rest.length ? `<div class="badges">${st.banned?'<span class="badge bad">محظور</span>':""}${st.blocked?'<span class="badge bad">موقوف مؤقتاً</span>':""}${st.rest.map(x=>`<span class="badge warn">مقيّد: ${RLBL[x]||x}</span>`).join("")}</div>`:""}</button>`; }).join("");
+}
+$("uList").addEventListener("click", e => { const b=e.target.closest("[data-u]"); if(b) openUser(S.users[+b.dataset.u]); });
+
+function openUser(u){
+  if(!u) return;
+  const st = uState(u), ph = u.contact_phone || u.phone || "", c = u.controls || {};
+  let rest = new Set(st.rest), blocked = st.blocked, dur = 0;
+  const kv = (k,v,ltr) => v ? `<div class="kv"><span>${k}</span><strong class="${ltr?"ltr":""}">${esc(v)}</strong></div>` : "";
+  const chip = (act,v,label,on,extra="") => `<button class="chip ${extra} ${on?"on":""}" type="button" data-act="${act}" data-v="${v}">${label}</button>`;
+  openSheet(`<div class="grab"></div><h3>${esc(u.email||ph||"مستخدم")}</h3>
+    ${kv("كود المشتري",u.buyer_code,true)}${kv("الهاتف",ph,true)}${kv("الانضمام",fmtT(u.created_at))}${kv("آخر دخول",u.last_sign_in_at?fmtT(u.last_sign_in_at):"")}${kv("المزايدات",nv(u.bids))}
+    ${st.banned?'<div class="kv"><span>الحالة</span><strong style="color:var(--bad)">محظور نهائياً</strong></div>':""}
+    <label class="fl">قيود الحساب</label>
+    <div class="chips wrap" id="uRest">${["bid","deposit","sell"].map(k => chip("rt",k,"منع "+RLBL[k],rest.has(k))).join("")}${chip("blk","1","إيقاف مؤقت (شاشة انتظار)",blocked,"dg")}</div>
+    <label class="fl">المدة</label>
+    <div class="chips wrap" id="uDur">${[[0,"دائم"],[60,"ساعة"],[1440,"24 ساعة"],[10080,"7 أيام"]].map(o => chip("du",o[0],o[1],o[0]===0)).join("")}</div>
+    <label class="fl" for="uWhy">السبب (يظهر للمستخدم عند الإيقاف)</label>
+    <input class="inp" id="uWhy" maxlength="120" placeholder="مثال: بانتظار التحقق من هويتك" value="${esc(c.reason||"")}">
+    <button class="b2" data-act="save" type="button">حفظ القيود</button>
+    <div class="pair">${ph?`<a class="b2 lt" href="tel:${esc(ph)}">اتصال</a><a class="b2 lt" href="${waLink(ph)}" target="_blank" rel="noopener">واتساب</a>`:""}</div>
+    <div class="pair"><button class="b2 lt" data-act="out" type="button">إنهاء جلساته</button><button class="b2 dg" data-act="ban" type="button">${st.banned?"رفع الحظر":"حظر نهائي"}</button></div>
+    <button class="b3" data-act="no" type="button">إغلاق</button>`, {
+    rt: b => { const k=b.dataset.v; rest.has(k)?rest.delete(k):rest.add(k); b.classList.toggle("on", rest.has(k)); },
+    blk: b => { blocked = !blocked; b.classList.toggle("on", blocked); },
+    du: b => { dur = +b.dataset.v; document.querySelectorAll("#uDur .chip").forEach(x => x.classList.toggle("on", x===b)); },
+    save: async b => {
+      b.disabled = true;
+      try{
+        const until = (rest.size||blocked) && dur ? new Date(Date.now()+dur*60000).toISOString() : null;
+        const r = await supabase.rpc("mzad_admin_set_user_controls", { p_user:u.id, p_restrictions:[...rest], p_blocked:blocked, p_reason:$("uWhy").value.trim()||null, p_until:until });
+        if(r.error) throw r.error;
+        closeSheet(false); toast(rest.size||blocked ? "تم تطبيق القيود" : "تم رفع كل القيود","ok"); loadUsers(); loadDash();
+      }catch(e){ b.disabled = false; toast("فشل الحفظ: "+userErr(e),"bad"); }
+    },
+    out: async () => {
+      if(!await confirmSheet({ title:"إنهاء الجلسات", text:"سيُخرَج هذا المستخدم من التطبيق على كل أجهزته ويحتاج تسجيل دخول من جديد.", ok:"إنهاء", danger:true })) return;
+      try{ const r = await supabase.rpc("mzad_admin_signout_user", { p_user:u.id }); if(r.error) throw r.error; toast("تم إنهاء جلساته","ok"); }catch(e){ toast("فشل: "+userErr(e),"bad"); }
+    },
+    ban: async () => {
+      const unban = st.banned;
+      if(!await confirmSheet({ title: unban?"رفع الحظر":"حظر نهائي", text: unban?"سيقدر المستخدم يسجّل دخول من جديد.":"سيُمنع من تسجيل الدخول نهائياً وتُنهى جلساته الحالية. يمكنك رفع الحظر لاحقاً.", ok: unban?"رفع الحظر":"حظر", danger:!unban })) return;
+      try{ const r = await supabase.rpc("mzad_admin_ban_user", { p_user:u.id, p_ban:!unban, p_reason:$("uWhy")?.value.trim()||null }); if(r.error) throw r.error; toast(unban?"تم رفع الحظر":"تم الحظر", unban?"ok":""); loadUsers(); }catch(e){ toast("فشل: "+userErr(e),"bad"); }
+    }
+  });
+}
+const userErr = e => ({ CANNOT_TARGET_SELF:"ما تقدر تطبّق هذا على حسابك", ACCESS_DENIED:"لا تملك الصلاحية" })[e?.message] || rpcErr(e);
+
+/* ===== أوامر المزادات ===== */
+const AUC_ERR = { AUCTION_NOT_LIVE:"المزاد ليس مباشراً", AUCTION_NOT_SCHEDULED:"المزاد ليس بانتظار الافتتاح", AUCTION_HAS_BIDS:"لا يمكن إلغاء مزاد عليه مزايدات", INVALID_MINUTES:"مدة غير صحيحة", AUCTION_NOT_FOUND:"المزاد غير موجود" };
+async function auctionAction(id, action, minutes){
+  try{
+    const r = await supabase.rpc("mzad_admin_auction_action", { p_auction:id, p_action:action, p_minutes:minutes||0 });
+    if(r.error) throw r.error;
+    closeSheet(false); toast("تم تنفيذ الأمر","ok"); await Promise.allSettled([loadAuctions(), loadDash()]);
+  }catch(e){ toast("فشل الأمر: "+(AUC_ERR[e?.message]||rpcErr(e)),"bad"); }
+}
+function openAuction(r){
+  const a = r.auction || {}, live = a.status==="live", sch = a.status==="scheduled";
+  const grid = (action, list) => `<div class="chips wrap">${list.map(m => `<button class="chip" type="button" data-act="x" data-a="${action}" data-m="${m}">+${m<60?m+" دقيقة":(m/60)+" ساعة"}</button>`).join("")}</div>`;
+  openSheet(`<div class="grab"></div><h3>أوامر المزاد ${esc(a.auction_number||"")}</h3><p class="sd">${esc(deviceName(r.device))} — ${live?"مباشر":"بانتظار الافتتاح"}</p>
+    ${live ? `<label class="fl">تمديد وقت المزاد</label>${grid("extend",[5,15,30,60])}` : ""}
+    ${sch ? `<label class="fl">تأجيل الافتتاح</label>${grid("delay",[30,60,120,240])}<button class="b2 gn" data-act="x" data-a="start_now" data-m="0" type="button">فتح المزاد الآن</button><button class="b2 dg" data-act="cancel" type="button">إلغاء المزاد</button>` : ""}
+    <button class="b3" data-act="no" type="button">إغلاق</button>`, {
+    x: b => auctionAction(a.id, b.dataset.a, +b.dataset.m),
+    cancel: async () => { if(await confirmSheet({ title:"إلغاء المزاد", text:"يُلغى المزاد المجدول نهائياً (فقط إذا ما عليه مزايدات).", ok:"إلغاء المزاد", danger:true })) auctionAction(a.id, "cancel", 0); }
+  });
+}
+$("aList").addEventListener("click", e => { const b=e.target.closest("[data-ac]"); if(b){ e.preventDefault(); openAuction(S.auctions[+b.dataset.ac]); } });
+
 /* ===== التبويبات ===== */
 function setTab(t){
   S.tab = t;
-  ["overview","review","auctions","settings"].forEach(x => { $("p-"+x).hidden = x!==t; });
+  ["overview","review","auctions","users","settings"].forEach(x => { $("p-"+x).hidden = x!==t; });
   document.querySelectorAll(".tb").forEach(b => b.classList.toggle("on", b.dataset.tab===t));
   try{ history.replaceState(null,"","#"+t); }catch{}
   updateDirty(); window.scrollTo({ top:0 });
   if(t==="review"){ renderFilters(); if(!S.loaded.review) $("qList").innerHTML='<div class="sk"></div><div class="sk"></div>'; loadQueue(); }
+  if(t==="users"){ if(!S.loaded.users) $("uList").innerHTML='<div class="sk"></div><div class="sk"></div>'; loadUsers(); }
   if(t==="auctions"){ renderFilters(); if(!S.loaded.auctions) $("aList").innerHTML='<div class="sk"></div><div class="sk"></div>'; loadAuctions(); }
 }
 document.querySelector(".tabs").addEventListener("click", e => { const b=e.target.closest("[data-tab]"); if(b) setTab(b.dataset.tab); });
 document.addEventListener("click", e => { const g=e.target.closest("[data-go]"); if(g && !g.closest(".tabs")) setTab(g.dataset.go); });
 
-$("refresh").onclick = async () => { const b=$("refresh"); b.classList.add("spin"); await Promise.allSettled([refreshActive(), loadSettings()]); b.classList.remove("spin"); };
+$("refresh").onclick = async () => { const b=$("refresh"); b.classList.add("spin"); await Promise.allSettled([refreshActive(), loadSettings(), loadConfig()]); b.classList.remove("spin"); };
 $("logout").onclick = async () => { await supabase.auth.signOut(); location.href = LOGIN_PAGE; };
 
 /* ===== البدء ===== */
@@ -586,9 +854,9 @@ $("logout").onclick = async () => { await supabase.auth.signOut(); location.href
   try{
     await adminGate();
     renderFilters();
-    await Promise.allSettled([loadSettings(), loadDash()]);
+    await Promise.allSettled([loadSettings(), loadDash(), loadConfig()]);
     const h = location.hash.replace("#","");
-    if(["review","auctions","settings"].includes(h)) setTab(h);
+    if(["review","auctions","users","settings"].includes(h)) setTab(h);
     setInterval(() => { if(!document.hidden && !S.busy) refreshActive(); }, POLL_MS);
     document.addEventListener("visibilitychange", () => { if(!document.hidden) refreshActive(); });
   }catch(e){
