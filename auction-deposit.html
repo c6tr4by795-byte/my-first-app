@@ -242,6 +242,7 @@ h1{margin:16px 2px 4px;font-size:23px;font-weight:950;letter-spacing:-.03em}
 </div>
 <div class="toast" id="toast"></div>
 
+<script type="module" src="./js/platform-guard.js"></script>
 <script type="module">
 import { supabase } from "./js/supabase.js";
 const $ = id => document.getElementById(id);
@@ -256,7 +257,7 @@ let tt; const toast = t => { const e=$("toast"); e.textContent=t; e.classList.ad
 const showMsg = t => { $("msg").textContent=t; $("msg").className="msg show"; };
 const hideMsg = () => $("msg").className="msg";
 
-const ERR = { AUTH_REQUIRED:"يجب تسجيل الدخول.", AUCTION_NOT_FOUND:"المزاد غير موجود.", SELLER_CANNOT_DEPOSIT:"أنت صاحب هذا المزاد ولا يمكنك المزايدة عليه.", DEPOSIT_NOT_FOUND:"تعذر العثور على التأمين.", PAYMENT_METHOD_REQUIRED:"اختر طريقة التحويل.", PAYMENT_METHOD_NOT_FOUND:"طريقة التحويل غير متاحة.", DEPOSITS_DISABLED:"نظام التأمينات متوقف حالياً.", PROOF_ALREADY_PENDING:"يوجد إثبات قيد المراجعة بالفعل.", PAYMENT_REQUEST_NOT_FOUND:"تعذر إنشاء الطلب.", AMOUNT_MISMATCH:"المبلغ غير صحيح." };
+const ERR = { AUTH_REQUIRED:"يجب تسجيل الدخول.", AUCTION_NOT_FOUND:"المزاد غير موجود.", SELLER_CANNOT_DEPOSIT:"أنت صاحب هذا المزاد ولا يمكنك المزايدة عليه.", DEPOSIT_NOT_FOUND:"تعذر العثور على التأمين.", PAYMENT_METHOD_REQUIRED:"اختر طريقة التحويل.", PAYMENT_METHOD_NOT_FOUND:"طريقة التحويل غير متاحة.", DEPOSITS_DISABLED:"نظام التأمينات متوقف حالياً.", PROOF_ALREADY_PENDING:"يوجد إثبات قيد المراجعة بالفعل.", PAYMENT_REQUEST_NOT_FOUND:"تعذر إنشاء الطلب.", AMOUNT_MISMATCH:"المبلغ غير صحيح.", MAINTENANCE_MODE:"المنصة تحت الصيانة حالياً، ارجع بعد قليل.", USER_DEPOSIT_RESTRICTED:"تم تقييد دفع التأمين على حسابك. تواصل مع الإدارة.", USER_BID_RESTRICTED:"تم تقييد المزايدة على حسابك. تواصل مع الإدارة." };
 const errText = e => { const c = String(e?.message || e || ""); for (const k in ERR) if (c.includes(k)) return ERR[k]; return "تعذر تنفيذ العملية، حاول مرة ثانية أو كلمنا على +964 783 800 3991"; };
 
 /* بيانات المنصة الثابتة: نفس صفحة تأمين البائع */
