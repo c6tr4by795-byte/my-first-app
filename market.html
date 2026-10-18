@@ -1,4667 +1,1616 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f7f8fa">
-
-  <title>MZAD PHONE - السوق</title>
-
-  <style>
-    :root{
-      --bg:#f7f8fa;
-      --surface:#ffffff;
-      --surface-2:#eef3f7;
-      --ink:#17202a;
-      --muted:#667085;
-      --line:#e6e9ed;
-      --primary:#176b87;
-      --primary-dark:#125a73;
-      --primary-soft:#e8f3f6;
-      --purple:#6246d9;
-      --purple-dark:#5147b8;
-      --purple-soft:#e5e0ff;
-      --pale:#e6e3f6;
-      --pale-dark:#d8d3ee;
-      --pale-text:#51477d;
-      --shadow:0 10px 28px rgba(24,32,42,.07);
-    }
-
-    *{
-      box-sizing:border-box;
-      -webkit-tap-highlight-color:transparent;
-    }
-
-    html,
-    body{
-      margin:0;
-      padding:0;
-      width:100%;
-      min-height:100%;
-      background:var(--bg);
-      color:var(--ink);
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "SF Pro Text",
-        "Segoe UI",
-        Tahoma,
-        Arial,
-        sans-serif;
-      -webkit-font-smoothing:antialiased;
-    }
-
-    body{
-      overflow-x:hidden;
-      padding-bottom:calc(88px + env(safe-area-inset-bottom,0px));
-    }
-
-    button,
-    input,
-    select{
-      font:inherit;
-    }
-
-    button{
-      border:0;
-      outline:0;
-    }
-
-    .page{
-      width:100%;
-      max-width:760px;
-      margin:0 auto;
-    }
-
-    /* =========================
-       HEADER
-    ========================== */
-
-    .top-header{
-      position:relative;
-      overflow:hidden;
-      padding:
-        calc(10px + env(safe-area-inset-top))
-        18px
-        11px;
-
-      background:
-        linear-gradient(
-          145deg,
-          #fff 0%,
-          #f5f2ff 45%,
-          #e6e1ff 100%
-        );
-
-      border-radius:0 0 22px 22px;
-      border-bottom:1px solid var(--line);
-      box-shadow:0 10px 26px rgba(23,32,42,.06);
-    }
-
-    .top-header::before{
-      content:"";
-      position:absolute;
-      width:210px;
-      height:210px;
-      top:-120px;
-      left:-80px;
-
-      background:
-        radial-gradient(
-          circle,
-          rgba(23,107,135,.12) 0%,
-          rgba(23,107,135,0) 70%
-        );
-
-      pointer-events:none;
-      animation:headerFloat 7s ease-in-out infinite alternate;
-    }
-
-    .top-header::after{
-      content:"";
-      position:absolute;
-      width:240px;
-      height:240px;
-      right:-100px;
-      bottom:-170px;
-
-      background:
-        radial-gradient(
-          circle,
-          rgba(98,70,217,.13) 0%,
-          rgba(98,70,217,0) 70%
-        );
-
-      pointer-events:none;
-      animation:headerFloat2 8s ease-in-out infinite alternate;
-    }
-
-    @keyframes headerFloat{
-      from{
-        transform:translate3d(0,0,0);
-      }
-      to{
-        transform:translate3d(25px,10px,0);
-      }
-    }
-
-    @keyframes headerFloat2{
-      from{
-        transform:translate3d(0,0,0);
-      }
-      to{
-        transform:translate3d(-20px,-8px,0);
-      }
-    }
-
-    .header-inner{
-      position:relative;
-      z-index:2;
-    }
-
-    .header-row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
-
-    .back-btn{
-      width:43px;
-      height:43px;
-      flex:0 0 43px;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-
-      border-radius:14px;
-
-      background:rgba(255,255,255,.72);
-      border:1px solid rgba(255,255,255,.8);
-
-      box-shadow:0 7px 18px rgba(24,32,42,.07);
-
-      color:var(--ink);
-
-      cursor:pointer;
-
-      -webkit-appearance:none;
-      appearance:none;
-
-      position:relative;
-      z-index:10;
-
-      transition:
-        transform .15s ease,
-        background .15s ease;
-    }
-
-    .back-btn:active{
-      transform:scale(.94);
-      background:#fff;
-    }
-
-    .back-btn svg{
-      width:21px;
-      height:21px;
-      pointer-events:none;
-    }
-
-    .header-title-wrap{
-      flex:1;
-      text-align:right;
-    }
-
-    .header-title{
-      margin:0;
-      font-size:21px;
-      line-height:1.2;
-      font-weight:950;
-      letter-spacing:-.5px;
-    }
-
-    .header-subtitle{
-      margin:3px 0 0;
-      color:var(--muted);
-      font-size:11px;
-      font-weight:700;
-      line-height:1.5;
-    }
-
-    /* =========================
-       SEARCH
-    ========================== */
-
-    .search-wrap{
-      position:relative;
-      margin-top:10px;
-    }
-
-    .search-box{
-      width:100%;
-      height:48px;
-
-      display:flex;
-      align-items:center;
-      gap:10px;
-
-      padding:0 15px;
-
-      background:#fff;
-      border:1px solid rgba(230,233,237,.9);
-      border-radius:17px;
-
-      box-shadow:0 9px 25px rgba(24,32,42,.06);
-
-      position:relative;
-    }
-
-    .search-box > svg{
-      width:20px;
-      height:20px;
-      flex:0 0 20px;
-      color:#7a8490;
-      pointer-events:none;
-    }
-
-    .search-box input{
-      width:100%;
-      height:100%;
-
-      border:0;
-      outline:0;
-      background:transparent;
-
-      color:var(--ink);
-
-      font-size:14px;
-      font-weight:700;
-
-      text-align:right;
-    }
-
-    .search-box input::placeholder{
-      color:#98a0aa;
-    }
-
-    .search-clear{
-      position:absolute;
-
-      left:9px;
-      top:50%;
-
-      transform:translateY(-50%);
-
-      width:32px;
-      height:32px;
-
-      display:none;
-      align-items:center;
-      justify-content:center;
-
-      border-radius:10px;
-      background:#f0f3f5;
-      color:#65717c;
-
-      z-index:3;
-    }
-
-    .search-wrap.has-value .search-clear{
-      display:flex;
-    }
-
-    /* =========================
-       CONTENT
-    ========================== */
-
-    .content{
-      padding:10px 14px 18px;
-    }
-
-    .section-head{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap:12px;
-      margin:0 3px 9px;
-    }
-
-    .section-title-wrap{
-      min-width:0;
-    }
-
-    .section-title{
-      margin:0;
-      font-size:19px;
-      line-height:1.3;
-      font-weight:950;
-      letter-spacing:-.25px;
-    }
-
-    .section-subtitle{
-      margin:4px 0 0;
-      color:var(--muted);
-      font-size:11px;
-      font-weight:700;
-      line-height:1.45;
-    }
-
-    .count-label{
-      flex:0 0 auto;
-      padding:7px 10px;
-      background:var(--purple-soft);
-      color:var(--pale-text);
-      border-radius:10px;
-      font-size:10px;
-      font-weight:900;
-    }
-
-    /* =========================
-       FILTERS
-    ========================== */
-
-    .filters{
-      display:flex;
-      gap:8px;
-      overflow-x:auto;
-      scrollbar-width:none;
-      padding:1px 2px 5px;
-      margin-bottom:9px;
-    }
-
-    .filters::-webkit-scrollbar{
-      display:none;
-    }
-
-    .filter{
-      height:36px;
-      flex:0 0 auto;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-
-      padding:0 13px;
-
-      border-radius:11px;
-
-      background:#fff;
-      color:#59636e;
-
-      border:1px solid #e4e7eb;
-
-      box-shadow:0 4px 12px rgba(24,32,42,.035);
-
-      font-size:12px;
-      font-weight:850;
-
-      cursor:pointer;
-      transition:.2s ease;
-    }
-
-    .filter.active{
-      background:
-        linear-gradient(
-          145deg,
-          #6246d9 0%,
-          #5147b8 100%
-        );
-
-      color:#fff;
-      border-color:#6246d9;
-
-      box-shadow:
-        0 7px 17px rgba(98,70,217,.25);
-    }
-
-    /* =========================
-       SORT
-    ========================== */
-
-    .toolbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin:0 2px 9px;
-    }
-
-    .results-label{
-      color:#77808a;
-      font-size:11px;
-      font-weight:750;
-    }
-
-    .sort-btn{
-      height:35px;
-
-      display:flex;
-      align-items:center;
-
-      gap:7px;
-
-      padding:0 11px;
-
-      border-radius:11px;
-
-      background:#fff;
-      color:#5e6873;
-
-      border:1px solid #e4e7eb;
-
-      font-size:11px;
-      font-weight:850;
-
-      box-shadow:0 4px 12px rgba(24,32,42,.035);
-
-      cursor:pointer;
-    }
-
-    .sort-btn svg{
-      width:15px;
-      height:15px;
-    }
-
-    /* =========================
-       GRID
-    ========================== */
-
-    .devices-grid{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:9px;
-    }
-
-    /* =========================
-       CARD
-    ========================== */
-
-    .device-card{
-      position:relative;
-
-      content-visibility:auto;
-      contain-intrinsic-size:350px;
-
-      overflow:hidden;
-      min-width:0;
-
-      background:#fff;
-
-      border:1px solid #E3E8EC;
-      border-radius:19px;
-
-      box-shadow:0 8px 22px rgba(23,32,42,.055);
-
-      cursor:pointer;
-
-      animation:cardIn .38s ease both;
-
-      transition:
-        transform .2s ease,
-        box-shadow .2s ease;
-    }
-
-    .device-card::after{
-      content:"";
-
-      position:absolute;
-
-      left:0;
-      right:0;
-
-      top:160px;
-
-      height:3px;
-
-      background:#32B8C4;
-
-      opacity:.9;
-
-      z-index:2;
-    }
-
-    .device-card:active{
-      transform:scale(.985);
-    }
-
-    @keyframes cardIn{
-      from{
-        opacity:0;
-        transform:translateY(8px);
-      }
-
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
-    }
-
-    .device-photo-wrap{
-      position:relative;
-
-      width:100%;
-      height:160px;
-
-      overflow:hidden;
-
-      background:#f0f1f3;
-    }
-
-    /*
-      الصورة تملأ مساحة الصورة بالكامل.
-      ماكو contain حتى ما يطلع إطار/فراغ حول الصورة.
-    */
-
-    .device-photo{
-      width:100%;
-      height:100%;
-
-      display:block;
-
-      object-fit:cover;
-      object-position:center;
-
-      background:#f0f1f3;
-
-      transition:
-        transform .35s ease,
-        filter .25s ease;
-
-      filter:saturate(.82);
-    }
-
-    .device-photo-wrap::after{
-      content:"";
-
-      position:absolute;
-      inset:0;
-
-      pointer-events:none;
-
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,255,255,.04),
-          rgba(255,255,255,0)
-        );
-
-      z-index:1;
-    }
-
-    .device-card:active .device-photo{
-      transform:scale(1.02);
-    }
-
-    .photo-placeholder{
-      width:100%;
-      height:100%;
-
-      display:flex;
-
-      align-items:center;
-      justify-content:center;
-
-      background:
-        linear-gradient(
-          145deg,
-          #F1F3F4,
-          #E7EBEE
-        );
-
-      color:#8A939D;
-    }
-
-    .photo-placeholder svg{
-      width:35px;
-      height:35px;
-      opacity:.55;
-    }
-
-    .favorite{
-      position:absolute;
-
-      top:9px;
-      left:9px;
-
-      width:34px;
-      height:34px;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-
-      border-radius:11px;
-
-      background:rgba(255,255,255,.92);
-      color:#6E7781;
-
-      border:1px solid rgba(255,255,255,.95);
-
-      box-shadow:
-        0 6px 15px rgba(0,0,0,.09);
-
-      cursor:pointer;
-
-      z-index:4;
-    }
-
-    .favorite svg{
-      width:18px;
-      height:18px;
-
-      fill:none;
-      stroke:currentColor;
-      stroke-width:2;
-    }
-
-    .favorite.active{
-      color:#fff;
-
-      background:
-        linear-gradient(
-          145deg,
-          #176B87,
-          #32B8C4
-        );
-
-      box-shadow:
-        0 7px 17px rgba(23,107,135,.25);
-
-      border:
-        1px solid rgba(23,107,135,.35);
-    }
-
-    .favorite.active svg{
-      fill:#fff;
-      stroke:#fff;
-    }
-
-    .sale-type{
-      position:absolute;
-
-      top:9px;
-      right:9px;
-
-      max-width:95px;
-
-      padding:6px 8px;
-
-      border-radius:9px;
-
-      background:rgba(255,255,255,.94);
-
-      color:#176B87;
-
-      border:
-        1px solid rgba(23,107,135,.10);
-
-      box-shadow:
-        0 5px 12px rgba(23,107,135,.08);
-
-      font-size:8px;
-      line-height:1;
-      font-weight:950;
-
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-
-      z-index:3;
-    }
-
-    /* =========================
-       INFO
-    ========================== */
-
-    .device-info{
-      padding:10px 11px 10px;
-
-      background:
-        linear-gradient(
-          180deg,
-          #FFFFFF 0%,
-          #FBFCFD 100%
-        );
-    }
-
-    .device-name{
-      min-width:0;
-
-      margin:0;
-
-      color:#17202A;
-
-      font-size:14px;
-      line-height:1.35;
-      font-weight:950;
-
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .device-location{
-      display:flex;
-      align-items:center;
-      gap:4px;
-
-      margin-top:2px;
-
-      color:#7b8490;
-
-      font-size:9px;
-      font-weight:750;
-
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .device-location svg{
-      width:11px;
-      height:11px;
-      flex:0 0 11px;
-    }
-
-    .published-time{
-      display:flex;
-      align-items:center;
-
-      margin-top:1px;
-
-      color:#9aa1aa;
-
-      font-size:8px;
-      line-height:1.3;
-      font-weight:700;
-
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .details-grid{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-
-      gap:6px;
-
-      margin-top:8px;
-    }
-
-    .details-grid.no-battery{
-      grid-template-columns:repeat(2,minmax(0,1fr));
-    }
-
-    .detail-item{
-      min-width:0;
-
-      padding:8px 6px 7px;
-
-      background:#F8FAFB;
-
-      border-radius:11px;
-      border:1px solid #E4EAED;
-
-      box-shadow:
-        0 3px 9px rgba(23,32,42,.025);
-
-      position:relative;
-      overflow:hidden;
-    }
-
-    .detail-item::before{
-      content:"";
-
-      position:absolute;
-
-      top:0;
-      left:0;
-      right:0;
-
-      height:3px;
-
-      background:#32B8C4;
-
-      opacity:.9;
-    }
-
-    .detail-item span{
-      display:block;
-
-      color:#7C858D;
-
-      font-size:8px;
-      line-height:1.2;
-      font-weight:800;
-
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .detail-item strong{
-      display:block;
-
-      min-width:0;
-
-      margin-top:3px;
-
-      color:#17202A;
-
-      font-size:11px;
-      line-height:1.25;
-      font-weight:950;
-
-      white-space:nowrap;
-      overflow:visible;
-      text-overflow:clip;
-    }
-
-    .price-row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-
-      gap:8px;
-
-      margin-top:7px;
-      padding-top:6px;
-
-      border-top:1px solid #E6EBEE;
-    }
-
-    .price-label{
-      color:#858d96;
-      font-size:8px;
-      font-weight:800;
-    }
-
-    .price{
-      min-width:0;
-
-      color:#176B87;
-
-      font-size:14px;
-      line-height:1.2;
-      font-weight:950;
-
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    /* =========================
-       STATES
-    ========================== */
-
-    .state{
-      width:100%;
-
-      padding:40px 20px;
-
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-
-      text-align:center;
-
-      background:#fff;
-
-      border:1px solid var(--line);
-      border-radius:20px;
-
-      box-shadow:
-        0 8px 22px rgba(24,32,42,.045);
-    }
-
-    .state-icon{
-      width:56px;
-      height:56px;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-
-      border-radius:17px;
-
-      background:var(--purple-soft);
-      color:var(--pale-text);
-
-      margin-bottom:13px;
-    }
-
-    .state-icon svg{
-      width:27px;
-      height:27px;
-    }
-
-    .state-title{
-      margin:0;
-      font-size:15px;
-      font-weight:950;
-    }
-
-    .state-text{
-      margin:6px 0 0;
-
-      color:var(--muted);
-
-      font-size:11px;
-      line-height:1.6;
-      font-weight:700;
-    }
-
-    .retry-btn{
-      margin-top:14px;
-
-      height:40px;
-      padding:0 17px;
-
-      border-radius:12px;
-
-      background:
-        linear-gradient(
-          145deg,
-          #176b87,
-          #125a73
-        );
-
-      color:#fff;
-
-      font-size:11px;
-      font-weight:900;
-
-      cursor:pointer;
-    }
-
-    .loading{
-      width:100%;
-
-      display:grid;
-
-      grid-template-columns:
-        repeat(2,minmax(0,1fr));
-
-      gap:12px;
-    }
-
-    .skeleton{
-      height:300px;
-
-      border-radius:19px;
-
-      background:
-        linear-gradient(
-          90deg,
-          #eef0f2 25%,
-          #f7f8f9 37%,
-          #eef0f2 63%
-        );
-
-      background-size:400% 100%;
-
-      animation:
-        loading 1.25s ease infinite;
-    }
-
-    @keyframes loading{
-      0%{
-        background-position:100% 0;
-      }
-
-      100%{
-        background-position:-100% 0;
-      }
-    }
-
-    /* =========================
-       BOTTOM NAV
-    ========================== */
-
-    .bottom-wrap{
-      position:fixed !important;
-
-      left:0 !important;
-      right:0 !important;
-      bottom:0 !important;
-
-      width:100% !important;
-
-      padding:
-        7px 10px
-        calc(
-          7px +
-          env(safe-area-inset-bottom,0px)
-        ) !important;
-
-      z-index:9999 !important;
-
-      pointer-events:none !important;
-
-      transition:
-        transform .18s ease;
-    }
-
-    .bottom-nav{
-      position:relative !important;
-
-      left:auto !important;
-      right:auto !important;
-      top:auto !important;
-      bottom:auto !important;
-
-      width:min(100%,520px) !important;
-      max-width:520px !important;
-
-      height:auto !important;
-      min-height:64px !important;
-
-      margin:0 auto !important;
-      padding:5px !important;
-
-      display:block !important;
-      transform:none !important;
-
-      border-radius:20px !important;
-
-      background:rgba(255,255,255,.97) !important;
-
-      border:1px solid #E7ECEF !important;
-
-      box-shadow:
-        0 10px 28px rgba(23,32,42,.10) !important;
-
-      backdrop-filter:blur(18px);
-      -webkit-backdrop-filter:blur(18px);
-
-      pointer-events:auto !important;
-    }
-
-    .bottom-inner{
-      width:100%;
-
-      display:grid;
-
-      grid-template-columns:
-        repeat(5,minmax(0,1fr));
-
-      gap:3px;
-
-      align-items:center;
-    }
-
-    .nav-item{
-      min-width:0;
-      min-height:52px;
-
-      padding:4px 2px;
-
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-
-      gap:3px;
-
-      border:0;
-      border-radius:15px;
-
-      background:transparent;
-
-      color:#7E8992;
-
-      text-decoration:none;
-
-      transition:
-        transform .16s ease,
-        background .16s ease,
-        color .16s ease;
-    }
-
-    .nav-item:active{
-      transform:scale(.96);
-    }
-
-    .nav-item.active{
-      color:#176B87;
-      background:#EAF6F8;
-    }
-
-    .nav-icon{
-      width:20px !important;
-      height:20px !important;
-
-      flex:0 0 20px;
-
-      color:currentColor;
-    }
-
-    .nav-item > span{
-      margin:0;
-
-      font-size:8.5px;
-      line-height:1;
-      font-weight:900;
-
-      white-space:nowrap;
-    }
-
-    .add-button{
-      width:38px !important;
-      height:38px !important;
-
-      flex:0 0 38px;
-
-      border-radius:13px !important;
-
-      display:grid !important;
-      place-items:center;
-
-      background:
-        linear-gradient(
-          145deg,
-          #176B87,
-          #32B8C4
-        ) !important;
-
-      color:#fff !important;
-
-      box-shadow:
-        0 6px 14px rgba(23,107,135,.18);
-    }
-
-    .add-button svg{
-      width:20px !important;
-      height:20px !important;
-    }
-
-    body.keyboard-open .bottom-wrap{
-      transform:translateY(120%);
-      pointer-events:none !important;
-    }
-
-    .toast{
-      position:fixed;
-
-      left:50%;
-      bottom:92px;
-
-      transform:
-        translateX(-50%)
-        translateY(14px);
-
-      opacity:0;
-
-      pointer-events:none;
-
-      z-index:200;
-
-      max-width:calc(100% - 40px);
-
-      padding:10px 14px;
-
-      border-radius:13px;
-
-      background:#1e2c30;
-      color:#fff;
-
-      font-size:11px;
-      font-weight:800;
-
-      text-align:center;
-
-      transition:.22s ease;
-    }
-
-    .toast.show{
-      opacity:1;
-
-      transform:
-        translateX(-50%)
-        translateY(0);
-    }
-
-    /* =========================
-       SMALL PHONES
-    ========================== */
-
-    @media(max-width:360px){
-
-      .content{
-        padding-left:10px;
-        padding-right:10px;
-      }
-
-      .devices-grid{
-        gap:9px;
-      }
-
-      .device-photo-wrap{
-        height:158px;
-      }
-
-      .device-card::after{
-        top:158px;
-      }
-
-      .device-info{
-        padding:8px 8px 9px;
-      }
-
-      .device-name{
-        font-size:13px;
-      }
-
-      .details-grid{
-        gap:5px;
-      }
-
-      .detail-item{
-        padding:6px 4px;
-      }
-
-      .detail-item span{
-        font-size:7px;
-      }
-
-      .detail-item strong{
-        font-size:10px;
-      }
-
-      .price{
-        font-size:13px;
-      }
-
-      .bottom-wrap{
-        padding-left:8px !important;
-        padding-right:8px !important;
-      }
-
-      .bottom-nav{
-        border-radius:18px !important;
-      }
-
-      .nav-item{
-        min-height:50px;
-        border-radius:14px;
-      }
-
-      .nav-icon{
-        width:19px !important;
-        height:19px !important;
-        flex-basis:19px;
-      }
-
-      .nav-item > span{
-        font-size:8px;
-      }
-    }
-
-    @media(min-width:600px){
-
-      .devices-grid{
-        grid-template-columns:
-          repeat(3,minmax(0,1fr));
-      }
-
-      .loading{
-        grid-template-columns:
-          repeat(3,minmax(0,1fr));
-      }
-    }
-
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#2e1d86">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MZAD PHONE">
+<title>MZAD PHONE — السوق</title>
+
+<style>
+:root{
+  --bg:#f7f6fc;
+  --ink:#141022;
+  --muted:#7a7390;
+  --line:#ebe8f5;
+  --edge:#ddd8f8;
+  --p:#6246d9;
+  --p-2:#8b6cf0;
+  --p-dark:#4a34b8;
+  --p-soft:#f1edff;
+  --ok:#1e8a5a;
+  --hot:#ff6b35;
+  --danger:#e5365f;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+
+html,body{margin:0}
+body{
+  min-height:100dvh;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  padding-bottom:calc(96px + var(--safe-bottom));
+}
+
+button,input{font:inherit;color:inherit}
+button{border:0;background:none;cursor:pointer}
+
+.wrap{width:min(100%,680px);margin:0 auto}
+
+/* ================= HERO ================= */
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  color:#fff;
+  padding:calc(14px + var(--safe-top)) 16px 20px;
+  border-radius:0 0 30px 30px;
+  background:linear-gradient(160deg,#150d3a 0%,#2e1d86 42%,#6246d9 100%);
+  box-shadow:0 18px 40px -14px rgba(41,25,120,.55);
+}
+.hero::before,.hero::after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  filter:blur(42px);
+  opacity:.75;
+  pointer-events:none;
+}
+.hero::before{
+  width:250px;height:250px;top:-120px;inset-inline-start:-80px;
+  background:radial-gradient(circle,#8b6cf0 0%,transparent 70%);
+  animation:blob 9s ease-in-out infinite alternate;
+}
+.hero::after{
+  width:270px;height:270px;bottom:-160px;inset-inline-end:-100px;
+  background:radial-gradient(circle,#32b8c4 0%,transparent 70%);
+  animation:blob 11s ease-in-out infinite alternate-reverse;
+}
+@keyframes blob{to{transform:translate3d(28px,-16px,0) scale(1.08)}}
+
+.hero-top{
+  position:relative;z-index:1;
+  display:flex;align-items:center;gap:12px;
+}
+.back{
+  width:42px;height:42px;flex:0 0 42px;
+  display:grid;place-items:center;
+  border-radius:14px;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.22);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:transform .15s ease;
+}
+.back:active{transform:scale(.92)}
+.back svg{width:20px;height:20px}
+.hero-title{min-width:0;flex:1}
+.hero-title h1{
+  margin:0;
+  font-size:27px;
+  font-weight:950;
+  letter-spacing:-.03em;
+  line-height:1.1;
+}
+.hero-title p{
+  margin:4px 0 0;
+  font-size:11.5px;
+  font-weight:700;
+  opacity:.8;
+}
+
+.stats{
+  position:relative;z-index:1;
+  display:grid;grid-template-columns:1fr 1fr;gap:9px;
+  margin-top:15px;
+}
+.stat{
+  padding:10px 12px;
+  border-radius:16px;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  display:flex;flex-direction:column;gap:3px;
+}
+.stat b{
+  font-size:21px;
+  font-weight:950;
+  letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;
+}
+.stat span{
+  display:flex;align-items:center;gap:6px;
+  font-size:10px;font-weight:800;opacity:.85;
+}
+.live{
+  width:7px;height:7px;border-radius:50%;
+  background:#7cffb2;
+  animation:ping 1.8s infinite;
+}
+@keyframes ping{
+  0%{box-shadow:0 0 0 0 rgba(124,255,178,.7)}
+  70%,100%{box-shadow:0 0 0 9px rgba(124,255,178,0)}
+}
+
+.searchbox{
+  position:relative;z-index:1;
+  margin-top:14px;
+}
+.searchbox input{
+  width:100%;height:50px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.3);
+  background:rgba(255,255,255,.97);
+  padding:0 46px 0 46px;
+  color:var(--ink);
+  font-size:14px;font-weight:750;
+  outline:none;
+  box-shadow:0 14px 30px -12px rgba(10,5,40,.5);
+  transition:box-shadow .25s ease;
+}
+.searchbox input::placeholder{color:#9aa0ad;font-weight:650}
+.searchbox input:focus{box-shadow:0 0 0 4px rgba(255,255,255,.22),0 14px 30px -12px rgba(10,5,40,.5)}
+.searchbox .ico-s{
+  position:absolute;top:50%;inset-inline-end:15px;
+  transform:translateY(-50%);
+  width:20px;height:20px;
+  color:var(--p);
+  pointer-events:none;
+}
+.searchbox .clear{
+  position:absolute;top:50%;inset-inline-start:8px;
+  transform:translateY(-50%);
+  width:34px;height:34px;
+  display:none;place-items:center;
+  border-radius:12px;
+  background:var(--p-soft);
+  color:var(--p-dark);
+}
+.searchbox.has-value .clear{display:grid}
+.searchbox .clear svg{width:15px;height:15px}
+
+/* ================= BRANDS ================= */
+
+.brands{
+  display:flex;gap:8px;
+  overflow-x:auto;
+  padding:16px 16px 4px;
+  scrollbar-width:none;
+  scroll-snap-type:x proximity;
+}
+.brands::-webkit-scrollbar{display:none}
+.chip{
+  flex:0 0 auto;
+  height:36px;
+  padding:0 15px;
+  border-radius:12px;
+  background:#fff;
+  border:1px solid var(--edge);
+  color:#4b4560;
+  font-size:12px;font-weight:850;
+  box-shadow:0 4px 12px rgba(24,20,55,.04);
+  transition:background .2s,color .2s,box-shadow .2s,transform .15s;
+  scroll-snap-align:start;
+}
+.chip:active{transform:scale(.95)}
+.chip.on{
+  background:linear-gradient(145deg,#6246d9,#8b6cf0);
+  border-color:transparent;
+  color:#fff;
+  box-shadow:0 10px 20px -8px rgba(98,70,217,.55);
+}
+
+/* ================= TOOLBAR ================= */
+
+.bar{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:12px 16px 4px;
+}
+.count{font-size:12px;font-weight:800;color:var(--muted)}
+.count b{color:var(--ink);font-weight:950}
+
+.seg{
+  display:flex;gap:2px;
+  padding:3px;
+  border-radius:14px;
+  background:#ebe8f7;
+}
+.seg button{
+  height:30px;padding:0 11px;
+  border-radius:11px;
+  font-size:11px;font-weight:850;
+  color:#6b6585;
+  transition:background .2s,color .2s,box-shadow .2s;
+}
+.seg button.on{
+  background:#fff;
+  color:var(--p-dark);
+  box-shadow:0 4px 10px rgba(40,30,90,.12);
+}
+
+/* ================= GRID ================= */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  padding:12px 16px 0;
+}
+@media(min-width:640px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+}
+
+/* ================= CARD ================= */
+
+.card{
+  position:relative;
+  aspect-ratio:7/10;
+  border-radius:22px;
+  overflow:hidden;
+  isolation:isolate;
+  background:#1b1f2e;
+  color:#fff;
+  box-shadow:
+    0 14px 30px -14px rgba(30,20,80,.55),
+    inset 0 0 0 1px rgba(255,255,255,.07);
+  cursor:pointer;
+  animation:cardIn .6s cubic-bezier(.2,.8,.3,1) backwards;
+  animation-delay:calc(var(--i,0) * 55ms);
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+.grid.settled .card{animation:none}
+@media(hover:hover){
+  .card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 22px 40px -16px rgba(30,20,80,.6);
+  }
+  .card:hover .media img{transform:scale(1.06)}
+}
+.card:active{transform:scale(.98)}
+.card.removing{animation:cardOut .28s ease forwards}
+
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(18px) scale(.98)}
+  to{opacity:1;transform:none}
+}
+@keyframes cardOut{
+  to{opacity:0;transform:scale(.9)}
+}
+
+.media{
+  position:absolute;inset:0;
+  background:linear-gradient(160deg,#7b61e8 0%,#3b2a92 60%,#1d1460 100%);
+  overflow:hidden;
+}
+.ph{
+  position:absolute;inset:0;
+  display:grid;place-items:center;
+  color:rgba(255,255,255,.55);
+}
+.ph svg{width:38px;height:38px}
+.media img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;object-position:center;
+  opacity:0;
+  transition:opacity .5s ease,transform .8s cubic-bezier(.2,.8,.3,1);
+}
+.media img.ready{opacity:1}
+
+.shade{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(to top,rgba(14,9,40,.97) 0%,rgba(14,9,40,.78) 36%,rgba(14,9,40,.05) 68%),
+    linear-gradient(to bottom,rgba(14,9,40,.45),transparent 22%);
+  pointer-events:none;
+}
+.shine{
+  position:absolute;inset:0;
+  background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.14) 50%,transparent 60%);
+  transform:translateX(120%);
+  animation:sweep 7s ease-in-out infinite;
+  animation-delay:calc(var(--i,0) * .9s + 1s);
+  pointer-events:none;
+  z-index:1;
+}
+@keyframes sweep{
+  0%,50%{transform:translateX(120%)}
+  100%{transform:translateX(-120%)}
+}
+
+.fav,.del{
+  position:absolute;top:10px;z-index:4;
+  width:34px;height:34px;
+  display:grid;place-items:center;
+  border-radius:12px;
+  color:#fff;
+  background:rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.25);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:transform .15s ease,background .2s ease,color .2s ease;
+}
+.fav{inset-inline-start:10px}
+.del{
+  inset-inline-end:10px;
+  color:#ffd6dd;
+  background:rgba(229,54,95,.3);
+  border-color:rgba(255,160,180,.4);
+}
+.fav:active,.del:active{transform:scale(.86)}
+.fav svg,.del svg{width:17px;height:17px}
+.fav.on{background:#fff;color:var(--danger)}
+.fav.on svg{fill:var(--danger)}
+
+.info{
+  position:absolute;inset-inline:0;bottom:0;z-index:3;
+  padding:12px 12px 13px;
+  display:flex;flex-direction:column;gap:6px;
+}
+.tags{display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-height:20px}
+.kind{
+  padding:4px 9px;
+  border-radius:999px;
+  font-size:9px;font-weight:900;
+  white-space:nowrap;
+}
+.kind.auc{
+  background:linear-gradient(135deg,#8b6cf0,#6246d9);
+  box-shadow:0 6px 14px -4px rgba(98,70,217,.6);
+}
+.kind.dir{background:rgba(255,255,255,.95);color:var(--ok)}
+.timer{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 9px;
+  border-radius:999px;
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  font-size:10px;font-weight:900;
+  font-variant-numeric:tabular-nums;
+  direction:ltr;
+  white-space:nowrap;
+}
+.timer::before{
+  content:"";
+  width:5px;height:5px;border-radius:50%;
+  background:#7cffb2;
+  animation:pulse 1.6s infinite;
+}
+.timer.urgent{background:rgba(255,107,53,.95)}
+.timer.urgent::before{background:#fff}
+.card.is-ended .timer{background:#4b4560}
+.card.is-ended .timer::before{display:none}
+@keyframes pulse{50%{opacity:.3}}
+
+.name{
+  margin:0;
+  font-size:13px;font-weight:950;
+  line-height:1.3;letter-spacing:-.01em;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;
+  text-shadow:0 2px 10px rgba(0,0,0,.3);
+}
+
+.specs{display:flex;flex-wrap:wrap;gap:4px}
+.specs span{
+  padding:3px 7px;
+  border-radius:7px;
+  background:rgba(255,255,255,.14);
+  font-size:9px;font-weight:800;
+  white-space:nowrap;
+}
+
+.time{
+  display:flex;align-items:center;gap:4px;
+  min-width:0;
+  font-size:9px;font-weight:800;
+  color:rgba(255,255,255,.72);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.time svg{width:11px;height:11px;flex:0 0 11px}
+
+.price{
+  margin-top:2px;
+  padding-top:8px;
+  border-top:1px solid rgba(255,255,255,.16);
+}
+.price small{
+  display:block;
+  font-size:9px;font-weight:800;
+  color:rgba(255,255,255,.7);
+}
+.price b{
+  display:block;
+  margin-top:1px;
+  font-size:15px;font-weight:950;
+  letter-spacing:-.01em;
+  white-space:nowrap;
+}
+
+/* ================= STATES ================= */
+
+.sk{
+  aspect-ratio:7/10;
+  border-radius:22px;
+  background:linear-gradient(90deg,#efecfa 25%,#faf9ff 50%,#efecfa 75%);
+  background-size:200% 100%;
+  animation:shim 1.3s linear infinite;
+}
+@keyframes shim{to{background-position:-200% 0}}
+
+.empty,.error{
+  grid-column:1/-1;
+  padding:34px 20px;
+  border-radius:24px;
+  background:#fff;
+  border:1px solid var(--line);
+  text-align:center;
+  box-shadow:0 14px 30px -18px rgba(30,20,80,.25);
+}
+.empty .ico{
+  width:56px;height:56px;margin:0 auto 12px;
+  border-radius:18px;
+  background:var(--p-soft);color:var(--p-dark);
+  display:grid;place-items:center;
+}
+.empty .ico svg{width:26px;height:26px}
+.empty h3,.error h3{margin:0;font-size:15px;font-weight:950}
+.empty p,.error p{
+  margin:6px 0 0;
+  font-size:11.5px;line-height:1.6;
+  font-weight:700;color:var(--muted);
+}
+.empty button,.error button{
+  margin-top:14px;height:40px;padding:0 18px;
+  border-radius:13px;
+  background:linear-gradient(145deg,#6246d9,#8b6cf0);
+  color:#fff;font-size:12px;font-weight:900;
+  box-shadow:0 10px 20px -10px rgba(98,70,217,.6);
+}
+
+/* ================= DELETE SHEET ================= */
+
+.sheet-wrap{
+  position:fixed;inset:0;z-index:300;
+  display:flex;align-items:flex-end;justify-content:center;
+  padding:12px;
+  pointer-events:none;
+}
+.sheet-wrap.open{pointer-events:auto}
+.sheet-backdrop{
+  position:absolute;inset:0;
+  background:rgba(14,9,40,.5);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  opacity:0;
+  transition:opacity .25s ease;
+}
+.sheet-wrap.open .sheet-backdrop{opacity:1}
+.sheet{
+  position:relative;
+  width:min(100%,420px);
+  margin-bottom:calc(10px + var(--safe-bottom));
+  padding:24px 20px 18px;
+  border-radius:26px;
+  background:#fff;
+  text-align:center;
+  box-shadow:0 30px 60px -20px rgba(14,9,40,.5);
+  transform:translateY(34px);
+  opacity:0;
+  transition:transform .3s cubic-bezier(.2,.8,.3,1),opacity .25s ease;
+}
+.sheet-wrap.open .sheet{transform:none;opacity:1}
+.sheet-icon{
+  width:58px;height:58px;margin:0 auto 12px;
+  border-radius:20px;
+  background:#ffe8ee;color:var(--danger);
+  display:grid;place-items:center;
+}
+.sheet-icon svg{width:26px;height:26px}
+.sheet h3{margin:0;font-size:17px;font-weight:950}
+.sheet p{
+  margin:7px 0 0;
+  font-size:12px;line-height:1.7;
+  font-weight:700;color:var(--muted);
+}
+.sheet-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px}
+.sheet-actions button{
+  height:46px;border-radius:15px;
+  font-size:13px;font-weight:900;
+}
+.sheet-actions .cancel{background:#f3f1fa;color:var(--ink)}
+.sheet-actions .confirm{
+  background:linear-gradient(145deg,#e5365f,#ff6b6b);
+  color:#fff;
+  box-shadow:0 10px 20px -10px rgba(229,54,95,.7);
+}
+.sheet-actions button:disabled{opacity:.6}
+
+/* ================= DOCK ================= */
+
+.dock{
+  position:fixed;left:0;right:0;bottom:0;
+  z-index:100;
+  padding:8px 12px calc(8px + var(--safe-bottom));
+  pointer-events:none;
+  transition:transform .2s ease;
+}
+body.kb .dock{transform:translateY(140%)}
+.dock-in{
+  pointer-events:auto;
+  width:min(100%,500px);
+  margin:0 auto;
+  padding:5px;
+  border-radius:22px;
+  background:rgba(255,255,255,.93);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border:1px solid var(--line);
+  box-shadow:0 14px 34px -12px rgba(30,20,80,.25);
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;
+}
+.dock a{
+  height:52px;
+  border-radius:16px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  color:#7e8992;
+  font-size:9px;font-weight:900;
+  transition:background .2s ease,color .2s ease,transform .15s ease;
+}
+.dock a:active{transform:scale(.94)}
+.dock a.on{color:var(--p-dark);background:var(--p-soft)}
+.dock svg{width:19px;height:19px}
+.dock .plus{
+  width:38px;height:38px;border-radius:14px;
+  display:grid;place-items:center;
+  background:linear-gradient(145deg,#6246d9,#8b6cf0);
+  color:#fff;
+  box-shadow:0 8px 16px -6px rgba(98,70,217,.6);
+}
+.dock .plus svg{width:20px;height:20px}
+
+/* ================= TOAST ================= */
+
+.toast{
+  position:fixed;left:50%;
+  bottom:calc(92px + var(--safe-bottom));
+  transform:translateX(-50%) translateY(14px);
+  max-width:calc(100% - 40px);
+  padding:10px 16px;
+  border-radius:14px;
+  background:#1d1836;color:#fff;
+  font-size:11.5px;font-weight:800;
+  text-align:center;
+  box-shadow:0 14px 34px -10px rgba(10,5,40,.5);
+  opacity:0;pointer-events:none;
+  transition:opacity .25s ease,transform .25s ease;
+  z-index:200;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:360px){
+  .hero-title h1{font-size:24px}
+  .name{font-size:12px}
+  .price b{font-size:13px}
+  .dock a{font-size:8px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
 </head>
-
 
 <body>
 
-  <div class="page">
-
-    <header class="top-header">
-
-      <div class="header-inner">
-
-        <div class="header-row">
-
-          <button
-            class="back-btn"
-            id="backBtn"
-            type="button"
-            aria-label="رجوع"
-          >
-
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M15 18l-6-6 6-6"/>
-            </svg>
-
-          </button>
-
-
-          <div class="header-title-wrap">
-
-            <h1 class="header-title">
-              السوق
-            </h1>
-
-            <p class="header-subtitle">
-              أهلاً وسهلاً بيك في سوق مزاد فون
-            </p>
-
-          </div>
-
-        </div>
-
-
-        <div
-          class="search-wrap"
-          id="searchWrap"
-        >
-
-          <label class="search-box">
-
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="11" cy="11" r="7"/>
-              <path d="M20 20l-4-4"/>
-            </svg>
-
-
-            <input
-              id="searchInput"
-              type="search"
-              autocomplete="off"
-              inputmode="search"
-              placeholder='ابحث عن جهاز، مثل "iPhone 15 Pro"'
-            >
-
-
-            <button
-              id="searchClear"
-              class="search-clear"
-              type="button"
-              aria-label="مسح البحث"
-            >
-
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.9"
-                stroke-linecap="round"
-              >
-                <path d="M7 7l10 10M17 7 7 17"/>
-              </svg>
-
-            </button>
-
-          </label>
-
-        </div>
-
-      </div>
-
-    </header>
-
-
-    <main class="content">
-
-      <div class="section-head">
-
-        <div class="section-title-wrap">
-
-          <h2
-            class="section-title"
-            id="sectionTitle"
-          >
-            كل الأجهزة
-          </h2>
-
-          <p
-            class="section-subtitle"
-            id="sectionSubtitle"
-          >
-            جميع الأجهزة المعروضة حالياً
-          </p>
-
-        </div>
-
-
-        <div
-          class="count-label"
-          id="countLabel"
-        >
-          0 جهاز
-        </div>
-
-      </div>
-
-
-      <div
-        class="filters"
-        id="brandFilters"
-      >
-
-        <button
-          class="filter"
-          data-brand="all"
-          type="button"
-        >
-          الكل
-        </button>
-
-        <button
-          class="filter"
-          data-brand="Apple"
-          type="button"
-        >
-          iPhone
-        </button>
-
-        <button
-          class="filter"
-          data-brand="Samsung"
-          type="button"
-        >
-          Samsung
-        </button>
-
-        <button
-          class="filter"
-          data-brand="Xiaomi"
-          type="button"
-        >
-          Xiaomi
-        </button>
-
-        <button
-          class="filter"
-          data-brand="Google"
-          type="button"
-        >
-          Google
-        </button>
-
-        <button
-          class="filter"
-          data-brand="Huawei"
-          type="button"
-        >
-          Huawei
-        </button>
-
-        <button
-          class="filter"
-          data-brand="OPPO"
-          type="button"
-        >
-          OPPO
-        </button>
-
-        <button
-          class="filter"
-          data-brand="HONOR"
-          type="button"
-        >
-          HONOR
-        </button>
-
-        <button
-          class="filter"
-          data-brand="OnePlus"
-          type="button"
-        >
-          OnePlus
-        </button>
-
-        <button
-          class="filter"
-          data-brand="realme"
-          type="button"
-        >
-          realme
-        </button>
-
-        <button
-          class="filter"
-          data-brand="Motorola"
-          type="button"
-        >
-          Motorola
-        </button>
-
-        <button
-          class="filter"
-          data-brand="Sony"
-          type="button"
-        >
-          Sony
-        </button>
-
-        <button
-          class="filter"
-          data-brand="Nokia"
-          type="button"
-        >
-          Nokia
-        </button>
-
-        <button
-          class="filter"
-          data-brand="Tecno"
-          type="button"
-        >
-          Tecno
-        </button>
-
-        <button
-          class="filter"
-          data-brand="Infinix"
-          type="button"
-        >
-          Infinix
-        </button>
-
-      </div>
-
-
-      <div class="toolbar">
-
-        <span
-          class="results-label"
-          id="resultsLabel"
-        >
-          جاري تحميل الأجهزة...
-        </span>
-
-
-        <button
-          class="sort-btn"
-          id="sortBtn"
-          type="button"
-        >
-
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M8 6h13"/>
-            <path d="M8 12h10"/>
-            <path d="M8 18h7"/>
-            <path d="M3 6h.01"/>
-            <path d="M3 12h.01"/>
-            <path d="M3 18h.01"/>
-          </svg>
-
-          <span id="sortText">
-            الأحدث
-          </span>
-
-        </button>
-
-      </div>
-
-
-      <div
-        class="loading"
-        id="loadingState"
-      >
-
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-
-      </div>
-
-
-      <div
-        class="devices-grid"
-        id="devicesGrid"
-        style="display:none;"
-      ></div>
-
-
-      <div
-        id="stateContainer"
-        style="display:none;"
-      ></div>
-
-    </main>
-
+<header class="hero">
+  <div class="hero-top">
+    <button class="back" id="back" type="button" aria-label="رجوع">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="hero-title">
+      <h1>السوق</h1>
+      <p>أهلاً بيك في سوق مزاد فون، كل الأجهزة بمكان واحد</p>
+    </div>
   </div>
 
-
-  <div class="bottom-wrap">
-
-    <nav class="bottom-nav">
-
-      <div class="bottom-inner">
-
-        <a
-          class="nav-item"
-          href="home.html"
-        >
-
-          <svg
-            class="nav-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.7"
-          >
-            <path d="m3 10 9-7 9 7"/>
-            <path d="M5 9v11h14V9"/>
-            <path d="M9 20v-6h6v6"/>
-          </svg>
-
-          <span>
-            الرئيسية
-          </span>
-
-        </a>
-
-
-        <a
-          class="nav-item active"
-          href="market.html"
-        >
-
-          <svg
-            class="nav-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.7"
-          >
-
-            <rect
-              x="4"
-              y="4"
-              width="16"
-              height="16"
-              rx="3"
-            />
-
-            <path d="M8 9h8"/>
-            <path d="M8 13h8"/>
-            <path d="M8 17h5"/>
-
-          </svg>
-
-          <span>
-            الأجهزة
-          </span>
-
-        </a>
-
-
-        <a
-          class="nav-item"
-          href="sell.html"
-        >
-
-          <span class="add-button">
-
-            <svg
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M12 5v14"/>
-              <path d="M5 12h14"/>
-            </svg>
-
-          </span>
-
-          <span>
-            إضافة
-          </span>
-
-        </a>
-
-
-        <a
-          class="nav-item"
-          href="favorites.html"
-        >
-
-          <svg
-            class="nav-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.7"
-          >
-            <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
-          </svg>
-
-          <span>
-            المفضلة
-          </span>
-
-        </a>
-
-
-        <a
-          class="nav-item"
-          href="profile.html"
-        >
-
-          <svg
-            class="nav-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.7"
-          >
-
-            <circle
-              cx="12"
-              cy="8"
-              r="3"
-            />
-
-            <path
-              d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5"
-            />
-
-          </svg>
-
-          <span>
-            حسابي
-          </span>
-
-        </a>
-
-      </div>
-
-    </nav>
-
+  <div class="stats">
+    <div class="stat">
+      <b id="statTotal">0</b>
+      <span>جهاز معروض</span>
+    </div>
+    <div class="stat">
+      <b id="statAuc">0</b>
+      <span><i class="live"></i>مزاد مباشر</span>
+    </div>
   </div>
 
+  <div class="searchbox" id="searchBox">
+    <svg class="ico-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+    <input id="q" type="search" autocomplete="off" inputmode="search" placeholder='ابحث: iPhone 15 Pro، سامسونج، 256GB' aria-label="بحث عن جهاز">
+    <button class="clear" id="qClear" type="button" aria-label="مسح البحث">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 7l10 10M17 7 7 17"/></svg>
+    </button>
+  </div>
+</header>
 
-  <div
-    class="toast"
-    id="toast"
-  ></div>
+<main class="wrap">
 
+  <nav class="brands" id="brands" aria-label="الشركات"></nav>
 
-  <script type="module">
+  <div class="bar">
+    <span class="count" id="count">جاري التحميل…</span>
+    <div class="seg" role="group" aria-label="ترتيب النتائج">
+      <button type="button" data-sort="newest" class="on">الأحدث</button>
+      <button type="button" data-sort="low">الأرخص</button>
+      <button type="button" data-sort="high">الأغلى</button>
+    </div>
+  </div>
 
-    import {
-      supabase
-    } from "./js/supabase.js";
+  <section class="grid" id="grid" aria-live="polite"></section>
 
+</main>
 
-    /* =========================================
-       ELEMENTS
-    ========================================== */
+<div class="sheet-wrap" id="sheet" hidden>
+  <div class="sheet-backdrop" id="sheetBackdrop"></div>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="sheet-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12"/><path d="M9 7V4h6v3"/></svg>
+    </div>
+    <h3 id="sheetTitle">حذف المنشور؟</h3>
+    <p>راح ينحذف منشورك نهائياً من السوق، وما يرجع. هذا الإجراء ما يمكن التراجع عنه.</p>
+    <div class="sheet-actions">
+      <button class="cancel" id="sheetCancel" type="button">إلغاء</button>
+      <button class="confirm" id="sheetConfirm" type="button">حذف المنشور</button>
+    </div>
+  </div>
+</div>
 
-    const searchInput =
-      document.getElementById(
-        "searchInput"
-      );
+<nav class="dock" aria-label="التنقل">
+  <div class="dock-in">
+    <a href="home.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></svg>
+      <span>الرئيسية</span>
+    </a>
+    <a href="market.html" class="on">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8"/><path d="M8 13h8"/><path d="M8 17h5"/></svg>
+      <span>الأجهزة</span>
+    </a>
+    <a href="sell.html">
+      <span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
+      <span>إضافة</span>
+    </a>
+    <a href="favorites.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/></svg>
+      <span>المفضلة</span>
+    </a>
+    <a href="profile.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="3"/><path d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5"/></svg>
+      <span>حسابي</span>
+    </a>
+  </div>
+</nav>
 
-    const searchWrap =
-      document.getElementById(
-        "searchWrap"
-      );
+<div class="toast" id="toast" role="status"></div>
 
-    const searchClear =
-      document.getElementById(
-        "searchClear"
-      );
+<script type="module">
 
-    const backBtn =
-      document.getElementById(
-        "backBtn"
-      );
+import { supabase } from "./js/supabase.js";
 
-    const brandFilters =
-      document.getElementById(
-        "brandFilters"
-      );
+/* =========================================
+   CONSTANTS
+========================================= */
 
-    const devicesGrid =
-      document.getElementById(
-        "devicesGrid"
-      );
+const BUCKET = "device-images";
 
-    const loadingState =
-      document.getElementById(
-        "loadingState"
-      );
+const LEGACY_BASE =
+  "id,created_at,brand,model,storage,color,battery_health,condition,body_condition,screen_condition,price,location,sale_type,images,notes";
 
-    const stateContainer =
-      document.getElementById(
-        "stateContainer"
-      );
+const BRAND_KEYS = {
+  all:"all",
+  apple:"Apple", iphone:"Apple", "i-phone":"Apple",
+  samsung:"Samsung",
+  xiaomi:"Xiaomi", redmi:"Xiaomi", poco:"Xiaomi",
+  google:"Google", pixel:"Google",
+  huawei:"Huawei",
+  oppo:"OPPO",
+  honor:"HONOR",
+  oneplus:"OnePlus",
+  realme:"realme",
+  motorola:"Motorola",
+  sony:"Sony",
+  nokia:"Nokia",
+  tecno:"Tecno",
+  infinix:"Infinix"
+};
 
-    const sectionTitle =
-      document.getElementById(
-        "sectionTitle"
-      );
+const BRANDS = [
+  ["all","الكل"],
+  ["Apple","iPhone"],
+  ["Samsung","Samsung"],
+  ["Xiaomi","Xiaomi"],
+  ["Google","Google"],
+  ["Huawei","Huawei"],
+  ["OPPO","OPPO"],
+  ["HONOR","HONOR"],
+  ["OnePlus","OnePlus"],
+  ["realme","realme"],
+  ["Motorola","Motorola"],
+  ["Sony","Sony"],
+  ["Nokia","Nokia"],
+  ["Tecno","Tecno"],
+  ["Infinix","Infinix"]
+];
 
-    const sectionSubtitle =
-      document.getElementById(
-        "sectionSubtitle"
-      );
+const SEARCH_PHRASES = [
+  ["برو ماكس","pro max"],
+  ["بروماكس","pro max"],
+  ["ون بلس","oneplus"],
+  ["ونبلس","oneplus"],
+  ["زد فولد","z fold"],
+  ["زد فليب","z flip"]
+];
 
-    const countLabel =
-      document.getElementById(
-        "countLabel"
-      );
+const SEARCH_WORDS = {
+  "ايفون":"iphone", "ايفن":"iphone", "ابل":"apple",
+  "سامسونج":"samsung", "سامسنغ":"samsung",
+  "جوجل":"google", "غوغل":"google", "قوقل":"google",
+  "بيكسل":"pixel", "هواوي":"huawei",
+  "شاومي":"xiaomi", "شياومي":"xiaomi", "ريدمي":"redmi", "بوكو":"poco",
+  "اوبو":"oppo", "هونر":"honor", "ريلمي":"realme",
+  "موتورولا":"motorola", "سوني":"sony", "نوكيا":"nokia",
+  "تكنو":"tecno", "انفنكس":"infinix", "انفينيكس":"infinix",
+  "برو":"pro", "ماكس":"max", "بلس":"plus", "بلاس":"plus",
+  "الترا":"ultra", "ميني":"mini", "فولد":"fold", "فليب":"flip",
+  "نوت":"note", "ميت":"mate", "زد":"z", "اس":"s"
+};
 
-    const resultsLabel =
-      document.getElementById(
-        "resultsLabel"
-      );
+const SVG = {
+  heart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 8.7c0 5.4-8.8 10.3-8.8 10.3S3.2 14.1 3.2 8.7A4.7 4.7 0 0 1 12 6.2a4.7 4.7 0 0 1 8.8 2.5Z"/></svg>',
+  trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12"/><path d="M9 7V4h6v3"/></svg>',
+  clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M9.5 5.5h5"/><path d="M11 18.5h2"/></svg>',
+  search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/><path d="M8.5 11h5"/></svg>',
+  alert:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16.5h.01"/></svg>'
+};
 
-    const sortBtn =
-      document.getElementById(
-        "sortBtn"
-      );
+/* =========================================
+   STATE
+========================================= */
 
-    const sortText =
-      document.getElementById(
-        "sortText"
-      );
+const state = {
+  devices: [],
+  byId: new Map(),
+  brand: "all",
+  query: "",
+  sort: "newest",
+  userId: null,
+  favKey: "mzad_phone_favorites:guest",
+  favs: new Set(),
+  pendingDelete: null,
+  settled: false
+};
 
-    const toast =
-      document.getElementById(
-        "toast"
-      );
+/* =========================================
+   ELEMENTS
+========================================= */
 
+const $ = id => document.getElementById(id);
 
-    /* =========================================
-       BACK BUTTON
-    ========================================== */
+const grid = $("grid");
+const chips = $("brands");
+const countEl = $("count");
+const input = $("q");
+const searchBox = $("searchBox");
+const sheet = $("sheet");
+const toastEl = $("toast");
 
-    backBtn.addEventListener(
-      "click",
-      function(event){
+/* =========================================
+   HELPERS
+========================================= */
 
-        event.preventDefault();
-        event.stopPropagation();
+function esc(value){
+  return String(value ?? "").replace(
+    /[&<>"']/g,
+    c => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[c])
+  );
+}
 
-        /*
-          إذا أكو صفحة سابقة بالـ history
-          يرجع إلها.
-          
-          وإذا ماكو صفحة سابقة
-          يرجع للرئيسية.
-        */
+function toast(message){
+  toastEl.textContent = message;
+  toastEl.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => toastEl.classList.remove("show"), 2200);
+}
 
-        if(
-          window.history.length > 1
-        ){
+function canonicalBrand(raw){
+  const value = String(raw ?? "").trim();
+  if(!value) return "";
+  const lower = value.toLowerCase();
+  return BRAND_KEYS[lower] || value;
+}
 
-          window.history.back();
+function brandLabel(key){
+  return BRANDS.find(([k]) => k === key)?.[1] || key;
+}
 
-        }else{
+function formatPrice(value){
+  const n = Number(value);
+  if(!Number.isFinite(n) || n <= 0) return "السعر غير محدد";
+  return new Intl.NumberFormat("en-US").format(n) + " د.ع";
+}
 
-          window.location.href =
-            "home.html";
+function unit(n, one, two, few, many){
+  if(n === 1) return one;
+  if(n === 2) return two;
+  if(n >= 3 && n <= 10) return `${n} ${few}`;
+  return `${n} ${many}`;
+}
 
-        }
+function publishedText(ms){
+  if(!ms) return "";
+  const diff = Date.now() - ms;
+  if(diff < 60000) return "نُشر للتو";
 
-      }
-    );
+  const minutes = Math.floor(diff / 60000);
+  if(minutes < 60) return "نُشر قبل " + unit(minutes, "دقيقة", "دقيقتين", "دقائق", "دقيقة");
 
+  const hours = Math.floor(minutes / 60);
+  if(hours < 24) return "نُشر قبل " + unit(hours, "ساعة", "ساعتين", "ساعات", "ساعة");
 
-    /* =========================================
-       STATE
-    ========================================== */
+  const days = Math.floor(hours / 24);
+  if(days < 7) return "نُشر قبل " + unit(days, "يوم", "يومين", "أيام", "يوم");
 
-    let devices = [];
+  if(days < 30){
+    const weeks = Math.floor(days / 7);
+    return "نُشر قبل " + unit(weeks, "أسبوع", "أسبوعين", "أسابيع", "أسبوع");
+  }
 
-    let selectedBrand =
-      "all";
+  if(days < 365){
+    const months = Math.floor(days / 30);
+    return "نُشر قبل " + unit(months, "شهر", "شهرين", "أشهر", "شهر");
+  }
 
-    let searchTerm =
-      "";
+  const years = Math.floor(days / 365);
+  return "نُشر قبل " + unit(years, "سنة", "سنتين", "سنوات", "سنة");
+}
 
-    let searchDebounceTimer =
-      null;
+function fmtLeft(ms){
+  if(ms <= 0) return "انتهى";
+  const s = Math.floor(ms / 1000);
+  const d = Math.floor(s / 86400);
+  const h = Math.floor((s % 86400) / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  const p = n => String(n).padStart(2, "0");
+  return d > 0 ? `${d} يوم ${h} س` : `${p(h)}:${p(m)}:${p(sec)}`;
+}
 
-    let sortMode =
-      "newest";
+function parseImages(value){
+  if(!value) return [];
+  if(Array.isArray(value)) return value.filter(Boolean).map(String);
+  if(typeof value === "string"){
+    const text = value.trim();
+    if(!text) return [];
+    try{
+      const parsed = JSON.parse(text);
+      if(Array.isArray(parsed)) return parsed.filter(Boolean).map(String);
+    }catch{}
+    return [text];
+  }
+  return [];
+}
 
-    let toastTimer =
-      null;
+function publicImage(path){
+  const value = String(path ?? "").trim();
+  if(!value) return "";
+  if(/^(https?:|data:)/i.test(value)) return value;
+  const clean = value.replace(/^\/+/, "").replace(/^device-images\//i, "");
+  return supabase.storage.from(BUCKET).getPublicUrl(clean).data?.publicUrl || "";
+}
 
+/* ----- search ----- */
 
-    /* =========================================
-       URL BRAND
-    ========================================== */
+const AR_DIGITS = "٠١٢٣٤٥٦٧٨٩";
 
-    const params =
-      new URLSearchParams(
-        window.location.search
-      );
+function normalizeText(value){
+  return String(value ?? "")
+    .toLowerCase()
+    .normalize("NFKC")
+    .replace(/[أإآٱ]/g, "ا")
+    .replace(/ى/g, "ي")
+    .replace(/ة/g, "ه")
+    .replace(/ؤ/g, "و")
+    .replace(/ئ/g, "ي")
+    .replace(/ـ/g, "")
+    .replace(/[ً-ٰٟ]/g, "")
+    .replace(/[٠-٩]/g, d => String(AR_DIGITS.indexOf(d)))
+    .replace(/[-–—_]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
 
-    const rawBrand =
-      (
-        params.get("brand") ||
-        "all"
-      )
-      .trim()
-      .toLowerCase();
+function expandQuery(value){
+  let text = normalizeText(value);
+  SEARCH_PHRASES.forEach(([from, to]) => {
+    text = text.split(normalizeText(from)).join(to);
+  });
+  return text
+    .split(" ")
+    .filter(Boolean)
+    .map(word => {
+      const key = normalizeText(word);
+      return SEARCH_WORDS[key] ? SEARCH_WORDS[key] : key;
+    })
+    .join(" ");
+}
 
+function makeHaystack(d, brand){
+  const raw = [
+    brand,
+    d.brand,
+    d.model,
+    d.storage,
+    d.color,
+    d.battery_health,
+    d.condition,
+    d.screen_condition,
+    d.body_condition,
+    d.location,
+    d.notes,
+    String(d.sale_type || "").toLowerCase().includes("auction") ? "مزاد auction" : "بيع مباشر direct"
+  ]
+    .filter(v => v !== null && v !== undefined)
+    .join(" ");
 
-    const brandAliases = {
+  return normalizeText(raw) + " " + expandQuery(raw);
+}
 
-      all:"all",
+function matchesQuery(device, query){
+  const tokens = expandQuery(query).split(" ").filter(Boolean);
+  if(!tokens.length) return true;
+  return tokens.every(token => device._haystack.includes(token));
+}
 
-      apple:"Apple",
-      iphone:"Apple",
-      "i-phone":"Apple",
+/* =========================================
+   LOAD
+========================================= */
 
-      samsung:"Samsung",
+async function initScope(){
+  try{
+    const { data } = await supabase.auth.getUser();
+    state.userId = data?.user?.id || null;
+  }catch(error){
+    console.warn("USER SCOPE:", error);
+    state.userId = null;
+  }
 
-      xiaomi:"Xiaomi",
-      redmi:"Xiaomi",
-      poco:"Xiaomi",
+  state.favKey = state.userId
+    ? `mzad_phone_favorites:user:${state.userId}`
+    : "mzad_phone_favorites:guest";
 
-      google:"Google",
-      pixel:"Google",
+  try{
+    const saved = JSON.parse(localStorage.getItem(state.favKey) || "[]");
+    state.favs = new Set(Array.isArray(saved) ? saved.map(String) : []);
+  }catch{
+    state.favs = new Set();
+  }
+}
 
-      huawei:"Huawei",
+function saveFavs(){
+  try{
+    localStorage.setItem(state.favKey, JSON.stringify([...state.favs]));
+  }catch{}
+}
 
-      oppo:"OPPO",
+async function fetchLegacy(){
+  // نجرب أولاً مع user_id وends_at، وإذا أحد الأعمدة مو موجود نرجع لنسخة أبسط
+  const variants = [
+    `${LEGACY_BASE},user_id,ends_at`,
+    `${LEGACY_BASE},user_id`,
+    `${LEGACY_BASE},ends_at`,
+    LEGACY_BASE
+  ];
 
-      honor:"HONOR",
+  let lastError = null;
 
-      oneplus:"OnePlus",
+  for(const columns of variants){
+    const { data, error } = await supabase
+      .from("devices")
+      .select(columns)
+      .order("created_at", { ascending:false });
 
-      realme:"realme",
+    if(!error) return data || [];
+    lastError = error;
+  }
 
-      motorola:"Motorola",
+  throw lastError;
+}
 
-      sony:"Sony",
+async function signImage(image){
+  const path = String(image.storage_path || "").replace(/^\/+/, "");
+  if(!path) return "";
+  if(/^(https?:|data:)/i.test(path)) return path;
 
-      nokia:"Nokia",
+  const { data, error } = await supabase.storage
+    .from(BUCKET)
+    .createSignedUrl(path, 3600);
 
-      tecno:"Tecno",
+  if(!error && data?.signedUrl) return data.signedUrl;
 
-      infinix:"Infinix"
+  return publicImage(path);
+}
 
+async function fetchMzad(){
+  const { data, error } = await supabase
+    .from("mzad_direct_sales")
+    .select("id,created_at,asking_price_iqd,status,device_id,device:mzad_devices!mzad_direct_sales_device_id_fkey(id,brand,model,storage,color,battery_health,condition_grade,screen_condition,camera_condition,biometric_condition,seller_notes,mzad_device_images(storage_path,sort_order,is_primary))")
+    .in("status", ["active","reserved","pending_handover"])
+    .order("created_at", { ascending:false });
+
+  if(error) throw error;
+
+  const rows = (data || []).filter(item => item.device);
+
+  return Promise.all(rows.map(async item => {
+    const d = item.device;
+
+    const images = (Array.isArray(d.mzad_device_images) ? [...d.mzad_device_images] : [])
+      .sort((a,b) => Number(a.sort_order || 0) - Number(b.sort_order || 0));
+
+    const urls = await Promise.all(images.map(signImage));
+
+    return {
+      id: d.id,
+      created_at: item.created_at,
+      brand: d.brand,
+      model: d.model,
+      storage: d.storage,
+      color: d.color,
+      battery_health: d.battery_health,
+      condition: d.condition_grade,
+      body_condition: d.condition_grade,
+      screen_condition: d.screen_condition,
+      price: item.asking_price_iqd,
+      location: "النجف",
+      sale_type: "direct",
+      images: urls.filter(Boolean),
+      notes: d.seller_notes,
+      _mzad: true
     };
-
-
-    selectedBrand =
-      brandAliases[rawBrand] ||
-      "all";
-
-
-    /* =========================================
-       BRAND NORMALIZATION
-    ========================================== */
-
-    function normalizeBrand(value){
-
-      const original =
-        String(value ?? "")
-        .trim();
-
-      if(!original){
-        return "";
-      }
-
-      const lower =
-        original.toLowerCase();
-
-      const map = {
-
-        apple:"Apple",
-        iphone:"Apple",
-        "i-phone":"Apple",
-
-        samsung:"Samsung",
-
-        xiaomi:"Xiaomi",
-        redmi:"Xiaomi",
-        poco:"Xiaomi",
-
-        google:"Google",
-        pixel:"Google",
-
-        huawei:"Huawei",
-
-        oppo:"OPPO",
-
-        honor:"HONOR",
-
-        oneplus:"OnePlus",
-
-        realme:"realme",
-
-        motorola:"Motorola",
-
-        sony:"Sony",
-
-        nokia:"Nokia",
-
-        tecno:"Tecno",
-
-        infinix:"Infinix"
-
-      };
-
-      return (
-        map[lower] ||
-        original
-      );
-
-    }
-
-
-    /* =========================================
-       SEARCH NORMALIZATION
-    ========================================== */
-
-    function normalizeSearchText(value){
-
-      return String(value ?? "")
-
-        .toLowerCase()
-
-        .trim()
-
-        .replace(
-          /[أإآ]/g,
-          "ا"
-        )
-
-        .replace(
-          /ى/g,
-          "ي"
-        )
-
-        .replace(
-          /ة/g,
-          "ه"
-        )
-
-        .replace(
-          /ؤ/g,
-          "و"
-        )
-
-        .replace(
-          /ئ/g,
-          "ي"
-        )
-
-        .replace(
-          /ـ/g,
-          ""
-        )
-
-        .replace(
-          /[\u064B-\u065F\u0670]/g,
-          ""
-        )
-
-        .replace(
-          /[‐-‒–—―]/g,
-          "-"
-        )
-
-        .replace(
-          /\s+/g,
-          " "
-        )
-
-        .trim();
-
-    }
-
-
-    /* =========================================
-       SEARCH ALIASES
-    ========================================== */
-
-    const SEARCH_PHRASE_ALIASES = [
-
-      ["اي فون","iphone"],
-      ["آي فون","iphone"],
-      ["أي فون","iphone"],
-      ["اى فون","iphone"],
-
-      ["ايفون","iphone"],
-      ["آيفون","iphone"],
-      ["أيفون","iphone"],
-      ["اىفون","iphone"],
-
-      ["ابل","apple"],
-      ["آبل","apple"],
-
-      ["سامسونج","samsung"],
-      ["سامسنغ","samsung"],
-      ["سامسونك","samsung"],
-
-      ["شاومي","xiaomi"],
-      ["شياومي","xiaomi"],
-      ["شومي","xiaomi"],
-
-      ["هواوي","huawei"],
-      ["هواوى","huawei"],
-
-      ["اوبو","oppo"],
-      ["أوبو","oppo"],
-
-      ["هونر","honor"],
-
-      ["ون بلس","oneplus"],
-      ["ونبلس","oneplus"],
-
-      ["ريلمي","realme"],
-      ["ريلمى","realme"],
-
-      ["موتورولا","motorola"],
-
-      ["سوني","sony"],
-
-      ["نوكيا","nokia"],
-
-      ["تكنو","tecno"],
-
-      ["انفنكس","infinix"],
-      ["إنفنكس","infinix"],
-      ["انفينيكس","infinix"],
-
-      ["جوجل","google"],
-      ["غوغل","google"],
-
-      ["بيكسل","pixel"],
-
-      ["ريدمي","redmi"],
-
-      ["بوكو","poco"],
-
-      ["برو ماكس","pro max"],
-      ["بروماكس","pro max"],
-
-      ["برو","pro"],
-
-      ["ماكس","max"],
-
-      ["بلس","plus"],
-      ["بلاس","plus"],
-
-      ["الترا","ultra"],
-      ["ألترا","ultra"],
-
-      ["ميني","mini"],
-
-      ["فولد","fold"],
-
-      ["فليب","flip"],
-
-      ["نوت","note"],
-
-      ["باد","pad"],
-
-      ["تاب","tab"],
-
-      ["ميت","mate"],
-
-      ["ايج","edge"],
-      ["إيدج","edge"],
-
-      ["اس","s"],
-      ["إس","s"],
-
-      ["زد فولد","z fold"],
-      ["زد فليب","z flip"],
-      ["زد","z"]
-
-    ];
-
-
-    const SEARCH_WORD_ALIASES = {
-
-      "ايفون":"iphone",
-      "آيفون":"iphone",
-      "أيفون":"iphone",
-
-      "ابل":"apple",
-      "آبل":"apple",
-
-      "سامسونج":"samsung",
-      "سامسنغ":"samsung",
-      "سامسونك":"samsung",
-
-      "شاومي":"xiaomi",
-      "شياومي":"xiaomi",
-
-      "هواوي":"huawei",
-
-      "اوبو":"oppo",
-      "أوبو":"oppo",
-
-      "هونر":"honor",
-
-      "ريلمي":"realme",
-
-      "موتورولا":"motorola",
-
-      "سوني":"sony",
-
-      "نوكيا":"nokia",
-
-      "تكنو":"tecno",
-
-      "انفنكس":"infinix",
-      "إنفنكس":"infinix",
-      "انفينيكس":"infinix",
-
-      "جوجل":"google",
-      "غوغل":"google",
-
-      "بيكسل":"pixel",
-
-      "ريدمي":"redmi",
-
-      "بوكو":"poco",
-
-      "برو":"pro",
-
-      "ماكس":"max",
-
-      "بلس":"plus",
-      "بلاس":"plus",
-
-      "الترا":"ultra",
-      "ألترا":"ultra",
-
-      "ميني":"mini",
-
-      "فولد":"fold",
-      "فليب":"flip",
-
-      "نوت":"note",
-
-      "ميت":"mate",
-
-      "ايج":"edge",
-      "إيدج":"edge",
-
-      "اس":"s",
-      "إس":"s",
-
-      "زد":"z"
-
-    };
-
-
-    function expandSearchQuery(value){
-
-      let text =
-        normalizeSearchText(
-          value
-        );
-
-      if(!text){
-        return "";
-      }
-
-      const phrases =
-        [
-          ...SEARCH_PHRASE_ALIASES
-        ]
-        .sort(
-          (a,b) =>
-            normalizeSearchText(
-              b[0]
-            ).length
-            -
-            normalizeSearchText(
-              a[0]
-            ).length
-        );
-
-
-      for(
-        const [from,to]
-        of phrases
-      ){
-
-        const normalizedFrom =
-          normalizeSearchText(
-            from
-          );
-
-        const normalizedTo =
-          normalizeSearchText(
-            to
-          );
-
-        text =
-          text
-          .split(
-            normalizedFrom
-          )
-          .join(
-            normalizedTo
-          );
-
-      }
-
-
-      const tokens =
-        text
-        .split(/\s+/)
-        .filter(Boolean);
-
-
-      const expandedTokens =
-        tokens.map(
-          token => {
-
-            const clean =
-              normalizeSearchText(
-                token
-              );
-
-            return (
-              SEARCH_WORD_ALIASES[
-                clean
-              ] ||
-              clean
-            );
-
-          }
-        );
-
-
-      return expandedTokens.join(" ");
-
-    }
-
-
-    function deviceMatchesSearch(
-      device,
-      query
-    ){
-
-      const normalized =
-        normalizeSearchText(
-          query
-        );
-
-      if(!normalized){
-        return true;
-      }
-
-
-      const expanded =
-        expandSearchQuery(
-          normalized
-        );
-
-
-      const queryTokens =
-        expanded
-        .split(/\s+/)
-        .filter(Boolean);
-
-
-      if(!queryTokens.length){
-        return true;
-      }
-
-
-      const searchText =
-        device._searchText ||
-        "";
-
-
-      const compactSearchText =
-        searchText.replace(
-          /\s+/g,
-          ""
-        );
-
-
-      return queryTokens.every(
-        token => {
-
-          const cleanToken =
-            normalizeSearchText(
-              token
-            );
-
-
-          if(!cleanToken){
-            return true;
-          }
-
-
-          if(
-            searchText.includes(
-              cleanToken
-            )
-          ){
-            return true;
-          }
-
-
-          if(
-            cleanToken.length >= 2 &&
-            compactSearchText.includes(
-              cleanToken.replace(
-                /\s+/g,
-                ""
-              )
-            )
-          ){
-            return true;
-          }
-
-
-          return false;
-
-        }
-      );
-
-    }
-
-
-    /* =========================================
-       IMAGE PARSER
-    ========================================== */
-
-    function getDeviceImages(
-      images
-    ){
-
-      if(!images){
+  }));
+}
+
+function normalizeDevice(raw){
+  const brand = canonicalBrand(raw.brand);
+  const images = parseImages(raw.images).map(publicImage).filter(Boolean);
+
+  return {
+    ...raw,
+    id: String(raw.id),
+    _brand: brand,
+    _auction: String(raw.sale_type || "").toLowerCase().includes("auction"),
+    _img: images[0] || "",
+    _ends: raw.ends_at ? new Date(raw.ends_at).getTime() : 0,
+    _created: raw.created_at ? new Date(raw.created_at).getTime() : 0,
+    _price: Number(raw.price) || 0,
+    _owned: !!state.userId && !raw._mzad && raw.user_id === state.userId,
+    _haystack: makeHaystack(raw, brand)
+  };
+}
+
+async function load(){
+  showSkeleton();
+
+  try{
+    const [legacyRows, mzadRows] = await Promise.all([
+      fetchLegacy(),
+      fetchMzad().catch(error => {
+        console.warn("MZAD LISTINGS:", error);
         return [];
+      })
+    ]);
+
+    state.devices = [...legacyRows, ...mzadRows]
+      .map(normalizeDevice)
+      .sort((a,b) => b._created - a._created);
+
+    state.byId = new Map(state.devices.map(d => [d.id, d]));
+
+    render();
+
+  }catch(error){
+    console.error("LOAD DEVICES ERROR:", error);
+    showError();
+  }
+}
+
+/* =========================================
+   FILTER + SORT
+========================================= */
+
+function visibleDevices(){
+  const list = state.devices.filter(d => {
+    const brandOk = state.brand === "all" || d._brand === state.brand;
+    const queryOk = !state.query || matchesQuery(d, state.query);
+    return brandOk && queryOk;
+  });
+
+  const byPrice = (a,b,dir) => {
+    const x = a._price;
+    const y = b._price;
+    if(!x && !y) return 0;
+    if(!x) return 1;
+    if(!y) return -1;
+    return dir * (x - y);
+  };
+
+  if(state.sort === "low") list.sort((a,b) => byPrice(a,b,1));
+  else if(state.sort === "high") list.sort((a,b) => byPrice(a,b,-1));
+  else list.sort((a,b) => b._created - a._created);
+
+  return list;
+}
+
+/* =========================================
+   RENDER
+========================================= */
+
+function titleOf(d){
+  const model = String(d.model || "").trim();
+  if(d._brand === "Apple") return model || "iPhone";
+  const parts = [d._brand, model].filter(Boolean);
+  return parts.join(" ") || "جهاز";
+}
+
+function specsOf(d){
+  const battery = String(d.battery_health ?? "").trim().replace(/%$/, "");
+  return [
+    d.storage,
+    d.color,
+    battery ? `بطارية ${battery}%` : ""
+  ]
+    .map(v => String(v ?? "").trim())
+    .filter(Boolean)
+    .slice(0,3);
+}
+
+function cardHTML(d, index){
+  const ended = d._auction && d._ends && d._ends <= Date.now();
+  const fav = state.favs.has(d.id);
+  const title = titleOf(d);
+  const specs = specsOf(d);
+
+  const kind = d._auction
+    ? '<span class="kind auc">مزاد</span>'
+    : '<span class="kind dir">بيع مباشر</span>';
+
+  const timer = d._auction && d._ends
+    ? `<span class="timer${ended ? "" : ""}" data-end="${d._ends}">${ended ? "انتهى" : "--:--:--"}</span>`
+    : "";
+
+  const time = d._created
+    ? `<div class="time" data-created="${d._created}">${SVG.clock}<span>${esc(publishedText(d._created))}</span></div>`
+    : "";
+
+  const image = d._img
+    ? `<img src="${esc(d._img)}" alt="${esc(title)}" loading="lazy" decoding="async" onload="this.classList.add('ready')" onerror="this.remove()">`
+    : "";
+
+  return `
+    <article class="card${ended ? " is-ended" : ""}" data-id="${esc(d.id)}" style="--i:${Math.min(index, 9)}">
+
+      <div class="media">
+        <div class="ph">${SVG.phone}</div>
+        ${image}
+        <div class="shade"></div>
+      </div>
+
+      <span class="shine"></span>
+
+      <button class="fav${fav ? " on" : ""}" type="button" data-fav="${esc(d.id)}" aria-label="إضافة إلى المفضلة">
+        ${SVG.heart}
+      </button>
+
+      ${
+        d._owned
+          ? `<button class="del" type="button" data-del="${esc(d.id)}" aria-label="حذف منشوري">${SVG.trash}</button>`
+          : ""
       }
 
+      <div class="info">
+        <div class="tags">${kind}${timer}</div>
 
-      if(
-        Array.isArray(images)
-      ){
+        <h3 class="name">${esc(title)}</h3>
 
-        return images.filter(
-          Boolean
-        );
+        ${specs.length ? `<div class="specs">${specs.map(s => `<span>${esc(s)}</span>`).join("")}</div>` : ""}
 
-      }
+        ${time}
 
-
-      if(
-        typeof images === "string"
-      ){
-
-        const value =
-          images.trim();
-
-
-        if(!value){
-          return [];
-        }
-
-
-        try{
-
-          const parsed =
-            JSON.parse(
-              value
-            );
-
-
-          if(
-            Array.isArray(parsed)
-          ){
-
-            return parsed.filter(
-              Boolean
-            );
-
-          }
-
-
-          if(
-            parsed &&
-            typeof parsed === "object"
-          ){
-
-            const image =
-              parsed.url ||
-              parsed.path ||
-              parsed.publicUrl ||
-              "";
-
-
-            return image
-              ? [image]
-              : [];
-
-          }
-
-        }catch(error){
-
-        }
-
-
-        return [value];
-
-      }
-
-
-      if(
-        images &&
-        typeof images === "object"
-      ){
-
-        const image =
-          images.url ||
-          images.path ||
-          images.publicUrl ||
-          "";
-
-
-        return image
-          ? [image]
-          : [];
-
-      }
-
-
-      return [];
-
-    }
-
-
-    /* =========================================
-       STORAGE IMAGE URL
-    ========================================== */
-
-    function getImageUrl(
-      path
-    ){
-
-      if(!path){
-        return "";
-      }
-
-
-      const value =
-        String(path).trim();
-
-
-      if(
-        /^https?:\/\//i.test(
-          value
-        ) ||
-        /^data:/i.test(
-          value
-        )
-      ){
-
-        return value;
-
-      }
-
-
-      let cleanPath =
-        value.replace(
-          /^\/+/,
-          ""
-        );
-
-
-      cleanPath =
-        cleanPath.replace(
-          /^device-images\//i,
-          ""
-        );
-
-
-      try{
-
-        const {
-          data
-        } =
-          supabase
-          .storage
-          .from(
-            "device-images"
-          )
-          .getPublicUrl(
-            cleanPath
-          );
-
-
-        return (
-          data?.publicUrl ||
-          ""
-        );
-
-      }catch(error){
-
-        console.error(
-          "IMAGE URL ERROR:",
-          error
-        );
-
-
-        return "";
-
-      }
-
-    }
-
-
-    /* =========================================
-       PRICE
-    ========================================== */
-
-    function formatPrice(
-      price
-    ){
-
-      const number =
-        Number(price);
-
-
-      if(
-        !Number.isFinite(
-          number
-        )
-      ){
-
-        return "السعر غير محدد";
-
-      }
-
-
-      return (
-        new Intl.NumberFormat(
-          "en-US"
-        )
-        .format(number)
-        +
-        " د.ع"
-      );
-
-    }
-
-
-    /* =========================================
-       PUBLISHED TIME
-    ========================================== */
-
-    function formatPublishedTime(
-      value
-    ){
-
-      const date =
-        new Date(value);
-
-
-      if(
-        Number.isNaN(
-          date.getTime()
-        )
-      ){
-
-        return "";
-
-      }
-
-
-      const diff =
-        Math.max(
-          0,
-          Date.now() -
-          date.getTime()
-        );
-
-
-      const minute =
-        60 * 1000;
-
-      const hour =
-        60 * minute;
-
-      const day =
-        24 * hour;
-
-      const week =
-        7 * day;
-
-      const month =
-        30 * day;
-
-      const year =
-        365 * day;
-
-
-      if(
-        diff < minute
-      ){
-
-        return "نُشر الآن";
-
-      }
-
-
-      if(
-        diff < hour
-      ){
-
-        const n =
-          Math.floor(
-            diff / minute
-          );
-
-
-        if(n === 1){
-          return "نُشر منذ دقيقة";
-        }
-
-
-        if(n === 2){
-          return "نُشر منذ دقيقتين";
-        }
-
-
-        if(n < 11){
-          return `نُشر منذ ${n} دقائق`;
-        }
-
-
-        return `نُشر منذ ${n} دقيقة`;
-
-      }
-
-
-      if(
-        diff < day
-      ){
-
-        const n =
-          Math.floor(
-            diff / hour
-          );
-
-
-        if(n === 1){
-          return "نُشر منذ ساعة";
-        }
-
-
-        if(n === 2){
-          return "نُشر منذ ساعتين";
-        }
-
-
-        if(n < 11){
-          return `نُشر منذ ${n} ساعات`;
-        }
-
-
-        return `نُشر منذ ${n} ساعة`;
-
-      }
-
-
-      if(
-        diff < week
-      ){
-
-        const n =
-          Math.floor(
-            diff / day
-          );
-
-
-        if(n === 1){
-          return "نُشر منذ يوم";
-        }
-
-
-        if(n === 2){
-          return "نُشر منذ يومين";
-        }
-
-
-        if(n < 11){
-          return `نُشر منذ ${n} أيام`;
-        }
-
-
-        return `نُشر منذ ${n} يوم`;
-
-      }
-
-
-      if(
-        diff < month
-      ){
-
-        const n =
-          Math.floor(
-            diff / week
-          );
-
-
-        if(n === 1){
-          return "نُشر منذ أسبوع";
-        }
-
-
-        if(n === 2){
-          return "نُشر منذ أسبوعين";
-        }
-
-
-        if(n < 11){
-          return `نُشر منذ ${n} أسابيع`;
-        }
-
-
-        return `نُشر منذ ${n} أسبوع`;
-
-      }
-
-
-      if(
-        diff < year
-      ){
-
-        const n =
-          Math.floor(
-            diff / month
-          );
-
-
-        if(n === 1){
-          return "نُشر منذ شهر";
-        }
-
-
-        if(n === 2){
-          return "نُشر منذ شهرين";
-        }
-
-
-        if(n < 11){
-          return `نُشر منذ ${n} أشهر`;
-        }
-
-
-        return `نُشر منذ ${n} شهر`;
-
-      }
-
-
-      const n =
-        Math.floor(
-          diff / year
-        );
-
-
-      if(n === 1){
-        return "نُشر منذ سنة";
-      }
-
-
-      if(n === 2){
-        return "نُشر منذ سنتين";
-      }
-
-
-      if(n < 11){
-        return `نُشر منذ ${n} سنوات`;
-      }
-
-
-      return `نُشر منذ ${n} سنة`;
-
-    }
-
-
-    /* =========================================
-       TOAST
-    ========================================== */
-
-    function showToast(
-      message
-    ){
-
-      toast.textContent =
-        message;
-
-      toast.classList.add(
-        "show"
-      );
-
-      clearTimeout(
-        toastTimer
-      );
-
-      toastTimer =
-        setTimeout(
-          () => {
-
-            toast.classList.remove(
-              "show"
-            );
-
-          },
-          2200
-        );
-
-    }
-
-
-    /* =========================================
-       NORMALIZE DEVICE
-    ========================================== */
-
-    function normalizeDevice(
-      device
-    ){
-
-      const images =
-        getDeviceImages(
-          device.images
-        );
-
-
-      const normalizedBrand =
-        normalizeBrand(
-          device.brand
-        );
-
-
-      const searchText =
-        [
-          device.brand,
-          normalizedBrand,
-          device.model,
-          device.storage,
-          device.color,
-          device.battery_health,
-          device.condition,
-          device.body_condition,
-          device.screen_condition,
-          device.location,
-          device.sale_type,
-          device.notes
-        ]
-        .filter(
-          value =>
-            value !== null &&
-            value !== undefined
-        )
-        .join(" ");
-
-
-      return {
-
-        ...device,
-
-        _brand:
-          normalizedBrand,
-
-        _images:
-          images,
-
-        _saleType:
-          String(
-            device.sale_type ||
-            ""
-          )
-          .trim()
-          .toLowerCase(),
-
-        _searchText:
-          normalizeSearchText(
-            searchText
-          )
-          +
-          " "
-          +
-          expandSearchQuery(
-            searchText
-          )
-
-      };
-
-    }
-
-
-    /* =========================================
-       LOAD DEVICES
-    ========================================== */
-
-    async function loadDevices(){
-
-      showLoading();
-
-
-      try{
-
-        const results = await Promise.all([
-          supabase.from("devices").select("id,created_at,brand,model,storage,color,battery_health,condition,body_condition,screen_condition,price,location,sale_type,images,notes").order("created_at",{ascending:false}),
-          supabase.from("mzad_direct_sales").select("id,created_at,asking_price_iqd,status,device_id,device:mzad_devices!mzad_direct_sales_device_id_fkey(id,brand,model,storage,color,battery_health,condition_grade,screen_condition,camera_condition,biometric_condition,seller_notes,mzad_device_images(storage_path,sort_order,is_primary))").in("status",["active","reserved","pending_handover"]).order("created_at",{ascending:false})
-        ]);
-        const legacyResult = results[0];
-        const salesResult = results[1];
-        if(legacyResult.error) throw legacyResult.error;
-        if(salesResult.error) throw salesResult.error;
-        const newListings = await Promise.all((salesResult.data || []).filter(x => x.device).map(async x => {
-          const d = x.device;
-          const imgs = Array.isArray(d.mzad_device_images) ? [...d.mzad_device_images].sort((u,v) => Number(u.sort_order || 0) - Number(v.sort_order || 0)) : [];
-          const imageUrls = await Promise.all(imgs.map(async image => {
-            const path = String(image.storage_path || "").replace(/^\/+/, "");
-            if(!path) return "";
-            if(/^https?:\/\//i.test(path) || /^data:/i.test(path)) return path;
-            const { data: signedData, error: signedError } = await supabase.storage.from("device-images").createSignedUrl(path, 3600);
-            if(!signedError && signedData?.signedUrl) return signedData.signedUrl;
-            const cleanPath = path.replace(/^device-images\//i, "");
-            const { data: publicData } = supabase.storage.from("device-images").getPublicUrl(cleanPath);
-            return publicData?.publicUrl || "";
-          }));
-          return {id:d.id,created_at:x.created_at,brand:d.brand,model:d.model,storage:d.storage,color:d.color,battery_health:d.battery_health,condition:d.condition_grade,body_condition:d.condition_grade,screen_condition:d.screen_condition,price:x.asking_price_iqd,location:"النجف",sale_type:"direct",images:imageUrls.filter(Boolean),notes:d.seller_notes};
-        }));
-        devices = [...(legacyResult.data || []), ...newListings].sort((x,y)=>new Date(y.created_at||0)-new Date(x.created_at||0)).map(normalizeDevice);
-
-        hideLoading();
-
-        render();
-
-      }catch(error){
-
-        console.error(
-          "LOAD DEVICES ERROR:",
-          error
-        );
-
-
-        showError(
-          "تعذر تحميل الأجهزة",
-          "تأكد من الاتصال بالإنترنت وحاول مرة ثانية."
-        );
-
-      }
-
-    }
-
-
-    /* =========================================
-       FILTER DEVICES
-    ========================================== */
-
-    function getFilteredDevices(){
-
-      const normalizedSearch =
-        searchTerm.trim();
-
-
-      let result =
-        devices.filter(
-          device => {
-
-            const brandMatch =
-              selectedBrand === "all" ||
-              device._brand ===
-              normalizeBrand(
-                selectedBrand
-              );
-
-
-            const searchMatch =
-              !normalizedSearch ||
-              deviceMatchesSearch(
-                device,
-                normalizedSearch
-              );
-
-
-            return (
-              brandMatch &&
-              searchMatch
-            );
-
-          }
-        );
-
-
-      if(
-        sortMode === "low"
-      ){
-
-        result.sort(
-          (a,b) =>
-            Number(
-              a.price || 0
-            )
-            -
-            Number(
-              b.price || 0
-            )
-        );
-
-      }
-
-      else if(
-        sortMode === "high"
-      ){
-
-        result.sort(
-          (a,b) =>
-            Number(
-              b.price || 0
-            )
-            -
-            Number(
-              a.price || 0
-            )
-        );
-
-      }
-
-      else{
-
-        result.sort(
-          (a,b) =>
-            new Date(
-              b.created_at || 0
-            )
-            -
-            new Date(
-              a.created_at || 0
-            )
-        );
-
-      }
-
-
-      return result;
-
-    }
-
-
-    /* =========================================
-       RENDER
-    ========================================== */
-
-    function render(){
-
-      const filtered =
-        getFilteredDevices();
-
-
-      updateHeader(
-        filtered.length
-      );
-
-
-      updateFilters();
-
-
-      devicesGrid.innerHTML =
-        "";
-
-      stateContainer.innerHTML =
-        "";
-
-
-      if(
-        !filtered.length
-      ){
-
-        devicesGrid.style.display =
-          "none";
-
-
-        stateContainer.style.display =
-          "block";
-
-
-        let title =
-          "ماكو أجهزة حالياً";
-
-
-        let text =
-          "ما لقينا أجهزة تطابق البحث أو الفلتر المحدد.";
-
-
-        if(
-          selectedBrand !== "all"
-        ){
-
-          const brandName =
-            getBrandDisplayName(
-              selectedBrand
-            );
-
-
-          title =
-            `ماكو أجهزة ${brandName} حالياً`;
-
-
-          text =
-            "جرّب تختار شركة ثانية أو شيل الفلتر.";
-
-        }
-
-        else if(
-          searchTerm
-        ){
-
-          title =
-            "ماكو نتائج";
-
-
-          text =
-            "جرّب كلمة بحث ثانية أو شيل البحث.";
-
-        }
-
-
-        stateContainer.innerHTML =
-          createEmptyState(
-            title,
-            text
-          );
-
-
-        resultsLabel.textContent =
-          "لا توجد نتائج";
-
-
-        return;
-
-      }
-
-
-      stateContainer.style.display =
-        "none";
-
-
-      devicesGrid.style.display =
-        "grid";
-
-
-      resultsLabel.textContent =
-        `${filtered.length} جهاز`;
-
-
-      filtered.forEach(
-        (device,index) => {
-
-          devicesGrid.appendChild(
-            createDeviceCard(
-              device,
-              index
-            )
-          );
-
-        }
-      );
-
-    }
-
-
-    /* =========================================
-       HEADER UPDATE
-    ========================================== */
-
-    function updateHeader(
-      count
-    ){
-
-      countLabel.textContent =
-        `${count} جهاز`;
-
-
-      if(
-        selectedBrand === "all"
-      ){
-
-        sectionTitle.textContent =
-          "كل الأجهزة";
-
-
-        sectionSubtitle.textContent =
-          "جميع الأجهزة المعروضة حالياً";
-
-      }
-
-      else{
-
-        const brandName =
-          getBrandDisplayName(
-            selectedBrand
-          );
-
-
-        sectionTitle.textContent =
-          `أجهزة ${brandName}`;
-
-
-        sectionSubtitle.textContent =
-          `تصفح أجهزة ${brandName} المعروضة للبيع والمزادات`;
-
-      }
-
-    }
-
-
-    /* =========================================
-       BRAND DISPLAY
-    ========================================== */
-
-    function getBrandDisplayName(
-      brand
-    ){
-
-      const map = {
-
-        Apple:"iPhone",
-        Samsung:"Samsung",
-        Xiaomi:"Xiaomi",
-        Google:"Google",
-        Huawei:"Huawei",
-        OPPO:"OPPO",
-        HONOR:"HONOR",
-        OnePlus:"OnePlus",
-        realme:"realme",
-        Motorola:"Motorola",
-        Sony:"Sony",
-        Nokia:"Nokia",
-        Tecno:"Tecno",
-        Infinix:"Infinix"
-
-      };
-
-
-      return (
-        map[brand] ||
-        brand
-      );
-
-    }
-
-
-    /* =========================================
-       FILTER BUTTONS
-    ========================================== */
-
-    function updateFilters(){
-
-      const buttons =
-        brandFilters.querySelectorAll(
-          ".filter"
-        );
-
-
-      buttons.forEach(
-        button => {
-
-          const buttonBrand =
-            button.dataset.brand;
-
-
-          const active =
-            normalizeBrand(
-              buttonBrand
-            )
-            ===
-            normalizeBrand(
-              selectedBrand
-            );
-
-
-          button.classList.toggle(
-            "active",
-            active
-          );
-
-        }
-      );
-
-    }
-
-
-    /* =========================================
-       DEVICE CARD
-    ========================================== */
-
-    function createDeviceCard(
-      device,
-      index
-    ){
-
-      const card =
-        document.createElement(
-          "article"
-        );
-
-
-      const brandClass =
-        {
-          Apple:"brand-apple",
-          Samsung:"brand-samsung",
-          Xiaomi:"brand-xiaomi",
-          Huawei:"brand-huawei",
-          Google:"brand-google"
-        }[
-          normalizeBrand(
-            device.brand
-          )
-        ]
-        ||
-        "brand-default";
-
-
-      card.className =
-        "device-card " +
-        brandClass;
-
-
-      if(
-        index < 12
-      ){
-
-        card.style.animationDelay =
-          `${index * 35}ms`;
-
-      }
-
-      else{
-
-        card.style.animation =
-          "none";
-
-      }
-
-
-      const images =
-        device._images ||
-        [];
-
-
-      const imageUrl =
-        images.length
-          ? getImageUrl(
-              images[0]
-            )
-          : "";
-
-
-      const saleType =
-        device._saleType === "auction"
-          ? "مزاد"
-          : "بيع مباشر";
-
-
-      const favorite =
-        isFavorite(
-          device.id
-        );
-
-
-      card.innerHTML = `
-
-        <div class="device-photo-wrap">
-
-          ${
-            imageUrl
-
-              ? `
-
-                <img
-                  class="device-photo"
-                  src="${escapeAttribute(imageUrl)}"
-                  alt="${escapeAttribute(
-                    `${device.brand || ""} ${device.model || ""}`
-                  )}"
-                  loading="lazy"
-                  onerror="
-                    this.style.display='none';
-                    this.nextElementSibling.style.display='flex';
-                  "
-                >
-
-                <div
-                  class="photo-placeholder"
-                  style="display:none;"
-                >
-                  ${imageIcon()}
-                </div>
-
-              `
-
-              : `
-
-                <div class="photo-placeholder">
-                  ${imageIcon()}
-                </div>
-
-              `
-          }
-
-
-          <div class="sale-type">
-            ${escapeHtml(saleType)}
-          </div>
-
-
-          <button
-            class="favorite ${
-              favorite ? "active" : ""
-            }"
-            type="button"
-            aria-label="المفضلة"
-            data-favorite-id="${escapeAttribute(device.id)}"
-          >
-
-            ${heartIcon()}
-
-          </button>
-
+        <div class="price">
+          <small>${d._auction ? "السعر الحالي" : "السعر"}</small>
+          <b>${esc(formatPrice(d.price))}</b>
         </div>
+      </div>
 
+    </article>
+  `;
+}
 
-        <div class="device-info">
+function emptyHTML(){
+  let title = "السوق فاضي حالياً";
+  let text = "أول ما ينضاف جهاز راح يظهر هنا.";
 
-          <h3 class="device-name">
+  if(state.query){
+    title = "ما لقينا نتائج";
+    text = "جرّب كلمة ثانية أو امسح البحث.";
+  }else if(state.brand !== "all"){
+    title = `ماكو أجهزة ${brandLabel(state.brand)} حالياً`;
+    text = "جرّب شركة ثانية أو اشيل الفلتر.";
+  }
 
-            ${escapeHtml(
-              [
-                device.brand,
-                device.model
-              ]
-              .filter(Boolean)
-              .join(" ")
-              ||
-              "جهاز"
-            )}
+  return `
+    <div class="empty">
+      <div class="ico">${SVG.search}</div>
+      <h3>${esc(title)}</h3>
+      <p>${esc(text)}</p>
+      <button type="button" data-reset>عرض كل الأجهزة</button>
+    </div>
+  `;
+}
 
-          </h3>
+function showSkeleton(){
+  grid.classList.remove("settled");
+  grid.innerHTML = '<div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div>';
+  countEl.textContent = "جاري التحميل…";
+}
 
+function showError(){
+  grid.classList.remove("settled");
+  grid.innerHTML = `
+    <div class="error">
+      <div class="ico">${SVG.alert}</div>
+      <h3>تعذر تحميل الأجهزة</h3>
+      <p>تأكد من الاتصال بالإنترنت وحاول مرة ثانية.</p>
+      <button type="button" data-retry>إعادة المحاولة</button>
+    </div>
+  `;
+  countEl.textContent = "تعذر التحميل";
+}
 
-          ${
-            device.location
-              ? `
+function countTo(el, to){
+  const from = Number(el.dataset.v || 0);
+  el.dataset.v = String(to);
+  if(from === to){
+    el.textContent = String(to);
+    return;
+  }
+  const start = performance.now();
+  const duration = 600;
+  const step = now => {
+    const k = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - k, 3);
+    el.textContent = String(Math.round(from + (to - from) * eased));
+    if(k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
 
-                <div class="device-location">
+function updateStats(){
+  const now = Date.now();
+  const total = state.devices.length;
+  const live = state.devices.filter(d => d._auction && (!d._ends || d._ends > now)).length;
+  countTo($("statTotal"), total);
+  countTo($("statAuc"), live);
+}
 
-                  ${locationIcon()}
+function renderChips(){
+  chips.innerHTML = BRANDS.map(([key, label]) => `
+    <button class="chip${state.brand === key ? " on" : ""}" type="button" data-brand="${esc(key)}">
+      ${esc(label)}
+    </button>
+  `).join("");
+}
 
-                  <span>
-                    ${escapeHtml(device.location)}
-                  </span>
+function updateSortButtons(){
+  document.querySelectorAll("[data-sort]").forEach(btn => {
+    btn.classList.toggle("on", btn.dataset.sort === state.sort);
+  });
+}
 
-                </div>
+function render(){
+  const list = visibleDevices();
 
-              `
-              : ""
-          }
+  updateStats();
+  renderChips();
+  updateSortButtons();
 
+  countEl.innerHTML = state.query
+    ? `<b>${list.length}</b> نتيجة`
+    : `<b>${list.length}</b> جهاز`;
 
-          ${
-            device.created_at
-              ? `
+  if(!list.length){
+    grid.innerHTML = emptyHTML();
+  }else{
+    grid.innerHTML = list.map(cardHTML).join("");
+  }
 
-                <div
-                  class="published-time"
-                  data-created-at="${escapeAttribute(
-                    device.created_at
-                  )}"
-                >
-                  ${escapeHtml(
-                    formatPublishedTime(
-                      device.created_at
-                    )
-                  )}
-                </div>
+  grid.classList.add("settled");
+  tickTimers();
+}
 
-              `
-              : ""
-          }
+/* =========================================
+   TIMERS
+========================================= */
 
+function tickTimers(){
+  const now = Date.now();
 
-          <div
-            class="details-grid ${
-              device._brand === "Apple" &&
-              device.battery_health !== null &&
-              device.battery_health !== undefined &&
-              String(
-                device.battery_health
-              ).trim() !== ""
-                ? ""
-                : "no-battery"
-            }"
-          >
+  document.querySelectorAll("[data-end]").forEach(el => {
+    const left = Number(el.dataset.end) - now;
+    el.textContent = fmtLeft(left);
+    el.classList.toggle("urgent", left > 0 && left < 3600000);
+    el.closest(".card")?.classList.toggle("is-ended", left <= 0);
+  });
+}
 
-            <div class="detail-item">
+function refreshPublishedTimes(){
+  document.querySelectorAll("[data-created]").forEach(el => {
+    const label = el.querySelector("span");
+    if(label) label.textContent = publishedText(Number(el.dataset.created));
+  });
+}
 
-              <span>
-                السعة
-              </span>
+setInterval(tickTimers, 1000);
+setInterval(refreshPublishedTimes, 30000);
 
-              <strong>
-                ${escapeHtml(
-                  device.storage || "-"
-                )}
-              </strong>
+/* =========================================
+   FAVORITES
+========================================= */
 
-            </div>
+function toggleFav(id){
+  const on = !state.favs.has(id);
 
+  if(on) state.favs.add(id);
+  else state.favs.delete(id);
 
-            <div class="detail-item">
+  saveFavs();
 
-              <span>
-                اللون
-              </span>
+  document
+    .querySelectorAll(`[data-fav="${CSS.escape(id)}"]`)
+    .forEach(btn => btn.classList.toggle("on", on));
 
-              <strong>
-                ${escapeHtml(
-                  device.color || "-"
-                )}
-              </strong>
+  toast(on ? "تمت الإضافة إلى المفضلة" : "تمت الإزالة من المفضلة");
+}
 
-            </div>
+/* =========================================
+   DELETE (owner only)
+========================================= */
 
+function openSheet(id){
+  state.pendingDelete = id;
+  sheet.hidden = false;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => sheet.classList.add("open"));
+  });
+}
 
-            ${
-              device._brand === "Apple" &&
-              device.battery_health !== null &&
-              device.battery_health !== undefined &&
-              String(
-                device.battery_health
-              ).trim() !== ""
+function closeSheet(){
+  sheet.classList.remove("open");
+  setTimeout(() => {
+    if(!sheet.classList.contains("open")){
+      sheet.hidden = true;
+      state.pendingDelete = null;
+    }
+  }, 260);
+}
 
-                ? `
+async function confirmDelete(){
+  const id = state.pendingDelete;
+  if(!id || !state.userId) return;
 
-                  <div class="detail-item">
+  const confirmBtn = $("sheetConfirm");
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = "جاري الحذف…";
 
-                    <span>
-                      البطارية
-                    </span>
+  try{
+    const { data, error } = await supabase
+      .from("devices")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", state.userId)
+      .select("id");
 
-                    <strong>
-                      ${escapeHtml(
-                        String(
-                          device.battery_health
-                        ) + "%"
-                      )}
-                    </strong>
+    if(error) throw error;
+    if(!data || !data.length) throw new Error("لم يتم حذف أي صف");
 
-                  </div>
+    state.devices = state.devices.filter(d => d.id !== id);
+    state.byId.delete(id);
 
-                `
+    if(state.favs.delete(id)) saveFavs();
 
-                : ""
-            }
+    const card = grid.querySelector(`[data-id="${CSS.escape(id)}"]`);
 
-          </div>
+    closeSheet();
 
-
-          <div class="price-row">
-
-            <span class="price-label">
-              السعر
-            </span>
-
-            <strong class="price">
-              ${escapeHtml(
-                formatPrice(
-                  device.price
-                )
-              )}
-            </strong>
-
-          </div>
-
-        </div>
-
-      `;
-
-
-      card.addEventListener(
-        "click",
-        event => {
-
-          if(
-            event.target.closest(
-              ".favorite"
-            )
-          ){
-            return;
-          }
-
-
-          window.location.href =
-            `device.html?id=${encodeURIComponent(
-              device.id
-            )}`;
-
-        }
-      );
-
-
-      const favoriteButton =
-        card.querySelector(
-          ".favorite"
-        );
-
-
-      favoriteButton.addEventListener(
-        "click",
-        event => {
-
-          event.stopPropagation();
-
-
-          toggleFavorite(
-            device.id,
-            favoriteButton
-          );
-
-        }
-      );
-
-
-      return card;
-
+    if(card){
+      card.classList.add("removing");
+      setTimeout(render, 280);
+    }else{
+      render();
     }
 
-
-    /* =========================================
-       FAVORITES
-    ========================================== */
-
-    // افصل المفضلة حسب حساب Supabase الحالي.
-    let FAVORITES_KEY = "mzad_phone_favorites:guest";
-    async function initFavoriteScope(){
-      try{
-        const {data,error}=await supabase.auth.getUser();
-        if(error) throw error;
-        FAVORITES_KEY = data?.user?.id
-          ? "mzad_phone_favorites:user:" + data.user.id
-          : "mzad_phone_favorites:guest";
-      }catch(error){
-        console.warn("FAVORITES SCOPE:",error);
-        FAVORITES_KEY = "mzad_phone_favorites:guest";
-      }
-    }
-
-
-    let favoritesCache =
-      new Set();
-
-
-    function loadFavoritesCache(){
-
-      try{
-
-        const saved =
-          localStorage.getItem(
-            FAVORITES_KEY
-          );
-
-
-        if(!saved){
-
-          favoritesCache =
-            new Set();
-
-          return;
-
-        }
-
-
-        const parsed =
-          JSON.parse(
-            saved
-          );
-
-
-        favoritesCache =
-          new Set(
-            Array.isArray(parsed)
-              ? parsed.map(String)
-              : []
-          );
-
-      }catch(error){
-
-        favoritesCache =
-          new Set();
-
-      }
-
-    }
-
-
-    function saveFavorites(){
-
-      localStorage.setItem(
-        FAVORITES_KEY,
-        JSON.stringify(
-          Array.from(
-            favoritesCache
-          )
-        )
-      );
-
-    }
-
-
-    function isFavorite(
-      id
-    ){
-
-      return favoritesCache.has(
-        String(id)
-      );
-
-    }
-
-
-    function toggleFavorite(
-      id,
-      button
-    ){
-
-      const stringId =
-        String(id);
-
-
-      if(
-        favoritesCache.has(
-          stringId
-        )
-      ){
-
-        favoritesCache.delete(
-          stringId
-        );
-
-
-        button.classList.remove(
-          "active"
-        );
-
-
-        showToast(
-          "تمت الإزالة من المفضلة"
-        );
-
-      }
-
-      else{
-
-        favoritesCache.add(
-          stringId
-        );
-
-
-        button.classList.add(
-          "active"
-        );
-
-
-        showToast(
-          "تمت الإضافة إلى المفضلة"
-        );
-
-      }
-
-
-      saveFavorites();
-
-    }
-
-
-    /* =========================================
-       BRAND FILTER CLICK
-    ========================================== */
-
-    brandFilters.addEventListener(
-      "click",
-      event => {
-
-        const button =
-          event.target.closest(
-            ".filter"
-          );
-
-
-        if(!button){
-          return;
-        }
-
-
-        selectedBrand =
-          normalizeBrand(
-            button.dataset.brand
-          );
-
-
-        const newUrl =
-          new URL(
-            window.location.href
-          );
-
-
-        if(
-          selectedBrand === "all"
-        ){
-
-          newUrl.searchParams.delete(
-            "brand"
-          );
-
-        }
-
-        else{
-
-          const urlBrand =
-            selectedBrand === "Apple"
-              ? "iphone"
-              : selectedBrand.toLowerCase();
-
-
-          newUrl.searchParams.set(
-            "brand",
-            urlBrand
-          );
-
-        }
-
-
-        window.history.replaceState(
-          {},
-          "",
-          newUrl
-        );
-
-
-        render();
-
-      }
+    toast("تم حذف منشورك");
+
+  }catch(error){
+    console.error("DELETE DEVICE ERROR:", error);
+    toast("ما قدرنا نحذف المنشور، جرّب مرة ثانية");
+  }finally{
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = "حذف المنشور";
+  }
+}
+
+/* =========================================
+   EVENTS
+========================================= */
+
+grid.addEventListener("click", event => {
+
+  const retry = event.target.closest("[data-retry]");
+  if(retry){
+    load();
+    return;
+  }
+
+  const reset = event.target.closest("[data-reset]");
+  if(reset){
+    state.brand = "all";
+    state.query = "";
+    input.value = "";
+    searchBox.classList.remove("has-value");
+    syncUrlBrand();
+    render();
+    return;
+  }
+
+  const del = event.target.closest("[data-del]");
+  if(del){
+    event.stopPropagation();
+    openSheet(del.dataset.del);
+    return;
+  }
+
+  const fav = event.target.closest("[data-fav]");
+  if(fav){
+    event.stopPropagation();
+    toggleFav(fav.dataset.fav);
+    return;
+  }
+
+  const card = event.target.closest(".card");
+  if(!card) return;
+
+  const device = state.byId.get(card.dataset.id);
+  if(!device) return;
+
+  const page = device._auction ? "auction-details.html" : "device.html";
+  window.location.href = `${page}?id=${encodeURIComponent(device.id)}`;
+});
+
+chips.addEventListener("click", event => {
+  const btn = event.target.closest("[data-brand]");
+  if(!btn) return;
+
+  state.brand = btn.dataset.brand;
+  syncUrlBrand();
+  render();
+
+  btn.scrollIntoView({ inline:"center", block:"nearest", behavior:"smooth" });
+});
+
+function syncUrlBrand(){
+  const url = new URL(window.location.href);
+
+  if(state.brand === "all"){
+    url.searchParams.delete("brand");
+  }else{
+    url.searchParams.set(
+      "brand",
+      state.brand === "Apple" ? "iphone" : state.brand.toLowerCase()
     );
-
-
-    /* =========================================
-       SEARCH INPUT
-    ========================================== */
-
-    searchInput.addEventListener(
-      "input",
-      event => {
-
-        searchTerm =
-          event.target.value ||
-          "";
-
-
-        searchWrap.classList.toggle(
-          "has-value",
-          !!searchTerm.trim()
-        );
-
-
-        clearTimeout(
-          searchDebounceTimer
-        );
-
-
-        searchDebounceTimer =
-          setTimeout(
-            render,
-            80
-          );
-
-      }
-    );
-
-
-    searchInput.addEventListener(
-      "keydown",
-      event => {
-
-        if(
-          event.key === "Enter"
-        ){
-
-          searchTerm =
-            searchInput.value ||
-            "";
-
-
-          render();
-
-        }
-
-      }
-    );
-
-
-    /* =========================================
-       CLEAR SEARCH
-    ========================================== */
-
-    searchClear.addEventListener(
-      "click",
-      event => {
-
-        event.preventDefault();
-        event.stopPropagation();
-
-
-        searchInput.value =
-          "";
-
-        searchTerm =
-          "";
-
-
-        searchWrap.classList.remove(
-          "has-value"
-        );
-
-
-        render();
-
-
-        searchInput.focus();
-
-      }
-    );
-
-
-    /* =========================================
-       SORT
-    ========================================== */
-
-    sortBtn.addEventListener(
-      "click",
-      () => {
-
-        if(
-          sortMode === "newest"
-        ){
-
-          sortMode =
-            "low";
-
-          sortText.textContent =
-            "الأرخص";
-
-        }
-
-        else if(
-          sortMode === "low"
-        ){
-
-          sortMode =
-            "high";
-
-          sortText.textContent =
-            "الأعلى سعراً";
-
-        }
-
-        else{
-
-          sortMode =
-            "newest";
-
-          sortText.textContent =
-            "الأحدث";
-
-        }
-
-
-        render();
-
-      }
-    );
-
-
-    /* =========================================
-       LOADING
-    ========================================== */
-
-    function showLoading(){
-
-      loadingState.style.display =
-        "grid";
-
-      devicesGrid.style.display =
-        "none";
-
-      stateContainer.style.display =
-        "none";
-
-      resultsLabel.textContent =
-        "جاري تحميل الأجهزة...";
-
-    }
-
-
-    function hideLoading(){
-
-      loadingState.style.display =
-        "none";
-
-    }
-
-
-    /* =========================================
-       ERROR
-    ========================================== */
-
-    function showError(
-      title,
-      text
-    ){
-
-      loadingState.style.display =
-        "none";
-
-      devicesGrid.style.display =
-        "none";
-
-      stateContainer.style.display =
-        "block";
-
-
-      stateContainer.innerHTML = `
-
-        <div class="state">
-
-          <div class="state-icon">
-            ${alertIcon()}
-          </div>
-
-          <h3 class="state-title">
-            ${escapeHtml(title)}
-          </h3>
-
-          <p class="state-text">
-            ${escapeHtml(text)}
-          </p>
-
-          <button
-            class="retry-btn"
-            type="button"
-            id="retryBtn"
-          >
-            إعادة المحاولة
-          </button>
-
-        </div>
-
-      `;
-
-
-      const retryBtn =
-        document.getElementById(
-          "retryBtn"
-        );
-
-
-      retryBtn?.addEventListener(
-        "click",
-        () => {
-
-          loadDevices();
-
-        }
-      );
-
-
-      resultsLabel.textContent =
-        "تعذر تحميل الأجهزة";
-
-    }
-
-
-    /* =========================================
-       EMPTY
-    ========================================== */
-
-    function createEmptyState(
-      title,
-      text
-    ){
-
-      return `
-
-        <div class="state">
-
-          <div class="state-icon">
-            ${searchEmptyIcon()}
-          </div>
-
-          <h3 class="state-title">
-            ${escapeHtml(title)}
-          </h3>
-
-          <p class="state-text">
-            ${escapeHtml(text)}
-          </p>
-
-        </div>
-
-      `;
-
-    }
-
-
-    /* =========================================
-       ESCAPE
-    ========================================== */
-
-    function escapeHtml(
-      value
-    ){
-
-      return String(
-        value ?? ""
-      )
-      .replaceAll(
-        "&",
-        "&amp;"
-      )
-      .replaceAll(
-        "<",
-        "&lt;"
-      )
-      .replaceAll(
-        ">",
-        "&gt;"
-      )
-      .replaceAll(
-        '"',
-        "&quot;"
-      )
-      .replaceAll(
-        "'",
-        "&#039;"
-      );
-
-    }
-
-
-    function escapeAttribute(
-      value
-    ){
-
-      return escapeHtml(
-        value
-      );
-
-    }
-
-
-    /* =========================================
-       ICONS
-    ========================================== */
-
-    function heartIcon(){
-
-      return `
-
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-
-          <path
-            d="M20.8 8.7c0 5.4-8.8 10.3-8.8 10.3S3.2 14.1 3.2 8.7A4.7 4.7 0 0 1 12 6.2a4.7 4.7 0 0 1 8.8 2.5Z"
-          />
-
-        </svg>
-
-      `;
-
-    }
-
-
-    function imageIcon(){
-
-      return `
-
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.7"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-
-          <rect
-            x="3"
-            y="4"
-            width="18"
-            height="16"
-            rx="2"
-          />
-
-          <circle
-            cx="8.5"
-            cy="9"
-            r="1.5"
-          />
-
-          <path
-            d="M21 15l-5-5L5 20"
-          />
-
-        </svg>
-
-      `;
-
-    }
-
-
-    function locationIcon(){
-
-      return `
-
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-
-          <path
-            d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"
-          />
-
-          <circle
-            cx="12"
-            cy="10"
-            r="2.5"
-          />
-
-        </svg>
-
-      `;
-
-    }
-
-
-    function searchEmptyIcon(){
-
-      return `
-
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-
-          <circle
-            cx="11"
-            cy="11"
-            r="6.5"
-          />
-
-          <path
-            d="M16 16l4 4"
-          />
-
-          <path
-            d="M8.5 11h5"
-          />
-
-        </svg>
-
-      `;
-
-    }
-
-
-    function alertIcon(){
-
-      return `
-
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-
-          <circle
-            cx="12"
-            cy="12"
-            r="9"
-          />
-
-          <path
-            d="M12 8v5"
-          />
-
-          <path
-            d="M12 16.5h.01"
-          />
-
-        </svg>
-
-      `;
-
-    }
-
-
-    /* =========================================
-       INCOMING SEARCH
-    ========================================== */
-
-    function readIncomingSearch(){
-
-      const incomingParams =
-        new URLSearchParams(
-          window.location.search
-        );
-
-
-      const incomingSearch =
-        incomingParams.get(
-          "search"
-        )
-        ||
-        sessionStorage.getItem(
-          "mzad_search_query"
-        )
-        ||
-        "";
-
-
-      if(
-        incomingSearch
-      ){
-
-        searchInput.value =
-          incomingSearch;
-
-        searchTerm =
-          incomingSearch;
-
-        searchWrap.classList.add(
-          "has-value"
-        );
-
-
-        sessionStorage.removeItem(
-          "mzad_search_query"
-        );
-
-      }
-
-
-      const incomingBrand =
-        incomingParams.get(
-          "brand"
-        );
-
-
-      if(
-        incomingBrand &&
-        incomingBrand !== "all"
-      ){
-
-        selectedBrand =
-          brandAliases[
-            String(
-              incomingBrand
-            )
-            .trim()
-            .toLowerCase()
-          ]
-          ||
-          normalizeBrand(
-            incomingBrand
-          );
-
-      }
-
-    }
-
-
-    /* =========================================
-       KEYBOARD MODE
-    ========================================== */
-
-    searchInput.addEventListener(
-      "focus",
-      () => {
-
-        document.body.classList.add(
-          "keyboard-open"
-        );
-
-      }
-    );
-
-
-    searchInput.addEventListener(
-      "blur",
-      () => {
-
-        setTimeout(
-          () => {
-
-            document.body.classList.remove(
-              "keyboard-open"
-            );
-
-          },
-          150
-        );
-
-      }
-    );
-
-
-    /* =========================================
-       LIVE PUBLICATION TIME
-    ========================================== */
-
-    function refreshPublishedTimes(){
-
-      const elements =
-        document.querySelectorAll(
-          ".published-time[data-created-at]"
-        );
-
-
-      elements.forEach(
-        element => {
-
-          const createdAt =
-            element.dataset.createdAt;
-
-
-          element.textContent =
-            formatPublishedTime(
-              createdAt
-            );
-
-        }
-      );
-
-    }
-
-
-    setInterval(
-      refreshPublishedTimes,
-      60 * 1000
-    );
-
-
-    /* =========================================
-       START
-    ========================================== */
-
-    readIncomingSearch();
-
-    updateFilters();
-
-    // انتظر تحديد الحساب قبل قراءة المفضلة ورسم البطاقات.
-    initFavoriteScope().finally(() => {
-      loadFavoritesCache();
-      loadDevices();
-    });
-
-  </script>
+  }
+
+  window.history.replaceState({}, "", url);
+}
+
+document.querySelector(".seg").addEventListener("click", event => {
+  const btn = event.target.closest("[data-sort]");
+  if(!btn) return;
+  state.sort = btn.dataset.sort;
+  render();
+});
+
+let searchTimer = null;
+
+input.addEventListener("input", () => {
+  state.query = input.value.trim();
+  searchBox.classList.toggle("has-value", !!input.value);
+
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(render, 120);
+});
+
+input.addEventListener("keydown", event => {
+  if(event.key !== "Enter") return;
+  event.preventDefault();
+  state.query = input.value.trim();
+  input.blur();
+  render();
+});
+
+input.addEventListener("focus", () => document.body.classList.add("kb"));
+input.addEventListener("blur", () => setTimeout(() => document.body.classList.remove("kb"), 150));
+
+$("qClear").addEventListener("click", () => {
+  input.value = "";
+  state.query = "";
+  searchBox.classList.remove("has-value");
+  render();
+  input.focus();
+});
+
+$("back").addEventListener("click", event => {
+  event.preventDefault();
+  if(window.history.length > 1) window.history.back();
+  else window.location.href = "home.html";
+});
+
+$("sheetCancel").addEventListener("click", closeSheet);
+$("sheetBackdrop").addEventListener("click", closeSheet);
+$("sheetConfirm").addEventListener("click", confirmDelete);
+
+document.addEventListener("keydown", event => {
+  if(event.key === "Escape" && !sheet.hidden) closeSheet();
+});
+
+/* =========================================
+   START
+========================================= */
+
+const params = new URLSearchParams(window.location.search);
+
+state.brand = canonicalBrand(params.get("brand")) || "all";
+
+const incomingSearch =
+  params.get("search") ||
+  sessionStorage.getItem("mzad_search_query") ||
+  "";
+
+if(incomingSearch){
+  input.value = incomingSearch;
+  state.query = incomingSearch.trim();
+  searchBox.classList.add("has-value");
+}
+
+sessionStorage.removeItem("mzad_search_query");
+
+renderChips();
+
+initScope().finally(load);
+
+</script>
 
 </body>
 </html>
