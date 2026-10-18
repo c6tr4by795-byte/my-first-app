@@ -107,11 +107,13 @@ button{border:0;background:none;cursor:pointer}
 .ph{position:absolute;inset:0;display:grid;place-items:center;color:rgba(98,70,217,.30);transition:opacity .2s ease}
 .ph svg{width:46px;height:46px}
 .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;
-  padding:14px;opacity:0;transition:opacity .35s ease,transform .55s var(--ease)}
+  padding:0;opacity:0;transition:opacity .35s ease,transform .55s var(--ease)}
 .pic img.ready{opacity:1}
+.pic img.photo-portrait{object-fit:cover}
+.pic img.photo-landscape{object-fit:contain}
+.pic img.photo-square{object-fit:cover}
 .pic:has(img.ready) .ph{opacity:0}
-@media(max-width:360px){.pic img{padding:9px}}
-/* خلي منطقة الصورة منفصلة حتى ما تنطمر تحت معلومات الجهاز */
+/* الصور تمتد داخل المساحة مباشرة، والملاءمة تتحدد حسب أبعاد الصورة الأصلية */
 
 .fav,.del{position:absolute;top:10px;z-index:3;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;
   background:rgba(255,255,255,.94);color:#6b6585;transition:transform .15s ease,color .2s ease}
@@ -519,7 +521,7 @@ function cardHTML(d, i){
     ? `<span class="badge ${ended ? "end" : "auc"}">${ended ? "انتهى المزاد" : "مزاد"}</span>`
     : `<span class="badge">بيع مباشر</span>`;
   const image = d._img
-    ? `<img src="${esc(d._img)}" alt="${esc(title)}" loading="lazy" decoding="async" onload="this.classList.add('ready')" onerror="this.remove()">`
+    ? `<img src="${esc(d._img)}" alt="${esc(title)}" loading="lazy" decoding="async" onload="this.classList.add('ready');this.classList.add(this.naturalWidth/this.naturalHeight>1.12?'photo-landscape':(this.naturalHeight/this.naturalWidth>1.12?'photo-portrait':'photo-square'))" onerror="this.remove()">`
     : "";
   return `
   <article class="card${d._owned ? " owned" : ""}" data-id="${esc(d.id)}" style="--i:${Math.min(i, 8)}">
