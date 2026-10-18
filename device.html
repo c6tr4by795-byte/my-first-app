@@ -2738,11 +2738,14 @@
           if (result.data && result.data.device) {
             const row = result.data;
             const d = row.device;
-            const imageRows = Array.isArray(d.mzad_device_images)
-              ? [...d.mzad_device_images].sort((a,b) =>
-                  Number(a.sort_order || 0) - Number(b.sort_order || 0)
-                )
-              : [];
+            // اجلب الصور باستعلام مستقل لتفادي اعتماد ظهورها على العلاقة المتداخلة.
+            const imageResult = await supabase
+              .from("mzad_device_images")
+              .select("storage_path, sort_order, is_primary")
+              .eq("device_id", d.id)
+              .order("sort_order", { ascending: true });
+            if (imageResult.error) throw imageResult.error;
+            const imageRows = Array.isArray(imageResult.data) ? imageResult.data : [];
 
             data = {
               id: d.id,
