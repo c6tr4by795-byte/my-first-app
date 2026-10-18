@@ -102,12 +102,14 @@ button{border:0;background:none;cursor:pointer}
 
 /* الصورة بمنطقتها، والكتابة بلوحة صلبة تحتها، حتى ما يتداخل شي */
 .pic{position:absolute;inset:0;overflow:hidden;
-  background:linear-gradient(160deg,#a396f0 0%,#6246d9 60%,#3f2d9c 100%)}
-.ph{position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,255,255,.45)}
+  background:radial-gradient(ellipse at 50% 42%,#fff 0%,#faf9ff 50%,#eee9ff 100%)}
+.ph{position:absolute;inset:0;display:grid;place-items:center;color:rgba(98,70,217,.30);transition:opacity .2s ease}
 .ph svg{width:46px;height:46px}
-.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;
-  opacity:0;transition:opacity .6s ease,transform 1.2s var(--ease)}
+.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:50% 50%;
+  padding:12px;opacity:0;transition:opacity .35s ease,transform .55s var(--ease)}
 .pic img.ready{opacity:1}
+.pic:has(img.ready) .ph{opacity:0}
+@media(max-width:360px){.pic img{padding:8px}}
 
 .fav,.del{position:absolute;top:10px;z-index:3;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;
   background:rgba(255,255,255,.94);color:#6b6585;transition:transform .15s ease,color .2s ease}
