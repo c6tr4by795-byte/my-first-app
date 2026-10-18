@@ -375,7 +375,19 @@ async function loadSettings(){
   renderToggles(); renderPresets(); renderFields(); renderStatus(); renderAlerts();
 }
 async function loadPub(){
-  const r = await supabase.rpc("mzad_public_status"); if(!r.error && r.data){ S.pub = r.data; renderCmds(); renderPresets(); renderStatus(); }
+  const r = await supabase.rpc("mzad_public_status");
+  if(r.error){
+    showErr("تعذر قراءة حالة الإعلان والصيانة من قاعدة البيانات: " + rpcErr(r.error));
+    return false;
+  }
+  if(!r.data || typeof r.data !== "object"){
+    showErr("قاعدة البيانات لم تُرجع حالة صحيحة للإعلان والصيانة.");
+    return false;
+  }
+  S.pub = r.data;
+  renderCmds(); renderPresets(); renderStatus();
+  hideErr();
+  return true;
 }
 async function loadQueue(){
   const st = Q_FILTERS.find(f => f[0]===S.qf)[2];
@@ -459,6 +471,7 @@ function needsConfirm(t, val){ return t && ((t.danger==="on" && val===true) || (
 async function saveSetting(key, value){
   const r = await supabase.rpc("mzad_admin_update_setting", { p_key:key, p_value:value, p_description_ar:null });
   if(r.error) throw r.error;
+  if(r.data === false) throw new Error("قاعدة البيانات رفضت حفظ الإعداد «"+key+"».");
   try{ await supabase.rpc("mzad_admin_log", { p_action:"setting_update", p_target:key, p_details:{ value } }); }catch{}
   S.saved.set(key, value);
 }
@@ -664,7 +677,14 @@ function noticeSheet(style, activate){
           const r = await supabase.rpc("mzad_admin_set_notice",{ p_style:getSeg("style"), p_title:$("nTitle").value.trim()||null, p_message:$("nMsg").value.trim()||null, p_eta_at:etaOf(), p_show_phone:$("nPhone").checked });
           if(r.error) throw r.error;
           if(activate) await saveSetting("maintenance_mode", true);
-          toast(activate?"تم تفعيل الصيانة":"تم حفظ الرسالة","ok"); await Promise.allSettled([loadPub(), loadSettings()]); closeSheet(true);
+          const results = await Promise.all([loadPub(), loadSettings()]);
+          if(!results[0]) throw new Error("تعذّر التحقق من حالة الصيانة بعد الحفظ.");
+          const savedNotice = S.pub?.maintenance || {};
+          const expectedStyle = getSeg("style");
+          if(savedNotice.style && savedNotice.style !== expectedStyle) throw new Error("الحالة المحفوظة لا تطابق نوع الصيانة المختار.");
+          if(activate && !isOn(S.saved.get("maintenance_mode"))) throw new Error("لم يتم تأكيد تفعيل وضع الصيانة.");
+          toast(activate?"تم تفعيل الصيانة والتحقق منها":"تم حفظ الرسالة والتحقق منها","ok");
+          closeSheet(true);
         }catch(e){ toast("فشل: "+rpcErr(e),"bad"); }
       } });
   });
@@ -679,9 +699,17 @@ function announceSheet(){
   { go:()=>setAnn($("aTxt").value.trim(), getSeg("ad")), del:()=>setAnn("", "0") });
 }
 async function setAnn(text, hrs){
-  try{ const r = await supabase.rpc("mzad_admin_set_announcement",{ p_text:text, p_until: text && Number(hrs)>0 ? iso(Number(hrs)*60) : null }); if(r.error) throw r.error;
-    toast(text?"تم نشر الإعلان":"تم حذف الإعلان","ok"); closeSheet(false); await loadPub(); }
-  catch(e){ toast("فشل: "+rpcErr(e),"bad"); }
+  try{
+    const r = await supabase.rpc("mzad_admin_set_announcement",{ p_text:text, p_until: text && Number(hrs)>0 ? iso(Number(hrs)*60) : null });
+    if(r.error) throw r.error;
+    if(r.data === false) throw new Error("قاعدة البيانات رفضت تغيير الإعلان.");
+    const statusOk = await loadPub();
+    if(!statusOk) throw new Error("تعذّر التحقق من حالة الإعلان بعد الحفظ.");
+    const actual = String(S.pub?.announcement || "");
+    if(actual !== text) throw new Error("الإعلان لم يظهر بالحالة المحفوظة. افحص دالة mzad_public_status في Supabase.");
+    toast(text?"تم نشر الإعلان والتحقق منه":"تم حذف الإعلان والتحقق من إزالته","ok");
+    closeSheet(false);
+  }catch(e){ toast("فشل التفعيل: "+rpcErr(e),"bad"); }
 }
 
 function extendAllSheet(){
