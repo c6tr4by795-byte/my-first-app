@@ -32,21 +32,21 @@ button{border:0;background:none;cursor:pointer}
 .wrap{width:min(100%,720px);margin:0 auto}
 
 /* HEADER */
-.top{position:sticky;top:0;z-index:50;padding:calc(10px + var(--st)) 18px 10px;
-  background:transparent;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  transition:box-shadow .3s ease,background .3s ease}
+.top{position:sticky;top:0;z-index:50;padding:calc(10px + var(--st)) 16px 10px;background:transparent;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);transition:box-shadow .3s ease,background .3s ease}
 .top.scrolled{box-shadow:0 1px 0 var(--line);background:rgba(248,247,252,.97)}
-.top-row{display:flex;align-items:center;gap:12px}
-.back{width:40px;height:40px;flex:0 0 40px;display:grid;place-items:center;border-radius:50%;
+.top-row{display:grid;grid-template-columns:40px 1fr 40px;align-items:center}
+.back{width:40px;height:40px;display:grid;place-items:center;border-radius:50%;
   background:#fff;border:1px solid var(--line);color:var(--pd);transition:transform .15s ease}
 .back:active{transform:scale(.9)}
 .back svg{width:18px;height:18px}
-.ttl{flex:1;min-width:0}
-.ttl h1{margin:0;font-size:26px;font-weight:900;letter-spacing:-.03em;line-height:1.1;transition:font-size .3s var(--ease)}
-.ttl p{margin:3px 0 0;font-size:12px;font-weight:600;color:var(--muted);max-height:20px;overflow:hidden;
-  transition:max-height .3s var(--ease),opacity .3s ease,margin .3s ease}
-.top.scrolled .ttl h1{font-size:20px}
-.top.scrolled .ttl p{max-height:0;opacity:0;margin:0}
+.logo{direction:ltr;text-align:center;line-height:1;user-select:none}
+.logo b{display:block;font-size:20px;font-weight:950;letter-spacing:.03em;color:var(--ink)}
+.logo small{display:block;margin-top:3px;font-size:7.5px;font-weight:800;letter-spacing:.42em;padding-left:.42em;color:var(--muted)}
+.ttl{margin-top:14px;max-height:70px;overflow:hidden;transition:max-height .3s var(--ease),opacity .3s ease,margin .3s ease}
+.ttl h1{margin:0;font-size:26px;font-weight:900;letter-spacing:-.03em;line-height:1.15}
+.ttl p{margin:3px 0 0;font-size:12px;font-weight:600;color:var(--muted)}
+.top.scrolled .ttl{max-height:0;opacity:0;margin-top:0}
 .searchbox{position:relative;margin-top:12px}
 .searchbox input{width:100%;height:46px;border-radius:16px;border:1px solid var(--line);background:#fff;
   padding:0 44px;font-size:14px;font-weight:600;outline:none;transition:box-shadow .25s ease,border-color .25s ease}
@@ -77,12 +77,12 @@ button{border:0;background:none;cursor:pointer}
 .seg button.on{background:#fff;color:var(--pd);border-color:var(--edge);box-shadow:0 4px 12px -6px rgba(60,40,140,.3)}
 
 /* GRID */
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:14px 14px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:14px 10px 0}
 @media(min-width:640px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}
 
 /* CARD */
 .card{position:relative;display:flex;flex-direction:column;overflow:hidden;isolation:isolate;cursor:pointer;
-  aspect-ratio:1/2.1;border-radius:28px;background:#16112d;border:1px solid rgba(255,255,255,.06);
+  aspect-ratio:1/2;border-radius:28px;background:#16112d;border:1px solid rgba(255,255,255,.06);
   box-shadow:0 24px 40px -26px rgba(40,25,110,.6);
   opacity:0;animation:rise .7s var(--ease) forwards;animation-delay:calc(var(--i,0)*70ms);
   transition:transform .4s var(--ease),box-shadow .4s ease}
@@ -105,7 +105,7 @@ button{border:0;background:none;cursor:pointer}
   background:linear-gradient(160deg,#a396f0 0%,#6246d9 60%,#3f2d9c 100%)}
 .ph{position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,255,255,.45)}
 .ph svg{width:46px;height:46px}
-.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;
+.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;
   opacity:0;transition:opacity .6s ease,transform 1.2s var(--ease)}
 .pic img.ready{opacity:1}
 
@@ -120,10 +120,13 @@ button{border:0;background:none;cursor:pointer}
 .fav.pop{animation:pop .4s var(--ease)}
 @keyframes pop{40%{transform:scale(1.3)}}
 
-.info{position:relative;z-index:1;flex:0 0 30%;margin-top:auto;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;padding:18px 12px 13px;background:linear-gradient(180deg,rgba(18,12,44,0) 0,rgba(18,12,44,.9) 18px,rgba(18,12,44,.97) 55%,#120c2c 100%)}
+.info{position:relative;z-index:1;flex:0 0 30%;margin-top:auto;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;padding:16px 12px 13px;background:linear-gradient(180deg,rgba(18,12,44,0) 0,rgba(18,12,44,.9) 18px,rgba(18,12,44,.97) 55%,#120c2c 100%)}
 .name{margin:0;font-size:15px;font-weight:900;line-height:1.25;letter-spacing:-.01em;color:#fff;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.name .br{display:inline-block;padding:2px 8px;border-radius:8px;background:linear-gradient(145deg,#6246d9,#8b6cf0);color:#fff;font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;margin-inline-end:6px;vertical-align:1px}
+.btag{position:absolute;top:12px;inset-inline-start:12px;z-index:3;padding:6px 12px;border-radius:999px;
+  background:linear-gradient(145deg,#6246d9,#8b6cf0);color:#fff;font-size:10px;font-weight:900;letter-spacing:.08em;
+  text-transform:uppercase;box-shadow:0 8px 16px -8px rgba(60,40,150,.7)}
+.card.owned .btag{top:56px}
 .specs{display:flex;gap:5px;overflow:hidden}
 .specs span{flex:0 0 auto;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.1);
   border:1px solid rgba(255,255,255,.08);color:#fff;font-size:10.5px;font-weight:800;white-space:nowrap}
@@ -134,13 +137,15 @@ button{border:0;background:none;cursor:pointer}
 .price{font-size:17px;font-weight:900;letter-spacing:-.02em;color:#fff;white-space:nowrap;direction:rtl}
 .price i{font-style:normal;font-size:10px;font-weight:700;margin-inline-start:3px;opacity:.75}
 .time{font-size:10px;font-weight:700;color:rgba(255,255,255,.55);white-space:nowrap}
+.specs .bat{display:inline-flex;align-items:center;gap:4px}
+.specs .bat svg{width:13px;height:13px}
 .badge{flex:0 0 auto;padding:5px 10px;border-radius:999px;font-size:10px;font-weight:900;
   background:#fff;color:#0f7a4a;margin-bottom:2px}
 .badge.auc{background:linear-gradient(145deg,#6246d9,#8b6cf0);color:#fff}
 .badge.end{background:rgba(110,104,135,.95);color:#fff}
 
 /* STATES */
-.sk{aspect-ratio:1/2.1;border-radius:28px;background:linear-gradient(90deg,#efecfa 25%,#faf9ff 50%,#efecfa 75%);
+.sk{aspect-ratio:1/2;border-radius:28px;background:linear-gradient(90deg,#efecfa 25%,#faf9ff 50%,#efecfa 75%);
   background-size:200% 100%;animation:shim 1.3s linear infinite}
 @keyframes shim{to{background-position:-200% 0}}
 .empty,.error{grid-column:1/-1;padding:38px 20px;border-radius:26px;background:#fff;border:1px solid var(--line);text-align:center}
@@ -201,10 +206,12 @@ body.kb .dock{transform:translateY(140%)}
     <button class="back" id="back" type="button" aria-label="رجوع">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
     </button>
-    <div class="ttl">
-      <h1>السوق</h1>
-      <p>كل الأجهزة بمكان واحد</p>
-    </div>
+    <div class="logo" aria-label="MZAD PHONE"><b>MZAD</b><small>PHONE</small></div>
+    <span></span>
+  </div>
+  <div class="ttl">
+    <h1>السوق</h1>
+    <p>كل الأجهزة بمكان واحد</p>
   </div>
   <div class="searchbox" id="searchBox">
     <svg class="ico-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
@@ -281,6 +288,7 @@ const SVG = {
   clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
   phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M9.5 5.5h5"/><path d="M11 18.5h2"/></svg>',
   search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/><path d="M8.5 11h5"/></svg>',
+  bat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="7" width="16" height="10" rx="2.5"/><path d="M21.5 10.5v3"/><path d="M6 10.5v3"/></svg>',
   alert:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16.5h.01"/></svg>'
 };
 
@@ -488,15 +496,13 @@ function titleOf(d){
 function titleHTML(d){
   const model = String(d.model || "").trim();
   if(d._brand === "Apple") return esc(model || "iPhone");
-  const b = esc(d._brand || "");
-  const m = esc(model);
-  if(!b && !m) return "جهاز";
-  return (b ? `<span class="br">${b}</span>` : "") + m;
+  return esc(model || d._brand || "جهاز");
 }
 function specsOf(d){
   const battery = String(d.battery_health ?? "").trim().replace(/%$/, "");
-  return [d.storage, d.color, battery ? `بطارية ${battery}%` : ""]
-    .map(v => String(v ?? "").trim()).filter(Boolean).slice(0,3);
+  const list = [d.storage, d.color].map(v => String(v ?? "").trim()).filter(Boolean).map(t => ({ t }));
+  if(battery) list.push({ t: battery + "%", bat: true });
+  return list.slice(0,3);
 }
 function cardHTML(d, i){
   const ended = d._auction && d._ends && d._ends <= Date.now();
@@ -512,16 +518,17 @@ function cardHTML(d, i){
     ? `<img src="${esc(d._img)}" alt="${esc(title)}" loading="lazy" decoding="async" onload="this.classList.add('ready')" onerror="this.remove()">`
     : "";
   return `
-  <article class="card" data-id="${esc(d.id)}" style="--i:${Math.min(i, 8)}">
+  <article class="card${d._owned ? " owned" : ""}" data-id="${esc(d.id)}" style="--i:${Math.min(i, 8)}">
     <div class="pic">
       <div class="ph">${SVG.phone}</div>
       ${image}
+      ${d._brand ? `<span class="btag">${esc(d._brand)}</span>` : ""}
       <button class="fav${fav ? " on" : ""}" type="button" data-fav="${esc(d.id)}" aria-label="المفضلة">${SVG.heart}</button>
       ${d._owned ? `<button class="del" type="button" data-del="${esc(d.id)}" aria-label="حذف منشوري">${SVG.trash}</button>` : ""}
     </div>
     <div class="info">
       <h3 class="name" title="${esc(title)}">${titleHTML(d)}</h3>
-      ${specs.length ? `<div class="specs">${specs.map(t => `<span>${esc(t)}</span>`).join("")}</div>` : ""}
+      ${specs.length ? `<div class="specs">${specs.map(x => `<span${x.bat ? ' class="bat"' : ""}>${x.bat ? SVG.bat : ""}${esc(x.t)}</span>`).join("")}</div>` : ""}
       <div class="foot">
         <div class="pricecol">
           <span class="price">${price}</span>
