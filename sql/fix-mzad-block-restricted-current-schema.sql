@@ -119,7 +119,7 @@ begin
 
   return jsonb_build_object(
     'maintenance', jsonb_build_object(
-      'on', coalesce(public.mzad_setting_bool('maintenance_mode'), false),
+      'on', coalesce(public.mzad_setting_bool('maintenance_mode', false), false),
       'style', coalesce(n.style, 'maintenance'),
       'title', n.title,
       'message', n.message,
@@ -131,10 +131,10 @@ begin
        and (n.announcement_until is null or n.announcement_until > now())
       then n.announcement else null end,
     'flags', jsonb_build_object(
-      'bidding', public.mzad_setting_bool('bidding_enabled'),
-      'auctions', public.mzad_setting_bool('auctions_enabled'),
-      'deposits', public.mzad_setting_bool('deposits_enabled'),
-      'registration', public.mzad_setting_bool('registration_enabled')
+      'bidding', public.mzad_setting_bool('bidding_enabled', false),
+      'auctions', public.mzad_setting_bool('auctions_enabled', false),
+      'deposits', public.mzad_setting_bool('deposits_enabled', false),
+      'registration', public.mzad_setting_bool('registration_enabled', false)
     ),
     'me', me,
     'server_time', now()
