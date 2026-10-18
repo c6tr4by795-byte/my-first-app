@@ -440,7 +440,8 @@ async function fetchMzad(){
     const d = item.device;
     const imgs = (Array.isArray(d.mzad_device_images) ? [...d.mzad_device_images] : [])
       .sort((a,b) => Number(a.sort_order||0) - Number(b.sort_order||0));
-    const urls = await Promise.all(imgs.map(signImage));
+    // device-images مخزن عام؛ استخدم الرابط العام مباشرة لتجنب فشل إنشاء الروابط الموقعة.
+    const urls = imgs.map(image => publicImage(image.storage_path));
     return {
       id:d.id, created_at:item.created_at, brand:d.brand, model:d.model, storage:d.storage, color:d.color,
       battery_health:d.battery_health, condition:d.condition_grade, body_condition:d.condition_grade,
