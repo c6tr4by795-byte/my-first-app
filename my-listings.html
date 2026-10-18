@@ -1476,31 +1476,96 @@
         }
 
 
-        const {
-          data,
-          error
-        } =
-          await supabase
+        const [
+          { data: legacyDevices, error: legacyError },
+          { data: directSales, error: directSalesError }
+        ] = await Promise.all([
+          supabase
             .from("devices")
             .select(DEVICE_FIELDS)
             .eq("seller_id", user.id)
-            .order(
-              "created_at",
-              {
-                ascending:false
-              }
-            );
+            .order("created_at", { ascending: false }),
 
+          supabase
+            .from("mzad_direct_sales")
+            .select(`
+              id,
+              created_at,
+              asking_price_iqd,
+              status,
+              device_id,
+              seller_user_id,
+              device:mzad_devices!mzad_direct_sales_device_id_fkey (
+                id,
+                brand,
+                model,
+                storage,
+                color,
+                battery_health,
+                condition_grade,
+                replaced_parts,
+                screen_condition,
+                camera_condition,
+                biometric_condition,
+                seller_notes,
+                mzad_device_images (
+                  storage_path,
+                  sort_order,
+                  is_primary
+                )
+              )
+            `)
+            .eq("seller_user_id", user.id)
+            .order("created_at", { ascending: false })
+        ]);
 
-        if(error){
-          throw error;
-        }
+        if(legacyError) throw legacyError;
+        if(directSalesError) throw directSalesError;
 
+        const normalizedDirectSales = (directSales || [])
+          .filter(row => row.device)
+          .map(row => {
+            const d = row.device;
+            const imageRows = Array.isArray(d.mzad_device_images)
+              ? [...d.mzad_device_images].sort((a,b) =>
+                  Number(a.sort_order || 0) - Number(b.sort_order || 0)
+                )
+              : [];
 
-        const devices =
-          Array.isArray(data)
-            ? data
-            : [];
+            return {
+              id: d.id,
+              direct_sale_id: row.id,
+              created_at: row.created_at,
+              brand: d.brand,
+              model: d.model,
+              storage: d.storage,
+              color: d.color,
+              battery_health: d.battery_health,
+              condition: d.condition_grade,
+              body_condition: d.condition_grade,
+              screen_condition: d.screen_condition,
+              face_id: d.biometric_condition,
+              cameras: d.camera_condition,
+              charging: "",
+              replaced_parts: d.replaced_parts,
+              price: row.asking_price_iqd,
+              location: "النجف",
+              sale_type: "direct",
+              seller_id: row.seller_user_id,
+              seller_name: "بائع MZAD PHONE",
+              images: imageRows.map(image => image.storage_path),
+              notes: d.seller_notes,
+              listing_status: row.status
+            };
+          });
+
+        const devices = [
+          ...(Array.isArray(legacyDevices) ? legacyDevices : []),
+          ...normalizedDirectSales
+        ].sort((a,b) =>
+          new Date(b.created_at || 0).getTime() -
+          new Date(a.created_at || 0).getTime()
+        );
 
 
         loading.style.display =
