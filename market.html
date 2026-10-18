@@ -21,16 +21,19 @@ html,body{margin:0}
 body{min-height:100dvh;background:var(--bg);color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Tahoma,Arial,sans-serif;
   -webkit-font-smoothing:antialiased;overflow-x:hidden;padding-bottom:calc(104px + var(--sb))}
-body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:radial-gradient(420px 300px at 90% -40px,rgba(139,108,240,.16),transparent 70%),
-             radial-gradient(360px 280px at -10% 40%,rgba(98,70,217,.07),transparent 70%)}
+body{position:relative}
+body::before{content:"";position:absolute;top:0;left:0;right:0;height:460px;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(300px 220px at 88% 40px,rgba(139,108,240,.30),transparent 70%),
+    radial-gradient(260px 200px at 6% 150px,rgba(98,70,217,.16),transparent 70%),
+    linear-gradient(180deg,#ebe6ff 0%,#f3f0ff 200px,rgba(248,247,252,0) 100%)}
 button,input{font:inherit;color:inherit}
 button{border:0;background:none;cursor:pointer}
 .wrap{width:min(100%,720px);margin:0 auto}
 
 /* HEADER */
 .top{position:sticky;top:0;z-index:50;padding:calc(10px + var(--st)) 18px 10px;
-  background:rgba(248,247,252,.78);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  background:transparent;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   transition:box-shadow .3s ease,background .3s ease}
 .top.scrolled{box-shadow:0 1px 0 var(--line);background:rgba(248,247,252,.92)}
 .top-row{display:flex;align-items:center;gap:12px}
@@ -78,68 +81,65 @@ button{border:0;background:none;cursor:pointer}
 @media(min-width:640px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}
 
 /* CARD */
-.card{position:relative;display:flex;flex-direction:column;overflow:hidden;isolation:isolate;cursor:pointer;
-  border-radius:28px;border:1px solid rgba(255,255,255,.07);
-  background:linear-gradient(170deg,#32238a 0%,#211563 50%,#130b36 100%);
-  box-shadow:0 22px 40px -22px rgba(41,25,120,.65);
+.card{position:relative;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;isolation:isolate;cursor:pointer;
+  aspect-ratio:1/1.42;border-radius:30px;
+  background:linear-gradient(160deg,#9a8bee 0%,#6246d9 55%,#3f2d9c 100%);
+  box-shadow:0 24px 40px -26px rgba(60,40,150,.55);
   opacity:0;animation:rise .7s var(--ease) forwards;animation-delay:calc(var(--i,0)*70ms);
   transition:transform .4s var(--ease),box-shadow .4s ease}
-.card::before{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;border-radius:inherit;
-  background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.14) 50%,transparent 65%);
+.card::before{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;border-radius:inherit;
+  background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.16) 50%,transparent 65%);
   transform:translateX(120%);transition:transform .9s var(--ease)}
+.card::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(18,12,44,0) 36%,rgba(18,12,44,.5) 60%,rgba(18,12,44,.92) 100%)}
 .card:active{transform:scale(.97)}
 .card:active::before{transform:translateX(-120%)}
 @media(hover:hover){
-  .card:hover{transform:translateY(-6px);box-shadow:0 34px 50px -24px rgba(41,25,120,.7)}
+  .card:hover{transform:translateY(-6px);box-shadow:0 34px 50px -26px rgba(60,40,150,.65)}
   .card:hover::before{transform:translateX(-120%)}
-  .card:hover .media img{transform:scale(1.07)}
+  .card:hover>img{transform:scale(1.06)}
 }
 .card.removing{animation:out .28s ease forwards}
 @keyframes rise{from{opacity:0;transform:translateY(26px) scale(.97);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
 @keyframes out{to{opacity:0;transform:scale(.9)}}
 
-.media{position:relative;margin:9px 9px 0;aspect-ratio:1/1.12;border-radius:21px;overflow:hidden;
-  background:linear-gradient(160deg,#4a3aa8,#2a1d6e)}
-.media::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(180deg,rgba(19,11,54,0) 60%,rgba(19,11,54,.35) 100%)}
-.ph{position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,255,255,.35)}
-.ph svg{width:42px;height:42px}
-.media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;
+.ph{position:absolute;inset:0;z-index:-2;display:grid;place-items:center;color:rgba(255,255,255,.4)}
+.ph svg{width:48px;height:48px}
+.card>img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;object-position:top center;
   opacity:0;transition:opacity .6s ease,transform 1.2s var(--ease)}
-.media img.ready{opacity:1}
+.card>img.ready{opacity:1}
 
-.fav,.del{position:absolute;top:10px;z-index:3;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;
-  background:rgba(255,255,255,.92);color:#6b6585;backdrop-filter:blur(8px);transition:transform .15s ease,color .2s ease}
-.fav{inset-inline-end:10px}
-.del{inset-inline-start:10px;color:var(--danger)}
+.fav,.del{position:absolute;top:12px;z-index:3;width:36px;height:36px;display:grid;place-items:center;border-radius:50%;
+  background:rgba(255,255,255,.93);color:#6b6585;backdrop-filter:blur(8px);transition:transform .15s ease,color .2s ease}
+.fav{inset-inline-end:12px}
+.del{inset-inline-start:12px;color:var(--danger)}
 .fav:active,.del:active{transform:scale(.85)}
-.fav svg,.del svg{width:16px;height:16px}
+.fav svg,.del svg{width:17px;height:17px}
 .fav.on{color:var(--danger)}
 .fav.on svg{fill:var(--danger)}
 .fav.pop{animation:pop .4s var(--ease)}
 @keyframes pop{40%{transform:scale(1.3)}}
 
-.badge{position:absolute;bottom:10px;inset-inline-start:10px;z-index:3;padding:5px 11px;border-radius:999px;
-  font-size:10px;font-weight:900;background:rgba(255,255,255,.92);color:#0f7a4a;backdrop-filter:blur(8px)}
-.badge.auc{background:rgba(98,70,217,.92);color:#fff}
-.badge.end{background:rgba(60,55,80,.88);color:#fff}
-
-.info{flex:1;display:flex;flex-direction:column;gap:9px;padding:14px 14px 15px}
-.name{margin:0;font-size:16px;font-weight:900;line-height:1.25;letter-spacing:-.015em;color:#fff;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.info{position:relative;z-index:1;display:flex;flex-direction:column;gap:10px;padding:0 14px 14px}
+.name{margin:0;font-size:17px;font-weight:900;line-height:1.25;letter-spacing:-.015em;color:#fff;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 2px 12px rgba(0,0,0,.35)}
 .specs{display:flex;gap:6px;overflow:hidden}
-.specs span{flex:0 0 auto;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.1);
-  border:1px solid rgba(255,255,255,.07);color:#e4dcff;font-size:10.5px;font-weight:800;white-space:nowrap}
-.sep{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent);margin-top:2px}
-.pricerow{display:flex;flex-direction:column;gap:2px}
-.pricerow small{font-size:10px;font-weight:700;color:rgba(255,255,255,.55)}
-.pricerow b{font-size:19px;font-weight:900;letter-spacing:-.02em;color:#fff;white-space:nowrap;
-  overflow:hidden;text-overflow:ellipsis}
-.time{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:rgba(255,255,255,.55);white-space:nowrap}
-.time svg{width:11px;height:11px;flex:0 0 11px}
+.specs span{flex:0 0 auto;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  color:#fff;font-size:11px;font-weight:800;white-space:nowrap}
+.sep{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent)}
+.foot{display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
+.pricecol{display:flex;flex-direction:column;gap:1px;min-width:0}
+.pricecol small{font-size:10.5px;font-weight:700;color:rgba(255,255,255,.7)}
+.pricecol b{font-size:18px;font-weight:900;letter-spacing:-.02em;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.time{font-size:10.5px;font-weight:700;color:rgba(255,255,255,.65);white-space:nowrap}
+.badge{flex:0 0 auto;padding:6px 12px;border-radius:999px;font-size:10.5px;font-weight:900;
+  background:rgba(255,255,255,.95);color:#0f7a4a;margin-bottom:2px}
+.badge.auc{background:linear-gradient(145deg,#6246d9,#8b6cf0);color:#fff}
+.badge.end{background:rgba(70,64,92,.92);color:#fff}
 
 /* STATES */
-.sk{aspect-ratio:1/1.55;border-radius:28px;background:linear-gradient(90deg,#efecfa 25%,#faf9ff 50%,#efecfa 75%);
+.sk{aspect-ratio:1/1.42;border-radius:28px;background:linear-gradient(90deg,#efecfa 25%,#faf9ff 50%,#efecfa 75%);
   background-size:200% 100%;animation:shim 1.3s linear infinite}
 @keyframes shim{to{background-position:-200% 0}}
 .empty,.error{grid-column:1/-1;padding:38px 20px;border-radius:26px;background:#fff;border:1px solid var(--line);text-align:center}
@@ -189,7 +189,7 @@ body.kb .dock{transform:translateY(140%)}
   opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;z-index:200}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-@media(max-width:360px){.name{font-size:14px}.pricerow b{font-size:16px}.dock a{font-size:8px}}
+@media(max-width:360px){.name{font-size:14px}.pricecol b{font-size:16px}.dock a{font-size:8px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition:none!important}.card{opacity:1}}
 </style>
 </head>
@@ -502,22 +502,22 @@ function cardHTML(d, i){
     : "";
   return `
   <article class="card" data-id="${esc(d.id)}" style="--i:${Math.min(i, 8)}">
-    <div class="media">
-      <div class="ph">${SVG.phone}</div>
-      ${image}
-      <button class="fav${fav ? " on" : ""}" type="button" data-fav="${esc(d.id)}" aria-label="المفضلة">${SVG.heart}</button>
-      ${d._owned ? `<button class="del" type="button" data-del="${esc(d.id)}" aria-label="حذف منشوري">${SVG.trash}</button>` : ""}
-      ${badge}
-    </div>
+    <div class="ph">${SVG.phone}</div>
+    ${image}
+    <button class="fav${fav ? " on" : ""}" type="button" data-fav="${esc(d.id)}" aria-label="المفضلة">${SVG.heart}</button>
+    ${d._owned ? `<button class="del" type="button" data-del="${esc(d.id)}" aria-label="حذف منشوري">${SVG.trash}</button>` : ""}
     <div class="info">
       <h3 class="name">${esc(title)}</h3>
       ${specs.length ? `<div class="specs">${specs.map(t => `<span>${esc(t)}</span>`).join("")}</div>` : ""}
       <div class="sep"></div>
-      <div class="pricerow">
-        <small>${d._auction ? "السعر الحالي" : "السعر"}</small>
-        <b>${esc(formatPrice(d.price))}</b>
+      <div class="foot">
+        <div class="pricecol">
+          <small>${d._auction ? "السعر الحالي" : "السعر"}</small>
+          <b>${esc(formatPrice(d.price))}</b>
+          ${d._created ? `<span class="time" data-created="${d._created}"><span>${esc(publishedText(d._created))}</span></span>` : ""}
+        </div>
+        ${badge}
       </div>
-      ${d._created ? `<div class="time" data-created="${d._created}">${SVG.clock}<span>${esc(publishedText(d._created))}</span></div>` : ""}
     </div>
   </article>`;
 }
