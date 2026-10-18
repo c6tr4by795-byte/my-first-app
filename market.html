@@ -3084,11 +3084,21 @@
         const salesResult = results[1];
         if(legacyResult.error) throw legacyResult.error;
         if(salesResult.error) throw salesResult.error;
-        const newListings = (salesResult.data || []).filter(x => x.device).map(x => {
-          const d=x.device;
-          const imgs=Array.isArray(d.mzad_device_images) ? [...d.mzad_device_images].sort((u,v)=>Number(u.sort_order||0)-Number(v.sort_order||0)) : [];
-          return {id:d.id,created_at:x.created_at,brand:d.brand,model:d.model,storage:d.storage,color:d.color,battery_health:d.battery_health,condition:d.condition_grade,body_condition:d.condition_grade,screen_condition:d.screen_condition,price:x.asking_price_iqd,location:"النجف",sale_type:"direct",images:imgs.map(i=>i.storage_path),notes:d.seller_notes};
-        });
+        const newListings = await Promise.all((salesResult.data || []).filter(x => x.device).map(async x => {
+          const d = x.device;
+          const imgs = Array.isArray(d.mzad_device_images) ? [...d.mzad_device_images].sort((u,v) => Number(u.sort_order || 0) - Number(v.sort_order || 0)) : [];
+          const imageUrls = await Promise.all(imgs.map(async image => {
+            const path = String(image.storage_path || "").replace(/^\/+/, "");
+            if(!path) return "";
+            if(/^https?:\/\//i.test(path) || /^data:/i.test(path)) return path;
+            const { data: signedData, error: signedError } = await supabase.storage.from("device-images").createSignedUrl(path, 3600);
+            if(!signedError && signedData?.signedUrl) return signedData.signedUrl;
+            const cleanPath = path.replace(/^device-images\//i, "");
+            const { data: publicData } = supabase.storage.from("device-images").getPublicUrl(cleanPath);
+            return publicData?.publicUrl || "";
+          }));
+          return {id:d.id,created_at:x.created_at,brand:d.brand,model:d.model,storage:d.storage,color:d.color,battery_health:d.battery_health,condition:d.condition_grade,body_condition:d.condition_grade,screen_condition:d.screen_condition,price:x.asking_price_iqd,location:"النجف",sale_type:"direct",images:imageUrls.filter(Boolean),notes:d.seller_notes};
+        }));
         devices = [...(legacyResult.data || []), ...newListings].sort((x,y)=>new Date(y.created_at||0)-new Date(x.created_at||0)).map(normalizeDevice);
 
         hideLoading();
