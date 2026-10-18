@@ -153,7 +153,7 @@ create or replace function public.mzad_admin_set_restriction(
   p_reason text default null,
   p_until timestamptz default null
 )
-returns jsonb
+returns void
 language plpgsql
 security definer
 set search_path = public
@@ -198,8 +198,7 @@ begin
   if coalesce(p_banned, false) then
     insert into public.mzad_user_restrictions
       (user_id, restriction_type, reason, starts_at, expires_at, is_active, created_by)
-    values (p_user_id, 'all', v_reason, now(), p_until, true, auth.uid())
-    returning jsonb_build_array(to_jsonb(public.mzad_user_restrictions.*)) into v_after;
+    values (p_user_id, 'all', v_reason, now(), p_until, true, auth.uid());
   else
     for v_type in
       select x.kind
@@ -214,13 +213,12 @@ begin
         (user_id, restriction_type, reason, starts_at, expires_at, is_active, created_by)
       values (p_user_id, v_type, v_reason, now(), p_until, true, auth.uid());
     end loop;
-
-    select coalesce(jsonb_agg(to_jsonb(r)), '[]'::jsonb)
-      into v_after
-      from public.mzad_user_restrictions r
-     where r.user_id = p_user_id and r.is_active is true
-       and r.restriction_type in ('all', 'bid', 'sell', 'deposit');
   end if;
+
+  select coalesce(jsonb_agg(to_jsonb(r)), '[]'::jsonb)
+    into v_after
+    from public.mzad_user_restrictions r
+   where r.user_id = p_user_id and r.is_active is true;
 
   perform public.mzad_write_audit(
     'admin_user_restriction_changed',
@@ -230,8 +228,6 @@ begin
     v_after,
     jsonb_build_object('reason', v_reason, 'expires_at', p_until)
   );
-
-  return jsonb_build_object('ok', true, 'user_id', p_user_id, 'restrictions', v_after);
 end;
 $restriction$;
 
