@@ -3076,62 +3076,20 @@
 
       try{
 
-        const {
-          data,
-          error
-        } =
-          await supabase
-          .from("devices")
-          .select(`
-            id,
-            created_at,
-            brand,
-            model,
-            storage,
-            color,
-            battery_health,
-            condition,
-            body_condition,
-            screen_condition,
-            price,
-            location,
-            sale_type,
-            images,
-            notes
-          `)
-          .order(
-            "created_at",
-            {
-              ascending:false
-            }
-          );
-
-
-        if(error){
-
-          console.error(
-            "SUPABASE DEVICES ERROR:",
-            error
-          );
-
-
-          showError(
-            "تعذر تحميل الأجهزة",
-            "صار خطأ أثناء الاتصال بقاعدة البيانات."
-          );
-
-
-          return;
-
-        }
-
-
-        devices =
-          (data || [])
-          .map(
-            normalizeDevice
-          );
-
+        const results = await Promise.all([
+          supabase.from("devices").select("id,created_at,brand,model,storage,color,battery_health,condition,body_condition,screen_condition,price,location,sale_type,images,notes").order("created_at",{ascending:false}),
+          supabase.from("mzad_direct_sales").select("id,created_at,asking_price_iqd,status,device_id,device:mzad_devices!mzad_direct_sales_device_id_fkey(id,brand,model,storage,color,battery_health,condition_grade,screen_condition,camera_condition,biometric_condition,seller_notes,mzad_device_images(storage_path,sort_order,is_primary))").in("status",["active","reserved","pending_handover"]).order("created_at",{ascending:false})
+        ]);
+        const legacyResult = results[0];
+        const salesResult = results[1];
+        if(legacyResult.error) throw legacyResult.error;
+        if(salesResult.error) throw salesResult.error;
+        const newListings = (salesResult.data || []).filter(x => x.device).map(x => {
+          const d=x.device;
+          const imgs=Array.isArray(d.mzad_device_images) ? [...d.mzad_device_images].sort((u,v)=>Number(u.sort_order||0)-Number(v.sort_order||0)) : [];
+          return {id:d.id,created_at:x.created_at,brand:d.brand,model:d.model,storage:d.storage,color:d.color,battery_health:d.battery_health,condition:d.condition_grade,body_condition:d.condition_grade,screen_condition:d.screen_condition,price:x.asking_price_iqd,location:"النجف",sale_type:"direct",images:imgs.map(i=>i.storage_path),notes:d.seller_notes};
+        });
+        devices = [...(legacyResult.data || []), ...newListings].sort((x,y)=>new Date(y.created_at||0)-new Date(x.created_at||0)).map(normalizeDevice);
 
         hideLoading();
 
