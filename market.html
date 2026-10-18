@@ -436,11 +436,24 @@ async function fetchMzad(){
   if(error) throw error;
 
   const rows = (data || []).filter(i => i.device);
+  const deviceIds = [...new Set(rows.map(item => item.device.id).filter(Boolean))];
+  const imageResult = deviceIds.length
+    ? await supabase.from("mzad_device_images")
+        .select("device_id, storage_path, sort_order, is_primary")
+        .in("device_id", deviceIds)
+        .order("sort_order", { ascending: true })
+    : { data: [], error: null };
+  if (imageResult.error) throw imageResult.error;
+  const imagesByDevice = new Map();
+  for (const image of (imageResult.data || [])) {
+    const key = String(image.device_id);
+    if (!imagesByDevice.has(key)) imagesByDevice.set(key, []);
+    imagesByDevice.get(key).push(image);
+  }
   return Promise.all(rows.map(async item => {
     const d = item.device;
-    const imgs = (Array.isArray(d.mzad_device_images) ? [...d.mzad_device_images] : [])
-      .sort((a,b) => Number(a.sort_order||0) - Number(b.sort_order||0));
-    // device-images مخزن عام؛ استخدم الرابط العام مباشرة لتجنب فشل إنشاء الروابط الموقعة.
+    const imgs = imagesByDevice.get(String(d.id)) || [];
+    // device-images مخزن عام؛ استخدم الرابط العام مباشرة.
     const urls = imgs.map(image => publicImage(image.storage_path));
     return {
       id:d.id, created_at:item.created_at, brand:d.brand, model:d.model, storage:d.storage, color:d.color,
