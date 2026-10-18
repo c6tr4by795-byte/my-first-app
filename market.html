@@ -117,8 +117,8 @@ button{border:0;background:none;cursor:pointer}
   background:linear-gradient(145deg,#6246d9,#32b8c4);
 }
 .hero-title h1{
-  margin:6px 0 0;
-  font-size:34px;
+  margin:0;
+  font-size:32px;
   font-weight:950;
   letter-spacing:-.04em;
   line-height:1;
@@ -129,9 +129,8 @@ button{border:0;background:none;cursor:pointer}
 }
 
 .hero-sub{
-  position:relative;z-index:1;
-  margin:10px 2px 0;
-  font-size:11.5px;font-weight:700;
+  margin:5px 0 0;
+  font-size:12px;font-weight:700;
   color:var(--muted);
 }
 
@@ -236,8 +235,8 @@ button{border:0;background:none;cursor:pointer}
 .grid{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;
-  padding:12px 12px 0;
+  gap:12px;
+  padding:14px 14px 0;
 }
 @media(min-width:640px){
   .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
@@ -247,13 +246,14 @@ button{border:0;background:none;cursor:pointer}
 
 .card{
   position:relative;
-  aspect-ratio:4/5;
-  border-radius:22px;
+  display:flex;
+  flex-direction:column;
   overflow:hidden;
   isolation:isolate;
-  background:#15112b;
-  color:#fff;
-  box-shadow:0 16px 30px -18px rgba(30,20,80,.55);
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:24px;
+  box-shadow:0 14px 30px -20px rgba(40,30,100,.38);
   cursor:pointer;
   animation:cardIn .6s var(--ease) backwards;
   animation-delay:calc(var(--i,0) * 55ms);
@@ -263,9 +263,9 @@ button{border:0;background:none;cursor:pointer}
 @media(hover:hover){
   .card:hover{
     transform:translateY(-4px);
-    box-shadow:0 26px 44px -18px rgba(30,20,80,.6);
+    box-shadow:0 26px 44px -22px rgba(40,30,100,.5);
   }
-  .card:hover .media img{transform:scale(1.06)}
+  .card:hover .media img{transform:scale(1.05)}
 }
 .card:active{transform:scale(.98)}
 .card.removing{animation:cardOut .28s ease forwards}
@@ -274,166 +274,129 @@ button{border:0;background:none;cursor:pointer}
   from{opacity:0;transform:translateY(18px) scale(.98)}
   to{opacity:1;transform:none}
 }
-@keyframes cardOut{
-  to{opacity:0;transform:scale(.9)}
-}
+@keyframes cardOut{to{opacity:0;transform:scale(.9)}}
 
-/* الصورة تملى الكارت كله */
+/* الصورة نظيفة بدون أي ظل، ومربعة حتى تكون كل البطاقات بنفس الحجم */
 .media{
-  position:absolute;
-  inset:0;
+  position:relative;
+  margin:8px 8px 0;
+  aspect-ratio:1/1;
+  border-radius:18px;
   overflow:hidden;
-  background:linear-gradient(160deg,#7b61e8 0%,#3b2a92 60%,#1d1460 100%);
+  background:linear-gradient(160deg,#f1edff,#ddd5fb);
 }
 .ph{
   position:absolute;inset:0;
   display:grid;place-items:center;
-  color:rgba(255,255,255,.5);
+  color:#b3a6ee;
 }
-.ph svg{width:36px;height:36px}
+.ph svg{width:40px;height:40px}
 .media img{
   position:absolute;inset:0;
   width:100%;height:100%;
-  object-fit:cover;object-position:center;
+  object-fit:cover;object-position:top center;
   opacity:0;
-  transition:opacity .5s ease,transform 1.1s var(--ease);
+  transition:opacity .5s ease,transform 1s var(--ease);
 }
 .media img.ready{opacity:1}
 
-/* تدرج طويل وناعم: يبدأ من تحت بقوة وينحل تدريجياً حتى ما يبين كأنه صندوق أسود */
-.shade{
-  position:absolute;inset:0;
-  z-index:1;
-  pointer-events:none;
-  background:linear-gradient(
-    to top,
-    rgba(10,7,24,.92) 0%,
-    rgba(10,7,24,.78) 14%,
-    rgba(10,7,24,.56) 28%,
-    rgba(10,7,24,.32) 44%,
-    rgba(10,7,24,.14) 60%,
-    rgba(10,7,24,.04) 74%,
-    rgba(10,7,24,0) 86%
-  );
-}
-
-.shine{
-  position:absolute;inset:0;
-  z-index:1;
-  background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.14) 50%,transparent 60%);
-  transform:translateX(120%);
-  animation:sweep 7s ease-in-out infinite;
-  animation-delay:calc(var(--i,0) * .9s + 1s);
-  pointer-events:none;
-}
-@keyframes sweep{
-  0%,50%{transform:translateX(120%)}
-  100%{transform:translateX(-120%)}
-}
-
-/* أزرار أعلى الكارت: زجاجية وخفيفة */
 .fav,.del{
-  position:absolute;top:10px;z-index:4;
-  width:32px;height:32px;
+  position:absolute;top:9px;z-index:3;
+  width:34px;height:34px;
   display:grid;place-items:center;
   border-radius:50%;
-  color:#fff;
-  background:rgba(12,9,28,.38);
-  border:1px solid rgba(255,255,255,.22);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  transition:transform .15s ease,background .2s ease,color .2s ease;
+  background:rgba(255,255,255,.95);
+  color:#6b6585;
+  box-shadow:0 6px 16px -4px rgba(20,10,60,.3);
+  transition:transform .15s ease,color .2s ease,background .2s ease;
 }
-.fav{inset-inline-end:10px}
-.del{
-  inset-inline-start:10px;
-  top:50px;
-  color:#ffd6dd;
-  background:rgba(229,54,95,.45);
-  border-color:rgba(255,160,180,.35);
-}
+.fav{inset-inline-end:9px}
+.del{inset-inline-start:9px;color:var(--danger)}
 .fav:active,.del:active{transform:scale(.86)}
-.fav svg,.del svg{width:15px;height:15px}
-.fav.on{background:#fff;color:var(--danger)}
+.fav svg,.del svg{width:16px;height:16px}
+.fav.on{color:var(--danger)}
 .fav.on svg{fill:var(--danger)}
 
 .timer{
   position:absolute;
-  top:10px;
-  inset-inline-start:10px;
-  z-index:4;
-  display:inline-flex;align-items:center;gap:5px;
-  padding:5px 9px;
+  bottom:9px;
+  inset-inline-start:9px;
+  z-index:3;
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 10px;
   border-radius:999px;
-  background:rgba(12,9,28,.45);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border:1px solid rgba(255,255,255,.2);
-  font-size:10px;font-weight:900;
+  background:rgba(21,17,43,.82);
+  color:#fff;
+  font-size:10.5px;font-weight:900;
   font-variant-numeric:tabular-nums;
   direction:ltr;
   white-space:nowrap;
 }
 .timer::before{
   content:"";
-  width:5px;height:5px;border-radius:50%;
+  width:6px;height:6px;border-radius:50%;
   background:#22c55e;
   animation:pulse 1.6s infinite;
 }
-.timer.urgent{background:rgba(255,107,53,.85);border-color:transparent}
+.timer.urgent{background:#ff6b35}
 .timer.urgent::before{background:#fff}
-.card.is-ended .timer{background:rgba(75,69,96,.9)}
+.card.is-ended .timer{background:#8a84a0}
 .card.is-ended .timer::before{display:none}
 @keyframes pulse{50%{opacity:.3}}
 
-/* التفاصيل فوق الصورة من تحت، بدون صندوق */
+/* الكتابة تحت الصورة على خلفية بيضاء، واضحة دائماً */
 .info{
-  position:absolute;
-  inset-inline:0;
-  bottom:0;
-  z-index:2;
-  padding:0 13px 13px;
-  display:flex;flex-direction:column;gap:4px;
-  pointer-events:none;
+  flex:1;
+  display:flex;flex-direction:column;
+  gap:7px;
+  padding:12px 12px 12px;
 }
-.time{
-  display:flex;align-items:center;gap:4px;
-  min-width:0;
-  font-size:9px;font-weight:750;
-  color:rgba(255,255,255,.72);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.time svg{width:10px;height:10px;flex:0 0 10px}
 .name{
   margin:0;
-  font-size:14px;font-weight:950;
-  line-height:1.25;letter-spacing:-.01em;
+  font-size:15px;font-weight:950;
+  line-height:1.25;letter-spacing:-.015em;
+  color:var(--ink);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  text-shadow:0 2px 14px rgba(0,0,0,.35);
 }
 .specs{
-  margin:0;
-  font-size:10px;font-weight:700;
-  color:rgba(255,255,255,.75);
+  display:flex;flex-wrap:nowrap;gap:5px;
+  overflow:hidden;
+}
+.specs span{
+  flex:0 0 auto;
+  padding:4px 9px;
+  border-radius:9px;
+  background:var(--p-soft);
+  color:var(--p-dark);
+  font-size:10px;font-weight:850;
+  white-space:nowrap;
+}
+.time{
+  display:flex;align-items:center;gap:5px;
+  min-width:0;
+  font-size:10px;font-weight:750;
+  color:var(--muted);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-.pricepill{
-  align-self:flex-start;
-  display:inline-flex;flex-direction:column;
-  margin-top:6px;
-  padding:6px 11px 7px;
-  border-radius:13px;
-  background:rgba(255,255,255,.16);
-  border:1px solid rgba(255,255,255,.24);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  max-width:100%;
+.time svg{width:11px;height:11px;flex:0 0 11px}
+
+.pricebox{
+  margin-top:auto;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:10px 12px;
+  border-radius:15px;
+  background:linear-gradient(135deg,#f5f1ff 0%,#e9e2ff 100%);
+  border:1px solid var(--edge);
 }
-.pricepill small{
-  font-size:8.5px;font-weight:800;
-  color:var(--accent);
-  letter-spacing:.02em;
+.pricebox small{
+  font-size:10px;font-weight:850;
+  color:var(--muted);
+  white-space:nowrap;
 }
-.pricepill b{
-  font-size:14px;font-weight:950;
+.pricebox b{
+  font-size:15px;font-weight:950;
   letter-spacing:-.01em;
+  color:var(--p-dark);
   white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis;
 }
@@ -441,8 +404,8 @@ button{border:0;background:none;cursor:pointer}
 /* ================= STATES ================= */
 
 .sk{
-  aspect-ratio:4/5;
-  border-radius:22px;
+  height:330px;
+  border-radius:24px;
   background:linear-gradient(90deg,#efecfa 25%,#faf9ff 50%,#efecfa 75%);
   background-size:200% 100%;
   animation:shim 1.3s linear infinite;
@@ -613,20 +576,15 @@ body.kb .dock{transform:translateY(140%)}
 <body>
 
 <header class="hero">
-  <div class="hero-ring" aria-hidden="true"></div>
-  <div class="hero-glow" aria-hidden="true"></div>
-
   <div class="hero-top">
     <button class="back" id="back" type="button" aria-label="رجوع">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <div class="hero-title">
-      <span class="kicker">MZAD PHONE</span>
       <h1>السوق</h1>
+      <p class="hero-sub">كل الأجهزة بمكان واحد</p>
     </div>
   </div>
-
-  <p class="hero-sub">كل الأجهزة بمكان واحد، اختار وشوف التفاصيل بسهولة</p>
 
   <div class="searchbox" id="searchBox">
     <svg class="ico-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
@@ -1180,8 +1138,7 @@ function specsOf(d){
   ]
     .map(v => String(v ?? "").trim())
     .filter(Boolean)
-    .slice(0,3)
-    .join(" · ");
+    .slice(0,3);
 }
 
 function cardHTML(d, index){
@@ -1208,28 +1165,25 @@ function cardHTML(d, index){
       <div class="media">
         <div class="ph">${SVG.phone}</div>
         ${image}
+
+        <button class="fav${fav ? " on" : ""}" type="button" data-fav="${esc(d.id)}" aria-label="إضافة إلى المفضلة">
+          ${SVG.heart}
+        </button>
+
+        ${
+          d._owned
+            ? `<button class="del" type="button" data-del="${esc(d.id)}" aria-label="حذف منشوري">${SVG.trash}</button>`
+            : ""
+        }
+
+        ${timer}
       </div>
 
-      <div class="shade"></div>
-      <span class="shine"></span>
-
-      ${timer}
-
-      <button class="fav${fav ? " on" : ""}" type="button" data-fav="${esc(d.id)}" aria-label="إضافة إلى المفضلة">
-        ${SVG.heart}
-      </button>
-
-      ${
-        d._owned
-          ? `<button class="del" type="button" data-del="${esc(d.id)}" aria-label="حذف منشوري">${SVG.trash}</button>`
-          : ""
-      }
-
       <div class="info">
-        ${time}
         <h3 class="name">${esc(title)}</h3>
-        ${specs ? `<p class="specs">${esc(specs)}</p>` : ""}
-        <div class="pricepill">
+        ${specs ? `<div class="specs">${specs.map(t => `<span>${esc(t)}</span>`).join("")}</div>` : ""}
+        ${time}
+        <div class="pricebox">
           <small>${d._auction ? "السعر الحالي" : "السعر"}</small>
           <b>${esc(formatPrice(d.price))}</b>
         </div>
