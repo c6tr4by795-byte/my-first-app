@@ -3344,7 +3344,34 @@ async function saveDevice(){
       throw new Error("IMAGE_LINK_FAILED");
     }
 
-    showToast("تم إرسال الجهاز للمراجعة بنجاح");
+    submitBtn.textContent = "جاري نشر البيع المباشر...";
+
+    const { data: saleResult, error: saleError } =
+      await supabase.rpc("mzad_create_direct_sale", {
+        p_device_id: deviceId,
+        p_asking_price_iqd: price
+      });
+
+    if(saleError){
+      console.error("DIRECT SALE CREATE ERROR:", saleError);
+      throw new Error(saleError.message || "DIRECT_SALE_CREATE_FAILED");
+    }
+
+    const directSaleId =
+      typeof saleResult === "string"
+        ? saleResult
+        : saleResult?.id ||
+          saleResult?.sale_id ||
+          saleResult?.[0]?.id ||
+          saleResult?.[0]?.sale_id ||
+          null;
+
+    if(!directSaleId){
+      console.error("DIRECT SALE CREATE RETURNED:", saleResult);
+      throw new Error("DIRECT_SALE_ID_MISSING");
+    }
+
+    showToast("تم نشر جهازك للبيع المباشر بنجاح");
 
     sessionStorage.setItem(
       "mzad_sell_reset",
@@ -3385,6 +3412,18 @@ async function saveDevice(){
       error.message === "DEVICE_ID_MISSING"
     ){
       showToast("تعذر استلام رقم الجهاز من النظام");
+
+    }else if(
+      error.message === "DIRECT_SALE_ID_MISSING"
+    ){
+      showToast("تم إنشاء الجهاز لكن لم نستلم رقم إعلان البيع. لا تعيد النشر؛ راجع سجل البيع.");
+
+    }else if(
+      /DEVICE_NOT_APPROVED|DEVICE_NOT_FOUND|NOT_DEVICE_OWNER|DEVICE_ALREADY_FOR_DIRECT_SALE|INVALID_PRICE|DIRECT_SALES_DISABLED/i.test(
+        error.message || ""
+      )
+    ){
+      showToast("تعذر نشر البيع المباشر: " + error.message);
 
     }else if(
       /AUTH_REQUIRED|PROFILE_NOT_FOUND|ACCOUNT_DISABLED/i.test(
