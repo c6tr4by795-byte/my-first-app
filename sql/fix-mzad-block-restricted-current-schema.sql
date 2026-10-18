@@ -141,3 +141,99 @@ begin
   );
 end;
 $status$;
+
+-- Compatibility RPC used by the existing admin dashboard.
+-- Maps its legacy checkbox payload to the current restriction_type table.
+create or replace function public.mzad_admin_set_restriction(
+  p_user_id uuid,
+  p_banned boolean,
+  p_no_bid boolean,
+  p_no_sell boolean,
+  p_no_deposit boolean,
+  p_reason text default null,
+  p_until timestamptz default null
+)
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $restriction$
+declare
+  v_reason text := nullif(btrim(coalesce(p_reason, '')), '');
+  v_type text;
+  v_before jsonb;
+  v_after jsonb := '[]'::jsonb;
+begin
+  if auth.uid() is null then
+    raise exception 'AUTH_REQUIRED';
+  end if;
+  if not coalesce(public.mzad_is_admin(), false) then
+    raise exception 'ADMIN_REQUIRED';
+  end if;
+  if p_user_id is null then
+    raise exception 'USER_REQUIRED';
+  end if;
+  if p_user_id = auth.uid() then
+    raise exception 'CANNOT_RESTRICT_SELF';
+  end if;
+  if p_until is not null and p_until <= now() then
+    raise exception 'INVALID_EXPIRY';
+  end if;
+  if not exists (select 1 from public.mzad_profiles where user_id = p_user_id) then
+    raise exception 'USER_NOT_FOUND';
+  end if;
+
+  select coalesce(jsonb_agg(to_jsonb(r)), '[]'::jsonb)
+    into v_before
+    from public.mzad_user_restrictions r
+   where r.user_id = p_user_id and r.is_active is true;
+
+  -- Replace only the legacy-managed restriction types; keep unrelated 'buy' rows intact.
+  update public.mzad_user_restrictions
+     set is_active = false, updated_at = now()
+   where user_id = p_user_id
+     and is_active is true
+     and restriction_type in ('all', 'bid', 'sell', 'deposit');
+
+  if coalesce(p_banned, false) then
+    insert into public.mzad_user_restrictions
+      (user_id, restriction_type, reason, starts_at, expires_at, is_active, created_by)
+    values (p_user_id, 'all', v_reason, now(), p_until, true, auth.uid())
+    returning jsonb_build_array(to_jsonb(public.mzad_user_restrictions.*)) into v_after;
+  else
+    for v_type in
+      select x.kind
+      from (values
+        ('bid', coalesce(p_no_bid, false)),
+        ('sell', coalesce(p_no_sell, false)),
+        ('deposit', coalesce(p_no_deposit, false))
+      ) as x(kind, enabled)
+      where x.enabled
+    loop
+      insert into public.mzad_user_restrictions
+        (user_id, restriction_type, reason, starts_at, expires_at, is_active, created_by)
+      values (p_user_id, v_type, v_reason, now(), p_until, true, auth.uid());
+    end loop;
+
+    select coalesce(jsonb_agg(to_jsonb(r)), '[]'::jsonb)
+      into v_after
+      from public.mzad_user_restrictions r
+     where r.user_id = p_user_id and r.is_active is true
+       and r.restriction_type in ('all', 'bid', 'sell', 'deposit');
+  end if;
+
+  perform public.mzad_write_audit(
+    'admin_user_restriction_changed',
+    'user',
+    p_user_id,
+    v_before,
+    v_after,
+    jsonb_build_object('reason', v_reason, 'expires_at', p_until)
+  );
+
+  return jsonb_build_object('ok', true, 'user_id', p_user_id, 'restrictions', v_after);
+end;
+$restriction$;
+
+revoke all on function public.mzad_admin_set_restriction(uuid, boolean, boolean, boolean, boolean, text, timestamptz) from public, anon;
+grant execute on function public.mzad_admin_set_restriction(uuid, boolean, boolean, boolean, boolean, text, timestamptz) to authenticated;
