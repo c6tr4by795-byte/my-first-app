@@ -25,7 +25,7 @@
  <div class="list" id="list"><div class="loading">جاري تحميل مزاداتك...</div></div>
  <div class="foot">MZAD PHONE · تفاصيل مزاداتك خاصة بحسابك</div>
 </main>
-<div class="toast" id="toast"></div>\n<div class="confirm-layer" id="confirmLayer" role="dialog" aria-modal="true" aria-labelledby="confirmTitle"><div class="confirm-box"><h3 id="confirmTitle">إلغاء هذا المزاد؟</h3><p id="confirmText">سيتم إيقاف المزاد وإخفاؤه من قائمة المزادات. إذا كان المزاد مباشراً، يبقى التأمين محفوظاً ولا يكون قابلاً للاسترداد قبل موعد نهاية المزاد الأصلي. لا يمكن التراجع عن الإلغاء.</p><div class="confirm-actions"><button class="confirm-no" id="cancelNo">تراجع</button><button class="confirm-yes" id="cancelYes">تأكيد الإلغاء</button></div></div></div>
+<div class="toast" id="toast"></div>\n<div class="confirm-layer" id="confirmLayer" role="dialog" aria-modal="true" aria-labelledby="confirmTitle"><div class="confirm-box"><h3 id="confirmTitle">حذف هذا المزاد؟</h3><p id="confirmText">سيتم إيقاف المزاد وإخفاؤه من قائمة المزادات. إذا كان المزاد مباشراً، يبقى التأمين محفوظاً ولا يكون قابلاً للاسترداد قبل موعد نهاية المزاد الأصلي. لا يمكن التراجع عن الإلغاء.</p><div class="confirm-actions"><button class="confirm-no" id="cancelNo">تراجع</button><button class="confirm-yes" id="cancelYes">تأكيد الإلغاء</button></div></div></div>
 <script type="module">
 import { supabase } from "./js/supabase.js";
 const SUPABASE_URL="https://ldvxctpngkidvatkisae.supabase.co";
@@ -79,7 +79,7 @@ async function load(){
   $("total").textContent=money(auctions.length);
   $("bids").textContent=money(auctions.reduce((n,a)=>n+a.bidCount,0));
   $("reserved").textContent=money(auctions.reduce((n,a)=>n+a.reserved,0));
-  const pending=auctions.find(a=>a.depositPending);
+  const pending=auctions.find(a=>a.depositPending && !["cancelled","ended","completed","rejected"].includes(String(a.status).toLowerCase()));
   $("notice").classList.toggle("show",!!pending);
   $("pay").onclick=()=>{if(pending)location.href="auction-seller-deposit.html?auction="+encodeURIComponent(pending.id)};
   render();
@@ -105,7 +105,7 @@ function render(){
   const canceled=String(a.status).toLowerCase()==="cancelled";
   const live=String(a.status).toLowerCase()==="live" && new Date(a.ends_at||0).getTime()>Date.now();
   const cancelNote=canceled?'<div class="cancel-note">تم إلغاء المزاد. إذا كان مباشراً، يبقى التأمين محفوظاً إلى موعد نهاية المزاد الأصلي؛ بعدها تواصل مع الإدارة لاسترداده.</div>':'';
-  const deleteBtn=!canceled && !["ended","completed","rejected"].includes(String(a.status).toLowerCase())?'<button class="action danger" data-cancel="'+esc(a.id)+'">إلغاء المزاد</button>':'';
+  const deleteBtn=!canceled && !["ended","completed","rejected"].includes(String(a.status).toLowerCase())?'<button class="action danger" data-cancel="'+esc(a.id)+'">حذف المزاد</button>':'';
   return '<article class="card"><div class="card-main"><div class="photo">'+img+'</div><div class="info"><div class="line1"><div class="name">'+esc(name)+'</div><span class="status '+cls+'">'+st+'</span></div><div class="sub">مزاد رقم '+esc(a.auction_number||String(a.id).slice(0,8))+' · '+esc(time)+'</div><div class="price-label">السعر الحالي / سعر البداية</div><div class="price">'+money(price)+' <small>د.ع</small></div></div></div><div class="mini-stats"><div class="mini"><strong>'+money(a.bidCount)+'</strong><span>مزايدة مقبولة</span></div><div class="mini"><strong>'+money(a.reserved)+'</strong><span>حاجز</span></div><div class="mini"><strong>'+money(a.views)+'</strong><span>مشاهدة</span></div></div>'+cancelNote+'<div class="actions"><button class="action primary" data-detail="'+esc(a.id)+'">تفاصيل المزاد</button>'+(a.depositPending?'<button class="action" data-pay="'+esc(a.id)+'">إكمال التأمين</button>':'<button class="action" data-refresh="'+esc(a.id)+'">تحديث الحالة</button>')+deleteBtn+'</div></article>';
  }).join("");
 }
