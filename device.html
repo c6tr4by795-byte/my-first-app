@@ -2706,30 +2706,76 @@
 
       try{
 
-        const { data,error } =
-          await supabase
+        let data = null;
+        let error = null;
+
+        if (/^\d+$/.test(deviceId)) {
+          ({ data, error } = await supabase
             .from("devices")
             .select("*")
-            .eq("id",deviceId)
-            .single();
+            .eq("id", deviceId)
+            .maybeSingle());
+          if (error) throw error;
+        }
 
-        if(error){
-          throw error;
+        if (!data) {
+          const result = await supabase
+            .from("mzad_direct_sales")
+            .select(`
+              id, asking_price_iqd, status, created_at, seller_user_id,
+              device:mzad_devices!mzad_direct_sales_device_id_fkey (
+                id, brand, model, storage, color, battery_health,
+                condition_grade, replaced_parts, screen_condition,
+                camera_condition, biometric_condition, seller_notes,
+                mzad_device_images (storage_path, sort_order, is_primary)
+              )
+            `)
+            .eq("device_id", deviceId)
+            .in("status", ["active", "reserved", "pending_handover"])
+            .maybeSingle();
+
+          if (result.error) throw result.error;
+          if (result.data && result.data.device) {
+            const row = result.data;
+            const d = row.device;
+            const imageRows = Array.isArray(d.mzad_device_images)
+              ? [...d.mzad_device_images].sort((a,b) =>
+                  Number(a.sort_order || 0) - Number(b.sort_order || 0)
+                )
+              : [];
+
+            data = {
+              id: d.id,
+              created_at: row.created_at,
+              brand: d.brand,
+              model: d.model,
+              storage: d.storage,
+              color: d.color,
+              battery_health: d.battery_health,
+              condition: d.condition_grade,
+              body_condition: d.condition_grade,
+              screen_condition: d.screen_condition,
+              face_id: d.biometric_condition,
+              cameras: d.camera_condition,
+              charging: "",
+              replaced_parts: d.replaced_parts,
+              price: row.asking_price_iqd,
+              location: "النجف",
+              sale_type: "direct",
+              seller_id: row.seller_user_id,
+              seller_name: "بائع MZAD PHONE",
+              images: imageRows.map(image => image.storage_path),
+              notes: d.seller_notes
+            };
+          }
         }
 
         if(!data){
-
-          renderError(
-            "الجهاز غير موجود"
-          );
-
+          renderError("الجهاز غير موجود أو لم يعد معروضاً للبيع");
           return;
-
         }
 
-        device =
-          data;
-
+        device = data;
         renderDevice();
 
       }catch(error){
