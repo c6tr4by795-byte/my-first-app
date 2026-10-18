@@ -82,8 +82,8 @@ button{border:0;background:none;cursor:pointer}
 
 /* CARD */
 .card{position:relative;display:flex;flex-direction:column;overflow:hidden;isolation:isolate;cursor:pointer;
-  aspect-ratio:1/2;border-radius:28px;background:#16112d;border:1px solid rgba(255,255,255,.06);
-  box-shadow:0 24px 40px -26px rgba(40,25,110,.6);
+  aspect-ratio:1/2;border-radius:25px;background:#16112d;border:1px solid rgba(98,70,217,.14);
+  box-shadow:0 18px 34px -25px rgba(40,25,110,.5);
   opacity:0;animation:rise .7s var(--ease) forwards;animation-delay:calc(var(--i,0)*70ms);
   transition:transform .4s var(--ease),box-shadow .4s ease}
 .card::before{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;border-radius:inherit;
@@ -101,15 +101,17 @@ button{border:0;background:none;cursor:pointer}
 @keyframes out{to{opacity:0;transform:scale(.9)}}
 
 /* الصورة بمنطقتها، والكتابة بلوحة صلبة تحتها، حتى ما يتداخل شي */
-.pic{position:absolute;inset:0;overflow:hidden;
-  background:radial-gradient(ellipse at 50% 42%,#fff 0%,#faf9ff 50%,#eee9ff 100%)}
+.pic{position:absolute;inset:0 0 30%;overflow:hidden;
+  display:grid;place-items:center;
+  background:radial-gradient(ellipse at 50% 42%,#fff 0%,#faf9ff 52%,#eee9ff 100%)}
 .ph{position:absolute;inset:0;display:grid;place-items:center;color:rgba(98,70,217,.30);transition:opacity .2s ease}
 .ph svg{width:46px;height:46px}
-.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:50% 50%;
-  padding:12px;opacity:0;transition:opacity .35s ease,transform .55s var(--ease)}
+.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;
+  padding:14px;opacity:0;transition:opacity .35s ease,transform .55s var(--ease)}
 .pic img.ready{opacity:1}
 .pic:has(img.ready) .ph{opacity:0}
-@media(max-width:360px){.pic img{padding:8px}}
+@media(max-width:360px){.pic img{padding:9px}}
+/* خلي منطقة الصورة منفصلة حتى ما تنطمر تحت معلومات الجهاز */
 
 .fav,.del{position:absolute;top:10px;z-index:3;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;
   background:rgba(255,255,255,.94);color:#6b6585;transition:transform .15s ease,color .2s ease}
