@@ -348,7 +348,8 @@
        DEVICE CARD
     ========================= */
 
-    .device-card{
+    .delete-listing-btn{display:block;width:100%;margin-top:12px;border:1px solid #f1c6ce;background:#fff6f7;color:#bd2943;border-radius:12px;padding:11px 14px;font:inherit;font-size:13px;font-weight:900;cursor:pointer;position:relative;z-index:2}.delete-listing-btn:disabled{opacity:.55;cursor:wait}
+.device-card{
       position:relative;
       overflow:hidden;
 
@@ -1409,19 +1410,41 @@
       `;
 
 
-      card.addEventListener(
-        "click",
-        () => {
-
-          if(!device.id){
-            return;
-          }
-
-          window.location.href =
-            `device.html?id=${encodeURIComponent(device.id)}`;
+      const deleteButton = document.createElement("button");
+      deleteButton.type = "button";
+      deleteButton.className = "delete-listing-btn";
+      deleteButton.textContent = "حذف الجهاز نهائياً";
+      deleteButton.addEventListener("click", async (event) => {
+        event.stopPropagation();
+        if (!device.id) return;
+        if (!window.confirm("تأكيد حذف إعلان الجهاز نهائياً؟ لا يمكن التراجع عن هذا الإجراء.")) return;
+        deleteButton.disabled = true;
+        deleteButton.textContent = "جاري الحذف...";
+        try {
+          const { data: authData, error: authError } = await supabase.auth.getUser();
+          if (authError) throw authError;
+          if (!authData?.user) throw new Error("AUTH_REQUIRED");
+          const { error } = await supabase.rpc("mzad_seller_delete_listing_permanently", {
+            p_device_id: device.id,
+            p_direct_sale_id: device.direct_sale_id || null
+          });
+          if (error) throw error;
+          showToast("تم حذف إعلان الجهاز نهائياً");
+          await loadMyListings();
+        } catch (error) {
+          console.error("PERMANENT LISTING DELETE", error);
+          showToast(error.message === "AUTH_REQUIRED" ? "انتهت الجلسة، سجّل الدخول من جديد." : "تعذر الحذف. قد يكون الجهاز مرتبطاً بمزاد أو حجز، أو تحتاج لتطبيق SQL الخاص بالحذف.");
+          deleteButton.disabled = false;
+          deleteButton.textContent = "حذف الجهاز نهائياً";
         }
-      );
+      });
+      card.appendChild(deleteButton);
 
+      card.addEventListener("click", (event) => {
+        if (event.target.closest(".delete-listing-btn")) return;
+        if (!device.id) return;
+        window.location.href = `device.html?id=${encodeURIComponent(device.id)}`;
+      });
 
       return card;
     }
