@@ -1433,7 +1433,8 @@
           await loadMyListings();
         } catch (error) {
           console.error("PERMANENT LISTING DELETE", error);
-          showToast(error.message === "AUTH_REQUIRED" ? "انتهت الجلسة، سجّل الدخول من جديد." : "تعذر الحذف. قد يكون الجهاز مرتبطاً بمزاد أو حجز، أو تحتاج لتطبيق SQL الخاص بالحذف.");
+          const deleteError = String(error?.message || error?.details || error?.hint || "خطأ غير معروف");
+          showToast(error.message === "AUTH_REQUIRED" ? "انتهت الجلسة، سجّل الدخول من جديد." : "سبب فشل الحذف: " + deleteError.slice(0, 180));
           deleteButton.disabled = false;
           deleteButton.textContent = "حذف الجهاز نهائياً";
         }
