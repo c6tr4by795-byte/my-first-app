@@ -48,7 +48,12 @@ begin
     end if;
   end if;
 
-  if exists (select 1 from public.mzad_auctions a where a.device_id = p_device_id) then
+  -- Direct-sale listings are independent from auction listings.
+  -- Do not block deleting a direct sale merely because an auction row happens
+  -- to reference the same device ID. Keep the legacy-table guard separate.
+  if p_direct_sale_id is null and exists (
+    select 1 from public.mzad_auctions a where a.device_id = p_device_id
+  ) then
     raise exception 'DEVICE_LINKED_TO_AUCTION';
   end if;
 
