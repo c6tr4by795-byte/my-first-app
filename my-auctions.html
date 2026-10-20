@@ -177,8 +177,8 @@ function kind(a){
 }
 const CHIP = { live:["مباشر الآن","live"], scheduled:["ينتظر الافتتاح","wait"], draft:["مسودة","wait"], ended:["منتهي","end"], cancelled:["ملغي","end"], rejected:["مرفوض","bad"] };
 /* المسح النهائي: فقط لو ما صار عليه شي (مزايدة أو تأمين مدفوع) وما كان مباشر */
-const noActivity = a => a.bidCount === 0 && !a.depositPaid;
-const canHardDelete = a => ["draft","rejected","cancelled","scheduled","ended"].includes(kind(a)) && noActivity(a);
+const noActivity = a => a.bidCount === 0 && !a.hasDeposit;
+const canHardDelete = a => kind(a) === "draft" && noActivity(a);
 const canCancel = a => ["live","scheduled"].includes(kind(a)) && !canHardDelete(a);
 
 async function getImage(id){
