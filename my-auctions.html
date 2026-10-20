@@ -193,7 +193,9 @@ const canHardDelete = a => {
   const k = kind(a), ds = String(a.depositStatus || "").toLowerCase();
   /* لا نحذف مزاداً نشطاً أو بانتظار الافتتاح. */
   if (!["draft","ended","cancelled","rejected"].includes(k)) return false;
-  /* أي تأمين مرتبط يمنع الحذف إلى أن تسجل الإدارة استرجاعه. */
+  /* إذا رُفض تأمين المسودة ولم يُقبل دفعه، اسمح بحذف المسودة. */
+  if (k === "draft" && a.hasDeposit && ["rejected","failed","cancelled","declined"].includes(ds) && !a.depositPaid) return true;
+  /* أي تأمين آخر غير مسترجع يمنع الحذف إلى أن تسجل الإدارة استرجاعه. */
   if (a.hasDeposit && ds !== "refunded") return false;
   return true;
 };
