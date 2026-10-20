@@ -59,22 +59,45 @@ begin
     raise exception 'AUCTION_HAS_PROTECTED_FRAUD_REVIEW';
   end if;
 
-  -- Never delete or alter a direct-sale listing from this auction action.
-  -- Any linked deposits must already be marked refunded. Keep deposit/payment
-  -- history, but detach the refunded deposit from the auction before deletion.
+  -- Keep all deposit/payment history. Permit deleting a draft whose deposit
+  -- was explicitly rejected only when no submitted/approved payment proof exists.
+  -- All other non-refunded deposits must be refunded before deletion.
   if exists (
     select 1
       from public.mzad_deposits d
      where d.auction_id = p_auction_id
        and lower(coalesce(d.status, '')) <> 'refunded'
+       and not (
+         v_status = 'draft'
+         and lower(coalesce(d.status, '')) in ('rejected', 'failed', 'cancelled', 'declined')
+         and not exists (
+           select 1
+             from public.mzad_payment_requests pr
+            where pr.deposit_id = d.id
+              and lower(coalesce(pr.status, '')) in ('proof_submitted', 'approved', 'paid', 'confirmed')
+         )
+       )
   ) then
     raise exception 'AUCTION_HAS_PROTECTED_DEPOSIT';
   end if;
 
-  update public.mzad_deposits
+  -- Detach deposits before deleting the auction; never delete deposits or payment requests.
+  update public.mzad_deposits d
      set auction_id = null
-   where auction_id = p_auction_id
-     and lower(coalesce(status, '')) = 'refunded';
+   where d.auction_id = p_auction_id
+     and (
+       lower(coalesce(d.status, '')) = 'refunded'
+       or (
+         v_status = 'draft'
+         and lower(coalesce(d.status, '')) in ('rejected', 'failed', 'cancelled', 'declined')
+         and not exists (
+           select 1
+             from public.mzad_payment_requests pr
+            where pr.deposit_id = d.id
+              and lower(coalesce(pr.status, '')) in ('proof_submitted', 'approved', 'paid', 'confirmed')
+         )
+       )
+     );
 
   -- Child auction records with cascading FKs are removed with the auction.
   -- Keep the device and its photos. Unlock it only when no other active auction
