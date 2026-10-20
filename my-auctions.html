@@ -176,9 +176,12 @@ function kind(a){
   return "draft";
 }
 const CHIP = { live:["مباشر الآن","live"], scheduled:["ينتظر الافتتاح","wait"], draft:["مسودة","wait"], ended:["منتهي","end"], cancelled:["ملغي","end"], rejected:["مرفوض","bad"] };
-/* المسح النهائي: فقط لو ما صار عليه شي (مزايدة أو تأمين مدفوع) وما كان مباشر */
-const canHardDelete = a => ["draft","ended","cancelled","rejected"].includes(kind(a)) && !a.depositPaid;
-const canCancel = a => ["live","scheduled"].includes(kind(a)) && !canHardDelete(a);
+/* إظهار زر الحذف للمسودات والمنتهية والملغاة/المرفوضة.
+   قرار السماح النهائي يبقى داخل دالة RPC حتى لا تُحذف التأمينات أو السجلات المحمية. */
+const canHardDelete = a => ["draft","ended","cancelled","rejected"].includes(kind(a));
+/* التنظيف الجماعي يبقى محافظاً: لا يضم السجلات التي عُلّمت كتأمين مدفوع/مقدّم إثباته. */
+const canBulkDelete = a => canHardDelete(a) && !a.depositPaid;
+const canCancel = a => ["live","scheduled"].includes(kind(a));
 
 async function getImage(id){
   try{
@@ -226,7 +229,7 @@ const TABS = [["all","الكل",()=>true],["live","مباشر",a=>kind(a)==="liv
 function render(){
   $("tabs").innerHTML = TABS.map(([k,l,f]) => `<button class="tab ${tab===k?"on":""}" data-tab="${k}" type="button">${l}<i>${auctions.filter(f).length}</i></button>`).join("");
   /* تنبيه تنظيف: أكثر من مسودة بلا نشاط */
-  const junk = auctions.filter(a => canHardDelete(a));
+  const junk = auctions.filter(a => canBulkDelete(a));
   $("clean").hidden = junk.length < 2;
   if (junk.length >= 2) $("cleanTxt").textContent = "عندك " + junk.length + " مسودات أو مزادات منتهية ما عليها تأمين مدفوع. امسحها حتى تبقى قائمتك نظيفة.";
 
@@ -266,7 +269,7 @@ function ask(cfg){
   $("sheet").classList.add("show");
 }
 const closeSheet = () => { $("sheet").classList.remove("show"); pending = null; };
-const ERRS = { AUCTION_HAS_ACTIVITY:"ما ينمسح: عليه مزايدات أو تأمين مرتبط.", AUCTION_HAS_ENDED:"المزاد منتهي بالفعل.", NOT_AUCTION_OWNER:"هذا المزاد مو من حسابك.", "FOREIGN KEY":"ما ينمسح لأن سجل ثاني مربوط بيه. تواصل مع الإدارة." };
+const ERRS = { AUCTION_HAS_ACTIVITY:"ما نكدر نحذفه لأن عليه نشاط مرتبط.", AUCTION_HAS_BIDS:"ما ينحذف لأن عليه مزايدات محفوظة.", AUCTION_HAS_PROTECTED_DEPOSIT:"زر الحذف ظاهر، لكن هذا المزاد مرتبط بتأمين محمي. التأمين يبقى محفوظ ولازم تراجع الإدارة.", AUCTION_HAS_PAYMENT_REQUEST:"ما ينحذف لأن إله طلب دفع محفوظ.", AUCTION_REQUIRES_ADMIN_REVIEW:"هذا المزاد يحتاج مراجعة الإدارة قبل الحذف.", DEVICE_HAS_RELATED_RECORDS:"الجهاز مرتبط ببيع أو معاملة، لذلك ما نكدر نحذفه.", AUCTION_HAS_ENDED:"المزاد منتهي بالفعل.", NOT_AUCTION_OWNER:"هذا المزاد مو من حسابك.", "FOREIGN KEY":"ما ينحذف لأن سجل ثاني مربوط بيه. تواصل مع الإدارة." };
 const errTxt = e => { const m = String(e?.message || e || ""); for (const k in ERRS) if (m.includes(k)) return ERRS[k]; return m === "TIMEOUT" ? "تأخر الرد. حدّث الصفحة وتأكد من الحالة." : "تعذر التنفيذ، حاول مرة ثانية."; };
 const rpc = (fn, id) => Promise.race([supabase.rpc(fn, { p_auction_id:id }), new Promise((_,j) => setTimeout(() => j(new Error("TIMEOUT")), 12000))]);
 
@@ -307,7 +310,7 @@ $("list").addEventListener("click", e => {
 });
 $("tabs").addEventListener("click", e => { const t = e.target.closest("[data-tab]"); if (t){ tab = t.dataset.tab; render(); } });
 $("cleanBtn").addEventListener("click", () => {
-  const ids = auctions.filter(a => canHardDelete(a)).map(a => a.id);
+  const ids = auctions.filter(a => canBulkDelete(a)).map(a => a.id);
   ask({ ids, fn:"mzad_seller_delete_auction_draft", title:"مسح " + ids.length + " مسودات؟", text:"تنمسح المسودات والمزادات المنتهية التي لا يوجد عليها تأمين مدفوع.", label:"امسحها كلها", done:"تم تنظيف المسودات" });
 });
 $("search").addEventListener("input", render);
