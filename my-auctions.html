@@ -263,7 +263,7 @@ function render(){
     const price = Number(a.current_price_iqd || a.starting_price_iqd) || 0;
     const img = a.image ? `<img src="${esc(a.image)}" alt="${esc(name)}" loading="lazy" onerror="this.remove()">` : IC.phone;
     let note = "";
-    if (a.depositPending && ["draft","scheduled"].includes(k)) note = `<div class="note">${IC.info}<span>تأمين البائع بعده قيد المراجعة. ما ينحذف المزاد إلى أن يُسترجع التأمين وتُسجّل حالته بالنظام.</span></div>`;
+    if (a.hasDeposit && a.depositStatus !== "refunded" && ["draft","scheduled"].includes(k)) note = `<div class="note">${IC.info}<span>هذا المزاد مرتبط بتأمين غير مسترجع (الحالة: ${esc(a.depositStatus || "قيد المراجعة")}). زر الحذف يظهر فقط بعد ما تسجّل الإدارة استرجاع التأمين بالنظام.</span></div>`;
     else if (k === "live" && a.bidCount > 0) note = `<div class="note info">${IC.shield}<span>عليه مزايدات، فما ينمسح. تقدر تلغيه فقط، ويبقى تأمينك محفوظ لحد موعد النهاية.</span></div>`;
     else if (k === "cancelled" && !canHardDelete(a)) note = `<div class="note info">${IC.shield}<span>تم الإلغاء. تأمينك محفوظ لحد موعد النهاية الأصلي، وبعدها تواصل مع الإدارة.</span></div>`;
     else if (k === "ended" && a.hasDeposit && a.depositStatus !== "refunded") note = `<div class="note info">${IC.shield}<span>انتهى المزاد وعليه تأمين بائع. استخدم استرجاع التأمين لمتابعة مراجعته؛ يبقى الحذف مخفياً إلى أن تُسجّل الإدارة الاسترداد.</span></div>`;
