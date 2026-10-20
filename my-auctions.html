@@ -279,7 +279,7 @@ $("shYes").addEventListener("click", async () => {
       const r = await rpc(c.fn, id);
       if (r.error) throw r.error;
       const paths = Array.isArray(r.data?.storage_paths) ? r.data.storage_paths : [];
-      const cleanPaths = [...new Set(paths.map(p => String(p || "").replace(/^device-images\\//, "").replace(/^\\/+/, "")).filter(Boolean))];
+      const cleanPaths = [...new Set(paths.map(p => String(p || "").replace(/^device-images\//, "").replace(/^\/+/, "")).filter(Boolean))];
       if (cleanPaths.length){
         const sr = await supabase.storage.from("device-images").remove(cleanPaths);
         if (sr.error) {
