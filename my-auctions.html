@@ -82,7 +82,6 @@ h1{margin:16px 2px 4px;font-size:23px;font-weight:950;letter-spacing:-.03em}
 .btn.ghost{background:#fff;color:var(--pd);border:1.5px solid var(--edge);box-shadow:none}
 .btn.warn{background:var(--hot);box-shadow:0 10px 20px rgba(232,89,12,.25)}
 
-/* زر استرجاع التأمين — واضح ومتناسق مع بطاقة المزاد */
 .refund-action{display:flex;align-items:center;gap:12px;margin:0 14px 14px;padding:12px 14px;min-height:70px;border:1px solid #0e9f6e;border-radius:17px;background:linear-gradient(110deg,#0e9f6e 0%,#13b981 100%);color:#fff;text-decoration:none;box-shadow:0 9px 20px rgba(14,159,110,.24);transition:transform .18s,border-color .18s,box-shadow .18s}
 .refund-action:active{transform:scale(.99);border-color:#087f5b;box-shadow:0 4px 12px rgba(14,159,110,.28)}
 .refund-icon{display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.25)}
@@ -187,15 +186,10 @@ function kind(a){
   return "draft";
 }
 const CHIP = { live:["مباشر الآن","live"], scheduled:["ينتظر الافتتاح","wait"], draft:["مسودة","wait"], ended:["منتهي","end"], cancelled:["ملغي","end"], rejected:["مرفوض","bad"] };
-/* إظهار زر الحذف للمسودات والمنتهية والملغاة/المرفوضة.
-   قرار السماح النهائي يبقى داخل دالة RPC حتى لا تُحذف التأمينات أو السجلات المحمية. */
 const canHardDelete = a => {
   const k = kind(a), ds = String(a.depositStatus || "").toLowerCase();
-  /* لا نحذف مزاداً نشطاً أو بانتظار الافتتاح. */
   if (!["draft","ended","cancelled","rejected"].includes(k)) return false;
-  /* إذا رُفض تأمين المسودة ولم يُقبل دفعه، اسمح بحذف المسودة. */
   if (k === "draft" && a.hasDeposit && ["rejected","failed","cancelled","declined"].includes(ds) && !a.depositPaid) return true;
-  /* أي تأمين آخر غير مسترجع يمنع الحذف إلى أن تسجل الإدارة استرجاعه. */
   if (a.hasDeposit && ds !== "refunded") return false;
   return true;
 };
@@ -247,7 +241,6 @@ const TABS = [["all","الكل",()=>true],["live","مباشر",a=>kind(a)==="liv
 
 function render(){
   $("tabs").innerHTML = TABS.map(([k,l,f]) => `<button class="tab ${tab===k?"on":""}" data-tab="${k}" type="button">${l}<i>${auctions.filter(f).length}</i></button>`).join("");
-  /* تنبيه تنظيف: أكثر من مسودة بلا نشاط */
   const junk = auctions.filter(a => canBulkDelete(a));
   $("clean").hidden = junk.length < 2;
   if (junk.length >= 2) $("cleanTxt").textContent = "عندك " + junk.length + " مسودات أو مزادات منتهية قابلة للحذف. أي مزاد عليه تأمين غير مسترجع يظهر له استرجاع التأمين أولاً.";
@@ -292,7 +285,11 @@ function ask(cfg){
 }
 const closeSheet = () => { $("sheet").classList.remove("show"); pending = null; };
 const ERRS = { AUCTION_HAS_ACTIVITY:"ما نكدر نحذفه لأن عليه نشاط مرتبط.", AUCTION_HAS_BIDS:"ما ينحذف لأن عليه مزايدات محفوظة.", AUCTION_HAS_PROTECTED_DEPOSIT:"ما ينحذف بعد؛ التأمين لازم يصير مسترجع ومسجل بالنظام أولاً.", AUCTION_HAS_PROTECTED_TRANSACTION:"المزاد مرتبط بمعاملة مالية محفوظة؛ لازم الإدارة تكملها قبل الحذف.", AUCTION_HAS_PROTECTED_DISPUTE:"المزاد عليه نزاع محفوظ؛ لازم الإدارة تحسمه قبل الحذف.", AUCTION_HAS_PROTECTED_FRAUD_REVIEW:"المزاد قيد مراجعة أمان؛ ما يصير حذف سجله قبل إكمال المراجعة.", AUCTION_IS_ACTIVE:"هذا المزاد شغّال أو ينتظر الافتتاح، فبقى مثل ما هو.", AUCTION_HAS_PAYMENT_REQUEST:"ما ينحذف لأن إله طلب دفع محفوظ.", AUCTION_REQUIRES_ADMIN_REVIEW:"هذا المزاد يحتاج مراجعة الإدارة قبل الحذف.", DEVICE_HAS_RELATED_RECORDS:"الجهاز مرتبط ببيع أو معاملة، لذلك ما نكدر نحذفه.", AUCTION_HAS_ENDED:"المزاد منتهي بالفعل.", NOT_AUCTION_OWNER:"هذا المزاد مو من حسابك.", "FOREIGN KEY":"ما ينحذف لأن سجل ثاني مربوط بيه. تواصل مع الإدارة." };
-const errTxt = e => { const m = String(e?.message || e || ""); for (const k in ERRS) if (m.includes(k)) return ERRS[k]; return m === "TIMEOUT" ? "تأخر الرد. حدّث الصفحة وتأكد من الحالة." : "تعذر التنفيذ، حاول مرة ثانية."; };
+const errTxt = e => {
+  const m = String(e?.message || e || "");
+  for (const k in ERRS) if (m.includes(k)) return ERRS[k];
+  return m === "TIMEOUT" ? "تأخر الرد. حدّث الصفحة وتأكد من الحالة." : "تعذر التنفيذ: " + m.slice(0, 120);
+};
 const rpc = (fn, id) => Promise.race([supabase.rpc(fn, { p_auction_id:id }), new Promise((_,j) => setTimeout(() => j(new Error("TIMEOUT")), 12000))]);
 
 $("shYes").addEventListener("click", async () => {
@@ -322,7 +319,7 @@ $("shNo").addEventListener("click", closeSheet);
 $("sheet").addEventListener("click", e => { if (e.target.id === "sheet") closeSheet(); });
 
 $("list").addEventListener("click", e => {
-  const g = s => e.target.closest(s), id = el => el.dataset[Object.keys(el.dataset)[0]];
+  const g = s => e.target.closest(s);
   let el;
   if ((el = g("[data-det]"))) location.href = "auction-details.html?auction=" + encodeURIComponent(el.dataset.det);
   else if ((el = g("[data-pay]"))) location.href = "auction-seller-deposit.html?auction=" + encodeURIComponent(el.dataset.pay);
