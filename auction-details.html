@@ -211,7 +211,7 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 import { supabase } from "./js/supabase.js";
 const $ = id => document.getElementById(id);
 const auctionId = new URLSearchParams(location.search).get("auction") || new URLSearchParams(location.search).get("id");
-const S = { user:null, a:null, d:null, imgs:[], bids:[], count:0, elig:false, result:null, busy:false, amount:0, sheet:"", sig:"", lastPrice:null, refetched:false, polling:false, loaded:false, stats:{ reserved:0, viewers:0 }, activating:false };
+const S = { user:null, a:null, d:null, imgs:[], bids:[], count:0, elig:false, result:null, busy:false, amount:0, sheet:"", sig:"", lastPrice:null, refetched:false, polling:false, loaded:false, stats:{ reserved:0, viewers:0 }, activating:false, sellerDeposit:null };
 const DEPOSIT = 5000;
 const money = n => Number(n||0).toLocaleString("en-US");
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -281,6 +281,35 @@ async function loadLive(){
   if (e) S.elig = e.data?.eligible === true;
   S.result = r?.data?.[0] || null;
   return true;
+}
+
+/* رابط استرجاع تأمين البائع: يظهر للمالك بعد انتهاء المزاد عند وجود تأمين بائع */
+async function renderRefundAction(){
+  const old = document.getElementById("sellerRefundAction");
+  if (old) old.remove();
+  if (!S.user || !S.a || S.a.seller_user_id !== S.user.id) return;
+  const ended = ["ended","completed"].includes(String(S.a.status||"").toLowerCase()) ||
+    (S.a.ends_at && new Date(S.a.ends_at).getTime() <= Date.now());
+  if (!ended) return;
+  const r = await supabase.from("mzad_deposits")
+    .select("id,status,amount_iqd")
+    .eq("auction_id", S.a.id)
+    .eq("user_id", S.user.id)
+    .eq("deposit_type","auction_seller")
+    .order("created_at",{ascending:false})
+    .limit(1).maybeSingle();
+  if (r.error) { console.warn("SELLER REFUND LINK:",r.error.message); return; }
+  if (!r.data) return;
+  const section = document.createElement("section");
+  section.id = "sellerRefundAction";
+  section.className = "card";
+  section.style.cssText = "margin-top:14px;padding:16px;border:1px solid #e5ddff;border-radius:20px;background:#fff";
+  const status = String(r.data.status||"").toLowerCase();
+  const refunded = status === "refunded";
+  section.innerHTML = '<div style="display:flex;gap:12px;align-items:center"><div style="width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:#f1edff;color:#6246d9;font-size:22px">↩</div><div style="flex:1"><b style="display:block;font-size:15px;margin-bottom:4px">'+(refunded?'تم استرجاع التأمين':'استرجاع تأمين المزاد')+'</b><span style="font-size:12px;color:#77758b;line-height:1.8">'+(refunded?'الإدارة سجّلت أن مبلغ التأمين تم استرجاعه.':'المزاد انتهى. افتح صفحة التأمين لمتابعة حالته وطلب مراجعته من الإدارة.')+'</span></div></div><div style="margin-top:12px;font-weight:900;color:#6246d9">'+money(r.data.amount_iqd)+' د.ع</div><a href="auction-refund.html?auction='+encodeURIComponent(S.a.id)+'" style="display:flex;justify-content:center;align-items:center;min-height:46px;margin-top:12px;border-radius:14px;background:#6246d9;color:#fff;text-decoration:none;font-weight:900">'+(refunded?'عرض تفاصيل الاسترجاع':'متابعة استرجاع التأمين')+'</a>';
+  const card = $("insCard");
+  if (card) card.insertAdjacentElement("afterend",section);
+  else $("pg").appendChild(section);
 }
 
 /* ============ الجزء الثابت: الصور والمواصفات ============ */
@@ -513,7 +542,7 @@ function fail(t, p, link, detail){
     if (!await loadLive()) return;
     await loadStatic();
     $("ld").hidden = true; $("pg").hidden = false;
-    renderStatic(); renderLive(); S.loaded = true;
+    renderStatic(); renderLive(); await renderRefundAction(); S.loaded = true;
     setInterval(() => { if (!document.hidden) refresh(); }, 5000);
     document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
     setInterval(() => { document.querySelectorAll(".who>span:last-child").length && (S.sig = ""); }, 60000);
