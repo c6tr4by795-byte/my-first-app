@@ -263,7 +263,7 @@ function render(){
     const price = Number(a.current_price_iqd || a.starting_price_iqd) || 0;
     const img = a.image ? `<img src="${esc(a.image)}" alt="${esc(name)}" loading="lazy" onerror="this.remove()">` : IC.phone;
     let note = "";
-    if (a.depositPending && ["draft","scheduled"].includes(k)) note = `<div class="note">${IC.info}<span>باقي تأمين البائع حتى تراجع الإدارة مزادك. إذا ما تريد تكمل، تقدر تمسحه.</span></div>`;
+    if (a.depositPending && ["draft","scheduled"].includes(k)) note = `<div class="note">${IC.info}<span>تأمين البائع بعده قيد المراجعة. ما ينحذف المزاد إلى أن يُسترجع التأمين وتُسجّل حالته بالنظام.</span></div>`;
     else if (k === "live" && a.bidCount > 0) note = `<div class="note info">${IC.shield}<span>عليه مزايدات، فما ينمسح. تقدر تلغيه فقط، ويبقى تأمينك محفوظ لحد موعد النهاية.</span></div>`;
     else if (k === "cancelled" && !canHardDelete(a)) note = `<div class="note info">${IC.shield}<span>تم الإلغاء. تأمينك محفوظ لحد موعد النهاية الأصلي، وبعدها تواصل مع الإدارة.</span></div>`;
     else if (k === "ended" && a.hasDeposit && a.depositStatus !== "refunded") note = `<div class="note info">${IC.shield}<span>انتهى المزاد وعليه تأمين بائع. استخدم استرجاع التأمين لمتابعة مراجعته؛ يبقى الحذف مخفياً إلى أن تُسجّل الإدارة الاسترداد.</span></div>`;
@@ -289,7 +289,7 @@ function ask(cfg){
   $("sheet").classList.add("show");
 }
 const closeSheet = () => { $("sheet").classList.remove("show"); pending = null; };
-const ERRS = { AUCTION_HAS_ACTIVITY:"ما نكدر نحذفه لأن عليه نشاط مرتبط.", AUCTION_HAS_BIDS:"ما ينحذف لأن عليه مزايدات محفوظة.", AUCTION_HAS_PROTECTED_DEPOSIT:"زر الحذف ظاهر، لكن هذا المزاد مرتبط بتأمين محمي. التأمين يبقى محفوظ ولازم تراجع الإدارة.", AUCTION_HAS_PAYMENT_REQUEST:"ما ينحذف لأن إله طلب دفع محفوظ.", AUCTION_REQUIRES_ADMIN_REVIEW:"هذا المزاد يحتاج مراجعة الإدارة قبل الحذف.", DEVICE_HAS_RELATED_RECORDS:"الجهاز مرتبط ببيع أو معاملة، لذلك ما نكدر نحذفه.", AUCTION_HAS_ENDED:"المزاد منتهي بالفعل.", NOT_AUCTION_OWNER:"هذا المزاد مو من حسابك.", "FOREIGN KEY":"ما ينحذف لأن سجل ثاني مربوط بيه. تواصل مع الإدارة." };
+const ERRS = { AUCTION_HAS_ACTIVITY:"ما نكدر نحذفه لأن عليه نشاط مرتبط.", AUCTION_HAS_BIDS:"ما ينحذف لأن عليه مزايدات محفوظة.", AUCTION_HAS_PROTECTED_DEPOSIT:"ما ينحذف بعد؛ التأمين لازم يصير مسترجع ومسجل بالنظام أولاً.", AUCTION_HAS_PROTECTED_TRANSACTION:"المزاد مرتبط بمعاملة مالية محفوظة؛ لازم الإدارة تكملها قبل الحذف.", AUCTION_HAS_PROTECTED_DISPUTE:"المزاد عليه نزاع محفوظ؛ لازم الإدارة تحسمه قبل الحذف.", AUCTION_HAS_PROTECTED_FRAUD_REVIEW:"المزاد قيد مراجعة أمان؛ ما يصير حذف سجله قبل إكمال المراجعة.", AUCTION_IS_ACTIVE:"هذا المزاد شغّال أو ينتظر الافتتاح، فبقى مثل ما هو.", AUCTION_HAS_PAYMENT_REQUEST:"ما ينحذف لأن إله طلب دفع محفوظ.", AUCTION_REQUIRES_ADMIN_REVIEW:"هذا المزاد يحتاج مراجعة الإدارة قبل الحذف.", DEVICE_HAS_RELATED_RECORDS:"الجهاز مرتبط ببيع أو معاملة، لذلك ما نكدر نحذفه.", AUCTION_HAS_ENDED:"المزاد منتهي بالفعل.", NOT_AUCTION_OWNER:"هذا المزاد مو من حسابك.", "FOREIGN KEY":"ما ينحذف لأن سجل ثاني مربوط بيه. تواصل مع الإدارة." };
 const errTxt = e => { const m = String(e?.message || e || ""); for (const k in ERRS) if (m.includes(k)) return ERRS[k]; return m === "TIMEOUT" ? "تأخر الرد. حدّث الصفحة وتأكد من الحالة." : "تعذر التنفيذ، حاول مرة ثانية."; };
 const rpc = (fn, id) => Promise.race([supabase.rpc(fn, { p_auction_id:id }), new Promise((_,j) => setTimeout(() => j(new Error("TIMEOUT")), 12000))]);
 
