@@ -614,7 +614,6 @@ header{
   opacity:1
 }
 
-/* تثبيت حجم الكارت حسب عرض الـ rail الحقيقي */
 .fcard,
 .sk{
   flex:0 0 calc((100% - 10px) / 2);
@@ -720,7 +719,6 @@ header{
   align-self:flex-start
 }
 
-/* اسم الجهاز أصغر شوي حتى يبين على مختلف الأجهزة */
 .ftitle{
   margin:0;
   font-size:12.5px;
@@ -771,7 +769,6 @@ header{
   color:#ffffffb3
 }
 
-/* السعر أكبر وأوضح */
 .frow b{
   display:block;
   margin-top:1px;
@@ -812,7 +809,6 @@ header{
   color:var(--ok)
 }
 
-/* وقت المزاد أكبر وأبرز */
 .cd{
   display:inline-flex;
   align-items:center;
@@ -1474,93 +1470,54 @@ const searchClear = $("searchClear");
 let toastTimer;
 
 function showToast(message){
-
   toast.textContent = message;
-
   toast.classList.add("show");
-
   clearTimeout(toastTimer);
-
-  toastTimer = setTimeout(
-    () => toast.classList.remove("show"),
-    2200
-  );
-
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
 }
 
 function esc(v){
-
   return String(v ?? "").replace(
     /[&<>"']/g,
-    c => ({
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#39;"
-    }[c])
+    c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])
   );
-
 }
 
-const go = url => {
-  window.location.href = url;
-};
+const go = url => { window.location.href = url; };
 
 /* ================================
    AUTH
 ================================ */
 
 async function isLoggedIn(){
-
   try{
-
-    const { data, error } =
-      await supabase.auth.getSession();
-
+    const { data, error } = await supabase.auth.getSession();
     if(error){
-
       console.error("SESSION ERROR:", error);
-
       return false;
     }
-
     return !!data?.session;
-
   }catch(error){
-
     console.error("AUTH ERROR:", error);
-
     return false;
   }
-
 }
 
 async function requireAuth(url){
 
   if(await isLoggedIn()){
-
     go(url);
-
     return;
   }
 
-  sessionStorage.setItem(
-    "mzad_pending_action",
-    url
-  );
+  sessionStorage.setItem("mzad_pending_action", url);
 
-  showToast(
-    "سجّل دخولك أو أنشئ حساباً أولاً"
-  );
+  showToast("سجّل دخولك أو أنشئ حساباً أولاً");
 
   setTimeout(
-    () => go(
-      `index.html?login=1&returnTo=${encodeURIComponent(url)}`
-    ),
+    () => go(`index.html?login=1&returnTo=${encodeURIComponent(url)}`),
     450
   );
-
 }
 
 /* ================================
@@ -1576,38 +1533,25 @@ const PROTECTED = [
 
 function bindNavigation(){
 
-  document
-    .querySelectorAll("[data-go]")
-    .forEach(el => {
+  document.querySelectorAll("[data-go]").forEach(el => {
 
-      el.addEventListener(
-        "click",
-        async event => {
+    el.addEventListener("click", async event => {
 
-          event.preventDefault();
+      event.preventDefault();
 
-          const url = el.dataset.go;
+      const url = el.dataset.go;
 
-          if(!url) return;
+      if(!url) return;
 
-          if(
-            PROTECTED.includes(
-              url.split("?")[0]
-            )
-          ){
+      if(PROTECTED.includes(url.split("?")[0])){
+        await requireAuth(url);
+        return;
+      }
 
-            await requireAuth(url);
-
-            return;
-          }
-
-          go(url);
-
-        }
-      );
-
+      go(url);
     });
 
+  });
 }
 
 /* ================================
@@ -1642,7 +1586,6 @@ const BRANDS = [
 ];
 
 function renderCategories(){
-
   $("categories").innerHTML =
     BRANDS.map(
       ([key,name,icon],i) => `
@@ -1655,31 +1598,18 @@ function renderCategories(){
         </button>
       `
     ).join("");
-
 }
 
 function bindCategories(){
 
-  const items =
-    [...document.querySelectorAll(".category")];
+  const items = [...document.querySelectorAll(".category")];
 
   items.forEach(button => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        items.forEach(
-          i => i.classList.remove("active")
-        );
-
-        button.classList.add("active");
-
-      }
-    );
-
+    button.addEventListener("click", () => {
+      items.forEach(i => i.classList.remove("active"));
+      button.classList.add("active");
+    });
   });
-
 }
 
 /* ================================
@@ -1836,39 +1766,23 @@ function renderAds(){
   if(ADS.length < 2) return;
 
   dotsBox.innerHTML =
-    ADS.map(
-      (_,i) =>
-        `<span class="ad-dot${i ? "" : " active"}"></span>`
-    ).join("");
+    ADS.map((_,i) => `<span class="ad-dot${i ? "" : " active"}"></span>`).join("");
 
-  const cards =
-    [...track.querySelectorAll(".ad-card")];
-
-  const adDots =
-    [...dotsBox.children];
+  const cards = [...track.querySelectorAll(".ad-card")];
+  const adDots = [...dotsBox.children];
 
   let cur = 0;
   let timer = null;
 
   const setActive = i =>
-    adDots.forEach(
-      (d,k) =>
-        d.classList.toggle(
-          "active",
-          k === i
-        )
-    );
+    adDots.forEach((d,k) => d.classList.toggle("active", k === i));
 
   function goTo(i){
 
-    cur =
-      (i + cards.length) %
-      cards.length;
+    cur = (i + cards.length) % cards.length;
 
     track.scrollTo({
-      left:
-        cards[cur].offsetLeft -
-        track.offsetLeft,
+      left: cards[cur].offsetLeft - track.offsetLeft,
       behavior:"smooth"
     });
 
@@ -1876,53 +1790,27 @@ function renderAds(){
   }
 
   const restart = () => {
-
     clearInterval(timer);
-
-    timer =
-      setInterval(
-        () => goTo(cur + 1),
-        6000
-      );
-
+    timer = setInterval(() => goTo(cur + 1), 6000);
   };
 
-  track.addEventListener(
-    "scroll",
-    () => {
+  track.addEventListener("scroll", () => {
 
-      const step =
-        cards[0].offsetWidth + 12;
+    const step = cards[0].offsetWidth + 12;
 
-      cur =
-        Math.min(
-          cards.length - 1,
-          Math.round(
-            Math.abs(track.scrollLeft) /
-            step
-          )
-        );
+    cur = Math.min(
+      cards.length - 1,
+      Math.round(Math.abs(track.scrollLeft) / step)
+    );
 
-      setActive(cur);
+    setActive(cur);
 
-    },
-    {passive:true}
-  );
+  }, {passive:true});
 
-  track.addEventListener(
-    "touchstart",
-    () => clearInterval(timer),
-    {passive:true}
-  );
-
-  track.addEventListener(
-    "touchend",
-    restart,
-    {passive:true}
-  );
+  track.addEventListener("touchstart", () => clearInterval(timer), {passive:true});
+  track.addEventListener("touchend", restart, {passive:true});
 
   restart();
-
 }
 
 /* ================================
@@ -1930,7 +1818,6 @@ function renderAds(){
 ================================ */
 
 function normalizeArabicSearch(value){
-
   return String(value || "")
     .toLowerCase()
     .normalize("NFKC")
@@ -1943,7 +1830,6 @@ function normalizeArabicSearch(value){
     .replace(/[\u064B-\u065F\u0670]/g,"")
     .replace(/\s+/g," ")
     .trim();
-
 }
 
 const ALIASES = [
@@ -1969,42 +1855,23 @@ const ALIASES = [
 ];
 
 function arabicBrandAliases(value){
-
-  let text =
-    normalizeArabicSearch(value);
-
-  ALIASES.forEach(
-    ([pattern,replacement]) => {
-      text =
-        text.replace(
-          pattern,
-          replacement
-        );
-    }
-  );
-
+  let text = normalizeArabicSearch(value);
+  ALIASES.forEach(([pattern,replacement]) => {
+    text = text.replace(pattern, replacement);
+  });
   return text;
-
 }
 
 function buildSearchVariants(value){
 
-  const raw =
-    String(value || "").trim();
+  const raw = String(value || "").trim();
 
   if(!raw) return [];
 
-  const branded =
-    arabicBrandAliases(raw);
+  const branded = arabicBrandAliases(raw);
 
   const englishDigits =
-    branded.replace(
-      /[٠-٩]/g,
-      d =>
-        String(
-          "٠١٢٣٤٥٦٧٨٩".indexOf(d)
-        )
-    );
+    branded.replace(/[٠-٩]/g, d => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
 
   return [
     raw,
@@ -2014,11 +1881,7 @@ function buildSearchVariants(value){
   ]
     .map(v => v.trim())
     .filter(Boolean)
-    .filter(
-      (v,i,a) =>
-        a.indexOf(v) === i
-    );
-
+    .filter((v,i,a) => a.indexOf(v) === i);
 }
 
 function bindSearch(){
@@ -2031,110 +1894,54 @@ function bindSearch(){
 
   function performSearch(){
 
-    const query =
-      searchInput.value.trim();
+    const query = searchInput.value.trim();
 
     if(!query){
-
-      showToast(
-        "اكتب اسم الجهاز أولاً"
-      );
-
+      showToast("اكتب اسم الجهاز أولاً");
       return;
     }
 
-    sessionStorage.setItem(
-      "mzad_search_query",
-      query
-    );
+    sessionStorage.setItem("mzad_search_query", query);
 
     sessionStorage.setItem(
       "mzad_search_variants",
-      JSON.stringify(
-        buildSearchVariants(query)
-      )
+      JSON.stringify(buildSearchVariants(query))
     );
 
-    go(
-      `market.html?search=${encodeURIComponent(query)}`
-    );
-
+    go(`market.html?search=${encodeURIComponent(query)}`);
   }
 
-  searchInput.addEventListener(
-    "input",
-    sync
-  );
+  searchInput.addEventListener("input", sync);
 
-  searchClear.addEventListener(
-    "click",
-    () => {
+  searchClear.addEventListener("click", () => {
+    searchInput.value = "";
+    sync();
+    searchInput.focus();
+  });
 
-      searchInput.value = "";
+  searchInput.addEventListener("keydown", event => {
+    if(event.key !== "Enter") return;
+    event.preventDefault();
+    performSearch();
+  });
 
-      sync();
-
-      searchInput.focus();
-
-    }
-  );
-
-  searchInput.addEventListener(
-    "keydown",
-    event => {
-
-      if(event.key !== "Enter") return;
-
-      event.preventDefault();
-
-      performSearch();
-
-    }
-  );
-
-  searchInput.addEventListener(
-    "search",
-    () => {
-
-      if(searchInput.value.trim())
-        performSearch();
-
-    }
-  );
-
+  searchInput.addEventListener("search", () => {
+    if(searchInput.value.trim()) performSearch();
+  });
 }
 
 /* ================================
    DEVICE HELPERS
 ================================ */
 
-const normalizeText =
-  v =>
-    (
-      v === null ||
-      v === undefined
-    )
-      ? ""
-      : String(v).trim();
+const normalizeText = v =>
+  (v === null || v === undefined) ? "" : String(v).trim();
 
-const isAuction =
-  d =>
-    String(
-      d.sale_type || ""
-    )
-    .toLowerCase()
-    .includes("auction");
+const isAuction = d =>
+  String(d.sale_type || "").toLowerCase().includes("auction");
 
-const deviceName =
-  d =>
-    [
-      d.brand,
-      d.model
-    ]
-    .filter(Boolean)
-    .join(" ")
-    ||
-    "جهاز";
+const deviceName = d =>
+  [d.brand, d.model].filter(Boolean).join(" ") || "جهاز";
 
 function getDeviceImages(images){
 
@@ -2145,39 +1952,29 @@ function getDeviceImages(images){
 
   if(typeof images === "string"){
 
-    const value =
-      images.trim();
+    const value = images.trim();
 
     if(!value) return [];
 
     try{
-
-      const parsed =
-        JSON.parse(value);
-
+      const parsed = JSON.parse(value);
       if(Array.isArray(parsed))
         return parsed.filter(Boolean);
-
     }catch(error){}
 
     return [value];
-
   }
 
   return [];
-
 }
 
 function getDeviceImageUrl(path){
 
   if(!path) return "";
 
-  const value =
-    String(path).trim();
+  const value = String(path).trim();
 
-  if(
-    /^(https?:|data:)/.test(value)
-  )
+  if(/^(https?:|data:)/.test(value))
     return value;
 
   const { data } =
@@ -2186,24 +1983,16 @@ function getDeviceImageUrl(path){
       .getPublicUrl(value);
 
   return data?.publicUrl || "";
-
 }
 
 function formatDevicePrice(price){
 
-  const number =
-    Number(price);
+  const number = Number(price);
 
   if(!Number.isFinite(number))
     return "السعر غير محدد";
 
-  return (
-    new Intl.NumberFormat("en-US")
-      .format(number)
-    +
-    " د.ع"
-  );
-
+  return new Intl.NumberFormat("en-US").format(number) + " د.ع";
 }
 
 /* ================================
@@ -2212,26 +2001,17 @@ function formatDevicePrice(price){
 
 function formatPublishedTime(value){
 
-  const date =
-    new Date(value);
+  const date = new Date(value);
 
-  if(
-    !value ||
-    Number.isNaN(date.getTime())
-  )
+  if(!value || Number.isNaN(date.getTime()))
     return "";
 
-  const diff =
-    Date.now() -
-    date.getTime();
+  const diff = Date.now() - date.getTime();
 
   if(diff < 0)
     return "نُشر للتو";
 
-  const minutes =
-    Math.floor(
-      diff / 60000
-    );
+  const minutes = Math.floor(diff / 60000);
 
   if(minutes < 1)
     return "نُشر للتو";
@@ -2239,60 +2019,35 @@ function formatPublishedTime(value){
   if(minutes < 60)
     return `منذ ${minutes} دقيقة`;
 
-  const hours =
-    Math.floor(
-      minutes / 60
-    );
+  const hours = Math.floor(minutes / 60);
 
   if(hours < 24)
     return `منذ ${hours} ساعة`;
 
-  const days =
-    Math.floor(
-      hours / 24
-    );
+  const days = Math.floor(hours / 24);
 
   if(days < 30)
     return `منذ ${days} يوم`;
 
-  const months =
-    Math.floor(
-      days / 30
-    );
+  const months = Math.floor(days / 30);
 
   if(months < 12)
     return `منذ ${months} شهر`;
 
-  const years =
-    Math.floor(
-      days / 365
-    );
+  const years = Math.floor(days / 365);
 
   return `منذ ${years} سنة`;
-
 }
 
 function refreshPublishedTimes(){
-
   document
-    .querySelectorAll(
-      ".published-time[data-created-at]"
-    )
+    .querySelectorAll(".published-time[data-created-at]")
     .forEach(el => {
-
-      el.textContent =
-        formatPublishedTime(
-          el.dataset.createdAt
-        );
-
+      el.textContent = formatPublishedTime(el.dataset.createdAt);
     });
-
 }
 
-setInterval(
-  refreshPublishedTimes,
-  60000
-);
+setInterval(refreshPublishedTimes, 60000);
 
 /* ================================
    المؤقت الحي للمزادات
@@ -2303,83 +2058,44 @@ function fmtLeft(ms){
   if(ms <= 0)
     return "انتهى";
 
-  const s =
-    Math.floor(
-      ms / 1000
-    );
+  const s = Math.floor(ms / 1000);
+  const d = Math.floor(s / 86400);
+  const h = Math.floor((s % 86400) / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
 
-  const d =
-    Math.floor(
-      s / 86400
-    );
-
-  const h =
-    Math.floor(
-      (s % 86400) / 3600
-    );
-
-  const m =
-    Math.floor(
-      (s % 3600) / 60
-    );
-
-  const sec =
-    s % 60;
-
-  const p =
-    n =>
-      String(n).padStart(2,"0");
+  const p = n => String(n).padStart(2,"0");
 
   return d > 0
     ? `${d} يوم ${h} س`
     : `${p(h)}:${p(m)}:${p(sec)}`;
-
 }
 
 function tickTimers(){
 
-  const now =
-    Date.now();
+  const now = Date.now();
 
-  document
-    .querySelectorAll(
-      "[data-end]"
-    )
-    .forEach(el => {
+  document.querySelectorAll("[data-end]").forEach(el => {
 
-      const left =
-        new Date(
-          el.dataset.end
-        ).getTime() -
-        now;
+    const left = new Date(el.dataset.end).getTime() - now;
 
-      el.textContent =
-        fmtLeft(left);
+    el.textContent = fmtLeft(left);
 
-      el.classList.toggle(
-        "urgent",
-        left > 0 &&
-        left < 3600e3
-      );
-
-    });
-
+    el.classList.toggle("urgent", left > 0 && left < 3600e3);
+  });
 }
 
-setInterval(
-  tickTimers,
-  1000
-);
+setInterval(tickTimers, 1000);
 
 /* ================================
    المفضلة
 ================================ */
 
-// افصل المفضلة محلياً لكل حساب حتى لا تنتقل عند تبديل المستخدم.
 let FAV_KEY = "mzad_favs:guest";
+
 async function initFavoriteScope(){
   try{
-    const {data,error}=await supabase.auth.getUser();
+    const {data,error} = await supabase.auth.getUser();
     if(error) throw error;
     FAV_KEY = data?.user?.id
       ? "mzad_favs:user:" + data.user.id
@@ -2391,38 +2107,17 @@ async function initFavoriteScope(){
 }
 
 const getFavs = () => {
-
   try{
-
-    return new Set(
-      JSON.parse(
-        localStorage.getItem(
-          FAV_KEY
-        ) || "[]"
-      )
-    );
-
+    return new Set(JSON.parse(localStorage.getItem(FAV_KEY) || "[]"));
   }catch{
-
     return new Set();
-
   }
-
 };
 
 const saveFavs = set => {
-
   try{
-
-    localStorage.setItem(
-      FAV_KEY,
-      JSON.stringify(
-        [...set]
-      )
-    );
-
+    localStorage.setItem(FAV_KEY, JSON.stringify([...set]));
   }catch{}
-
 };
 
 const HEART =
@@ -2433,15 +2128,9 @@ const PH_ICON =
 
 function imgTag(d){
 
-  const url =
-    getDeviceImageUrl(
-      getDeviceImages(
-        d.images
-      )[0]
-    );
+  const url = getDeviceImageUrl(getDeviceImages(d.images)[0]);
 
   return url
-
     ? `
       <img
         src="${esc(url)}"
@@ -2453,35 +2142,25 @@ function imgTag(d){
         onerror="this.remove()"
       >
     `
-
     : `
       <div class="no-img">
         ${PH_ICON}
       </div>
     `;
-
 }
 
 /* ================================
    الكرت الموحّد
 ================================ */
 
-function deviceCard(
-  d,
-  i,
-  favs,
-  opts = {}
-){
+function deviceCard(d, i, favs, opts = {}){
 
-  const auction =
-    isAuction(d);
+  const auction = isAuction(d);
 
   const specs = [
     d.storage,
     d.color,
-    d.battery_health
-      ? `بطارية ${d.battery_health}`
-      : ""
+    d.battery_health ? `بطارية ${d.battery_health}` : ""
   ]
     .map(normalizeText)
     .filter(Boolean)
@@ -2490,23 +2169,11 @@ function deviceCard(
   const fresh =
     opts.showFresh &&
     d.created_at &&
-    (
-      Date.now() -
-      new Date(
-        d.created_at
-      ).getTime()
-    ) <
-    24 * 3600e3;
+    (Date.now() - new Date(d.created_at).getTime()) < 24 * 3600e3;
 
-  const on =
-    favs.has(
-      String(d.id)
-    );
+  const on = favs.has(String(d.id));
 
-  const published =
-    formatPublishedTime(
-      d.created_at
-    );
+  const published = formatPublishedTime(d.created_at);
 
   return `
 
@@ -2523,11 +2190,7 @@ function deviceCard(
 
       <div class="shade"></div>
 
-      ${
-        fresh
-          ? '<span class="fresh">جديد</span>'
-          : ""
-      }
+      ${fresh ? '<span class="fresh">جديد</span>' : ""}
 
       <button
         class="favorite-btn${on ? " active" : ""}"
@@ -2542,58 +2205,27 @@ function deviceCard(
 
         ${
           auction && d.ends_at
-            ? `
-              <span
-                class="cd"
-                data-end="${esc(d.ends_at)}"
-              >
-                --:--:--
-              </span>
-            `
+            ? `<span class="cd" data-end="${esc(d.ends_at)}">--:--:--</span>`
             : ""
         }
 
-        <h3 class="ftitle">
-          ${esc(deviceName(d))}
-        </h3>
+        <h3 class="ftitle">${esc(deviceName(d))}</h3>
 
         <div class="specs">
-          ${
-            specs
-              .map(
-                s =>
-                  `<span class="spec">${esc(s)}</span>`
-              )
-              .join("")
-          }
+          ${specs.map(s => `<span class="spec">${esc(s)}</span>`).join("")}
         </div>
 
         <div class="frow">
 
           <div class="frow-main">
 
-            <small>
-              ${auction ? "السعر الحالي" : "السعر"}
-            </small>
+            <small>${auction ? "السعر الحالي" : "السعر"}</small>
 
-            <b>
-              ${esc(
-                formatDevicePrice(
-                  d.price
-                )
-              )}
-            </b>
+            <b>${esc(formatDevicePrice(d.price))}</b>
 
             ${
               published
-                ? `
-                  <span
-                    class="published-time"
-                    data-created-at="${esc(d.created_at)}"
-                  >
-                    ${esc(published)}
-                  </span>
-                `
+                ? `<span class="published-time" data-created-at="${esc(d.created_at)}">${esc(published)}</span>`
                 : ""
             }
 
@@ -2612,27 +2244,11 @@ function deviceCard(
     </article>
 
   `;
-
 }
 
-const featuredCard =
-  (d,i,f) =>
-    deviceCard(
-      d,
-      i,
-      f
-    );
+const featuredCard = (d,i,f) => deviceCard(d, i, f);
 
-const latestCard =
-  (d,i,f) =>
-    deviceCard(
-      d,
-      i,
-      f,
-      {
-        showFresh:true
-      }
-    );
+const latestCard = (d,i,f) => deviceCard(d, i, f, { showFresh:true });
 
 /* ================================
    FEATURED SCORE
@@ -2643,273 +2259,137 @@ function storageToNumber(value){
   const match =
     normalizeText(value)
       .toUpperCase()
-      .match(
-        /(\d+(?:\.\d+)?)\s*(TB|GB)/
-      );
+      .match(/(\d+(?:\.\d+)?)\s*(TB|GB)/);
 
   if(!match)
     return 0;
 
-  const number =
-    Number(match[1]);
+  const number = Number(match[1]);
 
   if(!Number.isFinite(number))
     return 0;
 
-  return match[2] === "TB"
-    ? number * 1024
-    : number;
-
+  return match[2] === "TB" ? number * 1024 : number;
 }
 
 function scoreFeaturedDevice(device){
 
   let score = 0;
 
-  const images =
-    getDeviceImages(
-      device.images
-    );
+  const images = getDeviceImages(device.images);
 
-  if(images.length >= 2)
-    score += 2;
-
-  if(images.length >= 4)
-    score += 1;
+  if(images.length >= 2) score += 2;
+  if(images.length >= 4) score += 1;
 
   const battery =
-    parseFloat(
-      String(
-        device.battery_health || ""
-      ).replace("%","")
-    );
+    parseFloat(String(device.battery_health || "").replace("%",""));
 
   if(Number.isFinite(battery)){
-
-    if(battery >= 95)
-      score += 4;
-
-    else if(battery >= 90)
-      score += 3;
-
-    else if(battery >= 85)
-      score += 1;
-
+    if(battery >= 95) score += 4;
+    else if(battery >= 90) score += 3;
+    else if(battery >= 85) score += 1;
   }
 
-  const condition =
-    normalizeText(
-      device.condition
-    ).toLowerCase();
+  const condition = normalizeText(device.condition).toLowerCase();
 
   if(
-    [
-      "ممتاز",
-      "excellent",
-      "جيد جدا",
-      "جيد جدًا",
-      "very good",
-      "نظيف"
-    ].some(
-      w =>
-        condition.includes(w)
-    )
+    ["ممتاز","excellent","جيد جدا","جيد جدًا","very good","نظيف"]
+      .some(w => condition.includes(w))
   )
     score += 4;
 
   else if(
-    [
-      "جيد",
-      "good"
-    ].some(
-      w =>
-        condition.includes(w)
-    )
+    ["جيد","good"].some(w => condition.includes(w))
   )
     score += 2;
 
-  const great =
-    v =>
-      [
-        "ممتاز",
-        "excellent",
-        "جديد",
-        "نظيف"
-      ].some(
-        w =>
-          normalizeText(v)
-            .toLowerCase()
-            .includes(w)
-      );
+  const great = v =>
+    ["ممتاز","excellent","جديد","نظيف"]
+      .some(w => normalizeText(v).toLowerCase().includes(w));
 
-  if(
-    great(
-      device.screen_condition
-    )
-  )
-    score += 2;
+  if(great(device.screen_condition)) score += 2;
+  if(great(device.body_condition)) score += 2;
 
-  if(
-    great(
-      device.body_condition
-    )
-  )
-    score += 2;
+  const completeness = [
+    device.brand,
+    device.model,
+    device.storage,
+    device.color,
+    device.price,
+    device.location,
+    device.condition,
+    device.screen_condition,
+    device.body_condition,
+    device.notes
+  ].filter(v => normalizeText(v)).length;
 
-  const completeness =
-    [
-      device.brand,
-      device.model,
-      device.storage,
-      device.color,
-      device.price,
-      device.location,
-      device.condition,
-      device.screen_condition,
-      device.body_condition,
-      device.notes
-    ]
-    .filter(
-      v =>
-        normalizeText(v)
-    ).length;
+  if(completeness >= 7) score += 2;
+  if(completeness >= 9) score += 1;
 
-  if(completeness >= 7)
-    score += 2;
+  const storage = storageToNumber(device.storage);
 
-  if(completeness >= 9)
-    score += 1;
-
-  const storage =
-    storageToNumber(
-      device.storage
-    );
-
-  if(storage >= 512)
-    score += 2;
-
-  else if(storage >= 256)
-    score += 1;
+  if(storage >= 512) score += 2;
+  else if(storage >= 256) score += 1;
 
   return score;
-
 }
 
 /* ================================
    RENDER
 ================================ */
 
-function skeletons(
-  trackId,
-  n = 3
-){
-
+function skeletons(trackId, n = 3){
   $(trackId).innerHTML =
-    Array.from(
-      {
-        length:n
-      },
-      () =>
-        '<div class="sk"></div>'
-    ).join("");
-
+    Array.from({length:n}, () => '<div class="sk"></div>').join("");
 }
 
 function emptyIcon(){
-
   return `
-    <svg
-      width="21"
-      height="21"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.8"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
+    <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <rect x="6" y="3" width="12" height="18" rx="2.5"/>
       <path d="M9 6h6"/>
       <path d="M10 18h4"/>
     </svg>
   `;
-
 }
 
-function showState(
-  trackId,
-  title,
-  copy,
-  retry,
-  kind = "empty"
-){
+function showState(trackId, title, copy, retry){
 
   $(trackId).innerHTML = `
 
     <div class="state-card">
 
-      <div class="state-icon">
-        ${emptyIcon()}
-      </div>
+      <div class="state-icon">${emptyIcon()}</div>
 
-      <h3>
-        ${esc(title)}
-      </h3>
+      <h3>${esc(title)}</h3>
 
-      <p>
-        ${esc(copy)}
-      </p>
+      <p>${esc(copy)}</p>
 
       ${
         retry
-          ? `
-            <button
-              class="retry"
-              type="button"
-              data-retry
-            >
-              إعادة المحاولة
-            </button>
-          `
+          ? '<button class="retry" type="button" data-retry>إعادة المحاولة</button>'
           : ""
       }
 
     </div>
 
   `;
-
 }
 
-function renderRail(
-  trackId,
-  devices,
-  builder
-){
+function renderRail(trackId, devices, builder){
 
-  const track =
-    $(trackId);
+  const track = $(trackId);
 
-  const favs =
-    getFavs();
+  const favs = getFavs();
 
   track.innerHTML =
-    devices
-      .map(
-        (d,i) =>
-          builder(
-            d,
-            i,
-            favs
-          )
-      )
-      .join("");
+    devices.map((d,i) => builder(d, i, favs)).join("");
 
   bindRail(track);
 
   tickTimers();
 
   refreshPublishedTimes();
-
 }
 
 /* ================================
@@ -2919,147 +2399,112 @@ function renderRail(
 const COLS =
   "id,created_at,brand,model,storage,color,battery_health,price,condition,screen_condition,body_condition,location,sale_type,images,notes";
 
-async function fetchDevices(){
+/* المزادات المباشرة الحقيقية من mzad_auctions */
+async function fetchLiveAuctions(){
 
-  let res =
-    await supabase
-      .from("devices")
-      .select(
-        COLS + ",ends_at"
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      )
-      .limit(40);
+  const r = await supabase
+    .from("mzad_auctions")
+    .select("id,device_id,starting_price_iqd,current_price_iqd,status,ends_at,created_at")
+    .eq("status","live")
+    .gt("ends_at", new Date().toISOString())
+    .order("created_at",{ascending:false})
+    .limit(20);
 
-  let hasEnds = true;
-
-  if(res.error){
-
-    hasEnds = false;
-
-    res =
-      await supabase
-        .from("devices")
-        .select(COLS)
-        .order(
-          "created_at",
-          {
-            ascending:false
-          }
-        )
-        .limit(40);
-
+  if(r.error){
+    console.error("HOME AUCTIONS ERROR:", r.error);
+    return [];
   }
 
-  return {
-    data:res.data || [],
-    error:res.error,
-    hasEnds
-  };
+  return Promise.all((r.data || []).map(async a => {
 
+    const [dr, ir] = await Promise.all([
+      supabase.from("mzad_devices").select("brand,model,storage").eq("id", a.device_id).maybeSingle(),
+      supabase.from("mzad_device_images").select("storage_path,is_primary,sort_order").eq("device_id", a.device_id).limit(8)
+    ]);
+
+    const imgs = [...(ir.data || [])]
+      .sort((x,y) => (Number(y.is_primary) - Number(x.is_primary)) || (Number(x.sort_order) - Number(y.sort_order)))
+      .map(i => i.storage_path)
+      .filter(Boolean);
+
+    const d = dr.data || {};
+
+    return {
+      id: a.id,
+      created_at: a.created_at,
+      brand: d.brand,
+      model: d.model,
+      storage: d.storage,
+      price: Number(a.current_price_iqd || a.starting_price_iqd) || 0,
+      sale_type: "auction",
+      ends_at: a.ends_at,
+      images: imgs
+    };
+  }));
 }
 
-async function loadLiveCount(
-  hasEnds
-){
+async function fetchDevices(){
+
+  /* البيع المباشر من جدول devices، وأي صف قديم نوعه مزاد نتجاهله */
+  const res = await supabase
+    .from("devices")
+    .select(COLS)
+    .order("created_at",{ascending:false})
+    .limit(40);
+
+  const direct = (res.data || []).filter(d => !isAuction(d));
+
+  let auctions = [];
+  try{ auctions = await fetchLiveAuctions(); }
+  catch(error){ console.error("HOME AUCTIONS LOAD ERROR:", error); }
+
+  /* نعتبره خطأ فقط إذا الاثنين فشلوا */
+  const failed = res.error && !auctions.length;
+
+  return {
+    data: [...auctions, ...direct],
+    error: failed ? res.error : null,
+    hasEnds: true
+  };
+}
+
+async function loadLiveCount(){
 
   try{
 
-    let q =
-      supabase
-        .from("devices")
-        .select(
-          "id",
-          {
-            count:"exact",
-            head:true
-          }
-        )
-        .ilike(
-          "sale_type",
-          "%auction%"
-        );
-
-    if(hasEnds){
-
-      q =
-        q.gt(
-          "ends_at",
-          new Date().toISOString()
-        );
-
-    }
-
-    const {
-      count,
-      error
-    } = await q;
+    const { count, error } = await supabase
+      .from("mzad_auctions")
+      .select("id",{count:"exact",head:true})
+      .eq("status","live")
+      .gt("ends_at", new Date().toISOString());
 
     if(error){
-
-      console.error(
-        "LIVE AUCTIONS ERROR:",
-        error
-      );
-
+      console.error("LIVE AUCTIONS ERROR:", error);
       return;
     }
 
-    if(!count){
-
-      $("liveDot").hidden = true;
-
-      $("auctionsSub").textContent =
-        "شاهد الأجهزة";
-
-      return;
-    }
-
-    $("liveDot").hidden = false;
+    $("liveDot").hidden = !count;
 
     $("auctionsSub").textContent =
-      `${count} مزاد مباشر الآن`;
+      count ? `${count} مزاد مباشر الآن` : "شاهد الأجهزة";
 
   }catch(error){
-
-    console.error(
-      "LIVE AUCTIONS ERROR:",
-      error
-    );
-
+    console.error("LIVE AUCTIONS ERROR:", error);
   }
-
 }
 
 async function loadDevices(){
 
-  skeletons(
-    "featuredTrack"
-  );
-
-  skeletons(
-    "latestTrack"
-  );
+  skeletons("featuredTrack");
+  skeletons("latestTrack");
 
   try{
 
-    const {
-      data,
-      error,
-      hasEnds
-    } =
-      await fetchDevices();
+    const { data, error } = await fetchDevices();
 
     if(error){
 
-      console.error(
-        "HOME DEVICES ERROR:",
-        error
-      );
+      console.error("HOME DEVICES ERROR:", error);
 
       showState(
         "featuredTrack",
@@ -3076,20 +2521,12 @@ async function loadDevices(){
       );
 
       return;
-
     }
 
-    const now =
-      Date.now();
+    const now = Date.now();
 
-    const byDate =
-      (a,b) =>
-        new Date(
-          b.created_at || 0
-        ) -
-        new Date(
-          a.created_at || 0
-        );
+    const byDate = (a,b) =>
+      new Date(b.created_at || 0) - new Date(a.created_at || 0);
 
     const devices =
       data.filter(
@@ -3097,62 +2534,25 @@ async function loadDevices(){
           !(
             isAuction(d) &&
             d.ends_at &&
-            new Date(
-              d.ends_at
-            ).getTime() <= now
+            new Date(d.ends_at).getTime() <= now
           )
       );
 
     const featured =
       devices
-
-        .map(
-          device => ({
-            device,
-            score:
-              scoreFeaturedDevice(
-                device
-              )
-          })
-        )
-
-        .sort(
-          (a,b) =>
-            b.score -
-            a.score ||
-            byDate(
-              a.device,
-              b.device
-            )
-        )
-
-        .filter(
-          item =>
-            item.score >= 5
-        )
-
+        .map(device => ({ device, score: scoreFeaturedDevice(device) }))
+        .sort((a,b) => b.score - a.score || byDate(a.device, b.device))
+        .filter(item => item.score >= 5)
         .slice(0,5)
+        .map(item => item.device);
 
-        .map(
-          item =>
-            item.device
-        );
+    $("featuredSection").hidden = false;
 
     if(featured.length){
 
-      $("featuredSection").hidden =
-        false;
-
-      renderRail(
-        "featuredTrack",
-        featured,
-        featuredCard
-      );
+      renderRail("featuredTrack", featured, featuredCard);
 
     }else{
-
-      $("featuredSection").hidden =
-        false;
 
       showState(
         "featuredTrack",
@@ -3163,32 +2563,17 @@ async function loadDevices(){
 
     }
 
-    const featuredIds =
-      new Set(
-        featured.map(
-          d =>
-            String(d.id)
-        )
-      );
+    const featuredIds = new Set(featured.map(d => String(d.id)));
 
     const latest =
       [...devices]
         .sort(byDate)
-        .filter(
-          d =>
-            !featuredIds.has(
-              String(d.id)
-            )
-        )
+        .filter(d => !featuredIds.has(String(d.id)))
         .slice(0,8);
 
     if(latest.length){
 
-      renderRail(
-        "latestTrack",
-        latest,
-        latestCard
-      );
+      renderRail("latestTrack", latest, latestCard);
 
     }else{
 
@@ -3201,19 +2586,13 @@ async function loadDevices(){
 
     }
 
-    await loadLiveCount(
-      hasEnds
-    );
+    await loadLiveCount();
 
   }catch(error){
 
-    console.error(
-      "HOME DEVICES LOAD ERROR:",
-      error
-    );
+    console.error("HOME DEVICES LOAD ERROR:", error);
 
-    $("featuredSection").hidden =
-      false;
+    $("featuredSection").hidden = false;
 
     showState(
       "featuredTrack",
@@ -3230,25 +2609,13 @@ async function loadDevices(){
     );
 
   }
-
 }
 
-document.addEventListener(
-  "click",
-  event => {
-
-    if(
-      event.target.closest(
-        "[data-retry]"
-      )
-    ){
-
-      loadDevices();
-
-    }
-
+document.addEventListener("click", event => {
+  if(event.target.closest("[data-retry]")){
+    loadDevices();
   }
-);
+});
 
 /* ================================
    RAIL
@@ -3256,78 +2623,47 @@ document.addEventListener(
 
 function bindRail(track){
 
-  const cards =
-    [
-      ...track.querySelectorAll(
-        ".dc"
-      )
-    ];
+  const cards = [...track.querySelectorAll(".dc")];
 
   if(!track.dataset.favBound){
 
-    track.dataset.favBound =
-      "1";
+    track.dataset.favBound = "1";
 
-    track.addEventListener(
-      "click",
-      async event => {
+    track.addEventListener("click", async event => {
 
-        const btn =
-          event.target.closest(
-            ".favorite-btn"
-          );
+      const btn = event.target.closest(".favorite-btn");
 
-        if(!btn) return;
+      if(!btn) return;
 
-        event.preventDefault();
-        event.stopPropagation();
+      event.preventDefault();
+      event.stopPropagation();
 
-        if(
-          !(await isLoggedIn())
-        ){
-
-          await requireAuth(
-            "favorites.html"
-          );
-
-          return;
-        }
-
-        const id =
-          btn.dataset.fav;
-
-        const favs =
-          getFavs();
-
-        const on =
-          !favs.has(id);
-
-        on
-          ? favs.add(id)
-          : favs.delete(id);
-
-        saveFavs(favs);
-
-        document
-          .querySelectorAll(
-            `.favorite-btn[data-fav="${CSS.escape(id)}"]`
-          )
-          .forEach(
-            b =>
-              b.classList.toggle(
-                "active",
-                on
-              )
-          );
-
-        showToast(
-          on
-            ? "تمت إضافة الجهاز إلى المفضلة"
-            : "تمت إزالة الجهاز من المفضلة"
-        );
-
+      if(!(await isLoggedIn())){
+        await requireAuth("favorites.html");
+        return;
       }
-    );
+
+      const id = btn.dataset.fav;
+
+      const favs = getFavs();
+
+      const on = !favs.has(id);
+
+      on ? favs.add(id) : favs.delete(id);
+
+      saveFavs(favs);
+
+      document
+        .querySelectorAll(`.favorite-btn[data-fav="${CSS.escape(id)}"]`)
+        .forEach(b => b.classList.toggle("active", on));
+
+      showToast(
+        on
+          ? "تمت إضافة الجهاز إلى المفضلة"
+          : "تمت إزالة الجهاز من المفضلة"
+      );
+
+    });
 
   }
 
@@ -3340,70 +2676,39 @@ function bindRail(track){
 
   function goToCard(index){
 
-    current =
-      (index + cards.length) %
-      cards.length;
+    current = (index + cards.length) % cards.length;
 
     track.scrollTo({
-      left:
-        cards[current].offsetLeft -
-        track.offsetLeft,
+      left: cards[current].offsetLeft - track.offsetLeft,
       behavior:"smooth"
     });
-
   }
 
-  clearInterval(
-    track._timer
-  );
+  clearInterval(track._timer);
 
   track._restart = () => {
-
-    clearInterval(
-      track._timer
-    );
-
-    track._timer =
-      setInterval(
-        () =>
-          goToCard(
-            current + 1
-          ),
-        10000
-      );
-
+    clearInterval(track._timer);
+    track._timer = setInterval(() => goToCard(current + 1), 10000);
   };
 
   if(!track.dataset.touchBound){
 
-    track.dataset.touchBound =
-      "1";
+    track.dataset.touchBound = "1";
 
     track.addEventListener(
       "touchstart",
-      () =>
-        clearInterval(
-          track._timer
-        ),
-      {
-        passive:true
-      }
+      () => clearInterval(track._timer),
+      {passive:true}
     );
 
     track.addEventListener(
       "touchend",
-      () =>
-        track._restart &&
-        track._restart(),
-      {
-        passive:true
-      }
+      () => track._restart && track._restart(),
+      {passive:true}
     );
-
   }
 
   track._restart();
-
 }
 
 /* ================================
@@ -3415,8 +2720,7 @@ function bindCardClicks(track){
   if(track.dataset.clickBound)
     return;
 
-  track.dataset.clickBound =
-    "1";
+  track.dataset.clickBound = "1";
 
   let touchStarted = false;
   let touchMoved = false;
@@ -3424,169 +2728,89 @@ function bindCardClicks(track){
   let startY = 0;
   let suppressClickUntil = 0;
 
-  track.addEventListener(
-    "touchstart",
-    event => {
+  track.addEventListener("touchstart", event => {
+    const t = event.touches[0];
+    touchStarted = true;
+    touchMoved = false;
+    startX = t.clientX;
+    startY = t.clientY;
+  }, {passive:true});
 
-      const t =
-        event.touches[0];
+  track.addEventListener("touchmove", event => {
 
-      touchStarted = true;
-      touchMoved = false;
+    if(!touchStarted) return;
 
-      startX =
-        t.clientX;
+    const t = event.touches[0];
 
-      startY =
-        t.clientY;
-
-    },
-    {
-      passive:true
+    if(
+      Math.abs(t.clientX - startX) > 8 ||
+      Math.abs(t.clientY - startY) > 8
+    ){
+      touchMoved = true;
     }
-  );
 
-  track.addEventListener(
-    "touchmove",
-    event => {
+  }, {passive:true});
 
-      if(!touchStarted)
-        return;
+  track.addEventListener("touchend", event => {
 
-      const t =
-        event.touches[0];
+    if(!touchStarted) return;
 
-      if(
-        Math.abs(
-          t.clientX -
-          startX
-        ) > 8 ||
+    const t = event.changedTouches[0];
 
-        Math.abs(
-          t.clientY -
-          startY
-        ) > 8
-      ){
-
-        touchMoved = true;
-
-      }
-
-    },
-    {
-      passive:true
+    if(
+      Math.abs(t.clientX - startX) > 8 ||
+      Math.abs(t.clientY - startY) > 8
+    ){
+      touchMoved = true;
     }
-  );
 
-  track.addEventListener(
-    "touchend",
-    event => {
-
-      if(!touchStarted)
-        return;
-
-      const t =
-        event.changedTouches[0];
-
-      if(
-        Math.abs(
-          t.clientX -
-          startX
-        ) > 8 ||
-
-        Math.abs(
-          t.clientY -
-          startY
-        ) > 8
-      ){
-
-        touchMoved = true;
-
-      }
-
-      if(touchMoved){
-
-        suppressClickUntil =
-          Date.now() + 700;
-
-      }
-
-      touchStarted = false;
-
-    },
-    {
-      passive:true
+    if(touchMoved){
+      suppressClickUntil = Date.now() + 700;
     }
-  );
 
-  track.addEventListener(
-    "touchcancel",
-    () => {
+    touchStarted = false;
 
-      touchStarted = false;
-      touchMoved = false;
+  }, {passive:true});
 
-    },
-    {
-      passive:true
+  track.addEventListener("touchcancel", () => {
+    touchStarted = false;
+    touchMoved = false;
+  }, {passive:true});
+
+  track.addEventListener("click", event => {
+
+    if(event.target.closest(".favorite-btn"))
+      return;
+
+    const card = event.target.closest(".dc");
+
+    if(!card)
+      return;
+
+    if(touchMoved || Date.now() < suppressClickUntil){
+      event.preventDefault();
+      event.stopPropagation();
+      return;
     }
-  );
 
-  track.addEventListener(
-    "click",
-    event => {
+    const id = card.dataset.id;
 
-      if(
-        event.target.closest(
-          ".favorite-btn"
-        )
-      )
-        return;
+    if(!id)
+      return;
 
-      const card =
-        event.target.closest(
-          ".dc"
-        );
+    /*
+      مزاد -> auction-details.html?auction=<uuid>
+      بيع مباشر -> device.html?id=<id>
+    */
+    const isAuc = card.dataset.saleType === "auction";
 
-      if(!card)
-        return;
+    const destination = isAuc ? "auction-details.html" : "device.html";
 
-      if(
-        touchMoved ||
-        Date.now() <
-        suppressClickUntil
-      ){
+    const param = isAuc ? "auction" : "id";
 
-        event.preventDefault();
-        event.stopPropagation();
+    go(`${destination}?${param}=${encodeURIComponent(id)}`);
 
-        return;
-
-      }
-
-      const id =
-        card.dataset.id;
-
-      if(!id)
-        return;
-
-      /*
-        مزاد -> تفاصيل المزاد
-        بيع مباشر -> تفاصيل الجهاز
-      */
-      const destination =
-        card.dataset.saleType === "auction"
-          ? "auction-details.html"
-          : "device.html";
-
-      go(
-        `${destination}?id=${encodeURIComponent(id)}`
-      );
-
-    },
-    true
-  );
-
+  }, true);
 }
 
 /* ================================
@@ -3595,10 +2819,7 @@ function bindCardClicks(track){
 
 $("locationBtn").addEventListener(
   "click",
-  () =>
-    showToast(
-      "المنصة تعمل حالياً داخل النجف"
-    )
+  () => showToast("المنصة تعمل حالياً داخل النجف")
 );
 
 /* مركز إشعارات المستخدم — يعتمد على جدول mzad_notifications */
