@@ -191,11 +191,10 @@ const CHIP = { live:["مباشر الآن","live"], scheduled:["ينتظر ال�
    قرار السماح النهائي يبقى داخل دالة RPC حتى لا تُحذف التأمينات أو السجلات المحمية. */
 const canHardDelete = a => {
   const k = kind(a), ds = String(a.depositStatus || "").toLowerCase();
+  /* لا نحذف مزاداً نشطاً أو بانتظار الافتتاح. */
   if (!["draft","ended","cancelled","rejected"].includes(k)) return false;
-  /* المزاد المنتهي الذي له تأمين غير مسترد يعرض استرجاع التأمين بدلاً من الحذف. */
-  if (k === "ended" && a.hasDeposit && ds !== "refunded") return false;
-  /* المسودة غير المنتهية لا تُحذف إذا وصل إثبات الدفع أو تم قبول التأمين. */
-  if (k !== "ended" && a.depositPaid) return false;
+  /* أي تأمين مرتبط يمنع الحذف إلى أن تسجل الإدارة استرجاعه. */
+  if (a.hasDeposit && ds !== "refunded") return false;
   return true;
 };
 const canBulkDelete = a => canHardDelete(a);
@@ -249,7 +248,7 @@ function render(){
   /* تنبيه تنظيف: أكثر من مسودة بلا نشاط */
   const junk = auctions.filter(a => canBulkDelete(a));
   $("clean").hidden = junk.length < 2;
-  if (junk.length >= 2) $("cleanTxt").textContent = "عندك " + junk.length + " مسودات أو مزادات منتهية قابلة للحذف. المزاد المنتهي الذي عليه تأمين غير مسترد يظهر له استرجاع التأمين أولاً.";
+  if (junk.length >= 2) $("cleanTxt").textContent = "عندك " + junk.length + " مسودات أو مزادات منتهية قابلة للحذف. أي مزاد عليه تأمين غير مسترجع يظهر له استرجاع التأمين أولاً.";
 
   const q = $("search").value.trim().toLowerCase(), f = TABS.find(t => t[0] === tab)[2];
   const rows = auctions.filter(f).filter(a => !q || [a.device.brand, a.device.model, a.auction_number, a.id].some(v => String(v || "").toLowerCase().includes(q)));
