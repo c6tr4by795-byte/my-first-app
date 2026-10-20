@@ -275,7 +275,20 @@ $("shYes").addEventListener("click", async () => {
   const b = $("shYes"), c = pending; b.classList.add("busy"); b.disabled = true;
   try{
     let n = 0;
-    for (const id of c.ids){ const r = await rpc(c.fn, id); if (r.error) throw r.error; n++; }
+    for (const id of c.ids){
+      const r = await rpc(c.fn, id);
+      if (r.error) throw r.error;
+      const paths = Array.isArray(r.data?.storage_paths) ? r.data.storage_paths : [];
+      const cleanPaths = [...new Set(paths.map(p => String(p || "").replace(/^device-images\\//, "").replace(/^\\/+/, "")).filter(Boolean))];
+      if (cleanPaths.length){
+        const sr = await supabase.storage.from("device-images").remove(cleanPaths);
+        if (sr.error) {
+          console.error("STORAGE CLEANUP ERROR", sr.error, cleanPaths);
+          toast("انحذف السجل، لكن بعض الصور بقيت بالتخزين. نحتاج إعادة تنظيفها.");
+        }
+      }
+      n++;
+    }
     toast(c.done); closeSheet(); await load();
   }catch(e){ console.error("ACTION ERROR", e); toast(errTxt(e)); closeSheet(); await load(); }
   finally{ b.classList.remove("busy"); b.disabled = false; }
