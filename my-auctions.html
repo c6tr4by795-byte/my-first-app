@@ -178,9 +178,16 @@ function kind(a){
 const CHIP = { live:["مباشر الآن","live"], scheduled:["ينتظر الافتتاح","wait"], draft:["مسودة","wait"], ended:["منتهي","end"], cancelled:["ملغي","end"], rejected:["مرفوض","bad"] };
 /* إظهار زر الحذف للمسودات والمنتهية والملغاة/المرفوضة.
    قرار السماح النهائي يبقى داخل دالة RPC حتى لا تُحذف التأمينات أو السجلات المحمية. */
-const canHardDelete = a => ["draft","ended","cancelled","rejected"].includes(kind(a));
-/* التنظيف الجماعي يبقى محافظاً: لا يضم السجلات التي عُلّمت كتأمين مدفوع/مقدّم إثباته. */
-const canBulkDelete = a => canHardDelete(a) && !a.depositPaid;
+const canHardDelete = a => {
+  const k = kind(a), ds = String(a.depositStatus || "").toLowerCase();
+  if (!["draft","ended","cancelled","rejected"].includes(k)) return false;
+  /* المزاد المنتهي الذي له تأمين غير مسترد يعرض استرجاع التأمين بدلاً من الحذف. */
+  if (k === "ended" && a.hasDeposit && ds !== "refunded") return false;
+  /* المسودة غير المنتهية لا تُحذف إذا وصل إثبات الدفع أو تم قبول التأمين. */
+  if (k !== "ended" && a.depositPaid) return false;
+  return true;
+};
+const canBulkDelete = a => canHardDelete(a);
 const canCancel = a => ["live","scheduled"].includes(kind(a));
 
 async function getImage(id){
@@ -207,12 +214,12 @@ async function load(){
         supabase.from("mzad_auction_bids").select("id",{count:"exact",head:true}).eq("auction_id", a.id).eq("accepted", true),
         supabase.rpc("mzad_auction_stats",{ p_auction_id:a.id }),
         getImage(a.device_id),
-        supabase.from("mzad_deposits").select("id,status").eq("auction_id", a.id).eq("user_id", user.id).eq("deposit_type","auction_seller").order("created_at",{ascending:false}).limit(1).maybeSingle()
+        supabase.from("mzad_deposits").select("id,status,amount_iqd").eq("auction_id", a.id).eq("user_id", user.id).eq("deposit_type","auction_seller").order("created_at",{ascending:false}).limit(1).maybeSingle()
       ]);
       const pr = dep.data?.id ? await supabase.from("mzad_payment_requests").select("status").eq("deposit_id", dep.data.id).eq("user_id", user.id).order("created_at",{ascending:false}).limit(1).maybeSingle() : { data:null };
       const done = ["proof_submitted","approved","refunded"].includes(String(pr.data?.status || "").toLowerCase()) || ["approved","refunded"].includes(String(dep.data?.status || "").toLowerCase());
       return { ...a, device:dr.data || {}, bidCount:br.count ?? 0, reserved:Number(sr.data?.reserved) || 0, views:Number(sr.data?.viewers) || 0, image:img,
-               hasDeposit:!!dep.data, depositPaid:!!dep.data && done, depositPending:!!dep.data && !done };
+               hasDeposit:!!dep.data, depositId:dep.data?.id || null, depositStatus:String(dep.data?.status || "").toLowerCase(), depositAmount:Number(dep.data?.amount_iqd)||0, depositPaid:!!dep.data && done, depositPending:!!dep.data && !done };
     }));
     $("sTotal").textContent = money(auctions.length);
     $("sBids").textContent = money(auctions.reduce((n,a) => n + a.bidCount, 0));
@@ -231,7 +238,7 @@ function render(){
   /* تنبيه تنظيف: أكثر من مسودة بلا نشاط */
   const junk = auctions.filter(a => canBulkDelete(a));
   $("clean").hidden = junk.length < 2;
-  if (junk.length >= 2) $("cleanTxt").textContent = "عندك " + junk.length + " مسودات أو مزادات منتهية ما عليها تأمين مدفوع. امسحها حتى تبقى قائمتك نظيفة.";
+  if (junk.length >= 2) $("cleanTxt").textContent = "عندك " + junk.length + " مسودات أو مزادات منتهية قابلة للحذف. المزاد المنتهي الذي عليه تأمين غير مسترد يظهر له استرجاع التأمين أولاً.";
 
   const q = $("search").value.trim().toLowerCase(), f = TABS.find(t => t[0] === tab)[2];
   const rows = auctions.filter(f).filter(a => !q || [a.device.brand, a.device.model, a.auction_number, a.id].some(v => String(v || "").toLowerCase().includes(q)));
@@ -249,14 +256,17 @@ function render(){
     if (a.depositPending && ["draft","scheduled"].includes(k)) note = `<div class="note">${IC.info}<span>باقي تأمين البائع حتى تراجع الإدارة مزادك. إذا ما تريد تكمل، تقدر تمسحه.</span></div>`;
     else if (k === "live" && a.bidCount > 0) note = `<div class="note info">${IC.shield}<span>عليه مزايدات، فما ينمسح. تقدر تلغيه فقط، ويبقى تأمينك محفوظ لحد موعد النهاية.</span></div>`;
     else if (k === "cancelled" && !canHardDelete(a)) note = `<div class="note info">${IC.shield}<span>تم الإلغاء. تأمينك محفوظ لحد موعد النهاية الأصلي، وبعدها تواصل مع الإدارة.</span></div>`;
-    else if (k === "ended" && a.bidCount > 0) note = `<div class="note info">${IC.shield}<span>انتهى بمزايدات، فالسجل محفوظ. الإدارة تنظفه بعد إتمام البيع.</span></div>`;
+    else if (k === "ended" && a.hasDeposit && a.depositStatus !== "refunded") note = `<div class="note info">${IC.shield}<span>انتهى المزاد وعليه تأمين بائع. استخدم استرجاع التأمين لمتابعة مراجعته؛ يبقى الحذف مخفياً إلى أن تُسجّل الإدارة الاسترداد.</span></div>`;
+    else if (k === "ended" && a.bidCount > 0) note = `<div class="note info">${IC.shield}<span>انتهى بمزايدات، فالسجل محفوظ للمراجعة.</span></div>`;
     const main = a.depositPending && ["draft","scheduled"].includes(k)
       ? `<button class="btn" data-pay="${esc(a.id)}" type="button">${IC.shield}إكمال التأمين</button>`
       : `<button class="btn" data-det="${esc(a.id)}" type="button">${IC.eye}التفاصيل</button>`;
     const sec = a.depositPending && ["draft","scheduled"].includes(k) ? `<button class="btn ghost" data-det="${esc(a.id)}" type="button" style="flex:.7">التفاصيل</button>` : "";
+    const refund = k === "ended" && a.hasDeposit && a.depositStatus !== "refunded"
+      ? `<a class="btn" href="auction-refund.html?auction=${encodeURIComponent(a.id)}" style="display:flex;align-items:center;justify-content:center;text-decoration:none;min-height:44px">${IC.shield}استرجاع التأمين ${a.depositAmount ? "· "+money(a.depositAmount)+" د.ع" : ""}</a>` : "";
     const rm = canHardDelete(a) ? `<button class="del" data-del="${esc(a.id)}" type="button" aria-label="مسح نهائي">${IC.trash}</button>`
       : canCancel(a) ? `<button class="del" data-cancel="${esc(a.id)}" type="button" aria-label="إلغاء المزاد" style="color:#b5480a;background:var(--hots);border-color:#f0c79c">${IC.stop}</button>` : "";
-    return `<article class="card" style="animation-delay:${Math.min(i,5)*.06}s"><div class="main"><div class="ph">${img}</div><div class="inf"><div class="l1"><div class="nm">${esc(name)}</div><span class="chip ${cc}">${cl}</span></div><div class="no">رقم ${esc(a.auction_number || String(a.id).slice(0,8))}</div><div class="pr"><small>${a.current_price_iqd ? "السعر الحالي" : "سعر البداية"}</small><strong>${money(price)}<em>د.ع</em></strong></div></div></div><div class="nums"><div><b>${money(a.bidCount)}</b><span>مزايدة</span></div><div><b>${money(a.reserved)}</b><span>حاجز</span></div><div><b>${money(a.views)}</b><span>مشاهدة</span></div></div>${note}<div class="acts">${main}${sec}${rm}</div></article>`;
+    return `<article class="card" style="animation-delay:${Math.min(i,5)*.06}s"><div class="main"><div class="ph">${img}</div><div class="inf"><div class="l1"><div class="nm">${esc(name)}</div><span class="chip ${cc}">${cl}</span></div><div class="no">رقم ${esc(a.auction_number || String(a.id).slice(0,8))}</div><div class="pr"><small>${a.current_price_iqd ? "السعر الحالي" : "سعر البداية"}</small><strong>${money(price)}<em>د.ع</em></strong></div></div></div><div class="nums"><div><b>${money(a.bidCount)}</b><span>مزايدة</span></div><div><b>${money(a.reserved)}</b><span>حاجز</span></div><div><b>${money(a.views)}</b><span>مشاهدة</span></div></div>${note}${refund}<div class="acts">${main}${sec}${rm}</div></article>`;
   }).join("");
 }
 
@@ -305,13 +315,13 @@ $("list").addEventListener("click", e => {
   if ((el = g("[data-det]"))) location.href = "auction-details.html?auction=" + encodeURIComponent(el.dataset.det);
   else if ((el = g("[data-pay]"))) location.href = "auction-seller-deposit.html?auction=" + encodeURIComponent(el.dataset.pay);
   else if (g("[data-retry]")) load();
-  else if ((el = g("[data-del]"))) ask({ ids:[el.dataset.del], fn:"mzad_seller_delete_auction_draft", title:"مسح المزاد نهائياً؟", text:"راح ينمسح من القاعدة ولا تقدر ترجعه. هذا مسموح لأن التأمين غير مدفوع. المزادات ذات التأمين المدفوع تبقى محفوظة.", label:"امسح نهائياً", done:"انمسح المزاد" });
+  else if ((el = g("[data-del]"))) ask({ ids:[el.dataset.del], fn:"mzad_seller_delete_auction_draft", title:"مسح المزاد نهائياً؟", text:"راح ينحذف سجل المزاد نهائياً. المزادات المنتهية التي عليها تأمين لا يظهر لها الحذف إلا بعد أن تسجل الإدارة حالة الاسترداد. تأكد من اختيار الجهاز الصحيح.", label:"امسح نهائياً", done:"انمسح المزاد" });
   else if ((el = g("[data-cancel]"))) ask({ ids:[el.dataset.cancel], fn:"mzad_seller_cancel_auction", warn:true, title:"إلغاء المزاد؟", text:"يوقف المزاد وتنحفظ بياناته. إذا كان مباشراً يبقى تأمينك محفوظاً لحد موعد النهاية الأصلي.", label:"ألغِ المزاد", done:"تم إلغاء المزاد" });
 });
 $("tabs").addEventListener("click", e => { const t = e.target.closest("[data-tab]"); if (t){ tab = t.dataset.tab; render(); } });
 $("cleanBtn").addEventListener("click", () => {
   const ids = auctions.filter(a => canBulkDelete(a)).map(a => a.id);
-  ask({ ids, fn:"mzad_seller_delete_auction_draft", title:"مسح " + ids.length + " مسودات؟", text:"تنمسح المسودات والمزادات المنتهية التي لا يوجد عليها تأمين مدفوع.", label:"امسحها كلها", done:"تم تنظيف المسودات" });
+  ask({ ids, fn:"mzad_seller_delete_auction_draft", title:"مسح " + ids.length + " مسودات؟", text:"تنحذف العناصر القابلة للحذف فقط. المزادات المنتهية التي عليها تأمين غير مسترد مستثناة حتى لا يضيع تتبع الاسترجاع.", label:"امسحها كلها", done:"تم تنظيف المسودات" });
 });
 $("search").addEventListener("input", render);
 $("refresh").addEventListener("click", load);
