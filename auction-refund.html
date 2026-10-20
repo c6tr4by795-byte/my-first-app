@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6246d9">
+<title>استرجاع التأمين — MZAD PHONE</title>
+<style>
+:root{--bg:#f8f7fd;--ink:#202033;--muted:#77758b;--line:#e7e1fb;--p:#6246d9;--ps:#f1edff;--ok:#16794b;--oks:#e8f7ef;--warn:#a75b13;--warns:#fff3e6;--bad:#b4233e;--bads:#fff0f3}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif}
+.page{width:min(100%,520px);margin:auto;padding:0 16px 36px}
+header{margin:0 -16px 18px;padding:calc(14px + env(safe-area-inset-top,0px)) 18px 24px;background:linear-gradient(145deg,#fff,#ece7ff);border-bottom:1px solid var(--line);border-radius:0 0 28px 28px}
+.top{display:flex;justify-content:space-between;align-items:center}.iconbtn{width:42px;height:42px;border:1px solid var(--line);border-radius:14px;background:white;color:var(--p);font-size:22px}
+.brand{text-align:center;font-weight:950;letter-spacing:.02em}.brand small{display:block;font-size:9px;letter-spacing:.18em;color:var(--muted)}
+h1{font-size:25px;margin:22px 0 6px;font-weight:950}.lead{font-size:13px;line-height:1.9;color:var(--muted);margin:0;font-weight:650}
+.card{background:white;border:1px solid var(--line);border-radius:22px;padding:18px;margin:14px 0;box-shadow:0 12px 28px -20px #6246d9}
+.amount{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border-radius:17px;background:var(--ps);margin-top:12px}.amount small{display:block;color:var(--muted);font-size:11px;font-weight:800}.amount strong{font-size:24px;color:var(--p);font-weight:950}.amount em{font-size:12px;font-style:normal}
+.status{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:16px;background:#f4f2fb;margin-top:14px}.dot{width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border-radius:13px;background:#e8e1ff;color:var(--p);font-size:20px}.status b{display:block;font-size:14px;margin-bottom:4px}.status p{margin:0;font-size:12px;line-height:1.8;color:var(--muted)}
+.status.ok{background:var(--oks)}.status.ok .dot{background:#d0f0dd;color:var(--ok)}.status.wait{background:var(--warns)}.status.wait .dot{background:#ffe5c7;color:var(--warn)}.status.bad{background:var(--bads)}.status.bad .dot{background:#ffdce3;color:var(--bad)}
+h2{font-size:16px;margin:0 0 12px}.steps{display:grid;gap:12px}.step{display:flex;gap:10px;font-size:12px;line-height:1.8;color:var(--muted)}.num{width:25px;height:25px;flex:0 0 25px;border-radius:9px;background:var(--ps);color:var(--p);display:grid;place-items:center;font-weight:900}
+.btn{width:100%;min-height:48px;border:0;border-radius:15px;background:linear-gradient(145deg,#6246d9,#8b6cf0);color:white;font-weight:900;font-size:14px;margin-top:10px;cursor:pointer}.btn.secondary{background:white;border:1.5px solid var(--line);color:var(--p)}
+.error{padding:24px 16px;text-align:center;color:var(--muted);font-size:13px;line-height:1.9}.hidden{display:none!important}
+</style>
+</head>
+<body>
+<main class="page">
+<header><div class="top"><button class="iconbtn" id="back" aria-label="رجوع">‹</button><div class="brand">MZAD<small>PHONE</small></div><button class="iconbtn" id="refresh" aria-label="تحديث">↻</button></div><h1>استرجاع التأمين</h1><p class="lead">تابع حالة تأمين البائع بعد انتهاء المزاد. مبلغ التأمين منفصل عن سعر الجهاز ورسوم المنصة.</p></header>
+<section class="card" id="content"><div class="error">جارٍ تحميل بيانات التأمين…</div></section>
+<section class="card"><h2>شلون يصير الاسترجاع؟</h2><div class="steps"><div class="step"><span class="num">1</span><span>ينتهي المزاد وتُراجع حالة المزاد والتأمين.</span></div><div class="step"><span class="num">2</span><span>إذا صار التأمين مؤهلاً للاسترداد، يظهر ضمن قائمة الاسترداد عند الإدارة.</span></div><div class="step"><span class="num">3</span><span>الإدارة تؤكد الاسترداد بعد إرجاع المبلغ فعلياً؛ بعدها تتحدث الحالة هنا.</span></div></div></section>
+<button class="btn secondary" id="details">العودة إلى مزاداتي</button>
+</main>
+<script type="module">
+import { supabase } from "./js/supabase.js";
+const $=id=>document.getElementById(id), params=new URLSearchParams(location.search), auctionId=params.get("auction");
+const money=v=>(Number(v)||0).toLocaleString("en-US");
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const labels={pending_payment:["بانتظار الدفع","لم يكتمل دفع التأمين بعد.","wait"],proof_submitted:["قيد المراجعة","تم إرسال إثبات الدفع وينتظر مراجعة الإدارة.","wait"],approved:["التأمين مقبول","تم قبول التأمين. بعد انتهاء المزاد تُراجع أهليته للاسترداد.","wait"],refundable:["جاهز للاسترداد","انتهى المزاد وأصبح التأمين مؤهلاً لمراجعة الاسترداد من الإدارة.","ok"],refunded:["تم استرجاع التأمين","الإدارة سجّلت إرجاع التأمين.","ok"],rejected:["التأمين مرفوض","راجع سبب الرفض مع الإدارة قبل أي خطوة أخرى.","bad"],forfeited:["التأمين مصادَر","حالة التأمين تحتاج مراجعة الإدارة.","bad"],cancelled:["التأمين ملغي","حالة التأمين ملغاة؛ تواصل مع الإدارة إذا تعتقد أن هناك خطأ.","bad"]};
+async function load(){
+ const el=$("content"); el.innerHTML='<div class="error">جارٍ تحميل بيانات التأمين…</div>';
+ try{
+  const au=await supabase.auth.getUser(); const user=au.data?.user;
+  if(!user){location.href="index.html?login=1&returnTo="+encodeURIComponent("auction-refund.html?auction="+(auctionId||""));return}
+  if(!auctionId) throw new Error("MISSING_AUCTION");
+  const a=await supabase.from("mzad_auctions").select("id,auction_number,status,ends_at,seller_user_id,device_id").eq("id",auctionId).maybeSingle();
+  if(a.error) throw a.error;
+  if(!a.data) throw new Error("NOT_FOUND");
+  if(a.data.seller_user_id!==user.id) throw new Error("NOT_OWNER");
+  const [d,dev]=await Promise.all([
+   supabase.from("mzad_deposits").select("id,deposit_number,amount_iqd,status,deposit_type,created_at,updated_at,refund_reason").eq("auction_id",auctionId).eq("user_id",user.id).eq("deposit_type","auction_seller").order("created_at",{ascending:false}).limit(1).maybeSingle(),
+   supabase.from("mzad_devices").select("brand,model,storage").eq("id",a.data.device_id).maybeSingle()
+  ]);
+  if(d.error) throw d.error;
+  if(!d.data) {el.innerHTML='<div class="error">ما لقينا تأمين بائع مرتبط بهذا المزاد. إذا كنت دافع التأمين، تواصل مع الإدارة وتزوّدهم برقم المزاد.</div>';return}
+  const dep=d.data, s=String(dep.status||"").toLowerCase(), label=labels[s]||["قيد التحقق","حالة التأمين: "+s,"wait"];
+  const ended=["ended","completed"].includes(String(a.data.status||"").toLowerCase()) || (a.data.ends_at && new Date(a.data.ends_at).getTime()<=Date.now());
+  const eligible=ended && ["approved","refundable","refunded"].includes(s);
+  let state=label;
+  if(s==="approved" && !ended) state=["المزاد لم ينتهِ بعد","بعد انتهاء المزاد يمكن مراجعة أهلية التأمين للاسترداد.","wait"];
+  else if(s==="approved" && ended) state=["انتهى المزاد — بانتظار مراجعة الاسترداد","يمكن للإدارة مراجعة التأمين وتأكيد إرجاعه. هذه الصفحة لا تسجّل التحويل تلقائياً.","ok"];
+  el.innerHTML='<div class="status '+state[2]+'"><span class="dot">'+(state[2]==="ok"?"✓":state[2]==="bad"?"!":"…")+'</span><div><b>'+esc(state[0])+'</b><p>'+esc(state[1])+'</p></div></div>'+
+   '<div class="amount"><div><small>مبلغ التأمين</small><small>رقم التأمين: '+esc(dep.deposit_number||dep.id.slice(0,8))+'</small></div><strong>'+money(dep.amount_iqd)+' <em>د.ع</em></strong></div>'+
+   '<div class="status"><span class="dot">▣</span><div><b>'+esc([dev.data?.brand,dev.data?.model,dev.data?.storage].filter(Boolean).join(" ")||"جهاز المزاد")+'</b><p>رقم المزاد: '+esc(a.data.auction_number||a.data.id.slice(0,8))+' · الحالة: '+esc(a.data.status)+'</p></div></div>'+
+   (dep.refund_reason?'<div class="status bad"><span class="dot">i</span><div><b>ملاحظة الإدارة</b><p>'+esc(dep.refund_reason)+'</p></div></div>':'')+
+   '<p class="lead" style="margin-top:14px">مهم: الاسترداد الفعلي تسجّله الإدارة بعد إرجاع المبلغ. لا ترسل معلومات البطاقة أو كلمة المرور عبر هذه الصفحة.</p>';
+ }catch(e){
+  console.error("AUCTION REFUND PAGE",e);
+  const msg=String(e?.message||"");
+  $("content").innerHTML='<div class="error">'+(msg==="NOT_FOUND"?"المزاد غير موجود.":msg==="NOT_OWNER"?"هذه صفحة تأمين البائع، ولا يمكن عرض تأمين حساب آخر.":msg==="MISSING_AUCTION"?"افتح الصفحة من تفاصيل المزاد حتى نعرف أي تأمين تعرضه.":"تعذر تحميل بيانات التأمين. حدّث الصفحة أو حاول لاحقاً.")+'</div>';
+ }
+}
+$("back").addEventListener("click",()=>history.length>1?history.back():location.href="my-auctions.html");
+$("refresh").addEventListener("click",load);
+$("details").addEventListener("click",()=>location.href="my-auctions.html");
+load();
+</script>
+</body></html>
