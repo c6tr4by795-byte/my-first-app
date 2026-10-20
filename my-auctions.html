@@ -81,6 +81,17 @@ h1{margin:16px 2px 4px;font-size:23px;font-weight:950;letter-spacing:-.03em}
 .btn:active{transform:scale(.98)}
 .btn.ghost{background:#fff;color:var(--pd);border:1.5px solid var(--edge);box-shadow:none}
 .btn.warn{background:var(--hot);box-shadow:0 10px 20px rgba(232,89,12,.25)}
+
+/* زر استرجاع التأمين — واضح ومتناسق مع بطاقة المزاد */
+.refund-action{display:flex;align-items:center;gap:12px;margin:0 14px 14px;padding:12px 14px;min-height:68px;border:1px solid #d8ceff;border-radius:17px;background:linear-gradient(110deg,#f7f4ff 0%,#fff 72%);color:var(--ink);text-decoration:none;box-shadow:0 7px 18px rgba(98,70,217,.08);transition:transform .18s,border-color .18s,box-shadow .18s}
+.refund-action:active{transform:scale(.99);border-color:var(--p);box-shadow:0 3px 10px rgba(98,70,217,.12)}
+.refund-icon{display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;border-radius:14px;background:var(--ps);color:var(--p)}
+.refund-icon svg{width:21px;height:21px}
+.refund-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:4px}
+.refund-copy strong{font-size:13px;font-weight:950;color:var(--pd)}
+.refund-copy small{font-size:11px;font-weight:750;color:var(--muted);line-height:1.6}
+.refund-arrow{display:grid;place-items:center;flex:0 0 28px;width:28px;height:28px;border-radius:10px;background:#fff;color:var(--p);border:1px solid var(--edge);font-size:25px;line-height:1}
+
 .btn:disabled{opacity:.5;box-shadow:none}
 .del{flex:0 0 44px;height:44px;border-radius:14px;display:grid;place-items:center;border:1.5px solid #f3c9d1;background:var(--bads);color:var(--bad)}
 .del svg{width:20px;height:20px}
@@ -263,7 +274,7 @@ function render(){
       : `<button class="btn" data-det="${esc(a.id)}" type="button">${IC.eye}التفاصيل</button>`;
     const sec = a.depositPending && ["draft","scheduled"].includes(k) ? `<button class="btn ghost" data-det="${esc(a.id)}" type="button" style="flex:.7">التفاصيل</button>` : "";
     const refund = k === "ended" && a.hasDeposit && a.depositStatus !== "refunded"
-      ? `<a class="btn" href="auction-refund.html?auction=${encodeURIComponent(a.id)}" style="display:flex;align-items:center;justify-content:center;text-decoration:none;min-height:44px">${IC.shield}استرجاع التأمين ${a.depositAmount ? "· "+money(a.depositAmount)+" د.ع" : ""}</a>` : "";
+      ? `<a class="refund-action" href="auction-refund.html?auction=${encodeURIComponent(a.id)}"><span class="refund-icon">${IC.shield}</span><span class="refund-copy"><strong>استرجاع التأمين</strong><small>المبلغ المستحق ${a.depositAmount ? money(a.depositAmount)+" د.ع" : "حسب حالة التأمين"}</small></span><span class="refund-arrow" aria-hidden="true">‹</span></a>` : "";
     const rm = canHardDelete(a) ? `<button class="del" data-del="${esc(a.id)}" type="button" aria-label="مسح نهائي">${IC.trash}</button>`
       : canCancel(a) ? `<button class="del" data-cancel="${esc(a.id)}" type="button" aria-label="إلغاء المزاد" style="color:#b5480a;background:var(--hots);border-color:#f0c79c">${IC.stop}</button>` : "";
     return `<article class="card" style="animation-delay:${Math.min(i,5)*.06}s"><div class="main"><div class="ph">${img}</div><div class="inf"><div class="l1"><div class="nm">${esc(name)}</div><span class="chip ${cc}">${cl}</span></div><div class="no">رقم ${esc(a.auction_number || String(a.id).slice(0,8))}</div><div class="pr"><small>${a.current_price_iqd ? "السعر الحالي" : "سعر البداية"}</small><strong>${money(price)}<em>د.ع</em></strong></div></div></div><div class="nums"><div><b>${money(a.bidCount)}</b><span>مزايدة</span></div><div><b>${money(a.reserved)}</b><span>حاجز</span></div><div><b>${money(a.views)}</b><span>مشاهدة</span></div></div>${note}${refund}<div class="acts">${main}${sec}${rm}</div></article>`;
