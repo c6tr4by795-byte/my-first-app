@@ -196,17 +196,25 @@ header{
 
 /* ============ الإجراءات (المزادات / بيع مزاد / بيع جهاز) ============ */
 
-.actions-section{margin-top:22px}
-
-.actions-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.actions-section{
+  position:relative;isolation:isolate;margin-top:20px;padding:10px;
+  border-radius:24px;overflow:hidden;
+  background:#22242b url("img/IMG_3323.jpeg") center 46%/cover no-repeat;
+  box-shadow:0 14px 30px rgba(23,32,42,.16)
+}
+.actions-section::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(135deg,rgba(18,20,27,.78),rgba(28,25,37,.58) 52%,rgba(18,20,27,.82))
+}
+.actions-grid{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 
 .action-card{
-  position:relative;overflow:hidden;min-height:112px;border-radius:20px;
-  border:1.5px solid #cfc7f5;padding:12px 11px 11px;
+  position:relative;overflow:hidden;min-height:116px;border-radius:17px;
+  border:1px solid rgba(255,255,255,.5);padding:11px 9px 10px;
   display:flex;flex-direction:column;justify-content:space-between;
-  background:linear-gradient(160deg,#fff 0%,#f1edff 100%);
-  box-shadow:0 14px 26px -12px rgba(98,70,217,.42);
-  text-align:start
+  background:linear-gradient(155deg,rgba(255,255,255,.96),rgba(245,241,255,.91));
+  box-shadow:0 8px 18px rgba(0,0,0,.18);
+  text-align:start;backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)
 }
 
 .action-card:before{
@@ -418,6 +426,12 @@ header{
 .toast.show{opacity:1;transform:translateX(-50%)}
 
 @media(max-width:360px){
+  .actions-section{padding:7px;border-radius:20px}
+  .actions-grid{gap:6px}
+  .action-card{min-height:108px;padding:9px 7px 8px;border-radius:15px}
+  .action-icon{width:36px;height:36px;border-radius:11px}
+  .action-title{font-size:12px}
+  .action-sub{font-size:9px}
   .nav-icon{width:18px;height:18px}
   .nav-item>span:not(.add-button){font-size:8px}
   .action-title{font-size:13px}
