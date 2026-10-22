@@ -470,7 +470,7 @@ header{padding:0 14px 12px;border-radius:0 0 20px 20px;box-shadow:0 6px 18px rgb
     <div class="c-head"><span class="num">4</span><div><h2>صور الجهاز</h2><p>صورة وحدة على الأقل، والأولى هي الغلاف</p></div></div>
     <div class="photos" id="photos"></div>
     <p class="hint"><b id="pCnt">0</b>/6 صور</p>
-    <p class="hint">تنضغط الصور وتترتب تلقائياً بإطار 4:5 مثل انستغرام وفيسبوك، كاملة بدون قص أو تمطيط.</p>
+    <p class="hint">نحافظ على الصورة ونسبتها الأصلية. طريقة عرضها تتكيّف حسب المكان: بطاقة المزاد أو تفاصيل الجهاز أو البنر، بدون إضافة خلفية للصورة عند الرفع.</p>
   </section>
 </div>
 
@@ -1045,24 +1045,7 @@ $("photos").addEventListener("click", e => {
   invalidate(); renderPhotos();
 });
 
-/* ===== إزالة خلفية الصورة فعلياً + الحفاظ على شكل الجهاز =====
-   المعالجة تتم داخل متصفح المستخدم، ثم تُرفع PNG بشفافية حقيقية.
-   لا نقصّ الصورة إلى 4:5 ولا نرسم خلفية بيضاء أو ضبابية خلفها. */
-let backgroundRemovalModulePromise = null;
-const CUTOUT_MAX_EDGE = 1242;
-const CUTOUT_MAX_BYTES = 4_500_000;
-
-async function getBackgroundRemover(){
-  if (!backgroundRemovalModulePromise){
-    backgroundRemovalModulePromise = import("https://esm.sh/@bg0/browser@0.1.1?bundle")
-      .catch(error => {
-        backgroundRemovalModulePromise = null;
-        throw error;
-      });
-  }
-  return backgroundRemovalModulePromise;
-}
-
+/* ===== قراءة الصورة الأصلية من دون قصّ أو إضافة خلفية ===== */
 async function readImage(file){
   try{
     const bmp = await createImageBitmap(file, { imageOrientation:"from-image" });
@@ -1080,38 +1063,6 @@ async function readImage(file){
     return { src:img, w:img.naturalWidth, h:img.naturalHeight };
   }finally{
     setTimeout(() => URL.revokeObjectURL(url), 4000);
-  }
-}
-
-async function optimizeTransparentPng(blob){
-  const im = await readImage(blob);
-  try{
-    if (!im.w || !im.h) throw new Error("تعذر قراءة الصورة بعد إزالة الخلفية");
-
-    // كل صور المزاد تُحفظ بمقاس موحد 1242×1242 مع الحفاظ على كامل الجهاز.
-    // المساحة الزائدة تبقى شفافة، ولا نقصّ الصورة أو نمدّدها.
-    const SIZE = 1242;
-    const c = document.createElement("canvas");
-    c.width = SIZE;
-    c.height = SIZE;
-    const g = c.getContext("2d", { alpha:true });
-    if (!g) throw new Error("المتصفح لا يدعم تجهيز صورة شفافة");
-    g.clearRect(0, 0, SIZE, SIZE);
-    g.imageSmoothingEnabled = true;
-    g.imageSmoothingQuality = "high";
-
-    const scale = Math.min(SIZE / im.w, SIZE / im.h);
-    const drawW = Math.max(1, Math.round(im.w * scale));
-    const drawH = Math.max(1, Math.round(im.h * scale));
-    const x = Math.round((SIZE - drawW) / 2);
-    const y = Math.round((SIZE - drawH) / 2);
-    g.drawImage(im.src, x, y, drawW, drawH);
-
-    return await new Promise((resolve, reject) => {
-      c.toBlob(out => out ? resolve(out) : reject(new Error("تعذر حفظ الصورة الشفافة بمقاس 1242×1242")), "image/png");
-    });
-  }finally{
-    if (im.src?.close) im.src.close();
   }
 }
 
@@ -1150,64 +1101,68 @@ async function normalizePhotoForBrowser(file){
 }
 
 async function shrink(file){
+  // الصورة الأصلية هي المصدر الأساسي: لا نفرض نسبة 4:5 أو مربّعاً عليها.
+  // نقلّل الدقة فقط عند الحاجة، مع الحفاظ على نسبة العرض إلى الارتفاع والمحتوى.
+  let inputFile = file;
   try{
-    const im = await readImage(file);
-    if (!im.w || !im.h) return file;
-
-    const ar = im.w / im.h;
-    const W = Math.max(POST_MIN_W, Math.min(POST_MAX_W, Math.round(Math.max(im.w, im.h / POST_RATIO))));
-    const H = Math.round(W * POST_RATIO);
-
-    const c = document.createElement("canvas");
-    c.width = W;
-    c.height = H;
-
-    const g = c.getContext("2d");
-    g.imageSmoothingEnabled = true;
-    g.imageSmoothingQuality = "high";
-    g.fillStyle = "#ffffff";
-    g.fillRect(0, 0, W, H);
-
-    if (ar >= 0.72 && ar <= 0.9){
-
-      const s = Math.max(W / im.w, H / im.h);
-      const dw = im.w * s;
-      const dh = im.h * s;
-      g.drawImage(im.src, (W - dw) / 2, (H - dh) / 2, dw, dh);
-
-    }else{
-
-      /* خلفية مغبّشة: تصغير شديد ثم تكبير على مرحلتين (تعمل بكل المتصفحات) */
-      const a = document.createElement("canvas");
-      a.width = 24; a.height = 30;
-      const ag = a.getContext("2d");
-      ag.imageSmoothingQuality = "high";
-      const bs = Math.max(24 / im.w, 30 / im.h);
-      ag.drawImage(im.src, (24 - im.w * bs) / 2, (30 - im.h * bs) / 2, im.w * bs, im.h * bs);
-
-      const b = document.createElement("canvas");
-      b.width = 120; b.height = 150;
-      const bg = b.getContext("2d");
-      bg.imageSmoothingQuality = "high";
-      bg.drawImage(a, 0, 0, 120, 150);
-
-      g.drawImage(b, 0, 0, W, H);
-      g.fillStyle = "rgba(20,14,48,.28)";
-      g.fillRect(0, 0, W, H);
-
-      const s = Math.min(W / im.w, H / im.h);
-      const dw = im.w * s;
-      const dh = im.h * s;
-      g.drawImage(im.src, (W - dw) / 2, (H - dh) / 2, dw, dh);
-    }
-
-    if (im.src.close) im.src.close();
-
-    return await new Promise(r => c.toBlob(blob => r(blob || file), "image/jpeg", .84));
-
+    inputFile = await normalizePhotoForBrowser(file);
   }catch(error){
-    console.warn("IMAGE PREPARE FAILED:", error);
-    return file;
+    console.warn("PHOTO NORMALIZATION SKIPPED:", error);
+    inputFile = file;
+  }
+
+  const type = String(inputFile.type || "").toLowerCase();
+  if (!["image/jpeg","image/png","image/webp"].includes(type)) return inputFile;
+
+  let im;
+  try{
+    im = await readImage(inputFile);
+  }catch(error){
+    console.warn("PHOTO READ SKIPPED:", error);
+    return inputFile;
+  }
+
+  try{
+    if (!im.w || !im.h) return inputFile;
+    const longest = Math.max(im.w, im.h);
+    const maxEdge = 2400;
+    const maxBytes = 5 * 1024 * 1024;
+
+    // الصور الملائمة تُرفع كما اختارها المستخدم دون إعادة ترميز.
+    if (longest <= maxEdge && inputFile.size <= maxBytes) return inputFile;
+
+    const scale = Math.min(1, maxEdge / longest);
+    const width = Math.max(1, Math.round(im.w * scale));
+    const height = Math.max(1, Math.round(im.h * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+
+    const ctx = canvas.getContext("2d", { alpha:type === "image/png" || type === "image/webp" });
+    if (!ctx) return inputFile;
+    ctx.clearRect(0, 0, width, height);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(im.src, 0, 0, width, height);
+
+    const qualityType = type === "image/png" ? "image/png" : type;
+    const blob = await new Promise(resolve => {
+      canvas.toBlob(
+        output => resolve(output),
+        qualityType,
+        qualityType === "image/png" ? undefined : 0.9
+      );
+    });
+
+    // لو المتصفح لا يدعم تنسيق الخرج، نحتفظ بالأصل بدلاً من تغيير الصورة.
+    if (!blob || !blob.size) return inputFile;
+    if (type === "image/webp" && blob.type !== "image/webp" && blob.type !== "image/png") return inputFile;
+    return blob;
+  }catch(error){
+    console.warn("PHOTO OPTIMIZATION SKIPPED:", error);
+    return inputFile;
+  }finally{
+    if (im?.src?.close) im.src.close();
   }
 }
 
