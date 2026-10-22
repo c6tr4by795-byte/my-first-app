@@ -1217,6 +1217,7 @@ document.addEventListener("change", async e => {
   }
 
   let failedCutouts = 0;
+  let lastPhotoError = "";
   if (ok.length){
 
     state.pending += ok.length;
@@ -1233,13 +1234,9 @@ document.addEventListener("change", async e => {
         failedCutouts++;
         console.error("BACKGROUND REMOVAL FAILED:", error);
         const detail = String(error?.message || error || "");
-        if (/network|fetch|load|import|module|http|failed to resolve/i.test(detail)) {
-          toast("تعذر تحميل أداة إزالة الخلفية. تأكد من الإنترنت وحدّث الصفحة ثم جرّب مجدداً.");
-        } else if (/memory|gpu|webassembly|wasm|webgpu|unsupported/i.test(detail)) {
-          toast("المتصفح لم يتمكن من معالجة الصورة. جرّب صورة أصغر أو حدّث Safari.");
-        } else {
-          toast("تعذر تجهيز الصورة: " + (detail.slice(0, 100) || "خطأ غير معروف"));
-        }
+        lastPhotoError = detail;
+        console.error("BACKGROUND REMOVAL FAILED:", detail);
+        toast("تعذر تجهيز الصورة: " + (detail.slice(0, 130) || "خطأ غير معروف"));
       }finally{
         state.pending = Math.max(0, state.pending - 1);
       }
@@ -1249,7 +1246,7 @@ document.addEventListener("change", async e => {
   if (failedCutouts && rejected) {
     toast("تعذر حذف خلفية " + failedCutouts + " صورة، وتم تجاهل " + rejected + " صورة غير مدعومة أو تجاوزت الحد");
   } else if (failedCutouts) {
-    toast("تعذر تجهيز " + failedCutouts + " صورة؛ جرّب JPG أو PNG أصغر حجماً.");
+    toast("فشلت معالجة " + failedCutouts + " صورة: " + (lastPhotoError.slice(0, 110) || "خطأ غير معروف"));
   } else if (rejected) {
     toast("تم تجاهل " + rejected + " صورة. الصيغ: JPG وPNG وWebP وAVIF وHEIC/HEIF، والحد " + MAX_MB + "MB للصورة");
   }
