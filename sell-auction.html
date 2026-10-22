@@ -470,7 +470,7 @@ header{padding:0 14px 12px;border-radius:0 0 20px 20px;box-shadow:0 6px 18px rgb
     <div class="c-head"><span class="num">4</span><div><h2>صور الجهاز</h2><p>صورة وحدة على الأقل، والأولى هي الغلاف</p></div></div>
     <div class="photos" id="photos"></div>
     <p class="hint"><b id="pCnt">0</b>/6 صور</p>
-    <p class="hint">الصورة تبقى بخلفيتها الأصلية. تُجهّز بمقاس 1242×1242 مع الحفاظ على الجهاز كاملاً ونسبة أبعاده؛ تُمدّد أطراف الصورة نفسها عند الحاجة.</p>
+    <p class="hint">تنضغط الصور وتترتب تلقائياً بإطار 4:5 مثل انستغرام وفيسبوك، كاملة بدون قص أو تمطيط.</p>
   </section>
 </div>
 
@@ -1024,7 +1024,7 @@ function renderPhotos(){
       <label class="add" id="addTile">
         <svg viewBox="0 0 24 24"><path d="M4 8a2 2 0 0 1 2-2h1.5l1.2-1.6h6.6L16.5 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8z"/><circle cx="12" cy="12.5" r="3.2"/></svg>
         <span>إضافة صورة</span>
-        <input id="file" type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.avif,.heic,.heif" multiple>
+        <input id="file" type="file" accept="image/*" multiple>
       </label>` : "");
   state.files.forEach(f => f.fresh = false);
   $("pCnt").textContent = state.files.length;
@@ -1150,52 +1150,64 @@ async function normalizePhotoForBrowser(file){
 }
 
 async function shrink(file){
-  // احتفظ بالصورة الأصلية وخلفيتها؛ لا إزالة خلفية ولا اتصال بخدمة خارجية.
-  // نثبت مقاس الملف 1242×1242 مع إبقاء الجهاز كاملاً ونسبة أبعاده كما هي.
-  const inputFile = await normalizePhotoForBrowser(file);
-  const im = await readImage(inputFile);
   try{
-    if (!im.w || !im.h) throw new Error("تعذر فتح الصورة. جرّب JPG أو PNG.");
+    const im = await readImage(file);
+    if (!im.w || !im.h) return file;
 
-    const SIZE = 1242;
-    const canvas = document.createElement("canvas");
-    canvas.width = SIZE;
-    canvas.height = SIZE;
-    const ctx = canvas.getContext("2d", { alpha:true });
-    if (!ctx) throw new Error("المتصفح لا يدعم تجهيز الصورة. حدّث Safari وحاول مجدداً.");
+    const ar = im.w / im.h;
+    const W = Math.max(POST_MIN_W, Math.min(POST_MAX_W, Math.round(Math.max(im.w, im.h / POST_RATIO))));
+    const H = Math.round(W * POST_RATIO);
 
-    ctx.clearRect(0, 0, SIZE, SIZE);
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = "high";
+    const c = document.createElement("canvas");
+    c.width = W;
+    c.height = H;
 
-    const scale = Math.min(SIZE / im.w, SIZE / im.h);
-    const drawW = Math.max(1, Math.round(im.w * scale));
-    const drawH = Math.max(1, Math.round(im.h * scale));
-    const x = Math.round((SIZE - drawW) / 2);
-    const y = Math.round((SIZE - drawH) / 2);
+    const g = c.getContext("2d");
+    g.imageSmoothingEnabled = true;
+    g.imageSmoothingQuality = "high";
+    g.fillStyle = "#ffffff";
+    g.fillRect(0, 0, W, H);
 
-    // تمديد الحافة الموجودة بالصورة نفسها لملء المربع؛ لا نقصّ محتوى الصورة.
-    // إذا الصورة طولية نمدّد العمودين الخارجيين، وإذا عرضية نمدّد الصفين الخارجيين.
-    if (drawW < SIZE) {
-      ctx.drawImage(im.src, 0, 0, 1, im.h, 0, 0, x, SIZE);
-      ctx.drawImage(im.src, im.w - 1, 0, 1, im.h, x + drawW, 0, SIZE - x - drawW, SIZE);
-    } else if (drawH < SIZE) {
-      ctx.drawImage(im.src, 0, 0, im.w, 1, 0, 0, SIZE, y);
-      ctx.drawImage(im.src, 0, im.h - 1, im.w, 1, 0, y + drawH, SIZE, SIZE - y - drawH);
+    if (ar >= 0.72 && ar <= 0.9){
+
+      const s = Math.max(W / im.w, H / im.h);
+      const dw = im.w * s;
+      const dh = im.h * s;
+      g.drawImage(im.src, (W - dw) / 2, (H - dh) / 2, dw, dh);
+
+    }else{
+
+      /* خلفية مغبّشة: تصغير شديد ثم تكبير على مرحلتين (تعمل بكل المتصفحات) */
+      const a = document.createElement("canvas");
+      a.width = 24; a.height = 30;
+      const ag = a.getContext("2d");
+      ag.imageSmoothingQuality = "high";
+      const bs = Math.max(24 / im.w, 30 / im.h);
+      ag.drawImage(im.src, (24 - im.w * bs) / 2, (30 - im.h * bs) / 2, im.w * bs, im.h * bs);
+
+      const b = document.createElement("canvas");
+      b.width = 120; b.height = 150;
+      const bg = b.getContext("2d");
+      bg.imageSmoothingQuality = "high";
+      bg.drawImage(a, 0, 0, 120, 150);
+
+      g.drawImage(b, 0, 0, W, H);
+      g.fillStyle = "rgba(20,14,48,.28)";
+      g.fillRect(0, 0, W, H);
+
+      const s = Math.min(W / im.w, H / im.h);
+      const dw = im.w * s;
+      const dh = im.h * s;
+      g.drawImage(im.src, (W - dw) / 2, (H - dh) / 2, dw, dh);
     }
 
-    ctx.drawImage(im.src, x, y, drawW, drawH);
+    if (im.src.close) im.src.close();
 
-    const outputType = inputFile.type === "image/png" ? "image/png" : "image/jpeg";
-    return await new Promise((resolve, reject) => {
-      canvas.toBlob(
-        blob => blob ? resolve(blob) : reject(new Error("تعذر حفظ الصورة بمقاس 1242×1242")),
-        outputType,
-        outputType === "image/jpeg" ? 0.94 : undefined
-      );
-    });
-  }finally{
-    if (im.src?.close) im.src.close();
+    return await new Promise(r => c.toBlob(blob => r(blob || file), "image/jpeg", .84));
+
+  }catch(error){
+    console.warn("IMAGE PREPARE FAILED:", error);
+    return file;
   }
 }
 
@@ -1211,7 +1223,7 @@ document.addEventListener("change", async e => {
 
   for (const f of picked){
     if (state.files.length + ok.length >= MAX_PHOTOS){ rejected++; continue; }
-    if (isSupportedPhotoFile(f) && f.size <= MAX_MB * 1e6) ok.push(f);
+    if (f.type.startsWith("image/") && f.size <= MAX_MB * 1e6) ok.push(f);
     else rejected++;
   }
 
