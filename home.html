@@ -503,31 +503,46 @@ header{
 .tw-b{bottom:0;left:0;transform:scaleY(-1)}
 
 
-/* ============ شريحة آخر فرصة داخل بنر الإعلانات ============ */
-.ad-card.auc-slide{
-  display:grid;grid-template-columns:minmax(0,1fr) 42%;gap:12px;align-items:center;
-  padding:14px 16px;
-  background:linear-gradient(145deg,#4a34b8 0%,#6246d9 55%,#8473ec 100%)
-}
-.ad-card.auc-slide::before{content:none}
+/* ============ بنر آخر فرصة للمزايدة (سلايد تحت الأزرار) ============ */
+.ending-section{margin-top:8px;padding-top:0;margin-inline:-12px}
+.ending-section .ad-dots{margin-top:6px}
 
-.eb-web{position:absolute;top:0;right:0;z-index:0;width:150px;height:150px;opacity:.16;pointer-events:none;transform:scaleX(-1)}
+/* أزرار الإجراءات أنزل شوي */
+.actions-section{margin-top:26px !important;margin-bottom:2px !important}
+
+.end-ban{
+  position:relative;isolation:isolate;overflow:hidden;flex:0 0 100%;
+  height:124px;
+  padding:10px 12px;border-radius:20px;
+  scroll-snap-align:center;scroll-snap-stop:always;cursor:pointer;
+  display:grid;grid-template-columns:minmax(0,1fr) 34%;gap:10px;align-items:center;
+  color:#fff;background:linear-gradient(145deg,#4a34b8 0%,#6246d9 55%,#8473ec 100%);
+  box-shadow:0 10px 22px -10px rgba(98,70,217,.35);
+  transition:transform .18s ease
+}
+.end-ban:active{transform:scale(.98)}
+
+.eb-web{position:absolute;top:0;right:0;z-index:0;width:110px;height:110px;opacity:.16;pointer-events:none;transform:scaleX(-1)}
 .eb-web svg{display:block;width:100%;height:100%}
 
-.eb-copy{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:8px;min-width:0;width:100%}
-.eb-badge{padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);font-size:10px;font-weight:900;white-space:nowrap}
-.eb-title{margin:0;max-width:100%;font-size:18px;font-weight:950;line-height:1.25;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.eb-price small{display:block;font-size:9.5px;font-weight:800;color:rgba(255,255,255,.75)}
-.eb-price b{display:block;margin-top:1px;font-size:18px;font-weight:950;white-space:nowrap}
+.eb-copy{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:center;gap:6px;min-width:0;width:100%}
+.eb-row{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
+.eb-badge{padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);font-size:9.5px;font-weight:900;white-space:nowrap}
+.eb-row .cd{font-size:11px;padding:3px 8px}
+.eb-title{margin:0;max-width:100%;font-size:15px;font-weight:950;line-height:1.25;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.eb-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
+.eb-price{min-width:0}
+.eb-price small{display:block;font-size:9px;font-weight:800;color:rgba(255,255,255,.75)}
+.eb-price b{display:block;margin-top:1px;font-size:15px;font-weight:950;white-space:nowrap}
 .eb-cta{
-  padding:9px 22px;border-radius:12px;background:#fff;color:var(--p-dark);
-  font-size:13px;font-weight:900;box-shadow:0 6px 14px rgba(20,14,48,.25);
+  flex:0 0 auto;padding:7px 16px;border-radius:11px;background:#fff;color:var(--p-dark);
+  font-size:11.5px;font-weight:900;box-shadow:0 5px 12px rgba(20,14,48,.25);
   transition:transform .18s ease
 }
 .eb-cta:active{transform:scale(.94)}
 
 .eb-media{
-  position:relative;z-index:1;align-self:stretch;overflow:hidden;isolation:isolate;border-radius:16px;
+  position:relative;z-index:1;align-self:stretch;overflow:hidden;isolation:isolate;border-radius:13px;
   background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);
   display:grid;place-items:center
 }
@@ -539,11 +554,6 @@ header{
 }
 .eb-media img{position:relative;z-index:1;width:100%;height:100%;object-fit:contain}
 .eb-media .no-img{position:absolute;inset:0;z-index:1}
-
-/* ترتيب المسافات: البنر قريب جداً من التصنيفات، أزرار الإجراءات أنزل شوي، البنر أطول شوي (ما يصغر) */
-#adsSection:not([hidden]){margin-top:4px !important;padding-top:0 !important}
-.ad-card{height:clamp(222px,30dvh,250px) !important}
-.actions-section{margin-top:28px !important;margin-bottom:2px !important}
 
 </style>
 </head>
@@ -705,6 +715,14 @@ header{
     </button>
 
   </div>
+
+</section>
+
+<section class="section ending-section" id="endingSection" hidden>
+
+  <div class="ad-track" id="endingTrack"></div>
+
+  <div class="ad-dots" id="endingDots"></div>
 
 </section>
 
@@ -1037,23 +1055,114 @@ const ADS = [
   }
 ];
 
-/* بنر الإعلانات + شريحة "آخر فرصة للمزايدة"
-   الشريحة تظهر فقط للمزاد اللي باقي على انتهائه نص ساعة أو أقل (أقصى مزادين) */
+function renderAds(){
+
+  const sec = $("adsSection");
+  const track = $("adTrack");
+  const dotsBox = $("adDots");
+
+  if(!sec || !track || !ADS.length) return;
+
+  track.innerHTML =
+    ADS.map(
+      a => `
+        <article
+          class="ad-card"
+          data-go="${esc(a.go)}"
+          style="background-image:url('${esc(a.img)}')"
+          role="link"
+          tabindex="0"
+        >
+
+          <div class="ad-copy">
+
+            <div class="ad-top">
+              <span class="ad-badge">إعلان</span>
+              <span class="ad-kicker">${esc(a.kicker)}</span>
+            </div>
+
+            <h3 class="ad-title">${esc(a.title)}</h3>
+
+            <p class="ad-text">${esc(a.text)}</p>
+
+          </div>
+
+          <span class="ad-cta">${esc(a.cta)}</span>
+
+        </article>
+      `
+    ).join("");
+
+  sec.hidden = false;
+
+  if(ADS.length < 2) return;
+
+  dotsBox.innerHTML =
+    ADS.map((_,i) => `<span class="ad-dot${i ? "" : " active"}"></span>`).join("");
+
+  const cards = [...track.querySelectorAll(".ad-card")];
+  const adDots = [...dotsBox.children];
+
+  let cur = 0;
+  let timer = null;
+
+  const setActive = i =>
+    adDots.forEach((d,k) => d.classList.toggle("active", k === i));
+
+  function goTo(i){
+
+    cur = (i + cards.length) % cards.length;
+
+    track.scrollTo({
+      left: cards[cur].offsetLeft - track.offsetLeft,
+      behavior:"smooth"
+    });
+
+    setActive(cur);
+  }
+
+  const restart = () => {
+    clearInterval(timer);
+    timer = setInterval(() => goTo(cur + 1), 6000);
+  };
+
+  track.addEventListener("scroll", () => {
+
+    const step = cards[0].offsetWidth + 12;
+
+    cur = Math.min(
+      cards.length - 1,
+      Math.round(Math.abs(track.scrollLeft) / step)
+    );
+
+    setActive(cur);
+
+  }, {passive:true});
+
+  track.addEventListener("touchstart", () => clearInterval(timer), {passive:true});
+  track.addEventListener("touchend", restart, {passive:true});
+
+  restart();
+}
+
+/* ================================
+   بنر "آخر فرصة للمزايدة" (سلايد تحت الأزرار الثلاثة)
+   يطلع فقط للمزاد اللي باقي عليه نص ساعة أو أقل، وبحد أقصى مزادين
+================================ */
 
 const ENDING_WINDOW_MS = 30 * 60 * 1000;
 const MAX_ENDING = 2;
-const AUCTION_DWELL = 13000;
-const AD_DWELL = 6000;
+const ENDING_DWELL = 13000;
 
 const END_WEB = '<svg viewBox="0 0 200 200" fill="none" stroke="#fff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M0 0L184.0 0.0M0 0L170.0 70.4M0 0L130.1 130.1M0 0L70.4 170.0M0 0L0.0 184.0M46.0 0.0L42.5 17.6L32.5 32.5L17.6 42.5L0.0 46.0M92.0 0.0L85.0 35.2L65.1 65.1L35.2 85.0L0.0 92.0M138.0 0.0L127.5 52.8L97.6 97.6L52.8 127.5L0.0 138.0"/></svg>';
 
 let LIVE_DEVICES = [];
-let adTimer = null;
-let adCards = [];
-let adDotEls = [];
-let adCur = 0;
-let adSig = null;
-let adInteracted = false;
+let endTimer = null;
+let endCards = [];
+let endDotEls = [];
+let endCur = 0;
+let endSig = null;
+let endInteracted = false;
 
 function endingAuctions(){
 
@@ -1068,117 +1177,78 @@ function endingAuctions(){
     .map(x => x.d);
 }
 
-function adSlideHTML(s){
+function endSlideHTML(d){
 
-  if(s.type === "auction"){
+  const url = getDeviceImageUrl(getDeviceImages(d.images)[0]);
 
-    const d = s.d;
-    const url = getDeviceImageUrl(getDeviceImages(d.images)[0]);
+  return `
+    <article class="end-ban" data-key="${esc(d.id)}" data-id="${esc(d.id)}" role="link" tabindex="0">
 
-    return `
-      <article
-        class="ad-card auc-slide"
-        data-key="auc:${esc(d.id)}"
-        data-auction="${esc(d.id)}"
-        data-dwell="${AUCTION_DWELL}"
-        role="link"
-        tabindex="0"
-      >
+      <div class="eb-web" aria-hidden="true">${END_WEB}</div>
 
-        <div class="eb-web" aria-hidden="true">${END_WEB}</div>
+      <div class="eb-copy">
 
-        <div class="eb-copy">
-
-          <span class="eb-badge">آخر فرصة للمزايدة</span>
-
-          <h3 class="eb-title">${esc(deviceName(d))}</h3>
-
+        <div class="eb-row">
+          <span class="eb-badge">آخر فرصة</span>
           <span class="cd" data-end="${esc(d.ends_at)}">--:--:--</span>
+        </div>
+
+        <h3 class="eb-title">${esc(deviceName(d))}</h3>
+
+        <div class="eb-foot">
 
           <div class="eb-price">
             <small>السعر الحالي</small>
             <b>${esc(formatDevicePrice(d.price))}</b>
           </div>
 
-          <button class="eb-cta" type="button" data-bid="${esc(d.id)}">زايد الآن</button>
+          <button class="eb-cta" type="button" data-bid="${esc(d.id)}">زايد</button>
 
         </div>
-
-        <div class="eb-media"${url ? ` style="--img:url('${esc(url)}')"` : ""}>
-          ${
-            url
-              ? `<img src="${esc(url)}" alt="${esc(deviceName(d))}" decoding="async" draggable="false" onerror="this.remove()">`
-              : `<div class="no-img">${PH_ICON}</div>`
-          }
-        </div>
-
-      </article>
-    `;
-  }
-
-  const a = s.a;
-
-  return `
-    <article
-      class="ad-card"
-      data-key="ad:${s.i}"
-      data-dwell="${AD_DWELL}"
-      data-link="${esc(a.go)}"
-      style="background-image:url('${esc(a.img)}')"
-      role="link"
-      tabindex="0"
-    >
-
-      <div class="ad-copy">
-
-        <div class="ad-top">
-          <span class="ad-badge">إعلان</span>
-          <span class="ad-kicker">${esc(a.kicker)}</span>
-        </div>
-
-        <h3 class="ad-title">${esc(a.title)}</h3>
-
-        <p class="ad-text">${esc(a.text)}</p>
 
       </div>
 
-      <span class="ad-cta">${esc(a.cta)}</span>
+      <div class="eb-media"${url ? ` style="--img:url('${esc(url)}')"` : ""}>
+        ${
+          url
+            ? `<img src="${esc(url)}" alt="${esc(deviceName(d))}" decoding="async" draggable="false" onerror="this.remove()">`
+            : `<div class="no-img">${PH_ICON}</div>`
+        }
+      </div>
 
     </article>
   `;
 }
 
-function adSetActive(i){
-  adDotEls.forEach((d,k) => d.classList.toggle("active", k === i));
+function endSetActive(i){
+  endDotEls.forEach((d,k) => d.classList.toggle("active", k === i));
 }
 
-/* كل شريحة لها مدتها: الإعلان 6 ثواني، مزاد آخر فرصة 13 ثانية */
-function adSchedule(){
+/* كل شريحة مزاد تبقى 13 ثانية */
+function endSchedule(){
 
-  clearTimeout(adTimer);
+  clearTimeout(endTimer);
 
-  if(adCards.length < 2) return;
+  if(endCards.length < 2) return;
 
-  const dwell = Number(adCards[adCur]?.dataset.dwell) || AD_DWELL;
-
-  adTimer = setTimeout(() => adGoTo(adCur + 1), dwell);
+  endTimer = setTimeout(() => endGoTo(endCur + 1), ENDING_DWELL);
 }
 
-function adGoTo(i){
+function endGoTo(i){
 
-  const track = $("adTrack");
+  const track = $("endingTrack");
 
-  if(!track || !adCards.length) return;
+  if(!track || !endCards.length) return;
 
-  adCur = (i + adCards.length) % adCards.length;
+  endCur = (i + endCards.length) % endCards.length;
 
   track.scrollTo({
-    left: adCards[adCur].offsetLeft - track.offsetLeft,
+    left: endCards[endCur].offsetLeft - track.offsetLeft,
     behavior:"smooth"
   });
 
-  adSetActive(adCur);
-  adSchedule();
+  endSetActive(endCur);
+  endSchedule();
 }
 
 /* زر المزايدة: يحتاج تسجيل دخول، بعدها يفتح صفحة المزاد */
@@ -1186,7 +1256,7 @@ function bidNow(id){
   requireAuth(`auction-details.html?auction=${encodeURIComponent(id)}&bid=1`);
 }
 
-function bindAdSlider(track){
+function bindEndSlider(track){
 
   if(track.dataset.bound) return;
 
@@ -1194,27 +1264,27 @@ function bindAdSlider(track){
 
   track.addEventListener("scroll", () => {
 
-    if(!adCards.length) return;
+    if(!endCards.length) return;
 
-    const step = adCards[0].offsetWidth + 12;
+    const step = endCards[0].offsetWidth + 12;
 
-    adCur = Math.min(
-      adCards.length - 1,
+    endCur = Math.min(
+      endCards.length - 1,
       Math.round(Math.abs(track.scrollLeft) / step)
     );
 
-    adSetActive(adCur);
+    endSetActive(endCur);
 
   }, {passive:true});
 
   track.addEventListener("touchstart", () => {
-    adInteracted = true;
-    clearTimeout(adTimer);
+    endInteracted = true;
+    clearTimeout(endTimer);
   }, {passive:true});
 
   track.addEventListener("touchend", () => {
-    clearTimeout(adTimer);
-    adTimer = setTimeout(adSchedule, 400);
+    clearTimeout(endTimer);
+    endTimer = setTimeout(endSchedule, 400);
   }, {passive:true});
 
   track.addEventListener("click", event => {
@@ -1228,33 +1298,18 @@ function bindAdSlider(track){
       return;
     }
 
-    const card = event.target.closest(".ad-card");
+    const card = event.target.closest(".end-ban");
 
-    if(!card) return;
-
-    if(card.dataset.auction){
-      go(`auction-details.html?auction=${encodeURIComponent(card.dataset.auction)}`);
-      return;
-    }
-
-    const link = card.dataset.link;
-
-    if(!link) return;
-
-    if(PROTECTED.includes(link.split("?")[0])){
-      requireAuth(link);
-      return;
-    }
-
-    go(link);
+    if(card && card.dataset.id)
+      go(`auction-details.html?auction=${encodeURIComponent(card.dataset.id)}`);
   });
 }
 
-function renderAds(){
+function renderEnding(){
 
-  const sec = $("adsSection");
-  const track = $("adTrack");
-  const dotsBox = $("adDots");
+  const sec = $("endingSection");
+  const track = $("endingTrack");
+  const dotsBox = $("endingDots");
 
   if(!sec || !track) return;
 
@@ -1262,50 +1317,53 @@ function renderAds(){
 
   const sig = aucs.map(d => d.id + ":" + d.price).join("|");
 
-  if(sig === adSig && track.children.length) return;
+  /* ما نعيد رسم البنر إلا إذا تغيّرت المزادات المعروضة */
+  if(sig === endSig) return;
 
-  adSig = sig;
+  endSig = sig;
 
-  const keepKey = adCards[adCur] ? adCards[adCur].dataset.key : null;
+  if(!aucs.length){
+    clearTimeout(endTimer);
+    sec.hidden = true;
+    track.innerHTML = "";
+    dotsBox.innerHTML = "";
+    endCards = [];
+    endDotEls = [];
+    return;
+  }
 
-  const slides = [
-    ...aucs.map(d => ({ type:"auction", d })),
-    ...ADS.map((a,i) => ({ type:"ad", a, i }))
-  ];
+  const keepKey = endCards[endCur] ? endCards[endCur].dataset.key : null;
 
-  if(!slides.length) return;
-
-  track.innerHTML = slides.map(adSlideHTML).join("");
+  track.innerHTML = aucs.map(endSlideHTML).join("");
 
   sec.hidden = false;
 
-  adCards = [...track.querySelectorAll(".ad-card")];
+  endCards = [...track.querySelectorAll(".end-ban")];
 
   dotsBox.innerHTML =
-    adCards.length > 1
-      ? adCards.map((_,i) => `<span class="ad-dot${i ? "" : " active"}"></span>`).join("")
+    endCards.length > 1
+      ? endCards.map((_,i) => `<span class="ad-dot${i ? "" : " active"}"></span>`).join("")
       : "";
 
-  adDotEls = [...dotsBox.children];
+  endDotEls = [...dotsBox.children];
 
-  /* إذا المستخدم ما لمس البنر، نبدأ من أول شريحة (مزاد آخر فرصة إن وجد)،
-     وإلا نبقيه على الشريحة اللي يشوفها */
-  const keepIndex = adCards.findIndex(c => c.dataset.key === keepKey);
+  /* إذا المستخدم يتصفح السلايد نبقيه على نفس المزاد، وإلا نبدأ من الأقرب للانتهاء */
+  const keepIndex = endCards.findIndex(c => c.dataset.key === keepKey);
 
-  adCur = adInteracted && keepIndex > 0 ? keepIndex : 0;
+  endCur = endInteracted && keepIndex > 0 ? keepIndex : 0;
 
   track.scrollTo({
-    left: adCards[adCur].offsetLeft - track.offsetLeft,
+    left: endCards[endCur].offsetLeft - track.offsetLeft,
     behavior:"auto"
   });
 
-  adSetActive(adCur);
+  endSetActive(endCur);
 
-  bindAdSlider(track);
+  bindEndSlider(track);
 
   tickTimers();
 
-  adSchedule();
+  endSchedule();
 }
 
 /* ================================
@@ -2043,7 +2101,7 @@ async function loadDevices(){
 
     LIVE_DEVICES = devices;
 
-    renderAds();
+    renderEnding();
 
     $("featuredSection").hidden = false;
 
@@ -2492,7 +2550,7 @@ initFavoriteScope().finally(() => loadDevices());
 
 /* نفحص كل 15 ثانية: مزاد دخل آخر نص ساعة يظهر، ومزاد انتهى يختفي */
 setInterval(() => {
-  if(!document.hidden) renderAds();
+  if(!document.hidden) renderEnding();
 }, 15000);
 
 </script>
