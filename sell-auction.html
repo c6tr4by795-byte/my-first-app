@@ -470,7 +470,7 @@ header{padding:0 14px 12px;border-radius:0 0 20px 20px;box-shadow:0 6px 18px rgb
     <div class="c-head"><span class="num">4</span><div><h2>صور الجهاز</h2><p>صورة وحدة على الأقل، والأولى هي الغلاف</p></div></div>
     <div class="photos" id="photos"></div>
     <p class="hint"><b id="pCnt">0</b>/6 صور</p>
-    <p class="hint">الصيغ المدعومة: JPG وPNG وWebP وAVIF، وصور iPhone بصيغة HEIC/HEIF نحاول تحويلها تلقائياً. تُزال الخلفية ويُحفظ الجهاز بصيغة PNG شفافة من دون قصّه.</p>
+    <p class="hint">المقاس النهائي 1242×1242 بكسل. تُحفظ الصورة بصيغة PNG شفافة مع بقاء الجهاز كاملاً من دون قص أو تمديد.</p>
   </section>
 </div>
 
@@ -1049,7 +1049,7 @@ $("photos").addEventListener("click", e => {
    المعالجة تتم داخل متصفح المستخدم، ثم تُرفع PNG بشفافية حقيقية.
    لا نقصّ الصورة إلى 4:5 ولا نرسم خلفية بيضاء أو ضبابية خلفها. */
 let backgroundRemovalModulePromise = null;
-const CUTOUT_MAX_EDGE = 1800;
+const CUTOUT_MAX_EDGE = 1242;
 const CUTOUT_MAX_BYTES = 4_500_000;
 
 async function getBackgroundRemover(){
@@ -1087,22 +1087,28 @@ async function optimizeTransparentPng(blob){
   const im = await readImage(blob);
   try{
     if (!im.w || !im.h) throw new Error("تعذر قراءة الصورة بعد إزالة الخلفية");
-    const longest = Math.max(im.w, im.h);
-    if (longest <= CUTOUT_MAX_EDGE && blob.size <= CUTOUT_MAX_BYTES) return blob;
 
-    const scale = Math.min(1, CUTOUT_MAX_EDGE / longest);
+    // كل صور المزاد تُحفظ بمقاس موحد 1242×1242 مع الحفاظ على كامل الجهاز.
+    // المساحة الزائدة تبقى شفافة، ولا نقصّ الصورة أو نمدّدها.
+    const SIZE = 1242;
     const c = document.createElement("canvas");
-    c.width = Math.max(1, Math.round(im.w * scale));
-    c.height = Math.max(1, Math.round(im.h * scale));
+    c.width = SIZE;
+    c.height = SIZE;
     const g = c.getContext("2d", { alpha:true });
     if (!g) throw new Error("المتصفح لا يدعم تجهيز صورة شفافة");
-    g.clearRect(0, 0, c.width, c.height);
+    g.clearRect(0, 0, SIZE, SIZE);
     g.imageSmoothingEnabled = true;
     g.imageSmoothingQuality = "high";
-    g.drawImage(im.src, 0, 0, c.width, c.height);
+
+    const scale = Math.min(SIZE / im.w, SIZE / im.h);
+    const drawW = Math.max(1, Math.round(im.w * scale));
+    const drawH = Math.max(1, Math.round(im.h * scale));
+    const x = Math.round((SIZE - drawW) / 2);
+    const y = Math.round((SIZE - drawH) / 2);
+    g.drawImage(im.src, x, y, drawW, drawH);
 
     return await new Promise((resolve, reject) => {
-      c.toBlob(out => out ? resolve(out) : reject(new Error("تعذر حفظ الصورة الشفافة")), "image/png");
+      c.toBlob(out => out ? resolve(out) : reject(new Error("تعذر حفظ الصورة الشفافة بمقاس 1242×1242")), "image/png");
     });
   }finally{
     if (im.src?.close) im.src.close();
