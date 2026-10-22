@@ -98,14 +98,26 @@ module.exports = async (req, res) => {
 
     if (!upstream.ok) {
       const upstreamMessage = await upstream.text().catch(() => "");
+      let providerError = "";
+      try {
+        const parsed = JSON.parse(upstreamMessage);
+        providerError = String(parsed.error || parsed.detail || "");
+      } catch {}
       console.error("Background removal provider error:", upstream.status, upstreamMessage.slice(0, 300));
-      return sendError(
-        res,
-        upstream.status === 429 ? 429 : 502,
-        upstream.status === 429
-          ? "خدمة إزالة الخلفية مزدحمة مؤقتاً. انتظر قليلاً ثم حاول."
-          : "خدمة قصّ الخلفية لم تستطع معالجة الصورة الآن. جرّب صورة JPG أوضح."
-      );
+
+      if (upstream.status === 402) {
+        return sendError(res, 502, "وصلت خدمة إزالة الخلفية إلى حدّها المجاني اليوم. جرّب لاحقاً أو استخدم خدمة أخرى.");
+      }
+      if (upstream.status === 429) {
+        return sendError(res, 429, "خدمة إزالة الخلفية مشغولة الآن. انتظر 20 ثانية ثم جرّب صورة واحدة.");
+      }
+      if (upstream.status === 413) {
+        return sendError(res, 413, "الصورة كبيرة جداً على خدمة إزالة الخلفية. اختر صورة أصغر.");
+      }
+      if (upstream.status === 400 || upstream.status === 422) {
+        return sendError(res, 400, "خدمة إزالة الخلفية لم تستطع قراءة الصورة. جرّب حفظها بصيغة JPG ثم أعد رفعها.");
+      }
+      return sendError(res, 502, providerError.slice(0, 180) || "خدمة إزالة الخلفية لم تستطع معالجة الصورة الآن. حاول لاحقاً.");
     }
 
     const outputType = String(upstream.headers.get("content-type") || "").toLowerCase();
