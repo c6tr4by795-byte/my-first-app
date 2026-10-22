@@ -470,7 +470,7 @@ header{padding:0 14px 12px;border-radius:0 0 20px 20px;box-shadow:0 6px 18px rgb
     <div class="c-head"><span class="num">4</span><div><h2>صور الجهاز</h2><p>صورة وحدة على الأقل، والأولى هي الغلاف</p></div></div>
     <div class="photos" id="photos"></div>
     <p class="hint"><b id="pCnt">0</b>/6 صور</p>
-    <p class="hint">المقاس النهائي 1242×1242 بكسل. تُحفظ الصورة بصيغة PNG شفافة مع بقاء الجهاز كاملاً من دون قص أو تمديد.</p>
+    <p class="hint">الصورة تبقى بخلفيتها الأصلية. تُجهّز بمقاس 1242×1242 مع الحفاظ على الجهاز كاملاً ونسبة أبعاده؛ تُمدّد أطراف الصورة نفسها عند الحاجة.</p>
   </section>
 </div>
 
@@ -1150,54 +1150,53 @@ async function normalizePhotoForBrowser(file){
 }
 
 async function shrink(file){
+  // احتفظ بالصورة الأصلية وخلفيتها؛ لا إزالة خلفية ولا اتصال بخدمة خارجية.
+  // نثبت مقاس الملف 1242×1242 مع إبقاء الجهاز كاملاً ونسبة أبعاده كما هي.
   const inputFile = await normalizePhotoForBrowser(file);
   const im = await readImage(inputFile);
-  let jpeg;
   try{
-    if (!im.w || !im.h) throw new Error("تعذر فتح الصورة. جرّب صورة JPG أو PNG.");
-    const maxEdge = 1600;
-    const scale = Math.min(1, maxEdge / Math.max(im.w, im.h));
+    if (!im.w || !im.h) throw new Error("تعذر فتح الصورة. جرّب JPG أو PNG.");
+
+    const SIZE = 1242;
     const canvas = document.createElement("canvas");
-    canvas.width = Math.max(1, Math.round(im.w * scale));
-    canvas.height = Math.max(1, Math.round(im.h * scale));
-    const ctx = canvas.getContext("2d", { alpha:false });
+    canvas.width = SIZE;
+    canvas.height = SIZE;
+    const ctx = canvas.getContext("2d", { alpha:true });
     if (!ctx) throw new Error("المتصفح لا يدعم تجهيز الصورة. حدّث Safari وحاول مجدداً.");
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.clearRect(0, 0, SIZE, SIZE);
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
-    ctx.drawImage(im.src, 0, 0, canvas.width, canvas.height);
-    jpeg = await new Promise((resolve, reject) => {
-      canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error("تعذر ضغط الصورة قبل إزالة الخلفية")), "image/jpeg", 0.88);
+
+    const scale = Math.min(SIZE / im.w, SIZE / im.h);
+    const drawW = Math.max(1, Math.round(im.w * scale));
+    const drawH = Math.max(1, Math.round(im.h * scale));
+    const x = Math.round((SIZE - drawW) / 2);
+    const y = Math.round((SIZE - drawH) / 2);
+
+    // تمديد الحافة الموجودة بالصورة نفسها لملء المربع؛ لا نقصّ محتوى الصورة.
+    // إذا الصورة طولية نمدّد العمودين الخارجيين، وإذا عرضية نمدّد الصفين الخارجيين.
+    if (drawW < SIZE) {
+      ctx.drawImage(im.src, 0, 0, 1, im.h, 0, 0, x, SIZE);
+      ctx.drawImage(im.src, im.w - 1, 0, 1, im.h, x + drawW, 0, SIZE - x - drawW, SIZE);
+    } else if (drawH < SIZE) {
+      ctx.drawImage(im.src, 0, 0, im.w, 1, 0, 0, SIZE, y);
+      ctx.drawImage(im.src, 0, im.h - 1, im.w, 1, 0, y + drawH, SIZE, SIZE - y - drawH);
+    }
+
+    ctx.drawImage(im.src, x, y, drawW, drawH);
+
+    const outputType = inputFile.type === "image/png" ? "image/png" : "image/jpeg";
+    return await new Promise((resolve, reject) => {
+      canvas.toBlob(
+        blob => blob ? resolve(blob) : reject(new Error("تعذر حفظ الصورة بمقاس 1242×1242")),
+        outputType,
+        outputType === "image/jpeg" ? 0.94 : undefined
+      );
     });
   }finally{
     if (im.src?.close) im.src.close();
   }
-
-  if (!jpeg || !jpeg.size) throw new Error("تعذر تجهيز الصورة للإرسال.");
-  if (jpeg.size > 4 * 1024 * 1024) throw new Error("الصورة كبيرة جداً بعد الضغط. اختر صورة أصغر.");
-
-  toast("جاري إزالة خلفية الجهاز…");
-  const response = await fetch("/api/remove-background", {
-    method:"POST",
-    headers:{ "Content-Type":"image/jpeg" },
-    body:jpeg
-  });
-
-  if (!response.ok) {
-    let message = "تعذرت إزالة الخلفية حالياً. جرّب صورة أخرى.";
-    try {
-      const info = await response.json();
-      if (info?.message) message = String(info.message).slice(0, 180);
-    } catch {}
-    throw new Error(message);
-  }
-
-  const cutout = await response.blob();
-  if (!cutout.type.includes("image/png") || !cutout.size) {
-    throw new Error("خدمة إزالة الخلفية لم تُرجع صورة شفافة صالحة.");
-  }
-  return optimizeTransparentPng(cutout);
 }
 
 document.addEventListener("change", async e => {
@@ -1221,7 +1220,7 @@ document.addEventListener("change", async e => {
   if (ok.length){
 
     state.pending += ok.length;
-    toast("جاري تجهيز الصور بمقاس 1242×1242…");
+    toast("جاري ضبط مقاس الصور إلى 1242×1242 مع الحفاظ على الأصل…");
 
     for (const f of ok){
       try{
@@ -1244,9 +1243,9 @@ document.addEventListener("change", async e => {
   }
 
   if (failedCutouts && rejected) {
-    toast("تعذر حذف خلفية " + failedCutouts + " صورة، وتم تجاهل " + rejected + " صورة غير مدعومة أو تجاوزت الحد");
+    toast("تعذر تجهيز " + failedCutouts + " صورة، وتم تجاهل " + rejected + " صورة غير مدعومة أو تجاوزت الحد");
   } else if (failedCutouts) {
-    toast("فشلت معالجة " + failedCutouts + " صورة: " + (lastPhotoError.slice(0, 110) || "خطأ غير معروف"));
+    toast("تعذر تجهيز " + failedCutouts + " صورة: " + (lastPhotoError.slice(0, 110) || "خطأ غير معروف"));
   } else if (rejected) {
     toast("تم تجاهل " + rejected + " صورة. الصيغ: JPG وPNG وWebP وAVIF وHEIC/HEIF، والحد " + MAX_MB + "MB للصورة");
   }
