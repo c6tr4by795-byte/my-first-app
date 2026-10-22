@@ -1150,33 +1150,30 @@ async function normalizePhotoForBrowser(file){
 }
 
 async function shrink(file){
-  // تجنّب انهيار Safari أثناء تحميل نموذج إزالة الخلفية داخل ذاكرة الهاتف.
-  // نجهّز الصورة محلياً بمقاس 1242×1242 من دون قصّ أو تمديد الجهاز.
   const inputFile = await normalizePhotoForBrowser(file);
-  const im = await readImage(inputFile);
-  try{
-    if (!im.w || !im.h) throw new Error("تعذر فتح الصورة. جرّب حفظها بصيغة JPG ثم أعد المحاولة.");
-    const SIZE = 1242;
-    const canvas = document.createElement("canvas");
-    canvas.width = SIZE;
-    canvas.height = SIZE;
-    const ctx = canvas.getContext("2d", { alpha:true });
-    if (!ctx) throw new Error("المتصفح لا يدعم تجهيز الصورة. حدّث Safari وحاول مجدداً.");
+  const body = new FormData();
+  body.append("image", inputFile, inputFile.name || "device-photo.jpg");
 
-    ctx.clearRect(0, 0, SIZE, SIZE);
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = "high";
-    const scale = Math.min(SIZE / im.w, SIZE / im.h);
-    const w = Math.max(1, Math.round(im.w * scale));
-    const h = Math.max(1, Math.round(im.h * scale));
-    ctx.drawImage(im.src, Math.round((SIZE - w) / 2), Math.round((SIZE - h) / 2), w, h);
+  toast("جاري إزالة خلفية الجهاز وتجهيز المقاس…");
+  const response = await fetch("/api/remove-background", {
+    method:"POST",
+    body
+  });
 
-    return await new Promise((resolve, reject) => {
-      canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error("تعذر حفظ الصورة بمقاس 1242×1242")), "image/png");
-    });
-  }finally{
-    if (im.src?.close) im.src.close();
+  if (!response.ok) {
+    let message = "تعذرت إزالة الخلفية حالياً. جرّب صورة JPG أو PNG أصغر.";
+    try {
+      const info = await response.json();
+      if (info?.error) message = String(info.error).slice(0, 180);
+    } catch {}
+    throw new Error(message);
   }
+
+  const result = await response.blob();
+  if (result.type !== "image/png" || !result.size) {
+    throw new Error("الخادم لم يُرجع صورة PNG شفافة صالحة");
+  }
+  return result;
 }
 
 document.addEventListener("change", async e => {
