@@ -503,36 +503,41 @@ header{
 .tw-b{bottom:0;left:0;transform:scaleY(-1)}
 
 
-/* ============ بنر آخر فرصة للمزايدة ============ */
-.ending-section{margin-top:14px;padding-top:0;margin-inline:-12px}
+/* ============ بنر آخر فرصة للمزايدة (مصغّر) ============ */
+.ending-section{margin-top:12px;padding-top:0;margin-inline:-12px}
+.ending-section .ad-dots{margin-top:6px}
 
 .end-ban{
   position:relative;isolation:isolate;overflow:hidden;flex:0 0 100%;
-  height:clamp(205px,28dvh,230px);
-  padding:14px 16px;border-radius:22px;
+  height:124px;
+  padding:10px 12px;border-radius:20px;
   scroll-snap-align:center;scroll-snap-stop:always;cursor:pointer;
-  display:grid;grid-template-columns:minmax(0,1fr) 42%;gap:12px;align-items:center;
+  display:grid;grid-template-columns:minmax(0,1fr) 34%;gap:10px;align-items:center;
   color:#fff;background:linear-gradient(145deg,#4a34b8 0%,#6246d9 55%,#8473ec 100%);
-  box-shadow:0 10px 22px -8px rgba(98,70,217,.35)
+  box-shadow:0 10px 22px -10px rgba(98,70,217,.35)
 }
 .end-ban:active{transform:scale(.98)}
 
-.eb-web{position:absolute;top:0;right:0;z-index:0;width:150px;height:150px;opacity:.16;pointer-events:none;transform:scaleX(-1)}
+.eb-web{position:absolute;top:0;right:0;z-index:0;width:110px;height:110px;opacity:.16;pointer-events:none;transform:scaleX(-1)}
 .eb-web svg{display:block;width:100%;height:100%}
 
-.eb-copy{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0}
-.eb-badge{padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);font-size:10px;font-weight:900}
-.eb-title{margin:0;max-width:100%;font-size:17px;font-weight:950;line-height:1.25;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.eb-price small{display:block;font-size:9.5px;font-weight:800;color:rgba(255,255,255,.75)}
-.eb-price b{display:block;margin-top:1px;font-size:17px;font-weight:950;white-space:nowrap}
-.eb-cta{padding:8px 18px;border-radius:12px;background:#fff;color:var(--p-dark);font-size:12px;font-weight:900;box-shadow:0 6px 14px rgba(20,14,48,.25)}
+.eb-copy{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:center;gap:6px;min-width:0;width:100%}
+.eb-row{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
+.eb-badge{padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);font-size:9.5px;font-weight:900;white-space:nowrap}
+.eb-row .cd{font-size:11px;padding:3px 8px}
+.eb-title{margin:0;max-width:100%;font-size:15px;font-weight:950;line-height:1.25;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.eb-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
+.eb-price{min-width:0}
+.eb-price small{display:block;font-size:9px;font-weight:800;color:rgba(255,255,255,.75)}
+.eb-price b{display:block;margin-top:1px;font-size:15px;font-weight:950;white-space:nowrap}
+.eb-cta{flex:0 0 auto;padding:7px 14px;border-radius:11px;background:#fff;color:var(--p-dark);font-size:11.5px;font-weight:900;box-shadow:0 5px 12px rgba(20,14,48,.25)}
 
 .eb-media{
-  position:relative;z-index:1;align-self:stretch;overflow:hidden;border-radius:16px;
+  position:relative;z-index:1;align-self:stretch;overflow:hidden;border-radius:13px;
   background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);
   display:grid;place-items:center
 }
-.eb-media img{width:100%;height:100%;object-fit:contain;padding:6px}
+.eb-media img{width:100%;height:100%;object-fit:contain;padding:4px}
 .eb-media .no-img{position:absolute;inset:0}
 
 </style>
@@ -1850,18 +1855,23 @@ function renderEnding(devices){
 
         <div class="eb-copy">
 
-          <span class="eb-badge">آخر فرصة للمزايدة</span>
+          <div class="eb-row">
+            <span class="eb-badge">آخر فرصة</span>
+            <span class="cd" data-end="${esc(d.ends_at)}">--:--:--</span>
+          </div>
 
           <h3 class="eb-title">${esc(deviceName(d))}</h3>
 
-          <span class="cd" data-end="${esc(d.ends_at)}">--:--:--</span>
+          <div class="eb-foot">
 
-          <div class="eb-price">
-            <small>السعر الحالي</small>
-            <b>${esc(formatDevicePrice(d.price))}</b>
+            <div class="eb-price">
+              <small>السعر الحالي</small>
+              <b>${esc(formatDevicePrice(d.price))}</b>
+            </div>
+
+            <span class="eb-cta">زايد</span>
+
           </div>
-
-          <span class="eb-cta">زايد الآن</span>
 
         </div>
 
