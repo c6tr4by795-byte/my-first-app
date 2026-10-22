@@ -1054,7 +1054,7 @@ const CUTOUT_MAX_BYTES = 4_500_000;
 
 async function getBackgroundRemover(){
   if (!backgroundRemovalModulePromise){
-    backgroundRemovalModulePromise = import("https://esm.sh/@bg0/browser@0.1.2")
+    backgroundRemovalModulePromise = import("https://esm.sh/@bg0/browser@0.1.1?bundle")
       .catch(error => {
         backgroundRemovalModulePromise = null;
         throw error;
@@ -1205,6 +1205,14 @@ document.addEventListener("change", async e => {
       }catch(error){
         failedCutouts++;
         console.error("BACKGROUND REMOVAL FAILED:", error);
+        const detail = String(error?.message || error || "");
+        if (/network|fetch|load|import|module|http|failed to resolve/i.test(detail)) {
+          toast("تعذر تحميل أداة إزالة الخلفية. تأكد من الإنترنت وحدّث الصفحة ثم جرّب مجدداً.");
+        } else if (/memory|gpu|webassembly|wasm|webgpu|unsupported/i.test(detail)) {
+          toast("المتصفح لم يتمكن من معالجة الصورة. جرّب صورة أصغر أو حدّث Safari.");
+        } else {
+          toast("فشلت معالجة الصورة: " + (detail.slice(0, 100) || "خطأ غير معروف") + " — جرّب JPG أو PNG.");
+        }
       }finally{
         state.pending = Math.max(0, state.pending - 1);
       }
