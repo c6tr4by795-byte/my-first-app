@@ -1150,33 +1150,33 @@ async function normalizePhotoForBrowser(file){
 }
 
 async function shrink(file){
+  // تجنّب انهيار Safari أثناء تحميل نموذج إزالة الخلفية داخل ذاكرة الهاتف.
+  // نجهّز الصورة محلياً بمقاس 1242×1242 من دون قصّ أو تمديد الجهاز.
   const inputFile = await normalizePhotoForBrowser(file);
-  const module = await getBackgroundRemover();
-  if (typeof module.removeBackground !== "function") {
-    throw new Error("خدمة إزالة الخلفية غير متاحة حالياً");
-  }
+  const im = await readImage(inputFile);
+  try{
+    if (!im.w || !im.h) throw new Error("تعذر فتح الصورة. جرّب حفظها بصيغة JPG ثم أعد المحاولة.");
+    const SIZE = 1242;
+    const canvas = document.createElement("canvas");
+    canvas.width = SIZE;
+    canvas.height = SIZE;
+    const ctx = canvas.getContext("2d", { alpha:true });
+    if (!ctx) throw new Error("المتصفح لا يدعم تجهيز الصورة. حدّث Safari وحاول مجدداً.");
 
-  let lastPercent = -1;
-  toast("جاري إزالة خلفية الجهاز بالذكاء الاصطناعي…");
-  const result = await module.removeBackground(inputFile, {
-    quality:"quality",
-    onProgress: progress => {
-      const stage = progress?.stage || "";
-      const percent = Math.max(0, Math.min(100, Math.round(Number(progress?.progress || 0) * 100)));
-      if (stage === "downloading" && percent !== lastPercent) {
-        lastPercent = percent;
-        toast("تجهيز أداة إزالة الخلفية " + percent + "%");
-      } else if (stage === "processing" && percent !== lastPercent) {
-        lastPercent = percent;
-        toast("جاري قصّ الجهاز من الخلفية… " + percent + "%");
-      }
-    }
-  });
+    ctx.clearRect(0, 0, SIZE, SIZE);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    const scale = Math.min(SIZE / im.w, SIZE / im.h);
+    const w = Math.max(1, Math.round(im.w * scale));
+    const h = Math.max(1, Math.round(im.h * scale));
+    ctx.drawImage(im.src, Math.round((SIZE - w) / 2), Math.round((SIZE - h) / 2), w, h);
 
-  if (!(result?.blob instanceof Blob) || result.blob.type !== "image/png") {
-    throw new Error("لم تنتج أداة إزالة الخلفية صورة PNG شفافة");
+    return await new Promise((resolve, reject) => {
+      canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error("تعذر حفظ الصورة بمقاس 1242×1242")), "image/png");
+    });
+  }finally{
+    if (im.src?.close) im.src.close();
   }
-  return optimizeTransparentPng(result.blob);
 }
 
 document.addEventListener("change", async e => {
@@ -1199,7 +1199,7 @@ document.addEventListener("change", async e => {
   if (ok.length){
 
     state.pending += ok.length;
-    toast("جاري تجهيز الصور وإزالة الخلفيات…");
+    toast("جاري تجهيز الصور بمقاس 1242×1242…");
 
     for (const f of ok){
       try{
@@ -1217,7 +1217,7 @@ document.addEventListener("change", async e => {
         } else if (/memory|gpu|webassembly|wasm|webgpu|unsupported/i.test(detail)) {
           toast("المتصفح لم يتمكن من معالجة الصورة. جرّب صورة أصغر أو حدّث Safari.");
         } else {
-          toast("فشلت معالجة الصورة: " + (detail.slice(0, 100) || "خطأ غير معروف") + " — جرّب JPG أو PNG.");
+          toast("تعذر تجهيز الصورة: " + (detail.slice(0, 100) || "خطأ غير معروف"));
         }
       }finally{
         state.pending = Math.max(0, state.pending - 1);
@@ -1228,7 +1228,7 @@ document.addEventListener("change", async e => {
   if (failedCutouts && rejected) {
     toast("تعذر حذف خلفية " + failedCutouts + " صورة، وتم تجاهل " + rejected + " صورة غير مدعومة أو تجاوزت الحد");
   } else if (failedCutouts) {
-    toast("تعذر حذف خلفية " + failedCutouts + " صورة؛ ما أضفناها حتى لا تظهر بخلفية");
+    toast("تعذر تجهيز " + failedCutouts + " صورة؛ جرّب JPG أو PNG أصغر حجماً.");
   } else if (rejected) {
     toast("تم تجاهل " + rejected + " صورة. الصيغ: JPG وPNG وWebP وAVIF وHEIC/HEIF، والحد " + MAX_MB + "MB للصورة");
   }
