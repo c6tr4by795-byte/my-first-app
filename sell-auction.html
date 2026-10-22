@@ -1151,29 +1151,53 @@ async function normalizePhotoForBrowser(file){
 
 async function shrink(file){
   const inputFile = await normalizePhotoForBrowser(file);
-  const body = new FormData();
-  body.append("image", inputFile, inputFile.name || "device-photo.jpg");
+  const im = await readImage(inputFile);
+  let jpeg;
+  try{
+    if (!im.w || !im.h) throw new Error("تعذر فتح الصورة. جرّب صورة JPG أو PNG.");
+    const maxEdge = 1600;
+    const scale = Math.min(1, maxEdge / Math.max(im.w, im.h));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(im.w * scale));
+    canvas.height = Math.max(1, Math.round(im.h * scale));
+    const ctx = canvas.getContext("2d", { alpha:false });
+    if (!ctx) throw new Error("المتصفح لا يدعم تجهيز الصورة. حدّث Safari وحاول مجدداً.");
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(im.src, 0, 0, canvas.width, canvas.height);
+    jpeg = await new Promise((resolve, reject) => {
+      canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error("تعذر ضغط الصورة قبل إزالة الخلفية")), "image/jpeg", 0.88);
+    });
+  }finally{
+    if (im.src?.close) im.src.close();
+  }
 
-  toast("جاري إزالة خلفية الجهاز وتجهيز المقاس…");
+  if (!jpeg || !jpeg.size) throw new Error("تعذر تجهيز الصورة للإرسال.");
+  if (jpeg.size > 4 * 1024 * 1024) throw new Error("الصورة كبيرة جداً بعد الضغط. اختر صورة أصغر.");
+
+  toast("جاري إزالة خلفية الجهاز…");
   const response = await fetch("/api/remove-background", {
     method:"POST",
-    body
+    headers:{ "Content-Type":"image/jpeg" },
+    body:jpeg
   });
 
   if (!response.ok) {
-    let message = "تعذرت إزالة الخلفية حالياً. جرّب صورة JPG أو PNG أصغر.";
+    let message = "تعذرت إزالة الخلفية حالياً. جرّب صورة أخرى.";
     try {
       const info = await response.json();
-      if (info?.error) message = String(info.error).slice(0, 180);
+      if (info?.message) message = String(info.message).slice(0, 180);
     } catch {}
     throw new Error(message);
   }
 
-  const result = await response.blob();
-  if (result.type !== "image/png" || !result.size) {
-    throw new Error("الخادم لم يُرجع صورة PNG شفافة صالحة");
+  const cutout = await response.blob();
+  if (!cutout.type.includes("image/png") || !cutout.size) {
+    throw new Error("خدمة إزالة الخلفية لم تُرجع صورة شفافة صالحة.");
   }
-  return result;
+  return optimizeTransparentPng(cutout);
 }
 
 document.addEventListener("change", async e => {
