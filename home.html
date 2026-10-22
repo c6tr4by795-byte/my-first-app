@@ -533,12 +533,18 @@ header{
 .eb-cta{flex:0 0 auto;padding:7px 14px;border-radius:11px;background:#fff;color:var(--p-dark);font-size:11.5px;font-weight:900;box-shadow:0 5px 12px rgba(20,14,48,.25)}
 
 .eb-media{
-  position:relative;z-index:1;align-self:stretch;overflow:hidden;border-radius:13px;
+  position:relative;z-index:1;align-self:stretch;overflow:hidden;isolation:isolate;border-radius:13px;
   background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);
   display:grid;place-items:center
 }
-.eb-media img{width:100%;height:100%;object-fit:contain;padding:4px}
-.eb-media .no-img{position:absolute;inset:0}
+/* خلفية مغبّشة من نفس الصورة تملي الفراغ إذا الصورة عريضة أو طويلة */
+.eb-media::before{
+  content:"";position:absolute;inset:-14px;z-index:0;pointer-events:none;
+  background:var(--img,none) center/cover no-repeat;
+  filter:blur(14px) saturate(1.1);opacity:.85
+}
+.eb-media img{position:relative;z-index:1;width:100%;height:100%;object-fit:contain;padding:0}
+.eb-media .no-img{position:absolute;inset:0;z-index:1}
 
 </style>
 </head>
@@ -1875,7 +1881,7 @@ function renderEnding(devices){
 
         </div>
 
-        <div class="eb-media">
+        <div class="eb-media"${url ? ` style="--img:url('${esc(url)}')"` : ""}>
           ${
             url
               ? `<img src="${esc(url)}" alt="${esc(deviceName(d))}" loading="lazy" decoding="async" draggable="false" onerror="this.remove()">`
