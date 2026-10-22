@@ -21,12 +21,19 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 .ib{width:39px;height:34px;display:grid;place-items:center;border:1px solid var(--edge);border-radius:12px;background:#fff;color:var(--p);box-shadow:0 7px 18px rgba(23,32,42,.045)}
 .ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 #fav[aria-pressed=true] svg{fill:var(--p)}
-.gallery{margin-top:12px;border-radius:22px;overflow:hidden;border:1px solid var(--edge);box-shadow:0 12px 28px rgba(98,70,217,.1);background:#fff}
+.gallery{position:relative;margin-top:12px;border-radius:22px;overflow:hidden;border:1px solid var(--edge);box-shadow:0 12px 28px rgba(98,70,217,.1);background:#fff}
 .slides{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
 .slides::-webkit-scrollbar{display:none}
-.slide{flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always;aspect-ratio:1/.82;display:grid;place-items:center;overflow:hidden;background:linear-gradient(145deg,#fff,#f3f0ff)}
-.slide img{width:100%;height:100%;object-fit:contain;display:block}
-.slide svg{height:50%;width:auto;opacity:.35}
+
+/* معرض الصور: إطار 4:5 مثل انستغرام. الصورة تتثبت بحجم الإطار (absolute) وتنعرض كاملة بدون قص أو تمطيط، والجوانب تنملي بخلفية مغبّشة من نفس الصورة */
+.slide{position:relative;flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always;aspect-ratio:4/5;max-height:min(68dvh,560px);display:grid;place-items:center;overflow:hidden;isolation:isolate;background:#1d1838}
+.slide::before{content:"";position:absolute;inset:-16px;z-index:0;pointer-events:none;background:var(--img,none) center/cover no-repeat;filter:blur(18px) saturate(1.1);opacity:.85}
+.slide img{position:absolute;inset:0;z-index:1;display:block;width:100%;height:100%;object-fit:contain;object-position:center}
+.slide.ph{background:linear-gradient(145deg,#fff,#f3f0ff)}
+.slide.ph::before{display:none}
+.slide svg{position:relative;z-index:1;height:50%;width:auto;opacity:.35}
+.shot-count{position:absolute;top:10px;right:10px;z-index:3;padding:4px 10px;border-radius:999px;background:rgba(20,14,48,.55);color:#fff;font-size:11px;font-weight:900;direction:ltr;font-variant-numeric:tabular-nums;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);pointer-events:none}
+
 .dots{display:flex;justify-content:center;gap:6px;margin-top:9px}
 .dot{width:6px;height:6px;border-radius:50%;background:#d6d2ea;transition:.2s}
 .dot.on{width:19px;border-radius:999px;background:var(--p)}
@@ -148,7 +155,7 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
     <div class="brand"><strong>MZAD</strong><span>PHONE</span></div>
     <button class="ib" id="fav" type="button" aria-pressed="false" aria-label="إضافة إلى المفضلة"><svg viewBox="0 0 24 24"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/></svg></button>
   </div>
-  <section class="gallery" aria-label="صور الجهاز"><div class="slides" id="slides" dir="ltr"></div></section>
+  <section class="gallery" aria-label="صور الجهاز"><div class="slides" id="slides" dir="ltr"></div><span class="shot-count" id="shotCount" hidden></span></section>
   <div class="dots" id="dots" dir="ltr"></div>
 </header>
 
@@ -325,9 +332,11 @@ function renderStatic(){
     + [d.condition_grade, d.storage, d.color, bat].filter(Boolean).map(x => `<span class="chip">${esc(x)}</span>`).join("");
 
   $("slides").innerHTML = S.imgs.length
-    ? S.imgs.map((u,i) => `<div class="slide"><img src="${esc(u)}" alt="${esc(name)} - ${i+1}" ${i?'loading="lazy" ':""}decoding="async" draggable="false" onerror="this.style.display='none'"></div>`).join("")
-    : `<div class="slide">${PH}</div>`;
+    ? S.imgs.map((u,i) => `<div class="slide" style="--img:url('${esc(u)}')"><img src="${esc(u)}" alt="${esc(name)} - ${i+1}" ${i?'loading="lazy" ':""}decoding="async" draggable="false" onerror="this.style.display='none'"></div>`).join("")
+    : `<div class="slide ph">${PH}</div>`;
   $("dots").innerHTML = S.imgs.length > 1 ? S.imgs.map((_,i) => `<span class="dot${i?"":" on"}"></span>`).join("") : "";
+  $("shotCount").hidden = S.imgs.length < 2;
+  $("shotCount").textContent = "1/" + S.imgs.length;
 
   $("aNo").textContent = a.auction_number || a.id;
   $("aStart").textContent = money(a.starting_price_iqd) + " د.ع";
@@ -347,6 +356,7 @@ $("slides").addEventListener("scroll", e => {
   const el = e.target, w = el.clientWidth; if (!w) return;
   const i = Math.round(Math.abs(el.scrollLeft) / w);
   [...$("dots").children].forEach((x,k) => x.classList.toggle("on", k === i));
+  if (S.imgs.length > 1) $("shotCount").textContent = (Math.min(i, S.imgs.length - 1) + 1) + "/" + S.imgs.length;
 }, { passive:true });
 
 /* ============ الجزء الحي ============ */
