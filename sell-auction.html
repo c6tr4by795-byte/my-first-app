@@ -1045,14 +1045,23 @@ $("photos").addEventListener("click", e => {
   invalidate(); renderPhotos();
 });
 
-/* ===== ضغط الصورة وترتيبها مثل انستغرام وفيسبوك =====
-   كل صورة تتحول إلى إطار 4:5 بحجم أقصاه 1080×1350 وجودة JPEG 84%.
-   - إذا الصورة قريبة من 4:5 تملي الإطار بقص خفيف جداً.
-   - غير ذلك تنعرض كاملة بالنص وبجوانبها خلفية مغبّشة من نفس الصورة.
-   لا تمطيط أبداً: النسبة الأصلية دائماً محفوظة. */
-const POST_MAX_W = 1080;
-const POST_MIN_W = 540;
-const POST_RATIO = 1.25;
+/* ===== إزالة خلفية الصورة فعلياً + الحفاظ على شكل الجهاز =====
+   المعالجة تتم داخل متصفح المستخدم، ثم تُرفع PNG بشفافية حقيقية.
+   لا نقصّ الصورة إلى 4:5 ولا نرسم خلفية بيضاء أو ضبابية خلفها. */
+let backgroundRemovalModulePromise = null;
+const CUTOUT_MAX_EDGE = 1800;
+const CUTOUT_MAX_BYTES = 4_500_000;
+
+async function getBackgroundRemover(){
+  if (!backgroundRemovalModulePromise){
+    backgroundRemovalModulePromise = import("https://esm.sh/@bg0/browser@0.1.2")
+      .catch(error => {
+        backgroundRemovalModulePromise = null;
+        throw error;
+      });
+  }
+  return backgroundRemovalModulePromise;
+}
 
 async function readImage(file){
   try{
@@ -1074,66 +1083,59 @@ async function readImage(file){
   }
 }
 
-async function shrink(file){
+async function optimizeTransparentPng(blob){
+  const im = await readImage(blob);
   try{
-    const im = await readImage(file);
-    if (!im.w || !im.h) return file;
+    if (!im.w || !im.h) throw new Error("تعذر قراءة الصورة بعد إزالة الخلفية");
+    const longest = Math.max(im.w, im.h);
+    if (longest <= CUTOUT_MAX_EDGE && blob.size <= CUTOUT_MAX_BYTES) return blob;
 
-    const ar = im.w / im.h;
-    const W = Math.max(POST_MIN_W, Math.min(POST_MAX_W, Math.round(Math.max(im.w, im.h / POST_RATIO))));
-    const H = Math.round(W * POST_RATIO);
-
+    const scale = Math.min(1, CUTOUT_MAX_EDGE / longest);
     const c = document.createElement("canvas");
-    c.width = W;
-    c.height = H;
-
-    const g = c.getContext("2d");
+    c.width = Math.max(1, Math.round(im.w * scale));
+    c.height = Math.max(1, Math.round(im.h * scale));
+    const g = c.getContext("2d", { alpha:true });
+    if (!g) throw new Error("المتصفح لا يدعم تجهيز صورة شفافة");
+    g.clearRect(0, 0, c.width, c.height);
     g.imageSmoothingEnabled = true;
     g.imageSmoothingQuality = "high";
-    g.fillStyle = "#ffffff";
-    g.fillRect(0, 0, W, H);
+    g.drawImage(im.src, 0, 0, c.width, c.height);
 
-    if (ar >= 0.72 && ar <= 0.9){
-
-      const s = Math.max(W / im.w, H / im.h);
-      const dw = im.w * s;
-      const dh = im.h * s;
-      g.drawImage(im.src, (W - dw) / 2, (H - dh) / 2, dw, dh);
-
-    }else{
-
-      /* خلفية مغبّشة: تصغير شديد ثم تكبير على مرحلتين (تعمل بكل المتصفحات) */
-      const a = document.createElement("canvas");
-      a.width = 24; a.height = 30;
-      const ag = a.getContext("2d");
-      ag.imageSmoothingQuality = "high";
-      const bs = Math.max(24 / im.w, 30 / im.h);
-      ag.drawImage(im.src, (24 - im.w * bs) / 2, (30 - im.h * bs) / 2, im.w * bs, im.h * bs);
-
-      const b = document.createElement("canvas");
-      b.width = 120; b.height = 150;
-      const bg = b.getContext("2d");
-      bg.imageSmoothingQuality = "high";
-      bg.drawImage(a, 0, 0, 120, 150);
-
-      g.drawImage(b, 0, 0, W, H);
-      g.fillStyle = "rgba(20,14,48,.28)";
-      g.fillRect(0, 0, W, H);
-
-      const s = Math.min(W / im.w, H / im.h);
-      const dw = im.w * s;
-      const dh = im.h * s;
-      g.drawImage(im.src, (W - dw) / 2, (H - dh) / 2, dw, dh);
-    }
-
-    if (im.src.close) im.src.close();
-
-    return await new Promise(r => c.toBlob(blob => r(blob || file), "image/jpeg", .84));
-
-  }catch(error){
-    console.warn("IMAGE PREPARE FAILED:", error);
-    return file;
+    return await new Promise((resolve, reject) => {
+      c.toBlob(out => out ? resolve(out) : reject(new Error("تعذر حفظ الصورة الشفافة")), "image/png");
+    });
+  }finally{
+    if (im.src?.close) im.src.close();
   }
+}
+
+async function shrink(file){
+  const module = await getBackgroundRemover();
+  if (typeof module.removeBackground !== "function") {
+    throw new Error("خدمة إزالة الخلفية غير متاحة حالياً");
+  }
+
+  let lastPercent = -1;
+  toast("جاري إزالة خلفية الجهاز بالذكاء الاصطناعي…");
+  const result = await module.removeBackground(file, {
+    quality:"quality",
+    onProgress: progress => {
+      const stage = progress?.stage || "";
+      const percent = Math.max(0, Math.min(100, Math.round(Number(progress?.progress || 0) * 100)));
+      if (stage === "downloading" && percent !== lastPercent) {
+        lastPercent = percent;
+        toast("تجهيز أداة إزالة الخلفية " + percent + "%");
+      } else if (stage === "processing" && percent !== lastPercent) {
+        lastPercent = percent;
+        toast("جاري قصّ الجهاز من الخلفية… " + percent + "%");
+      }
+    }
+  });
+
+  if (!(result?.blob instanceof Blob) || result.blob.type !== "image/png") {
+    throw new Error("لم تنتج أداة إزالة الخلفية صورة PNG شفافة");
+  }
+  return optimizeTransparentPng(result.blob);
 }
 
 document.addEventListener("change", async e => {
@@ -1152,27 +1154,33 @@ document.addEventListener("change", async e => {
     else rejected++;
   }
 
+  let failedCutouts = 0;
   if (ok.length){
 
     state.pending += ok.length;
-    toast("جاري تجهيز الصور…");
+    toast("جاري تجهيز الصور وإزالة الخلفيات…");
 
     for (const f of ok){
-
-      const blob = await shrink(f);
-
-      state.pending--;
-
-      if (state.files.length >= MAX_PHOTOS) continue;
-
-      state.files.push({ file:f, blob, url:URL.createObjectURL(blob), fresh:true });
-
-      invalidate();
-      renderPhotos();
+      try{
+        const blob = await shrink(f);
+        if (state.files.length >= MAX_PHOTOS) continue;
+        state.files.push({ file:f, blob, url:URL.createObjectURL(blob), fresh:true });
+        invalidate();
+        renderPhotos();
+      }catch(error){
+        failedCutouts++;
+        console.error("BACKGROUND REMOVAL FAILED:", error);
+      }finally{
+        state.pending = Math.max(0, state.pending - 1);
+      }
     }
   }
 
-  if (rejected) toast(`تم تجاهل ${rejected} صورة (الحد ${MAX_PHOTOS} صور، وكل صورة أقل من ${MAX_MB}MB)`);
+  if (failedCutouts) {
+    toast(`تعذر حذف خلفية ${failedCutouts} صورة؛ ما أضفناها حتى لا تظهر بخلفية`);
+  } else if (rejected) {
+    toast(`تم تجاهل ${rejected} صورة (الحد ${MAX_PHOTOS} صور، وكل صورة أقل من ${MAX_MB}MB)`);
+  }
 });
 
 /* ===== الملخص والمعاينة ===== */
@@ -1366,8 +1374,10 @@ async function auth(){
 }
 
 const extFor = (blob, file) => {
+  if (blob.type === "image/png") return "png";
   if (blob.type === "image/jpeg") return "jpg";
-  return (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+  if (blob.type === "image/webp") return "webp";
+  return (file.name.split(".").pop() || "png").toLowerCase().replace(/[^a-z0-9]/g, "") || "png";
 };
 
 async function uploadImages(deviceId){
