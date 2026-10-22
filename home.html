@@ -503,33 +503,37 @@ header{
 .tw-b{bottom:0;left:0;transform:scaleY(-1)}
 
 
-/* ============ تنتهي قريباً ============ */
-.ending-section{margin-top:16px}
+/* ============ بنر آخر فرصة للمزايدة ============ */
+.ending-section{margin-top:14px;padding-top:0;margin-inline:-12px}
 
-.end-track{
-  display:flex;gap:10px;margin:-6px -10px -10px;padding:6px 10px 12px;
-  scroll-padding-inline:10px;scroll-snap-type:x proximity;overflow-x:auto;scrollbar-width:none;
-  overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch
+.end-ban{
+  position:relative;isolation:isolate;overflow:hidden;flex:0 0 100%;
+  height:clamp(205px,28dvh,230px);
+  padding:14px 16px;border-radius:22px;
+  scroll-snap-align:center;scroll-snap-stop:always;cursor:pointer;
+  display:grid;grid-template-columns:minmax(0,1fr) 42%;gap:12px;align-items:center;
+  color:#fff;background:linear-gradient(145deg,#4a34b8 0%,#6246d9 55%,#8473ec 100%);
+  box-shadow:0 10px 22px -8px rgba(98,70,217,.35)
 }
-.end-track::-webkit-scrollbar{display:none}
+.end-ban:active{transform:scale(.98)}
 
-.end-card{
-  flex:0 0 138px;scroll-snap-align:start;cursor:pointer;overflow:hidden;
-  background:#fff;border:1px solid var(--edge);border-radius:18px;
-  box-shadow:0 10px 20px -14px rgba(98,70,217,.4);transition:transform .18s ease
+.eb-web{position:absolute;top:0;right:0;z-index:0;width:150px;height:150px;opacity:.16;pointer-events:none;transform:scaleX(-1)}
+.eb-web svg{display:block;width:100%;height:100%}
+
+.eb-copy{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0}
+.eb-badge{padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);font-size:10px;font-weight:900}
+.eb-title{margin:0;max-width:100%;font-size:17px;font-weight:950;line-height:1.25;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.eb-price small{display:block;font-size:9.5px;font-weight:800;color:rgba(255,255,255,.75)}
+.eb-price b{display:block;margin-top:1px;font-size:17px;font-weight:950;white-space:nowrap}
+.eb-cta{padding:8px 18px;border-radius:12px;background:#fff;color:var(--p-dark);font-size:12px;font-weight:900;box-shadow:0 6px 14px rgba(20,14,48,.25)}
+
+.eb-media{
+  position:relative;z-index:1;align-self:stretch;overflow:hidden;border-radius:16px;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);
+  display:grid;place-items:center
 }
-.end-card:active{transform:scale(.97)}
-
-.end-media{
-  position:relative;aspect-ratio:4/3;overflow:hidden;
-  background:linear-gradient(160deg,#7b61e8,#3b2a92)
-}
-.end-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.end-media .cd{position:absolute;top:7px;inset-inline-start:7px;z-index:2;font-size:11px;padding:3px 8px}
-
-.end-info{padding:9px 10px 10px;display:flex;flex-direction:column;gap:4px}
-.end-name{margin:0;font-size:12px;font-weight:900;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.end-price{font-size:12.5px;font-weight:950;color:var(--p-dark);white-space:nowrap}
+.eb-media img{width:100%;height:100%;object-fit:contain;padding:6px}
+.eb-media .no-img{position:absolute;inset:0}
 
 </style>
 </head>
@@ -634,23 +638,6 @@ header{
 
 </section>
 
-<section class="section ending-section" id="endingSection" hidden>
-
-  <div class="section-head">
-
-    <h2 class="section-title">
-      تنتهي قريباً
-      <span class="section-sub">آخر فرصة للمزايدة</span>
-    </h2>
-
-    <a class="section-link" href="auctions.html">عرض الكل</a>
-
-  </div>
-
-  <div class="end-track" id="endingTrack"></div>
-
-</section>
-
 <section class="section actions-section">
 
   <div class="actions-grid">
@@ -708,6 +695,14 @@ header{
     </button>
 
   </div>
+
+</section>
+
+<section class="section ending-section" id="endingSection" hidden>
+
+  <div class="ad-track" id="endingTrack"></div>
+
+  <div class="ad-dots" id="endingDots"></div>
 
 </section>
 
@@ -1811,13 +1806,19 @@ async function loadLiveCount(){
 }
 
 /* ================================
-   تنتهي قريباً — أقرب 3 مزادات تخلص خلال 3 أيام
+   بنر آخر فرصة للمزايدة — أقرب مزادين ينتهون (خلال 3 أيام)
+   لتعرض مزاد واحد فقط غيّر MAX_ENDING إلى 1
 ================================ */
+
+const MAX_ENDING = 2;
+
+const END_WEB = '<svg viewBox="0 0 200 200" fill="none" stroke="#fff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M0 0L184.0 0.0M0 0L170.0 70.4M0 0L130.1 130.1M0 0L70.4 170.0M0 0L0.0 184.0M46.0 0.0L42.5 17.6L32.5 32.5L17.6 42.5L0.0 46.0M92.0 0.0L85.0 35.2L65.1 65.1L35.2 85.0L0.0 92.0M138.0 0.0L127.5 52.8L97.6 97.6L52.8 127.5L0.0 138.0"/></svg>';
 
 function renderEnding(devices){
 
   const sec = $("endingSection");
   const track = $("endingTrack");
+  const dotsBox = $("endingDots");
 
   if(!sec || !track) return;
 
@@ -1828,12 +1829,13 @@ function renderEnding(devices){
     .map(d => ({ d, left: new Date(d.ends_at).getTime() - now }))
     .filter(x => x.left > 0 && x.left < 3 * 86400e3)
     .sort((a,b) => a.left - b.left)
-    .slice(0,3)
+    .slice(0, MAX_ENDING)
     .map(x => x.d);
 
   if(!soon.length){
     sec.hidden = true;
     track.innerHTML = "";
+    dotsBox.innerHTML = "";
     return;
   }
 
@@ -1842,20 +1844,33 @@ function renderEnding(devices){
     const url = getDeviceImageUrl(getDeviceImages(d.images)[0]);
 
     return `
-      <article class="end-card" data-id="${esc(d.id)}" role="link" tabindex="0">
+      <article class="end-ban" data-id="${esc(d.id)}" role="link" tabindex="0">
 
-        <div class="end-media">
+        <div class="eb-web" aria-hidden="true">${END_WEB}</div>
+
+        <div class="eb-copy">
+
+          <span class="eb-badge">آخر فرصة للمزايدة</span>
+
+          <h3 class="eb-title">${esc(deviceName(d))}</h3>
+
+          <span class="cd" data-end="${esc(d.ends_at)}">--:--:--</span>
+
+          <div class="eb-price">
+            <small>السعر الحالي</small>
+            <b>${esc(formatDevicePrice(d.price))}</b>
+          </div>
+
+          <span class="eb-cta">زايد الآن</span>
+
+        </div>
+
+        <div class="eb-media">
           ${
             url
               ? `<img src="${esc(url)}" alt="${esc(deviceName(d))}" loading="lazy" decoding="async" draggable="false" onerror="this.remove()">`
               : `<div class="no-img">${PH_ICON}</div>`
           }
-          <span class="cd" data-end="${esc(d.ends_at)}">--:--:--</span>
-        </div>
-
-        <div class="end-info">
-          <h3 class="end-name">${esc(deviceName(d))}</h3>
-          <b class="end-price">${esc(formatDevicePrice(d.price))}</b>
         </div>
 
       </article>
@@ -1863,12 +1878,29 @@ function renderEnding(devices){
   }).join("");
 
   track.onclick = event => {
-    const card = event.target.closest(".end-card");
+    const card = event.target.closest(".end-ban");
     if(card && card.dataset.id)
       go(`auction-details.html?auction=${encodeURIComponent(card.dataset.id)}`);
   };
 
   sec.hidden = false;
+
+  dotsBox.innerHTML = "";
+
+  if(soon.length > 1){
+
+    dotsBox.innerHTML =
+      soon.map((_,i) => `<span class="ad-dot${i ? "" : " active"}"></span>`).join("");
+
+    const cards = [...track.querySelectorAll(".end-ban")];
+    const dots = [...dotsBox.children];
+
+    track.onscroll = () => {
+      const step = cards[0].offsetWidth + 12;
+      const cur = Math.min(cards.length - 1, Math.round(Math.abs(track.scrollLeft) / step));
+      dots.forEach((dot,k) => dot.classList.toggle("active", k === cur));
+    };
+  }
 
   tickTimers();
 }
