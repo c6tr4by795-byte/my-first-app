@@ -21,15 +21,15 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 .ib{width:39px;height:34px;display:grid;place-items:center;border:1px solid var(--edge);border-radius:12px;background:#fff;color:var(--p);box-shadow:0 7px 18px rgba(23,32,42,.045)}
 .ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 #fav[aria-pressed=true] svg{fill:var(--p)}
-.gallery{position:relative;margin-top:12px;border-radius:22px;overflow:hidden;border:1px solid var(--edge);box-shadow:0 12px 28px rgba(98,70,217,.1);background:#fff}
+.gallery{position:relative;margin-top:12px;border-radius:22px;overflow:hidden;border:1px solid var(--edge);box-shadow:0 12px 28px rgba(98,70,217,.1);background:transparent}
 .slides{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
 .slides::-webkit-scrollbar{display:none}
 
-/* معرض الصور: إطار 4:5 مثل انستغرام. الصورة تتثبت بحجم الإطار (absolute) وتنعرض كاملة بدون قص أو تمطيط، والجوانب تنملي بخلفية مغبّشة من نفس الصورة */
-.slide{position:relative;flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always;aspect-ratio:4/5;max-height:min(68dvh,560px);display:grid;place-items:center;overflow:hidden;isolation:isolate;background:#1d1838}
-.slide::before{content:"";position:absolute;inset:-16px;z-index:0;pointer-events:none;background:var(--img,none) center/cover no-repeat;filter:blur(18px) saturate(1.1);opacity:.85}
-.slide img{position:absolute;inset:0;z-index:1;display:block;width:100%;height:100%;object-fit:contain;object-position:center}
-.slide.ph{background:linear-gradient(145deg,#fff,#f3f0ff)}
+/* معرض الصور: إظهار الصورة كاملة بنسبة أبعادها، بلا قص أو خلفية ضبابية مصطنعة */
+.slide{position:relative;flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always;aspect-ratio:4/5;max-height:min(68dvh,560px);display:grid;place-items:center;overflow:hidden;isolation:isolate;background:transparent}
+.slide::before{display:none}
+.slide img{position:absolute;inset:0;z-index:1;display:block;width:100%;height:100%;object-fit:contain;object-position:center;padding:4px;background:transparent}
+.slide.ph{background:transparent}
 .slide.ph::before{display:none}
 .slide svg{position:relative;z-index:1;height:50%;width:auto;opacity:.35}
 .shot-count{position:absolute;top:10px;right:10px;z-index:3;padding:4px 10px;border-radius:999px;background:rgba(20,14,48,.55);color:#fff;font-size:11px;font-weight:900;direction:ltr;font-variant-numeric:tabular-nums;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);pointer-events:none}
