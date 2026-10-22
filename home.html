@@ -1231,10 +1231,12 @@ function endingAuctions(){
 
   const now = Date.now();
 
+  /* عرض تجريبي للبنر: اعرض المزادات النشطة حتى لو بقي على نهايتها أكثر من 30 دقيقة،
+     لكن لا تعرض عدّاد انتهاء داخل هذا البنر. */
   return LIVE_DEVICES
     .filter(d => isAuction(d) && d.ends_at)
     .map(d => ({ d, left: new Date(d.ends_at).getTime() - now }))
-    .filter(x => x.left > 0 && x.left <= ENDING_WINDOW_MS)
+    .filter(x => x.left > 0)
     .sort((a,b) => a.left - b.left)
     .slice(0, MAX_ENDING)
     .map(x => x.d);
@@ -1252,8 +1254,7 @@ function endSlideHTML(d){
       <div class="eb-copy">
 
         <div class="eb-row">
-          <span class="eb-badge">آخر فرصة</span>
-          <span class="cd" data-end="${esc(d.ends_at)}">--:--:--</span>
+          <span class="eb-badge">تجريبي</span>
         </div>
 
         <h3 class="eb-title">${esc(deviceName(d))}</h3>
