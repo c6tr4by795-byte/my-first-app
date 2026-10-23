@@ -573,6 +573,61 @@ header{
   background:linear-gradient(90deg,#ffb36b,#ff6a2b);transition:width 1s linear
 }
 
+/* ============ حاويات الأجهزة الملونة (مميزة / أحدث) ============ */
+.dev-block{scroll-margin-top:12px}
+
+.dev-box{
+  position:relative;isolation:isolate;overflow:hidden;
+  margin-inline:-10px;padding:14px 10px 8px;border-radius:26px;
+  border:1px solid rgba(255,255,255,.14)
+}
+.dev-featured{
+  background:
+    radial-gradient(circle at 90% 0%,rgba(255,255,255,.2) 0%,rgba(255,255,255,0) 45%),
+    linear-gradient(145deg,#3f2aa8 0%,#6246d9 55%,#8473ec 100%);
+  box-shadow:0 18px 34px -18px rgba(74,52,184,.6)
+}
+.dev-latest{
+  background:
+    radial-gradient(circle at 90% 0%,rgba(255,255,255,.14) 0%,rgba(255,255,255,0) 45%),
+    linear-gradient(145deg,#12163a 0%,#1c2762 55%,#27428a 100%);
+  box-shadow:0 18px 34px -18px rgba(18,22,58,.65)
+}
+
+.dev-web{position:absolute;top:0;right:0;z-index:0;width:130px;height:130px;opacity:.14;pointer-events:none;transform:scaleX(-1)}
+.dev-web svg{display:block;width:100%;height:100%}
+
+.dev-box>.section-head,.dev-box>.rail{position:relative;z-index:1}
+
+.dev-box .section-title{color:#fff}
+.dev-box .section-sub{color:rgba(255,255,255,.78)}
+.dev-box .section-link{
+  padding:6px 13px;border-radius:999px;color:#fff;
+  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3)
+}
+
+/* الكروت تبقى بنفس الحجم، فقط حد خفيف حتى ما تضيع فوق الخلفية */
+.dev-box .fcard{
+  outline:1px solid rgba(255,255,255,.24);outline-offset:-1px;
+  box-shadow:0 14px 26px -12px rgba(0,0,0,.5)
+}
+.dev-box .sk{
+  border-color:rgba(255,255,255,.16);
+  background:linear-gradient(90deg,rgba(255,255,255,.1) 25%,rgba(255,255,255,.22) 50%,rgba(255,255,255,.1) 75%);
+  background-size:200% 100%
+}
+
+/* أقراص الانتقال السريع تحت الأزرار الثلاثة */
+.jump-pills{display:flex;gap:8px;margin-top:14px}
+.jump-pill{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:10px 10px;border-radius:999px;background:#fff;color:var(--p-dark);
+  border:1px solid var(--edge);font-size:11.5px;font-weight:900;white-space:nowrap;
+  box-shadow:0 8px 16px -10px rgba(98,70,217,.4);transition:transform .18s ease
+}
+.jump-pill:active{transform:scale(.95)}
+.jump-pill svg{width:13px;height:13px}
+
 </style>
 </head>
 
@@ -744,9 +799,18 @@ header{
 
 </section>
 
+<div class="jump-pills">
+  <button class="jump-pill" type="button" data-jump="featuredSection">أجهزة مميزة <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <button class="jump-pill" type="button" data-jump="latestSection">أحدث الأجهزة <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+</div>
+
 </div><!-- /first-screen -->
 
-<section class="section" id="featuredSection">
+<section class="section dev-block" id="featuredSection">
+
+<div class="dev-box dev-featured">
+
+  <div class="dev-web" aria-hidden="true"><svg viewBox="0 0 200 200" fill="none" stroke="#fff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M0 0L184.0 0.0M0 0L170.0 70.4M0 0L130.1 130.1M0 0L70.4 170.0M0 0L0.0 184.0M46.0 0.0L42.5 17.6L32.5 32.5L17.6 42.5L0.0 46.0M92.0 0.0L85.0 35.2L65.1 65.1L35.2 85.0L0.0 92.0M138.0 0.0L127.5 52.8L97.6 97.6L52.8 127.5L0.0 138.0"/></svg></div>
 
   <div class="section-head">
 
@@ -761,9 +825,15 @@ header{
 
   <div class="rail" id="featuredTrack"></div>
 
+</div>
+
 </section>
 
-<section class="section">
+<section class="section dev-block" id="latestSection">
+
+<div class="dev-box dev-latest">
+
+  <div class="dev-web" aria-hidden="true"><svg viewBox="0 0 200 200" fill="none" stroke="#fff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M0 0L184.0 0.0M0 0L170.0 70.4M0 0L130.1 130.1M0 0L70.4 170.0M0 0L0.0 184.0M46.0 0.0L42.5 17.6L32.5 32.5L17.6 42.5L0.0 46.0M92.0 0.0L85.0 35.2L65.1 65.1L35.2 85.0L0.0 92.0M138.0 0.0L127.5 52.8L97.6 97.6L52.8 127.5L0.0 138.0"/></svg></div>
 
   <div class="section-head">
 
@@ -777,6 +847,8 @@ header{
   </div>
 
   <div class="rail" id="latestTrack"></div>
+
+</div>
 
 </section>
 
@@ -2560,6 +2632,19 @@ setInterval(()=>{
 },45000);
 
 /* ================================
+   الانتقال السريع للأقسام
+================================ */
+
+function bindJump(){
+  document.querySelectorAll("[data-jump]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const target = $(btn.dataset.jump);
+      if(target) target.scrollIntoView({ behavior:"smooth", block:"start" });
+    });
+  });
+}
+
+/* ================================
    START
 ================================ */
 
@@ -2572,6 +2657,8 @@ bindNavigation();
 bindSearch();
 
 bindCategories();
+
+bindJump();
 
 // لا ترسم أزرار المفضلة قبل تحديد هوية الحساب الحالي.
 initFavoriteScope().finally(() => loadDevices());
