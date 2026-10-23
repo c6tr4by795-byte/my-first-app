@@ -512,12 +512,15 @@ header{
 
 .end-ban{
   position:relative;isolation:isolate;overflow:hidden;flex:0 0 100%;
-  height:124px;
-  padding:10px 12px;border-radius:20px;
+  height:124px;padding:12px 14px 14px;border-radius:20px;
   scroll-snap-align:center;scroll-snap-stop:always;cursor:pointer;
-  display:grid;grid-template-columns:minmax(0,1fr) 34%;gap:10px;align-items:center;
-  color:#fff;background:linear-gradient(145deg,#4a34b8 0%,#6246d9 55%,#8473ec 100%);
-  box-shadow:0 10px 22px -10px rgba(98,70,217,.35);
+  display:flex;align-items:center;
+  color:#fff;
+  background:
+    radial-gradient(circle at 88% 15%,rgba(255,255,255,.2) 0%,rgba(255,255,255,0) 45%),
+    linear-gradient(145deg,#3f2aa8 0%,#6246d9 55%,#8473ec 100%);
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 10px 22px -10px rgba(98,70,217,.45);
   transition:transform .18s ease
 }
 .end-ban:active{transform:scale(.98)}
@@ -525,11 +528,33 @@ header{
 .eb-web{position:absolute;top:0;right:0;z-index:0;width:110px;height:110px;opacity:.16;pointer-events:none;transform:scaleX(-1)}
 .eb-web svg{display:block;width:100%;height:100%}
 
-.eb-copy{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:center;gap:6px;min-width:0;width:100%}
+/* مطرقة مزاد كبيرة شفافة بالخلفية */
+.eb-gavel{
+  position:absolute;inset-inline-end:-6px;top:50%;z-index:0;
+  width:112px;height:112px;margin-top:-56px;color:#fff;opacity:.13;
+  transform:rotate(-12deg);pointer-events:none
+}
+.eb-gavel svg{display:block;width:100%;height:100%}
+
+/* توهج هادئ */
+.eb-glow{
+  position:absolute;z-index:0;width:130px;height:130px;border-radius:50%;
+  inset-inline-end:-30px;bottom:-60px;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,170,90,.35) 0%,rgba(255,170,90,0) 70%);
+  animation:ebglow 3s ease-in-out infinite alternate
+}
+@keyframes ebglow{from{opacity:.5;transform:scale(.9)}to{opacity:1;transform:scale(1.1)}}
+
+.eb-copy{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:center;gap:7px;min-width:0;width:100%}
 .eb-row{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
-.eb-badge{padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);font-size:9.5px;font-weight:900;white-space:nowrap}
+.eb-badge{
+  display:inline-flex;align-items:center;gap:4px;padding:3px 9px 3px 10px;border-radius:999px;
+  background:linear-gradient(145deg,#ff8a3d,#e8590c);border:1px solid rgba(255,255,255,.35);
+  font-size:9.5px;font-weight:900;white-space:nowrap;box-shadow:0 4px 10px rgba(232,89,12,.4)
+}
+.eb-badge svg{width:11px;height:11px}
 .eb-row .cd{font-size:11px;padding:3px 8px}
-.eb-title{margin:0;max-width:100%;font-size:15px;font-weight:950;line-height:1.25;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.eb-title{margin:0;max-width:100%;font-size:17px;font-weight:950;line-height:1.25;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .eb-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
 .eb-price{min-width:0}
 .eb-price small{display:block;font-size:9px;font-weight:800;color:rgba(255,255,255,.75)}
@@ -541,23 +566,12 @@ header{
 }
 .eb-cta:active{transform:scale(.94)}
 
-.eb-media{
-  position:relative;z-index:1;align-self:stretch;overflow:hidden;isolation:isolate;border-radius:14px;
-  background:#1d1838;border:1px solid rgba(255,255,255,.25);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)
+/* شريط الوقت المتبقي */
+.eb-bar{position:absolute;inset-inline:0;bottom:0;height:4px;background:rgba(255,255,255,.15);z-index:2}
+.eb-bar i{
+  display:block;height:100%;width:100%;border-radius:0 4px 4px 0;
+  background:linear-gradient(90deg,#ffb36b,#ff6a2b);transition:width 1s linear
 }
-/* خلفية مغبّشة من نفس الصورة تملي الجوانب إذا الصورة طويلة أو عريضة */
-.eb-media::before{
-  content:"";position:absolute;inset:-14px;z-index:0;pointer-events:none;
-  background:var(--img,none) center/cover no-repeat;
-  filter:blur(14px) saturate(1.1);opacity:.85
-}
-/* الصورة تتثبت بحجم الإطار بالضبط (absolute) حتى ما تنزاح ولا تنقص */
-.eb-media img{
-  position:absolute;inset:0;z-index:1;display:block;
-  width:100%;height:100%;object-fit:contain;object-position:center
-}
-.eb-media .no-img{position:absolute;inset:0;z-index:1;display:grid;place-items:center}
 
 </style>
 </head>
@@ -1183,17 +1197,27 @@ function endingAuctions(){
 
 function endSlideHTML(d){
 
-  const url = getDeviceImageUrl(getDeviceImages(d.images)[0]);
-
   return `
     <article class="end-ban" data-key="${esc(d.id)}" data-id="${esc(d.id)}" role="link" tabindex="0">
 
       <div class="eb-web" aria-hidden="true">${END_WEB}</div>
+      <div class="eb-glow" aria-hidden="true"></div>
+
+      <div class="eb-gavel" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="3.5" width="10" height="5" rx="1.3" transform="rotate(45 14 6)"/>
+          <path d="M12.2 7.8 4.5 15.5"/>
+          <path d="M4 21h9"/>
+        </svg>
+      </div>
 
       <div class="eb-copy">
 
         <div class="eb-row">
-          <span class="eb-badge">آخر فرصة</span>
+          <span class="eb-badge">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 3-1.5 4.5-3 6.5C7.5 10.5 7 12 7 13.5a5 5 0 0 0 10 0c0-2-1-3.3-2-4.5-.3 1.2-1 2-1.8 2.3C13.6 8.6 13.4 4.5 12 2Z"/></svg>
+            آخر فرصة
+          </span>
           <span class="cd" data-end="${esc(d.ends_at)}">--:--:--</span>
         </div>
 
@@ -1212,13 +1236,7 @@ function endSlideHTML(d){
 
       </div>
 
-      <div class="eb-media"${url ? ` style="--img:url('${esc(url)}')"` : ""}>
-        ${
-          url
-            ? `<img src="${esc(url)}" alt="${esc(deviceName(d))}" decoding="async" draggable="false" onerror="this.remove()">`
-            : `<div class="no-img">${PH_ICON}</div>`
-        }
-      </div>
+      <div class="eb-bar" aria-hidden="true"><i data-prog="${esc(d.ends_at)}"></i></div>
 
     </article>
   `;
@@ -1639,6 +1657,12 @@ function tickTimers(){
     el.textContent = fmtLeft(left);
 
     el.classList.toggle("urgent", left > 0 && left < 3600e3);
+  });
+
+  /* شريط الوقت المتبقي ببنر آخر فرصة */
+  document.querySelectorAll("[data-prog]").forEach(el => {
+    const left = new Date(el.dataset.prog).getTime() - now;
+    el.style.width = Math.max(0, Math.min(100, left / ENDING_WINDOW_MS * 100)) + "%";
   });
 }
 
