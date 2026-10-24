@@ -629,6 +629,18 @@ header{
 .jump-pill:active{transform:scale(.95)}
 .jump-pill svg{width:13px;height:13px}
 
+/* إخفاء الشريط السفلي عند النزول وإظهاره عند الصعود */
+.bottom-wrap{
+  transition:transform .3s cubic-bezier(.2,.8,.3,1);
+  will-change:transform
+}
+.bottom-wrap.nav-hidden{
+  transform:translateY(calc(100% + 24px));
+}
+/* التوست ينزل مع الشريط */
+.toast{transition:.25s ease, bottom .3s ease}
+body.nav-is-hidden .toast{bottom:calc(24px + var(--safe-bottom))}
+
 </style>
 </head>
 
@@ -2644,6 +2656,53 @@ function bindJump(){
     });
   });
 }
+
+/* ================================
+   إخفاء الشريط السفلي عند النزول
+================================ */
+
+(function(){
+
+  const wrap = document.querySelector(".bottom-wrap");
+  if(!wrap) return;
+
+  let lastY = window.scrollY;
+  let ticking = false;
+
+  const THRESHOLD = 8;   // أقل حركة حتى يتفاعل
+  const TOP_ZONE = 60;   // قرب أعلى الصفحة يظل الشريط ظاهر
+
+  function setHidden(hide){
+    wrap.classList.toggle("nav-hidden", hide);
+    document.body.classList.toggle("nav-is-hidden", hide);
+  }
+
+  function update(){
+
+    const y = Math.max(0, window.scrollY);
+    const diff = y - lastY;
+
+    const atBottom =
+      window.innerHeight + y >= document.documentElement.scrollHeight - 4;
+
+    if(y < TOP_ZONE || atBottom){
+      setHidden(false);              // أعلى الصفحة أو آخرها: ظاهر
+    }else if(Math.abs(diff) > THRESHOLD){
+      setHidden(diff > 0);           // نزول = اخفاء، صعود = إظهار
+    }
+
+    if(Math.abs(diff) > THRESHOLD) lastY = y;
+
+    ticking = false;
+  }
+
+  window.addEventListener("scroll", () => {
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  }, {passive:true});
+
+})();
 
 /* ================================
    START
