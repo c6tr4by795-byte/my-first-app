@@ -631,15 +631,31 @@ header{
 
 /* إخفاء الشريط السفلي عند النزول وإظهاره عند الصعود */
 .bottom-wrap{
-  transition:transform .3s cubic-bezier(.2,.8,.3,1);
-  will-change:transform
+  transition:transform .32s cubic-bezier(.22,.8,.3,1);
+  will-change:transform;
+  transform:translateZ(0)
 }
 .bottom-wrap.nav-hidden{
-  transform:translateY(calc(100% + 24px));
+  transform:translate3d(0,calc(100% + 24px),0);
+}
+/* البلور على شريط ثابت فوق محتوى متحرك يسبب تقطيع، والخلفية شبه صلبة أصلاً */
+.bottom-nav{
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  background:#fff !important
 }
 /* التوست ينزل مع الشريط */
 .toast{transition:.25s ease, bottom .3s ease}
 body.nav-is-hidden .toast{bottom:calc(24px + var(--safe-bottom))}
+
+/* إيقاف الأنيميشنات الثقيلة أثناء السكرول */
+body.is-scrolling .fcard:after,
+body.is-scrolling .fmedia img.is-ready,
+body.is-scrolling .eb-glow,
+body.is-scrolling .live-dot,
+body.is-scrolling .cd:before{
+  animation-play-state:paused !important
+}
 
 </style>
 </head>
@@ -2666,40 +2682,73 @@ function bindJump(){
   const wrap = document.querySelector(".bottom-wrap");
   if(!wrap) return;
 
+  const root = document.documentElement;
+
+  const HIDE_AFTER = 28;   // لازم تنزل هالمسافة (بنفس الاتجاه) حتى يختفي
+  const SHOW_AFTER = 12;   // أي صعود بسيط بهالمسافة يرجعه
+  const TOP_ZONE   = 80;   // قرب أعلى الصفحة يبقى ظاهر
+
   let lastY = window.scrollY;
+  let acc = 0;
+  let hidden = false;
   let ticking = false;
+  let idleTimer;
 
-  const THRESHOLD = 8;   // أقل حركة حتى يتفاعل
-  const TOP_ZONE = 60;   // قرب أعلى الصفحة يظل الشريط ظاهر
-
-  function setHidden(hide){
-    wrap.classList.toggle("nav-hidden", hide);
-    document.body.classList.toggle("nav-is-hidden", hide);
+  function setHidden(h){
+    if(h === hidden) return;
+    hidden = h;
+    wrap.classList.toggle("nav-hidden", h);
+    document.body.classList.toggle("nav-is-hidden", h);
   }
 
   function update(){
 
-    const y = Math.max(0, window.scrollY);
-    const diff = y - lastY;
+    ticking = false;
 
-    const atBottom =
-      window.innerHeight + y >= document.documentElement.scrollHeight - 4;
+    const y = window.scrollY;
+    const max = root.scrollHeight - window.innerHeight;
 
-    if(y < TOP_ZONE || atBottom){
-      setHidden(false);              // أعلى الصفحة أو آخرها: ظاهر
-    }else if(Math.abs(diff) > THRESHOLD){
-      setHidden(diff > 0);           // نزول = اخفاء، صعود = إظهار
+    /* ارتداد الآيفون (overscroll) أعلى وأسفل الصفحة: نتجاهله حتى ما يرتبك الشريط */
+    if(y <= 0 || y >= max - 1){
+      lastY = Math.min(Math.max(y, 0), Math.max(max, 0));
+      acc = 0;
+      if(y <= 0) setHidden(false);
+      return;
     }
 
-    if(Math.abs(diff) > THRESHOLD) lastY = y;
+    const diff = y - lastY;
+    lastY = y;
 
-    ticking = false;
+    if(y < TOP_ZONE){
+      setHidden(false);
+      acc = 0;
+      return;
+    }
+
+    /* نجمع الحركة بنفس الاتجاه، وإذا تغيّر الاتجاه نصفّر العدّاد */
+    if(diff * acc < 0) acc = 0;
+    acc += diff;
+
+    if(acc > HIDE_AFTER){
+      setHidden(true);
+      acc = 0;
+    }else if(acc < -SHOW_AFTER){
+      setHidden(false);
+      acc = 0;
+    }
   }
 
   window.addEventListener("scroll", () => {
+
+    /* نوقف الأنيميشنات الثقيلة أثناء السكرول حتى يصير أنعم */
+    document.body.classList.add("is-scrolling");
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => document.body.classList.remove("is-scrolling"), 160);
+
     if(ticking) return;
     ticking = true;
     requestAnimationFrame(update);
+
   }, {passive:true});
 
 })();
