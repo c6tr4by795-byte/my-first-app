@@ -680,44 +680,95 @@ body.is-scrolling .cd:before{
 }
 
 
-/* ============ مربعات البنتو داخل الحاويات ============ */
-.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:12px;position:relative;z-index:1}
-.bento:empty{display:none}
+/* ============ لوحة المربعات (بنتو) تحت أحدث الأجهزة ============ */
+.board-section{scroll-margin-top:12px}
 
-.bn-t{
-  position:relative;overflow:hidden;border-radius:18px;padding:11px 12px;
-  display:flex;flex-direction:column;justify-content:space-between;
-  background:#f3f0ff;color:#4a34b8;min-width:0;
-  animation:up .5s cubic-bezier(.2,.8,.3,1) backwards;animation-delay:var(--d,0s)
+.board{
+  position:relative;isolation:isolate;overflow:hidden;
+  margin-inline:-6px;padding:12px;border-radius:26px;
+  background:
+    radial-gradient(circle at 92% 0%,rgba(255,255,255,.2) 0%,rgba(255,255,255,0) 46%),
+    linear-gradient(145deg,#4a34b8 0%,#6246d9 52%,#8473ec 100%);
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 16px 30px -18px rgba(74,52,184,.5);
+  display:flex;flex-direction:column;gap:8px
 }
-.bn-w{grid-column:span 4;height:112px}
-.bn-s{grid-column:span 2;height:112px}
-.bn-m{grid-column:span 2;height:86px}
-.bn-dark{background:linear-gradient(145deg,#3b2a92,#5a45d4);color:#fff}
-.bn-hot{background:linear-gradient(145deg,#ff8a3d,#e8590c);color:#fff}
-.bn-white{background:#fff}
+.board:before{
+  content:"";position:absolute;z-index:0;width:210px;height:210px;border-radius:50%;
+  inset-inline-start:-80px;bottom:-90px;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,255,255,.14) 0%,rgba(255,255,255,0) 70%)
+}
+.bd-top,.bd-bottom{position:relative;z-index:1;display:flex;gap:8px;align-items:stretch}
+.bd-col-l{flex:0 0 31.6%;display:flex;flex-direction:column;gap:8px;min-width:0}
+.bd-col-r{flex:1;display:flex;flex-direction:column;gap:8px;min-width:0}
+.bd-row2{flex:1;display:flex;gap:8px;min-height:0}
 
-.bn-k{font-size:10px;font-weight:800;opacity:.75;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bn-dark .bn-k,.bn-hot .bn-k{opacity:.88}
-.bn-n{font-size:30px;font-weight:950;line-height:1;letter-spacing:-.03em;white-space:nowrap}
-.bn-n small{font-size:12px;font-weight:900;margin-inline-start:3px}
-.bn-m .bn-n{font-size:21px}
-.bn-n.sm{font-size:16px}
-.bn-n.xs{font-size:13.5px}
+.bd-t{
+  position:relative;overflow:hidden;border-radius:20px;padding:11px 11px 12px;
+  display:flex;flex-direction:column;justify-content:space-between;gap:6px;
+  min-width:0;text-align:start;color:#4a34b8;background:#f3f0ff;
+  border:0;font:inherit;cursor:pointer;
+  transition:transform .18s ease;
+  animation:up .55s cubic-bezier(.2,.8,.3,1) backwards;animation-delay:var(--d,0s)
+}
+.bd-t:active{transform:scale(.97)}
 
-.bn-ico{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:#ebe6ff}
-.bn-dark .bn-ico,.bn-hot .bn-ico{background:rgba(255,255,255,.18)}
-.bn-ico svg{width:19px;height:19px}
+/* القياسات نفس الصورة المرجعية */
+.bd-a{aspect-ratio:375/425}
+.bd-c{aspect-ratio:375/535;flex:1 1 auto}
+.bd-b{aspect-ratio:785/515}
+.bd-d{flex:395 1 0}
+.bd-e{flex:370 1 0}
+.bd-f{flex:0 0 56%;aspect-ratio:675/445}
+.bd-g{flex:1;min-height:0}
 
-.bn-web{position:absolute;top:0;inset-inline-end:0;width:84px;height:84px;opacity:.14;pointer-events:none;transform:scaleX(-1)}
-.bn-web svg{width:100%;height:100%;display:block}
+.bd-dark{background:linear-gradient(145deg,#2e1f7a,#4a34b8);color:#fff}
+.bd-hot{background:linear-gradient(145deg,#ff8a3d,#e8590c);color:#fff}
+.bd-white{background:#fff}
 
-.bn-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#1e8a5a;margin-inline-end:5px;animation:livepulse 1.6s infinite}
+.bd-k{font-size:10px;font-weight:800;line-height:1.35;opacity:.78}
+.bd-dark .bd-k,.bd-hot .bd-k{opacity:.9}
+.bd-n{font-size:31px;font-weight:950;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.bd-n small{font-size:11px;font-weight:900;margin-inline-start:3px}
+.bd-title{font-size:13px;font-weight:950;line-height:1.3}
+.bd-sub{font-size:9.5px;font-weight:800;opacity:.75;line-height:1.35}
 
-.bn-bar{height:6px;border-radius:99px;background:rgba(98,70,217,.18);overflow:hidden;margin-top:7px}
-.bn-bar i{display:block;height:100%;background:#6246d9;border-radius:99px}
+.bd-ico{width:32px;height:32px;border-radius:11px;display:grid;place-items:center;background:#ebe6ff;flex:0 0 auto}
+.bd-dark .bd-ico,.bd-hot .bd-ico{background:rgba(255,255,255,.18)}
+.bd-ico svg{width:18px;height:18px}
 
-body.is-scrolling .bn-dot{animation-play-state:paused !important}
+.bd-web{position:absolute;top:0;inset-inline-end:0;width:96px;height:96px;opacity:.13;pointer-events:none;transform:scaleX(-1)}
+.bd-web svg{display:block;width:100%;height:100%}
+
+/* الشعار الكبير */
+.bd-b{justify-content:center;align-items:flex-start;gap:5px}
+.bd-logo strong{display:block;font-size:40px;font-weight:950;letter-spacing:.01em;line-height:.95}
+.bd-logo span{display:block;margin-top:5px;font-size:11px;font-weight:800;letter-spacing:.5em;opacity:.8}
+.bd-tag{position:relative;z-index:1;font-size:10px;font-weight:800;opacity:.7}
+.bd-b .bd-logo,.bd-b .bd-tag{position:relative;z-index:1}
+
+/* مؤقت المزاد */
+.bd-cd{
+  display:inline-block;direction:ltr;font-size:12px;font-weight:950;font-variant-numeric:tabular-nums;
+  padding:3px 8px;border-radius:999px;background:#ebe6ff;color:#4a34b8;align-self:flex-start
+}
+.bd-cd.urgent{background:#e8590c;color:#fff}
+
+/* شبكة الأيقونات 2×2 */
+.bd-grid{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:5px}
+.bd-cell{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:12px;background:#f3f0ff;font-size:8.5px;font-weight:900;color:#4a34b8;text-align:center;line-height:1.2}
+.bd-cell svg{width:17px;height:17px}
+
+/* أحدث جهاز */
+.bd-f{justify-content:space-between}
+.bd-dev-name{font-size:14px;font-weight:950;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.bd-dev-price{font-size:19px;font-weight:950;letter-spacing:-.02em;white-space:nowrap}
+.bd-dev-price small{font-size:10px;font-weight:900;margin-inline-start:3px}
+
+@media(max-width:360px){
+  .bd-logo strong{font-size:34px}
+  .bd-n{font-size:27px}
+}
 
 </style>
 </head>
@@ -914,8 +965,6 @@ body.is-scrolling .bn-dot{animation-play-state:paused !important}
 
   </div>
 
-  <div class="bento" id="featuredBento"></div>
-
   <div class="rail" id="featuredTrack"></div>
 
 </div>
@@ -939,9 +988,97 @@ body.is-scrolling .bn-dot{animation-play-state:paused !important}
 
   </div>
 
-  <div class="bento" id="latestBento"></div>
-
   <div class="rail" id="latestTrack"></div>
+
+</div>
+
+</section>
+
+<section class="section board-section" id="boardSection">
+
+<div class="board">
+
+  <div class="bd-top">
+
+    <div class="bd-col-l">
+
+      <button class="bd-t bd-a bd-dark" type="button" data-go="market.html" style="--d:.0s">
+        <span class="bd-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M9.5 5.5h5"/><path d="M11 18.5h2"/></svg></span>
+        <span>
+          <span class="bd-n" id="bdToday">—</span>
+          <span class="bd-k" id="bdTodayLabel" style="display:block;margin-top:4px">أضيف اليوم</span>
+        </span>
+      </button>
+
+      <button class="bd-t bd-c bd-white" type="button" data-go="auctions.html" style="--d:.07s">
+        <span class="bd-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3.5" width="10" height="5" rx="1.3" transform="rotate(45 14 6)"/><path d="M12.2 7.8 4.5 15.5"/><path d="M4 21h9"/></svg></span>
+        <span>
+          <span class="bd-n" id="bdLive">—</span>
+          <span class="bd-k" style="display:block;margin-top:4px">مزاد مباشر</span>
+        </span>
+        <span class="bd-cd" id="bdTimer" hidden>--:--:--</span>
+      </button>
+
+    </div>
+
+    <div class="bd-col-r">
+
+      <div class="bd-t bd-b" style="--d:.1s;cursor:default">
+        <div class="bd-web" aria-hidden="true"><svg viewBox="0 0 200 200" fill="none" stroke="#6246d9" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M0 0L184.0 0.0M0 0L170.0 70.4M0 0L130.1 130.1M0 0L70.4 170.0M0 0L0.0 184.0M46.0 0.0L42.5 17.6L32.5 32.5L17.6 42.5L0.0 46.0M92.0 0.0L85.0 35.2L65.1 65.1L35.2 85.0L0.0 92.0M138.0 0.0L127.5 52.8L97.6 97.6L52.8 127.5L0.0 138.0"/></svg></div>
+        <div class="bd-logo">
+          <strong>MZAD</strong>
+          <span>PHONE</span>
+        </div>
+        <div class="bd-tag">سوق الأجهزة داخل النجف</div>
+      </div>
+
+      <div class="bd-row2">
+
+        <button class="bd-t bd-d bd-white" type="button" data-go="market.html" style="--d:.14s">
+          <span class="bd-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M9.5 5.5h5"/><path d="M11 18.5h2"/></svg></span>
+          <span>
+            <span class="bd-n" id="bdCount">—</span>
+            <span class="bd-k" style="display:block;margin-top:4px">جهاز متوفر</span>
+            <span class="bd-sub" id="bdSplit" style="display:block;margin-top:3px"></span>
+          </span>
+        </button>
+
+        <button class="bd-t bd-e bd-hot" type="button" data-go="sell-auction.html" style="--d:.18s">
+          <span class="bd-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3.5" width="10" height="5" rx="1.3" transform="rotate(45 14 6)"/><path d="M12.2 7.8 4.5 15.5"/><path d="M4 21h9"/></svg></span>
+          <span>
+            <span class="bd-title" style="display:block">ابدأ مزادك</span>
+            <span class="bd-sub" style="display:block;margin-top:2px">بيع بالمزاد</span>
+          </span>
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="bd-bottom">
+
+    <button class="bd-t bd-f" type="button" id="bdNewest" style="--d:.22s">
+      <span class="bd-k">أحدث جهاز</span>
+      <span>
+        <span class="bd-dev-name" id="bdNewestName" style="display:block">—</span>
+      </span>
+      <span>
+        <span class="bd-dev-price" id="bdNewestPrice" style="display:block"></span>
+        <span class="bd-sub" id="bdNewestTime" style="display:block;margin-top:2px"></span>
+      </span>
+    </button>
+
+    <button class="bd-t bd-g bd-dark" type="button" data-go="sell.html" style="--d:.26s">
+      <span class="bd-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M12 9v6"/><path d="M9 12h6"/></svg></span>
+      <span>
+        <span class="bd-title" style="display:block">بيع جهازك</span>
+        <span class="bd-sub" style="display:block;margin-top:2px">أضف جهازك</span>
+      </span>
+    </button>
+
+  </div>
 
 </div>
 
@@ -2298,7 +2435,7 @@ async function loadDevices(){
 
     renderEnding();
 
-    renderBento(featured, devices);
+    renderBoard(devices);
 
     $("featuredSection").hidden = false;
 
@@ -2742,162 +2879,88 @@ function bindJump(){
 }
 
 /* ================================
-   مربعات البنتو (أرقام حقيقية من بيانات الصفحة)
+   لوحة المربعات تحت أحدث الأجهزة
 ================================ */
 
-const BENTO_WEB = END_WEB.replace('stroke="#fff"', 'stroke="#6246d9"');
-
-const BN_SHIELD =
-  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 4.5 3 7.8 7 10 4-2.2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg>';
-
-const BN_GAVEL =
-  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3.5" width="10" height="5" rx="1.3" transform="rotate(45 14 6)"/><path d="M12.2 7.8 4.5 15.5"/><path d="M4 21h9"/></svg>';
-
-const fmtNum = n => new Intl.NumberFormat("en-US").format(n);
-
-function bnPrice(n){
-  const txt = fmtNum(n);
-  const cls = txt.length > 7 ? "xs" : (txt.length > 5 ? "sm" : "");
-  return `<div class="bn-n ${cls}">${esc(txt)}<small>د.ع</small></div>`;
-}
-
-function bnTile(cls, inner, i){
-  return `<div class="bn-t ${cls}" style="--d:${i * 70}ms">${inner}</div>`;
-}
-
-function cheapest(list){
-  const prices = list.map(d => Number(d.price)).filter(n => Number.isFinite(n) && n > 0);
-  return prices.length ? Math.min(...prices) : 0;
-}
-
-function renderBento(featured, devices){
-
-  const fBox = $("featuredBento");
-  const lBox = $("latestBento");
+function renderBoard(devices){
 
   const now = Date.now();
 
-  /* ---------- أجهزة مميزة ---------- */
-  if(fBox){
+  const setText = (id, v) => { const el = $(id); if(el) el.textContent = v; };
 
-    if(!featured.length){
-      fBox.innerHTML = "";
+  setText("bdCount", String(devices.length));
+
+  const aucCount = devices.filter(d => isAuction(d)).length;
+
+  setText("bdSplit", `${aucCount} مزاد · ${devices.length - aucCount} مباشر`);
+
+  const within = ms => devices.filter(d =>
+    d.created_at && (now - new Date(d.created_at).getTime()) < ms
+  ).length;
+
+  const todayN = within(24 * 3600e3);
+  const weekN = within(7 * 24 * 3600e3);
+
+  if(todayN){ setText("bdToday", String(todayN)); setText("bdTodayLabel", "أضيف اليوم"); }
+  else if(weekN){ setText("bdToday", String(weekN)); setText("bdTodayLabel", "أضيف هذا الأسبوع"); }
+  else { setText("bdToday", "0"); setText("bdTodayLabel", "أضيف اليوم"); }
+
+  const live = devices
+    .filter(d => isAuction(d) && d.ends_at && new Date(d.ends_at).getTime() > now)
+    .sort((a,b) => new Date(a.ends_at) - new Date(b.ends_at));
+
+  setText("bdLive", String(live.length));
+
+  const timer = $("bdTimer");
+
+  if(timer){
+    if(live.length){
+      timer.dataset.end = live[0].ends_at;
+      timer.hidden = false;
     }else{
-
-      const batteries = featured
-        .map(d => parseFloat(String(d.battery_health || "").replace("%","")))
-        .filter(Number.isFinite);
-
-      const bestBattery = batteries.length ? Math.max(...batteries) : 0;
-
-      const bestStorage = Math.max(0, ...featured.map(d => storageToNumber(d.storage)));
-
-      const storageTxt =
-        bestStorage >= 1024 ? (bestStorage / 1024) + "TB" :
-        bestStorage > 0 ? bestStorage + "GB" : "";
-
-      const minPrice = cheapest(featured);
-
-      const directCount = featured.filter(d => !isAuction(d)).length;
-
-      const wide = bestBattery
-        ? bnTile("bn-w", `
-            <div class="bn-web" aria-hidden="true">${BENTO_WEB}</div>
-            <span class="bn-k">أعلى صحة بطارية</span>
-            <div>
-              <div class="bn-n">${esc(Math.round(bestBattery))}<small>%</small></div>
-              <div class="bn-bar"><i style="width:${Math.min(100, bestBattery)}%"></i></div>
-            </div>`, 0)
-        : bnTile("bn-w", `
-            <div class="bn-web" aria-hidden="true">${BENTO_WEB}</div>
-            <span class="bn-k">مختارة بعناية</span>
-            <div class="bn-n">${featured.length}<small>جهاز مميز</small></div>`, 0);
-
-      const second = bestBattery
-        ? bnTile("bn-m", `<span class="bn-k">أجهزة مختارة</span><div class="bn-n">${featured.length}</div>`, 3)
-        : bnTile("bn-m", `<span class="bn-k">بيع مباشر</span><div class="bn-n">${directCount}</div>`, 3);
-
-      fBox.innerHTML = [
-        wide,
-
-        bnTile("bn-s bn-dark", `
-          <span class="bn-ico">${BN_SHIELD}</span>
-          <span class="bn-k" style="font-size:11px">بيانات<br>واضحة</span>`, 1),
-
-        bnTile("bn-m bn-white", `
-          <span class="bn-k">أكبر سعة</span>
-          <div class="bn-n">${storageTxt ? esc(storageTxt) : "—"}</div>`, 2),
-
-        second,
-
-        bnTile("bn-m bn-dark", `
-          <span class="bn-k">أرخص سعر</span>
-          ${minPrice ? bnPrice(minPrice) : '<div class="bn-n">—</div>'}`, 4)
-      ].join("");
+      timer.hidden = true;
+      timer.removeAttribute("data-end");
     }
   }
 
-  /* ---------- أحدث الأجهزة ---------- */
-  if(lBox){
+  const newest = [...devices]
+    .filter(d => d.created_at)
+    .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))[0];
 
-    if(!devices.length){
-      lBox.innerHTML = "";
-    }else{
+  const box = $("bdNewest");
 
-      const liveAuctions = devices.filter(d =>
-        isAuction(d) && d.ends_at && new Date(d.ends_at).getTime() > now
-      ).length;
+  if(newest && box){
 
-      const directCount = devices.filter(d => !isAuction(d)).length;
+    setText("bdNewestName", deviceName(newest));
 
-      const within = ms => devices.filter(d =>
-        d.created_at && (now - new Date(d.created_at).getTime()) < ms
-      ).length;
+    const priceEl = $("bdNewestPrice");
 
-      const today = within(24 * 3600e3);
-      const week = within(7 * 24 * 3600e3);
-
-      let addedNum, addedLabel;
-
-      if(today){ addedNum = today; addedLabel = "أضيف اليوم"; }
-      else if(week){ addedNum = week; addedLabel = "أضيف هذا الأسبوع"; }
-      else { addedNum = devices.length; addedLabel = "متوفر الآن"; }
-
-      const newest = [...devices]
-        .filter(d => d.created_at)
-        .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))[0];
-
-      const newestTxt = newest ? formatPublishedTime(newest.created_at) : "";
-
-      const minPrice = cheapest(devices);
-
-      lBox.innerHTML = [
-
-        bnTile("bn-s bn-hot", `
-          <span class="bn-ico">${BN_GAVEL}</span>
-          <div><div class="bn-n">${liveAuctions}</div><span class="bn-k" style="font-size:11px">مزاد مباشر</span></div>`, 0),
-
-        bnTile("bn-w", `
-          <div class="bn-web" aria-hidden="true">${BENTO_WEB}</div>
-          <span class="bn-k"><span class="bn-dot"></span>${esc(addedLabel)}</span>
-          <div class="bn-n">${addedNum}<small>جهاز</small></div>`, 1),
-
-        bnTile("bn-m bn-white", `
-          <span class="bn-k">آخر إضافة</span>
-          <div class="bn-n xs">${newestTxt ? esc(newestTxt) : "—"}</div>`, 2),
-
-        bnTile("bn-m bn-dark", `
-          <span class="bn-k">بيع مباشر</span>
-          <div class="bn-n">${directCount}</div>`, 3),
-
-        bnTile("bn-m", `
-          <span class="bn-k">أرخص جهاز</span>
-          ${minPrice ? bnPrice(minPrice) : '<div class="bn-n">—</div>'}`, 4)
-
-      ].join("");
+    if(priceEl){
+      const n = Number(newest.price);
+      priceEl.innerHTML = Number.isFinite(n) && n > 0
+        ? `${esc(new Intl.NumberFormat("en-US").format(n))}<small>د.ع</small>`
+        : "";
     }
+
+    setText("bdNewestTime", formatPublishedTime(newest.created_at));
+
+    box.dataset.id = String(newest.id);
+    box.dataset.auction = isAuction(newest) ? "1" : "";
   }
+
+  tickTimers();
 }
+
+$("bdNewest").addEventListener("click", () => {
+
+  const box = $("bdNewest");
+
+  if(!box.dataset.id) return;
+
+  const isAuc = !!box.dataset.auction;
+
+  go(`${isAuc ? "auction-details.html" : "device.html"}?${isAuc ? "auction" : "id"}=${encodeURIComponent(box.dataset.id)}`);
+});
 
 /* ================================
    إخفاء الشريط السفلي عند النزول
