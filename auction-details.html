@@ -286,6 +286,26 @@ async function loadLive(){
   if (sx && !sx.error && sx.data) S.stats = { reserved:Number(sx.data.reserved)||0, viewers:Number(sx.data.viewers)||0 };
   S.bids = b.error ? [] : (b.data || []); S.count = b.count ?? S.bids.length;
   if (e) S.elig = e.data?.eligible === true;
+
+  // مزامنة احتياطية: إذا التأمين معتمد فعلاً لكن سجل الأهلية تأخر أو فُقد،
+  // نقرأ سجل التأمين المعتمد حتى لا نظهر زر الدفع للمستخدم مرة ثانية.
+  if (!S.elig) {
+    try {
+      const dep = await supabase.from("mzad_deposits")
+        .select("id")
+        .eq("auction_id", auctionId)
+        .eq("user_id", S.user.id)
+        .eq("deposit_type", "auction_buyer")
+        .eq("status", "approved")
+        .eq("eligible_to_bid", true)
+        .limit(1)
+        .maybeSingle();
+      if (!dep.error && dep.data) S.elig = true;
+    } catch (err) {
+      console.warn("BUYER DEPOSIT FALLBACK:", err);
+    }
+  }
+
   S.result = r?.data?.[0] || null;
   return true;
 }
