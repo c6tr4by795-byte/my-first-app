@@ -258,25 +258,13 @@ function renderUser(u){
     </div>
 
     <div class="actions">
-      <button class="btn ${active ? "red" : "green"}" onclick='toggleActive(${JSON.stringify(u)})'>
-        ${active ? "تعطيل الحساب" : "تفعيل الحساب"}
-      </button>
-
-      <button class="btn orange" onclick='openRestrict(${JSON.stringify(u)})'>
-        حظر / تقييد
-      </button>
-
-      ${isRestricted ? `
-      <button class="btn green wide" onclick='unrestrict(${JSON.stringify(u)})'>
-        إلغاء الحظر عن المستخدم
-      </button>` : `
-      <button class="btn secondary wide" disabled style="opacity:.55;cursor:not-allowed">
-        لا يوجد حظر فعّال
-      </button>`}
-
-      <button class="btn secondary" onclick='showId(${JSON.stringify(u)})'>
-        User ID
-      </button>
+      <button class="btn ${active ? "red" : "green"}" onclick='toggleActive(${JSON.stringify(u)})'>${active ? "تعطيل الحساب" : "تفعيل الحساب"}</button>
+      <button class="btn ${u.restriction_status?.all ? "red" : "green"}" onclick='toggleRestriction(${JSON.stringify(u)},"all")'>${u.restriction_status?.all ? "إلغاء الحظر الكامل" : "حظر كامل"}</button>
+      <button class="btn ${u.restriction_status?.bid ? "red" : "green"}" onclick='toggleRestriction(${JSON.stringify(u)},"bid")'>${u.restriction_status?.bid ? "فتح المزايدة" : "منع المزايدة"}</button>
+      <button class="btn ${u.restriction_status?.sell ? "red" : "green"}" onclick='toggleRestriction(${JSON.stringify(u)},"sell")'>${u.restriction_status?.sell ? "فتح البيع" : "منع البيع"}</button>
+      <button class="btn ${u.restriction_status?.buy ? "red" : "green"}" onclick='toggleRestriction(${JSON.stringify(u)},"buy")'>${u.restriction_status?.buy ? "فتح الشراء" : "منع الشراء"}</button>
+      <button class="btn ${u.restriction_status?.deposit ? "red" : "green"}" onclick='toggleRestriction(${JSON.stringify(u)},"deposit")'>${u.restriction_status?.deposit ? "فتح التأمين" : "منع التأمين"}</button>
+      <button class="btn secondary" onclick='showId(${JSON.stringify(u)})'>User ID</button>
     </div>
   </article>`;
 }
@@ -319,6 +307,31 @@ window.openRestrict = function(u){
   $("reason").value="";
   $("notes").value="";
   $("overlay").classList.add("show");
+};
+
+window.toggleRestriction = async function(u, type){
+  const labels = {all:"الحظر الكامل",bid:"منع المزايدة",sell:"منع البيع",buy:"منع الشراء",deposit:"منع التأمين"};
+  const currentlyOn = !!u.restriction_status?.[type];
+  if(currentlyOn){
+    if(!confirm("تأكيد إلغاء " + labels[type] + " فقط؟")) return;
+    const reason = prompt("سبب إلغاء القيد (اختياري):") || null;
+    const { error } = await supabase.rpc("mzad_admin_unrestrict_user", {
+      p_user_id: u.user_id, p_restriction_type: type, p_reason: reason
+    });
+    if(error){ toast("فشل إلغاء القيد: " + error.message); return; }
+    toast("تم إلغاء " + labels[type]);
+    await loadUsers();
+    return;
+  }
+  if(!confirm("تأكيد تفعيل " + labels[type] + " لهذا المستخدم؟")) return;
+  const reason = prompt("سبب القيد (اختياري):") || null;
+  const { error } = await supabase.rpc("mzad_admin_restrict_user", {
+    p_user_id: u.user_id, p_restriction_type: type,
+    p_reason: reason, p_notes: null, p_expires_at: null
+  });
+  if(error){ toast("فشل تطبيق القيد: " + error.message); return; }
+  toast("تم تفعيل " + labels[type]);
+  await loadUsers();
 };
 
 window.unrestrict = async function(u){
