@@ -85,8 +85,21 @@ header{
   box-shadow:0 10px 26px rgba(74,52,184,.28)
 }
 
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 2px 11px}
-.topbar-side{display:flex;align-items:center;gap:8px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 2px 11px;min-width:0}
+.brand-mini{flex:0 0 auto;white-space:nowrap}
+.topbar-side{display:flex;align-items:center;gap:8px;flex:0 0 auto;min-width:0}
+#locationBtn{flex:0 0 auto;white-space:nowrap}
+#notificationBtn{position:relative;isolation:isolate;width:40px;min-width:40px;height:40px;padding:0;flex:0 0 40px;overflow:visible;transform:none}
+#notificationBtn svg{display:block;flex:0 0 auto}
+@media(max-width:370px){
+  .topbar{gap:5px;padding-inline:0}
+  .topbar-side{gap:6px}
+  .brand-mini{gap:4px}
+  .brand-mini strong{font-size:19px}
+  .brand-mini span{font-size:8px;letter-spacing:.12em}
+  .location-box{padding:6px 8px}
+  .location-name{font-size:12px}
+}
 .location-box{display:flex;align-items:center;gap:5px;padding:6px 11px 6px 9px;color:#fff;
   border-radius:999px;background:rgba(255,255,255,.17);border:1px solid rgba(255,255,255,.32)}
 .location-name{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:850;line-height:1.2;white-space:nowrap;color:#fff}
@@ -2750,7 +2763,8 @@ function ensureNotificationPanel(){
   if(notificationPanel) return notificationPanel;
   const style = document.createElement("style");
   style.textContent = `
-    .mzad-notify-panel{position:fixed;z-index:999;top:64px;right:12px;left:12px;width:auto;max-width:480px;margin-inline:auto;max-height:min(72dvh,620px);overflow:auto;background:#fff;border:1px solid #e8e4f7;border-radius:20px;box-shadow:0 18px 55px rgba(24,20,55,.2);padding:14px;direction:rtl}
+    .mzad-notify-panel{position:fixed;z-index:999;top:64px;right:12px;left:auto;width:min(360px,calc(100vw - 24px));max-width:calc(100vw - 24px);margin:0;max-height:min(72dvh,620px);overflow:auto;background:#fff;border:1px solid #e8e4f7;border-radius:20px;box-shadow:0 18px 55px rgba(24,20,55,.2);padding:14px;direction:rtl}
+    @media(max-width:380px){.mzad-notify-panel{width:calc(100vw - 20px);max-width:calc(100vw - 20px)}}
     .mzad-notify-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:11px;border-bottom:1px solid #f0edf8}
     .mzad-notify-title{font-size:15px;font-weight:950;color:#17202a}
     .mzad-notify-close{width:32px;height:32px;border-radius:10px;background:#f5f3fc;font-size:20px}
@@ -2761,8 +2775,9 @@ function ensureNotificationPanel(){
     .mzad-notify-item span{display:block;margin-top:5px;font-size:11px;line-height:1.6;color:#626b78;white-space:pre-wrap}
     .mzad-notify-item time{display:block;margin-top:7px;font-size:9px;color:#8a91a0}
     .mzad-notify-empty{padding:24px 10px;text-align:center;color:#737b89;font-size:12px;line-height:1.7}
-    .mzad-notify-badge{position:absolute;top:-5px;left:-5px;min-width:17px;height:17px;padding:0 4px;border-radius:20px;background:#e91d4f;color:#fff;font-size:9px;font-weight:900;display:grid;place-items:center}
-    #notificationBtn{position:relative}
+    .mzad-notify-badge{position:absolute;z-index:2;top:-5px;inset-inline-start:-5px;min-width:19px;height:19px;padding:0 5px;border:2px solid #7563df;border-radius:999px;background:linear-gradient(145deg,#ff6684,#e11d48);color:#fff;font-size:10px;line-height:1;font-weight:900;display:grid;place-items:center;white-space:nowrap;box-shadow:0 2px 7px rgba(225,29,72,.28);pointer-events:none;transform:none}
+    #notificationBtn{position:relative;overflow:visible}
+    #notificationBtn .mzad-notify-badge[hidden]{display:none}
   `;
   document.head.appendChild(style);
   notificationPanel = document.createElement("section");
@@ -2867,11 +2882,26 @@ async function loadUserNotifications(){
   });
 }
 
+function positionNotificationPanel(){
+  if(!notificationPanel || notificationPanel.hidden) return;
+  const rect=notificationButton.getBoundingClientRect();
+  const width=Math.min(360,window.innerWidth-20);
+  const right=Math.max(10,Math.min(window.innerWidth-rect.right,window.innerWidth-width-10));
+  notificationPanel.style.top=Math.min(window.innerHeight-100,rect.bottom+8)+"px";
+  notificationPanel.style.right=right+"px";
+  notificationPanel.style.left="auto";
+  notificationPanel.style.width=width+"px";
+}
 notificationButton.addEventListener("click",async()=>{
   const panel=ensureNotificationPanel();
   panel.hidden=!panel.hidden;
-  if(!panel.hidden) await loadUserNotifications();
+  if(!panel.hidden){
+    positionNotificationPanel();
+    await loadUserNotifications();
+  }
 });
+window.addEventListener("resize",positionNotificationPanel,{passive:true});
+window.addEventListener("scroll",positionNotificationPanel,{passive:true});
 
 /* تحديث عدّاد الإشعارات عند الدخول ودورياً، من دون إعادة تحميل الصفحة */
 async function refreshNotificationBadge(){
