@@ -218,7 +218,7 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 import { supabase } from "./js/supabase.js";
 const $ = id => document.getElementById(id);
 const auctionId = new URLSearchParams(location.search).get("auction") || new URLSearchParams(location.search).get("id");
-const S = { user:null, a:null, d:null, imgs:[], bids:[], count:0, elig:false, result:null, busy:false, amount:0, sheet:"", sig:"", lastPrice:null, refetched:false, polling:false, loaded:false, stats:{ reserved:0, viewers:0 }, activating:false, sellerDeposit:null };
+const S = { user:null, a:null, d:null, imgs:[], bids:[], names:{}, count:0, elig:false, result:null, busy:false, amount:0, sheet:"", sig:"", lastPrice:null, refetched:false, polling:false, loaded:false, stats:{ reserved:0, viewers:0 }, activating:false, sellerDeposit:null };
 const DEPOSIT = 5000;
 const money = n => Number(n||0).toLocaleString("en-US");
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -243,10 +243,8 @@ const isSeller = () => S.a.seller_user_id === S.user.id;
 const mine = b => b.bidder_user_id === S.user.id;
 
 const who = id => {
-  if (id === S.user.id) return "أنت";
-  let h = 0; const s = String(id);
-  for (let i = 0; i < s.length; i++) h = (h*31 + s.charCodeAt(i)) >>> 0;
-  return "مزايد " + (100 + h % 900);
+  if (id === S.user?.id) return "أنت";
+  return S.names?.[id] || "مستخدم بدون اسم";
 };
 const COLORS = ["#6246d9","#176b87","#e8590c","#1e8a5a","#b9791a","#c2255c"];
 const av = id => `<span class="av" style="background:${COLORS[[...String(id)].reduce((s,c)=>s+c.charCodeAt(0),0) % COLORS.length]}">${esc(who(id).slice(-1))}</span>`;
@@ -291,6 +289,20 @@ async function loadLive(){
   ]);
   if (sx && !sx.error && sx.data) S.stats = { reserved:Number(sx.data.reserved)||0, viewers:Number(sx.data.viewers)||0 };
   S.bids = b.error ? [] : (b.data || []); S.count = b.count ?? S.bids.length;
+  // جلب الأسماء الحقيقية من ملفات المستخدمين، بدون إنشاء أسماء وهمية.
+  const bidderIds = [...new Set(S.bids.map(x => x.bidder_user_id).filter(Boolean))];
+  if (bidderIds.length) {
+    try {
+      const profiles = await supabase.from("mzad_profiles").select("user_id,full_name").in("user_id", bidderIds);
+      if (!profiles.error) {
+        S.names = {};
+        (profiles.data || []).forEach(p => {
+          const name = String(p.full_name || "").trim();
+          if (name) S.names[p.user_id] = name;
+        });
+      } else console.warn("BIDDER NAMES:", profiles.error.message);
+    } catch (nameErr) { console.warn("BIDDER NAMES:", nameErr); }
+  }
   if (e) S.elig = e.data?.eligible === true;
 
   // مزامنة احتياطية: إذا التأمين معتمد فعلاً لكن سجل الأهلية تأخر أو فُقد،
@@ -423,10 +435,10 @@ function renderLive(){
       seen.add(id);
       return true;
     });
-    $("stack").innerHTML = uniq.slice(0,3).map(b => av(b.bidder_user_id)).join("");
+    $("stack").innerHTML = "";
     $("ticker").innerHTML = top ? `<b>${esc(who(top.bidder_user_id))}</b> أعلى مزايدة ${money(top.amount_iqd)} د.ع، ${esc(ago(top.placed_at))}` : "لا توجد مزايدات بعد";
     $("panelHead").textContent = `المزايدون (${uniq.length})`;
-    $("bidders").innerHTML = uniq.slice(0,10).map((b,i) => `<li class="${top && b.bidder_user_id === top.bidder_user_id ? "lead" : ""}">${av(b.bidder_user_id)}<span class="who">${esc(who(b.bidder_user_id))}${top && b.bidder_user_id === top.bidder_user_id ? '<span class="tg" style="display:inline">الأعلى</span>' : ""}<span>آخر مزايدة: ${esc(ago(b.placed_at))}</span></span><b>${money(b.amount_iqd)} د.ع</b></li>`).join("");
+    $("bidders").innerHTML = uniq.slice(0,10).map((b,i) => `<li class="${top && b.bidder_user_id === top.bidder_user_id ? "lead" : ""}"><span class="who">${esc(who(b.bidder_user_id))}${top && b.bidder_user_id === top.bidder_user_id ? '<span class="tg" style="display:inline">الأعلى</span>' : ""}<span>آخر مزايدة: ${esc(ago(b.placed_at))}</span></span><b>${money(b.amount_iqd)} د.ع</b></li>`).join("");
     $("allBids").hidden = uniq.length <= 10;
     $("allBids").textContent = "عرض كل المزايدين (" + uniq.length + ")";
     if (S.sheet === "bidders") $("sheet").innerHTML = biddersHtml();
