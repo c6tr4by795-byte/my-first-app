@@ -413,13 +413,22 @@ function renderLive(){
   const sig = S.count + "|" + S.bids.map(b => b.id + ":" + b.amount_iqd).join(",");
   if (sig !== S.sig){
     S.sig = sig;
-    const seen = new Set(), uniq = S.bids.filter(b => !seen.has(b.bidder_user_id) && seen.add(b.bidder_user_id));
+    // اعرض آخر مزايدة لكل مستخدم فقط، بدون تكرار سجل الشخص نفسه.
+    // تبقى أعلى مزايدة الإجمالية ظاهرة في الشريط العلوي، حتى لو كانت أقدم زمنياً.
+    const byNewest = [...S.bids].sort((x,y) => new Date(y.placed_at || 0).getTime() - new Date(x.placed_at || 0).getTime());
+    const seen = new Set();
+    const uniq = byNewest.filter(b => {
+      const id = b.bidder_user_id;
+      if (seen.has(id)) return false;
+      seen.add(id);
+      return true;
+    });
     $("stack").innerHTML = uniq.slice(0,3).map(b => av(b.bidder_user_id)).join("");
-    $("ticker").innerHTML = top ? `<b>${esc(who(top.bidder_user_id))}</b> زايد ${money(top.amount_iqd)} د.ع، ${esc(ago(top.placed_at))}` : "لا توجد مزايدات بعد";
-    $("panelHead").textContent = `المزايدون (${S.count})`;
-    $("bidders").innerHTML = S.bids.slice(0,10).map((b,i) => `<li class="${i?"":"lead"}">${av(b.bidder_user_id)}<span class="who">${esc(who(b.bidder_user_id))}${i?"":'<span class="tg" style="display:inline">الأعلى</span>'}<span>${esc(ago(b.placed_at))}</span></span><b>${money(b.amount_iqd)} د.ع</b></li>`).join("");
-    $("allBids").hidden = S.count <= 10 && S.bids.length <= 10;
-    $("allBids").textContent = "عرض كل المزايدين (" + S.count + ")";
+    $("ticker").innerHTML = top ? `<b>${esc(who(top.bidder_user_id))}</b> أعلى مزايدة ${money(top.amount_iqd)} د.ع، ${esc(ago(top.placed_at))}` : "لا توجد مزايدات بعد";
+    $("panelHead").textContent = `المزايدون (${uniq.length})`;
+    $("bidders").innerHTML = uniq.slice(0,10).map((b,i) => `<li class="${top && b.bidder_user_id === top.bidder_user_id ? "lead" : ""}">${av(b.bidder_user_id)}<span class="who">${esc(who(b.bidder_user_id))}${top && b.bidder_user_id === top.bidder_user_id ? '<span class="tg" style="display:inline">الأعلى</span>' : ""}<span>آخر مزايدة: ${esc(ago(b.placed_at))}</span></span><b>${money(b.amount_iqd)} د.ع</b></li>`).join("");
+    $("allBids").hidden = uniq.length <= 10;
+    $("allBids").textContent = "عرض كل المزايدين (" + uniq.length + ")";
     if (S.sheet === "bidders") $("sheet").innerHTML = biddersHtml();
   }
 
