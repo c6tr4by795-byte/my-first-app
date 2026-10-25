@@ -184,20 +184,32 @@ function dateTime(v){
   return d.toLocaleString("ar-IQ", {dateStyle:"short", timeStyle:"short"});
 }
 
+function elapsedPresence(raw){
+  if(!raw) return "ما مسجل بعد";
+  const timestamp = new Date(raw).getTime();
+  if(!Number.isFinite(timestamp)) return "وقت غير معروف";
+  const total = Math.max(0, Math.floor((Date.now() - timestamp) / 1000));
+  if(total < 120) return "متصل تقريباً · قبل " + total + " ثانية";
+  if(total < 3600) {
+    const mins = Math.floor(total / 60);
+    const secs = total % 60;
+    return "آخر ظهور قبل " + mins + " د " + secs + " ث";
+  }
+  if(total < 86400) {
+    const hours = Math.floor(total / 3600);
+    const mins = Math.floor((total % 3600) / 60);
+    return "آخر ظهور قبل " + hours + " س " + mins + " د";
+  }
+  return "آخر ظهور: " + dateTime(raw);
+}
+
 function presenceLabel(u){
-  if(!u.last_seen_at) return "ما مسجل بعد";
-  const age = Math.max(0, Math.floor((Date.now() - new Date(u.last_seen_at).getTime()) / 1000));
-  if(age < 120) return "آخر تحديث قبل " + age + " ث";
-  return "آخر ظهور: " + dateTime(u.last_seen_at);
+  return elapsedPresence(u.last_seen_at);
 }
 
 function updatePresenceLabels(){
   document.querySelectorAll("[data-last-seen]").forEach(el => {
-    const raw = el.getAttribute("data-last-seen");
-    if(!raw) { el.textContent = "ما مسجل بعد"; return; }
-    const age = Math.max(0, Math.floor((Date.now() - new Date(raw).getTime()) / 1000));
-    if(age < 120) el.textContent = "آخر تحديث قبل " + age + " ثانية";
-    else el.textContent = "آخر ظهور: " + dateTime(raw);
+    el.textContent = elapsedPresence(el.getAttribute("data-last-seen"));
   });
 }
 
