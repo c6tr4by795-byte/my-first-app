@@ -226,7 +226,13 @@ const fmtT = v => { const d = new Date(v); return isNaN(d) ? "—" : d.toLocaleS
 const must = r => { if (r.error) throw r.error; return r.data; };
 
 const BID_ERR = { AUTH_REQUIRED:"يجب تسجيل الدخول أولاً.", SELLER_CANNOT_BID:"لا يمكنك المزايدة على مزادك.", AUCTION_NOT_LIVE:"المزاد غير مفتوح حالياً.", AUCTION_ALREADY_ENDED:"انتهى المزاد.", BUYER_DEPOSIT_NOT_APPROVED:"تأمين المشاركة غير معتمد بعد.", BID_TOO_LOW:"المبلغ أقل من الحد المطلوب.", MAINTENANCE_MODE:"المنصة تحت الصيانة حالياً.", USER_BID_RESTRICTED:"تم تقييد المزايدة على حسابك. تواصل مع الإدارة." };
-const bidErr = e => { const m = String(e?.message||""); for (const k in BID_ERR) if (m.includes(k)) return BID_ERR[k]; return "تعذر تسجيل المزايدة، حاول مرة ثانية."; };
+const bidErr = e => {
+  const m = String(e?.message || e?.details || e?.hint || "").trim();
+  for (const k in BID_ERR) if (m.includes(k)) return BID_ERR[k];
+  // عرض سبب الخطأ الحقيقي أثناء التشخيص بدلاً من إخفائه برسالة عامة.
+  if (m) return "تعذر تسجيل المزايدة: " + m.slice(0, 220);
+  return "تعذر تسجيل المزايدة: لم يصل سبب الخطأ من الخادم.";
+};
 
 const isLive = () => S.a?.status === "live" && new Date(S.a.ends_at).getTime() > Date.now();
 /* مزاد معتمد وينتظر الافتتاح: الحجز مفتوح والمزايدة لا */
