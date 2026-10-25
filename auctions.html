@@ -196,8 +196,8 @@ async function loadWinners(){
 
 async function fetchAuctions(){
   const a = await supabase.from("mzad_auctions")
-    .select("id,auction_number,device_id,starting_price_iqd,current_price_iqd,bid_increment_iqd,status,ends_at,created_at")
-    .eq("status","live").gt("ends_at", new Date().toISOString()).order("created_at",{ascending:false}).limit(100);
+    .select("id,auction_number,device_id,starting_price_iqd,current_price_iqd,bid_increment_iqd,status,starts_at,ends_at,created_at")
+    .in("status",["live","scheduled"]).gt("ends_at", new Date().toISOString()).order("created_at",{ascending:false}).limit(100);
   if (a.error) throw a.error;
   const list = a.data || [];
   if (!list.length) return [];
@@ -246,7 +246,7 @@ async function load(first){
 function visible(){
   const now = Date.now();
   const q = norm(query);
-  let l = AU.filter(a => endOf(a) > now).filter(a => !q || norm([a.dev.brand,a.dev.model,a.dev.storage,a.dev.color,a.dev.condition_grade].filter(Boolean).join(" ")).includes(q));
+  let l = AU.filter(a => endOf(a) > now && (a.status !== "scheduled" || new Date(a.starts_at).getTime() > now)).filter(a => !q || norm([a.dev.brand,a.dev.model,a.dev.storage,a.dev.color,a.dev.condition_grade].filter(Boolean).join(" ")).includes(q));
   if (filter === "soon") l = l.filter(a => endOf(a) - now <= 3*36e5).sort((a,b) => endOf(a) - endOf(b));
   if (filter === "new")  l = [...l].sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
   if (filter === "low")  l = [...l].sort((a,b) => a.current_price_iqd - b.current_price_iqd);
@@ -280,7 +280,7 @@ function makeCard(a, i){
   el.style.animationDelay = Math.min(i,5)*.06 + "s";
   el.addEventListener("animationend", () => el.classList.remove("enter"), { once:true });
   el.innerHTML = `<div class="im">${PH}
-      <span class="lv">مباشر</span>
+      <span class="lv" data-state>مباشر</span>
       <button class="fav${favs.has(id)?" on":""}" type="button" aria-label="المفضلة">${HEART}</button>
     </div>
     <div class="cb">
@@ -291,7 +291,7 @@ function makeCard(a, i){
           <div class="pv"><strong data-price></strong><small>د.ع</small></div>
           <span class="lbl">بدأ من ${fmt(a.starting_price_iqd)} د.ع · <span data-bids></span></span>
         </div>
-        <span class="pill"><small>ينتهي بعد</small><b></b></span>
+        <span class="pill"><small data-timer-label>ينتهي بعد</small><b></b></span>
       </div>
     </div>`;
   return el;
@@ -308,14 +308,25 @@ function updateCard(el, a){
   }
   const bt = a.bids + " مزايدة";
   const be = el.querySelector("[data-bids]"); if (be.textContent !== bt) be.textContent = bt;
+  const scheduled = a.status === "scheduled" && new Date(a.starts_at).getTime() > Date.now();
+  const state = el.querySelector("[data-state]");
+  if (state) state.textContent = scheduled ? "محجوز" : "مباشر";
+  const timerLabel = el.querySelector("[data-timer-label]");
+  if (timerLabel) timerLabel.textContent = scheduled ? "يبدأ بعد" : "ينتهي بعد";
+  if (scheduled) el.querySelector(".pill").classList.remove("hot");
   timerOne(el, a);
 }
 
 function timerOne(el, a){
-  const left = endOf(a) - Date.now();
+  const scheduled = a.status === "scheduled" && a.starts_at && new Date(a.starts_at).getTime() > Date.now();
+  const left = (scheduled ? new Date(a.starts_at).getTime() : endOf(a)) - Date.now();
   const pill = el.querySelector(".pill");
+  const label = el.querySelector("[data-timer-label]");
+  if (label) label.textContent = scheduled ? "يبدأ بعد" : "ينتهي بعد";
+  const state = el.querySelector("[data-state]");
+  if (state) state.textContent = scheduled ? "محجوز" : "مباشر";
   pill.querySelector("b").textContent = timeText(left);
-  pill.classList.toggle("hot", left > 0 && left <= 5*6e4);
+  pill.classList.toggle("hot", !scheduled && left > 0 && left <= 5*6e4);
   return left <= 0;
 }
 
