@@ -205,6 +205,7 @@ header{margin-inline:-14px;padding:0 14px 14px;background:linear-gradient(145deg
 
   <section class="card" id="resCard" hidden><h2>نتيجة المزاد</h2>
     <div class="r"><span>الحالة</span><strong id="rSt"></strong></div>
+    <div class="r"><span>الفائز بالمزاد</span><strong id="rWinner">—</strong></div>
     <div class="r"><span>السعر النهائي</span><strong id="rPr"></strong></div>
   </section>
 </div>
@@ -444,7 +445,7 @@ function renderLive(){
   /* النتيجة */
   const showRes = a.status === "ended" || !!S.result;
   $("resCard").hidden = !showRes;
-  if (showRes){ $("rSt").textContent = S.result?.status || S.result?.result_status || "انتهى المزاد"; $("rPr").textContent = money(S.result?.final_price_iqd ?? S.result?.winning_amount_iqd ?? a.current_price_iqd) + " د.ع"; }
+  if (showRes){ $("rSt").textContent = S.result?.status || S.result?.result_status || "انتهى المزاد"; $("rPr").textContent = money(S.result?.final_price_iqd ?? S.result?.winning_amount_iqd ?? a.final_price_iqd ?? a.current_price_iqd) + " د.ع"; const winnerId = S.result?.winner_user_id || a.winner_user_id || null; $("rWinner").textContent = winnerId ? (S.names?.[winnerId] || (winnerId === S.user?.id ? "أنت" : "الفائز بالمزاد")) : "لا يوجد فائز معلن"; }
 
   /* الزر */
   const btn = $("bid");
