@@ -284,7 +284,7 @@ async function loadLive(){
   S.a = a;
   const ended = a.status === "ended" || new Date(a.ends_at).getTime() <= Date.now();
   const [b, e, r, sx] = await Promise.all([
-    supabase.from("mzad_auction_bids").select("id,amount_iqd,bidder_user_id,created_at", { count:"exact" }).eq("auction_id", auctionId).eq("accepted", true).order("amount_iqd",{ascending:false}).limit(30),
+    supabase.from("mzad_auction_bids").select("id,amount_iqd,bidder_user_id,placed_at", { count:"exact" }).eq("auction_id", auctionId).eq("accepted", true).order("amount_iqd",{ascending:false}).limit(30),
     S.elig ? null : supabase.from("mzad_auction_eligibility").select("eligible").eq("auction_id", auctionId).eq("user_id", S.user.id).maybeSingle(),
     ended ? supabase.from("mzad_auction_results").select("*").eq("auction_id", auctionId).order("created_at",{ascending:false}).limit(1) : null,
     supabase.rpc("mzad_auction_stats", { p_auction_id:auctionId })
@@ -415,9 +415,9 @@ function renderLive(){
     S.sig = sig;
     const seen = new Set(), uniq = S.bids.filter(b => !seen.has(b.bidder_user_id) && seen.add(b.bidder_user_id));
     $("stack").innerHTML = uniq.slice(0,3).map(b => av(b.bidder_user_id)).join("");
-    $("ticker").innerHTML = top ? `<b>${esc(who(top.bidder_user_id))}</b> زايد ${money(top.amount_iqd)} د.ع، ${esc(ago(top.created_at))}` : "لا توجد مزايدات بعد";
+    $("ticker").innerHTML = top ? `<b>${esc(who(top.bidder_user_id))}</b> زايد ${money(top.amount_iqd)} د.ع، ${esc(ago(top.placed_at))}` : "لا توجد مزايدات بعد";
     $("panelHead").textContent = `المزايدون (${S.count})`;
-    $("bidders").innerHTML = S.bids.slice(0,10).map((b,i) => `<li class="${i?"":"lead"}">${av(b.bidder_user_id)}<span class="who">${esc(who(b.bidder_user_id))}${i?"":'<span class="tg" style="display:inline">الأعلى</span>'}<span>${esc(ago(b.created_at))}</span></span><b>${money(b.amount_iqd)} د.ع</b></li>`).join("");
+    $("bidders").innerHTML = S.bids.slice(0,10).map((b,i) => `<li class="${i?"":"lead"}">${av(b.bidder_user_id)}<span class="who">${esc(who(b.bidder_user_id))}${i?"":'<span class="tg" style="display:inline">الأعلى</span>'}<span>${esc(ago(b.placed_at))}</span></span><b>${money(b.amount_iqd)} د.ع</b></li>`).join("");
     $("allBids").hidden = S.count <= 10 && S.bids.length <= 10;
     $("allBids").textContent = "عرض كل المزايدين (" + S.count + ")";
     if (S.sheet === "bidders") $("sheet").innerHTML = biddersHtml();
@@ -477,7 +477,7 @@ function biddersHtml(){
   const my = S.bids.findIndex(mine);
   return `<div class="grab"></div><h3>المزايدون</h3>
     <p class="sd">مرتبون من الأعلى إلى الأقل. العدد الكلي ${S.count}${S.count > S.bids.length ? "، ونعرض هنا أعلى " + S.bids.length : ""}.${my >= 0 ? ` ترتيبك الحالي: <b>${my+1}</b>` : ""}</p>
-    <ul style="list-style:none;margin:0;padding:0">${S.bids.map((b,i) => `<li style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)">${av(b.bidder_user_id)}<span class="who">${esc(who(b.bidder_user_id))}${i?"":'<span class="tg">الأعلى</span>'}<span>${esc(ago(b.created_at))}</span></span><b style="color:var(--pd)">${money(b.amount_iqd)} د.ع</b></li>`).join("")}</ul>
+    <ul style="list-style:none;margin:0;padding:0">${S.bids.map((b,i) => `<li style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)">${av(b.bidder_user_id)}<span class="who">${esc(who(b.bidder_user_id))}${i?"":'<span class="tg">الأعلى</span>'}<span>${esc(ago(b.placed_at))}</span></span><b style="color:var(--pd)">${money(b.amount_iqd)} د.ع</b></li>`).join("")}</ul>
     <button class="b3" type="button" data-act="close" style="margin-top:12px">إغلاق</button>`;
 }
 $("allBids").addEventListener("click", () => openSheet(biddersHtml(), "bidders"));
