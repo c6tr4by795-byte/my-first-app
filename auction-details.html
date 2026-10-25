@@ -449,8 +449,8 @@ $("sheet").addEventListener("click", e => {
   const k = b.dataset.act;
   if (k === "close") closeSheet();
   else if (k === "go") submitBid();
-  else if (k === "inc"){ S.amount += incr(); amtUpd(); }
-  else if (k === "dec"){ S.amount = Math.max(minBid(), S.amount - incr()); amtUpd(); }
+  else if (k === "inc"){ S.amount = minBid(); amtUpd(); }
+  else if (k === "dec"){ S.amount = minBid(); amtUpd(); }
 });
 const amtUpd = () => { const b = $("bigAmt"); if (b) b.innerHTML = money(S.amount) + "<small>د.ع</small>"; };
 
@@ -465,11 +465,12 @@ function openDeposit(){
     <button class="b3" type="button" data-act="close">ليس الآن</button>`, "deposit");
 }
 function openConfirm(){
-  openSheet(`<div class="grab"></div><h3>تأكيد المزايدة</h3>
-    <div class="amtbox"><button class="st" type="button" data-act="dec" aria-label="إنقاص">−</button><div class="big" id="bigAmt">${money(S.amount)}<small>د.ع</small></div><button class="st" type="button" data-act="inc" aria-label="زيادة">+</button></div>
-    <p class="sd">تأكد من المبلغ قبل التأكيد. بعد تسجيل مزايدتك يصبح هذا هو السعر الحالي للمزاد.</p>
+  S.amount = minBid();
+  openSheet(`<div class="grab"></div><h3>مزايدتك القادمة</h3>
+    <div class="amtbox"><div class="big" id="bigAmt">${money(S.amount)}<small>د.ع</small></div></div>
+    <p class="sd">المزايدة تزيد تلقائياً بمقدار ${money(incr())} د.ع فقط حسب نظام المزاد. ما تگدر تختار مبلغ عشوائي.</p>
     <div id="sMsg"></div>
-    <button class="b2" type="button" data-act="go" id="goBtn">تأكيد وزايد</button>
+    <button class="b2" type="button" data-act="go" id="goBtn">زايد هسه</button>
     <button class="b3" type="button" data-act="close">رجوع</button>`, "confirm");
 }
 function biddersHtml(){
@@ -497,8 +498,8 @@ $("bid").onclick = () => {
 
 async function submitBid(){
   if (S.busy) return;
-  const amount = S.amount;
-  if (amount < minBid()){ S.amount = minBid(); amtUpd(); $("sMsg").innerHTML = `<div class="msg">أقل مبلغ مسموح: ${money(minBid())} د.ع</div>`; return; }
+  const amount = minBid();
+  S.amount = amount;
   S.busy = true;
   const g = $("goBtn"); if (g){ g.disabled = true; g.textContent = "جاري تسجيل مزايدتك..."; }
   try{
