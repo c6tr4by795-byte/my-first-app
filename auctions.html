@@ -129,6 +129,7 @@ h1{margin:0;font-size:18px;font-weight:900;letter-spacing:-.01em;color:var(--ink
 </div>
 
 <div class="result" id="result"></div>
+<section class="card" id="winnersCard" style="margin:0 0 12px;padding:12px;border-radius:16px;background:#fff;border:1px solid var(--line);display:none"><h2 style="margin:0 0 10px;font-size:15px;font-weight:900">🏆 آخر الفائزين بالمزادات</h2><div id="winnersList" style="display:flex;flex-direction:column;gap:8px"></div></section>
 <section class="list" id="list" aria-live="polite"></section>
 <div class="empty" id="empty" hidden><h3 id="eT"></h3><p id="eP"></p></div>
 </main>
@@ -174,6 +175,24 @@ const timeText = left => {
   if (left >= D) return Math.floor(left/D) + " يوم و " + Math.floor(left%D/H) + " ساعة";
   return p2(Math.floor(left/H)) + ":" + p2(Math.floor(left%H/M)) + ":" + p2(Math.floor(left%M/1000));
 };
+
+async function loadWinners(){
+  const card = $("winnersCard"), list = $("winnersList");
+  try {
+    const r = await supabase.rpc("mzad_public_auction_winners");
+    if (r.error) throw r.error;
+    const rows = r.data || [];
+    if (!rows.length) { card.style.display = "none"; return; }
+    list.innerHTML = rows.slice(0,8).map(w => {
+      const name = esc(w.winner_name || "فائز بالمزاد");
+      const device = esc([w.brand,w.model].filter(Boolean).join(" ") || "جهاز");
+      const price = fmt(w.final_price_iqd);
+      const date = w.ended_at ? new Date(w.ended_at).toLocaleDateString("ar-IQ") : "";
+      return `<a href="auction-details.html?auction=${encodeURIComponent(w.auction_id)}" style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:#f6f4fc;text-decoration:none"><span style="width:36px;height:36px;flex:0 0 36px;border-radius:50%;display:grid;place-items:center;background:#e8e1ff;color:#6246d9;font-size:18px">🏆</span><span style="min-width:0;flex:1"><b style="display:block;font-size:13px;color:#1b1740">${name}</b><small style="display:block;margin-top:3px;color:#6c6f8a;font-size:11px">${device}${date ? " · " + esc(date) : ""}</small></span><b style="font-size:12px;white-space:nowrap;color:#6246d9">${price} د.ع</b></a>`;
+    }).join("");
+    card.style.display = "block";
+  } catch(e) { console.warn("PUBLIC WINNERS:",e); card.style.display = "none"; }
+}
 
 async function fetchAuctions(){
   const a = await supabase.from("mzad_auctions")
@@ -367,9 +386,10 @@ $("back").addEventListener("click", () => history.length > 1 ? history.back() : 
 function toast(m){ const el = $("toast"); el.textContent = m; el.classList.add("show"); clearTimeout(tt); tt = setTimeout(() => el.classList.remove("show"), 1800); }
 
 load(true);
+loadWinners();
 const t1 = setInterval(tick, 1000);
-const t2 = setInterval(() => { if (!document.hidden) load(false); }, 10000);
-document.addEventListener("visibilitychange", () => { if (!document.hidden) load(false); });
+const t2 = setInterval(() => { if (!document.hidden) { load(false); loadWinners(); } }, 10000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) { load(false); loadWinners(); } });
 addEventListener("pagehide", () => { clearInterval(t1); clearInterval(t2); });
 </script>
 <script type="module" src="./js/platform-guard.js"></script>
