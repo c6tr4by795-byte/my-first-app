@@ -289,20 +289,17 @@ async function loadLive(){
   ]);
   if (sx && !sx.error && sx.data) S.stats = { reserved:Number(sx.data.reserved)||0, viewers:Number(sx.data.viewers)||0 };
   S.bids = b.error ? [] : (b.data || []); S.count = b.count ?? S.bids.length;
-  // جلب الأسماء الحقيقية من ملفات المستخدمين، بدون إنشاء أسماء وهمية.
-  const bidderIds = [...new Set(S.bids.map(x => x.bidder_user_id).filter(Boolean))];
-  if (bidderIds.length) {
-    try {
-      const profiles = await supabase.from("mzad_profiles").select("user_id,full_name").in("user_id", bidderIds);
-      if (!profiles.error) {
-        S.names = {};
-        (profiles.data || []).forEach(p => {
-          const name = String(p.full_name || "").trim();
-          if (name) S.names[p.user_id] = name;
-        });
-      } else console.warn("BIDDER NAMES:", profiles.error.message);
-    } catch (nameErr) { console.warn("BIDDER NAMES:", nameErr); }
-  }
+  // Use a restricted RPC to retrieve bidder names only.
+  S.names = {};
+  try {
+    const namesResult = await supabase.rpc("mzad_get_auction_bidder_names", { p_auction_id: auctionId });
+    if (!namesResult.error) {
+      (namesResult.data || []).forEach(p => {
+        const name = String(p.full_name || "").trim();
+        if (p.user_id && name) S.names[p.user_id] = name;
+      });
+    } else console.warn("BIDDER NAMES RPC:", namesResult.error.message);
+  } catch (nameErr) { console.warn("BIDDER NAMES RPC:", nameErr); }
   if (e) S.elig = e.data?.eligible === true;
 
   // مزامنة احتياطية: إذا التأمين معتمد فعلاً لكن سجل الأهلية تأخر أو فُقد،
