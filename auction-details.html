@@ -493,7 +493,7 @@ $("bid").onclick = () => {
   if (!isLive()) return;
   const b = $("bid"); b.classList.remove("pulse"); void b.offsetWidth; b.classList.add("pulse");
   S.amount = minBid();
-  S.elig ? openConfirm() : openDeposit();
+  if (S.elig) submitBid(); else openDeposit();
 };
 
 async function submitBid(){
