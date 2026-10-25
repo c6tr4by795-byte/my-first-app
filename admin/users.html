@@ -185,10 +185,20 @@ function dateTime(v){
 }
 
 function presenceLabel(u){
-  if(!u.last_seen_at) return "ما دخل بعد تفعيل التتبع";
-  const age = Date.now() - new Date(u.last_seen_at).getTime();
-  if(age < 2 * 60 * 1000) return "متصل تقريباً";
+  if(!u.last_seen_at) return "ما مسجل بعد";
+  const age = Math.max(0, Math.floor((Date.now() - new Date(u.last_seen_at).getTime()) / 1000));
+  if(age < 120) return "آخر تحديث قبل " + age + " ث";
   return "آخر ظهور: " + dateTime(u.last_seen_at);
+}
+
+function updatePresenceLabels(){
+  document.querySelectorAll("[data-last-seen]").forEach(el => {
+    const raw = el.getAttribute("data-last-seen");
+    if(!raw) { el.textContent = "ما مسجل بعد"; return; }
+    const age = Math.max(0, Math.floor((Date.now() - new Date(raw).getTime()) / 1000));
+    if(age < 120) el.textContent = "آخر تحديث قبل " + age + " ثانية";
+    else el.textContent = "آخر ظهور: " + dateTime(raw);
+  });
 }
 
 async function presencePing(online=true){
@@ -279,7 +289,7 @@ function renderUser(u){
     : initials(u.full_name);
 
   return `
-  <article class="user">
+  <article class="user" data-user-id="${esc(u.user_id)}">
     <div class="userhead">
       <div class="avatar">${avatar}</div>
       <div class="info">
@@ -295,7 +305,7 @@ function renderUser(u){
       <div class="stat"><small>الثقة</small><b>${money(u.trust_score)}</b></div>
       <div class="stat"><small>الحساب</small><b>${active ? "فعال" : "موقوف"}</b></div>
       <div class="stat"><small>القيود</small><b>${isRestricted ? "موجودة" : "لا توجد"}</b></div>
-      <div class="stat"><small>الحالة التقريبية</small><b>${esc(presenceLabel(u))}</b></div>
+      <div class="stat"><small>آخر ظهور (يتحدث كل ثانية)</small><b data-last-seen="${esc(u.last_seen_at || "")}">${esc(presenceLabel(u))}</b></div>
       <div class="stat"><small>آخر دخول مسجل</small><b>${esc(dateTime(u.last_login_at))}</b></div>
       <div class="stat"><small>آخر خروج مسجل</small><b>${esc(dateTime(u.last_logout_at))}</b></div>
     </div>
@@ -443,6 +453,29 @@ $("confirmBtn").onclick = async () => {
   toast("تم تطبيق القيد وتسجيل العملية");
   loadUsers();
 };
+
+async function refreshPresenceOnly(){
+  const { data, error } = await supabase.rpc("mzad_admin_list_users", {
+    p_search: $("search").value.trim() || null,
+    p_limit: 100,
+    p_offset: 0
+  });
+  if(error || !Array.isArray(data)) return;
+  const byId = new Map(data.map(u => [String(u.user_id), u]));
+  document.querySelectorAll(".user[data-user-id]").forEach(card => {
+    const u = byId.get(card.getAttribute("data-user-id"));
+    const label = card.querySelector("[data-last-seen]");
+    if(u && label) label.setAttribute("data-last-seen", u.last_seen_at || "");
+  });
+  updatePresenceLabels();
+}
+setInterval(updatePresenceLabels, 1000);
+setInterval(() => {
+  if(document.visibilityState === "visible") refreshPresenceOnly();
+}, 10000);
+document.addEventListener("visibilitychange", () => {
+  if(document.visibilityState === "visible") refreshPresenceOnly();
+});
 
 $("searchBtn").onclick = loadUsers;
 $("search").addEventListener("keydown", e => {
