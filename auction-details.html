@@ -225,7 +225,7 @@ const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt
 const fmtT = v => { const d = new Date(v); return isNaN(d) ? "—" : d.toLocaleString("ar-IQ",{dateStyle:"medium",timeStyle:"short"}); };
 const must = r => { if (r.error) throw r.error; return r.data; };
 
-const BID_ERR = { AUTH_REQUIRED:"يجب تسجيل الدخول أولاً.", SELLER_CANNOT_BID:"لا يمكنك المزايدة على مزادك.", AUCTION_NOT_LIVE:"المزاد غير مفتوح حالياً.", AUCTION_ALREADY_ENDED:"انتهى المزاد.", BUYER_DEPOSIT_NOT_APPROVED:"تأمين المشاركة غير معتمد بعد.", BID_TOO_LOW:"المبلغ أقل من الحد المطلوب.", MAINTENANCE_MODE:"المنصة تحت الصيانة حالياً.", USER_BID_RESTRICTED:"تم تقييد المزايدة على حسابك. تواصل مع الإدارة." };
+const BID_ERR = { AUTH_REQUIRED:"يجب تسجيل الدخول أولاً.", SELLER_CANNOT_BID:"لا يمكنك المزايدة على مزادك.", AUCTION_NOT_LIVE:"المزاد غير مفتوح حالياً.", AUCTION_ALREADY_ENDED:"انتهى المزاد.", BUYER_DEPOSIT_NOT_APPROVED:"تأمين المشاركة غير معتمد بعد.", BID_TOO_LOW:"المبلغ أقل من الحد المطلوب.", BID_INCREMENT_REQUIRED:"المزايدة لازم تكون بالمبلغ المحدد فقط حسب زيادة المزاد.", MAINTENANCE_MODE:"المنصة تحت الصيانة حالياً.", USER_BID_RESTRICTED:"تم تقييد المزايدة على حسابك. تواصل مع الإدارة." };
 const bidErr = e => {
   const m = String(e?.message || e?.details || e?.hint || "").trim();
   for (const k in BID_ERR) if (m.includes(k)) return BID_ERR[k];
