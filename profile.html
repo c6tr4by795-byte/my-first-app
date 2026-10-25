@@ -1056,6 +1056,45 @@ const purchasesBtn =
 
 
 let toastTimer;
+const safeText = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const winsSection = document.createElement("section");
+winsSection.className = "section";
+winsSection.id = "myAuctionWins";
+winsSection.innerHTML = `
+  <h2 class="section-heading">المزادات اللي فزت بيها</h2>
+  <div class="menu-card" id="myAuctionWinsList" style="padding:12px">
+    <p style="margin:0;color:var(--muted);font-size:11px">جاري تحميل نتائج مزاداتك...</p>
+  </div>`;
+const profileCardForWins = document.querySelector(".profile-card");
+if (profileCardForWins) profileCardForWins.insertAdjacentElement("afterend", winsSection);
+
+async function loadMyAuctionWins(){
+  const list = document.getElementById("myAuctionWinsList");
+  if (!list) return;
+  try {
+    const { data, error } = await supabase.rpc("mzad_get_my_auction_wins");
+    if (error) throw error;
+    const rows = data || [];
+    if (!rows.length) {
+      list.innerHTML = '<p style="margin:0;color:var(--muted);font-size:11px;line-height:1.8">بعدك ما فزت بأي مزاد. إذا فزت، راح تظهر نتائج مزاداتك هنا.</p>';
+      return;
+    }
+    list.innerHTML = rows.map(w => {
+      const device = safeText([w.brand,w.model].filter(Boolean).join(" ") || "جهاز");
+      const number = safeText(w.auction_number || "");
+      const price = Number(w.final_price_iqd || 0).toLocaleString("en-US");
+      const date = w.ended_at ? new Date(w.ended_at).toLocaleDateString("ar-IQ") : "";
+      return `<a href="auction-details.html?auction=${encodeURIComponent(w.auction_id)}" style="display:flex;align-items:center;gap:10px;padding:11px 8px;border-bottom:1px solid var(--line);text-decoration:none">
+        <span style="width:36px;height:36px;flex:0 0 36px;border-radius:12px;display:grid;place-items:center;background:#eaf6f8;color:#176b87;font-size:18px">🏆</span>
+        <span style="min-width:0;flex:1"><b style="display:block;color:var(--ink);font-size:12px;font-weight:900">${device}</b><small style="display:block;margin-top:4px;color:var(--muted);font-size:9px">${number ? "المزاد " + number + " · " : ""}${safeText(date)}</small></span>
+        <span style="text-align:left;white-space:nowrap"><b style="display:block;color:#176b87;font-size:11px">${price} د.ع</b><small style="color:var(--muted);font-size:9px">فزت بيه ✓</small></span>
+      </a>`;
+    }).join("");
+  } catch (e) {
+    console.warn("MY AUCTION WINS:", e);
+    list.innerHTML = '<p style="margin:0;color:var(--muted);font-size:11px;line-height:1.8">تعذر تحميل نتائج مزاداتك حالياً.</p>';
+  }
+}
 
 
 /* =====================================================
@@ -1121,6 +1160,8 @@ async function loadProfile(){
 
     const user =
       data.user;
+
+    await loadMyAuctionWins();
 
     const metadata =
       user.user_metadata || {};
