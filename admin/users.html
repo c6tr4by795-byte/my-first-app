@@ -266,9 +266,13 @@ function renderUser(u){
         حظر / تقييد
       </button>
 
-      <button class="btn secondary" onclick='unrestrict(${JSON.stringify(u)})'>
-        فك الحظر
-      </button>
+      ${isRestricted ? `
+      <button class="btn green wide" onclick='unrestrict(${JSON.stringify(u)})'>
+        إلغاء الحظر عن المستخدم
+      </button>` : `
+      <button class="btn secondary wide" disabled style="opacity:.55;cursor:not-allowed">
+        لا يوجد حظر فعّال
+      </button>`}
 
       <button class="btn secondary" onclick='showId(${JSON.stringify(u)})'>
         User ID
