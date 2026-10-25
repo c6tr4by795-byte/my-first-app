@@ -177,6 +177,45 @@ function money(v){
   return Number(v || 0).toLocaleString("ar-IQ");
 }
 
+function dateTime(v){
+  if(!v) return "ما مسجل بعد";
+  const d = new Date(v);
+  if(Number.isNaN(d.getTime())) return "غير معروف";
+  return d.toLocaleString("ar-IQ", {dateStyle:"short", timeStyle:"short"});
+}
+
+function presenceLabel(u){
+  if(!u.last_seen_at) return "ما دخل بعد تفعيل التتبع";
+  const age = Date.now() - new Date(u.last_seen_at).getTime();
+  if(age < 2 * 60 * 1000) return "متصل تقريباً";
+  return "آخر ظهور: " + dateTime(u.last_seen_at);
+}
+
+async function presencePing(online=true){
+  const { data:{session} } = await supabase.auth.getSession();
+  if(!session) return;
+  await supabase.rpc("mzad_presence_ping", {p_online: online});
+}
+
+let presenceTimer = null;
+async function startPresenceTracking(){
+  await presencePing(true);
+  if(presenceTimer) clearInterval(presenceTimer);
+  presenceTimer = setInterval(() => {
+    if(document.visibilityState === "visible") presencePing(true);
+  }, 60000);
+}
+supabase.auth.onAuthStateChange((event, session) => {
+  if(event === "SIGNED_IN" && session) setTimeout(() => presencePing(true), 0);
+  if(event === "SIGNED_OUT") presencePing(false);
+});
+document.addEventListener("visibilitychange", () => {
+  if(document.visibilityState === "visible") presencePing(true);
+});
+window.addEventListener("pagehide", () => {
+  presencePing(false);
+});
+
 async function ensureAdmin(){
   const { data:{session}, error:sessionError } = await supabase.auth.getSession();
 
@@ -194,6 +233,7 @@ async function ensureAdmin(){
     return false;
   }
 
+  startPresenceTracking();
   return true;
 }
 
@@ -255,6 +295,9 @@ function renderUser(u){
       <div class="stat"><small>الثقة</small><b>${money(u.trust_score)}</b></div>
       <div class="stat"><small>الحساب</small><b>${active ? "فعال" : "موقوف"}</b></div>
       <div class="stat"><small>القيود</small><b>${isRestricted ? "موجودة" : "لا توجد"}</b></div>
+      <div class="stat"><small>الحالة التقريبية</small><b>${esc(presenceLabel(u))}</b></div>
+      <div class="stat"><small>آخر دخول مسجل</small><b>${esc(dateTime(u.last_login_at))}</b></div>
+      <div class="stat"><small>آخر خروج مسجل</small><b>${esc(dateTime(u.last_logout_at))}</b></div>
     </div>
 
     <div class="actions">
