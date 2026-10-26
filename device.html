@@ -208,6 +208,7 @@ function render(){
   const batBad = bat === "مبدلة" || (parseInt(bat) < 80);
   const tile = (k, v, bad) => v ? `<div class="t${(bad === undefined ? BAD.test(v) : bad) ? " bad" : ""}"><small>${esc(k)}</small><b>${esc(v)}</b></div>` : "";
   const wide = (k, html, bad) => html ? `<div class="t w${bad ? " bad" : ""}"><small>${esc(k)}</small><div class="ps">${html}</div></div>` : "";
+  const phys = v => vals(v).filter(x => x !== "لا تعمل").join(" • ");
   const dot = v => cl(v).replace(/[،,]\s*/g, " • ");
   const sec = (ic, t, inner) => inner ? `<section class="card"><div class="sh"><span class="si"><svg viewBox="0 0 24 24">${ic}</svg></span><h2 class="hd">${t}</h2></div><div class="g">${inner}</div></section>` : "";
 
@@ -217,9 +218,9 @@ function render(){
     tile("الشريحة", sim["الشريحة"], false) + tile("الإصدار", sim["الإصدار"], false) + tile("قفل الشبكة", sim["الشبكة"]);
 
   const looks =
-    tile("الحالة العامة", d.cond) + tile("الشاشة", d.screen) +
+    tile("الحالة العامة", d.cond) + tile("زجاج الشاشة", d.screen) +
     tile("الهيكل", body["الهيكل"]) + tile("الظهر", body["الظهر"]) +
-    tile("الكاميرا الأمامية", dot(cams["الأمامية"])) + tile("الكاميرا الخلفية", dot(cams["الخلفية"]));
+    tile("عدسة الكاميرا الأمامية", phys(cams["الأمامية"])) + tile("عدسة الكاميرا الخلفية", phys(cams["الخلفية"]));
 
   const fx = cl(d.faults).replace(/^لا يعمل:\s*/, "");
   const parts = cl(d.replaced).split("|");
@@ -265,6 +266,14 @@ function render(){
       <button class="fav" id="fav" type="button" aria-label="المفضلة"><svg viewBox="0 0 24 24"><path d="M20.8 8.9c0 5.1-8.8 10.1-8.8 10.1S3.2 14 3.2 8.9A4.7 4.7 0 0 1 12 6.4a4.7 4.7 0 0 1 8.8 2.5z"/></svg></button>
       <button class="buy" id="buy" type="button">شراء الجهاز</button>
     </div></div>`;
+  document.querySelectorAll(".g").forEach(g => {
+    let c = 0;
+    [...g.children].forEach((el, i, a) => {
+      if (el.classList.contains("w")){ c = 0; return; }
+      c++;
+      if (c === 2) c = 0; else if (i === a.length - 1) el.classList.add("w");
+    });
+  });
   setupGallery(); setupActions();
 }
 
