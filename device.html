@@ -34,22 +34,34 @@ header{position:sticky;top:0;z-index:30;margin-inline:-14px;padding:10px 14px;di
 .empty svg{width:40px;height:40px;fill:none;stroke:var(--p2);stroke-width:1.6}
 .tap{margin:8px 2px 0;text-align:center;font-size:11px;font-weight:700;color:var(--muted)}
 
-.card{margin-top:15px;padding:17px 15px;border-radius:23px;background:#fff;border:1px solid var(--edge);box-shadow:0 7px 24px -14px rgba(98,70,217,.22);animation:up .45s backwards}
-.hd{margin:0 0 4px;font-size:16px;font-weight:900}
+.card{margin-top:14px;padding:15px 14px;border-radius:23px;background:#fff;border:1px solid var(--edge);box-shadow:0 7px 24px -14px rgba(98,70,217,.22);animation:up .45s backwards}
+.hd{margin:0;font-size:15.5px;font-weight:900}
+.sh{display:flex;align-items:center;gap:9px;margin-bottom:13px}
+.si{width:28px;height:28px;flex:0 0 28px;border-radius:9px;display:grid;place-items:center;color:#fff;background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 5px 12px rgba(98,70,217,.25)}
+.si svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .title{padding:18px 2px 0}
-.title small{display:block;font-size:13px;font-weight:900;color:var(--p)}
-.title h1{margin:4px 0 0;font-size:25px;line-height:1.35;font-weight:900;letter-spacing:-.4px}
-.price{display:flex;align-items:center;justify-content:space-between;gap:10px;background:linear-gradient(145deg,#f7f5ff,#ece8ff);border-color:#d9d1fb}
-.price small{display:block;font-size:11.5px;font-weight:800;color:var(--muted)}
-.price b{display:block;margin-top:2px;font-size:28px;font-weight:900;color:var(--p-dark);direction:ltr;text-align:right;white-space:nowrap}
+.title small{display:block;font-size:12.5px;font-weight:900;color:var(--p)}
+.title h1{margin:3px 0 0;font-size:24px;line-height:1.35;font-weight:900;letter-spacing:-.4px}
+.qc{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.qp{padding:5px 11px;border-radius:99px;background:#fff;border:1.5px solid var(--line);font-size:11.5px;font-weight:800;color:#4b5563}
+.price{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:10px;background:linear-gradient(135deg,#e6e3f6,#ebe9f7 52%,#e2dff2);border-color:#d8d3ee;box-shadow:0 13px 28px rgba(98,70,217,.10)}
+.price>*{position:relative;z-index:1}
+.orb{position:absolute!important;z-index:0!important;width:150px;height:150px;border-radius:50%;right:-70px;top:-85px;background:rgba(255,255,255,.42);animation:floaty 6s ease-in-out infinite}
+@keyframes floaty{50%{transform:translateY(8px)}}
+.price small{display:block;font-size:11.5px;font-weight:800;color:#6b6290}
+.price b{display:block;margin-top:2px;font-size:27px;font-weight:900;color:#4c426f;direction:ltr;text-align:right;white-space:nowrap}
 .tag{padding:7px 12px;border-radius:99px;background:linear-gradient(135deg,#6246d9,#8b6cf0);color:#fff;font-size:11px;font-weight:900;white-space:nowrap}
-
-.pl{display:inline-flex;align-items:center;padding:8px 14px;border-radius:99px;background:var(--p-soft);border:1.5px solid var(--p2);color:var(--p-dark);font-size:13px;font-weight:900}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.t{padding:10px 12px;border-radius:14px;background:#faf9ff;border:1px solid var(--line);min-width:0;animation:up .45s backwards}
+.t:nth-child(2){animation-delay:.04s}.t:nth-child(3){animation-delay:.08s}.t:nth-child(4){animation-delay:.12s}.t:nth-child(5){animation-delay:.16s}.t:nth-child(6){animation-delay:.2s}
+.t small{display:block;font-size:11px;font-weight:800;color:var(--muted)}
+.t b{display:block;margin-top:3px;font-size:13px;font-weight:900;line-height:1.5;color:var(--p-dark)}
+.t.w{grid-column:1/-1}
+.t.bad{background:var(--bad-soft);border-color:var(--bad-edge)}
+.t.bad b{color:var(--bad)}
+.ps{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.pl{display:inline-flex;align-items:center;padding:5px 11px;border-radius:99px;background:var(--p-soft);border:1.5px solid var(--p2);color:var(--p-dark);font-size:11.5px;font-weight:900}
 .pl.bad{background:var(--bad-soft);border-color:var(--bad-edge);color:var(--bad)}
-.rw{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px dashed #e9e5f8}
-.rw:last-child{border:0;padding-bottom:0}
-.k{flex:0 0 78px;padding-top:9px;font-size:12px;font-weight:800;color:var(--muted)}
-.ps{flex:1;display:flex;flex-wrap:wrap;gap:7px}
 .note{margin:0;font-size:14.5px;line-height:2;font-weight:700;color:#4b5563;white-space:pre-wrap}
 .seller{display:flex;align-items:center;gap:12px}
 .av{width:44px;height:44px;flex:0 0 44px;border-radius:14px;display:grid;place-items:center;background:var(--p-soft);color:var(--p)}
@@ -194,34 +206,32 @@ function render(){
   let bat = cl(d.battery);
   if (bat && /^\d+$/.test(bat)) bat += "%";
   const batBad = bat === "مبدلة" || (parseInt(bat) < 80);
+  const tile = (k, v, bad) => v ? `<div class="t${(bad === undefined ? BAD.test(v) : bad) ? " bad" : ""}"><small>${esc(k)}</small><b>${esc(v)}</b></div>` : "";
+  const wide = (k, html, bad) => html ? `<div class="t w${bad ? " bad" : ""}"><small>${esc(k)}</small><div class="ps">${html}</div></div>` : "";
+  const dot = v => cl(v).replace(/[،,]\s*/g, " • ");
+  const sec = (ic, t, inner) => inner ? `<section class="card"><div class="sh"><span class="si"><svg viewBox="0 0 24 24">${ic}</svg></span><h2 class="hd">${t}</h2></div><div class="g">${inner}</div></section>` : "";
 
   const specs =
-    row("السعة", d.storage && pill(d.storage, false)) +
-    row("اللون", d.color && pill(d.color, false)) +
-    row("البطارية", apple && bat && pill(bat === "مبدلة" ? "مبدّلة" : "صحة " + bat, batBad)) +
-    row("الشريحة", sim["الشريحة"] && pill(sim["الشريحة"], false)) +
-    row("الإصدار", sim["الإصدار"] && pill(sim["الإصدار"], false)) +
-    row("قفل الشبكة", sim["الشبكة"] && pill(sim["الشبكة"]));
+    tile("السعة", d.storage, false) + tile("اللون", d.color, false) +
+    (apple && bat ? tile("صحة البطارية", bat === "مبدلة" ? "مبدّلة" : bat, batBad) : "") +
+    tile("الشريحة", sim["الشريحة"], false) + tile("الإصدار", sim["الإصدار"], false) + tile("قفل الشبكة", sim["الشبكة"]);
 
   const looks =
-    row("الحالة العامة", d.cond && pill(d.cond)) +
-    row("الشاشة", d.screen && pill(d.screen)) +
-    row("الهيكل", body["الهيكل"] && pill(body["الهيكل"])) +
-    row("الظهر", body["الظهر"] && pill(body["الظهر"])) +
-    row("أمامية", pills(cams["الأمامية"])) +
-    row("خلفية", pills(cams["الخلفية"]));
+    tile("الحالة العامة", d.cond) + tile("الشاشة", d.screen) +
+    tile("الهيكل", body["الهيكل"]) + tile("الظهر", body["الظهر"]) +
+    tile("الكاميرا الأمامية", dot(cams["الأمامية"])) + tile("الكاميرا الخلفية", dot(cams["الخلفية"]));
 
   const fx = cl(d.faults).replace(/^لا يعمل:\s*/, "");
   const parts = cl(d.replaced).split("|");
   const orig = !parts[0] || parts[0].trim() === "لا توجد";
   const q = (parts[1] || "").replace("نوع القطع:", "").trim();
   const checks =
-    (fx ? row("لا يعمل", vals(fx).map(x => pill(x, true)).join(""))
-        : pill("كل الوظائف تعمل", false) && row("الوظائف", pill("كل الوظائف تعمل", false))) +
-    row("القطع", orig ? pill("الجهاز أصلي", false) : vals(parts[0]).map(x => pill(x, true)).join("")) +
-    (!orig ? row("نوع القطع", q && pill(q)) : "");
+    (fx ? wide("لا يعمل", vals(fx).map(x => pill(x, true)).join(""), true) : tile("الوظائف", "كل الوظائف تعمل", false)) +
+    (orig ? tile("القطع", "الجهاز أصلي", false) : wide("قطع مبدّلة", vals(parts[0]).map(x => pill(x, true)).join(""), true)) +
+    (!orig && q ? tile("نوع القطع", q) : "");
 
-  const extras = row("الملحقات", pills(d.acc)) + row("الضمان", warranty && pill(warranty, false));
+  const extras = wide("الملحقات", pills(d.acc)) + tile("الضمان", warranty, false);
+  const qc = [d.storage, d.color, sim["الشريحة"]].filter(Boolean).map(x => `<span class="qp">${esc(x)}</span>`).join("");
 
   const gallery = imgs.length
     ? `<div class="gt" id="gt">${imgs.map((s, i) => `<div class="gs" data-i="${i}"><img src="${esc(s)}" alt="" ${i ? 'loading="lazy"' : ""} draggable="false"></div>`).join("")}</div>
@@ -233,18 +243,18 @@ function render(){
     <section class="gal">${gallery}</section>
     ${imgs.length ? '<p class="tap">اضغط على الصورة لعرضها كاملة</p>' : ""}
 
-    <section class="title"><small>${esc(cl(d.brand) || "هاتف")}</small><h1>${esc(cl(d.model) || "جهاز")}</h1></section>
+    <section class="title"><small>${esc(cl(d.brand) || "هاتف")}</small><h1>${esc(cl(d.model) || "جهاز")}</h1>${qc ? `<div class="qc">${qc}</div>` : ""}</section>
 
-    <section class="card price">
+    <section class="card price"><i class="orb"></i>
       <div><small>السعر المطلوب</small><b>${money(d.price)}</b>${neg ? '<small style="margin-top:4px;color:var(--p-dark)">قابل للتفاوض</small>' : ""}</div>
       <span class="tag">بيع مباشر</span>
     </section>
 
-    <section class="card"><h2 class="hd">مواصفات الجهاز</h2>${specs}</section>
-    <section class="card"><h2 class="hd">حالة الجهاز</h2>${looks || row("الحالة", pill("غير محددة", false))}</section>
-    <section class="card"><h2 class="hd">الفحص والقطع</h2>${checks}</section>
-    ${extras ? `<section class="card"><h2 class="hd">الملحقات والضمان</h2>${extras}</section>` : ""}
-    ${notes ? `<section class="card"><h2 class="hd">ملاحظات البائع</h2><p class="note">${esc(notes)}</p></section>` : ""}
+    ${sec('<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M10.5 18.5h3"/>', "مواصفات الجهاز", specs)}
+    ${sec('<path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/>', "حالة الجهاز", looks) || sec('<circle cx="12" cy="12" r="9"/>', "حالة الجهاز", tile("الحالة", "غير محددة", false))}
+    ${sec('<path d="M5 12.5l4.5 4.5L19 7.5"/>', "الفحص والقطع", checks)}
+    ${sec('<path d="M4 8l8-4 8 4v8l-8 4-8-4V8z"/><path d="M4 8l8 4 8-4M12 12v8"/>', "الملحقات والضمان", extras)}
+    ${notes ? `<section class="card"><div class="sh"><span class="si"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/><path d="M9 9h6M9 13h4"/></svg></span><h2 class="hd">ملاحظات البائع</h2></div><p class="note">${esc(notes)}</p></section>` : ""}
 
     <section class="card seller">
       <div class="av"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></div>
