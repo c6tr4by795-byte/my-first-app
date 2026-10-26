@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>تأميناتي وحجوزاتي — MZAD PHONE</title>
+<style>
+:root{--primary:#176b87;--bg:#f4f6f8;--ink:#18212b;--muted:#77828c;--line:#e6eaee;--green:#177a50;--orange:#9b6500;--red:#b42318}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}.wrap{max-width:560px;margin:auto;padding:16px 14px 34px}.top{display:flex;align-items:center;gap:12px;margin:8px 0 18px}.back{width:42px;height:42px;border-radius:14px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;text-decoration:none;color:var(--ink);font-size:22px}.title{font-size:21px;font-weight:950}.sub{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.7}.summary{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px;margin-bottom:12px}.summary strong{display:block;font-size:15px}.summary p{margin:7px 0 0;font-size:12px;line-height:1.8;color:var(--muted)}.list{display:flex;flex-direction:column;gap:10px}.item{background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px}.head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.name{font-size:14px;font-weight:900}.num{font-size:10px;color:var(--muted);margin-top:5px;direction:ltr;text-align:right}.badge{border-radius:999px;padding:6px 9px;font-size:10px;font-weight:900;white-space:nowrap;background:#eef2f5;color:#56616b}.badge.ok{background:#e7f6ee;color:var(--green)}.badge.wait{background:#fff4d9;color:var(--orange)}.badge.no{background:#fdebea;color:var(--red)}.details{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}.cell{padding:10px;border-radius:12px;background:#f7f9fa}.label{font-size:10px;color:var(--muted);margin-bottom:5px}.value{font-size:12px;font-weight:850;line-height:1.5}.actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.btn{display:inline-block;border:1px solid var(--line);background:#fff;border-radius:11px;padding:10px 12px;color:var(--primary);text-decoration:none;font-size:11px;font-weight:850}.empty{background:#fff;border:1px dashed #cbd4db;border-radius:16px;padding:24px 16px;text-align:center;color:var(--muted);font-size:12px;line-height:1.9}.error{color:var(--red)}.note{font-size:10px;color:var(--muted);line-height:1.8;margin:14px 3px}
+</style>
+</head>
+<body><main class="wrap">
+<header class="top"><a class="back" href="profile.html" aria-label="رجوع">‹</a><div><div class="title">تأميناتي وحجوزاتي</div><div class="sub">كل تأميناتك بحساب واحد، حتى بعد انتهاء المزاد.</div></div></header>
+<section class="summary"><strong>سجل التأمينات</strong><p>هنا تشوف حالة كل تأمين: قيد المراجعة، مقبول، مسترجع أو مرفوض. انتهاء المزاد ما يحذف سجل التأمين.</p></section>
+<div id="list" class="list"><div class="empty">جاري تحميل التأمينات...</div></div>
+<p class="note">هذه الصفحة تعرض سجلات حسابك فقط. إذا حالة التأمين ما تطابق الدفع اللي سويته، تواصل مع إدارة مزاد فون ولا تدفع مرة ثانية قبل التحقق.</p>
+</main>
+<script type="module">
+import { supabase } from "./js/supabase.js";
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const statusInfo={
+ pending:{label:"قيد المراجعة",cls:"wait",detail:"الإدارة لم تكمل مراجعة التأمين بعد."},
+ submitted:{label:"بانتظار التحقق",cls:"wait",detail:"تم تسجيل الطلب وينتظر التحقق."},
+ under_review:{label:"قيد المراجعة",cls:"wait",detail:"التأمين قيد المراجعة."},
+ approved:{label:"مقبول",cls:"ok",detail:"التأمين مقبول."},
+ paid:{label:"تم الدفع",cls:"wait",detail:"تم تسجيل الدفع وبانتظار اعتماد التأمين."},
+ refunded:{label:"مسترجع",cls:"ok",detail:"تم تسجيل استرجاع التأمين."},
+ rejected:{label:"مرفوض",cls:"no",detail:"التأمين مرفوض. راجع الإدارة لمعرفة السبب."},
+ forfeited:{label:"مصادَر",cls:"no",detail:"تم تسجيل التأمين كمصادَر."},
+ cancelled:{label:"ملغي",cls:"no",detail:"تم إلغاء سجل التأمين."}
+};
+function date(v){if(!v)return "—";const d=new Date(v);return Number.isNaN(d.getTime())?"—":d.toLocaleString("ar-IQ",{dateStyle:"medium",timeStyle:"short"});}
+function money(v){return Number(v||0).toLocaleString("en-US")+" د.ع";}
+async function init(){
+ const {data:{user},error:authError}=await supabase.auth.getUser();
+ if(authError||!user){$("list").innerHTML='<div class="empty">سجّل دخولك حتى تشوف تأميناتك.<br><a class="btn" href="index.html">تسجيل الدخول</a></div>';return;}
+ const {data:rows,error}=await supabase.from("mzad_deposits").select("id,deposit_number,auction_id,direct_sale_id,deposit_type,amount_iqd,status,eligible_to_bid,paid_at,approved_at,refunded_at,forfeited_at,created_at,updated_at").eq("user_id",user.id).order("created_at",{ascending:false}).limit(100);
+ if(error){console.error("deposit history",error);$("list").innerHTML='<div class="empty error">ما كدرنا نحمل سجل التأمينات هسه. حاول مرة ثانية بعد قليل.</div>';return;}
+ if(!rows?.length){$("list").innerHTML='<div class="empty">ما عندك سجلات تأمين لحد الآن.<br>إذا قدمت تأمين لمزاد، راح يظهر هنا وتبقى حالته محفوظة.</div>';return;}
+ $("list").innerHTML=rows.map(d=>{
+   const st=statusInfo[d.status]||{label:esc(d.status||"غير محدد"),cls:"wait",detail:"راجع حالة التأمين مع الإدارة إذا تحتاج توضيح."};
+   const type=d.deposit_type==="auction_seller"?"تأمين البائع":d.deposit_type==="auction_buyer"?"تأمين المشتري":d.deposit_type==="direct_sale_buyer"?"تأمين مشتري البيع المباشر":d.deposit_type==="direct_sale_seller"?"تأمين بائع البيع المباشر": "تأمين";
+   const stamp=d.refunded_at?("تاريخ الاسترجاع: "+date(d.refunded_at)):d.forfeited_at?("تاريخ المصادرة: "+date(d.forfeited_at)):d.approved_at?("تاريخ الاعتماد: "+date(d.approved_at)):d.paid_at?("تاريخ الدفع: "+date(d.paid_at)):("تاريخ الطلب: "+date(d.created_at));
+   const link=d.auction_id?'<a class="btn" href="auction-details.html?auction='+encodeURIComponent(d.auction_id)+'">فتح المزاد</a>':"";
+   return '<article class="item"><div class="head"><div><div class="name">'+type+'</div><div class="num">'+esc(d.deposit_number||d.id)+'</div></div><span class="badge '+st.cls+'">'+st.label+'</span></div><div class="details"><div class="cell"><div class="label">قيمة التأمين</div><div class="value">'+money(d.amount_iqd)+'</div></div><div class="cell"><div class="label">السماح بالمزايدة</div><div class="value">'+(d.eligible_to_bid?"مسموح":"غير مفعّل / غير مطلوب")+'</div></div><div class="cell" style="grid-column:1/-1"><div class="label">آخر حالة مسجلة</div><div class="value">'+esc(st.detail)+'<br>'+esc(stamp)+'</div></div></div><div class="actions">'+link+'</div></article>';
+ }).join("");
+}
+init();
+</script></body></html>
