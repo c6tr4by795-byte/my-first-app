@@ -1548,6 +1548,11 @@ function validateStep(n){
     for (const [k, t] of list){
       if (!state.v[k]) return need($("ch-" + k), "اختر " + t);
     }
+    const fl = [state.v.screen, state.v.body, state.v.back, state.v.camF, state.v.camB];
+    if (state.v.condition === "جديد" && fl.some(x => x && !["سليمة","نظيف"].includes(x)))
+      return need($("ch-condition"), "الجهاز «جديد» وفيه خدوش أو كسر؟ غيّر الحالة العامة");
+    if (state.v.condition === "ممتاز" && fl.some(x => x && /مكسور|ضربات|خدوش واضحة/.test(x)))
+      return need($("ch-condition"), "حالة «ممتاز» ما تناسب كسر أو خدوش واضحة");
     if (state.replaced){
       if (!state.rep.size && !val("replaced")) return need($("ch-rep"), "اختر القطع المبدّلة");
       if (!state.v.quality) return need($("ch-quality"), "اختر نوع القطع المبدّلة");
