@@ -390,9 +390,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
   </section>
 
   <section class="card">
-    <div class="c-head"><div><h2>القفل والحساب</h2><p>يؤثر على السعر وثقة المشتري</p></div></div>
+    <div class="c-head"><div><h2>قفل الشبكة</h2><p>يؤثر على السعر</p></div></div>
     <div class="field"><span class="lbl">قفل الشبكة <i>*</i></span><div class="chips" id="ch-netlock"></div></div>
-    <div class="field"><span class="lbl">حساب الجهاز (iCloud / Google) <i>*</i></span><div class="chips" id="ch-acct"></div><p class="help" id="acctHelp"></p></div>
   </section>
 
   <section class="card">
@@ -429,7 +428,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
   <section class="card">
     <div class="c-head"><div><h2>شنو يؤثر على سعر جهازك</h2><p>المشتري يشوف هذي التفاصيل، سعّر على أساسها</p></div></div>
     <div class="fx-list" id="fxList"></div>
-    <p class="help">نوع الشريحة والإصدار وقفل الشبكة والحساب والبطارية والقطع المبدلة من أكثر الأشياء اللي تفرق السعر بين جهاز وجهاز مثله. لو تريد تغير شي اضغط «تعديل» من المراجعة الأخيرة تحت.</p>
+    <p class="help">نوع الشريحة والإصدار وقفل الشبكة والبطارية والقطع المبدلة من أكثر الأشياء اللي تفرق السعر بين جهاز وجهاز مثله. لو تريد تغير شي اضغط «تعديل» من المراجعة الأخيرة تحت.</p>
   </section>
 
   <section class="card">
@@ -640,19 +639,16 @@ const BRAND_COLORS = {
 };
 
 const STORAGE = ["32GB","64GB","128GB","256GB","512GB","1TB"];
-const SIM = { SINGLE:"شريحة واحدة", DUAL:"شريحتين فيزيائيتين", MIX:"شريحة + eSIM", ESIM:"eSIM فقط" };
+const SIM = { SINGLE:"شريحة واحدة", DUAL:"شريحتين", MIX:"شريحة + eSIM", ESIM:"eSIM فقط" };
 const NET_OPEN = "مفتوح لكل الشبكات";
 const NET_LOCKED = "مقفل على شركة";
-const ACCT_OK = "الحساب مفصول والجهاز جاهز";
-const ACCT_LINKED = "الجهاز مرتبط بحسابي";
 const REGIONS = [
   { v:"LL/A", t:"LL/A أمريكي" },
   { v:"CH/A", t:"CH/A صيني" },
   { v:"ZA/A", t:"ZA/A سنغافورة" },
   { v:"AE/AB", t:"AE / AB خليجي" },
   { v:"J/A", t:"J/A ياباني" },
-  { v:"__other__", t:"رمز ثاني" },
-  { v:"غير معروف", t:"ما أعرف" }
+  { v:"__other__", t:"رمز ثاني" }
 ];
 const CAM = ["سليمة","خدوش خفيفة","خدوش واضحة","مكسورة"];
 const OPTS = {
@@ -664,8 +660,7 @@ const OPTS = {
   camB:CAM,
   quality:["كلها أصلية","أغلبها أصلية","أغلبها بديلة عالية الجودة","أغلبها بديلة عادية"],
   warranty:["لا يوجد","أقل من 3 أشهر","3 إلى 12 شهر","أكثر من سنة"],
-  netlock:[NET_OPEN, NET_LOCKED],
-  acct:[ACCT_OK, ACCT_LINKED]
+  netlock:[NET_OPEN, NET_LOCKED]
 };
 const NOACC = "بدون ملحقات";
 const ACC = ["الشاحن","العلبة","كفر وحماية","الفاتورة",NOACC];
@@ -777,7 +772,7 @@ function syncSim(){
   if (isApple()){
     if (opts.length === 1 && opts[0] === SIM.ESIM) t = "iPhone Air يجي eSIM فقط بكل دول العالم، بدون فتحة شريحة.";
     else if (opts.length === 1) t = "هذا الموديل ما يدعم eSIM، شريحة وحدة فقط.";
-    else t = "«eSIM فقط» يعني بدون فتحة شريحة (مثل الإصدار الأمريكي من iPhone 14 وأحدث). الإصدار الصيني عادةً شريحتين فيزيائيتين بدون eSIM.";
+    else t = "«eSIM فقط» يعني بدون فتحة شريحة (مثل الإصدار الأمريكي من iPhone 14 وأحدث). الإصدار الصيني عادةً شريحتين عادية بدون eSIM.";
   } else if (opts.length){
     t = "إذا جهازك يدعم eSIM وفيه فتحة شريحة، اختر «شريحة + eSIM».";
   }
@@ -786,14 +781,7 @@ function syncSim(){
 
 const getRegion = () => !isApple() ? "" : state.regionOther ? val("regionCustom").toUpperCase() : (state.v.region || "");
 
-function updateAcctHelp(){
-  $("acctHelp").textContent = isApple()
-    ? "لازم تطفي «تحديد موقعي / Find My» وتطلع من حساب iCloud قبل التسليم؛ الجهاز المربوط بحساب يقل سعره كثير."
-    : "لازم تطلع من حساب Google أو حساب الشركة (Mi / Samsung) قبل التسليم؛ الجهاز المربوط بحساب يقل سعره كثير.";
-}
-
 function renderRegion(){
-  updateAcctHelp();
   const show = isApple();
   $("regionField").style.display = show ? "" : "none";
   if (!show){
@@ -818,7 +806,7 @@ function syncRegion(){
   let t = "تلقاه من الإعدادات ← عام ← حول ← رقم الموديل (اضغط عليه)، والرمز هو الحرفين قبل /A مثل LL/A.";
   if (!state.regionOther){
     if (r === "LL/A" && n >= 14) t = "الإصدار الأمريكي من iPhone 14 وأحدث يكون عادةً eSIM فقط، تأكد من نوع الشريحة فوق.";
-    else if (r === "CH/A") t = "الإصدار الصيني يكون عادةً شريحتين فيزيائيتين بدون eSIM.";
+    else if (r === "CH/A") t = "الإصدار الصيني يكون عادةً شريحتين عادية بدون eSIM.";
     else if (r === "AE/AB" && n >= 17) t = "iPhone 17 بدول الخليج (السعودية، الإمارات، الكويت، قطر، البحرين، عُمان) يجي eSIM فقط.";
   }
   $("regionHelp").textContent = t;
@@ -837,9 +825,8 @@ function renderFactors(){
 
   add(v.storage);
   add(v.sim);
-  if (getRegion() && getRegion() !== "غير معروف") add("إصدار " + getRegion());
+  if (getRegion()) add("إصدار " + getRegion());
   if (v.netlock) add(v.netlock, v.netlock === NET_OPEN ? "good" : "bad");
-  if (v.acct) add(v.acct === ACCT_OK ? "الحساب مفصول" : "مرتبط بحساب", v.acct === ACCT_OK ? "good" : "bad");
   if (v.condition) add("حالة " + v.condition, ["جديد","ممتاز"].includes(v.condition) ? "good" : v.condition === "متوسط" ? "bad" : "");
   if (batteryValue()){
     add("بطارية " + batteryValue(), batteryReplaced() ? "bad" : num >= 85 ? "good" : num < 80 ? "bad" : "");
@@ -1326,7 +1313,7 @@ function renderReview(){
     ["الجهاز", titleOf() || "—", "", 1],
     ["المواصفات", [v.storage, getColor(), batteryValue() && "بطارية " + batteryValue()].filter(Boolean).join(" • ") || "—", "", 1],
     ["الشريحة", [v.sim, getRegion() && "إصدار " + getRegion()].filter(Boolean).join(" • ") || "—", "", 1],
-    ["القفل", [v.netlock, v.acct].filter(Boolean).join(" • ") || "—", (v.netlock === NET_LOCKED || v.acct === ACCT_LINKED) ? "bad" : "", 3],
+    ["قفل الشبكة", v.netlock || "—", v.netlock === NET_LOCKED ? "bad" : "", 3],
     ["الحالة", cond || "—", "", 2],
     ["الفحص", off.length ? "لا يعمل: " + off.map(w => w.t).join("، ") : "كل الوظائف تعمل", off.length ? "bad" : "good", 3],
     ["القطع", state.replaced ? "مبدّل: " + replacedValue() : "الجهاز أصلي", state.replaced ? "bad" : "good", 2],
@@ -1346,7 +1333,7 @@ function renderMeter(){
   const v = state.v;
   const items = [
     ["الشركة", !!getBrand()], ["الموديل", !!getModel()], ["السعة", !!v.storage], ["اللون", !!getColor()],
-    ["نوع الشريحة", !!v.sim], ["قفل الشبكة والحساب", !!v.netlock && !!v.acct], ["الحالة العامة", !!v.condition], ["الشاشة", !!v.screen], ["الهيكل", !!v.body], ["الظهر", !!v.back],
+    ["نوع الشريحة", !!v.sim], ["قفل الشبكة", !!v.netlock], ["الحالة العامة", !!v.condition], ["الشاشة", !!v.screen], ["الهيكل", !!v.body], ["الظهر", !!v.back],
     ["الكاميرا الأمامية", !!v.camF], ["الكاميرا الخلفية", !!v.camB],
     ["3 صور أو أكثر", state.files.length >= 3], ["الضمان", !!v.warranty], ["ملاحظات", val("notes").length > 0],
     ["السعر", !priceError(parsePrice($("price").value))]
@@ -1384,7 +1371,7 @@ function sync(){
   const rgn = getRegion();
   const specs = [
     state.v.storage, getColor(), batteryValue() ? "بطارية " + batteryValue() : "",
-    state.v.sim, rgn && rgn !== "غير معروف" ? rgn : "",
+    state.v.sim, rgn || "",
     state.v.netlock ? (state.v.netlock === NET_OPEN ? "مفتوح" : "مقفل") : ""
   ].filter(Boolean).slice(0, 6);
   const key = specs.join("|");
@@ -1436,7 +1423,6 @@ function validateStep(n){
   }
   if (n === 3){
     if (!state.v.netlock) return need($("ch-netlock"), "اختر حالة قفل الشبكة");
-    if (!state.v.acct) return need($("ch-acct"), "اختر حالة حساب الجهاز");
     if (!state.v.warranty) return need($("ch-warranty"), "اختر الضمان");
     if (!state.acc.size) return need($("ch-acc"), "اختر الملحقات");
   }
@@ -1547,7 +1533,6 @@ const biometricValue = () => state.works.bio ? "يعمل" : "لا يعمل";
 const faultsValue = () => {
   const o = offWorks(), p = [];
   if (o.length) p.push("لا يعمل: " + o.map(w => w.t).join("، "));
-  if (state.v.acct === ACCT_LINKED) p.push("الجهاز مرتبط بحساب (iCloud / Google)");
   return p.length ? p.join(" | ") : null;
 };
 const bodyBackValue  = () => {
@@ -1556,7 +1541,7 @@ const bodyBackValue  = () => {
 };
 const accessoriesValue = () => state.acc.size ? [...state.acc].join("، ") : "بدون ملحقات";
 const notesValue = () => {
-  const p = [val("notes"), state.v.warranty ? "الضمان: " + state.v.warranty : "", state.v.acct ? "الحساب: " + state.v.acct : "", state.negotiable ? "السعر قابل للتفاوض" : ""].filter(Boolean);
+  const p = [val("notes"), state.v.warranty ? "الضمان: " + state.v.warranty : "", state.negotiable ? "السعر قابل للتفاوض" : ""].filter(Boolean);
   return p.length ? p.join("\n") : null;
 };
 
