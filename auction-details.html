@@ -444,8 +444,12 @@ function renderLive(){
 
   /* النتيجة */
   const showRes = a.status === "ended" || !!S.result;
-  $("resCard").hidden = !showRes;
-  if (showRes){ $("rSt").textContent = S.result?.status || S.result?.result_status || "انتهى المزاد"; $("rPr").textContent = money(S.result?.final_price_iqd ?? S.result?.winning_amount_iqd ?? a.final_price_iqd ?? a.current_price_iqd) + " د.ع"; const winnerId = S.result?.winner_user_id || a.winner_user_id || null; $("rWinner").textContent = winnerId ? (S.names?.[winnerId] || (winnerId === S.user?.id ? "أنت" : "الفائز بالمزاد")) : "لا يوجد فائز معلن"; }
+  const winnerId = S.result?.winner_user_id || a.winner_user_id || null;
+  const isAuctionSeller = !!S.user && a.seller_user_id === S.user.id;
+  const isAuctionWinner = !!S.user && winnerId === S.user.id;
+  const canSeeAuctionResult = isAuctionSeller || isAuctionWinner || S.elig === true;
+  $("resCard").hidden = !(showRes && canSeeAuctionResult);
+  if (showRes && canSeeAuctionResult){ $("rSt").textContent = isAuctionWinner ? "مبروك، أنت الفائز بالمزاد" : (isAuctionSeller ? (winnerId ? "تم تحديد الفائز بمزادك" : "انتهى المزاد") : (isAuctionWinner ? "فزت بالمزاد" : "انتهى المزاد")); $("rPr").textContent = money(S.result?.final_price_iqd ?? S.result?.winning_amount_iqd ?? a.final_price_iqd ?? a.current_price_iqd) + " د.ع"; $("rWinner").textContent = isAuctionWinner ? "أنت" : (isAuctionSeller ? (winnerId ? (S.names?.[winnerId] || "الفائز بالمزاد") : "لا يوجد فائز معلن") : "نتيجة المزاد متاحة لأطراف المزاد فقط"); }
 
   /* الزر */
   const btn = $("bid");
