@@ -111,33 +111,44 @@ header{margin-inline:-14px;padding:0 14px 12px;background:linear-gradient(145deg
 .tg:active i:after{width:25px}
 .tg input:checked+i{background:var(--ok)}
 .tg input:checked+i:after{transform:translateX(-19px)}
-.sw-legend{display:flex;flex-wrap:wrap;gap:8px;margin:-4px 0 4px}
-.sw-legend span{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:999px;font-size:11.5px;font-weight:800;background:var(--p-soft);border:1px solid var(--edge);color:var(--p-dark)}
+.sw-legend{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 4px}
+.sw-legend span{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:800;background:var(--p-soft);border:1px solid var(--edge);color:var(--p-dark)}
 .sw-legend i{width:8px;height:8px;border-radius:50%}
-.sw-legend .g i{background:var(--ok)}
-.sw-legend .r i{background:var(--bad)}
-.sw{padding:13px 0;border-bottom:1px solid #f1eefb}
+.sw-legend .g i{background:#4cb78a}
+.sw-legend .r i{background:#e07088}
+.sw-legend .m i{background:#b7b0d6}
+#swCount{margin:0 2px 4px}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #f1eefb}
 .sw:last-child{border-bottom:0}
-.sw-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
-.sw-title b{font-size:14.5px;font-weight:900}
-.sw-chip{padding:3px 10px;border-radius:99px;font-size:11px;font-weight:900;background:var(--ok-soft);color:var(--ok);transition:background .25s,color .25s}
-.sw.off .sw-chip{background:var(--bad-soft);color:var(--bad)}
-.sw-track{--pos:1;position:relative;height:56px;border-radius:18px;direction:ltr;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;background:#eaf7f0;border:1.5px solid #bfe6d1;transition:background .25s,border-color .25s;outline:none}
-.sw.off .sw-track{background:#fff0f3;border-color:#f3c0cb}
+.sw-info b{display:block;font-size:13.5px;font-weight:900}
+.sw-info small{display:block;margin-top:2px;font-size:11px;font-weight:800;color:#a8b0bb;transition:color .35s}
+.sw.s-on small{color:var(--ok)}
+.sw.s-off small{color:var(--bad)}
+.sw-track{--pos:.5;position:relative;flex:0 0 132px;width:132px;height:38px;border-radius:99px;direction:ltr;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;background:#f4f2fb;border:1.5px solid #e4defa;transition:background .4s ease,border-color .4s ease;outline:none}
+.sw.s-on .sw-track{background:#ecf7f1;border-color:#c9e8d8}
+.sw.s-off .sw-track{background:#fcf1f4;border-color:#f2d0d8}
 .sw-track:focus-visible{box-shadow:0 0 0 3px rgba(98,70,217,.25)}
 .sw-track.drag{cursor:grabbing}
-.sw-thumb{position:absolute;top:4px;left:calc(4px + var(--pos) * (100% - 66px));width:58px;height:45px;border-radius:14px;display:grid;place-items:center;color:#fff;background:linear-gradient(145deg,#1e8a5a,#34b67f);box-shadow:0 7px 14px -4px rgba(30,138,90,.45);transition:left .35s cubic-bezier(.3,1.3,.5,1),background .25s,box-shadow .25s}
-.sw.off .sw-thumb{background:linear-gradient(145deg,#c62f4d,#e5566f);box-shadow:0 7px 14px -4px rgba(198,47,77,.42)}
-.sw-track.drag .sw-thumb{transition:background .25s,box-shadow .25s;transform:scale(1.05)}
+.sw-track.invalid{animation:shake .4s;border-color:var(--hot)}
+.sw-thumb{position:absolute;top:50%;margin-top:-14px;left:calc(var(--pos) * (100% - 44px));width:44px;height:28px;border-radius:99px;display:grid;place-items:center;background:#fff;color:#a39cc9;border:1px solid #e4defa;box-shadow:0 3px 8px -2px rgba(98,70,217,.25);transition:left .5s cubic-bezier(.3,1.25,.5,1),background .4s,color .4s,border-color .4s,box-shadow .4s}
+.sw.s-on .sw-thumb{background:linear-gradient(145deg,#3fae80,#5cc79b);color:#fff;border-color:transparent;box-shadow:0 4px 10px -3px rgba(30,138,90,.4)}
+.sw.s-off .sw-thumb{background:linear-gradient(145deg,#d9566f,#e88a9c);color:#fff;border-color:transparent;box-shadow:0 4px 10px -3px rgba(198,47,77,.35)}
+.sw-track.drag .sw-thumb{transition:background .35s,color .35s,box-shadow .35s;transform:scale(1.07,.95)}
+.sw-thumb.land{animation:land .45s ease}
+@keyframes land{40%{transform:scale(1.14,.9)}}
+.sw.s-mid .sw-thumb{animation:breathe 2.6s ease-in-out infinite}
+@keyframes breathe{50%{box-shadow:0 0 0 5px rgba(98,70,217,.08),0 3px 8px -2px rgba(98,70,217,.25)}}
+.sw.hint.s-mid .sw-thumb{animation:swHint 1.6s ease-in-out 2 .6s}
+@keyframes swHint{0%,100%{transform:translateX(0)}30%{transform:translateX(16px)}70%{transform:translateX(-16px)}}
 .sw-thumb svg{grid-area:1/1}
-.sw .ic-no{display:none}
-.sw.off .ic-ok{display:none}
-.sw.off .ic-no{display:block}
-.sw-cue{position:absolute;top:50%;left:18px;width:36px;height:16px;margin-top:-8px;fill:none;stroke:var(--ok);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;opacity:.55;pointer-events:none;animation:cue 1.6s ease-in-out infinite}
-.sw.off .sw-cue{left:auto;right:18px;stroke:var(--bad);transform:scaleX(-1)}
-@keyframes cue{50%{opacity:.2}}
-@keyframes swHint{0%,100%{transform:translateX(0)}40%{transform:translateX(-18px)}}
-.sw.hint .sw-thumb{animation:swHint 1.4s ease-in-out 2 .6s}
+.sw-thumb .ic-ok,.sw-thumb .ic-no{display:none}
+.sw.s-on .ic-ok,.sw.s-off .ic-no{display:block}
+.sw.s-on .ic-mid,.sw.s-off .ic-mid{display:none}
+.sw-cue{position:absolute;top:50%;width:14px;height:14px;margin-top:-7px;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;transition:opacity .3s;animation:cue 2s ease-in-out infinite}
+.sw-cue.l{left:10px;stroke:#e07088}
+.sw-cue.r{right:10px;stroke:#4cb78a;animation-delay:1s}
+.sw.s-on .sw-cue,.sw.s-off .sw-cue{opacity:0;animation:none}
+@keyframes cue{0%,100%{opacity:.25}50%{opacity:.8}}
 .link-btn{margin-top:10px;padding:8px 15px;border-radius:999px;background:var(--p-soft);border:1px solid var(--edge);color:var(--p-dark);font-size:12px;font-weight:900}
 .fold{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.3,1,.4,1)}
 .fold.open{grid-template-rows:1fr}
@@ -412,7 +423,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
 <div class="step" data-step="3">
   <section class="card">
     <div class="c-head"><span class="num">3</span><div><h2>فحص الوظائف</h2><p>اسحب الزر لكل وظيفة</p></div></div>
-    <div class="sw-legend"><span class="g"><i></i>اسحب لليمين = يعمل</span><span class="r"><i></i>اسحب لليسار = لا يعمل</span></div>
+    <div class="sw-legend"><span class="g"><i></i>يمين = يعمل</span><span class="r"><i></i>يسار = لا يعمل</span><span class="m"><i></i>وسط = لم تحدد</span></div>
+    <p class="help" id="swCount"></p>
     <div id="works"></div>
     <button class="link-btn" id="allWork" type="button">كل الوظائف تعمل</button>
   </section>
@@ -703,7 +715,7 @@ const WORKS = [
   { k:"charge", t:"الشحن والمنفذ" },
   { k:"net",    t:"الشبكة والواي فاي" }
 ];
-WORKS.forEach(w => state.works[w.k] = true);
+WORKS.forEach(w => state.works[w.k] = null);
 
 /* ===== بناء الواجهة ===== */
 Object.entries(OPTS).forEach(([g, list]) => {
@@ -713,13 +725,15 @@ $("ch-acc").innerHTML = ACC.map(v => `<button type="button" class="opt" data-acc
 $("ch-rep").innerHTML = REP_PARTS.map(v => `<button type="button" class="opt" data-rep="${esc(v)}" aria-pressed="false">${esc(v)}</button>`).join("");
 
 $("works").innerHTML = WORKS.map((w, i) => `
-  <div class="sw${i === 0 ? " hint" : ""}" data-k="${w.k}">
-    <div class="sw-title"><b>${esc(w.t)}</b><span class="sw-chip">يعمل</span></div>
-    <div class="sw-track" role="switch" aria-checked="true" aria-label="${esc(w.t)}" tabindex="0">
-      <svg class="sw-cue" viewBox="0 0 36 16"><path d="M9 3 4 8l5 5M19 3l-5 5 5 5M29 3l-5 5 5 5"/></svg>
+  <div class="sw s-mid${i === 0 ? " hint" : ""}" data-k="${w.k}">
+    <div class="sw-info"><b>${esc(w.t)}</b><small>اسحب الزر</small></div>
+    <div class="sw-track" role="switch" aria-checked="mixed" aria-label="${esc(w.t)}" tabindex="0">
+      <svg class="sw-cue l" viewBox="0 0 16 16"><path d="M10 3 5 8l5 5"/></svg>
+      <svg class="sw-cue r" viewBox="0 0 16 16"><path d="M6 3l5 5-5 5"/></svg>
       <span class="sw-thumb">
-        <svg class="ic-ok" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
-        <svg class="ic-no" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        <svg class="ic-mid" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/></svg>
+        <svg class="ic-ok" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        <svg class="ic-no" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </span>
     </div>
   </div>`).join("");
@@ -1090,34 +1104,55 @@ $("sheetList").addEventListener("click", e => {
 });
 
 /* ===== مفاتيح التشغيل ===== */
-function paintWork(k){
-  const row = document.querySelector(`.sw[data-k="${k}"]`);
-  if (!row) return;
-  const on = state.works[k];
-  row.classList.toggle("off", !on);
-  row.querySelector(".sw-track").style.setProperty("--pos", on ? 1 : 0);
-  row.querySelector(".sw-track").setAttribute("aria-checked", on);
-  row.querySelector(".sw-chip").textContent = on ? "يعمل" : "لا يعمل";
+const SW_TXT = { on:"يعمل", off:"لا يعمل", mid:"اسحب لليمين أو اليسار" };
+const SW_THUMB = 44;
+const swKey = v => v === true ? "on" : v === false ? "off" : "mid";
+const swZone = q => q >= .67 ? "on" : q <= .33 ? "off" : "mid";
+
+function updateWorkCount(){
+  const n = WORKS.filter(w => state.works[w.k] !== null).length;
+  const el = $("swCount");
+  el.textContent = n === WORKS.length ? "تم فحص كل الوظائف ✓" : `تم فحص ${n} من ${WORKS.length}`;
+  el.className = "help" + (n === WORKS.length ? " hint-ok" : "");
 }
 
-function setWork(k, on, fromUser){
-  if (state.works[k] === on){ paintWork(k); return; }
-  state.works[k] = on;
-  paintWork(k);
-  if (fromUser){ try{ navigator.vibrate && navigator.vibrate(12); }catch{} }
+function paintWork(k, land){
+  const row = document.querySelector(`.sw[data-k="${k}"]`);
+  if (!row) return;
+  const v = state.works[k], z = swKey(v);
+  row.classList.remove("s-on", "s-off", "s-mid");
+  row.classList.add("s-" + z);
+  const tr = row.querySelector(".sw-track");
+  tr.style.setProperty("--pos", v === true ? 1 : v === false ? 0 : .5);
+  tr.setAttribute("aria-checked", v === null ? "mixed" : String(v));
+  tr.classList.remove("invalid");
+  row.querySelector("small").textContent = SW_TXT[z];
+  if (land){
+    const t = row.querySelector(".sw-thumb");
+    t.classList.remove("land"); void t.offsetWidth; t.classList.add("land");
+  }
+  updateWorkCount();
+}
+
+function setWork(k, v, fromUser){
+  if (state.works[k] === v){ paintWork(k); return; }
+  state.works[k] = v;
+  paintWork(k, true);
+  if (fromUser){ try{ navigator.vibrate && navigator.vibrate(10); }catch{} }
   invalidate(); sync();
 }
 
-// سحب أفقي: يمين = يعمل، يسار = لا يعمل. الضغط السريع يقلب الحالة.
-const SW_THUMB = 66;
 $("works").addEventListener("pointerdown", e => {
   const track = e.target.closest(".sw-track");
   if (!track || (e.pointerType === "mouse" && e.button !== 0)) return;
   const row = track.closest(".sw"), k = row.dataset.k;
   document.querySelectorAll(".sw.hint").forEach(r => r.classList.remove("hint"));
 
-  const travel = Math.max(1, track.getBoundingClientRect().width - 3 - SW_THUMB);
-  const startX = e.clientX, startP = state.works[k] ? 1 : 0;
+  const rect = track.getBoundingClientRect();
+  const travel = Math.max(1, track.clientWidth - SW_THUMB);
+  const cur = state.works[k];
+  const startP = cur === true ? 1 : cur === false ? 0 : .5;
+  const startX = e.clientX, onThumb = !!e.target.closest(".sw-thumb");
   let p = startP, moved = false;
   try{ track.setPointerCapture(e.pointerId); }catch{}
 
@@ -1127,8 +1162,10 @@ $("works").addEventListener("pointerdown", e => {
     if (!moved){ moved = true; track.classList.add("drag"); }
     p = Math.min(1, Math.max(0, startP + dx / travel));
     track.style.setProperty("--pos", p);
-    row.classList.toggle("off", p < 0.5);
-    row.querySelector(".sw-chip").textContent = p >= 0.5 ? "يعمل" : "لا يعمل";
+    const z = swZone(p);
+    row.classList.remove("s-on", "s-off", "s-mid");
+    row.classList.add("s-" + z);
+    row.querySelector("small").textContent = SW_TXT[z];
   };
   const cleanup = ev => {
     track.removeEventListener("pointermove", move);
@@ -1139,7 +1176,14 @@ $("works").addEventListener("pointerdown", e => {
   };
   const up = ev => {
     cleanup(ev);
-    setWork(k, moved ? p >= 0.5 : !state.works[k], true);
+    if (moved){
+      const z = swZone(p);
+      setWork(k, z === "on" ? true : z === "off" ? false : null, true);
+    } else if (onThumb){
+      setWork(k, cur === true ? false : true, true);
+    } else {
+      setWork(k, (ev.clientX - rect.left) > rect.width / 2, true);
+    }
     paintWork(k);
   };
   const cancel = ev => { cleanup(ev); paintWork(k); };
@@ -1152,16 +1196,19 @@ $("works").addEventListener("pointerdown", e => {
 $("works").addEventListener("keydown", e => {
   const track = e.target.closest(".sw-track");
   if (!track) return;
-  const k = track.closest(".sw").dataset.k;
+  const k = track.closest(".sw").dataset.k, cur = state.works[k];
   if (e.key === "ArrowRight"){ e.preventDefault(); setWork(k, true, true); }
   else if (e.key === "ArrowLeft"){ e.preventDefault(); setWork(k, false, true); }
-  else if (e.key === " " || e.key === "Enter"){ e.preventDefault(); setWork(k, !state.works[k], true); }
+  else if (e.key === "Backspace" || e.key === "Delete"){ e.preventDefault(); setWork(k, null, true); }
+  else if (e.key === " " || e.key === "Enter"){ e.preventDefault(); setWork(k, cur === true ? false : true, true); }
 });
 
 $("allWork").addEventListener("click", () => {
-  WORKS.forEach(w => { state.works[w.k] = true; paintWork(w.k); });
+  WORKS.forEach(w => { state.works[w.k] = true; paintWork(w.k, true); });
   invalidate(); sync(); toast("تم تعيين كل الوظائف: تعمل");
 });
+
+WORKS.forEach(w => paintWork(w.k));
 
 $("battery").style.setProperty("--p-fill", "75%");
 $("battery").addEventListener("input", e => {
@@ -1382,9 +1429,9 @@ const titleOf = () => {
   const b = getBrand(), m = getModel();
   return m && b && m.toLowerCase().startsWith(b.toLowerCase()) ? m : [b, m].filter(Boolean).join(" ");
 };
-const offWorks = () => WORKS.filter(w => !state.works[w.k]);
+const offWorks = () => WORKS.filter(w => state.works[w.k] === false);
 
-const camPart = k => [state.v[k], state.works[k] ? "" : "لا تعمل"].filter(Boolean).join("، ");
+const camPart = k => [state.v[k], state.works[k] === false ? "لا تعمل" : ""].filter(Boolean).join("، ");
 const replacedValue = () => {
   if (!state.replaced) return "لا توجد";
   const p = [...state.rep];
@@ -1509,6 +1556,8 @@ function validateStep(n){
     if (isApple() && !batteryReplaced() && !state.batteryTouched) return need($("battery"), "حدد صحة البطارية");
   }
   if (n === 3){
+    const und = WORKS.find(w => state.works[w.k] === null);
+    if (und) return need(document.querySelector(`.sw[data-k="${und.k}"] .sw-track`), "حدد حالة: " + und.t);
     if (!state.v.netlock) return need($("ch-netlock"), "اختر حالة قفل الشبكة");
     if (!state.v.warranty) return need($("ch-warranty"), "اختر الضمان");
     if (!state.acc.size) return need($("ch-acc"), "اختر الملحقات");
@@ -1616,7 +1665,7 @@ const cameraValue = () => {
   const p = [f && "الأمامية: " + f, b && "الخلفية: " + b].filter(Boolean);
   return p.length ? p.join(" | ") : "تعمل بالكامل";
 };
-const biometricValue = () => state.works.bio ? "يعمل" : "لا يعمل";
+const biometricValue = () => state.works.bio === false ? "لا يعمل" : "يعمل";
 const faultsValue = () => {
   const o = offWorks(), p = [];
   if (o.length) p.push("لا يعمل: " + o.map(w => w.t).join("، "));
