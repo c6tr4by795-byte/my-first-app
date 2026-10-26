@@ -2369,29 +2369,48 @@ async function fetchLiveAuctions(){
   }));
 }
 
+/* البيع المباشر الحديث من جداول MZAD، حتى يظهر بالهوم مثل السوق */
+async function fetchMZADDirectSales(){
+  const {data,error}=await supabase
+    .from("mzad_direct_sales")
+    .select("id,created_at,asking_price_iqd,status,device_id,device:mzad_devices!mzad_direct_sales_device_id_fkey(id,brand,model,storage,color,battery_health,condition_grade,screen_condition,seller_notes)")
+    .in("status",["active","reserved","pending_handover"])
+    .order("created_at",{ascending:false})
+    .limit(40);
+  if(error){console.error("HOME MZAD DIRECT SALES ERROR:",error);return [];}
+  const rows=(data||[]).filter(x=>x.device);
+  const ids=[...new Set(rows.map(x=>x.device.id).filter(Boolean))];
+  const ir=ids.length?await supabase.from("mzad_device_images").select("device_id,storage_path,sort_order,is_primary").in("device_id",ids).order("sort_order",{ascending:true}):{data:[],error:null};
+  if(ir.error) console.error("HOME MZAD DEVICE IMAGES ERROR:",ir.error);
+  const byId=new Map();
+  for(const im of ir.data||[]){const k=String(im.device_id);if(!byId.has(k))byId.set(k,[]);byId.get(k).push(im);}
+  return rows.map(item=>{
+    const d=item.device;
+    const images=(byId.get(String(d.id))||[]).sort((a,b)=>(Number(b.is_primary)-Number(a.is_primary))||(Number(a.sort_order)-Number(b.sort_order))).map(im=>publicImage(im.storage_path)).filter(Boolean);
+    return {id:d.id,created_at:item.created_at,brand:d.brand,model:d.model,storage:d.storage,color:d.color,battery_health:d.battery_health,condition:d.condition_grade,screen_condition:d.screen_condition,body_condition:d.condition_grade,price:item.asking_price_iqd,location:"النجف",sale_type:"direct",images,notes:d.seller_notes,_mzad:true};
+  });
+}
+
 async function fetchDevices(){
 
   /* البيع المباشر من جدول devices، وأي صف قديم نوعه مزاد نتجاهله */
-  const res = await supabase
-    .from("devices")
-    .select(COLS)
-    .order("created_at",{ascending:false})
-    .limit(40);
+  const [res,mzadDirectResult,auctionsResult] = await Promise.all([
+    supabase.from("devices").select(COLS).order("created_at",{ascending:false}).limit(40),
+    fetchMZADDirectSales().catch(error=>{console.error("HOME MZAD DIRECT LOAD ERROR:",error);return [];}),
+    fetchLiveAuctions().catch(error=>{console.error("HOME AUCTIONS LOAD ERROR:",error);return [];})
+  ]);
 
-  const direct = (res.data || []).filter(d => !isAuction(d));
+  const legacyDirect=(res.data||[]).filter(d=>!isAuction(d));
+  const mzadDirect=mzadDirectResult||[];
+  const auctions=auctionsResult||[];
+  const seen=new Set();
+  const direct=[...mzadDirect,...legacyDirect].filter(d=>{
+    const key=String(d.id);
+    if(seen.has(key)) return false;
+    seen.add(key); return true;
+  });
 
-  let auctions = [];
-  try{ auctions = await fetchLiveAuctions(); }
-  catch(error){ console.error("HOME AUCTIONS LOAD ERROR:", error); }
-
-  /* نعتبره خطأ فقط إذا الاثنين فشلوا */
-  const failed = res.error && !auctions.length;
-
-  return {
-    data: [...auctions, ...direct],
-    error: failed ? res.error : null,
-    hasEnds: true
-  };
+  return {data:[...auctions,...direct],error:res.error&&!auctions.length&&!direct.length?res.error:null,hasEnds:true};
 }
 
 async function loadLiveCount(){
