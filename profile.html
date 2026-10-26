@@ -3,99 +3,110 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<meta name="theme-color" content="#6246d9">
+<meta name="theme-color" content="#f7f6fb">
 <title>MZAD PHONE — حسابي</title>
 <style>
-:root{--bg:#f9f8fd;--ink:#17202a;--muted:#6b7280;--muted2:#9aa3ab;--line:#ece8fb;--edge:#ddd8f8;--p:#6246d9;--p2:#8b6cf0;--p-dark:#4a34b8;--p-soft:#f3f0ff;--ok:#1e8a5a;--bad:#c62f4d;--sb:env(safe-area-inset-bottom,0px)}
+:root{--bg:#f7f6fb;--card:#fff;--ink:#16181d;--muted:#737a86;--muted2:#a0a6b1;--line:#eeecf6;--p:#6246d9;--p2:#8b6cf0;--p-dark:#3f2a9c;--p-soft:#f1eeff;--ok:#1e8a5a;--bad:#c62f4d;--sb:env(safe-area-inset-bottom,0px);--st:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Tahoma,Arial,sans-serif;-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 a{color:inherit;text-decoration:none}
-.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(104px + var(--sb))}
-@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-@keyframes rot{to{transform:rotate(360deg)}}
-@keyframes floaty{50%{transform:translateY(8px)}}
+.page{width:min(100%,520px);margin:0 auto;padding:0 16px calc(108px + var(--sb))}
 
-header{position:sticky;top:0;z-index:30;margin-inline:-14px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(145deg,#fff,#f7f5ff 55%,#ece8ff);border-radius:0 0 22px 22px;border-bottom:1px solid var(--line);box-shadow:0 8px 24px rgba(23,32,42,.055)}
-.ib{width:40px;height:38px;display:grid;place-items:center;border:1px solid var(--edge);border-radius:12px;background:#fff;color:var(--p);transition:transform .18s}
-.ib:active{transform:scale(.94)}
+/* top bar */
+.top{position:sticky;top:0;z-index:30;margin-inline:-16px;padding:calc(10px + var(--st)) 16px 10px;display:flex;align-items:center;justify-content:space-between;background:rgba(247,246,251,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.ib{width:40px;height:40px;display:grid;place-items:center;border-radius:50%;background:#fff;border:1px solid var(--line);color:var(--ink);transition:transform .15s}
+.ib:active{transform:scale(.93)}
 .ib svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.brand{display:flex;flex-direction:column;align-items:center;line-height:.9}
-.brand strong{font-size:16px;letter-spacing:-.03em}
-.brand span{font-size:7px;font-weight:800;letter-spacing:.15em;color:#8a96a3;margin-top:3px}
-.sp40{width:40px}
+.top h2{margin:0;font-size:16px;font-weight:900}
+.sp{width:40px}
 
-.hero{position:relative;overflow:hidden;margin-top:14px;padding:18px 16px 16px;border-radius:24px;background:linear-gradient(135deg,#e6e3f6,#ebe9f7 52%,#e2dff2);border:1px solid #d8d3ee;box-shadow:0 13px 28px rgba(98,70,217,.10);animation:up .45s backwards}
-.hero>*{position:relative;z-index:1}
-.orb{position:absolute!important;z-index:0!important;width:170px;height:170px;border-radius:50%;right:-80px;top:-95px;background:rgba(255,255,255,.45);animation:floaty 6s ease-in-out infinite}
-.kick{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.kick small{font-size:11.5px;font-weight:900;color:#6b6290}
-.live{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:99px;background:#fff;border:1px solid #d8d3ee;color:var(--ok);font-size:10.5px;font-weight:900}
-.live i{width:7px;height:7px;border-radius:50%;background:#43b98a}
-.hero h1{margin:8px 0 0;font-size:25px;line-height:1.25;font-weight:900;letter-spacing:-.04em;color:#3f3566;overflow-wrap:anywhere}
-.hero p{margin:4px 0 0;font-size:11.5px;font-weight:700;color:#6b6290}
-.info{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:15px}
-.cell{padding:10px 12px;border-radius:15px;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.9);min-width:0}
-.cell small{display:block;font-size:10.5px;font-weight:800;color:var(--muted)}
-.cell b{display:block;margin-top:3px;font-size:12.5px;font-weight:900;direction:ltr;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.idc{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fff;border-color:#d9d1fb}
-.idc>div{min-width:0}
-.idc b{font-size:20px;letter-spacing:1px;color:var(--p-dark);text-align:right;overflow:visible}
-.copy{flex:0 0 auto;padding:9px 14px;border-radius:99px;background:linear-gradient(135deg,#6246d9,#8b6cf0);color:#fff;font-size:11.5px;font-weight:900;box-shadow:0 8px 16px rgba(98,70,217,.25);transition:transform .18s}
-.copy:active{transform:scale(.95)}
-.copy:disabled{opacity:.5;cursor:wait}
-
-.card{margin-top:14px;padding:15px 14px;border-radius:23px;background:#fff;border:1px solid var(--edge);box-shadow:0 7px 24px -14px rgba(98,70,217,.22);animation:up .45s backwards}
-.sh{display:flex;align-items:center;gap:9px;margin-bottom:10px}
-.si{width:28px;height:28px;flex:0 0 28px;border-radius:9px;display:grid;place-items:center;color:#fff;background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 5px 12px rgba(98,70,217,.25)}
-.si svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.sh h2{margin:0;font-size:15.5px;font-weight:900}
-.empty{margin:0;padding:6px 2px;font-size:12px;line-height:1.9;font-weight:700;color:var(--muted)}
-
-.mi{width:100%;display:flex;align-items:center;gap:12px;padding:12px 4px;text-align:right;border-bottom:1px solid #f1eefb;transition:background .18s,transform .18s}
-.mi:last-child{border-bottom:0;padding-bottom:2px}
-.mi:first-of-type{padding-top:4px}
-.mi:active{transform:scale(.99);background:#faf9ff}
-.mic{width:40px;height:40px;flex:0 0 40px;border-radius:13px;display:grid;place-items:center;background:var(--p-soft);border:1px solid var(--edge);color:var(--p)}
-.mic svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.mc{min-width:0;flex:1}
-.mc b{display:block;font-size:13.5px;font-weight:900}
-.mc small{display:block;margin-top:2px;font-size:11px;font-weight:700;color:var(--muted2);line-height:1.5}
-.ar{width:17px;height:17px;flex:0 0 17px;fill:none;stroke:#b3a9e0;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.badge{padding:3px 9px;border-radius:99px;background:var(--p-soft);border:1px solid var(--edge);color:var(--p-dark);font-size:11px;font-weight:900}
-
-.win{display:flex;align-items:center;gap:11px;padding:11px 2px;border-bottom:1px solid #f1eefb}
-.win:last-child{border-bottom:0}
-.wi{width:38px;height:38px;flex:0 0 38px;border-radius:12px;display:grid;place-items:center;background:var(--p-soft);color:var(--p)}
-.wi svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+/* identity */
+.who{display:flex;align-items:center;gap:14px;padding:8px 2px 18px}
+.av{width:62px;height:62px;flex:0 0 62px;border-radius:50%;display:grid;place-items:center;font-size:26px;font-weight:900;color:var(--p-dark);background:#e6e0ff;border:3px solid #fff;box-shadow:0 6px 16px rgba(98,70,217,.18)}
 .wm{min-width:0;flex:1}
-.wm b{display:block;font-size:13px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wm small{display:block;margin-top:3px;font-size:10.5px;font-weight:700;color:var(--muted)}
-.wp{text-align:left;white-space:nowrap}
-.wp b{display:block;font-size:12.5px;font-weight:900;color:var(--p-dark)}
-.wp small{display:inline-block;margin-top:3px;padding:2px 8px;border-radius:99px;background:#e8f6ef;color:var(--ok);font-size:10px;font-weight:900}
+.wm h1{margin:0;font-size:21px;line-height:1.25;font-weight:900;letter-spacing:-.02em;overflow-wrap:anywhere}
+.live{display:inline-flex;align-items:center;gap:6px;margin-top:5px;font-size:11.5px;font-weight:800;color:var(--ok)}
+.live i{width:7px;height:7px;border-radius:50%;background:#2fb67e}
 
-.out{width:100%;height:50px;margin-top:14px;border-radius:16px;background:#fff;border:1px solid #f3c0cb;color:var(--bad);font-size:13px;font-weight:900;transition:transform .18s}
+/* ID card - the one bold element */
+.idcard{position:relative;overflow:hidden;padding:18px 18px 16px;border-radius:26px;color:#fff;background:linear-gradient(135deg,#4a34b8,#6246d9 55%,#8b6cf0);box-shadow:0 18px 34px -16px rgba(98,70,217,.65)}
+.idcard::after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;left:-70px;bottom:-110px;background:rgba(255,255,255,.09)}
+.idcard>*{position:relative;z-index:1}
+.idtop{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.idtop small{font-size:12px;font-weight:800;opacity:.8}
+.copy{padding:8px 15px;border-radius:99px;background:#fff;color:var(--p-dark);font-size:12px;font-weight:900;transition:transform .15s}
+.copy:active{transform:scale(.95)}
+.copy:disabled{opacity:.55;cursor:wait}
+.code{margin:10px 0 0;font-size:30px;font-weight:900;letter-spacing:3px;direction:ltr;text-align:right;overflow-wrap:anywhere}
+.code.sm{font-size:16px;letter-spacing:0;font-weight:800}
+.ct{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.ct div{padding:9px 12px;border-radius:14px;background:rgba(255,255,255,.14);min-width:0}
+.ct small{display:block;font-size:10.5px;font-weight:700;opacity:.75}
+.ct b{display:block;margin-top:3px;font-size:12.5px;font-weight:800;direction:ltr;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* quick tiles */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.tile{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 4px 11px;border-radius:20px;background:var(--card);border:1px solid var(--line);transition:transform .15s}
+.tile:active{transform:scale(.95)}
+.tile .ic{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:var(--p-soft);color:var(--p)}
+.tile svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tile span.l{font-size:11px;font-weight:800;line-height:1.3;text-align:center}
+.badge{position:absolute;top:7px;inset-inline-start:7px;min-width:19px;height:19px;padding:0 5px;border-radius:99px;background:var(--p);color:#fff;font-size:10.5px;font-weight:900;display:grid;place-items:center}
+
+/* sections */
+.sec{margin-top:24px}
+.sec>h3{margin:0 2px 6px;font-size:18px;font-weight:900;letter-spacing:-.01em}
+.box{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:2px 14px}
+.row{width:100%;display:flex;align-items:center;gap:13px;padding:14px 0;text-align:right;border-bottom:1px solid var(--line);transition:opacity .15s}
+.row:last-child{border-bottom:0}
+.row:active{opacity:.6}
+.row .ic{width:24px;height:24px;flex:0 0 24px;color:#7b8394}
+.row .ic svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.rt{min-width:0;flex:1}
+.rt b{display:block;font-size:14px;font-weight:800}
+.rt small{display:block;margin-top:2px;font-size:11.5px;font-weight:600;color:var(--muted);direction:rtl}
+.rt small.ltr{direction:ltr;text-align:right}
+.ar{width:17px;height:17px;flex:0 0 17px;fill:none;stroke:#bfc4ce;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+/* wins */
+.empty{margin:0;padding:14px 0;font-size:12.5px;line-height:1.9;font-weight:700;color:var(--muted)}
+.win{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.win:last-child{border-bottom:0}
+.wi{width:40px;height:40px;flex:0 0 40px;border-radius:13px;display:grid;place-items:center;background:#fff6dc;color:#b7860b}
+.wi svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.wn{min-width:0;flex:1}
+.wn b{display:block;font-size:13.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wn small{display:block;margin-top:3px;font-size:11px;font-weight:600;color:var(--muted)}
+.wp{text-align:left;white-space:nowrap}
+.wp b{display:block;font-size:13px;font-weight:900;color:var(--p-dark)}
+.wp small{display:inline-block;margin-top:3px;padding:2px 8px;border-radius:99px;background:#e8f6ef;color:var(--ok);font-size:10px;font-weight:800}
+
+.out{width:100%;height:52px;margin-top:24px;border-radius:18px;background:#fff;border:1px solid #f1c4cd;color:var(--bad);font-size:14px;font-weight:900;transition:transform .15s}
 .out:active{transform:scale(.98)}
 .out:disabled{opacity:.6}
+.ver{margin:14px 0 0;text-align:center;font-size:11px;font-weight:700;color:var(--muted2)}
 
+/* bottom nav */
 .bw{position:fixed;left:0;right:0;bottom:0;padding:8px 12px calc(8px + var(--sb));z-index:50;pointer-events:none}
-.bn{width:min(100%,500px);margin:0 auto;padding:6px;border-radius:22px;background:rgba(255,255,255,.97);border:1px solid var(--line);box-shadow:0 8px 24px rgba(23,32,42,.12);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);pointer-events:auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px}
-.ni{min-width:0;min-height:54px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:16px;color:#7e8992;transition:transform .16s,background .16s,color .16s}
+.bn{width:min(100%,500px);margin:0 auto;padding:6px;border-radius:24px;background:rgba(255,255,255,.96);border:1px solid var(--line);box-shadow:0 10px 28px rgba(23,32,42,.12);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);pointer-events:auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px}
+.ni{min-width:0;min-height:54px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:18px;color:#7e8992;transition:transform .16s,background .16s,color .16s}
 .ni:active{transform:scale(.96)}
 .ni.on{color:var(--p);background:var(--p-soft)}
 .ni svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.ni span{font-size:9px;line-height:1;font-weight:900;white-space:nowrap}
+.ni span{font-size:9.5px;line-height:1;font-weight:900;white-space:nowrap}
 .add{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,#6246d9,#8b6cf0);color:#fff;box-shadow:0 8px 16px rgba(98,70,217,.28)}
 .add svg{width:20px;height:20px;stroke-width:2.2}
 
-.toast{position:fixed;left:50%;bottom:calc(92px + var(--sb));transform:translate(-50%,14px);max-width:calc(100% - 40px);padding:10px 14px;border-radius:13px;background:#17202a;color:#fff;font-size:12px;font-weight:800;text-align:center;opacity:0;pointer-events:none;transition:.28s;z-index:80}
+.toast{position:fixed;left:50%;bottom:calc(94px + var(--sb));transform:translate(-50%,14px);max-width:calc(100% - 40px);padding:10px 15px;border-radius:13px;background:#16181d;color:#fff;font-size:12px;font-weight:800;text-align:center;opacity:0;pointer-events:none;transition:.28s;z-index:80}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .loading{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;transition:.28s}
 .loading.hidden{opacity:0;visibility:hidden;pointer-events:none}
 .loader{width:30px;height:30px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--p);animation:rot .8s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+:focus-visible{outline:2px solid var(--p);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-@media(max-width:360px){.hero h1{font-size:22px}.info{grid-template-columns:1fr}}
+@media(max-width:360px){.tiles{grid-template-columns:repeat(2,1fr)}.code{font-size:25px}.ct{grid-template-columns:1fr}}
 </style>
 <script type="module" src="./js/auth-guard.js"></script>
 </head>
@@ -103,82 +114,106 @@ header{position:sticky;top:0;z-index:30;margin-inline:-14px;padding:10px 14px;di
 <div class="loading" id="loading"><div class="loader"></div></div>
 
 <main class="page">
-  <header>
+  <div class="top">
     <button class="ib" id="backBtn" type="button" aria-label="رجوع"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-    <div class="brand"><strong>MZAD</strong><span>PHONE</span></div>
-    <span class="sp40"></span>
-  </header>
+    <h2>حسابي</h2>
+    <span class="sp"></span>
+  </div>
 
-  <section class="hero">
-    <i class="orb"></i>
-    <div class="kick"><small>حسابي</small><span class="live"><i></i>حساب نشط</span></div>
-    <h1 id="profileName">جاري التحميل...</h1>
-    <p>إدارة حسابك ومتابعة نشاطك على MZAD PHONE</p>
-    <div class="info">
-      <div class="cell"><small>رقم الهاتف</small><b id="infoPhone">—</b></div>
-      <div class="cell"><small>البريد الإلكتروني</small><b id="infoEmail">—</b></div>
-      <div class="cell idc">
-        <div><small>المعرّف الخاص بك (ID)</small><b id="personalCode" aria-live="polite">جاري التحميل...</b></div>
-        <button class="copy" id="copyPersonalCode" type="button" disabled>نسخ</button>
-      </div>
+  <section class="who">
+    <div class="av" id="avatar">M</div>
+    <div class="wm">
+      <h1 id="profileName">جاري التحميل...</h1>
+      <span class="live"><i></i>حساب نشط</span>
     </div>
   </section>
 
-  <section class="card" id="winsCard">
-    <div class="sh"><span class="si"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0V4z"/><path d="M8 6H5v1a3 3 0 0 0 3 3M16 6h3v1a3 3 0 0 1-3 3M12 13v4M8.5 20h7"/></svg></span><h2>المزادات اللي فزت بيها</h2></div>
-    <div id="winsList"><p class="empty">جاري تحميل نتائج مزاداتك...</p></div>
+  <section class="idcard">
+    <div class="idtop">
+      <small>المعرّف الخاص بك (ID)</small>
+      <button class="copy" id="copyPersonalCode" type="button" disabled>نسخ</button>
+    </div>
+    <p class="code" id="personalCode" aria-live="polite">...</p>
+    <div class="ct">
+      <div><small>رقم الهاتف</small><b id="infoPhone">—</b></div>
+      <div><small>البريد الإلكتروني</small><b id="infoEmail">—</b></div>
+    </div>
   </section>
 
-  <section class="card">
-    <div class="sh"><span class="si"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></span><h2>إدارة حسابك</h2></div>
-    <button class="mi" data-go="my-listings.html" type="button">
-      <span class="mic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span>
-      <span class="mc"><b>أجهزتي المعروضة</b><small>عرض وإدارة الأجهزة التي أضفتها للبيع</small></span>
+  <nav class="tiles" aria-label="اختصارات">
+    <button class="tile" data-go="my-listings.html" type="button">
       <span class="badge" id="listingsBadge" style="display:none">0</span>
-      <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+      <span class="ic"><svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></span>
+      <span class="l">أجهزتي</span>
     </button>
-    <button class="mi" data-go="my-auctions.html" type="button">
-      <span class="mic"><svg viewBox="0 0 24 24"><path d="m7 11 7.5-7.5 3 3L10 14M5 13l6 6M4 20h16"/></svg></span>
-      <span class="mc"><b>مزاداتي</b><small>إدارة الأجهزة التي تعرضها بالمزاد</small></span>
-      <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+    <button class="tile" data-go="my-auctions.html" type="button">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="m7 11 7.5-7.5 3 3L10 14M5 13l6 6M4 21h16"/></svg></span>
+      <span class="l">مزاداتي</span>
     </button>
-    <button class="mi" data-go="my-deposits.html" type="button">
-      <span class="mic"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></span>
-      <span class="mc"><b>تأميناتي وحجوزاتي</b><small>حالة التأمين: قيد المراجعة أو مقبول أو مسترجع</small></span>
-      <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+    <button class="tile" data-go="my-deposits.html" type="button">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></span>
+      <span class="l">تأميناتي</span>
     </button>
-    <button class="mi" data-toast="سجل المشتريات راح يتفعل مع نظام الشراء" type="button">
-      <span class="mic"><svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg></span>
-      <span class="mc"><b>مشترياتي</b><small>الأجهزة التي اشتريتها من المنصة</small></span>
-      <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+    <button class="tile" data-toast="سجل المشتريات راح يتفعل مع نظام الشراء" type="button">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg></span>
+      <span class="l">مشترياتي</span>
     </button>
+  </nav>
+
+  <section class="sec" id="winsSec">
+    <h3>المزادات اللي فزت بيها</h3>
+    <div class="box" id="winsList"><p class="empty">جاري تحميل نتائج مزاداتك...</p></div>
   </section>
 
-  <section class="card">
-    <div class="sh"><span class="si"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5M12 17h.01"/></svg></span><h2>المساعدة والدعم</h2></div>
-    <button class="mi" data-toast="هذا القسم راح يتفعل قريباً." type="button">
-      <span class="mic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5M12 17h.01"/></svg></span>
-      <span class="mc"><b>مركز المساعدة</b><small>إجابات سريعة على الأسئلة الشائعة</small></span>
-      <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
-    </button>
-    <button class="mi" data-toast="هذا القسم راح يتفعل قريباً." type="button">
-      <span class="mic"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4V5z"/></svg></span>
-      <span class="mc"><b>تواصل معنا</b><small>نحن موجودين لمساعدتك</small></span>
-      <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
-    </button>
-    <button class="mi" data-toast="هذا القسم راح يتفعل قريباً." type="button">
-      <span class="mic"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6V3z"/><path d="M9 12h7M9 16h5"/></svg></span>
-      <span class="mc"><b>الشروط والأحكام</b><small>قواعد استخدام منصة مزاد فون</small></span>
-      <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
-    </button>
-    <button class="mi" data-toast="هذا القسم راح يتفعل قريباً." type="button">
-      <span class="mic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5h.01"/></svg></span>
-      <span class="mc"><b>من نحن</b><small>تعرف أكثر على MZAD PHONE</small></span>
-      <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
-    </button>
+  <section class="sec">
+    <h3>حسابك</h3>
+    <div class="box">
+      <button class="row" data-toast="تعديل المعلومات راح يتفعل قريباً." type="button">
+        <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></span>
+        <span class="rt"><b>المعلومات الشخصية</b><small class="ltr" id="rowPhone">—</small></span>
+        <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <button class="row" data-go="favorites.html" type="button">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7z"/></svg></span>
+        <span class="rt"><b>المفضلة</b><small>الأجهزة اللي حفظتها</small></span>
+        <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <button class="row" data-go="my-deposits.html" type="button">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></span>
+        <span class="rt"><b>تأميناتي وحجوزاتي</b><small>قيد المراجعة أو مقبول أو مسترجع</small></span>
+        <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h3>الدعم</h3>
+    <div class="box">
+      <button class="row" data-toast="هذا القسم راح يتفعل قريباً." type="button">
+        <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5M12 17h.01"/></svg></span>
+        <span class="rt"><b>مركز المساعدة</b></span>
+        <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <button class="row" data-toast="هذا القسم راح يتفعل قريباً." type="button">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4V5z"/></svg></span>
+        <span class="rt"><b>تواصل معنا</b></span>
+        <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <button class="row" data-toast="هذا القسم راح يتفعل قريباً." type="button">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6V3z"/><path d="M9 12h7M9 16h5"/></svg></span>
+        <span class="rt"><b>الشروط والأحكام</b></span>
+        <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <button class="row" data-toast="هذا القسم راح يتفعل قريباً." type="button">
+        <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5h.01"/></svg></span>
+        <span class="rt"><b>من نحن</b></span>
+        <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+    </div>
   </section>
 
   <button class="out" id="logoutBtn" type="button">تسجيل الخروج</button>
+  <p class="ver">MZAD PHONE</p>
 </main>
 
 <div class="bw"><nav class="bn">
@@ -214,7 +249,7 @@ async function loadWins(){
       const price = Number(w.final_price_iqd || 0).toLocaleString("en-US");
       return `<a class="win" href="auction-details.html?auction=${encodeURIComponent(w.auction_id)}">
         <span class="wi"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0V4z"/><path d="M8 6H5v1a3 3 0 0 0 3 3M16 6h3v1a3 3 0 0 1-3 3M12 13v4M8.5 20h7"/></svg></span>
-        <span class="wm"><b>${dev}</b><small>${num}${date}</small></span>
+        <span class="wn"><b>${dev}</b><small>${num}${date}</small></span>
         <span class="wp"><b>${price} د.ع</b><small>فزت بيه ✓</small></span></a>`;
     }).join("");
   }catch(e){
@@ -229,18 +264,22 @@ async function loadProfile(){
     const { data, error } = await supabase.auth.getUser();
     if (error || !data?.user){ location.replace("index.html?login=1&returnTo=profile.html"); return; }
     const user = data.user, m = user.user_metadata || {};
-    $("profileName").textContent = m.full_name || m.name || "مستخدم MZAD PHONE";
-    $("infoPhone").textContent = m.phone || "غير مضاف";
+    const name = m.full_name || m.name || "مستخدم MZAD PHONE";
+    const phone = m.phone || "غير مضاف";
+    $("profileName").textContent = name;
+    $("avatar").textContent = (name.trim().charAt(0) || "M").toUpperCase();
+    $("infoPhone").textContent = phone;
+    $("rowPhone").textContent = phone;
     $("infoEmail").textContent = user.email || "غير مضاف";
     $("loading").classList.add("hidden");
 
-    // باقي البيانات تتحمل بدون ما تأخر ظهور الصفحة
     loadWins();
 
     const code = await supabase.rpc("mzad_get_my_buyer_code");
     if (code.error || typeof code.data !== "string" || !code.data){
       console.error("Personal code error:", code.error);
       $("personalCode").textContent = "تعذر تحميل المعرّف";
+      $("personalCode").classList.add("sm");
       toast("تعذر تحميل المعرّف الخاص بك");
     }else{
       $("personalCode").textContent = code.data;
@@ -265,7 +304,7 @@ $("backBtn").onclick = () => {
 
 $("copyPersonalCode").onclick = async () => {
   const code = $("personalCode").textContent.trim();
-  if (!code || /^(تعذر|جاري)/.test(code)) return;
+  if (!code || /^(تعذر|\.\.\.)/.test(code)) return;
   try{
     await navigator.clipboard.writeText(code);
     toast("تم نسخ المعرّف");
@@ -279,7 +318,7 @@ $("copyPersonalCode").onclick = async () => {
 };
 
 document.addEventListener("click", e => {
-  const b = e.target.closest(".mi");
+  const b = e.target.closest(".row, .tile");
   if (!b) return;
   if (b.dataset.go) location.href = b.dataset.go;
   else if (b.dataset.toast) toast(b.dataset.toast);
