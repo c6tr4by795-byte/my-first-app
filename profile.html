@@ -38,13 +38,23 @@ a{color:inherit;text-decoration:none}
 .copy:disabled{opacity:.55;cursor:wait}
 
 /* quick tiles */
-.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
-.tile{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 4px 11px;border-radius:20px;background:var(--card);border:1px solid var(--line);transition:transform .15s}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.tile{position:relative;display:flex;flex-direction:column;align-items:center;gap:9px;padding:16px 4px 13px;border-radius:20px;background:var(--card);border:1px solid var(--line);transition:transform .15s}
 .tile:active{transform:scale(.95)}
 .tile .ic{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:var(--p-soft);color:var(--p)}
 .tile svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .tile span.l{font-size:11px;font-weight:800;line-height:1.3;text-align:center}
 .badge{position:absolute;top:7px;inset-inline-start:7px;min-width:19px;height:19px;padding:0 5px;border-radius:99px;background:var(--p);color:#fff;font-size:10.5px;font-weight:900;display:grid;place-items:center}
+
+/* contest banner */
+.promo{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;padding:15px 16px;min-height:92px;border-radius:20px;color:#2d1a00;background:linear-gradient(135deg,#ffd35e,#ffa62b);transition:transform .15s}
+.promo:active{transform:scale(.98)}
+.promo .pt{min-width:0}
+.promo .tag{display:inline-block;padding:2px 9px;border-radius:99px;background:rgba(255,255,255,.55);font-size:10.5px;font-weight:900}
+.promo b{display:block;margin-top:6px;font-size:16px;font-weight:900;line-height:1.35}
+.promo small{display:block;margin-top:2px;font-size:11.5px;font-weight:700;opacity:.8}
+.promo .tr{flex:0 0 52px;width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:rgba(255,255,255,.45)}
+.promo .tr svg{width:28px;height:28px;fill:none;stroke:#2d1a00;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
 /* sections */
 .sec{margin-top:28px}
@@ -62,18 +72,6 @@ a{color:inherit;text-decoration:none}
 .ar{width:17px;height:17px;flex:0 0 17px;fill:none;stroke:#bfc4ce;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 
 /* wins */
-.empty{margin:0;padding:14px 0;font-size:12.5px;line-height:1.9;font-weight:700;color:var(--muted)}
-.win{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
-.win:last-child{border-bottom:0}
-.wi{width:40px;height:40px;flex:0 0 40px;border-radius:13px;display:grid;place-items:center;background:#fff6dc;color:#b7860b}
-.wi svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.wn{min-width:0;flex:1}
-.wn b{display:block;font-size:13.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wn small{display:block;margin-top:3px;font-size:11px;font-weight:600;color:var(--muted)}
-.an{direction:ltr;text-align:right;font-size:10px!important;color:var(--muted2)!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.wp{text-align:left;white-space:nowrap}
-.wp b{display:block;font-size:13px;font-weight:900;color:var(--p-dark)}
-.wp small{display:inline-block;margin-top:3px;padding:2px 8px;border-radius:99px;background:#e8f6ef;color:var(--ok);font-size:10px;font-weight:800}
 
 .out{width:100%;height:52px;margin-top:24px;border-radius:18px;background:#fff;border:1px solid #f1c4cd;color:var(--bad);font-size:14px;font-weight:900;transition:transform .15s}
 .out:active{transform:scale(.98)}
@@ -99,7 +97,7 @@ a{color:inherit;text-decoration:none}
 @keyframes rot{to{transform:rotate(360deg)}}
 :focus-visible{outline:2px solid var(--p);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-@media(max-width:360px){.tiles{grid-template-columns:repeat(2,1fr)}.code{font-size:25px}.ct{grid-template-columns:1fr}}
+@media(max-width:340px){.tiles{grid-template-columns:repeat(2,1fr)}.code{font-size:25px}.ct{grid-template-columns:1fr}}
 </style>
 <script type="module" src="./js/auth-guard.js"></script>
 </head>
@@ -146,12 +144,24 @@ a{color:inherit;text-decoration:none}
       <span class="ic"><svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg></span>
       <span class="l">مشترياتي</span>
     </button>
+    <button class="tile" data-go="my-wins.html" type="button">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0V4z"/><path d="M8 6H5v1a3 3 0 0 0 3 3M16 6h3v1a3 3 0 0 1-3 3M12 13v4M8.5 20h7"/></svg></span>
+      <span class="l">فزت بيها</span>
+    </button>
+    <button class="tile" data-go="favorites.html" type="button">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7z"/></svg></span>
+      <span class="l">المفضلة</span>
+    </button>
   </nav>
 
-  <section class="sec" id="winsSec">
-    <h3>المزادات اللي فزت بيها</h3>
-    <div class="box" id="winsList"><p class="empty">جاري تحميل نتائج مزاداتك...</p></div>
-  </section>
+  <a class="promo" href="contests.html">
+    <div class="pt">
+      <span class="tag">مسابقات</span>
+      <b>شارك بمسابقات MZAD PHONE واربح جوائز</b>
+      <small>اضغط لمعرفة المسابقات المتاحة</small>
+    </div>
+    <span class="tr"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0V4z"/><path d="M8 6H5v1a3 3 0 0 0 3 3M16 6h3v1a3 3 0 0 1-3 3M12 13v4M8.5 20h7"/></svg></span>
+  </a>
 
   <section class="sec">
     <h3>حسابك</h3>
@@ -161,14 +171,14 @@ a{color:inherit;text-decoration:none}
         <span class="rt"><b>المعلومات الشخصية</b><small class="ltr" id="rowPhone">—</small></span>
         <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
       </button>
+      <button class="row" data-go="contests.html" type="button">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0V4z"/><path d="M8 6H5v1a3 3 0 0 0 3 3M16 6h3v1a3 3 0 0 1-3 3M12 13v4M8.5 20h7"/></svg></span>
+        <span class="rt"><b>المسابقات</b><small>المسابقات الحالية والجوائز</small></span>
+        <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
       <button class="row" data-toast="تعديل المعلومات راح يتفعل قريباً." type="button">
         <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg></span>
         <span class="rt"><b>البريد الإلكتروني</b><small class="ltr" id="rowEmail">—</small></span>
-        <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
-      </button>
-      <button class="row" data-go="favorites.html" type="button">
-        <span class="ic"><svg viewBox="0 0 24 24"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7z"/></svg></span>
-        <span class="rt"><b>المفضلة</b><small>الأجهزة اللي حفظتها</small></span>
         <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
       </button>
     </div>
@@ -217,34 +227,9 @@ a{color:inherit;text-decoration:none}
 <script type="module">
 import { supabase } from "./js/supabase.js";
 const $ = id => document.getElementById(id);
-const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
 let tt;
 function toast(m){ const e = $("toast"); e.textContent = m; e.classList.add("show"); clearTimeout(tt); tt = setTimeout(() => e.classList.remove("show"), 2300); }
-
-/* ===== المزادات اللي فزت بيها ===== */
-async function loadWins(){
-  const list = $("winsList");
-  try{
-    const { data, error } = await supabase.rpc("mzad_get_my_auction_wins");
-    if (error) throw error;
-    const rows = data || [];
-    if (!rows.length){ list.innerHTML = '<p class="empty">بعدك ما فزت بأي مزاد. إذا فزت، راح تظهر نتائج مزاداتك هنا.</p>'; return; }
-    list.innerHTML = rows.map(w => {
-      const dev = esc([w.brand, w.model].filter(Boolean).join(" ") || "جهاز");
-      const num = w.auction_number ? '<small class="an">' + esc(w.auction_number) + '</small>' : "";
-      const date = w.ended_at ? esc(new Date(w.ended_at).toLocaleDateString("ar-IQ")) : "";
-      const price = Number(w.final_price_iqd || 0).toLocaleString("en-US");
-      return `<a class="win" href="auction-details.html?auction=${encodeURIComponent(w.auction_id)}">
-        <span class="wi"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0V4z"/><path d="M8 6H5v1a3 3 0 0 0 3 3M16 6h3v1a3 3 0 0 1-3 3M12 13v4M8.5 20h7"/></svg></span>
-        <span class="wn"><b>${dev}</b><small>${date}</small>${num}</span>
-        <span class="wp"><b>${price} د.ع</b><small>فزت بيه ✓</small></span></a>`;
-    }).join("");
-  }catch(e){
-    console.warn("MY AUCTION WINS:", e);
-    list.innerHTML = '<p class="empty">تعذر تحميل نتائج مزاداتك حالياً.</p>';
-  }
-}
 
 /* ===== الحساب ===== */
 async function loadProfile(){
@@ -258,8 +243,6 @@ async function loadProfile(){
     $("rowPhone").textContent = phone;
     $("rowEmail").textContent = user.email || "غير مضاف";
     $("loading").classList.add("hidden");
-
-    loadWins();
 
     const code = await supabase.rpc("mzad_get_my_buyer_code");
     if (code.error || typeof code.data !== "string" || !code.data){
