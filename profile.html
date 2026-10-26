@@ -22,28 +22,20 @@ a{color:inherit;text-decoration:none}
 .sp{width:40px}
 
 /* identity */
-.who{display:flex;align-items:center;gap:14px;padding:8px 2px 18px}
-.av{width:62px;height:62px;flex:0 0 62px;border-radius:50%;display:grid;place-items:center;font-size:26px;font-weight:900;color:var(--p-dark);background:#e6e0ff;border:3px solid #fff;box-shadow:0 6px 16px rgba(98,70,217,.18)}
+.who{padding:6px 2px 14px}
 .wm{min-width:0;flex:1}
-.wm h1{margin:0;font-size:21px;line-height:1.25;font-weight:900;letter-spacing:-.02em;overflow-wrap:anywhere}
+.wm h1{margin:0;font-size:22px;line-height:1.25;font-weight:900;letter-spacing:-.02em;overflow-wrap:anywhere}
 .live{display:inline-flex;align-items:center;gap:6px;margin-top:5px;font-size:11.5px;font-weight:800;color:var(--ok)}
 .live i{width:7px;height:7px;border-radius:50%;background:#2fb67e}
 
 /* ID card - the one bold element */
-.idcard{position:relative;overflow:hidden;padding:18px 18px 16px;border-radius:26px;color:#fff;background:linear-gradient(135deg,#4a34b8,#6246d9 55%,#8b6cf0);box-shadow:0 18px 34px -16px rgba(98,70,217,.65)}
-.idcard::after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;left:-70px;bottom:-110px;background:rgba(255,255,255,.09)}
-.idcard>*{position:relative;z-index:1}
-.idtop{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.idtop small{font-size:12px;font-weight:800;opacity:.8}
-.copy{padding:8px 15px;border-radius:99px;background:#fff;color:var(--p-dark);font-size:12px;font-weight:900;transition:transform .15s}
+.idcard{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-radius:20px;color:#fff;background:linear-gradient(135deg,#4a34b8,#6246d9 60%,#7c5ee8)}
+.idcard small{display:block;font-size:11.5px;font-weight:800;opacity:.8}
+.code{margin:4px 0 0;font-size:22px;font-weight:900;letter-spacing:2px;direction:ltr;text-align:right;overflow-wrap:anywhere}
+.code.sm{font-size:14px;letter-spacing:0;font-weight:800}
+.copy{flex:0 0 auto;padding:8px 16px;border-radius:99px;background:#fff;color:var(--p-dark);font-size:12px;font-weight:900;transition:transform .15s}
 .copy:active{transform:scale(.95)}
 .copy:disabled{opacity:.55;cursor:wait}
-.code{margin:10px 0 0;font-size:30px;font-weight:900;letter-spacing:3px;direction:ltr;text-align:right;overflow-wrap:anywhere}
-.code.sm{font-size:16px;letter-spacing:0;font-weight:800}
-.ct{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
-.ct div{padding:9px 12px;border-radius:14px;background:rgba(255,255,255,.14);min-width:0}
-.ct small{display:block;font-size:10.5px;font-weight:700;opacity:.75}
-.ct b{display:block;margin-top:3px;font-size:12.5px;font-weight:800;direction:ltr;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* quick tiles */
 .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
@@ -122,7 +114,6 @@ a{color:inherit;text-decoration:none}
   </div>
 
   <section class="who">
-    <div class="av" id="avatar">M</div>
     <div class="wm">
       <h1 id="profileName">جاري التحميل...</h1>
       <span class="live"><i></i>حساب نشط</span>
@@ -130,15 +121,11 @@ a{color:inherit;text-decoration:none}
   </section>
 
   <section class="idcard">
-    <div class="idtop">
+    <div>
       <small>المعرّف الخاص بك (ID)</small>
-      <button class="copy" id="copyPersonalCode" type="button" disabled>نسخ</button>
+      <p class="code" id="personalCode" aria-live="polite">...</p>
     </div>
-    <p class="code" id="personalCode" aria-live="polite">...</p>
-    <div class="ct">
-      <div><small>رقم الهاتف</small><b id="infoPhone">—</b></div>
-      <div><small>البريد الإلكتروني</small><b id="infoEmail">—</b></div>
-    </div>
+    <button class="copy" id="copyPersonalCode" type="button" disabled>نسخ</button>
   </section>
 
   <nav class="tiles" aria-label="اختصارات">
@@ -172,6 +159,11 @@ a{color:inherit;text-decoration:none}
       <button class="row" data-toast="تعديل المعلومات راح يتفعل قريباً." type="button">
         <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></span>
         <span class="rt"><b>المعلومات الشخصية</b><small class="ltr" id="rowPhone">—</small></span>
+        <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <button class="row" data-toast="تعديل المعلومات راح يتفعل قريباً." type="button">
+        <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg></span>
+        <span class="rt"><b>البريد الإلكتروني</b><small class="ltr" id="rowEmail">—</small></span>
         <svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
       </button>
       <button class="row" data-go="favorites.html" type="button">
@@ -263,10 +255,8 @@ async function loadProfile(){
     const name = m.full_name || m.name || "مستخدم MZAD PHONE";
     const phone = m.phone || "غير مضاف";
     $("profileName").textContent = name;
-    $("avatar").textContent = (name.trim().charAt(0) || "M").toUpperCase();
-    $("infoPhone").textContent = phone;
     $("rowPhone").textContent = phone;
-    $("infoEmail").textContent = user.email || "غير مضاف";
+    $("rowEmail").textContent = user.email || "غير مضاف";
     $("loading").classList.add("hidden");
 
     loadWins();
