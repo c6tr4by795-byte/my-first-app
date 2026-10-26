@@ -1057,6 +1057,18 @@ const purchasesBtn =
 
 let toastTimer;
 const safeText = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const depositSection = document.createElement("section");
+depositSection.className = "section";
+depositSection.id = "myDepositHistory";
+depositSection.innerHTML = `
+  <h2 class="section-heading">تأميناتي وحجوزاتي</h2>
+  <div class="menu-card" style="padding:13px">
+    <p style="margin:0;color:var(--muted);font-size:11px;line-height:1.8">تابع حالة تأمين البائع أو المشتري، واعرف إذا كان قيد المراجعة أو مقبول أو مسترجع، حتى بعد انتهاء المزاد.</p>
+    <a href="my-deposits.html" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;padding:12px;border-radius:12px;background:#176b87;color:#fff;text-decoration:none;font-size:12px;font-weight:900">فتح سجل التأمينات والحجوزات ←</a>
+  </div>`;
+const profileCardForDeposits = document.querySelector(".profile-card");
+if (profileCardForDeposits) profileCardForDeposits.insertAdjacentElement("afterend", depositSection);
+
 const winsSection = document.createElement("section");
 winsSection.className = "section";
 winsSection.id = "myAuctionWins";
