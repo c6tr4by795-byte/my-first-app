@@ -2386,7 +2386,7 @@ async function fetchMZADDirectSales(){
   for(const im of ir.data||[]){const k=String(im.device_id);if(!byId.has(k))byId.set(k,[]);byId.get(k).push(im);}
   return rows.map(item=>{
     const d=item.device;
-    const images=(byId.get(String(d.id))||[]).sort((a,b)=>(Number(b.is_primary)-Number(a.is_primary))||(Number(a.sort_order)-Number(b.sort_order))).map(im=>publicImage(im.storage_path)).filter(Boolean);
+    const images=(byId.get(String(d.id))||[]).sort((a,b)=>(Number(b.is_primary)-Number(a.is_primary))||(Number(a.sort_order)-Number(b.sort_order))).map(im=>getDeviceImageUrl(im.storage_path)).filter(Boolean);
     return {id:d.id,created_at:item.created_at,brand:d.brand,model:d.model,storage:d.storage,color:d.color,battery_health:d.battery_health,condition:d.condition_grade,screen_condition:d.screen_condition,body_condition:d.condition_grade,price:item.asking_price_iqd,location:"النجف",sale_type:"direct",images,notes:d.seller_notes,_mzad:true};
   });
 }
