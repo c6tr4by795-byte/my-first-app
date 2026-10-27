@@ -2796,7 +2796,8 @@ function ensureNotificationPanel(){
     .mzad-notify-item span{display:block;margin-top:5px;font-size:11px;line-height:1.6;color:#626b78;white-space:pre-wrap}
     .mzad-notify-item time{display:block;margin-top:7px;font-size:9px;color:#8a91a0}
     .mzad-notify-empty{padding:24px 10px;text-align:center;color:#737b89;font-size:12px;line-height:1.7}
-    .mzad-notify-badge{position:absolute;z-index:2;top:-5px;inset-inline-start:-5px;min-width:19px;height:19px;padding:0 5px;border:2px solid #7563df;border-radius:999px;background:linear-gradient(145deg,#ff6684,#e11d48);color:#fff;font-size:10px;line-height:1;font-weight:900;display:grid;place-items:center;white-space:nowrap;box-shadow:0 2px 7px rgba(225,29,72,.28);pointer-events:none;transform:none}
+    /* نقطة حمراء صغيرة بدون رقم، بزاوية الجرس العليا */
+    .mzad-notify-badge{position:absolute;z-index:2;top:6px;inset-inline-start:9px;width:10px;height:10px;min-width:0;padding:0;border:2px solid #fff;border-radius:50%;background:#e5365f;box-shadow:0 2px 6px rgba(229,54,95,.4);font-size:0;line-height:0;color:transparent;overflow:hidden;pointer-events:none;transform:none}
     #notificationBtn{position:relative;overflow:visible}
     #notificationBtn .mzad-notify-badge[hidden]{display:none}
   `;
@@ -2814,17 +2815,18 @@ function ensureNotificationPanel(){
   return notificationPanel;
 }
 
+/* النقطة الحمراء: تظهر إذا فيه إشعارات غير مقروءة، بدون أي رقم */
 function updateNotificationBadge(count){
   notificationUnreadCount = Math.max(0, Number(count)||0);
   let badge = notificationButton.querySelector(".mzad-notify-badge");
   if(notificationUnreadCount && !badge){
     badge=document.createElement("span");
     badge.className="mzad-notify-badge";
-    badge.setAttribute("aria-label","إشعارات غير مقروءة");
     notificationButton.appendChild(badge);
   }
   if(badge){
-    badge.textContent=notificationUnreadCount>99?"99+":String(notificationUnreadCount);
+    badge.textContent="";
+    badge.setAttribute("aria-label", notificationUnreadCount + " إشعارات غير مقروءة");
     badge.hidden=!notificationUnreadCount;
   }
 }
