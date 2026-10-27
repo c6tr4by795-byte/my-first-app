@@ -2,2619 +2,928 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#F7F8FA">
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#6f5ce0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>MZAD PHONE — المفضلة</title>
 
 <style>
-
 :root{
-  --bg:#F7F8FA;
-  --white:#FFFFFF;
-  --ink:#17202A;
-  --muted:#667085;
-  --line:#E6E9ED;
-
-  --primary:#176B87;
-  --primary-dark:#125A73;
-  --primary-soft:#E8F3F6;
-
-  --purple:#6246D9;
-  --purple-dark:#51477D;
-
-  --shadow:0 10px 28px rgba(23,32,42,.06);
-
-  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#f9f8fd;--ink:#17202a;--muted:#6b7280;--line:#ece8fb;--edge:#ddd8f8;
+  --p:#6246d9;--p-dark:#4a34b8;--p-soft:#f3f0ff;--hot:#e8590c;--ok:#1e8a5a;
+  --safe-bottom:env(safe-area-inset-bottom,0px)
 }
 
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
+*{box-sizing:border-box}
 
-html{
-  scroll-behavior:smooth;
-}
+html{scroll-behavior:smooth}
 
 body{
   margin:0;
-  min-height:100vh;
-
+  min-height:100dvh;
   background:var(--bg);
   color:var(--ink);
-
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Display",
-    "SF Pro Text",
-    "Segoe UI",
-    Tahoma,
-    Arial,
-    sans-serif;
-
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
   -webkit-font-smoothing:antialiased;
-  text-rendering:optimizeLegibility;
+  text-rendering:optimizeLegibility
 }
 
-button{
-  font:inherit;
-  border:0;
-  cursor:pointer;
-  color:inherit;
-}
+button{font:inherit;border:0;background:none;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+a{text-decoration:none;color:inherit;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
 
 .page{
   width:min(100%,520px);
-  margin:auto;
-
-  padding:
-    0
-    14px
-    calc(100px + var(--safe-bottom));
+  margin:0 auto;
+  padding:0 14px calc(112px + var(--safe-bottom));
+  overflow-x:clip
 }
 
+@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes shimmer{to{background-position:-200% 0}}
+@keyframes pulse2{50%{opacity:.3}}
 
-/* =====================================================
-   HEADER
-===================================================== */
+/* ============ الهيدر (نفس هوية الرئيسية: بنفسجي + شبكة هندسية ثابتة) ============ */
 
-.header{
+header{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
   margin-inline:-14px;
-
-  padding:
-    7px
-    14px
-    15px;
-
+  padding:env(safe-area-inset-top,0px) 14px 18px;
   background:
-    linear-gradient(
-      145deg,
-      #FFFFFF 0%,
-      #F5F2FF 45%,
-      #E6E1FF 100%
-    );
-
-  border-bottom:
-    1px solid var(--line);
-
-  border-radius:
-    0
-    0
-    24px
-    24px;
-
-  box-shadow:
-    0 10px
-    26px
-    rgba(23,32,42,.06);
-
-  position:relative;
-  overflow:hidden;
+    radial-gradient(circle at 12% 0%,rgba(255,255,255,.18) 0%,rgba(255,255,255,0) 46%),
+    linear-gradient(145deg,#5a45d4 0%,#7a67e8 50%,#a496f3 100%);
+  border-radius:0 0 24px 24px;
+  border-bottom:1px solid #5f4cd0;
+  box-shadow:0 10px 26px rgba(74,52,184,.28)
 }
 
-.header::before{
-  content:"";
+.web{position:absolute;top:0;z-index:0;pointer-events:none;opacity:.26}
+.web svg{display:block;width:100%;height:100%}
+.web-a{left:0;width:190px;height:190px}
+.web-b{right:0;width:150px;height:150px;opacity:.2;transform:scaleX(-1)}
 
-  position:absolute;
+.topbar{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 2px 6px}
+.topbar-side{display:flex;align-items:center;gap:8px}
 
-  width:170px;
-  height:170px;
+.brand-mini{display:flex;flex-direction:column;align-items:flex-start;gap:4px;color:#fff;line-height:1}
+.brand-mini strong{font-size:25px;font-weight:950;letter-spacing:.02em;line-height:1}
+.brand-mini span{font-size:9.5px;font-weight:800;letter-spacing:.5em;margin-inline-end:-.5em;color:rgba(255,255,255,.85);line-height:1}
 
-  left:-82px;
-  top:-112px;
+.icon-btn{
+  width:40px;height:36px;display:grid;place-items:center;
+  border:1px solid rgba(255,255,255,.6);border-radius:12px;background:rgba(255,255,255,.9);color:var(--p);
+  box-shadow:0 7px 18px rgba(23,32,42,.08);flex:0 0 auto;transition:transform .18s ease
+}
+.icon-btn:active{transform:scale(.93)}
+.icon-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 
-  border-radius:50%;
-
-  background:
-    rgba(98,70,217,.055);
-
-  pointer-events:none;
+.head-row{position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-top:12px;padding:0 2px}
+.head-row h1{margin:0;font-size:24px;font-weight:950;letter-spacing:-.04em;color:#fff;line-height:1.15}
+.head-row p{margin:5px 0 0;font-size:11px;font-weight:700;line-height:1.6;color:rgba(255,255,255,.82)}
+.count-chip{
+  flex:0 0 auto;padding:6px 12px;border-radius:999px;
+  background:rgba(255,255,255,.17);border:1px solid rgba(255,255,255,.32);
+  color:#fff;font-size:11px;font-weight:900;white-space:nowrap
 }
 
-.header::after{
-  content:"";
+/* ============ التبويبات ============ */
 
-  position:absolute;
+.section{margin-top:16px}
 
-  width:125px;
-  height:125px;
+.tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -2px;padding:2px}
+.tabs::-webkit-scrollbar{display:none}
 
-  right:-65px;
-  bottom:-88px;
+.tab{
+  flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;
+  padding:9px 15px;border-radius:999px;background:#fff;border:1.5px solid var(--edge);
+  font-size:12.5px;font-weight:900;color:#4b5563;
+  transition:background .2s,border-color .2s,color .2s,transform .18s
+}
+.tab:active{transform:scale(.95)}
+.tab small{
+  min-width:20px;padding:1px 6px;border-radius:999px;background:var(--p-soft);
+  color:var(--p-dark);font-size:10px;font-weight:900;text-align:center
+}
+.tab.active{background:var(--p-soft);border-color:#8977e9;color:var(--p-dark)}
+.tab.active small{background:var(--p);color:#fff}
 
-  border-radius:50%;
+/* ============ شبكة الكروت (نفس كرت الرئيسية) ============ */
 
-  background:
-    rgba(98,70,217,.07);
-
-  pointer-events:none;
+.grid{
+  margin-top:12px;
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px
 }
 
-
-/* =====================================================
-   TOP BAR
-===================================================== */
-
-.topbar{
-  position:relative;
-  z-index:2;
-
-  display:flex;
-  align-items:center;
-
-  gap:8px;
+.fcard,.sk{
+  position:relative;aspect-ratio:7/10;border-radius:22px;overflow:hidden
 }
 
-.back-btn,
-.refresh-btn{
-  width:37px;
-  height:37px;
+.fcard{
+  display:block;cursor:pointer;background:#1d2430;
+  box-shadow:0 12px 24px -12px rgba(74,52,184,.45),inset 0 0 0 1px rgba(255,255,255,.08);
+  animation:up .4s ease backwards;
+  transition:transform .2s ease,opacity .22s ease
+}
+.fcard:active{transform:scale(.97)}
+.fcard.leaving{opacity:0;transform:scale(.9)}
 
-  flex:0 0 37px;
+.fmedia{
+  position:absolute;inset:0;overflow:hidden;isolation:isolate;
+  background:linear-gradient(160deg,#7b61e8,#3b2a92)
+}
+/* خلفية مغبّشة من نفس الصورة، والصورة نفسها كاملة بالنص بدون قص أو تمطيط */
+.fmedia::before{
+  content:"";position:absolute;inset:-14px;z-index:0;pointer-events:none;
+  background:var(--img,none) center/cover no-repeat;
+  filter:blur(14px) saturate(1.1);opacity:.85
+}
+.fmedia img{
+  position:absolute;inset:0;z-index:1;display:block;
+  width:100%;height:100%;object-fit:contain;object-position:center
+}
+.no-img{position:absolute;inset:0;z-index:1;display:grid;place-items:center}
+.no-img svg{width:38px;height:38px;opacity:.5}
 
-  border-radius:12px;
-
-  background:#fff;
-
-  border:
-    1px solid #DDD8F8;
-
-  color:var(--primary);
-
-  display:grid;
-  place-items:center;
-
-  box-shadow:
-    0 7px
-    18px
-    rgba(23,32,42,.045);
-
-  transition:
-    transform .18s ease,
-    box-shadow .18s ease;
+.shade{
+  position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(to top,rgba(20,14,48,.95) 0%,rgba(20,14,48,.72) 32%,rgba(20,14,48,0) 62%)
 }
 
-.back-btn:active,
-.refresh-btn:active{
-  transform:scale(.93);
+.fav-btn{
+  position:absolute;top:8px;inset-inline-start:8px;z-index:10;
+  width:32px;height:32px;border-radius:50%;display:grid;place-items:center;padding:0;
+  background:rgba(255,255,255,.96);color:#e5365f;
+  box-shadow:0 5px 13px rgba(23,32,42,.15);transition:transform .18s
+}
+.fav-btn:active{transform:scale(.85)}
+.fav-btn svg{width:16px;height:16px;fill:currentColor;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
-  box-shadow:
-    0 4px
-    11px
-    rgba(23,32,42,.05);
+.fbody{
+  position:absolute;inset-inline:0;bottom:0;z-index:3;padding:10px 11px 11px;color:#fff;
+  display:flex;flex-direction:column;gap:6px
 }
 
-.brand{
-  flex:1;
+.cd{
+  align-self:flex-start;display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:999px;
+  background:rgba(255,255,255,.18);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  color:#fff;font-size:12px;font-weight:950;font-variant-numeric:tabular-nums;direction:ltr
+}
+.cd:before{content:"";width:5px;height:5px;border-radius:50%;background:#7CFFB2;animation:pulse2 1.6s infinite}
+.cd.urgent{background:rgba(232,89,12,.94)}
+.cd.urgent:before{background:#fff}
+.cd.over{background:rgba(255,255,255,.14);color:rgba(255,255,255,.8)}
+.cd.over:before{background:#c8c3e6;animation:none}
 
-  text-align:center;
-
-  line-height:.9;
+.ftitle{
+  margin:0;font-size:12.5px;font-weight:950;line-height:1.28;letter-spacing:-.015em;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden
 }
 
-.brand strong{
-  display:block;
-
-  font-size:18px;
-  font-weight:950;
-
-  letter-spacing:-.05em;
+.specs{display:flex;flex-wrap:wrap;gap:4px}
+.spec{
+  padding:3px 7px;border-radius:7px;background:rgba(255,255,255,.16);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);font-size:9px;font-weight:800;color:#fff
 }
 
-.brand span{
-  display:block;
+.frow{display:flex;align-items:flex-end;justify-content:space-between;gap:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,.18)}
+.frow-main{min-width:0;flex:1}
+.frow small{display:block;font-size:8.5px;font-weight:800;color:#ffffffb3}
+.frow b{display:block;margin-top:1px;font-size:16px;font-weight:950;white-space:nowrap}
 
-  margin-top:3px;
+.type{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;font-size:8.5px;font-weight:900;white-space:nowrap}
+.type.auc{background:var(--p);color:#fff}
+.type.dir{background:rgba(255,255,255,.95);color:var(--ok)}
+.type.end{background:rgba(255,255,255,.2);color:#fff}
 
-  color:#8A929A;
+/* ============ التحميل والحالة الفارغة ============ */
 
-  font-size:7px;
-  font-weight:950;
-
-  letter-spacing:.2em;
+.sk{
+  border:1px solid var(--line);
+  background:linear-gradient(90deg,#f1eefb 25%,#faf8ff 50%,#f1eefb 75%);
+  background-size:200% 100%;animation:shimmer 1.4s linear infinite
 }
 
-
-/* =====================================================
-   TITLE
-===================================================== */
-
-.header-content{
-  position:relative;
-  z-index:2;
-
-  margin-top:9px;
+.empty{
+  position:relative;overflow:hidden;margin-top:12px;min-height:300px;padding:28px 18px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  border:1px solid var(--edge);border-radius:22px;
+  background:linear-gradient(145deg,#fff 0%,#faf8ff 100%);
+  box-shadow:0 10px 24px -14px rgba(98,70,217,.22);
+  animation:up .4s ease backwards
 }
-
-.header-title-row{
-  display:flex;
-
-  align-items:center;
-  justify-content:space-between;
-
-  gap:9px;
-}
-
-.header-title{
-  min-width:0;
-}
-
-.header-title h1{
-  margin:0;
-
-  font-size:19px;
-  line-height:1.15;
-
-  font-weight:950;
-
-  letter-spacing:-.045em;
-}
-
-.header-title p{
-  margin:
-    4px
-    0
-    0;
-
-  color:#667085;
-
-  font-size:9px;
-
-  line-height:1.4;
-}
-
-.header-count{
-  flex:0 0 auto;
-
-  padding:
-    6px
-    9px;
-
-  border-radius:10px;
-
-  background:
-    rgba(255,255,255,.86);
-
-  border:
-    1px solid rgba(98,70,217,.12);
-
-  color:#51477D;
-
-  font-size:8px;
-  font-weight:950;
-
-  white-space:nowrap;
-
-  box-shadow:
-    0 5px
-    13px
-    rgba(98,70,217,.055);
-}
-
-
-/* =====================================================
-   DEVICES
-===================================================== */
-
-.devices-grid{
-  margin-top:10px;
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(2,minmax(0,1fr));
-
-  gap:10px;
-}
-
-.device-card{
-  position:relative;
-
-  overflow:hidden;
-
-  background:#fff;
-
-  border:
-    1px solid #E5E2F1;
-
-  border-radius:17px;
-
-  box-shadow:
-    0 9px
-    22px
-    rgba(98,70,217,.08);
-
-  cursor:pointer;
-
-  animation:
-    cardIn .38s cubic-bezier(.2,.7,.2,1) both;
-
-  transition:
-    transform .18s ease,
-    box-shadow .18s ease;
-}
-
-.device-card:active{
-  transform:scale(.975);
-
-  box-shadow:
-    0 6px
-    16px
-    rgba(98,70,217,.06);
-}
-
-
-/* =====================================================
-   PHOTO
-===================================================== */
-
-.device-photo{
-  height:175px;
-
-  background:#fff;
-
-  display:grid;
-  place-items:center;
-
-  position:relative;
-
-  overflow:hidden;
-}
-
-.device-photo img{
-  width:100%;
-  height:100%;
-
-  display:block;
-
-  object-fit:contain;
-
-  background:#fff;
-}
-
-.photo-placeholder{
-  color:#111827;
-
-  font-size:9px;
-  font-weight:900;
-
-  text-align:center;
-
-  padding:
-    9px
-    11px;
-
-  border-radius:10px;
-
-  background:#FAFAFA;
-
-  border:
-    1px solid #EEEEEE;
-}
-
-
-/* =====================================================
-   REMOVE FAVORITE
-===================================================== */
-
-.remove-btn{
-  position:absolute;
-
-  top:8px;
-  left:8px;
-
-  width:33px;
-  height:33px;
-
-  border-radius:50%;
-
-  background:
-    linear-gradient(
-      145deg,
-      #6246D9 0%,
-      #5147B8 100%
-    );
-
-  color:#fff;
-
-  display:grid;
-  place-items:center;
-
-  box-shadow:
-    0 7px
-    17px
-    rgba(98,70,217,.30);
-
-  z-index:4;
-
-  transition:
-    transform .18s ease,
-    box-shadow .18s ease;
-}
-
-.remove-btn:active{
-  transform:scale(.88);
-
-  box-shadow:
-    0 4px
-    10px
-    rgba(98,70,217,.20);
-}
-
-
-/* =====================================================
-   SALE TYPE
-===================================================== */
-
-.sale-type{
-  position:absolute;
-
-  top:8px;
-  right:8px;
-
-  padding:
-    6px
-    8px;
-
-  border-radius:8px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #FAF9FF 0%,
-      #F0EDFF 100%
-    );
-
-  color:#51477D;
-
-  font-size:8px;
-  font-weight:950;
-
-  box-shadow:
-    0 5px
-    12px
-    rgba(81,71,125,.08);
-
-  z-index:3;
-}
-
-
-/* =====================================================
-   INFO
-===================================================== */
-
-.device-info{
-  min-height:128px;
-
-  padding:
-    10px
-    12px
-    10px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #FAF9FF 0%,
-      #F6F3FF 45%,
-      #EEEAFE 100%
-    );
-
-  position:relative;
-
-  overflow:hidden;
-}
-
-.device-info::before{
-  content:"";
-
-  position:absolute;
-
-  width:72px;
-  height:72px;
-
-  right:-35px;
-  top:-38px;
-
-  border-radius:50%;
-
-  background:
-    rgba(98,70,217,.065);
-
-  pointer-events:none;
-}
-
-.device-info::after{
-  content:"";
-
-  position:absolute;
-
-  width:8px;
-  height:8px;
-
-  left:14px;
-  bottom:13px;
-
-  border-radius:3px;
-
-  background:
-    rgba(98,70,217,.10);
-
-  transform:rotate(18deg);
-
-  pointer-events:none;
-}
-
-.device-name{
-  position:relative;
-  z-index:1;
-
-  font-size:15px;
-
-  font-weight:950;
-
-  line-height:1.3;
-
-  white-space:nowrap;
-
-  overflow:hidden;
-
-  text-overflow:ellipsis;
-
-  letter-spacing:-.02em;
-
-  color:#2B2460;
-}
-
-.device-details{
-  position:relative;
-  z-index:1;
-
-  margin-top:7px;
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(3,minmax(0,1fr));
-
-  gap:5px 8px;
-}
-
-.detail-item{
-  min-width:0;
-
-  display:flex;
-
-  flex-direction:column;
-
-  gap:2px;
-
-  padding:2px 0;
-}
-
-.detail-item span{
-  color:#7C758F;
-
-  font-size:8px;
-
-  line-height:1.25;
-
-  font-weight:800;
-}
-
-.detail-item strong{
-  min-width:0;
-
-  color:#29243F;
-
-  font-size:10px;
-
-  line-height:1.3;
-
-  font-weight:950;
-
-  white-space:nowrap;
-
-  overflow:hidden;
-
-  text-overflow:ellipsis;
-}
-
-
-/* =====================================================
-   PRICE
-===================================================== */
-
-.price-row{
-  position:relative;
-  z-index:1;
-
-  margin-top:6px;
-
-  padding-top:5px;
-
-  border-top:
-    1px solid
-    rgba(81,71,125,.12);
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:space-between;
-
-  gap:6px;
-}
-
-.price-label{
-  color:#7C758F;
-
-  font-size:8px;
-
-  line-height:1.2;
-
-  font-weight:800;
-}
-
-.device-price{
-  color:#51477D;
-
-  font-size:14px;
-
-  line-height:1.1;
-
-  font-weight:950;
-
-  white-space:nowrap;
-
-  letter-spacing:-.025em;
-}
-
-
-/* =====================================================
-   EMPTY
-===================================================== */
-
-.empty-state{
-  margin-top:14px;
-
-  padding:
-    28px
-    18px;
-
-  min-height:300px;
-
-  border-radius:21px;
-
-  background:#fff;
-
-  border:
-    1px solid var(--line);
-
-  box-shadow:var(--shadow);
-
-  text-align:center;
-
-  display:flex;
-
-  flex-direction:column;
-
-  align-items:center;
-
-  justify-content:center;
-
-  position:relative;
-
-  overflow:hidden;
-}
-
-.empty-state::before{
-  content:"";
-
-  position:absolute;
-
-  width:180px;
-  height:180px;
-
-  right:-75px;
-  top:-105px;
-
-  border-radius:50%;
-
-  background:
-    rgba(98,70,217,.055);
-
-  pointer-events:none;
-}
-
-.empty-state::after{
-  content:"";
-
-  position:absolute;
-
-  width:130px;
-  height:130px;
-
-  left:-55px;
-  bottom:-78px;
-
-  border-radius:50%;
-
-  background:
-    rgba(23,107,135,.045);
-
-  pointer-events:none;
-}
+.empty-web{position:absolute;z-index:0;pointer-events:none;width:110px;height:110px;opacity:.2}
+.empty-web svg{display:block;width:100%;height:100%}
+.ew-a{top:0;right:0;transform:scaleX(-1)}
+.ew-b{bottom:0;left:0;transform:scaleY(-1)}
 
 .empty-icon{
-  position:relative;
-  z-index:1;
-
-  width:62px;
-  height:62px;
-
-  border-radius:19px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #F0EEFF,
-      #E7E2FF
-    );
-
-  color:var(--purple);
-
-  border:
-    1px solid #DDD8F7;
-
-  display:grid;
-  place-items:center;
-
-  box-shadow:
-    0 11px
-    24px
-    rgba(98,70,217,.10);
+  position:relative;z-index:1;width:64px;height:64px;border-radius:20px;display:grid;place-items:center;
+  background:var(--p-soft);color:var(--p-dark);border:1px solid #e3defa;
+  box-shadow:0 11px 24px rgba(98,70,217,.12)
 }
-
-.empty-state h3{
-  position:relative;
-  z-index:1;
-
-  margin:
-    15px
-    0
-    0;
-
-  font-size:16px;
-
-  font-weight:950;
+.empty-icon svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.empty h3{position:relative;z-index:1;margin:16px 0 0;font-size:17px;font-weight:950}
+.empty p{position:relative;z-index:1;max-width:270px;margin:7px auto 0;color:var(--muted);font-size:11.5px;font-weight:700;line-height:1.9}
+.empty-btn{
+  position:relative;z-index:1;margin-top:18px;height:46px;padding:0 24px;border-radius:14px;color:#fff;
+  font-size:13px;font-weight:900;background:linear-gradient(145deg,#6246d9,#8b6cf0);
+  box-shadow:0 10px 22px rgba(98,70,217,.32);transition:transform .18s ease
 }
+.empty-btn:active{transform:scale(.96)}
 
-.empty-state p{
-  position:relative;
-  z-index:1;
+/* ============ الشريط السفلي (نفس الرئيسية) ============ */
 
-  max-width:285px;
-
-  margin:
-    7px
-    auto
-    0;
-
-  color:var(--muted);
-
-  font-size:10px;
-
-  line-height:1.8;
+.bottom-wrap{
+  position:fixed;left:0;right:0;bottom:-6px;width:100%;
+  padding:6px 12px calc(6px + var(--safe-bottom));z-index:100;pointer-events:none
 }
-
-.browse-btn{
-  position:relative;
-  z-index:1;
-
-  margin-top:16px;
-
-  height:43px;
-
-  padding:
-    0
-    18px;
-
-  border-radius:13px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #176B87,
-      #257F98
-    );
-
-  color:#fff;
-
-  font-size:11px;
-
-  font-weight:950;
-
-  box-shadow:
-    0 10px
-    22px
-    rgba(23,107,135,.18);
-
-  transition:
-    transform .18s ease;
-}
-
-.browse-btn:active{
-  transform:scale(.97);
-}
-
-
-/* =====================================================
-   LOADING
-===================================================== */
-
-.loading-state{
-  grid-column:1 / -1;
-
-  padding:
-    32px
-    18px;
-
-  text-align:center;
-
-  color:var(--muted);
-
-  font-size:11px;
-
-  background:#fff;
-
-  border:
-    1px solid var(--line);
-
-  border-radius:19px;
-}
-
-.loading-spinner{
-  width:29px;
-  height:29px;
-
-  margin:
-    0
-    auto
-    10px;
-
-  border-radius:50%;
-
-  border:
-    3px solid #E5E8EB;
-
-  border-top-color:
-    var(--purple);
-
-  animation:
-    spin .8s linear infinite;
-}
-
-@keyframes spin{
-  to{
-    transform:rotate(360deg);
-  }
-}
-
-
-/* =====================================================
-   BOTTOM NAV
-===================================================== */
 
 .bottom-nav{
-  position:fixed;
-
-  left:0;
-  right:0;
-  bottom:0;
-
-  z-index:40;
-
-  padding:
-    7px
-    10px
-    calc(7px + var(--safe-bottom));
-
-  background:
-    rgba(255,255,255,.97);
-
-  border-top:
-    1px solid rgba(23,107,135,.10);
-
-  box-shadow:
-    0 -10px
-    28px
-    rgba(23,107,135,.07);
-
-  backdrop-filter:blur(16px);
+  width:min(100%,500px);margin:0 auto;min-height:66px;padding:6px;border-radius:22px;
+  background:rgba(255,255,255,.97);border:1px solid var(--line);box-shadow:0 10px 28px rgba(23,32,42,.13);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);pointer-events:auto
 }
 
-.bottom-inner{
-  width:min(100%,520px);
-
-  margin:auto;
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(5,1fr);
-
-  align-items:center;
-}
+.bottom-inner{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;align-items:center}
 
 .nav-item{
-  min-width:0;
-
-  height:51px;
-
-  display:flex;
-
-  flex-direction:column;
-
-  align-items:center;
-
-  justify-content:center;
-
-  gap:4px;
-
-  color:#858D94;
-
-  background:transparent;
-
-  font-size:8px;
-  font-weight:850;
-
-  transition:
-    color .18s ease,
-    transform .18s ease;
+  min-width:0;min-height:54px;padding:4px 2px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:4px;border-radius:16px;color:#7e8992;
+  transition:transform .18s ease
 }
-
-.nav-item:active{
-  transform:scale(.95);
-}
-
-.nav-item.active{
-  color:var(--primary-dark);
-}
-
-.nav-icon{
-  width:21px;
-  height:21px;
-}
+.nav-item:active{transform:scale(.93)}
+.nav-item.active{color:var(--p-dark);background:var(--p-soft)}
+.nav-icon{width:23px;height:23px;flex:0 0 23px}
+.nav-item>span:not(.add-button){font-size:10px;line-height:1;font-weight:900;white-space:nowrap}
 
 .add-button{
-  width:43px;
-  height:43px;
-
-  margin-top:-13px;
-
-  border-radius:15px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #176B87,
-      #257F98
-    );
-
-  color:#fff;
-
-  display:grid;
-  place-items:center;
-
-  box-shadow:
-    0 8px
-    20px
-    rgba(23,107,135,.20);
+  width:40px;height:40px;flex:0 0 40px;border-radius:14px;display:grid;place-items:center;
+  background:linear-gradient(145deg,#6246d9,#8b6cf0);color:#fff;box-shadow:0 6px 14px rgba(98,70,217,.32)
 }
+.add-button svg{width:22px;height:22px}
 
-
-/* =====================================================
-   TOAST
-===================================================== */
+/* ============ التوست ============ */
 
 .toast{
-  position:fixed;
-
-  left:50%;
-  bottom:88px;
-
-  transform:
-    translateX(-50%)
-    translateY(12px);
-
-  max-width:
-    calc(100% - 40px);
-
-  padding:
-    10px
-    14px;
-
-  border-radius:13px;
-
-  background:#1E2C30;
-
-  color:#fff;
-
-  font-size:11px;
-
-  font-weight:800;
-
-  text-align:center;
-
-  box-shadow:
-    0 12px
-    30px
-    rgba(23,32,42,.16);
-
-  opacity:0;
-
-  pointer-events:none;
-
-  transition:
-    opacity .22s ease,
-    transform .22s ease;
-
-  z-index:80;
+  position:fixed;left:50%;bottom:calc(92px + var(--safe-bottom));
+  transform:translateX(-50%) translateY(16px);max-width:calc(100% - 40px);
+  padding:10px 14px;border-radius:13px;background:#1e2c30;color:#fff;font-size:11px;font-weight:800;
+  box-shadow:0 14px 34px rgba(24,44,49,.14);opacity:0;pointer-events:none;transition:.25s ease;z-index:120;text-align:center
 }
-
-.toast.show{
-  opacity:1;
-
-  transform:
-    translateX(-50%)
-    translateY(0);
-}
-
-
-/* =====================================================
-   ANIMATION
-===================================================== */
-
-.header{
-  animation:
-    headerIn .42s cubic-bezier(.2,.7,.2,1) both;
-}
-
-.header-content{
-  animation:
-    contentIn .42s .05s cubic-bezier(.2,.7,.2,1) both;
-}
-
-.empty-state{
-  animation:
-    contentIn .42s .09s cubic-bezier(.2,.7,.2,1) both;
-}
-
-@keyframes headerIn{
-  from{
-    opacity:0;
-    transform:translateY(-10px);
-  }
-
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-
-@keyframes contentIn{
-  from{
-    opacity:0;
-    transform:translateY(7px);
-  }
-
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-
-@keyframes cardIn{
-  from{
-    opacity:0;
-    transform:translateY(10px);
-  }
-
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-
+.toast.show{opacity:1;transform:translateX(-50%)}
 
 @media(max-width:360px){
-
-  .device-photo{
-    height:175px;
-  }
-
-  .device-info{
-    min-height:126px;
-
-    padding:
-      9px
-      10px
-      9px;
-  }
-
-  .device-name{
-    font-size:14px;
-  }
-
-  .detail-item span{
-    font-size:7px;
-  }
-
-  .detail-item strong{
-    font-size:9px;
-  }
-
-  .device-price{
-    font-size:13px;
-  }
-
+  .nav-icon{width:21px;height:21px}
+  .nav-item>span:not(.add-button){font-size:9px}
+  .head-row h1{font-size:22px}
 }
-
 
 @media(prefers-reduced-motion:reduce){
-
-  *,
-  *::before,
-  *::after{
-    animation:none !important;
-    transition:none !important;
-  }
-
+  *,*::before,*::after{animation:none!important;transition:none!important}
 }
-
-
-/* UNIFIED MZAD PHONE BOTTOM NAV */
-.bottom-wrap,.bottom-nav{
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:0;
-  z-index:50;
-}
-.bottom-wrap{
-  padding:7px 10px calc(7px + env(safe-area-inset-bottom));
-  pointer-events:none;
-}
-.bottom-nav{
-  width:min(100%,520px);
-  margin:0 auto;
-  min-height:64px;
-  padding:5px;
-  border-radius:20px;
-  background:rgba(255,255,255,.97);
-  border:1px solid #E7ECEF;
-  box-shadow:0 10px 28px rgba(23,32,42,.10);
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-  pointer-events:auto;
-  display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:3px;
-}
-.bottom-nav .nav-inner,.bottom-nav .bottom-inner{
-  width:100%;
-  display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:3px;
-  align-items:center;
-  grid-column:1/-1;
-}
-.bottom-nav .nav-item{
-  min-width:0;
-  min-height:52px;
-  padding:4px 2px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:3px;
-  border:0;
-  border-radius:15px;
-  background:transparent;
-  color:#7E8992;
-  text-decoration:none;
-  transition:transform .16s ease,background .16s ease,color .16s ease;
-}
-.bottom-nav .nav-item:active{transform:scale(.96)}
-.bottom-nav .nav-item.active{
-  color:#176B87;background:#EAF6F8;
-}
-.bottom-nav .nav-item svg,
-.bottom-nav .nav-icon{
-  width:20px;
-  height:20px;
-  flex:0 0 20px;
-  color:currentColor;
-}
-.bottom-nav .nav-label,
-.bottom-nav .nav-item>span:not(.action-icon):not(.add-button){
-  margin:0;
-  font-size:8.5px;
-  line-height:1;
-  font-weight:900;
-  white-space:nowrap;
-}
-.bottom-nav .action-icon,
-.bottom-nav .add-button{
-  width:38px!important;
-  height:38px!important;
-  flex:0 0 38px;
-  border-radius:13px!important;
-  display:grid!important;
-  place-items:center;
-  background:linear-gradient(145deg,#176B87,#32B8C4)!important;color:#fff!important;box-shadow:0 6px 14px rgba(23,107,135,.18);
-}
-.bottom-nav .action-icon svg,.bottom-nav .add-button svg{
-  width:20px!important;
-  height:20px!important;
-}
-@media(max-width:360px){
-  .bottom-wrap{padding-inline:8px}
-  .bottom-nav{border-radius:18px}
-  .bottom-nav .nav-item{min-height:50px;border-radius:14px}
-  .bottom-nav .nav-item svg,.bottom-nav .nav-icon{width:19px;height:19px;flex-basis:19px}
-  .bottom-nav .nav-label,.bottom-nav .nav-item>span:not(.action-icon):not(.add-button){font-size:8px}
-}
-
-
-/* MZAD PHONE — unified calm bottom navigation */
-.mzad-unified-nav-style{display:none}
-.bottom-wrap{position:fixed;left:0;right:0;bottom:0;padding:7px 10px calc(7px + env(safe-area-inset-bottom));z-index:50;pointer-events:none}
-.bottom-nav{width:min(100%,520px);margin:0 auto;min-height:64px;padding:5px;border-radius:20px;background:rgba(255,255,255,.97);border:1px solid #E7ECEF;box-shadow:0 10px 28px rgba(23,32,42,.10);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);pointer-events:auto;display:blocktransform:none!important;position:static!important;left:auto!important;bottom:auto!important;transform:none!important;width:100%!important;max-width:none!important;height:auto!important;}
-.bottom-nav .bottom-inner{width:100%;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;align-items:center}
-.bottom-nav .nav-item{min-width:0;min-height:52px;padding:4px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:0;border-radius:15px;background:transparent;color:#7E8992;text-decoration:none;transition:transform .16s ease,background .16s ease,color .16s ease}
-.bottom-nav .nav-item:active{transform:scale(.96)}
-.bottom-nav .nav-item.active{color:#176B87;background:#EAF6F8}
-.bottom-nav .nav-item svg,.bottom-nav .nav-icon{width:20px;height:20px;flex:0 0 20px;color:currentColor}
-.bottom-nav .nav-item>span:not(.add-button){margin:0;font-size:8.5px;line-height:1;font-weight:900;white-space:nowrap}
-.bottom-nav .add-button{width:38px!important;height:38px!important;flex:0 0 38px;border-radius:13px!important;display:grid!important;place-items:center;background:linear-gradient(145deg,#176B87,#32B8C4)!important;color:#fff!important;box-shadow:0 6px 14px rgba(23,107,135,.18)}
-.bottom-nav .add-button svg{width:20px!important;height:20px!important}
-@media(max-width:360px){.bottom-wrap{padding-inline:8px}.bottom-nav{border-radius:18px}.bottom-nav .nav-item{min-height:50px;border-radius:14px}.bottom-nav .nav-item svg,.bottom-nav .nav-icon{width:19px;height:19px;flex-basis:19px}.bottom-nav .nav-item>span:not(.add-button){font-size:8px}}
-
-/* FINAL NAV SIZE — match the unified compact bottom navigation */
-.bottom-nav{
-  position:fixed!important;
-  left:10px!important;
-  right:10px!important;
-  bottom:7px!important;
-  width:auto!important;
-  max-width:520px!important;
-  height:64px!important;
-  min-height:64px!important;
-  max-height:64px!important;
-  margin:0 auto!important;
-  padding:5px!important;
-  display:block!important;
-  overflow:hidden!important;
-  z-index:50!important;
-}
-.bottom-nav .bottom-inner{
-  width:100%!important;
-  height:52px!important;
-  min-height:52px!important;
-  max-height:52px!important;
-  margin:0!important;
-  display:grid!important;
-  grid-template-columns:repeat(5,minmax(0,1fr))!important;
-  gap:3px!important;
-  align-items:center!important;
-}
-.bottom-nav .nav-item{
-  height:52px!important;
-  min-height:52px!important;
-  max-height:52px!important;
-  padding:3px 2px!important;
-}
-.bottom-nav .add-button{
-  width:38px!important;
-  height:38px!important;
-  max-height:38px!important;
-  margin-top:0!important;
-}
-@media(max-width:360px){
-  .bottom-nav{
-    left:8px!important;
-    right:8px!important;
-    height:62px!important;
-    min-height:62px!important;
-    max-height:62px!important;
-  }
-  .bottom-nav .bottom-inner,
-  .bottom-nav .nav-item{
-    height:50px!important;
-    min-height:50px!important;
-    max-height:50px!important;
-  }
-}
-
 </style>
 
 <script type="module" src="./js/auth-guard.js"></script>
 <link rel="stylesheet" href="/css/responsive-compat.css">
 </head>
 
-
 <body>
 
 <main class="page">
 
-<header class="header">
+<header>
+
+  <div class="web web-a" aria-hidden="true"><svg viewBox="0 0 200 200" fill="none" stroke="#fff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M0 0L184.0 0.0M0 0L170.0 70.4M0 0L130.1 130.1M0 0L70.4 170.0M0 0L0.0 184.0M46.0 0.0L42.5 17.6L32.5 32.5L17.6 42.5L0.0 46.0M92.0 0.0L85.0 35.2L65.1 65.1L35.2 85.0L0.0 92.0M138.0 0.0L127.5 52.8L97.6 97.6L52.8 127.5L0.0 138.0"/></svg></div>
+  <div class="web web-b" aria-hidden="true"><svg viewBox="0 0 200 200" fill="none" stroke="#fff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M0 0L184.0 0.0M0 0L170.0 70.4M0 0L130.1 130.1M0 0L70.4 170.0M0 0L0.0 184.0M46.0 0.0L42.5 17.6L32.5 32.5L17.6 42.5L0.0 46.0M92.0 0.0L85.0 35.2L65.1 65.1L35.2 85.0L0.0 92.0M138.0 0.0L127.5 52.8L97.6 97.6L52.8 127.5L0.0 138.0"/></svg></div>
 
   <div class="topbar">
 
-    <button
-      class="back-btn"
-      id="backBtn"
-      type="button"
-      aria-label="رجوع">
-
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2">
-
-        <path d="M15 18l-6-6 6-6"/>
-
-      </svg>
-
-    </button>
-
-
-    <div class="brand">
-
+    <div class="brand-mini">
       <strong>MZAD</strong>
-
       <span>PHONE</span>
-
     </div>
 
+    <div class="topbar-side">
 
-    <button
-      class="refresh-btn"
-      id="refreshBtn"
-      type="button"
-      aria-label="تحديث">
+      <button class="icon-btn" id="refreshBtn" type="button" aria-label="تحديث">
+        <svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.9-4M4 5v4h4"/><path d="M4 13a8 8 0 0 0 14.9 4M20 19v-4h-4"/></svg>
+      </button>
 
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.8">
+      <button class="icon-btn" id="backBtn" type="button" aria-label="رجوع">
+        <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
 
-        <path
-          d="M20 11a8 8 0 0 0-14.9-4M4 5v4h4"/>
-
-        <path
-          d="M4 13a8 8 0 0 0 14.9 4M20 19v-4h-4"/>
-
-      </svg>
-
-    </button>
+    </div>
 
   </div>
 
+  <div class="head-row">
 
-  <div class="header-content">
-
-    <div class="header-title-row">
-
-      <div class="header-title">
-
-        <h1>المفضلة</h1>
-
-        <p>
-          الأجهزة التي حفظتها للرجوع إليها لاحقاً
-        </p>
-
-      </div>
-
-
-      <span
-        class="header-count"
-        id="headerCount">
-
-        0 جهاز
-
-      </span>
-
+    <div>
+      <h1>المفضلة</h1>
+      <p>الأجهزة اللي حفظتها، ترجعلها بسرعة</p>
     </div>
+
+    <span class="count-chip" id="headerCount">0 جهاز</span>
 
   </div>
 
 </header>
 
+<section class="section">
 
-<section
-  class="devices-grid"
-  id="devicesGrid">
-
-  <div
-    class="loading-state"
-    id="loadingState">
-
-    <div class="loading-spinner"></div>
-
-    جاري تحميل المفضلة...
-
+  <div class="tabs" id="tabs" role="tablist" aria-label="تصفية المفضلة">
+    <button class="tab active" type="button" role="tab" data-tab="all" aria-selected="true">الكل <small id="cAll">0</small></button>
+    <button class="tab" type="button" role="tab" data-tab="auction" aria-selected="false">مزادات <small id="cAuc">0</small></button>
+    <button class="tab" type="button" role="tab" data-tab="direct" aria-selected="false">بيع مباشر <small id="cDir">0</small></button>
   </div>
 
-</section>
+  <div class="grid" id="grid"></div>
 
+  <div class="empty" id="empty" hidden>
 
-<section
-  class="empty-state"
-  id="emptyState"
-  style="display:none;">
+    <div class="empty-web ew-a" aria-hidden="true"><svg viewBox="0 0 200 200" fill="none" stroke="#6246d9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M0 0L184.0 0.0M0 0L170.0 70.4M0 0L130.1 130.1M0 0L70.4 170.0M0 0L0.0 184.0M46.0 0.0L42.5 17.6L32.5 32.5L17.6 42.5L0.0 46.0M92.0 0.0L85.0 35.2L65.1 65.1L35.2 85.0L0.0 92.0M138.0 0.0L127.5 52.8L97.6 97.6L52.8 127.5L0.0 138.0"/></svg></div>
+    <div class="empty-web ew-b" aria-hidden="true"><svg viewBox="0 0 200 200" fill="none" stroke="#6246d9" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M0 0L184.0 0.0M0 0L170.0 70.4M0 0L130.1 130.1M0 0L70.4 170.0M0 0L0.0 184.0M46.0 0.0L42.5 17.6L32.5 32.5L17.6 42.5L0.0 46.0M92.0 0.0L85.0 35.2L65.1 65.1L35.2 85.0L0.0 92.0M138.0 0.0L127.5 52.8L97.6 97.6L52.8 127.5L0.0 138.0"/></svg></div>
 
-  <div class="empty-icon">
+    <div class="empty-icon">
+      <svg viewBox="0 0 24 24"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/></svg>
+    </div>
 
-    <svg
-      width="29"
-      height="29"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.7">
+    <h3 id="emptyTitle">ما عندك أجهزة بالمفضلة بعد</h3>
+    <p id="emptyText">احفظ أي جهاز يعجبك حتى تقدر ترجعله بسرعة من هنا.</p>
 
-      <path
-        d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
-
-    </svg>
+    <button class="empty-btn" id="browseBtn" type="button">استكشف الأجهزة</button>
 
   </div>
-
-
-  <h3>
-    ما عندك أجهزة بالمفضلة بعد
-  </h3>
-
-
-  <p>
-    احفظ أي جهاز يعجبك حتى تقدر ترجع له بسرعة من هنا.
-  </p>
-
-
-  <button
-    class="browse-btn"
-    id="browseBtn"
-    type="button">
-
-    استكشف الأجهزة
-
-  </button>
 
 </section>
 
 </main>
 
+<div class="bottom-wrap">
 
-<nav class="bottom-nav">
+  <nav class="bottom-nav">
 
-<div class="bottom-inner">
+    <div class="bottom-inner">
 
-<a class="nav-item" href="home.html">
-<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-<path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/>
-</svg>
-<span>الرئيسية</span>
-</a>
+      <a class="nav-item" href="home.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <path d="m3 10 9-7 9 7"/>
+          <path d="M5 9v11h14V9"/>
+          <path d="M9 20v-6h6v6"/>
+        </svg>
+        <span>الرئيسية</span>
+      </a>
 
-<a class="nav-item" href="market.html">
-<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-<rect x="4" y="4" width="16" height="16" rx="3"/>
-<path d="M8 9h8"/><path d="M8 13h8"/><path d="M8 17h5"/>
-</svg>
-<span>الأجهزة</span>
-</a>
+      <a class="nav-item" href="market.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <rect x="4" y="4" width="16" height="16" rx="3"/>
+          <path d="M8 9h8"/>
+          <path d="M8 13h8"/>
+          <path d="M8 17h5"/>
+        </svg>
+        <span>الأجهزة</span>
+      </a>
 
-<a class="nav-item" href="sell.html">
-<span class="add-button">
-<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-<path d="M12 5v14"/><path d="M5 12h14"/>
-</svg>
-</span>
-<span>إضافة</span>
-</a>
+      <a class="nav-item" href="sell.html">
+        <span class="add-button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 5v14"/>
+            <path d="M5 12h14"/>
+          </svg>
+        </span>
+        <span>إضافة</span>
+      </a>
 
-<a class="nav-item active" href="favorites.html">
-<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-<path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
-</svg>
-<span>المفضلة</span>
-</a>
+      <a class="nav-item active" href="favorites.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
+        </svg>
+        <span>المفضلة</span>
+      </a>
 
-<a class="nav-item" href="profile.html">
-<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-<circle cx="12" cy="8" r="3"/><path d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5"/>
-</svg>
-<span>حسابي</span>
-</a>
+      <a class="nav-item" href="profile.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <circle cx="12" cy="8" r="3"/>
+          <path d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5"/>
+        </svg>
+        <span>حسابي</span>
+      </a>
+
+    </div>
+
+  </nav>
 
 </div>
-</nav>
 
-
-<div
-  class="toast"
-  id="toast">
-</div>
-
+<div class="toast" id="toast"></div>
 
 <script type="module">
 
 import { supabase } from "./js/supabase.js";
 
+const $ = id => document.getElementById(id);
 
-const devicesGrid =
-  document.getElementById("devicesGrid");
-
-const loadingState =
-  document.getElementById("loadingState");
-
-const emptyState =
-  document.getElementById("emptyState");
-
-const headerCount =
-  document.getElementById("headerCount");
-
-const browseBtn =
-  document.getElementById("browseBtn");
-
-const backBtn =
-  document.getElementById("backBtn");
-
-const refreshBtn =
-  document.getElementById("refreshBtn");
-
-const toast =
-  document.getElementById("toast");
-
-
-// لكل حساب قائمة مفضلة محلية مستقلة؛ لا تشارك بين الحسابات على الجهاز نفسه.
-let FAVORITES_KEY = "mzad_phone_favorites:guest";
-async function initFavoriteScope(){
-  try{
-    const {data,error}=await supabase.auth.getUser();
-    if(error) throw error;
-    FAVORITES_KEY = data?.user?.id
-      ? "mzad_phone_favorites:user:" + data.user.id
-      : "mzad_phone_favorites:guest";
-  }catch(error){
-    console.warn("FAVORITES SCOPE:",error);
-    FAVORITES_KEY = "mzad_phone_favorites:guest";
-  }
-}
-
+const grid = $("grid");
+const emptyBox = $("empty");
+const toast = $("toast");
 
 let toastTimer;
 
+function showToast(message){
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+}
 
-/* =====================================================
-   FAVORITES STORAGE
-===================================================== */
+const esc = v => String(v ?? "").replace(
+  /[&<>"']/g,
+  c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])
+);
 
-function getFavoriteIds(){
+const go = url => { window.location.href = url; };
 
+/* ================================
+   مخزن المفضلة
+   الصفحات المختلفة تحفظ بمفاتيح مختلفة، فنقرأ منها كلها ونحذف من كلها
+================================ */
+
+const FAV_PREFIXES = ["mzad_phone_favorites", "mzad_favs"];
+const AUC_PREFIX = "mzad_favorite_auction_";
+
+let uid = null;
+
+async function initScope(){
   try{
-
-    const raw =
-      localStorage.getItem(
-        FAVORITES_KEY
-      );
-
-    if(!raw){
-      return [];
-    }
-
-    const parsed =
-      JSON.parse(raw);
-
-    if(!Array.isArray(parsed)){
-      return [];
-    }
-
-    return [
-      ...new Set(
-        parsed
-          .map(
-            id => String(id).trim()
-          )
-          .filter(Boolean)
-      )
-    ];
-
+    const { data, error } = await supabase.auth.getUser();
+    if(error) throw error;
+    uid = data?.user?.id || null;
   }catch(error){
-
-    console.error(
-      "Favorites read error:",
-      error
-    );
-
-    return [];
-
+    console.warn("FAVORITES SCOPE:", error);
+    uid = null;
   }
-
 }
 
+const keyOf = prefix => prefix + ":" + (uid ? "user:" + uid : "guest");
 
-function saveFavoriteIds(ids){
-
+function readList(key){
   try{
-
-    localStorage.setItem(
-      FAVORITES_KEY,
-      JSON.stringify(
-        [
-          ...new Set(
-            ids
-              .map(
-                id => String(id).trim()
-              )
-              .filter(Boolean)
-          )
-        ]
-      )
-    );
-
-  }catch(error){
-
-    console.error(
-      "Favorites save error:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-   FORMAT PRICE
-===================================================== */
-
-function formatPrice(price){
-
-  const number =
-    Number(price);
-
-  if(
-    !Number.isFinite(number) ||
-    number <= 0
-  ){
-
-    return "السعر يحدد لاحقاً";
-
-  }
-
-  return (
-    new Intl.NumberFormat("en-US")
-      .format(number)
-    + " د.ع"
-  );
-
-}
-
-
-/* =====================================================
-   IMAGES
-===================================================== */
-
-function getDeviceImages(value){
-
-  if(!value){
+    const arr = JSON.parse(localStorage.getItem(key) || "[]");
+    return Array.isArray(arr) ? arr.map(x => String(x).trim()).filter(Boolean) : [];
+  }catch{
     return [];
   }
+}
 
-  if(Array.isArray(value)){
+function writeList(key, list){
+  try{
+    localStorage.setItem(key, JSON.stringify([...new Set(list)]));
+  }catch{}
+}
 
-    return value
-      .filter(Boolean);
+/* الأحدث حفظاً أولاً */
+function favoriteIds(){
 
-  }
+  const ids = [];
 
-  if(typeof value === "string"){
+  FAV_PREFIXES.forEach(p => ids.push(...readList(keyOf(p))));
 
-    const text =
-      value.trim();
-
-    if(!text){
-      return [];
+  try{
+    for(let i = 0; i < localStorage.length; i++){
+      const k = localStorage.key(i);
+      if(k && k.startsWith(AUC_PREFIX) && localStorage.getItem(k) === "1")
+        ids.push(k.slice(AUC_PREFIX.length));
     }
+  }catch{}
+
+  return [...new Set(ids)].reverse();
+}
+
+function removeId(id){
+
+  FAV_PREFIXES.forEach(p => {
+    const k = keyOf(p);
+    writeList(k, readList(k).filter(x => x !== id));
+  });
+
+  try{ localStorage.removeItem(AUC_PREFIX + id); }catch{}
+}
+
+/* ================================
+   مساعدات الأجهزة
+================================ */
+
+function getImages(images){
+
+  if(!images) return [];
+
+  if(Array.isArray(images)) return images.filter(Boolean);
+
+  if(typeof images === "string"){
+
+    const value = images.trim();
+
+    if(!value) return [];
 
     try{
+      const parsed = JSON.parse(value);
+      if(Array.isArray(parsed)) return parsed.filter(Boolean);
+    }catch{}
 
-      const parsed =
-        JSON.parse(text);
-
-      if(Array.isArray(parsed)){
-
-        return parsed
-          .filter(Boolean);
-
-      }
-
-    }catch(error){}
-
-    return [text];
-
+    return [value];
   }
 
   return [];
-
 }
 
+function imageUrl(images){
 
-/* =====================================================
-   TOAST
-===================================================== */
+  const first = getImages(images)[0];
 
-function showToast(message){
+  if(!first) return "";
 
-  toast.textContent =
-    message;
+  const value = String(first).trim();
 
-  toast.classList.add(
-    "show"
-  );
+  if(/^(https?:|data:)/.test(value)) return value;
 
-  clearTimeout(
-    toastTimer
-  );
+  const { data } = supabase.storage.from("device-images").getPublicUrl(value);
 
-  toastTimer =
-    setTimeout(
-      () => {
-
-        toast.classList.remove(
-          "show"
-        );
-
-      },
-      2200
-    );
-
+  return data?.publicUrl || "";
 }
 
+const nameOf = d => [d.brand, d.model].filter(Boolean).join(" ") || "جهاز";
 
-/* =====================================================
-   LOADING
-===================================================== */
+function formatPrice(price){
 
-function showLoading(){
+  const number = Number(price);
 
-  loadingState.style.display =
-    "block";
+  if(!Number.isFinite(number) || number <= 0) return "السعر يحدد لاحقاً";
 
-  emptyState.style.display =
-    "none";
-
+  return new Intl.NumberFormat("en-US").format(number) + " د.ع";
 }
 
+function batteryText(value){
 
-function hideLoading(){
+  if(value === null || value === undefined || String(value).trim() === "") return "";
 
-  loadingState.style.display =
-    "none";
+  const v = String(value).trim();
 
+  return "بطارية " + (/^\d+$/.test(v) ? v + "%" : v);
 }
 
+const isAuctionType = v => String(v || "").toLowerCase().includes("auction");
 
-/* =====================================================
-   DETAIL ITEM
-===================================================== */
+/* ================================
+   تحميل جهاز واحد (بيع مباشر أو مزاد)
+   null = غير موجود فعلاً، { failed:true } = تعذر الفحص (لا نحذفه)
+================================ */
 
-function createDetailItem(
-  label,
-  value
-){
+const COLS = "id,created_at,brand,model,storage,color,battery_health,price,sale_type,images";
 
-  const item =
-    document.createElement("div");
+async function loadAuctionItem(id){
 
-  item.className =
-    "detail-item";
+  const a = await supabase
+    .from("mzad_auctions")
+    .select("id,device_id,starting_price_iqd,current_price_iqd,status,ends_at,created_at")
+    .eq("id", id)
+    .maybeSingle();
 
+  if(a.error) return { failed:true };
 
-  const labelElement =
-    document.createElement("span");
+  if(!a.data) return null;
 
-  labelElement.textContent =
-    label;
+  const [dr, ir] = await Promise.all([
+    supabase.from("mzad_devices").select("brand,model,storage,color,battery_health").eq("id", a.data.device_id).maybeSingle(),
+    supabase.from("mzad_device_images").select("storage_path,is_primary,sort_order").eq("device_id", a.data.device_id).limit(8)
+  ]);
 
+  const imgs = [...(ir.data || [])]
+    .sort((x,y) => (Number(y.is_primary) - Number(x.is_primary)) || (Number(x.sort_order) - Number(y.sort_order)))
+    .map(i => i.storage_path)
+    .filter(Boolean);
 
-  const valueElement =
-    document.createElement("strong");
+  const d = dr.data || {};
 
-  valueElement.textContent =
-    value || "غير محدد";
-
-
-  item.appendChild(
-    labelElement
-  );
-
-  item.appendChild(
-    valueElement
-  );
-
-
-  return item;
-
+  return {
+    id: String(a.data.id),
+    kind: "auction",
+    brand: d.brand,
+    model: d.model,
+    storage: d.storage,
+    color: d.color,
+    battery_health: d.battery_health,
+    price: Number(a.data.current_price_iqd || a.data.starting_price_iqd) || 0,
+    ends_at: a.data.ends_at,
+    status: a.data.status,
+    images: imgs
+  };
 }
 
+async function loadOne(id){
 
-/* =====================================================
-   DEVICE CARD
-===================================================== */
-
-function createDeviceCard(
-  device,
-  index
-){
-
-  const card =
-    document.createElement("article");
-
-  card.className =
-    "device-card";
-
-  card.dataset.deviceId =
-    device.id || "";
-
-  card.style.animationDelay =
-    `${Math.min(index * .04,.35)}s`;
-
-
-  /* PHOTO */
-
-  const photo =
-    document.createElement("div");
-
-  photo.className =
-    "device-photo";
-
-
-  const images =
-    getDeviceImages(
-      device.images
-    );
-
-
-  if(images.length){
-
-    const img =
-      document.createElement("img");
-
-    img.src =
-      images[0];
-
-    img.alt =
-      `${device.brand || ""} ${device.model || "جهاز"}`;
-
-    img.loading =
-      "lazy";
-
-    img.decoding =
-      "async";
-
-
-    img.addEventListener(
-      "error",
-      () => {
-
-        img.remove();
-
-        const placeholder =
-          document.createElement("span");
-
-        placeholder.className =
-          "photo-placeholder";
-
-        placeholder.textContent =
-          "تعذر تحميل الصورة";
-
-        photo.prepend(
-          placeholder
-        );
-
-      }
-    );
-
-
-    photo.appendChild(
-      img
-    );
-
-  }else{
-
-    const placeholder =
-      document.createElement("span");
-
-    placeholder.className =
-      "photo-placeholder";
-
-    placeholder.textContent =
-      "لا توجد صورة";
-
-    photo.appendChild(
-      placeholder
-    );
-
-  }
-
-
-  /* REMOVE */
-
-  const removeButton =
-    document.createElement("button");
-
-  removeButton.type =
-    "button";
-
-  removeButton.className =
-    "remove-btn";
-
-  removeButton.setAttribute(
-    "aria-label",
-    "إزالة من المفضلة"
-  );
-
-
-  removeButton.innerHTML = `
-
-    <svg
-      width="17"
-      height="17"
-      viewBox="0 0 24 24"
-      fill="#FFFFFF"
-      stroke="#FFFFFF"
-      stroke-width="1.8">
-
-      <path
-        d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/>
-
-    </svg>
-
-  `;
-
-
-  removeButton.addEventListener(
-    "click",
-    event => {
-
-      event.stopPropagation();
-
-      removeFavorite(
-        device.id
-      );
-
-    }
-  );
-
-
-  photo.appendChild(
-    removeButton
-  );
-
-
-  /* SALE TYPE */
-
-  const saleType =
-    document.createElement("span");
-
-  saleType.className =
-    "sale-type";
-
-  saleType.textContent =
-    normalizeSaleType(
-      device.sale_type
-    );
-
-
-  photo.appendChild(
-    saleType
-  );
-
-
-  /* INFO */
-
-  const info =
-    document.createElement("div");
-
-  info.className =
-    "device-info";
-
-
-  const name =
-    document.createElement("div");
-
-  name.className =
-    "device-name";
-
-  name.textContent =
-    [
-      device.brand,
-      device.model
-    ]
-    .filter(Boolean)
-    .join(" ") ||
-    "جهاز";
-
-
-  const details =
-    document.createElement("div");
-
-  details.className =
-    "device-details";
-
-
-  details.appendChild(
-    createDetailItem(
-      "التخزين",
-      device.storage || "غير محدد"
-    )
-  );
-
-
-  details.appendChild(
-    createDetailItem(
-      "اللون",
-      device.color || "غير محدد"
-    )
-  );
-
-
-  let battery =
-    "غير محددة";
-
-
-  if(
-    device.battery_health !== null &&
-    device.battery_health !== undefined &&
-    device.battery_health !== ""
-  ){
-
-    battery =
-      `${device.battery_health}%`;
-
-  }
-
-
-  details.appendChild(
-    createDetailItem(
-      "البطارية",
-      battery
-    )
-  );
-
-
-  const priceRow =
-    document.createElement("div");
-
-  priceRow.className =
-    "price-row";
-
-
-  const priceLabel =
-    document.createElement("span");
-
-  priceLabel.className =
-    "price-label";
-
-  priceLabel.textContent =
-    "السعر";
-
-
-  const price =
-    document.createElement("strong");
-
-  price.className =
-    "device-price";
-
-  price.textContent =
-    formatPrice(
-      device.price
-    );
-
-
-  priceRow.appendChild(
-    priceLabel
-  );
-
-  priceRow.appendChild(
-    price
-  );
-
-
-  info.appendChild(
-    name
-  );
-
-  info.appendChild(
-    details
-  );
-
-  info.appendChild(
-    priceRow
-  );
-
-
-  card.appendChild(
-    photo
-  );
-
-  card.appendChild(
-    info
-  );
-
-
-  card.addEventListener(
-    "click",
-    () => {
-
-      if(!device.id){
-        return;
-      }
-
-      window.location.href =
-        `device.html?id=${encodeURIComponent(device.id)}`;
-
-    }
-  );
-
-
-  return card;
-
-}
-
-
-/* =====================================================
-   SALE TYPE
-===================================================== */
-
-function normalizeSaleType(value){
-
-  const type =
-    String(
-      value || "direct"
-    )
-    .toLowerCase();
-
-
-  if(
-    type === "auction" ||
-    type === "مزاد"
-  ){
-
-    return "مزاد";
-
-  }
-
-
-  return "بيع مباشر";
-
-}
-
-
-/* =====================================================
-   CLEAR CARDS
-===================================================== */
-
-function clearCards(){
-
-  devicesGrid
-    .querySelectorAll(
-      ".device-card"
-    )
-    .forEach(
-      card => card.remove()
-    );
-
-}
-
-
-/* =====================================================
-   LOAD ONE FAVORITE
-   الطريقة الجديدة:
-   كل ID ينفحص بشكل مستقل
-===================================================== */
-
-async function loadOneFavorite(id){
+  let failed = false;
 
   try{
 
-    const {
-      data,
-      error
-    } =
-      await supabase
-        .from("devices")
-        .select(`
-          id,
-          created_at,
-          brand,
-          model,
-          storage,
-          color,
-          battery_health,
-          condition,
-          body_condition,
-          screen_condition,
-          face_id,
-          cameras,
-          charging,
-          replaced_parts,
-          price,
-          location,
-          sale_type,
-          seller_id,
-          seller_name,
-          images,
-          notes
-        `)
-        .eq(
-          "id",
-          id
-        )
-        .maybeSingle();
+    const r = await supabase.from("devices").select(COLS).eq("id", id).maybeSingle();
 
-
-    if(error){
-
-      console.error(
-        `Favorite device ${id} error:`,
-        error
-      );
-
-      return null;
-
+    if(r.data){
+      return isAuctionType(r.data.sale_type)
+        ? { ...r.data, id:String(r.data.id), kind:"auction", ends_at:null }
+        : { ...r.data, id:String(r.data.id), kind:"direct" };
     }
 
+    if(r.error) failed = true;
 
-    return data || null;
-
-  }catch(error){
-
-    console.error(
-      `Favorite device ${id} exception:`,
-      error
-    );
-
-    return null;
-
+  }catch{
+    failed = true;
   }
 
+  try{
+
+    const item = await loadAuctionItem(id);
+
+    if(item && !item.failed) return item;
+
+    if(item && item.failed) failed = true;
+
+  }catch{
+    failed = true;
+  }
+
+  return failed ? { failed:true } : null;
 }
 
+/* ================================
+   الحالة والرسم
+================================ */
 
-/* =====================================================
-   LOAD FAVORITES
-===================================================== */
+const state = { items:[], tab:"all", loading:true };
+
+const HEART =
+  '<svg viewBox="0 0 24 24"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/></svg>';
+
+const PH_ICON =
+  '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M9.5 5.5h5"/><path d="M11 18.5h2"/></svg>';
+
+function cardHTML(it, i){
+
+  const auction = it.kind === "auction";
+
+  const url = imageUrl(it.images);
+
+  const specs = [it.storage, it.color, batteryText(it.battery_health)]
+    .map(v => String(v ?? "").trim())
+    .filter(Boolean)
+    .slice(0, 3);
+
+  const over = auction && it.ends_at && new Date(it.ends_at).getTime() <= Date.now();
+
+  return `
+    <article class="fcard" data-id="${esc(it.id)}" data-kind="${it.kind}" style="animation-delay:${Math.min(i * 50, 350)}ms">
+
+      <div class="fmedia"${url ? ` style="--img:url('${esc(url)}')"` : ""}>
+        ${
+          url
+            ? `<img src="${esc(url)}" alt="${esc(nameOf(it))}" loading="lazy" decoding="async" draggable="false" onerror="this.remove()">`
+            : `<div class="no-img">${PH_ICON}</div>`
+        }
+      </div>
+
+      <div class="shade"></div>
+
+      <button class="fav-btn" type="button" data-remove="${esc(it.id)}" aria-label="إزالة من المفضلة">${HEART}</button>
+
+      <div class="fbody">
+
+        ${
+          auction && it.ends_at
+            ? `<span class="cd" data-end="${esc(it.ends_at)}">--:--:--</span>`
+            : ""
+        }
+
+        <h3 class="ftitle">${esc(nameOf(it))}</h3>
+
+        <div class="specs">
+          ${specs.map(s => `<span class="spec">${esc(s)}</span>`).join("")}
+        </div>
+
+        <div class="frow">
+
+          <div class="frow-main">
+            <small>${auction ? "السعر الحالي" : "السعر"}</small>
+            <b>${esc(formatPrice(it.price))}</b>
+          </div>
+
+          ${
+            auction
+              ? `<span class="type ${over ? "end" : "auc"}">${over ? "انتهى" : "مزاد"}</span>`
+              : '<span class="type dir">بيع مباشر</span>'
+          }
+
+        </div>
+
+      </div>
+
+    </article>
+  `;
+}
+
+function render(){
+
+  const all = state.items;
+
+  const aucs = all.filter(x => x.kind === "auction").length;
+
+  $("cAll").textContent = all.length;
+  $("cAuc").textContent = aucs;
+  $("cDir").textContent = all.length - aucs;
+
+  $("headerCount").textContent =
+    all.length === 1 ? "جهاز واحد" : `${all.length} ${all.length === 2 || (all.length >= 3 && all.length <= 10) ? "أجهزة" : "جهاز"}`;
+
+  document.querySelectorAll(".tab").forEach(t => {
+    const on = t.dataset.tab === state.tab;
+    t.classList.toggle("active", on);
+    t.setAttribute("aria-selected", on);
+  });
+
+  if(state.loading){
+    emptyBox.hidden = true;
+    grid.innerHTML = Array.from({length:4}, () => '<div class="sk"></div>').join("");
+    return;
+  }
+
+  const list = state.tab === "all" ? all : all.filter(x => x.kind === state.tab);
+
+  if(!list.length){
+
+    grid.innerHTML = "";
+    emptyBox.hidden = false;
+
+    if(!all.length){
+      $("emptyTitle").textContent = "ما عندك أجهزة بالمفضلة بعد";
+      $("emptyText").textContent = "احفظ أي جهاز يعجبك حتى تقدر ترجعله بسرعة من هنا.";
+    }else{
+      $("emptyTitle").textContent = state.tab === "auction" ? "ماكو مزادات محفوظة" : "ماكو أجهزة بيع مباشر محفوظة";
+      $("emptyText").textContent = "جرّب قسم ثاني، أو استكشف أجهزة جديدة.";
+    }
+
+    return;
+  }
+
+  emptyBox.hidden = true;
+
+  grid.innerHTML = list.map(cardHTML).join("");
+
+  tickTimers();
+}
+
+/* ================================
+   العدادات
+================================ */
+
+function fmtLeft(ms){
+
+  if(ms <= 0) return "انتهى";
+
+  const s = Math.floor(ms / 1000);
+  const d = Math.floor(s / 86400);
+  const h = Math.floor((s % 86400) / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+
+  const p = n => String(n).padStart(2, "0");
+
+  return d > 0 ? `${d} يوم ${h} س` : `${p(h)}:${p(m)}:${p(sec)}`;
+}
+
+function tickTimers(){
+
+  const now = Date.now();
+
+  document.querySelectorAll("[data-end]").forEach(el => {
+
+    const left = new Date(el.dataset.end).getTime() - now;
+
+    el.textContent = fmtLeft(left);
+
+    el.classList.toggle("urgent", left > 0 && left < 3600e3);
+    el.classList.toggle("over", left <= 0);
+  });
+}
+
+setInterval(tickTimers, 1000);
+
+/* ================================
+   التحميل
+================================ */
 
 async function loadFavorites(){
 
-  showLoading();
+  state.loading = true;
+  render();
 
-  clearCards();
+  const ids = favoriteIds();
 
-
-  const favoriteIds =
-    getFavoriteIds();
-
-
-  /* لا توجد مفضلة */
-
-  if(!favoriteIds.length){
-
-    hideLoading();
-
-    emptyState.style.display =
-      "flex";
-
-    headerCount.textContent =
-      "0 جهاز";
-
+  if(!ids.length){
+    state.items = [];
+    state.loading = false;
+    render();
     return;
-
   }
 
+  const results = await Promise.all(ids.map(loadOne));
 
-  /*
-    نجلب كل جهاز محفوظ بشكل مستقل.
-    هذا يلغي الاعتماد على .in()
-  */
+  /* ننظف فقط الأجهزة المحذوفة فعلاً، وما نحذف شي إذا الفحص فشل */
+  ids.forEach((id, i) => {
+    if(results[i] === null) removeId(id);
+  });
 
-  const results =
-    await Promise.all(
-      favoriteIds.map(
-        id =>
-          loadOneFavorite(id)
-      )
-    );
+  state.items = results.filter(r => r && !r.failed);
 
+  state.loading = false;
+  render();
 
-  /*
-    نحذف النتائج الفارغة
-    ونبقي ترتيب الأجهزة نفس ترتيب الحفظ.
-  */
-
-  const favorites =
-    results.filter(
-      device =>
-        device !== null
-    );
-
-
-  /*
-    IDs الموجودة فعلياً في قاعدة البيانات
-  */
-
-  const existingIds =
-    new Set(
-      favorites.map(
-        device =>
-          String(device.id)
-      )
-    );
-
-
-  /*
-    تنظيف المفضلة من الأجهزة المحذوفة
-  */
-
-  const cleanedIds =
-    favoriteIds.filter(
-      id =>
-        existingIds.has(
-          String(id)
-        )
-    );
-
-
-  if(
-    cleanedIds.length !==
-    favoriteIds.length
-  ){
-
-    saveFavoriteIds(
-      cleanedIds
-    );
-
-  }
-
-
-  /*
-    رسم الأجهزة
-  */
-
-  favorites.forEach(
-    (device,index) => {
-
-      devicesGrid.appendChild(
-        createDeviceCard(
-          device,
-          index
-        )
-      );
-
-    }
-  );
-
-
-  hideLoading();
-
-
-  /*
-    لا توجد أجهزة فعلية
-  */
-
-  if(!favorites.length){
-
-    emptyState.style.display =
-      "flex";
-
-    headerCount.textContent =
-      "0 جهاز";
-
-
-    showToast(
-      "الأجهزة المحفوظة غير متاحة حالياً"
-    );
-
-    return;
-
-  }
-
-
-  emptyState.style.display =
-    "none";
-
-
-  headerCount.textContent =
-    `${favorites.length} ${
-      favorites.length === 1
-        ? "جهاز"
-        : "أجهزة"
-    }`;
-
+  if(results.some(r => r && r.failed))
+    showToast("بعض الأجهزة تعذر تحميلها، حاول التحديث");
 }
 
+/* ================================
+   الأحداث
+================================ */
 
-/* =====================================================
-   REMOVE FAVORITE
-===================================================== */
+grid.addEventListener("click", event => {
 
-function removeFavorite(deviceId){
+  const rm = event.target.closest("[data-remove]");
 
-  if(
-    deviceId === undefined ||
-    deviceId === null
-  ){
+  if(rm){
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const id = rm.dataset.remove;
+    const card = rm.closest(".fcard");
+
+    if(card) card.classList.add("leaving");
+
+    setTimeout(() => {
+      removeId(id);
+      state.items = state.items.filter(x => x.id !== id);
+      render();
+      showToast("تمت إزالة الجهاز من المفضلة");
+    }, 220);
 
     return;
-
   }
 
+  const card = event.target.closest(".fcard");
 
-  const id =
-    String(deviceId);
+  if(!card || !card.dataset.id) return;
 
+  const id = encodeURIComponent(card.dataset.id);
 
-  const current =
-    getFavoriteIds();
-
-
-  const next =
-    current.filter(
-      favoriteId =>
-        String(favoriteId) !== id
-    );
-
-
-  saveFavoriteIds(
-    next
+  go(
+    card.dataset.kind === "auction"
+      ? `auction-details.html?auction=${id}`
+      : `device.html?id=${id}`
   );
+});
 
+$("tabs").addEventListener("click", event => {
 
-  showToast(
-    "تمت إزالة الجهاز من المفضلة"
-  );
+  const tab = event.target.closest(".tab");
 
+  if(!tab) return;
 
-  loadFavorites();
+  state.tab = tab.dataset.tab;
+  render();
+});
 
-}
+$("browseBtn").addEventListener("click", () => go("market.html"));
 
+$("refreshBtn").addEventListener("click", async () => {
+  await loadFavorites();
+  showToast("تم تحديث المفضلة");
+});
 
-/* =====================================================
-   BROWSE
-===================================================== */
+$("backBtn").addEventListener("click", () => {
 
-browseBtn.addEventListener(
-  "click",
-  () => {
+  if(document.referrer && document.referrer.includes(window.location.host))
+    window.history.back();
+  else
+    go("home.html");
+});
 
-    window.location.href =
-      "market.html";
-
-  }
-);
-
-
-/* =====================================================
-   REFRESH
-===================================================== */
-
-refreshBtn.addEventListener(
-  "click",
-  () => {
-
-    loadFavorites();
-
-  }
-);
-
-
-/* =====================================================
-   BACK
-===================================================== */
-
-backBtn.addEventListener(
-  "click",
-  () => {
-
-    if(
-      document.referrer &&
-      document.referrer.includes(
-        window.location.host
-      )
-    ){
-
-      window.history.back();
-
-    }else{
-
-      window.location.href =
-        "home.html";
-
-    }
-
-  }
-);
-
-
-/* =====================================================
-   BOTTOM NAV
-===================================================== */
-
-document
-  .querySelectorAll(".nav-item")
-  .forEach(
-    item => {
-
-      item.addEventListener(
-        "click",
-        () => {
-
-          const page =
-            item.dataset.page;
-
-          if(page){
-
-            window.location.href =
-              page;
-
-          }
-
-        }
-      );
-
-    }
-  );
-
-
-/* =====================================================
+/* ================================
    START
-===================================================== */
+================================ */
 
-initFavoriteScope().finally(() => loadFavorites());
+initScope().finally(() => loadFavorites());
 
 </script>
 
