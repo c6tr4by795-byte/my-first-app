@@ -113,12 +113,12 @@ header{
 /* ============ شبكة الكروت (نفس كرت الرئيسية) ============ */
 
 .grid{
-  margin-top:12px;
-  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px
+  margin-top:14px;
+  display:grid;grid-template-columns:minmax(0,1fr);gap:18px
 }
 
 .fcard,.sk{
-  position:relative;aspect-ratio:2/3;border-radius:20px;overflow:hidden
+  position:relative;aspect-ratio:3/4;border-radius:22px;overflow:hidden
 }
 
 .fcard{
@@ -132,13 +132,17 @@ header{
 
 .fmedia{
   position:absolute;inset:0;overflow:hidden;isolation:isolate;
-  background:#f3f4f6
+  background:#20242c
 }
-/* إلغاء الخلفية المموّهة التي كانت تظهر كشريط مشوّه أعلى الصورة */
-.fmedia::before{content:none!important;display:none!important}
+/* تعبئة مساحة الصورة بصورة طبيعية من دون شريط ضبابي منفصل */
+.fmedia::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:var(--img,none) center/cover no-repeat;
+  filter:blur(10px);opacity:.42;transform:scale(1.06)
+}
 .fmedia img{
   position:absolute;inset:0;z-index:1;display:block;
-  width:100%;height:100%;object-fit:contain;object-position:center
+  width:100%;height:100%;object-fit:contain;object-position:center;background:transparent
 }
 .no-img{position:absolute;inset:0;z-index:1;display:grid;place-items:center}
 .no-img svg{width:38px;height:38px;opacity:.5}
@@ -149,17 +153,17 @@ header{
 }
 
 .fav-btn{
-  position:absolute;top:8px;inset-inline-start:8px;z-index:10;
-  width:32px;height:32px;border-radius:50%;display:grid;place-items:center;padding:0;
+  position:absolute;top:12px;inset-inline-start:12px;z-index:10;
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;padding:0;
   background:rgba(255,255,255,.96);color:#e5365f;
   box-shadow:0 5px 13px rgba(23,32,42,.15);transition:transform .18s
 }
 .fav-btn:active{transform:scale(.85)}
-.fav-btn svg{width:16px;height:16px;fill:currentColor;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fav-btn svg{width:19px;height:19px;fill:currentColor;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
 .fbody{
-  position:absolute;inset-inline:0;bottom:0;z-index:3;padding:10px 11px 11px;color:#fff;
-  display:flex;flex-direction:column;gap:6px
+  position:absolute;inset-inline:0;bottom:0;z-index:3;padding:16px 16px 17px;color:#fff;
+  display:flex;flex-direction:column;gap:9px
 }
 
 .cd{
@@ -174,20 +178,20 @@ header{
 .cd.over:before{background:#c8c3e6;animation:none}
 
 .ftitle{
-  margin:0;font-size:12.5px;font-weight:950;line-height:1.28;letter-spacing:-.015em;
+  margin:0;font-size:16px;font-weight:950;line-height:1.35;letter-spacing:-.015em;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden
 }
 
 .specs{display:flex;flex-wrap:wrap;gap:4px}
 .spec{
-  padding:3px 7px;border-radius:7px;background:rgba(255,255,255,.16);
-  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);font-size:9px;font-weight:800;color:#fff
+  padding:5px 9px;border-radius:7px;background:rgba(255,255,255,.16);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);font-size:11px;font-weight:800;color:#fff
 }
 
 .frow{display:flex;align-items:flex-end;justify-content:space-between;gap:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,.18)}
 .frow-main{min-width:0;flex:1}
 .frow small{display:block;font-size:8.5px;font-weight:800;color:#ffffffb3}
-.frow b{display:block;margin-top:1px;font-size:16px;font-weight:950;white-space:nowrap}
+.frow b{display:block;margin-top:2px;font-size:19px;font-weight:950;white-space:nowrap}
 
 .type{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;font-size:8.5px;font-weight:900;white-space:nowrap}
 .type.auc{background:var(--p);color:#fff}
