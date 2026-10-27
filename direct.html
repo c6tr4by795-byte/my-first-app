@@ -2051,6 +2051,19 @@ function normalizeDevice(device){
 }
 
 
+let DIRECT_FAV_KEY = "mzad_phone_favorites:guest";
+async function initDirectFavorites(){
+  try{ const {data,error}=await supabase.auth.getUser(); if(error) throw error;
+    DIRECT_FAV_KEY=data?.user?.id ? "mzad_phone_favorites:user:"+data.user.id : "mzad_phone_favorites:guest";
+  }catch(e){ console.warn("DIRECT FAVORITES SCOPE",e); }
+}
+function readDirectFavorites(){ try{const v=JSON.parse(localStorage.getItem(DIRECT_FAV_KEY)||"[]");return new Set(Array.isArray(v)?v.map(String):[]);}catch{return new Set();} }
+function toggleDirectFavorite(id,button){
+  const favs=readDirectFavorites(),key=String(id),on=!favs.has(key);on?favs.add(key):favs.delete(key);
+  try{localStorage.setItem(DIRECT_FAV_KEY,JSON.stringify([...favs]));}catch(e){console.error("DIRECT FAVORITE SAVE",e);return;}
+  button.classList.toggle("active",on);
+  const toast=document.getElementById("toast");if(toast){toast.textContent=on?"تمت الإضافة إلى المفضلة":"تمت الإزالة من المفضلة";toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),2200);}
+}
 async function loadDevices(){
 
   showLoading();
@@ -2371,18 +2384,8 @@ function createDeviceCard(
   `;
 
 
-  favorite.addEventListener(
-    "click",
-    event => {
-
-      event.stopPropagation();
-
-      favorite.classList.toggle(
-        "active"
-      );
-
-    }
-  );
+  favorite.classList.toggle("active",readDirectFavorites().has(String(device.id)));
+    favorite.addEventListener("click",event=>{event.stopPropagation();toggleDirectFavorite(device.id,favorite);});
 
 
   photo.appendChild(
@@ -3034,9 +3037,7 @@ document
   );
 
 
-applyBrand();
-
-loadDevices();
+initDirectFavorites().finally(()=>{applyBrand();loadDevices();});
 
 </script>
 
