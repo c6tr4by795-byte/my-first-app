@@ -298,16 +298,17 @@ header{
 .fbody .cd{align-self:flex-start}
 
 .ftitle{
-  margin:0;font-size:12.5px;font-weight:950;line-height:1.28;letter-spacing:-.015em;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden
+  margin:0;font-size:11px;font-weight:950;line-height:1.25;letter-spacing:-.015em;
+  display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;min-width:0
 }
 
-.specs{display:flex;flex-wrap:wrap;gap:4px}
+.specs{display:flex;flex-wrap:nowrap;align-items:center;gap:3px;min-width:0;max-width:100%;overflow:hidden;white-space:nowrap}
 
 .spec{
-  padding:3px 7px;border-radius:7px;background:rgba(255,255,255,.16);
-  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);font-size:9px;font-weight:800;color:#fff
+  display:block;flex:0 1 auto;min-width:0;max-width:42%;padding:3px 5px;border-radius:7px;background:rgba(255,255,255,.18);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);font-size:8px;line-height:1.2;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
 }
+.spec:last-child{flex:0 0 auto;max-width:none}
 
 .frow{display:flex;align-items:flex-end;justify-content:space-between;gap:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,.18)}
 .frow-main{min-width:0;flex:1}
@@ -2087,7 +2088,7 @@ function deviceCard(d, i, favs, opts = {}){
   const specs = [
     d.storage,
     d.color,
-    d.battery_health ? `بطارية ${d.battery_health}` : ""
+    d.battery_health ? `${String(d.battery_health).replace(/\s*%\s*$/, "")}%` : ""
   ]
     .map(normalizeText)
     .filter(Boolean)
