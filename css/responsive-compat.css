@@ -1,0 +1,65 @@
+/* MZAD PHONE — responsive compatibility layer
+   Shared layout safety only. Page-specific design remains in each HTML file. */
+:root {
+  --mzad-safe-top: env(safe-area-inset-top, 0px);
+  --mzad-safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+html {
+  max-width: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: clip;
+}
+img, picture, video, canvas, svg {
+  max-width: 100%;
+}
+img { height: auto; }
+button, input, select, textarea {
+  font: inherit;
+  min-width: 0;
+  max-width: 100%;
+}
+main, header, footer, nav, section, article, aside, form,
+[class*="container"], [class*="wrapper"], [class*="content"],
+[class*="layout"], [class*="section"], [class*="panel"], [class*="card"] {
+  min-width: 0;
+}
+:where(.grid, .cards, .products, .device-grid, .auction-grid) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+:where(.grid, .cards, .products, .device-grid, .auction-grid) > * {
+  min-width: 0;
+}
+:where(h1, h2, h3, p, label, a, button, span) {
+  overflow-wrap: anywhere;
+}
+:where(input, select, textarea) {
+  width: 100%;
+}
+@media (max-width: 390px) {
+  :where(.page, .wrap, .container, .shell, .content-wrap) {
+    max-width: 100%;
+  }
+  :where(.grid, .cards, .products, .device-grid, .auction-grid) {
+    gap: clamp(7px, 2.4vw, 12px);
+  }
+}
+@media (max-width: 340px) {
+  :where(.page, .wrap, .container, .shell, .content-wrap) {
+    padding-inline: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
