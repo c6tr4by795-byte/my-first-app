@@ -585,77 +585,105 @@ const isAuctionType = v => String(v || "").toLowerCase().includes("auction");
 const COLS = "id,created_at,brand,model,storage,color,battery_health,price,sale_type,images";
 
 async function loadAuctionItem(id){
-
-  const a = await supabase
+  // بعض أزرار المفضلة تحفظ معرّف المزاد، وبعضها معرّف الجهاز نفسه.
+  const auctionResult = await supabase
     .from("mzad_auctions")
     .select("id,device_id,starting_price_iqd,current_price_iqd,status,ends_at,created_at")
     .eq("id", id)
     .maybeSingle();
 
-  if(a.error) return { failed:true };
+  if(auctionResult.error) return { failed:true };
+  let auction = auctionResult.data;
+  let deviceId = auction?.device_id || null;
 
-  if(!a.data) return null;
+  // إذا لم يكن المعرّف مزاداً، جرّب اعتباره معرّف جهاز مزاد.
+  if(!auction){
+    const byDevice = await supabase
+      .from("mzad_auctions")
+      .select("id,device_id,starting_price_iqd,current_price_iqd,status,ends_at,created_at")
+      .eq("device_id", id)
+      .order("created_at", { ascending:false })
+      .limit(1);
+    if(byDevice.error) return { failed:true };
+    auction = byDevice.data?.[0] || null;
+    deviceId = auction?.device_id || id;
+  }
+  if(!auction) return null;
 
-  const [dr, ir] = await Promise.all([
-    supabase.from("mzad_devices").select("brand,model,storage,color,battery_health").eq("id", a.data.device_id).maybeSingle(),
-    supabase.from("mzad_device_images").select("storage_path,is_primary,sort_order").eq("device_id", a.data.device_id).limit(8)
+  const [deviceResult, imagesResult] = await Promise.all([
+    supabase.from("mzad_devices")
+      .select("brand,model,storage,color,battery_health")
+      .eq("id", deviceId).maybeSingle(),
+    supabase.from("mzad_device_images")
+      .select("storage_path,is_primary,sort_order")
+      .eq("device_id", deviceId).limit(8)
   ]);
 
-  const imgs = [...(ir.data || [])]
+  if(deviceResult.error || imagesResult.error) return { failed:true };
+  const imgs = [...(imagesResult.data || [])]
     .sort((x,y) => (Number(y.is_primary) - Number(x.is_primary)) || (Number(x.sort_order) - Number(y.sort_order)))
-    .map(i => i.storage_path)
-    .filter(Boolean);
-
-  const d = dr.data || {};
+    .map(i => i.storage_path).filter(Boolean);
+  const d = deviceResult.data || {};
 
   return {
-    id: String(a.data.id),
-    kind: "auction",
-    brand: d.brand,
-    model: d.model,
-    storage: d.storage,
-    color: d.color,
-    battery_health: d.battery_health,
-    price: Number(a.data.current_price_iqd || a.data.starting_price_iqd) || 0,
-    ends_at: a.data.ends_at,
-    status: a.data.status,
-    images: imgs
+    id: String(auction.id), kind:"auction", brand:d.brand, model:d.model,
+    storage:d.storage, color:d.color, battery_health:d.battery_health,
+    price:Number(auction.current_price_iqd || auction.starting_price_iqd) || 0,
+    ends_at:auction.ends_at, status:auction.status, images:imgs
   };
 }
 
 async function loadOne(id){
+  let hadError = false;
 
-  let failed = false;
-
-  try{
-
-    const r = await supabase.from("devices").select(COLS).eq("id", id).maybeSingle();
-
-    if(r.data){
-      return isAuctionType(r.data.sale_type)
-        ? { ...r.data, id:String(r.data.id), kind:"auction", ends_at:null }
-        : { ...r.data, id:String(r.data.id), kind:"direct" };
+  // البيع المباشر القديم يستخدم public.devices (معرّف رقمي).
+  try {
+    const direct = await supabase.from("devices").select(COLS).eq("id", id).maybeSingle();
+    if(direct.data) {
+      return isAuctionType(direct.data.sale_type)
+        ? { ...direct.data, id:String(direct.data.id), kind:"auction", ends_at:direct.data.auction_ends_at || null }
+        : { ...direct.data, id:String(direct.data.id), kind:"direct" };
     }
+    if(direct.error) hadError = true;
+  } catch { hadError = true; }
 
-    if(r.error) failed = true;
+  // نظام المزاد الجديد يستخدم UUID في mzad_devices، وقد يكون المحفوظ هو device_id.
+  try {
+    const modernDevice = await supabase.from("mzad_devices")
+      .select("id,brand,model,storage,color,battery_health,created_at")
+      .eq("id", id).maybeSingle();
 
-  }catch{
-    failed = true;
-  }
+    if(modernDevice.error) hadError = true;
+    if(modernDevice.data) {
+      const auction = await supabase.from("mzad_auctions")
+        .select("id,device_id,starting_price_iqd,current_price_iqd,status,ends_at,created_at")
+        .eq("device_id", modernDevice.data.id)
+        .order("created_at", {ascending:false}).limit(1);
 
-  try{
+      if(auction.error) return {failed:true};
+      if(auction.data?.length) {
+        const a = auction.data[0];
+        const images = await supabase.from("mzad_device_images")
+          .select("storage_path,is_primary,sort_order").eq("device_id", modernDevice.data.id).limit(8);
+        if(images.error) return {failed:true};
+        const imgs = [...(images.data||[])]
+          .sort((x,y)=>(Number(y.is_primary)-Number(x.is_primary))||(Number(x.sort_order)-Number(y.sort_order)))
+          .map(x=>x.storage_path).filter(Boolean);
+        return {id:String(a.id),kind:"auction",brand:modernDevice.data.brand,model:modernDevice.data.model,
+          storage:modernDevice.data.storage,color:modernDevice.data.color,battery_health:modernDevice.data.battery_health,
+          price:Number(a.current_price_iqd||a.starting_price_iqd)||0,ends_at:a.ends_at,status:a.status,images:imgs};
+      }
+      return null;
+    }
+  } catch { hadError = true; }
 
+  try {
     const item = await loadAuctionItem(id);
-
     if(item && !item.failed) return item;
+    if(item && item.failed) hadError = true;
+  } catch { hadError = true; }
 
-    if(item && item.failed) failed = true;
-
-  }catch{
-    failed = true;
-  }
-
-  return failed ? { failed:true } : null;
+  return hadError ? {failed:true} : null;
 }
 
 /* ================================
