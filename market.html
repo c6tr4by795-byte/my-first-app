@@ -534,9 +534,14 @@ function titleHTML(d){
   return esc(model || d._brand || "جهاز");
 }
 function specsOf(d){
-  const battery = String(d.battery_health ?? "").trim().replace(/%$/, "");
+  // اعرض صحة البطارية كرقم صحيح فقط؛ تجاهل القيم التالفة مثل "i%" أو النصوص.
+  const rawBattery = String(d.battery_health ?? "").trim();
+  const matchBattery = rawBattery.match(/(?:^|[^0-9])(100|[1-9]?\d)(?:\s*%|$)/);
+  const batteryNumber = matchBattery ? Number(matchBattery[1]) : NaN;
   const list = [d.storage, d.color].map(v => String(v ?? "").trim()).filter(Boolean).map(t => ({ t }));
-  if(battery) list.push({ t: battery + "%", bat: true });
+  if(Number.isInteger(batteryNumber) && batteryNumber >= 1 && batteryNumber <= 100) {
+    list.push({ t: batteryNumber + "%", bat: true });
+  }
   return list.slice(0,3);
 }
 function cardHTML(d, i){
