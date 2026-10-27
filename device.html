@@ -338,10 +338,42 @@ async function needLogin(){
   return true;
 }
 function setupActions(){
-  $("fav").onclick = async () => {
+  const favoriteKey = "mzad_phone_favorites:user:" + (window.__mzadFavoriteUserId || "");
+  const readFavorites = () => {
+    try { return new Set(JSON.parse(localStorage.getItem(favoriteKey) || "[]").map(String)); }
+    catch { return new Set(); }
+  };
+  const favButton = $("fav");
+  const refreshFavorite = () => {
+    const ids = readFavorites();
+    favButton.classList.toggle("on", !!D?.id && ids.has(String(D.id)));
+  };
+  (async () => {
+    try {
+      const {data} = await supabase.auth.getUser();
+      if (data?.user?.id) window.__mzadFavoriteUserId = data.user.id;
+      else window.__mzadFavoriteUserId = "";
+      refreshFavorite();
+    } catch { window.__mzadFavoriteUserId = ""; }
+  })();
+  favButton.onclick = async () => {
     if (await needLogin()) return;
-    const on = $("fav").classList.toggle("on");
-    toast(on ? "تمت إضافة الجهاز للمفضلة" : "تمت إزالة الجهاز من المفضلة");
+    try {
+      const {data} = await supabase.auth.getUser();
+      const userId = data?.user?.id;
+      if (!userId) { toast("سجّل دخولك أولاً"); return; }
+      const key = "mzad_phone_favorites:user:" + userId;
+      let ids = [];
+      try { ids = JSON.parse(localStorage.getItem(key) || "[]"); } catch {}
+      ids = Array.isArray(ids) ? ids.map(String) : [];
+      const id = String(D?.id || "");
+      if (!id) { toast("تعذر تحديد الجهاز"); return; }
+      const on = !ids.includes(id);
+      ids = on ? [...new Set([...ids, id])] : ids.filter(x => x !== id);
+      localStorage.setItem(key, JSON.stringify(ids));
+      favButton.classList.toggle("on", on);
+      toast(on ? "تمت إضافة الجهاز للمفضلة" : "تمت إزالة الجهاز من المفضلة");
+    } catch (e) { console.error("FAVORITE SAVE", e); toast("تعذر حفظ المفضلة"); }
   };
   $("buy").onclick = async () => {
     if (await needLogin()) return;
