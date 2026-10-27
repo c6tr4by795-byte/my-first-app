@@ -2018,18 +2018,18 @@ setInterval(tickTimers, 1000);
    المفضلة
 ================================ */
 
-let FAV_KEY = "mzad_favs:guest";
+let FAV_KEY = "mzad_phone_favorites:guest";
 
 async function initFavoriteScope(){
   try{
     const {data,error} = await supabase.auth.getUser();
     if(error) throw error;
     FAV_KEY = data?.user?.id
-      ? "mzad_favs:user:" + data.user.id
-      : "mzad_favs:guest";
+      ? "mzad_phone_favorites:user:" + data.user.id
+      : "mzad_phone_favorites:guest";
   }catch(e){
     console.warn("FAVORITES SCOPE:",e);
-    FAV_KEY = "mzad_favs:guest";
+    FAV_KEY = "mzad_phone_favorites:guest";
   }
 }
 
