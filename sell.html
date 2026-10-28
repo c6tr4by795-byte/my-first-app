@@ -63,6 +63,7 @@ header{margin-inline:-14px;padding:0 14px 12px;background:linear-gradient(145deg
 .card{margin-top:15px;padding:17px 15px;border-radius:23px;background:#fff;border:1px solid var(--edge);box-shadow:0 7px 24px -14px rgba(98,70,217,.22)}
 .c-head{display:flex;align-items:center;gap:10px;margin-bottom:17px}
 .num{width:29px;height:29px;flex:0 0 29px;border-radius:10px;display:grid;place-items:center;color:#fff;font-size:13.5px;font-weight:900;background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 5px 12px rgba(98,70,217,.25)}
+.num svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .c-head h2{margin:0;font-size:16.5px;font-weight:900}
 .c-head p{margin:1px 0 0;font-size:11.5px;font-weight:700;color:var(--muted)}
 
@@ -201,6 +202,55 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
 .pv-row b{display:block;margin-top:1px;font-size:13px;font-weight:900;white-space:nowrap}
 .type{padding:4px 8px;border-radius:999px;background:linear-gradient(135deg,#6246d9,#8b6cf0);color:#fff;font-size:8.5px;font-weight:900}
 
+/* معاينة صفحة الجهاز: الصور كاملة بنسبتها + صندوق المعلومات */
+.dp{border-radius:20px;overflow:hidden;background:#fff;border:1px solid var(--edge);box-shadow:0 9px 22px rgba(98,70,217,.09)}
+.dp-gal{display:flex;align-items:flex-start;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;transition:height .25s ease;background:transparent}
+.dp-gal::-webkit-scrollbar{display:none}
+.dp-gal .sl{flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always}
+.dp-gal img{display:block;width:100%;height:auto;max-height:70dvh;object-fit:contain;margin:0;padding:0;border:0}
+.dp-dots{display:flex;justify-content:center;gap:6px;padding:9px 0 0}
+.dp-dots:empty{display:none}
+.dpd{width:6px;height:6px;border-radius:50%;background:#d6d2ea;transition:.25s ease}
+.dpd.on{width:19px;border-radius:999px;background:var(--p)}
+.dp-body{padding:12px 14px 14px}
+.dp-title{margin:0;font-size:18px;font-weight:950;letter-spacing:-.03em;line-height:1.25}
+.dp-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:7px}
+.dp-price{font-size:19px;font-weight:950;color:var(--p-dark);white-space:nowrap}
+.dp-tags{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end}
+.dp-info{margin-top:8px}
+.gi{margin:14px 0 2px;font-size:11px;font-weight:900;color:var(--p-dark)}
+.ir{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid #f1eefb;font-size:12.5px}
+.ir:last-child{border-bottom:0;padding-bottom:0}
+.ir span{flex:none;color:var(--muted);font-weight:700}
+.ir strong{font-weight:800;text-align:end;line-height:1.7}
+.ir.ok strong{color:var(--ok)}
+.ir.warn strong{color:var(--hot)}
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.wk{display:flex;align-items:center;gap:8px;min-width:0;padding:10px 11px;border-radius:14px;background:var(--ok-soft);border:1px solid #c6e8d6;color:var(--ok);font-size:11.5px;font-weight:800}
+.wk svg{width:16px;height:16px;flex:0 0 16px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.wk span{min-width:0;line-height:1.35}
+.wk.off{background:var(--bad-soft);border-color:#f6d3da;color:var(--bad)}
+.nbox{margin-top:8px;padding:11px 12px;border-radius:14px;background:var(--p-soft);font-size:12.5px;font-weight:700;line-height:1.9;color:#374151;white-space:pre-wrap;overflow-wrap:anywhere}
+
+/* تأكيد النشر */
+.cf-sum{display:grid;grid-template-columns:1.4fr 1.1fr .8fr;gap:8px}
+.cf-sum div{padding:10px 11px;border-radius:14px;background:var(--p-soft);border:1px solid var(--line);min-width:0}
+.cf-sum small{display:block;font-size:10px;font-weight:800;color:var(--muted)}
+.cf-sum b{display:block;margin-top:3px;font-size:12.5px;font-weight:900;color:var(--p-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cf-list{margin:14px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+.cf-list li{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;font-weight:700;line-height:1.8;color:#374151}
+.cf-list li svg{width:18px;height:18px;flex:0 0 18px;margin-top:3px;fill:none;stroke:var(--ok);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.agree{position:relative;display:flex;align-items:flex-start;gap:12px;margin-top:16px;padding:14px;border-radius:16px;background:var(--p-soft);border:1.5px solid var(--edge);cursor:pointer;transition:background .25s,border-color .25s}
+.agree input{position:absolute;opacity:0;pointer-events:none}
+.agree .ck{position:relative;width:24px;height:24px;flex:0 0 24px;margin-top:1px;border-radius:8px;background:#fff;border:2px solid #c9bff7;transition:background .25s,border-color .25s}
+.agree .ck:after{content:"";position:absolute;top:3px;left:7px;width:6px;height:11px;border:solid #fff;border-width:0 2.6px 2.6px 0;transform:rotate(45deg) scale(0);transition:transform .2s cubic-bezier(.3,1.5,.5,1)}
+.agree input:checked+.ck{background:var(--ok);border-color:var(--ok)}
+.agree input:checked+.ck:after{transform:rotate(45deg) scale(1)}
+.agree.on{background:var(--ok-soft);border-color:#c6e8d6}
+.agree.invalid{animation:shake .4s;border-color:var(--hot);box-shadow:0 0 0 3px rgba(232,89,12,.12)}
+.agree .tx{font-size:13px;font-weight:900;line-height:1.7}
+.agree:focus-within .ck{box-shadow:0 0 0 3px rgba(98,70,217,.3)}
+
 .money{position:relative}
 .money .in{padding-inline-start:14px;padding-inline-end:60px;height:54px;font-size:22px;font-weight:900;direction:ltr;text-align:right;font-variant-numeric:tabular-nums}
 .money span{position:absolute;inset-inline-start:14px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:900;color:var(--muted);pointer-events:none}
@@ -310,6 +360,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
   .photos{gap:7px}
   .thumb .x{width:24px;height:24px}
   .thumb .mk{height:23px;padding:0 7px}
+  .cf-sum{grid-template-columns:1fr 1fr}
+  .cf-sum div:first-child{grid-column:1/-1}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
@@ -463,7 +515,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
 
   <div class="guide">
     <b>آخر خطوة</b>
-    <p>حدد سعر البيع، راجع المعاينة والملخص، وإذا كلشي تمام اضغط «نشر الجهاز».</p>
+    <p>حدد سعر البيع، شوف شلون يطلع إعلانك، وبالأخير أكد وانشر.</p>
   </div>
 
   <section class="card">
@@ -500,7 +552,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
   </section>
 
   <section class="card">
-    <div class="c-head"><div><h2>هكذا يظهر إعلانك</h2><p>معاينة حية للبطاقة</p></div></div>
+    <div class="c-head"><div><h2>هكذا يظهر إعلانك</h2><p>بطاقة الجهاز داخل السوق</p></div></div>
     <div class="pv-wrap">
       <div class="pv">
         <div class="pv-media" id="pvMedia"></div>
@@ -513,6 +565,19 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
             <span class="type">بيع مباشر</span>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="c-head"><div><h2>صفحة جهازك بعد النشر</h2><p>الصور والمعلومات مثل ما يشوفها المشتري</p></div></div>
+    <div class="dp">
+      <div class="dp-gal" id="dpGal" dir="ltr"></div>
+      <div class="dp-dots" id="dpDots" dir="ltr"></div>
+      <div class="dp-body">
+        <h3 class="dp-title" id="dpTitle">اسم الجهاز</h3>
+        <div class="dp-meta"><b class="dp-price" id="dpPrice">—</b><span class="dp-tags" id="dpTags"></span></div>
+        <div class="dp-info" id="dpInfo"></div>
       </div>
     </div>
   </section>
@@ -538,6 +603,30 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
       <li><span class="n">2</span><div><b>ينشر إعلان البيع المباشر</b><p>بالسعر اللي حددته، بدون مزايدة وبدون مدة محددة.</p></div></li>
       <li><span class="n">3</span><div><b>تتابع إعلانك</b><p>بعد النشر ننقلك لصفحة «إعلاناتي» حتى تتابع جهازك.</p></div></li>
     </ol>
+  </section>
+
+  <!-- آخر شي: رسالة التأكيد وموافقة المستخدم -->
+  <section class="card" id="confirmCard">
+    <div class="c-head"><span class="num"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 7.8 7 10 4-2.2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg></span><div><h2>تأكيد قبل النشر</h2><p>خطوة أخيرة، اقرأ ووافق</p></div></div>
+
+    <div class="cf-sum">
+      <div><small>الجهاز</small><b id="cfName">—</b></div>
+      <div><small>السعر</small><b id="cfPrice">—</b></div>
+      <div><small>الصور</small><b id="cfPhotos">0</b></div>
+    </div>
+
+    <ul class="cf-list">
+      <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>كل المعلومات والصور اللي أضفتها صحيحة وتخص جهازي.</span></li>
+      <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>ذكرت كل العيوب والقطع المبدلة الموجودة بالجهاز.</span></li>
+      <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>السعر المحدد فوق هو اللي راح يظهر للمشترين بالنجف.</span></li>
+    </ul>
+
+    <label class="agree" id="agreeBox">
+      <input type="checkbox" id="agree">
+      <i class="ck"></i>
+      <span class="tx">أوافق وأؤكد صحة المعلومات أعلاه، وأريد نشر الجهاز.</span>
+    </label>
+
     <div id="msg" class="msg"></div>
   </section>
 </div>
@@ -592,7 +681,7 @@ const state = {
   user:null, step:1, files:[], busy:false, done:false, pending:0,
   v:{}, acc:new Set(), rep:new Set(), works:{}, replaced:null,
   modelOther:false, colorOther:false, regionOther:false, batteryTouched:false,
-  deviceId:null, imagesDone:false, negotiable:false
+  deviceId:null, imagesDone:false, negotiable:false, agreed:false
 };
 
 const val = id => $(id).value.trim();
@@ -1257,9 +1346,20 @@ function priceError(n){
 }
 
 form.addEventListener("input", e => {
+  /* تغيير الموافقة لا يغيّر بيانات الجهاز، فلا نلغي الجهاز المحفوظ */
+  if (e.target.id === "agree") return;
   if (e.target.classList?.contains("in")) e.target.classList.remove("invalid");
   if (e.target.id === "modelCustom" || e.target.id === "brandOther"){ updateBattery(); renderSim(); renderRegion(); }
   invalidate(); sync();
+});
+
+/* ===== الموافقة النهائية ===== */
+$("agree").addEventListener("change", e => {
+  state.agreed = e.target.checked;
+  $("agreeBox").classList.toggle("on", state.agreed);
+  $("agreeBox").classList.remove("invalid");
+  hideMsg();
+  renderBar();
 });
 
 /* ===== الصور ===== */
@@ -1423,7 +1523,9 @@ document.addEventListener("change", async e => {
 
 /* ===== الملخص والمعاينة ===== */
 const PH_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M9.5 5.5h5"/><path d="M11 18.5h2"/></svg>';
-let lastCover = null, lastSpecs = null, lastPct = -1;
+const IC_OK = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const IC_NO = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+let lastCover = null, lastSpecs = null, lastPct = -1, dpKey = null;
 
 const titleOf = () => {
   const b = getBrand(), m = getModel();
@@ -1462,6 +1564,85 @@ $("review").addEventListener("click", e => {
   const b = e.target.closest("[data-go]");
   if (b) goStep(+b.dataset.go);
 });
+
+/* ===== معاينة صفحة الجهاز: الصور كاملة + صندوق المعلومات (أي قسم فاضي ما يظهر) ===== */
+function fitDp(){
+  const el = $("dpGal");
+  if (!el || !el.clientWidth) return;
+  const i = Math.round(Math.abs(el.scrollLeft) / el.clientWidth);
+  const sl = el.children[i];
+  if (!sl) return;
+  const im = sl.querySelector("img");
+  const h = (im && im.complete && im.naturalWidth) ? im.getBoundingClientRect().height : sl.getBoundingClientRect().height;
+  if (h > 0) el.style.height = h + "px";
+  [...$("dpDots").children].forEach((d, k) => d.classList.toggle("on", k === i));
+}
+window.__fitDp = fitDp;
+$("dpGal").addEventListener("scroll", fitDp, { passive:true });
+window.addEventListener("resize", fitDp, { passive:true });
+
+function infoHtml(){
+  const v = state.v;
+  const tone = x => /مكسور|لا يعمل|لا تعمل|ضربات|انبعاج|خدوش واضحة|مقفل|مبدل|متوسط/.test(x) ? "warn" : /^(سليمة|نظيف|يعمل|جديد|ممتاز|جيد|مفتوح|كلها أصلية|لا توجد)/.test(x) ? "ok" : "";
+  const R = (label, x, t) => { if (!x) return ""; const c = t === undefined ? tone(x) : t; return `<div class="ir${c ? " " + c : ""}"><span>${esc(label)}</span><strong>${esc(x)}</strong></div>`; };
+  const G = (title, body) => body ? `<div class="gi">${esc(title)}</div>${body}` : "";
+
+  const bat = batteryValue();
+  const bn = parseInt(bat, 10);
+  const bt = bat && /%$/.test(bat) ? (bn >= 85 ? "ok" : bn < 80 ? "warn" : "") : undefined;
+
+  const specs = R("الحالة العامة", v.condition) + R("السعة", v.storage, "") + R("اللون", getColor(), "") + R("صحة البطارية", bat, bt)
+    + R("نوع الشريحة", v.sim, "") + R("إصدار الآيفون", getRegion(), "") + R("قفل الشبكة", v.netlock);
+
+  const look = R("الشاشة", v.screen) + R("الهيكل", v.body) + R("الظهر", v.back)
+    + R("الكاميرا الأمامية", v.camF ? camPart("camF") : "") + R("الكاميرا الخلفية", v.camB ? camPart("camB") : "");
+
+  const decided = WORKS.filter(w => state.works[w.k] !== null);
+  const works = decided.length
+    ? `<div class="wgrid">${decided.map(w => { const off = state.works[w.k] === false; return `<div class="wk${off ? " off" : ""}">${off ? IC_NO : IC_OK}<span>${esc(w.t)}</span></div>`; }).join("")}</div>`
+    : "";
+
+  let parts = "";
+  if (state.replaced === false) parts = R("القطع المبدّلة", "لا توجد، الجهاز أصلي", "ok");
+  else if (state.replaced === true){
+    const list = [...state.rep, val("replaced")].filter(Boolean).join("، ") || "نعم";
+    parts = R("القطع المبدّلة", list, "warn") + R("نوع القطع", v.quality, "");
+  }
+
+  const extras = R("الضمان", v.warranty, "") + R("الملحقات", state.acc.size ? [...state.acc].join("، ") : "", "");
+  const notes = val("notes");
+
+  return G("مواصفات الجهاز", specs) + G("شكل الجهاز", look) + G("فحص الوظائف", works) + G("القطع", parts) + G("الضمان والملحقات", extras)
+    + G("ملاحظاتك", notes ? `<div class="nbox">${esc(notes)}</div>` : "");
+}
+
+function renderDetailsPreview(){
+  const gal = $("dpGal");
+  const key = state.files.map(f => f.url).join("|");
+  if (key !== dpKey){
+    dpKey = key;
+    gal.style.height = "";
+    gal.scrollLeft = 0;
+    gal.innerHTML = state.files.map((f, i) => `<div class="sl"><img src="${f.url}" alt="صورة ${i + 1}" draggable="false" onload="window.__fitDp&&window.__fitDp()"></div>`).join("");
+    $("dpDots").innerHTML = state.files.length > 1 ? state.files.map((_, i) => `<span class="dpd${i ? "" : " on"}"></span>`).join("") : "";
+  }
+  gal.style.display = state.files.length ? "" : "none";
+
+  const price = parsePrice($("price").value);
+  $("dpTitle").textContent = titleOf() || "اسم الجهاز";
+  $("dpPrice").textContent = price ? money(price) : "—";
+  $("dpTags").innerHTML = ["بيع مباشر", state.negotiable ? "قابل للتفاوض" : "", "النجف"].filter(Boolean).map(t => `<span class="spec">${esc(t)}</span>`).join("");
+  $("dpInfo").innerHTML = infoHtml();
+  requestAnimationFrame(fitDp);
+}
+
+/* ===== رسالة التأكيد ===== */
+function renderConfirm(){
+  const price = parsePrice($("price").value);
+  $("cfName").textContent = titleOf() || "—";
+  $("cfPrice").textContent = price ? money(price) : "—";
+  $("cfPhotos").textContent = state.files.length + " صور";
+}
 
 function renderMeter(){
   const v = state.v;
@@ -1520,7 +1701,7 @@ function sync(){
     $("pvMedia").innerHTML = cover ? `<img src="${cover}" alt="">` : `<div class="ph">${PH_ICON}</div>`;
   }
 
-  if (state.step === 5){ renderFactors(); renderReview(); renderMeter(); }
+  if (state.step === 5){ renderFactors(); renderDetailsPreview(); renderReview(); renderMeter(); renderConfirm(); }
   renderBar();
 }
 
@@ -1571,6 +1752,8 @@ function validateStep(n){
   if (n === 5){
     const err = priceError(parsePrice($("price").value));
     if (err){ flag($("price")); $("price").focus(); toast(err); return false; }
+    /* آخر شي: موافقة المستخدم على رسالة التأكيد */
+    if (!state.agreed) return need($("agreeBox"), "وافق على التأكيد قبل النشر");
   }
   return true;
 }
@@ -1588,7 +1771,7 @@ function renderBar(){
   const last = state.step === TOTAL;
   $("bPrev").classList.toggle("off", state.step === 1);
   $("bText").textContent = last ? "نشر الجهاز" : "التالي";
-  $("bNext").classList.toggle("ready", last && !state.busy && !!getBrand() && !!getModel() && state.files.length > 0 && !priceError(parsePrice($("price").value)));
+  $("bNext").classList.toggle("ready", last && !state.busy && state.agreed && !!getBrand() && !!getModel() && state.files.length > 0 && !priceError(parsePrice($("price").value)));
 }
 
 function goStep(n){
