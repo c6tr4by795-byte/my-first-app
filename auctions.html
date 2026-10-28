@@ -64,9 +64,9 @@ h1{margin:0;font-size:16px;font-weight:900;letter-spacing:-.01em;color:#fff;line
 .list{display:flex;flex-direction:column;gap:12px}
 .c{position:relative;display:grid;grid-template-columns:42% minmax(0,1fr);min-height:176px;background:#fff;border-radius:20px;border:1px solid var(--edge);overflow:hidden;cursor:pointer;box-shadow:0 12px 24px -16px rgba(98,70,217,.4);transition:transform .16s,box-shadow .2s;-webkit-tap-highlight-color:transparent}
 .c:active{transform:scale(.99)}
-.c.enter{animation:up .4s ease-out backwards}
+.c.enter{animation:none!important;opacity:1;transform:none}
 .im{position:relative;grid-column:1;min-width:0;display:grid;place-items:center;overflow:hidden;background:linear-gradient(160deg,#ebe6ff,#d9d0fb)}
-.im img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;transition:opacity .3s}
+.im img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:1;transition:none}
 .im img.ok{opacity:1}
 .im>svg{width:34px;height:34px;opacity:.35}
 .im:after{content:"";position:absolute;inset:auto 0 0 0;height:40%;background:linear-gradient(to top,rgba(20,14,48,.35),rgba(20,14,48,0));pointer-events:none}
@@ -102,7 +102,7 @@ h1{margin:0;font-size:16px;font-weight:900;letter-spacing:-.01em;color:#fff;line
 .empty{padding:40px 20px;text-align:center;border-radius:20px;background:#fff;border:1px dashed #cfc7f3}
 .empty h3{margin:0 0 6px;font-size:16px;font-weight:900}
 .empty p{margin:0;font-size:12.5px;font-weight:500;color:var(--muted);line-height:1.8}
-.sk{height:176px;border-radius:20px;background:linear-gradient(100deg,#eeeafa 30%,#f8f6ff 50%,#eeeafa 70%);background-size:300% 100%;animation:shimmer 1.6s linear infinite}
+.sk{height:176px;border-radius:20px;background:#f1eefb;animation:none}
 @media(max-width:360px){
   .c{min-height:168px}
   .cb{padding:10px 10px 9px}
@@ -240,7 +240,7 @@ async function fetchAuctions(){
 async function load(first){
   if (loading) return; loading = true;
   try{
-    if (first){ $("result").textContent = "جاري تحميل المزادات..."; $("list").innerHTML = '<div class="sk"></div><div class="sk"></div>'; }
+    if (first && !AU.length){ $("result").textContent = "جاري تحميل المزادات..."; $("list").innerHTML = '<div class="sk"></div><div class="sk"></div>'; }
     AU = await fetchAuctions();
     render();
   }catch(e){
