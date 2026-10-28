@@ -49,6 +49,7 @@ header{position:relative;overflow:hidden;isolation:isolate;margin-inline:-14px;p
 .slide.ph svg{height:46%;width:auto;opacity:.5}
 .shot-count{position:absolute;top:10px;right:10px;z-index:3;padding:4px 10px;border-radius:999px;background:rgba(20,14,48,.55);color:#fff;font-size:11px;font-weight:900;direction:ltr;font-variant-numeric:tabular-nums;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);pointer-events:none}
 .dots{display:flex;justify-content:center;gap:6px;margin-top:10px}
+.dots:empty{display:none}
 .dot{width:6px;height:6px;border-radius:50%;background:#d6d2ea;transition:.25s ease}
 .dot.on{width:19px;border-radius:999px;background:var(--p)}
 
@@ -133,6 +134,13 @@ header{position:relative;overflow:hidden;isolation:isolate;margin-inline:-14px;p
 .r.bad{margin-top:6px;padding:10px 12px;border:0;border-radius:14px;background:#fff0f3;border-inline-start:4px solid var(--bad)}
 .r.bad span{color:var(--bad)}.r.bad strong{color:#8f1d36}
 .fine{margin-top:12px;padding:10px 12px;border-radius:14px;background:var(--ps);font-size:11px;font-weight:700;line-height:1.8;color:#4a4d6e}
+.r.warn strong{color:var(--hot)}
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.wk{display:flex;align-items:center;gap:8px;min-width:0;padding:10px 11px;border-radius:14px;background:#e8f6ef;border:1px solid #c6e8d6;color:var(--ok);font-size:11.5px;font-weight:800}
+.wk svg{width:16px;height:16px;flex:0 0 16px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.wk span{min-width:0;line-height:1.35}
+.wk.off{background:#fff0f3;border-color:#f6d3da;color:var(--bad)}
+.nbox{margin-top:8px;padding:11px 12px;border-radius:14px;background:var(--ps);font-size:12.5px;font-weight:700;line-height:1.9;color:#374151;white-space:pre-wrap;overflow-wrap:anywhere}
 
 /* المزايدون */
 .live-row{display:flex;align-items:center;gap:10px;width:100%;margin-top:8px;padding:11px 12px;border-radius:16px;background:var(--ps);border:1px solid var(--line);text-align:start}
@@ -218,7 +226,7 @@ header{position:relative;overflow:hidden;isolation:isolate;margin-inline:-14px;p
 
 <div id="pg" hidden>
 
-  <section class="gallery" aria-label="صور الجهاز"><div class="slides" id="slides" dir="ltr"></div><span class="shot-count" id="shotCount" hidden></span></section>
+  <section class="gallery" id="gallery" aria-label="صور الجهاز"><div class="slides" id="slides" dir="ltr"></div><span class="shot-count" id="shotCount" hidden></span></section>
   <div class="dots" id="dots" dir="ltr"></div>
 
   <div class="title"><h1 id="name"></h1><p class="sub" id="sub"></p></div>
@@ -260,7 +268,7 @@ header{position:relative;overflow:hidden;isolation:isolate;margin-inline:-14px;p
   </section>
 
   <section class="card" id="insCard" hidden>
-    <h2>تقرير الفحص</h2><p class="hint">اقرأه قبل ما تزايد</p>
+    <h2>فحص الجهاز</h2><p class="hint">كل تفاصيل البائع قبل ما تزايد</p>
     <div id="ins"></div>
     <div class="fine">يُفحص الجهاز عند التسليم بنقطة المنصة. اقرأ العيوب جيداً قبل المزايدة.</div>
   </section>
@@ -442,6 +450,72 @@ window.__fit = fitGallery;
 window.addEventListener("resize", fitGallery, { passive:true });
 
 /* ============ الجزء الثابت: الصور والمواصفات ============ */
+/* ============ فحص الجهاز: نفس تفاصيل نموذج البيع، وأي قسم فاضي ما يظهر ============ */
+const WORK_LIST = ["Face ID / البصمة","الكاميرا الأمامية","الكاميرا الخلفية","اللمس والشاشة","السماعات والمايك","الشحن والمنفذ","الشبكة والواي فاي"];
+const IC_OK = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const IC_NO = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+function buildInspection(d){
+  const get = k => (d[k] != null && String(d[k]).trim() !== "") ? String(d[k]).trim() : "";
+  /* "مفتاح: قيمة | مفتاح: قيمة" إلى كائن */
+  const pairs = s => { const o = {}; String(s || "").split("|").forEach(p => { const i = p.indexOf(":"); if (i > 0){ const k = p.slice(0,i).trim(), v = p.slice(i+1).trim(); if (k && v) o[k] = v; } }); return o; };
+  const tone = v => /مكسور|لا يعمل|لا تعمل|ضربات|انبعاج|خدوش واضحة|مقفل|مبدل|متوسط/.test(v) ? "warn" : /^(سليمة|نظيف|يعمل|جديد|ممتاز|جيد|مفتوح|كلها أصلية|لا توجد|تعمل بالكامل)/.test(v) ? "ok" : "";
+  const R = (label, v, t) => { if (!v) return ""; const c = t === undefined ? tone(v) : t; return `<div class="r${c ? " " + c : ""}"><span>${esc(label)}</span><strong>${esc(v)}</strong></div>`; };
+  const G = (title, body) => body ? `<div class="g">${esc(title)}</div>${body}` : "";
+
+  /* مواصفات الجهاز */
+  let bat = get("battery_health");
+  if (/^\d+$/.test(bat)) bat += "%";
+  const bn = parseInt(bat, 10);
+  const bt = /%$/.test(bat) ? (bn >= 85 ? "ok" : bn < 80 ? "warn" : "") : undefined;
+  const simRaw = get("sim_network"), sim = pairs(simRaw);
+  const simRows = Object.keys(sim).length
+    ? R("نوع الشريحة", sim["الشريحة"], "") + R("إصدار الآيفون", sim["الإصدار"], "") + R("قفل الشبكة", sim["الشبكة"])
+    : R("الشبكة", simRaw, "");
+  const specs = R("الحالة العامة", get("condition_grade")) + R("صحة البطارية", bat, bt) + simRows;
+
+  /* شكل الجهاز */
+  const sdRaw = get("scratches_dents"), sd = pairs(sdRaw);
+  const bodyRows = (sd["الهيكل"] || sd["الظهر"]) ? R("الهيكل", sd["الهيكل"]) + R("الظهر", sd["الظهر"]) : R("خدوش وصدمات", sdRaw, "warn");
+  const camRaw = get("camera_condition"), cm = pairs(camRaw);
+  const camRows = (cm["الأمامية"] || cm["الخلفية"]) ? R("الكاميرا الأمامية", cm["الأمامية"]) + R("الكاميرا الخلفية", cm["الخلفية"]) : R("الكاميرات", camRaw);
+  const look = R("الشاشة", get("screen_condition")) + bodyRows + camRows;
+
+  /* فحص الوظائف: يظهر فقط إذا الجهاز مسجل من النموذج المنظم */
+  const faults = get("faults");
+  const structured = !!(cm["الأمامية"] || cm["الخلفية"] || /^لا يعمل\s*:/.test(faults));
+  const bioOff = get("biometric_condition") === "لا يعمل";
+  const works = structured
+    ? `<div class="wgrid">${WORK_LIST.map((n,i) => { const off = faults.includes(n) || (i === 0 && bioOff); return `<div class="wk${off ? " off" : ""}">${off ? IC_NO : IC_OK}<span>${esc(n)}</span></div>`; }).join("")}</div>`
+    : "";
+  const looseFaults = !structured ? R("الأعطال", faults, "bad") : "";
+
+  /* القطع المبدلة */
+  const rp = get("replaced_parts");
+  let parts = "";
+  if (rp){
+    if (/^لا توجد/.test(rp)) parts = R("القطع المبدّلة", "لا توجد، الجهاز أصلي", "ok");
+    else {
+      const segs = rp.split("|").map(x => x.trim());
+      parts = R("القطع المبدّلة", segs[0], "warn") + R("نوع القطع", pairs(segs.slice(1).join("|"))["نوع القطع"], "");
+    }
+  }
+
+  /* الضمان والملحقات والملاحظات */
+  const lines = get("seller_notes").split("\n").map(x => x.trim()).filter(Boolean);
+  const wLine = lines.find(l => l.startsWith("الضمان:"));
+  const warranty = wLine ? wLine.slice(wLine.indexOf(":") + 1).trim() : "";
+  const notes = lines.filter(l => !l.startsWith("الضمان:") && l !== "السعر قابل للتفاوض").join("\n");
+  const extras = R("الضمان", warranty, "") + R("الملحقات", get("accessories"), "");
+
+  return G("مواصفات الجهاز", specs)
+    + G("شكل الجهاز", look)
+    + G("فحص الوظائف", works)
+    + G("الأعطال", looseFaults)
+    + G("القطع", parts)
+    + G("الضمان والملحقات", extras)
+    + G("ملاحظات البائع", notes ? `<div class="nbox">${esc(notes)}</div>` : "");
+}
+
 const PH = '<svg viewBox="0 0 24 24" fill="none" stroke="#6246d9" stroke-width="1.5"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>';
 function renderStatic(){
   const a = S.a, d = S.d || {};
@@ -467,14 +541,10 @@ function renderStatic(){
   $("aInc").textContent = money(a.bid_increment_iqd) + " د.ع";
   $("stepTag").textContent = "+" + money(a.bid_increment_iqd) + " د.ع";
 
-  /* تقرير الفحص: مجموعتان واضحتان، وصف + قيمة، بدون نقاط */
-  const val = k => (d[k] != null && String(d[k]).trim() !== "") ? String(d[k]) : null;
-  const row = ([k,l], cls) => { let v = val(k); if (v === null) return ""; if (k === "battery_health" && /^\d+$/.test(v)) v += "%"; return `<div class="r${cls?" "+cls:""}"><span>${l}</span><strong>${esc(v)}</strong></div>`; };
-  const A = [["condition_grade","الحالة"],["battery_health","صحة البطارية"],["screen_condition","الشاشة"],["camera_condition","الكاميرا"],["biometric_condition","البصمة / الوجه"],["sim_network","الشبكة"]].map(x => row(x)).join("");
-  const W = [["scratches_dents","خدوش وصدمات"],["faults","الأعطال"]].map(x => row(x,"bad")).join("");
-  const B = [["replaced_parts","أجزاء مستبدلة"],["accessories","الملحقات"],["seller_notes","ملاحظات البائع"]].map(x => row(x)).join("");
-  const html = (A ? `<div class="g">حالة الجهاز</div>${A}` : "") + (W || B ? `<div class="g">العيوب والملاحظات</div>${W}${B}` : "");
+  /* فحص الجهاز: أقسام تظهر فقط إذا فيها بيانات */
+  const html = buildInspection(d);
   $("insCard").hidden = !html; $("ins").innerHTML = html;
+  $("gallery").hidden = !S.imgs.length;
 }
 $("slides").addEventListener("scroll", e => {
   const el = e.target, w = el.clientWidth; if (!w) return;
@@ -492,6 +562,7 @@ function renderLive(){
   if (S.loaded && S.lastPrice !== null && price !== S.lastPrice){ const b = $("priceBox"); b.classList.remove("bump"); void b.offsetWidth; b.classList.add("bump"); }
   S.lastPrice = price;
   $("count").textContent = S.count + " مزايدة";
+  $("biddersCard").hidden = !S.bids.length;
   $("stRes").textContent = money(S.stats.reserved);
   $("stView").textContent = money(S.stats.viewers);
   $("next").textContent = money(minBid());
