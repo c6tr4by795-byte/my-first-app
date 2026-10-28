@@ -6,6 +6,11 @@
 <meta name="theme-color" content="#6f5ce0">
 <title>MZAD PHONE — تفاصيل المزاد</title>
 <style>
+/*
+  نظام التصميم: شبكة 4px، مسافة ثابتة 12px بين الكروت، 10px بين المربعات.
+  أنصاف الأقطار: 24 للكروت، 18 للمربعات، 12 للعناصر الصغيرة.
+  ألوان: بنفسجي الهوية للتمييز فقط، والخلفيات فاتحة حتى تبقى الصفحة مريحة للعين.
+*/
 :root{--bg:#f9f8fd;--ink:#17202a;--muted:#6b7280;--line:#ece8fb;--p:#6246d9;--pd:#4a34b8;--ps:#f3f0ff;--edge:#ddd8f8;--ok:#1e8a5a;--hot:#e8590c;--gold:#b9791a;--bad:#c62f4d;--sb:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
 body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
@@ -13,43 +18,42 @@ button{font:inherit;border:0;background:none;color:inherit;cursor:pointer;-webki
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:3px solid var(--p);outline-offset:2px}
 [hidden]{display:none!important}
-.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(130px + var(--sb));overflow-x:clip}
+.page{width:min(100%,520px);margin:0 auto;padding:0 14px calc(40px + var(--sb));overflow-x:clip}
 
-@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 
 /* ============ الهيدر ============ */
-header{position:relative;overflow:hidden;isolation:isolate;margin-inline:-14px;padding:env(safe-area-inset-top,0px) 14px 62px;background:radial-gradient(circle at 12% 0%,rgba(255,255,255,.18) 0%,rgba(255,255,255,0) 46%),linear-gradient(145deg,#5a45d4 0%,#7a67e8 50%,#a496f3 100%);border-radius:0 0 30px 30px;border-bottom:1px solid #5f4cd0;box-shadow:0 10px 26px rgba(74,52,184,.28);animation:fade .5s backwards}
-.web{position:absolute;top:0;z-index:0;pointer-events:none;opacity:.26}
+header{position:relative;overflow:hidden;isolation:isolate;margin-inline:-14px;padding:env(safe-area-inset-top,0px) 14px 12px;background:radial-gradient(circle at 12% 0%,rgba(255,255,255,.18) 0%,rgba(255,255,255,0) 46%),linear-gradient(145deg,#5a45d4 0%,#7a67e8 50%,#a496f3 100%);border-radius:0 0 24px 24px;border-bottom:1px solid #5f4cd0;box-shadow:0 10px 26px rgba(74,52,184,.24);animation:fade .5s backwards}
+.web{position:absolute;top:0;z-index:0;pointer-events:none;opacity:.22}
 .web svg{display:block;width:100%;height:100%}
-.web-a{left:0;width:190px;height:190px}
-.web-b{right:0;width:150px;height:150px;opacity:.2;transform:scaleX(-1)}
-.spider{position:absolute;top:0;left:46%;z-index:1;pointer-events:none;display:flex;flex-direction:column;align-items:center;opacity:.8}
-.spider .thread{display:block;width:1px;height:26px;background:rgba(255,255,255,.6)}
-.spider svg{margin-top:-2px}
-.topbar{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 2px 6px}
+.web-a{left:0;width:150px;height:150px}
+.web-b{right:0;width:120px;height:120px;opacity:.16;transform:scaleX(-1)}
+.topbar{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 2px 0}
+.tb-end{display:flex;align-items:center;gap:8px}
 .brand{display:flex;flex-direction:column;align-items:center;gap:4px;color:#fff;line-height:1}
-.brand strong{font-size:22px;font-weight:950;letter-spacing:.02em;line-height:1}
+.brand strong{font-size:21px;font-weight:950;letter-spacing:.02em;line-height:1}
 .brand span{font-size:8.5px;font-weight:800;letter-spacing:.5em;margin-inline-end:-.5em;color:rgba(255,255,255,.85);line-height:1}
-.ib{width:42px;height:42px;display:grid;place-items:center;flex:0 0 auto;border:1px solid rgba(255,255,255,.6);border-radius:13px;background:rgba(255,255,255,.9);color:var(--p);box-shadow:0 7px 18px rgba(23,32,42,.1);transition:transform .18s ease}
+.ib{width:40px;height:40px;display:grid;place-items:center;flex:0 0 auto;border:1px solid rgba(255,255,255,.6);border-radius:12px;background:rgba(255,255,255,.92);color:var(--p);box-shadow:0 6px 16px rgba(23,32,42,.1);transition:transform .18s ease}
 .ib:active{transform:scale(.92)}
 .ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 #fav[aria-pressed=true] svg{fill:#e5365f;stroke:#e5365f}
 
-/* ============ المعرض (يطفو فوق الهيدر) ============ */
-.gallery{position:relative;z-index:5;margin-top:-46px;border-radius:28px;overflow:hidden;border:1px solid rgba(255,255,255,.4);background:linear-gradient(160deg,#2a1d6e 0%,#4a34b8 60%,#6246d9 100%);box-shadow:0 20px 36px -18px rgba(40,24,120,.6);animation:up .55s cubic-bezier(.2,.8,.3,1) backwards}
-.slides{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+/* ============ معرض الصور: الصورة كاملة بنسبتها، بدون إطار أو خلفية ============ */
+.gallery{position:relative;margin-top:14px;border-radius:22px;overflow:hidden;background:transparent;animation:up .5s cubic-bezier(.2,.8,.3,1) backwards}
+.slides{display:flex;align-items:flex-start;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;transition:height .25s ease}
 .slides::-webkit-scrollbar{display:none}
-.slide{position:relative;flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always;aspect-ratio:1/1;max-height:min(62dvh,500px);display:grid;place-items:center;overflow:hidden;isolation:isolate}
-.slide img{position:absolute;inset:0;z-index:1;display:block;width:100%;height:100%;object-fit:contain;object-position:center;padding:10px;margin:0;border:0;background:transparent}
-.slide svg{position:relative;z-index:1;height:46%;width:auto;opacity:.5;stroke:#fff}
-.shot-count{position:absolute;top:12px;right:12px;z-index:3;padding:4px 11px;border-radius:999px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:11px;font-weight:900;direction:ltr;font-variant-numeric:tabular-nums;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);pointer-events:none}
+.slide{position:relative;flex:0 0 100%;display:block;scroll-snap-align:center;scroll-snap-stop:always;background:transparent}
+.slide img{display:block;width:100%;height:auto;max-height:78dvh;object-fit:contain;margin:0;padding:0;border:0;background:transparent}
+.slide.ph{aspect-ratio:1/1;display:grid;place-items:center;background:var(--ps)}
+.slide.ph svg{height:46%;width:auto;opacity:.5}
+.shot-count{position:absolute;top:10px;right:10px;z-index:3;padding:4px 10px;border-radius:999px;background:rgba(20,14,48,.55);color:#fff;font-size:11px;font-weight:900;direction:ltr;font-variant-numeric:tabular-nums;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);pointer-events:none}
 .dots{display:flex;justify-content:center;gap:6px;margin-top:10px}
 .dot{width:6px;height:6px;border-radius:50%;background:#d6d2ea;transition:.25s ease}
 .dot.on{width:19px;border-radius:999px;background:var(--p)}
 
 /* ============ العنوان والشارات ============ */
-.title{margin:16px 4px 0}
+.title{margin:14px 4px 0}
 .title h1{margin:0;font-size:24px;line-height:1.2;letter-spacing:-.04em;font-weight:950}
 .sub{margin:4px 0 0;color:var(--muted);font-size:12px;font-weight:700}
 .chips{display:flex;flex-wrap:wrap;gap:7px;margin:12px 4px 0}
@@ -57,47 +61,65 @@ header{position:relative;overflow:hidden;isolation:isolate;margin-inline:-14px;p
 .chip.ver{background:linear-gradient(145deg,#6246d9,#8b6cf0);border-color:transparent;color:#fff}
 .chip svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
-/* ============ كرت المزاد (غامق) ============ */
-.auction{position:relative;overflow:hidden;isolation:isolate;margin-top:16px;padding:16px;border-radius:28px;color:#fff;background:radial-gradient(circle at 92% 0%,rgba(255,255,255,.2) 0%,rgba(255,255,255,0) 46%),linear-gradient(145deg,#3f2aa8 0%,#6246d9 55%,#8473ec 100%);border:1px solid rgba(255,255,255,.16);box-shadow:0 18px 32px -18px rgba(74,52,184,.65);animation:up .55s cubic-bezier(.2,.8,.3,1) .08s backwards}
-.aweb{position:absolute;top:0;right:0;z-index:0;width:150px;height:150px;opacity:.14;pointer-events:none;transform:scaleX(-1)}
+/* ============ كرت المزاد (شبكة مربعات) ============ */
+.auction{position:relative;overflow:hidden;isolation:isolate;margin-top:16px;padding:14px;border-radius:24px;background:#fff;border:1px solid var(--edge);box-shadow:0 14px 28px -18px rgba(98,70,217,.45);animation:up .55s cubic-bezier(.2,.8,.3,1) .06s backwards}
+.aweb{position:absolute;top:0;right:0;z-index:0;width:130px;height:130px;opacity:.08;pointer-events:none;transform:scaleX(-1)}
 .aweb svg{display:block;width:100%;height:100%}
 .auction>*:not(.aweb){position:relative;z-index:1}
 .a-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.live{display:inline-flex;align-items:center;gap:7px;min-height:28px;padding:0 12px;border-radius:999px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);font-size:10.5px;font-weight:900;color:#fff}
-.live:before{content:"";width:7px;height:7px;border-radius:50%;background:#7CFFB2;animation:pulse2 1.6s infinite}
+.live{display:inline-flex;align-items:center;gap:7px;min-height:28px;padding:0 12px;border-radius:999px;background:var(--ps);border:1px solid var(--edge);font-size:10.5px;font-weight:900;color:var(--pd)}
+.live:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ok);animation:pulse2 1.6s infinite}
 @keyframes pulse2{50%{opacity:.3}}
-.auction.hot .live:before{background:#ffb36b}
-.auction.soon .live:before{background:#ffd479;animation:none}
-.auction.ended .live:before{background:#c9c4e8;animation:none}
-.a-count{font-size:11px;font-weight:800;color:rgba(255,255,255,.82)}
-.a-price{margin-top:16px;text-align:center}
-.label{display:block;font-size:10.5px;font-weight:800;color:var(--muted);margin-bottom:3px}
-.auction .label{color:rgba(255,255,255,.78)}
-.price{font-size:42px;font-weight:950;color:#fff;line-height:1.1;letter-spacing:-.04em;font-variant-numeric:tabular-nums;white-space:nowrap}
-.price small{font-size:13px;font-weight:800;color:rgba(255,255,255,.8);margin-inline-start:6px;letter-spacing:0}
+.auction.hot .live:before{background:var(--hot)}
+.auction.soon .live:before{background:var(--gold);animation:none}
+.auction.ended .live:before{background:#9ca3af;animation:none}
+.a-count{font-size:11px;font-weight:800;color:var(--muted)}
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.t{min-width:0;padding:14px;border-radius:18px;background:var(--ps);border:1px solid var(--line)}
+.t.w{grid-column:1/-1}
+.label{display:block;font-size:10.5px;font-weight:800;color:var(--muted);margin-bottom:4px}
+.price{font-size:38px;font-weight:950;color:var(--pd);line-height:1.1;letter-spacing:-.04em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.price small{font-size:12px;font-weight:800;color:var(--muted);margin-inline-start:6px;letter-spacing:0}
 .price.bump{animation:bump .4s}
-@keyframes bump{40%{transform:scale(1.06)}}
-.a-time{margin-top:16px;padding:12px;border-radius:20px;background:rgba(20,14,48,.28);border:1px solid rgba(255,255,255,.14);text-align:center}
-.tdig{direction:ltr;display:flex;align-items:center;justify-content:center;gap:6px;font-variant-numeric:tabular-nums;margin-top:6px}
-.tdig span{flex:1;max-width:84px;padding:10px 4px;text-align:center;border-radius:14px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.22);font-size:28px;font-weight:950;line-height:1;color:#fff}
-.tdig i{font-style:normal;font-weight:900;color:rgba(255,255,255,.55);font-size:22px}
-.auction.hot .tdig span{background:linear-gradient(145deg,#ff8a3d,#e8590c);border-color:rgba(255,255,255,.35)}
-.auction.hot .tdig i{color:#ffb36b;animation:blink 1s steps(1) infinite}
+@keyframes bump{40%{transform:scale(1.05)}}
+.tdig{direction:ltr;display:flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums;margin-top:6px}
+.tdig span{flex:1;padding:10px 4px;text-align:center;border-radius:14px;background:#fff;border:1px solid var(--edge);font-size:26px;font-weight:950;line-height:1;color:var(--ink)}
+.tdig i{font-style:normal;font-weight:900;color:#b9b1e6;font-size:20px}
+.auction.hot .t.time{background:#fff4ec;border-color:#ffd9c2}
+.auction.hot .tdig span{background:linear-gradient(145deg,#ff8a3d,#e8590c);border-color:transparent;color:#fff}
+.auction.hot .tdig i{color:var(--hot);animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:.15}}
-.auction.soon .tdig span{background:rgba(255,212,121,.22);border-color:rgba(255,212,121,.5);color:#ffe4a3}
+.auction.soon .t.time{background:#fdf6e8;border-color:#f1dcae}
+.auction.soon .tdig span{background:#fff;border-color:#f1dcae;color:var(--gold)}
+.auction.soon .tdig i{color:var(--gold)}
 .auction.ended .tdig span{opacity:.55}
-.stats{display:flex;gap:8px;margin-top:12px}
-.stat{flex:1;display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22)}
-.stat svg{width:19px;height:19px;flex:0 0 19px;fill:none;stroke:#fff;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-.stat b{display:block;font-size:17px;font-weight:950;line-height:1.1;font-variant-numeric:tabular-nums;color:#fff}
-.stat small{display:block;margin-top:1px;font-size:10px;font-weight:800;color:rgba(255,255,255,.78)}
-.note{margin:12px 0 0;padding:10px 12px;border-radius:14px;font-size:11.5px;font-weight:800;line-height:1.7;text-align:center;background:rgba(255,255,255,.12);color:rgba(255,255,255,.92)}
-.note:empty{display:none}
-.note.me{background:rgba(52,178,127,.32)}
-.note.out{background:rgba(255,138,61,.34)}
+.t.stat{display:flex;align-items:center;gap:10px;padding:12px;background:#fff}
+.stat .si{width:34px;height:34px;flex:0 0 34px;border-radius:11px;display:grid;place-items:center;background:var(--ps);color:var(--p)}
+.stat .si svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.stat b{display:block;font-size:17px;font-weight:950;line-height:1.1;font-variant-numeric:tabular-nums;color:var(--pd)}
+.stat small{display:block;margin-top:1px;font-size:10px;font-weight:800;color:var(--muted)}
 
-/* ============ الكروت البيضاء ============ */
-.card{margin-top:14px;padding:16px;border-radius:24px;background:#fff;border:1px solid var(--edge);box-shadow:0 14px 26px -18px rgba(98,70,217,.4);animation:up .55s cubic-bezier(.2,.8,.3,1) backwards}
+/* صف المزايدة: نفس الزر الدائري القديم */
+.t.bidrow{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 14px}
+.nextbox b{display:block;font-size:21px;font-weight:900;letter-spacing:-.02em;line-height:1.3;font-variant-numeric:tabular-nums;white-space:nowrap}
+.nextbox b small{font-size:10px;font-weight:800;color:var(--muted);margin-inline-start:3px}
+.nextbox em{display:inline-block;margin-top:3px;padding:2px 10px;border-radius:9px;background:#fff;color:var(--pd);font-style:normal;font-size:10px;font-weight:900}
+.bid-btn{position:relative;flex:0 0 auto;width:88px;height:88px;border-radius:50%;border:4px solid #fff;color:#fff;font-size:18px;font-weight:900;background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 12px 26px rgba(98,70,217,.38)}
+.bid-btn:after{content:"";position:absolute;inset:-4px;border-radius:50%;border:3px solid #8b6cf0;opacity:0;pointer-events:none}
+.bid-btn.pulse{animation:press .45s}.bid-btn.pulse:after{animation:ring .7s ease-out}
+@keyframes press{35%{transform:scale(.86)}70%{transform:scale(1.08)}}
+@keyframes ring{0%{opacity:.85}100%{opacity:0;transform:scale(1.6)}}
+.bid-btn:disabled{opacity:.55;cursor:not-allowed;background:#9ca3af;box-shadow:none;font-size:15px}
+.bid-btn.rsv{font-size:15px}
+.bid-btn.done{background:linear-gradient(145deg,#1e8a5a,#34b27f);box-shadow:0 12px 26px rgba(30,138,90,.32);font-size:14px}
+
+.note{margin:10px 0 0;padding:10px 12px;border-radius:14px;font-size:11.5px;font-weight:800;line-height:1.7;text-align:center;background:var(--ps);color:var(--pd)}
+.note:empty{display:none}
+.note.me{background:#e8f6ef;color:var(--ok)}
+.note.out{background:#fff1e8;color:var(--hot)}
+
+/* ============ الكروت ============ */
+.card{margin-top:12px;padding:16px;border-radius:24px;background:#fff;border:1px solid var(--edge);box-shadow:0 14px 26px -18px rgba(98,70,217,.35);animation:up .55s cubic-bezier(.2,.8,.3,1) backwards}
 .card h2{display:flex;align-items:center;gap:8px;margin:0 0 4px;font-size:15px;font-weight:950}
 .card h2:before{content:"";width:4px;height:16px;border-radius:4px;background:linear-gradient(var(--p),#8b6cf0)}
 .card .hint{margin:0 0 6px;font-size:11px;font-weight:700;color:var(--muted)}
@@ -137,27 +159,11 @@ header{position:relative;overflow:hidden;isolation:isolate;margin-inline:-14px;p
 .all{width:100%;margin-top:6px;height:42px;border-radius:13px;background:var(--ps);color:var(--pd);font-size:12px;font-weight:800}
 
 /* معلومات المزاد (مربعات) */
-.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.tile{padding:11px 12px;border-radius:16px;background:var(--ps);border:1px solid var(--line);min-width:0}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.tile{padding:12px 14px;border-radius:16px;background:var(--ps);border:1px solid var(--line);min-width:0}
 .tile.wide{grid-column:1/-1}
 .tile span{display:block;font-size:10px;font-weight:800;color:var(--muted)}
 .tile strong{display:block;margin-top:3px;font-size:13px;font-weight:900;color:var(--pd);line-height:1.5;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-
-/* ============ شريط المزايدة السفلي ============ */
-.bidbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + var(--sb));z-index:90;width:min(calc(100% - 24px),496px);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 10px 9px 14px;border-radius:26px;background:#fff;border:1px solid var(--line);box-shadow:0 12px 32px rgba(23,32,42,.2)}
-.nextbox{min-width:0}
-.nextbox .label{margin-bottom:1px;font-size:10px}
-.nextbox b{display:block;font-size:20px;font-weight:950;letter-spacing:-.02em;line-height:1.25;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--ink)}
-.nextbox b small{font-size:10px;font-weight:800;color:var(--muted);margin-inline-start:3px}
-.nextbox em{display:inline-block;margin-top:2px;padding:2px 9px;border-radius:9px;background:var(--ps);color:var(--pd);font-style:normal;font-size:9.5px;font-weight:900}
-.bid-btn{position:relative;flex:0 0 auto;width:132px;height:56px;border-radius:19px;color:#fff;font-size:18px;font-weight:950;background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 10px 22px -8px rgba(98,70,217,.7);transition:transform .18s ease}
-.bid-btn:after{content:"";position:absolute;inset:-3px;border-radius:inherit;border:3px solid #8b6cf0;opacity:0;pointer-events:none}
-.bid-btn.pulse{animation:press .45s}.bid-btn.pulse:after{animation:ring .7s ease-out}
-@keyframes press{35%{transform:scale(.9)}70%{transform:scale(1.05)}}
-@keyframes ring{0%{opacity:.85}100%{opacity:0;transform:scale(1.4)}}
-.bid-btn:disabled{opacity:.6;cursor:not-allowed;background:#9ca3af;box-shadow:none;font-size:15px}
-.bid-btn.rsv{font-size:16px}
-.bid-btn.done{background:linear-gradient(145deg,#1e8a5a,#34b27f);box-shadow:0 10px 22px -8px rgba(30,138,90,.6);font-size:15px}
 
 /* ============ النوافذ ============ */
 .sbg{position:fixed;inset:0;z-index:100;display:flex;align-items:flex-end;justify-content:center;background:rgba(20,14,48,.55);opacity:0;visibility:hidden;transition:opacity .25s,visibility 0s .25s}
@@ -179,17 +185,15 @@ header{position:relative;overflow:hidden;isolation:isolate;margin-inline:-14px;p
 .sn{width:30px;height:30px;flex:none;border-radius:50%;background:var(--ps);color:var(--pd);font-size:13px;font-weight:900;display:grid;place-items:center}
 .stp b{font-size:13.5px;font-weight:800}
 
-.toast{position:fixed;left:50%;bottom:calc(98px + var(--sb));transform:translateX(-50%) translateY(16px);max-width:calc(100% - 40px);padding:10px 14px;border-radius:13px;background:#1e2c30;color:#fff;font-size:12px;font-weight:800;opacity:0;pointer-events:none;transition:.25s;z-index:120;text-align:center}
+.toast{position:fixed;left:50%;bottom:calc(24px + var(--sb));transform:translateX(-50%) translateY(16px);max-width:calc(100% - 40px);padding:10px 14px;border-radius:13px;background:#1e2c30;color:#fff;font-size:12px;font-weight:800;opacity:0;pointer-events:none;transition:.25s;z-index:120;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%)}.toast.ok{background:var(--ok)}
 .err{text-align:center;padding:70px 10px}.err h2{margin:0 0 8px;font-size:19px}.err p{margin:0 0 16px;font-size:13px;color:var(--muted)}
 .err a,.err button{display:inline-block;padding:12px 26px;border-radius:14px;background:linear-gradient(145deg,#6246d9,#8b6cf0);color:#fff;font-size:14px;font-weight:800}
-#ld{margin-top:-46px;position:relative;z-index:5}
-.sk{height:300px;margin-top:12px;border-radius:28px;background:linear-gradient(100deg,#eeeafa 30%,#f8f6ff 50%,#eeeafa 70%);background-size:300% 100%;animation:sh 1.6s linear infinite}
-#ld .sk:first-child{margin-top:0}
+.sk{height:320px;margin-top:14px;border-radius:22px;background:linear-gradient(100deg,#eeeafa 30%,#f8f6ff 50%,#eeeafa 70%);background-size:300% 100%;animation:sh 1.6s linear infinite}
 @keyframes sh{to{background-position:-200% 0}}
 
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
-@media(max-width:360px){.price{font-size:36px}.tdig span{font-size:23px}.bid-btn{width:112px}.nextbox b{font-size:17px}}
+@media(max-width:360px){.price{font-size:32px}.tdig span{font-size:22px}.bid-btn{width:80px;height:80px}.nextbox b{font-size:18px}}
 </style>
 <link rel="stylesheet" href="/css/responsive-compat.css">
 </head>
@@ -199,18 +203,13 @@ header{position:relative;overflow:hidden;isolation:isolate;margin-inline:-14px;p
 <header>
   <div class="web web-a" aria-hidden="true"><svg viewBox="0 0 200 200" fill="none" stroke="#fff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M0 0L184.0 0.0M0 0L170.0 70.4M0 0L130.1 130.1M0 0L70.4 170.0M0 0L0.0 184.0M46.0 0.0L42.5 17.6L32.5 32.5L17.6 42.5L0.0 46.0M92.0 0.0L85.0 35.2L65.1 65.1L35.2 85.0L0.0 92.0M138.0 0.0L127.5 52.8L97.6 97.6L52.8 127.5L0.0 138.0"/></svg></div>
   <div class="web web-b" aria-hidden="true"><svg viewBox="0 0 200 200" fill="none" stroke="#fff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M0 0L184.0 0.0M0 0L170.0 70.4M0 0L130.1 130.1M0 0L70.4 170.0M0 0L0.0 184.0M46.0 0.0L42.5 17.6L32.5 32.5L17.6 42.5L0.0 46.0M92.0 0.0L85.0 35.2L65.1 65.1L35.2 85.0L0.0 92.0M138.0 0.0L127.5 52.8L97.6 97.6L52.8 127.5L0.0 138.0"/></svg></div>
-  <div class="spider" aria-hidden="true">
-    <i class="thread"></i>
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="#fff" stroke="#fff" stroke-linecap="round" stroke-width="1.1">
-      <ellipse cx="12" cy="14" rx="4" ry="4.6" stroke="none"/>
-      <circle cx="12" cy="8.6" r="2.3" stroke="none"/>
-      <path fill="none" d="M9 12 3.5 9.5 2 11M9 14 2.5 14 1.5 16M9.5 16.5 4 20 3 21.5M10.5 18 8 22M15 12l5.5-2.5L22 11M15 14l6.5 0 1 2M14.5 16.5 20 20l1 1.5M13.5 18l2.5 4"/>
-    </svg>
-  </div>
   <div class="topbar">
     <button class="ib" id="back" type="button" aria-label="رجوع"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
     <div class="brand"><strong>MZAD</strong><span>PHONE</span></div>
-    <button class="ib" id="fav" type="button" aria-pressed="false" aria-label="إضافة إلى المفضلة"><svg viewBox="0 0 24 24"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/></svg></button>
+    <div class="tb-end">
+      <button class="ib" id="share" type="button" aria-label="مشاركة المزاد"><svg viewBox="0 0 24 24"><path d="M12 15V4"/><path d="M7.5 8.5 12 4l4.5 4.5"/><path d="M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg></button>
+      <button class="ib" id="fav" type="button" aria-pressed="false" aria-label="إضافة إلى المفضلة"><svg viewBox="0 0 24 24"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7Z"/></svg></button>
+    </div>
   </div>
 </header>
 
@@ -226,19 +225,26 @@ header{position:relative;overflow:hidden;isolation:isolate;margin-inline:-14px;p
   <div class="chips" id="chips"></div>
 
   <section class="auction" id="auction">
-    <div class="aweb" aria-hidden="true"><svg viewBox="0 0 200 200" fill="none" stroke="#fff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M0 0L184.0 0.0M0 0L170.0 70.4M0 0L130.1 130.1M0 0L70.4 170.0M0 0L0.0 184.0M46.0 0.0L42.5 17.6L32.5 32.5L17.6 42.5L0.0 46.0M92.0 0.0L85.0 35.2L65.1 65.1L35.2 85.0L0.0 92.0M138.0 0.0L127.5 52.8L97.6 97.6L52.8 127.5L0.0 138.0"/></svg></div>
+    <div class="aweb" aria-hidden="true"><svg viewBox="0 0 200 200" fill="none" stroke="#6246d9" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M0 0L184.0 0.0M0 0L170.0 70.4M0 0L130.1 130.1M0 0L70.4 170.0M0 0L0.0 184.0M46.0 0.0L42.5 17.6L32.5 32.5L17.6 42.5L0.0 46.0M92.0 0.0L85.0 35.2L65.1 65.1L35.2 85.0L0.0 92.0M138.0 0.0L127.5 52.8L97.6 97.6L52.8 127.5L0.0 138.0"/></svg></div>
 
     <div class="a-top"><span class="live" id="liveBadge">مزاد مستمر</span><span class="a-count" id="count"></span></div>
 
-    <div class="a-price"><span class="label">السعر الحالي</span><div class="price" id="priceBox"><span id="price"></span><small>د.ع</small></div></div>
+    <div class="agrid">
 
-    <div class="a-time" role="timer"><span class="label" id="endLabel">الوقت المتبقي</span>
-      <div class="tdig"><span id="hh">00</span><i>:</i><span id="mm">00</span><i>:</i><span id="ss">00</span></div>
-    </div>
+      <div class="t w"><span class="label">السعر الحالي</span><div class="price" id="priceBox"><span id="price"></span><small>د.ع</small></div></div>
 
-    <div class="stats" id="stats">
-      <div class="stat"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 7.8 7 10 4-2.2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg><div><b id="stRes">0</b><small>حاجز</small></div></div>
-      <div class="stat"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg><div><b id="stView">0</b><small>مشاهد</small></div></div>
+      <div class="t w time" role="timer"><span class="label" id="endLabel">الوقت المتبقي</span>
+        <div class="tdig"><span id="hh">00</span><i>:</i><span id="mm">00</span><i>:</i><span id="ss">00</span></div>
+      </div>
+
+      <div class="t stat"><span class="si"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 7.8 7 10 4-2.2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg></span><div><b id="stRes">0</b><small>حاجز</small></div></div>
+      <div class="t stat"><span class="si"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></span><div><b id="stView">0</b><small>مشاهد</small></div></div>
+
+      <div class="t w bidrow">
+        <div class="nextbox"><span class="label">مزايدتك القادمة</span><b><span id="next"></span><small>د.ع</small></b><em id="stepTag"></em></div>
+        <button class="bid-btn" id="bid" type="button" aria-label="زايد الآن">زايد</button>
+      </div>
+
     </div>
 
     <p class="note" id="note"></p>
@@ -274,11 +280,6 @@ header{position:relative;overflow:hidden;isolation:isolate;margin-inline:-14px;p
     <div class="r"><span>الفائز بالمزاد</span><strong id="rWinner">—</strong></div>
     <div class="r"><span>السعر النهائي</span><strong id="rPr"></strong></div>
   </section>
-
-  <div class="bidbar" id="bidbar">
-    <div class="nextbox"><span class="label">مزايدتك القادمة</span><b><span id="next"></span><small>د.ع</small></b><em id="stepTag"></em></div>
-    <button class="bid-btn" id="bid" type="button" aria-label="زايد الآن">زايد</button>
-  </div>
 
 </div>
 </main>
@@ -427,6 +428,19 @@ async function renderRefundAction(){
   else $("pg").appendChild(section);
 }
 
+/* ============ معرض الصور: ارتفاع الإطار = ارتفاع الصورة الظاهرة بالضبط ============ */
+function fitGallery(){
+  const el = $("slides"); if (!el) return;
+  const w = el.clientWidth; if (!w) return;
+  const i = Math.round(Math.abs(el.scrollLeft) / w);
+  const sl = el.children[i]; if (!sl) return;
+  const im = sl.querySelector("img");
+  const h = (im && im.complete && im.naturalWidth) ? im.getBoundingClientRect().height : sl.getBoundingClientRect().height;
+  if (h > 0) el.style.height = h + "px";
+}
+window.__fit = fitGallery;
+window.addEventListener("resize", fitGallery, { passive:true });
+
 /* ============ الجزء الثابت: الصور والمواصفات ============ */
 const PH = '<svg viewBox="0 0 24 24" fill="none" stroke="#6246d9" stroke-width="1.5"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>';
 function renderStatic(){
@@ -440,8 +454,10 @@ function renderStatic(){
     + [d.condition_grade, d.storage, d.color, bat].filter(Boolean).map(x => `<span class="chip">${esc(x)}</span>`).join("");
 
   $("slides").innerHTML = S.imgs.length
-    ? S.imgs.map((u,i) => `<div class="slide" style="--img:url('${esc(u)}')"><img src="${esc(u)}" alt="${esc(name)} - ${i+1}" ${i?'loading="lazy" ':""}decoding="async" draggable="false" onerror="this.style.display='none'"></div>`).join("")
+    ? S.imgs.map((u,i) => `<div class="slide"><img src="${esc(u)}" alt="${esc(name)} - ${i+1}" ${i?'loading="lazy" ':""}decoding="async" draggable="false" onload="window.__fit&&window.__fit()" onerror="this.style.display='none'"></div>`).join("")
     : `<div class="slide ph">${PH}</div>`;
+  $("slides").style.height = "";
+  requestAnimationFrame(fitGallery);
   $("dots").innerHTML = S.imgs.length > 1 ? S.imgs.map((_,i) => `<span class="dot${i?"":" on"}"></span>`).join("") : "";
   $("shotCount").hidden = S.imgs.length < 2;
   $("shotCount").textContent = "1/" + S.imgs.length;
@@ -465,6 +481,7 @@ $("slides").addEventListener("scroll", e => {
   const i = Math.round(Math.abs(el.scrollLeft) / w);
   [...$("dots").children].forEach((x,k) => x.classList.toggle("on", k === i));
   if (S.imgs.length > 1) $("shotCount").textContent = (Math.min(i, S.imgs.length - 1) + 1) + "/" + S.imgs.length;
+  fitGallery();
 }, { passive:true });
 
 /* ============ الجزء الحي ============ */
@@ -645,7 +662,7 @@ async function refresh(){
   finally{ S.polling = false; }
 }
 
-/* ============ المفضلة والرجوع ============ */
+/* ============ المفضلة والمشاركة والرجوع ============ */
 const favKey = () => "mzad_favorite_auction_" + auctionId;
 function favSet(on){ $("fav").setAttribute("aria-pressed", on); $("fav").setAttribute("aria-label", on ? "إزالة من المفضلة" : "إضافة إلى المفضلة"); }
 try{ favSet(localStorage.getItem(favKey()) === "1"); }catch{}
@@ -653,6 +670,22 @@ $("fav").onclick = () => {
   const on = $("fav").getAttribute("aria-pressed") !== "true";
   try{ on ? localStorage.setItem(favKey(), "1") : localStorage.removeItem(favKey()); }catch{}
   favSet(on); toast(on ? "تمت إضافة المزاد إلى المفضلة" : "تمت إزالة المزاد من المفضلة");
+};
+$("share").onclick = async () => {
+  const name = ($("name").textContent || "").trim() || "مزاد على MZAD PHONE";
+  const url = location.href;
+  const text = name + " — مزاد على MZAD PHONE";
+  try{
+    if (navigator.share){ await navigator.share({ title:name, text, url }); return; }
+  }catch(e){
+    if (e && e.name === "AbortError") return;
+  }
+  try{
+    await navigator.clipboard.writeText(url);
+    toast("تم نسخ رابط المزاد", "ok");
+  }catch{
+    toast("تعذر مشاركة الرابط");
+  }
 };
 $("back").onclick = () => history.length > 1 ? history.back() : location.href = "auctions.html";
 
@@ -675,6 +708,7 @@ function fail(t, p, link, detail){
     await loadStatic();
     $("ld").hidden = true; $("pg").hidden = false;
     renderStatic(); renderLive(); await renderRefundAction(); S.loaded = true;
+    fitGallery();
     setInterval(() => { if (!document.hidden) refresh(); }, 5000);
     document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
     setInterval(() => { document.querySelectorAll(".who>span:last-child").length && (S.sig = ""); }, 60000);
