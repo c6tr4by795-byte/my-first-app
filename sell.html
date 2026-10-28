@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#6246d9">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>بيع مباشر — MZAD PHONE</title>
+<title>نشر مزاد — MZAD PHONE</title>
 <style>
 :root{
   --bg:#f9f8fd;--ink:#17202a;--muted:#6b7280;--line:#ece8fb;--edge:#ddd8f8;
@@ -16,7 +16,8 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 body.lock{overflow:hidden}
 button,input,textarea{font:inherit;color:inherit}
 button{border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -37,6 +38,7 @@ button{border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:trans
 @keyframes thumbIn{from{opacity:0;transform:scale(.5) rotate(-6deg)}to{opacity:1;transform:none}}
 @keyframes attn{0%,100%{box-shadow:0 0 0 0 rgba(232,89,12,0)}50%{box-shadow:0 0 0 6px rgba(232,89,12,.16)}}
 @keyframes nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes pulse2{50%{opacity:.3}}
 .icon-btn,.opt,.tile,.pick,.b-next,.b-back,.add,.edit{transition:transform .18s ease,background .25s,border-color .25s,color .25s,box-shadow .25s}
 .icon-btn:active,.opt:active,.tile:active,.pick:active,.add:active,.b-back:active{transform:scale(.95)}
 
@@ -63,14 +65,16 @@ header{margin-inline:-14px;padding:0 14px 12px;background:linear-gradient(145deg
 .card{margin-top:15px;padding:17px 15px;border-radius:23px;background:#fff;border:1px solid var(--edge);box-shadow:0 7px 24px -14px rgba(98,70,217,.22)}
 .c-head{display:flex;align-items:center;gap:10px;margin-bottom:17px}
 .num{width:29px;height:29px;flex:0 0 29px;border-radius:10px;display:grid;place-items:center;color:#fff;font-size:13.5px;font-weight:900;background:linear-gradient(145deg,#6246d9,#8b6cf0);box-shadow:0 5px 12px rgba(98,70,217,.25)}
-.num svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .c-head h2{margin:0;font-size:16.5px;font-weight:900}
 .c-head p{margin:1px 0 0;font-size:11.5px;font-weight:700;color:var(--muted)}
+.card .sub{margin-top:18px}
 
 .guide{margin-top:15px;padding:13px 14px;border-radius:18px;background:linear-gradient(145deg,#f7f5ff,#ece8ff);border:1px solid #d9d1fb;animation:up .5s}
 .guide b{display:block;font-size:13.5px;font-weight:900;color:var(--p-dark)}
 .guide p{margin:3px 0 0;font-size:12px;font-weight:700;line-height:1.9;color:#4b5563}
 .help,.hint{margin:7px 2px 0;font-size:11.5px;font-weight:700;line-height:1.8;color:var(--muted)}
+.help.hint-ok{color:var(--ok)}
+.help.hint-bad{color:var(--hot)}
 
 .field+.field{margin-top:21px}
 .lbl{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;font-size:13px;font-weight:800;color:#374151}
@@ -86,14 +90,13 @@ header{margin-inline:-14px;padding:0 14px 12px;background:linear-gradient(145deg
 .chips.invalid,.tiles.invalid{padding:6px;margin:-6px;border-radius:16px;box-shadow:0 0 0 1.5px var(--hot)}
 .count{text-align:end;margin-top:4px;font-size:10px;font-weight:700;color:#9ca3af}
 .sub-in{margin-top:9px;animation:up .35s}
-.card .sub{margin-top:18px}
 
 .chips{display:flex;flex-wrap:wrap;gap:9px}
 .opt{padding:10px 15px;border-radius:999px;background:#fff;border:1.5px solid var(--line);font-size:13px;font-weight:800;color:#4b5563}
 .opt.on{background:var(--p-soft);border-color:var(--p2);color:var(--p-dark);font-weight:900;animation:pop .3s}
 .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .tile{padding:13px 4px;border-radius:15px;background:#fff;border:1.5px solid var(--line);font-size:12px;font-weight:900;color:#374151;text-align:center}
-.tile.on{background:var(--p-soft);border-color:var(--p2);color:var(--p-dark);animation:pop .3s}
+.tile.on{background:var(--p-soft);border-color:var(--p);color:var(--p-dark);box-shadow:0 8px 18px -10px rgba(98,70,217,.5);animation:pop .3s}
 
 .pick{width:100%;height:52px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;border-radius:15px;background:#fff;border:1.5px solid #e4defa;font-size:14.5px;font-weight:800;text-align:start}
 .pick span{color:#a8b0bb;font-weight:700}
@@ -101,17 +104,9 @@ header{margin-inline:-14px;padding:0 14px 12px;background:linear-gradient(145deg
 .pick:disabled{background:#f7f7fa;opacity:.7;cursor:not-allowed}
 .pick svg{width:17px;height:17px;flex:0 0 17px;fill:none;stroke:var(--p);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 
-.tg{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 2px;border-bottom:1px solid #f1eefb;cursor:pointer}
-.tg:last-of-type{border-bottom:0}
-.tg b{display:block;font-size:14.5px;font-weight:900}
-.tg small{display:block;margin-top:3px;font-size:11.5px;font-weight:800;color:var(--ok);transition:color .25s}
-.tg.off small{color:var(--hot)}
-.tg input{position:absolute;opacity:0;pointer-events:none}
-.tg i{position:relative;width:46px;height:27px;flex:0 0 46px;border-radius:99px;background:#d9d6e8;transition:background .3s}
-.tg i:after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:21px;height:21px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:transform .3s cubic-bezier(.3,1.4,.5,1)}
-.tg:active i:after{width:25px}
-.tg input:checked+i{background:var(--ok)}
-.tg input:checked+i:after{transform:translateX(-19px)}
+.link-btn{margin-top:10px;padding:8px 15px;border-radius:999px;background:var(--p-soft);border:1px solid var(--edge);color:var(--p-dark);font-size:12px;font-weight:900}
+
+/* فحص الوظائف */
 .fn-prog{display:flex;align-items:center;gap:11px;margin:0 0 14px}
 .fn-bar{flex:1;height:6px;border-radius:99px;background:#e4defa;overflow:hidden}
 .fn-bar i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,#8b6cf0,#6246d9);transition:width .5s cubic-bezier(.3,1,.4,1),background .4s}
@@ -144,7 +139,7 @@ header{margin-inline:-14px;padding:0 14px 12px;background:linear-gradient(145deg
 .sw-thumb.land{animation:land .4s ease}
 .fn.s-mid .sw-thumb{animation:breathe 2.8s ease-in-out infinite}
 @keyframes breathe{50%{box-shadow:0 1px 4px rgba(23,32,42,.22),0 0 0 4px rgba(98,70,217,.1)}}
-.fn.hint.s-mid .sw-thumb{animation:swHint 1.7s ease-in-out 2 .6s}
+.fn.swhint.s-mid .sw-thumb{animation:swHint 1.7s ease-in-out 2 .6s}
 @keyframes swHint{0%,100%{transform:translateX(0)}30%{transform:translateX(18px)}70%{transform:translateX(-18px)}}
 .sw-thumb svg{grid-area:1/1}
 .sw-thumb .ic-ok,.sw-thumb .ic-no{display:none}
@@ -155,16 +150,17 @@ header{margin-inline:-14px;padding:0 14px 12px;background:linear-gradient(145deg
 .sw-lb.on{left:13px;color:var(--ok)}
 .sw-lb.off{right:12px;color:var(--bad)}
 .fn.s-on .sw-lb.on,.fn.s-off .sw-lb.off{opacity:1}
-.link-btn{margin-top:10px;padding:8px 15px;border-radius:999px;background:var(--p-soft);border:1px solid var(--edge);color:var(--p-dark);font-size:12px;font-weight:900}
 .fold{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.3,1,.4,1)}
 .fold.open{grid-template-rows:1fr}
 .fold>div{overflow:hidden}
+.fold .in{margin-top:10px}
 
 .bat{display:flex;align-items:center;gap:12px}
 .bat output{min-width:62px;padding:8px 0;border-radius:12px;background:var(--p-soft);color:var(--p-dark);text-align:center;font-size:15px;font-weight:900;direction:ltr}
 .bat output.idle{color:var(--muted);font-size:12px;font-weight:800}
 input[type=range]{flex:1;-webkit-appearance:none;height:8px;border-radius:99px;background:linear-gradient(to left,#6246d9 var(--p-fill,75%),#e4defa var(--p-fill,75%))}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#fff;border:4px solid var(--p);box-shadow:0 4px 10px rgba(98,70,217,.35)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#fff;border:4px solid var(--p);box-shadow:0 4px 10px rgba(98,70,217,.35);transition:transform .15s}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
 .batrep{padding:13px 15px;border-radius:13px;background:var(--warn-soft);border:1px solid #f2e2b7;color:var(--warn);font-size:13.5px;font-weight:900}
 
 .card.alert{border:1.5px solid #f3c9ad;background:linear-gradient(#fffaf6,#fff)}
@@ -176,6 +172,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
 .opt.yn.yes.on{background:#fff3ec;border-color:var(--hot);color:var(--hot)}
 .opt.yn:not(.yes).on{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
 
+/* الصور 4:5 */
 .photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .add,.thumb{position:relative;min-width:0;aspect-ratio:4/5;border-radius:16px;overflow:hidden}
 .add{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:2px dashed #c9bff7;background:var(--p-soft);color:var(--p-dark);font-size:11.5px;font-weight:900;cursor:pointer}
@@ -191,63 +188,27 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
 .thumb .x:active,.thumb .mk:active{transform:scale(.8)}
 .thumb .cv{position:absolute;z-index:2;bottom:6px;inset-inline:6px;padding:2px 0;border-radius:8px;background:var(--p);color:#fff;text-align:center;font-size:9px;font-weight:900}
 
+/* معاينة بطاقة المزاد */
+.pv-wrap{display:flex;flex-direction:column;align-items:center}
+.pv{position:relative;width:min(100%,320px);border-radius:17px;overflow:hidden;background:#fff;border:1px solid var(--edge);box-shadow:0 9px 22px rgba(98,70,217,.08)}
+.pv-media{position:relative;width:100%;overflow:hidden;display:block;line-height:0}
+.pv-media img{display:block;width:100%;height:auto;max-width:100%;object-fit:contain}
+.pv-media .ph{position:absolute;inset:0;display:grid;place-items:center}
+.pv-media .ph svg{width:44px;height:44px;opacity:.5;animation:floaty 3s ease-in-out infinite}
+.pv-body{padding:10px 11px 11px;background:#fff;border-top:1px solid var(--edge);display:flex;flex-direction:column;gap:6px}
+.cd{align-self:flex-start;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;background:var(--p-soft);color:var(--p-dark);font-size:9px;font-weight:900;direction:ltr;font-variant-numeric:tabular-nums}
+.cd:before{content:"";width:5px;height:5px;border-radius:50%;background:var(--ok);animation:pulse2 1.6s infinite}
+.pv-title{margin:0;font-size:14px;font-weight:950;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.specs{display:flex;flex-wrap:wrap;gap:4px}
 .spec{padding:3px 7px;border-radius:7px;background:var(--p-soft);color:var(--p-dark);font-size:9px;font-weight:800}
-
-/* معاينة صفحة الجهاز: الصور كاملة بنسبتها + صندوق المعلومات */
-.dp{border-radius:20px;overflow:hidden;background:#fff;border:1px solid var(--edge);box-shadow:0 9px 22px rgba(98,70,217,.09)}
-.dp-gal{display:flex;align-items:flex-start;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;transition:height .25s ease;background:transparent}
-.dp-gal::-webkit-scrollbar{display:none}
-.dp-gal .sl{flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always}
-.dp-gal img{display:block;width:100%;height:auto;max-height:70dvh;object-fit:contain;margin:0;padding:0;border:0}
-.dp-dots{display:flex;justify-content:center;gap:6px;padding:9px 0 0}
-.dp-dots:empty{display:none}
-.dpd{width:6px;height:6px;border-radius:50%;background:#d6d2ea;transition:.25s ease}
-.dpd.on{width:19px;border-radius:999px;background:var(--p)}
-.dp-body{padding:12px 14px 14px}
-.dp-title{margin:0;font-size:18px;font-weight:950;letter-spacing:-.03em;line-height:1.25}
-.dp-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:7px}
-.dp-price{font-size:19px;font-weight:950;color:var(--p-dark);white-space:nowrap}
-.dp-tags{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end}
-.dp-info{margin-top:8px}
-.gi{margin:14px 0 2px;font-size:11px;font-weight:900;color:var(--p-dark)}
-.ir{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid #f1eefb;font-size:12.5px}
-.ir:last-child{border-bottom:0;padding-bottom:0}
-.ir span{flex:none;color:var(--muted);font-weight:700}
-.ir strong{font-weight:800;text-align:end;line-height:1.7}
-.ir.ok strong{color:var(--ok)}
-.ir.warn strong{color:var(--hot)}
-.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-.wk{display:flex;align-items:center;gap:8px;min-width:0;padding:10px 11px;border-radius:14px;background:var(--ok-soft);border:1px solid #c6e8d6;color:var(--ok);font-size:11.5px;font-weight:800}
-.wk svg{width:16px;height:16px;flex:0 0 16px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
-.wk span{min-width:0;line-height:1.35}
-.wk.off{background:var(--bad-soft);border-color:#f6d3da;color:var(--bad)}
-.nbox{margin-top:8px;padding:11px 12px;border-radius:14px;background:var(--p-soft);font-size:12.5px;font-weight:700;line-height:1.9;color:#374151;white-space:pre-wrap;overflow-wrap:anywhere}
-
-/* تأكيد النشر */
-.cf-sum{display:grid;grid-template-columns:1.4fr 1.1fr .8fr;gap:8px}
-.cf-sum div{padding:10px 11px;border-radius:14px;background:var(--p-soft);border:1px solid var(--line);min-width:0}
-.cf-sum small{display:block;font-size:10px;font-weight:800;color:var(--muted)}
-.cf-sum b{display:block;margin-top:3px;font-size:12.5px;font-weight:900;color:var(--p-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cf-list{margin:14px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
-.cf-list li{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;font-weight:700;line-height:1.8;color:#374151}
-.cf-list li svg{width:18px;height:18px;flex:0 0 18px;margin-top:3px;fill:none;stroke:var(--ok);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
-.agree{position:relative;display:flex;align-items:flex-start;gap:12px;margin-top:16px;padding:14px;border-radius:16px;background:var(--p-soft);border:1.5px solid var(--edge);cursor:pointer;transition:background .25s,border-color .25s}
-.agree input{position:absolute;opacity:0;pointer-events:none}
-.agree .ck{position:relative;width:24px;height:24px;flex:0 0 24px;margin-top:1px;border-radius:8px;background:#fff;border:2px solid #c9bff7;transition:background .25s,border-color .25s}
-.agree .ck:after{content:"";position:absolute;top:3px;left:7px;width:6px;height:11px;border:solid #fff;border-width:0 2.6px 2.6px 0;transform:rotate(45deg) scale(0);transition:transform .2s cubic-bezier(.3,1.5,.5,1)}
-.agree input:checked+.ck{background:var(--ok);border-color:var(--ok)}
-.agree input:checked+.ck:after{transform:rotate(45deg) scale(1)}
-.agree.on{background:var(--ok-soft);border-color:#c6e8d6}
-.agree.invalid{animation:shake .4s;border-color:var(--hot);box-shadow:0 0 0 3px rgba(232,89,12,.12)}
-.agree .tx{font-size:13px;font-weight:900;line-height:1.7}
-.agree:focus-within .ck{box-shadow:0 0 0 3px rgba(98,70,217,.3)}
+.pv-row{display:flex;align-items:flex-end;justify-content:space-between;gap:6px;padding-top:8px;border-top:1px solid var(--line)}
+.pv-row small{display:block;font-size:8.5px;font-weight:800;color:var(--muted)}
+.pv-row b{display:block;margin-top:1px;font-size:13px;font-weight:950;white-space:nowrap}
+.type{padding:4px 8px;border-radius:999px;background:var(--p);color:#fff;font-size:8.5px;font-weight:900}
 
 .money{position:relative}
 .money .in{padding-inline-start:14px;padding-inline-end:60px;height:54px;font-size:22px;font-weight:900;direction:ltr;text-align:right;font-variant-numeric:tabular-nums}
 .money span{position:absolute;inset-inline-start:14px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:900;color:var(--muted);pointer-events:none}
-.quick{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
-.quick button{padding:7px 12px;border-radius:999px;background:var(--p-soft);border:1px solid var(--edge);color:var(--p-dark);font-size:11.5px;font-weight:900}
-.quick button:active{transform:scale(.94)}
 .row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px dashed #e9e5f8;font-size:12.5px;font-weight:700}
 .row:last-child{border:0;padding-bottom:0}
 .row span{color:var(--muted);flex:0 0 auto}
@@ -259,10 +220,17 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
 .rv .v.bad{color:var(--hot)}
 .rv .v.good{color:var(--ok)}
 .edit{flex:0 0 auto;padding:6px 13px;border-radius:999px;background:var(--p-soft);color:var(--p-dark);font-size:11px;font-weight:900}
+.edit:active{transform:scale(.94)}
 .msg{display:none;margin-top:12px;padding:11px;border-radius:13px;text-align:center;font-size:12.5px;font-weight:800;line-height:1.7}
 .msg.show{display:block;animation:up .35s}
 .msg.err{background:var(--bad-soft);color:var(--bad)}
 .msg.ok{background:var(--ok-soft);color:var(--ok)}
+
+/* ما يؤثر على السعر */
+.fx-list{display:flex;flex-wrap:wrap;gap:7px}
+.fx{padding:6px 11px;border-radius:999px;font-size:11.5px;font-weight:800;border:1px solid var(--edge);background:var(--p-soft);color:var(--p-dark)}
+.fx.good{background:var(--ok-soft);border-color:#c6e8d6;color:var(--ok)}
+.fx.bad{background:#fff3ec;border-color:#f3c9ad;color:var(--hot)}
 
 .meter{display:flex;align-items:center;gap:12px}
 .ring{position:relative;width:62px;height:62px;flex:0 0 62px}
@@ -285,18 +253,25 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
 .tl b{display:block;font-size:13px;font-weight:900}
 .tl p{margin:2px 0 0;font-size:11.5px;font-weight:700;line-height:1.8;color:var(--muted)}
 
-.loc{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:15px;background:var(--p-soft);border:1px solid var(--edge)}
-.loc .ic{width:36px;height:36px;border-radius:11px;background:#fff;color:var(--p);display:grid;place-items:center;flex:0 0 36px}
-.loc .ic svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.loc strong{display:block;font-size:14px;font-weight:900}
-.loc span{display:block;margin-top:2px;font-size:11px;font-weight:700;color:var(--muted)}
+/* تأكيد قبل النشر */
+.cf-sum{display:grid;grid-template-columns:1.4fr 1.1fr .8fr;gap:8px}
+.cf-sum div{padding:10px 11px;border-radius:14px;background:var(--p-soft);border:1px solid var(--line);min-width:0}
+.cf-sum small{display:block;font-size:10px;font-weight:800;color:var(--muted)}
+.cf-sum b{display:block;margin-top:3px;font-size:12.5px;font-weight:900;color:var(--p-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cf-list{margin:14px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+.cf-list li{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;font-weight:700;line-height:1.8;color:#374151}
+.cf-list li svg{width:18px;height:18px;flex:0 0 18px;margin-top:3px;fill:none;stroke:var(--ok);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.agree{position:relative;display:flex;align-items:flex-start;gap:12px;margin-top:16px;padding:14px;border-radius:16px;background:var(--p-soft);border:1.5px solid var(--edge);cursor:pointer;transition:background .25s,border-color .25s}
+.agree input{position:absolute;opacity:0;pointer-events:none}
+.agree .ck{position:relative;width:24px;height:24px;flex:0 0 24px;margin-top:1px;border-radius:8px;background:#fff;border:2px solid #c9bff7;transition:background .25s,border-color .25s}
+.agree .ck:after{content:"";position:absolute;top:3px;left:7px;width:6px;height:11px;border:solid #fff;border-width:0 2.6px 2.6px 0;transform:rotate(45deg) scale(0);transition:transform .2s cubic-bezier(.3,1.5,.5,1)}
+.agree input:checked+.ck{background:var(--ok);border-color:var(--ok)}
+.agree input:checked+.ck:after{transform:rotate(45deg) scale(1)}
+.agree.on{background:var(--ok-soft);border-color:#c6e8d6}
+.agree.invalid{animation:shake .4s;border-color:var(--hot);box-shadow:0 0 0 3px rgba(232,89,12,.12)}
+.agree .tx{font-size:13px;font-weight:900;line-height:1.7}
+.agree:focus-within .ck{box-shadow:0 0 0 3px rgba(98,70,217,.3)}
 
-.fx-list{display:flex;flex-wrap:wrap;gap:7px}
-.fx{padding:6px 11px;border-radius:999px;font-size:11.5px;font-weight:800;border:1px solid var(--edge);background:var(--p-soft);color:var(--p-dark)}
-.fx.good{background:var(--ok-soft);border-color:#c6e8d6;color:var(--ok)}
-.fx.bad{background:#fff3ec;border-color:#f3c9ad;color:var(--hot)}
-.help.hint-ok{color:var(--ok)}
-.help.hint-bad{color:var(--hot)}
 .sheet{position:fixed;inset:0;z-index:300;display:none}
 .sheet.show{display:block}
 .sheet-ov{position:absolute;inset:0;background:rgba(23,32,42,.5);animation:fade .25s}
@@ -320,7 +295,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
 .b-back{width:54px;height:50px;flex:0 0 54px;border-radius:15px;display:grid;place-items:center;background:var(--p-soft);color:var(--p-dark);border:1px solid var(--edge)}
 .b-back svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transform:scaleX(-1)}
 .b-back.off{visibility:hidden}
-.b-next{flex:1;height:50px;border-radius:15px;color:#fff;font-size:15px;font-weight:900;background:linear-gradient(135deg,#6246d9,#8b6cf0);box-shadow:0 10px 22px rgba(98,70,217,.28)}
+.b-next{flex:1;height:50px;border-radius:15px;color:#fff;font-size:15px;font-weight:900;background:linear-gradient(135deg,#6246d9,#8b6cf0);box-shadow:0 10px 22px rgba(98,70,217,.3)}
 .b-next:active{transform:scale(.97)}
 .b-next.ready{animation:glow 2s ease-in-out infinite}
 .b-next:disabled{opacity:.75;animation:none}
@@ -351,6 +326,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
   .photos{gap:7px}
   .thumb .x{width:24px;height:24px}
   .thumb .mk{height:23px;padding:0 7px}
+  .fn{gap:9px}
+  .fn .ico{width:34px;height:34px;flex-basis:34px}
+  .swt{flex-basis:104px;width:104px}
   .cf-sum{grid-template-columns:1fr 1fr}
   .cf-sum div:first-child{grid-column:1/-1}
 }
@@ -481,8 +459,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
 
   <section class="card">
     <div class="c-head"><div><h2>ملاحظات</h2><p>اختياري</p></div></div>
-    <textarea class="ta" id="notes" maxlength="300" placeholder="مثال: الجهاز ويا الكرتون والشاحن، سبب البيع، مدة الاستخدام..."></textarea>
-    <div class="count"><span id="nCount">0</span>/300</div>
+    <textarea class="ta" id="notes" maxlength="500" placeholder="سبب البيع، مدة الاستخدام، أي شي يهم المشتري"></textarea>
+    <div class="count"><span id="nCount">0</span>/500</div>
   </section>
 </div>
 
@@ -491,8 +469,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
   <section class="card">
     <div class="c-head"><span class="num">4</span><div><h2>صور الجهاز</h2><p>صورة وحدة على الأقل، والأولى هي الغلاف</p></div></div>
     <div class="photos" id="photos"></div>
-    <p class="hint"><b id="pCnt">0</b>/10 صور</p>
-    <p class="hint">الصور الحقيقية للجهاز مطلوبة. نحافظ على الصورة ونسبتها الأصلية بدون قص.</p>
+    <p class="hint"><b id="pCnt">0</b>/6 صور</p>
+    <p class="hint">نحافظ على الصورة ونسبتها الأصلية. طريقة عرضها تتكيّف حسب المكان: بطاقة المزاد أو تفاصيل الجهاز أو البنر، بدون إضافة خلفية للصورة عند الرفع.</p>
   </section>
 </div>
 
@@ -501,51 +479,51 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
 
   <div class="guide">
     <b>آخر خطوة</b>
-    <p>حدد سعر البيع، شوف شلون تظهر صفحة جهازك، وبالأخير أكد وانشر.</p>
+    <p>اكتب سعر البداية، راجع المعاينة والملخص، وإذا كلشي تمام أكّد واضغط «نشر المزاد».</p>
   </div>
 
   <section class="card">
-    <div class="c-head"><div><h2>شنو يؤثر على سعر جهازك</h2><p>المشتري يشوف هذي التفاصيل، سعّر على أساسها</p></div></div>
+    <div class="c-head"><div><h2>شنو يؤثر على سعر جهازك</h2><p>المزايد يشوف هذي التفاصيل</p></div></div>
     <div class="fx-list" id="fxList"></div>
-    <p class="help">نوع الشريحة والإصدار والبطارية والقطع المبدلة من أكثر الأشياء اللي تفرق السعر بين جهاز وجهاز مثله. لو تريد تغير شي اضغط «تعديل» من المراجعة الأخيرة تحت.</p>
+    <p class="help">نوع الشريحة والإصدار والبطارية والقطع المبدلة تفرق كثير بالسعر اللي يوصله مزادك. لو تريد تغير شي اضغط «تعديل» من المراجعة الأخيرة تحت.</p>
   </section>
 
   <section class="card">
-    <div class="c-head"><span class="num">5</span><div><h2>سعر البيع</h2><p>السعر اللي تريد تبيع بيه الجهاز</p></div></div>
+    <div class="c-head"><span class="num">5</span><div><h2>السعر الابتدائي</h2><p>من وين يبدأ المزاد</p></div></div>
     <div class="field">
-      <label class="lbl" for="price">السعر المطلوب <i>*</i></label>
+      <label class="lbl" for="price">سعر البداية <i>*</i></label>
       <div class="money"><input class="in" id="price" inputmode="numeric" autocomplete="off" placeholder="0"><span>د.ع</span></div>
-      <div class="quick" id="quick">
-        <button type="button" data-add="50000">+50,000</button>
-        <button type="button" data-add="100000">+100,000</button>
-        <button type="button" data-add="500000">+500,000</button>
-        <button type="button" data-clear="1">مسح</button>
+      <p class="help">ابدأ بسعر مغري. السعر الواطي يجذب مزايدين أكثر، والمنافسة هي اللي ترفعه.</p>
+    </div>
+    <div class="field">
+      <span class="lbl">مدة المزاد <i>*</i></span>
+      <div class="tiles" id="durationOptions" role="group" aria-label="مدة المزاد">
+        <button type="button" class="tile on" data-duration="1" aria-pressed="true">ساعة</button>
+        <button type="button" class="tile" data-duration="4" aria-pressed="false">4 ساعات</button>
+        <button type="button" class="tile" data-duration="8" aria-pressed="false">8 ساعات</button>
       </div>
-      <p class="help" id="priceHint">أرقام صحيحة فقط بدون كسور، من 20,000 إلى 5,000,000 د.ع.</p>
+      <p class="help" id="durationHelp">ينتهي المزاد بعد ساعة من بدء المزاد الفعلي بعد موافقة الإدارة.</p>
     </div>
-    <label class="tg" id="negRow" style="margin-top:12px;border-top:1px solid #f1eefb">
-      <div><b>السعر قابل للتفاوض</b><small id="negTxt" style="color:var(--muted)">السعر ثابت</small></div>
-      <input type="checkbox" id="negotiable"><i></i>
-    </label>
-  </section>
-
-  <section class="card">
-    <div class="c-head"><div><h2>موقع البيع</h2><p>نطاق البيع الحالي</p></div></div>
-    <div class="loc">
-      <div class="ic"><svg viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
-      <div><strong>النجف</strong><span>الجهاز يُباع ضمن هذا النطاق</span></div>
+    <div class="guide" style="margin-top:12px">
+      <b>أقل زيادة للمزايدة</b>
+      <p id="incrementHelp">تُحدد الزيادة تلقائياً حسب سعر بداية المزاد.</p>
     </div>
   </section>
 
   <section class="card">
-    <div class="c-head"><div><h2>صفحة جهازك بعد النشر</h2><p>الصور والمعلومات مثل ما يشوفها المشتري</p></div></div>
-    <div class="dp">
-      <div class="dp-gal" id="dpGal" dir="ltr"></div>
-      <div class="dp-dots" id="dpDots" dir="ltr"></div>
-      <div class="dp-body">
-        <h3 class="dp-title" id="dpTitle">اسم الجهاز</h3>
-        <div class="dp-meta"><b class="dp-price" id="dpPrice">—</b><span class="dp-tags" id="dpTags"></span></div>
-        <div class="dp-info" id="dpInfo"></div>
+    <div class="c-head"><div><h2>هكذا يظهر مزادك</h2><p>معاينة حية للبطاقة</p></div></div>
+    <div class="pv-wrap">
+      <div class="pv">
+        <div class="pv-media" id="pvMedia"></div>
+        <div class="pv-body">
+          <span class="cd" id="pvDuration">01:00:00</span>
+          <h3 class="pv-title" id="pvTitle">اسم الجهاز</h3>
+          <div class="specs" id="pvSpecs"></div>
+          <div class="pv-row">
+            <div><small>السعر الابتدائي</small><b id="pvPrice">—</b></div>
+            <span class="type">مزاد</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -556,7 +534,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
   </section>
 
   <section class="card">
-    <div class="c-head"><div><h2>اكتمال إعلانك</h2><p>كل ما زادت التفاصيل، زادت ثقة المشتري</p></div></div>
+    <div class="c-head"><div><h2>اكتمال إعلانك</h2><p>كل ما زادت التفاصيل، زادت ثقة المزايدين</p></div></div>
     <div class="meter">
       <div class="ring"><svg viewBox="0 0 62 62"><circle class="bg" cx="31" cy="31" r="25"/><circle class="fg" id="mFg" cx="31" cy="31" r="25"/></svg><b id="mPct">0%</b></div>
       <div><b class="t" id="mTitle">أكمل بياناتك</b><p id="mSub">—</p></div>
@@ -567,32 +545,39 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
   <section class="card">
     <div class="c-head"><div><h2>شنو يصير بعد النشر؟</h2><p>الخطوات بالترتيب</p></div></div>
     <ol class="tl">
-      <li><span class="n">1</span><div><b>نحفظ جهازك وصوره</b><p>تنحفظ كل المعلومات اللي كتبتها مع الصور.</p></div></li>
-      <li><span class="n">2</span><div><b>ينشر إعلان البيع المباشر</b><p>بالسعر اللي حددته، بدون مزايدة وبدون مدة محددة.</p></div></li>
-      <li><span class="n">3</span><div><b>تتابع إعلانك</b><p>بعد النشر ننقلك لصفحة «إعلاناتي» حتى تتابع جهازك.</p></div></li>
+      <li><span class="n">1</span><div><b>ينحفظ مزادك كمسودة</b><p>ما يظهر لأي أحد بعد، وننقلك مباشرة لصفحة التأمين.</p></div></li>
+      <li><span class="n">2</span><div><b>تدفع تأمين البائع 5,000 د.ع</b><p>تختار طريقة الدفع وترفع صورة الإيصال. التأمين قابل للاسترداد وليس رسم نشر.</p></div></li>
+      <li><span class="n">3</span><div><b>الإدارة تراجع الإثبات</b><p>بعد الموافقة يبدأ مزادك تلقائياً.</p></div></li>
+      <li><span class="n">4</span><div><b>مزادك يشتغل للمدة اللي اخترتها</b><p>المزايدون يتنافسون. إذا تمت عملية البيع تنحسب عليك أجرة المنصة 3,000 د.ع.</p></div></li>
     </ol>
+    <div class="row" style="margin-top:14px"><span>مدة المزاد</span><strong id="rowDur">60 دقيقة</strong></div>
+    <div class="row"><span>تأمين البائع</span><strong>5,000 د.ع</strong></div>
+    <div class="row"><span>تأمين المزايد</span><strong>5,000 د.ع</strong></div>
+    <div class="row"><span>أجرة المنصة (عند إتمام البيع فقط)</span><strong>3,000 د.ع للبائع</strong></div>
+    <p class="help">الأجرة مبلغ منفصل عن التأمين. التأمين 5,000 د.ع قابل للاسترداد ولا تنحسب الأجرة منه.</p>
   </section>
 
-  <!-- آخر شي: رسالة التأكيد وموافقة المستخدم -->
+  <!-- آخر شي: التأكيد وموافقة البائع -->
   <section class="card" id="confirmCard">
-    <div class="c-head"><span class="num"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 7.8 7 10 4-2.2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg></span><div><h2>تأكيد قبل النشر</h2><p>خطوة أخيرة، اقرأ ووافق</p></div></div>
+    <div class="c-head"><span class="num"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 4.5 3 7.8 7 10 4-2.2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg></span><div><h2>تأكيد قبل النشر</h2><p>خطوة أخيرة، اقرأ ووافق</p></div></div>
 
     <div class="cf-sum">
       <div><small>الجهاز</small><b id="cfName">—</b></div>
-      <div><small>السعر</small><b id="cfPrice">—</b></div>
-      <div><small>الصور</small><b id="cfPhotos">0</b></div>
+      <div><small>سعر البداية</small><b id="cfPrice">—</b></div>
+      <div><small>المدة</small><b id="cfDur">—</b></div>
     </div>
 
     <ul class="cf-list">
       <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>كل المعلومات والصور اللي أضفتها صحيحة وتخص جهازي.</span></li>
       <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>ذكرت كل العيوب والقطع المبدلة الموجودة بالجهاز.</span></li>
-      <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>السعر المحدد فوق هو اللي راح يظهر للمشترين بالنجف.</span></li>
+      <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>أدفع تأمين البائع 5,000 د.ع، وإذا تمت عملية البيع تنحسب أجرة المنصة 3,000 د.ع.</span></li>
+      <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>ما أقدر أعدّل أو أسحب المزاد بعد ما يبدأ ويدخل مزايدين.</span></li>
     </ul>
 
     <label class="agree" id="agreeBox">
       <input type="checkbox" id="agree">
       <i class="ck"></i>
-      <span class="tx">أوافق وأؤكد صحة المعلومات أعلاه، وأريد نشر الجهاز.</span>
+      <span class="tx">أوافق وأؤكد صحة المعلومات أعلاه، وأريد نشر المزاد.</span>
     </label>
 
     <div id="msg" class="msg"></div>
@@ -627,8 +612,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
     <circle class="ringd" cx="55" cy="55" r="46"/>
     <path class="tick" d="M36 57l13 13 26-28"/>
   </svg>
-  <h2>تم نشر جهازك للبيع المباشر</h2>
-  <p>ننتقل الآن إلى إعلاناتك…</p>
+  <h2>تم إنشاء مزادك كمسودة</h2>
+  <p>ننتقل الآن إلى تأمين البائع 5,000 د.ع…</p>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -638,31 +623,22 @@ import { supabase } from "./js/supabase.js";
 
 const $ = id => document.getElementById(id);
 const form = $("form");
-const MAX_PHOTOS = 10;
+const MAX_PHOTOS = 6;
 const MAX_MB = 12;
 const TOTAL = 5;
 const STEPS = ["الجهاز", "الحالة", "الفحص", "الصور", "السعر والنشر"];
-const MIN_PRICE = 20000;
-const MAX_PRICE = 5000000;
 
 const state = {
   user:null, step:1, files:[], busy:false, done:false, pending:0,
   v:{}, acc:new Set(), rep:new Set(), works:{}, replaced:null,
   modelOther:false, colorOther:false, regionOther:false, batteryTouched:false,
-  deviceId:null, imagesDone:false, negotiable:false, agreed:false
+  deviceId:null, imagesDone:false, auctionId:null, durationHours:1, agreed:false
 };
 
 const val = id => $(id).value.trim();
 const money = n => Number(n || 0).toLocaleString("en-US") + " د.ع";
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const digitsOf = s => String(s || "").replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
-// أرقام صحيحة فقط: أي كسر (مثل 850.5) يُحذف، والفواصل تُتجاهل
-function parsePrice(s){
-  let t = digitsOf(s).replace(/[٬،,\s]/g, "");
-  const m = t.match(/^(\d+)[.٫]\d{1,2}$/);
-  if (m) t = m[1];
-  return parseInt(t.replace(/\D/g, ""), 10) || 0;
-}
+const numOf = s => parseInt(String(s || "").replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/\D/g, ""), 10) || 0;
 
 let toastT;
 function toast(t){
@@ -675,34 +651,33 @@ function toast(t){
 function showMsg(t, type = "err"){ const m = $("msg"); m.textContent = t; m.className = "msg show " + type; }
 function hideMsg(){ $("msg").className = "msg"; }
 
-// أي تعديل على البيانات يلغي الجهاز المحفوظ سابقاً حتى لا يُنشر شيء قديم
-function invalidate(){ if (!state.busy){ state.deviceId = null; state.imagesDone = false; } }
+function invalidate(){ if (!state.busy){ state.deviceId = null; state.imagesDone = false; state.auctionId = null; } }
 
 /* ===== البيانات ===== */
 const BRANDS = ["Apple","Samsung","Xiaomi","Google","Huawei","OPPO","HONOR","OnePlus","realme","Motorola","Sony","Nokia","Tecno","Infinix","أخرى"];
 
 const MODELS = {
-  Apple:["iPhone 17 Pro Max","iPhone 17 Pro","iPhone 17","iPhone Air","iPhone 16 Pro Max","iPhone 16 Pro","iPhone 16 Plus","iPhone 16","iPhone 16e","iPhone 15 Pro Max","iPhone 15 Pro","iPhone 15 Plus","iPhone 15","iPhone 14 Pro Max","iPhone 14 Pro","iPhone 14 Plus","iPhone 14","iPhone 13 Pro Max","iPhone 13 Pro","iPhone 13","iPhone 13 mini","iPhone 12 Pro Max","iPhone 12 Pro","iPhone 12","iPhone 12 mini","iPhone 11 Pro Max","iPhone 11 Pro","iPhone 11","iPhone XS Max","iPhone XS","iPhone XR","iPhone X","iPhone 8 Plus","iPhone 8","iPhone 7 Plus","iPhone 7","iPhone SE (3rd generation)","iPhone SE (2nd generation)"],
-  Samsung:["Galaxy S26 Ultra","Galaxy S26+","Galaxy S26","Galaxy S25 Ultra","Galaxy S25+","Galaxy S25","Galaxy S25 Edge","Galaxy S24 Ultra","Galaxy S24+","Galaxy S24","Galaxy S24 FE","Galaxy S23 Ultra","Galaxy S23+","Galaxy S23","Galaxy S23 FE","Galaxy S22 Ultra","Galaxy S22+","Galaxy S22","Galaxy S22 FE","Galaxy S21 Ultra","Galaxy S21+","Galaxy S21","Galaxy S21 FE","Galaxy S20 Ultra","Galaxy S20+","Galaxy S20","Galaxy S20 FE","Galaxy Note20 Ultra","Galaxy Note20","Galaxy Z Fold7","Galaxy Z Fold6","Galaxy Z Fold5","Galaxy Z Fold4","Galaxy Z Fold3","Galaxy Z Flip7","Galaxy Z Flip6","Galaxy Z Flip5","Galaxy Z Flip4","Galaxy Z Flip3","Galaxy A56","Galaxy A55","Galaxy A54","Galaxy A53","Galaxy A52","Galaxy A51","Galaxy A36","Galaxy A35","Galaxy A34","Galaxy A33","Galaxy A26","Galaxy A25","Galaxy A24","Galaxy A23","Galaxy A16","Galaxy A15","Galaxy A14","Galaxy A13","Galaxy A06","Galaxy A05s","Galaxy A05","Galaxy M55","Galaxy M54","Galaxy M35","Galaxy M34","Galaxy M15"],
-  Xiaomi:["Xiaomi 15 Ultra","Xiaomi 15 Pro","Xiaomi 15","Xiaomi 14 Ultra","Xiaomi 14 Pro","Xiaomi 14","Xiaomi 13 Ultra","Xiaomi 13 Pro","Xiaomi 13","Xiaomi 12 Pro","Xiaomi 12","Redmi Note 14 Pro+","Redmi Note 14 Pro","Redmi Note 14","Redmi Note 13 Pro+","Redmi Note 13 Pro","Redmi Note 13","Redmi Note 12 Pro+","Redmi Note 12 Pro","Redmi Note 12","Redmi Note 11 Pro","Redmi Note 11","Redmi 14C","Redmi 13C","Redmi 12","Redmi 10","POCO F7 Ultra","POCO F7 Pro","POCO F7","POCO F6 Pro","POCO F6","POCO X7 Pro","POCO X7","POCO X6 Pro","POCO X6","POCO M7 Pro","POCO M6 Pro"],
-  Google:["Pixel 10 Pro XL","Pixel 10 Pro","Pixel 10","Pixel 9 Pro XL","Pixel 9 Pro","Pixel 9","Pixel 9 Pro Fold","Pixel 9a","Pixel 8 Pro","Pixel 8","Pixel 8a","Pixel 7 Pro","Pixel 7","Pixel 7a","Pixel 6 Pro","Pixel 6","Pixel 6a","Pixel 5","Pixel 5a"],
-  Huawei:["Mate 70 Pro+","Mate 70 Pro","Mate 70","Mate 60 Pro+","Mate 60 Pro","Mate 60","Mate 50 Pro","Mate 50","Mate 40 Pro","Mate 40","Pura 70 Ultra","Pura 70 Pro","Pura 70","P60 Pro","P60","P50 Pro","P50","Nova 13 Pro","Nova 13","Nova 12 Pro","Nova 12","Nova 11 Pro","Nova 11","Nova 10 Pro","Nova 10"],
-  OPPO:["Find X8 Ultra","Find X8 Pro","Find X8","Find X7 Ultra","Find X7","Find X6 Pro","Find X6","Find X5 Pro","Find X5","Reno 14 Pro","Reno 14","Reno 13 Pro","Reno 13","Reno 12 Pro","Reno 12","Reno 11 Pro","Reno 11","A5 Pro","A5","A3 Pro","A3","A2 Pro","A2"],
-  HONOR:["Magic7 Pro","Magic7","Magic6 Pro","Magic6","Magic V5","Magic V3","Magic V2","Magic Vs","HONOR 400 Pro","HONOR 400","HONOR 300 Pro","HONOR 300","HONOR 200 Pro","HONOR 200","HONOR 90","HONOR 90 Lite","X9c","X9b","X8c","X8b","X7c","X7b","X6c","X6b"],
-  OnePlus:["OnePlus 13","OnePlus 13R","OnePlus 12","OnePlus 12R","OnePlus 11","OnePlus 11R","OnePlus 10 Pro","OnePlus 10T","OnePlus 9 Pro","OnePlus 9","OnePlus Open","OnePlus Nord 5","OnePlus Nord 4","OnePlus Nord 3","OnePlus Nord 2T","OnePlus Nord CE5","OnePlus Nord CE4"],
-  realme:["GT 7 Pro","GT 7","GT 6","GT 5","GT Neo 6","GT Neo 5","12 Pro+","12 Pro","12","11 Pro+","11 Pro","11","C75","C65","C55","C53","Narzo 80 Pro","Narzo 70 Pro","Narzo 60 Pro"],
-  Motorola:["Razr 60 Ultra","Razr 60","Razr 50 Ultra","Razr 50","Edge 60 Pro","Edge 60","Edge 50 Ultra","Edge 50 Pro","Edge 50","Moto G86","Moto G85","Moto G75","Moto G55","Moto G54","Moto G Power","Moto G Stylus"],
-  Sony:["Xperia 1 VII","Xperia 1 VI","Xperia 1 V","Xperia 1 IV","Xperia 5 V","Xperia 5 IV","Xperia 5 III","Xperia 10 VI","Xperia 10 V","Xperia 10 IV","Xperia Pro-I"],
-  Nokia:["Nokia X30","Nokia X20","Nokia X10","Nokia G60","Nokia G50","Nokia G42","Nokia G22","Nokia G21","Nokia C32","Nokia C31","Nokia C22","Nokia 8.3 5G","Nokia 7.2","Nokia 6.2"],
-  Tecno:["Phantom V Fold2","Phantom V Fold","Phantom V Flip2","Phantom V Flip","Camon 40 Pro","Camon 40","Camon 30 Pro","Camon 30","Camon 20 Pro","Camon 20","Pova 7 Pro","Pova 7","Pova 6 Pro","Pova 6","Spark 30 Pro","Spark 30","Spark 20 Pro","Spark 20"],
-  Infinix:["ZERO 40 Pro","ZERO 40","ZERO 30","NOTE 50 Pro+","NOTE 50 Pro","NOTE 50","NOTE 40 Pro+","NOTE 40 Pro","NOTE 40","GT 30 Pro","GT 20 Pro","HOT 50 Pro+","HOT 50 Pro","HOT 50","HOT 40 Pro","HOT 40","Smart 9 Pro","Smart 9","Smart 8"]
+  Apple:["iPhone 18 Pro Max","iPhone 18 Pro","iPhone 18","iPhone 17 Pro Max","iPhone 17 Pro","iPhone 17 Air","iPhone 17","iPhone 17e","iPhone 16 Pro Max","iPhone 16 Pro","iPhone 16 Plus","iPhone 16","iPhone 16e","iPhone 15 Pro Max","iPhone 15 Pro","iPhone 15 Plus","iPhone 15","iPhone 14 Pro Max","iPhone 14 Pro","iPhone 14 Plus","iPhone 14","iPhone 13 Pro Max","iPhone 13 Pro","iPhone 13","iPhone 13 mini","iPhone 12 Pro Max","iPhone 12 Pro","iPhone 12","iPhone 12 mini","iPhone 11 Pro Max","iPhone 11 Pro","iPhone 11","iPhone XS Max","iPhone XS","iPhone XR","iPhone X","iPhone 8 Plus","iPhone 8","iPhone 7 Plus","iPhone 7","iPhone 6s Plus","iPhone 6s","iPhone 6 Plus","iPhone 6","iPhone SE 3","iPhone SE 2","iPhone SE"],
+  Samsung:["Galaxy S26 Ultra","Galaxy S26+","Galaxy S26","Galaxy S25 Ultra","Galaxy S25 Edge","Galaxy S25+","Galaxy S25","Galaxy S24 Ultra","Galaxy S24+","Galaxy S24","Galaxy S23 Ultra","Galaxy S23+","Galaxy S23","Galaxy S22 Ultra","Galaxy S22+","Galaxy S22","Galaxy S21 Ultra","Galaxy S21+","Galaxy S21","Galaxy S20 Ultra","Galaxy S20+","Galaxy S20","Galaxy Note 20 Ultra","Galaxy Note 20","Galaxy Z Fold7","Galaxy Z Flip7","Galaxy Z Fold6","Galaxy Z Flip6","Galaxy Z Fold5","Galaxy Z Flip5","Galaxy A57","Galaxy A37","Galaxy A56","Galaxy A36","Galaxy A55","Galaxy A35","Galaxy A54","Galaxy A34","Galaxy A53","Galaxy A33","Galaxy A52","Galaxy A32","Galaxy A51","Galaxy A31","Galaxy A72","Galaxy A71","Galaxy A70","Galaxy A50","Galaxy A30","Galaxy M56","Galaxy M55","Galaxy M54","Galaxy M53","Galaxy M52","Galaxy M51"],
+  Xiaomi:["Xiaomi 17 Ultra","Xiaomi 17 Pro","Xiaomi 17","Xiaomi 15 Ultra","Xiaomi 15 Pro","Xiaomi 15","Xiaomi 14 Ultra","Xiaomi 14 Pro","Xiaomi 14","Xiaomi 13 Ultra","Xiaomi 13 Pro","Xiaomi 13","Xiaomi 12S Ultra","Xiaomi 12 Pro","Xiaomi 12","Redmi Note 17 Pro+","Redmi Note 17 Pro","Redmi Note 17","Redmi Note 16 Pro+","Redmi Note 16 Pro","Redmi Note 16","Redmi Note 15 Pro+","Redmi Note 15 Pro","Redmi Note 15","Redmi Note 14 Pro+","Redmi Note 14 Pro","Redmi Note 14","Redmi Note 13 Pro+","Redmi Note 13 Pro","Redmi Note 13","Redmi Note 12 Pro+","Redmi Note 12 Pro","Redmi Note 12","POCO F8 Ultra","POCO F8 Pro","POCO F8","POCO F7 Ultra","POCO F7 Pro","POCO F7","POCO F6 Pro","POCO F6","POCO X8 Pro","POCO X8","POCO X7 Pro","POCO X7","Redmi 15","Redmi 14C","Redmi 13"],
+  Google:["Pixel 10 Pro XL","Pixel 10 Pro","Pixel 10","Pixel 9 Pro XL","Pixel 9 Pro","Pixel 9","Pixel 8 Pro","Pixel 8","Pixel 7 Pro","Pixel 7","Pixel 6 Pro","Pixel 6","Pixel 5","Pixel 4 XL","Pixel 4"],
+  Huawei:["Mate 80 Pro","Mate 80","Mate 70 Pro","Mate 70","Mate 60 Pro","Mate 60","Mate 50 Pro","Mate 50","Pura 80 Pro","Pura 80","P70 Pro","P70","P60 Pro","P60","P50 Pro","P50","Nova 14 Pro","Nova 14","Nova 13 Pro","Nova 13","Nova 12 Pro","Nova 12"],
+  OPPO:["Find X9 Ultra","Find X9 Pro","Find X9","Find X8 Ultra","Find X8 Pro","Find X8","Find X7 Ultra","Find X7","Find X6 Pro","Find X6","Reno 15 Pro","Reno 15","Reno 14 Pro","Reno 14","Reno 13 Pro","Reno 13","Reno 12 Pro","Reno 12","Reno 11 Pro","Reno 11","A6 Pro","A5 Pro","A4 Pro"],
+  HONOR:["Magic8 Pro","Magic8","Magic7 Pro","Magic7","Magic6 Pro","Magic6","Magic V5","Magic V3","Magic V2","HONOR 600 Pro","HONOR 600","HONOR 400 Pro","HONOR 400","HONOR 200 Pro","HONOR 200","HONOR 100 Pro","HONOR 100","X60 Pro","X50 Pro","X50"],
+  OnePlus:["OnePlus 14","OnePlus 13","OnePlus 12","OnePlus 11","OnePlus 10 Pro","OnePlus 9 Pro","OnePlus 9","OnePlus Nord 6","OnePlus Nord 5","OnePlus Nord 4","OnePlus Nord 3","OnePlus Open","OnePlus Open 2"],
+  realme:["GT 8 Pro","GT 8","GT 7 Pro","GT 7","GT 6","GT 5 Pro","GT 5","GT Neo 7","GT Neo 6","realme 15 Pro","realme 15","realme 14 Pro+","realme 14 Pro","realme 14","realme 13 Pro+","realme 13 Pro","realme 13","C75","C65","C55"],
+  Motorola:["Edge 70 Ultra","Edge 70 Pro","Edge 70","Edge 60 Ultra","Edge 60 Pro","Edge 60","Edge 50 Ultra","Edge 50 Pro","Edge 50","Razr 70 Ultra","Razr 70","Razr 60 Ultra","Razr 60","Moto G75","Moto G85","Moto G55"],
+  Sony:["Xperia 1 VII","Xperia 1 VI","Xperia 1 V","Xperia 5 V","Xperia 5 IV","Xperia 10 VII","Xperia 10 VI","Xperia 10 V"],
+  Nokia:["Nokia X60","Nokia X50","Nokia X30","Nokia G60","Nokia G50","Nokia G42","Nokia C32","Nokia C22"],
+  Tecno:["Phantom V Fold2","Phantom V Fold","Phantom V Flip2","Phantom V Flip","Camon 40 Pro","Camon 40","Camon 30 Pro","Camon 30","Spark 40 Pro+","Spark 40 Pro","Spark 40","Spark 30 Pro","Spark 30"],
+  Infinix:["Note 50 Pro+","Note 50 Pro","Note 50","Note 40 Pro+","Note 40 Pro","Note 40","GT 30 Pro","GT 30","GT 20 Pro","Zero 40","Zero 30","Hot 60 Pro+","Hot 60 Pro","Hot 60","Hot 50 Pro+","Hot 50 Pro","Hot 50"]
 };
 
 function groupOf(brand, m){
   if (brand === "Apple"){
-    const x = m.match(/iPhone\s(\d+|SE|X|Air)/);
+    const x = m.match(/iPhone\s(\d+|SE|X)/);
     if (!x) return "";
-    return x[1] === "SE" ? "iPhone SE" : x[1] === "X" ? "iPhone X / XS / XR" : x[1] === "Air" ? "iPhone Air" : "iPhone " + x[1];
+    return x[1] === "SE" ? "iPhone SE" : x[1] === "X" ? "iPhone X / XS / XR" : "iPhone " + x[1];
   }
   if (brand === "Samsung"){
     const x = m.match(/Galaxy\s(Note|S|Z|A|M)/);
@@ -780,7 +755,7 @@ $("ch-acc").innerHTML = ACC.map(v => `<button type="button" class="opt" data-acc
 $("ch-rep").innerHTML = REP_PARTS.map(v => `<button type="button" class="opt" data-rep="${esc(v)}" aria-pressed="false">${esc(v)}</button>`).join("");
 
 $("works").innerHTML = WORKS.map((w, i) => `
-  <div class="fn s-mid${i === 0 ? " hint" : ""}" data-k="${w.k}">
+  <div class="fn s-mid${i === 0 ? " swhint" : ""}" data-k="${w.k}">
     <span class="ico"><svg viewBox="0 0 24 24">${w.ic}</svg></span>
     <div class="nm"><b>${esc(w.t)}</b><small>اسحب الزر</small></div>
     <div class="swt" role="switch" aria-checked="mixed" aria-label="${esc(w.t)}" tabindex="0">
@@ -830,9 +805,11 @@ const batteryReplaced = () => state.replaced && state.rep.has("البطارية"
 function updateBattery(){
   const show = isApple();
   const f = $("batField");
+  const was = f.style.display !== "none";
   f.style.display = show ? "" : "none";
   $("batSlider").style.display = batteryReplaced() ? "none" : "";
   $("batRep").style.display = batteryReplaced() ? "" : "none";
+  if (show && !was){ f.style.animation = "none"; void f.offsetWidth; f.style.animation = ""; }
 }
 const batteryValue = () => !isApple() ? null : batteryReplaced() ? "مبدلة" : (state.batteryTouched ? $("battery").value + "%" : null);
 
@@ -844,7 +821,7 @@ function simOptions(){
   if (!state.v.brand || !m) return [];
   if (isApple()){
     if (/\bAir\b/i.test(m)) return [SIM.ESIM];
-    if (/iPhone\s(7|8|X)(\s|$)/i.test(m)) return [SIM.SINGLE];
+    if (/iPhone\s(6|6s|7|8|X)(\s|$)/i.test(m)) return [SIM.SINGLE];
     return appleGen(m) >= 14 ? [SIM.MIX, SIM.ESIM, SIM.DUAL] : [SIM.MIX, SIM.DUAL];
   }
   return [SIM.SINGLE, SIM.DUAL, SIM.MIX, SIM.ESIM];
@@ -873,7 +850,7 @@ function syncSim(){
   const opts = simOptions();
   let t = "";
   if (isApple()){
-    if (opts.length === 1 && opts[0] === SIM.ESIM) t = "iPhone Air يجي eSIM فقط بكل دول العالم، بدون فتحة شريحة.";
+    if (opts.length === 1 && opts[0] === SIM.ESIM) t = "iPhone Air يجي eSIM فقط، بدون فتحة شريحة.";
     else if (opts.length === 1) t = "هذا الموديل ما يدعم eSIM، شريحة وحدة فقط.";
     else t = "«eSIM فقط» يعني بدون فتحة شريحة (مثل الإصدار الأمريكي من iPhone 14 وأحدث). الإصدار الصيني عادةً شريحتين عادية بدون eSIM.";
   } else if (opts.length){
@@ -910,7 +887,7 @@ function syncRegion(){
   if (!state.regionOther){
     if (r === "LL/A" && n >= 14) t = "الإصدار الأمريكي من iPhone 14 وأحدث يكون عادةً eSIM فقط، تأكد من نوع الشريحة فوق.";
     else if (r === "CH/A") t = "الإصدار الصيني يكون عادةً شريحتين عادية بدون eSIM.";
-    else if (r === "AE/AB" && n >= 17) t = "iPhone 17 بدول الخليج (السعودية، الإمارات، الكويت، قطر، البحرين، عُمان) يجي eSIM فقط.";
+    else if (r === "AE/AB" && n >= 17) t = "iPhone 17 بدول الخليج يجي eSIM فقط.";
   }
   $("regionHelp").textContent = t;
 }
@@ -929,9 +906,7 @@ function renderFactors(){
   add(v.sim);
   if (getRegion()) add("إصدار " + getRegion());
   if (v.condition) add("حالة " + v.condition, ["جديد","ممتاز"].includes(v.condition) ? "good" : v.condition === "متوسط" ? "bad" : "");
-  if (batteryValue()){
-    add("بطارية " + batteryValue(), batteryReplaced() ? "bad" : num >= 85 ? "good" : num < 80 ? "bad" : "");
-  }
+  if (batteryValue()) add("بطارية " + batteryValue(), batteryReplaced() ? "bad" : num >= 85 ? "good" : num < 80 ? "bad" : "");
   if (state.replaced !== null) add(state.replaced ? "قطع مبدلة" : "الجهاز أصلي", state.replaced ? "bad" : "good");
   if (v.screen && v.screen !== "سليمة") add("شاشة " + v.screen, "bad");
   const off = offWorks();
@@ -1204,7 +1179,7 @@ $("works").addEventListener("pointerdown", e => {
   const track = e.target.closest(".swt");
   if (!track || (e.pointerType === "mouse" && e.button !== 0)) return;
   const row = track.closest(".fn"), k = row.dataset.k;
-  document.querySelectorAll(".fn.hint").forEach(r => r.classList.remove("hint"));
+  document.querySelectorAll(".fn.swhint").forEach(r => r.classList.remove("swhint"));
 
   const rect = track.getBoundingClientRect();
   const travel = Math.max(1, track.clientWidth - SW_THUMB);
@@ -1280,42 +1255,21 @@ $("battery").addEventListener("input", e => {
 
 $("notes").addEventListener("input", e => $("nCount").textContent = e.target.value.length);
 
-/* ===== السعر ===== */
-function setPrice(n){
-  $("price").value = n ? n.toLocaleString("en-US") : "";
-  $("price").classList.remove("invalid");
-  invalidate(); sync();
-}
 $("price").addEventListener("input", e => {
-  const n = parsePrice(e.target.value);
+  const n = numOf(e.target.value);
   e.target.value = n ? n.toLocaleString("en-US") : "";
   e.target.classList.remove("invalid");
 });
-$("price").addEventListener("beforeinput", e => {
-  if (e.inputType === "insertText" && e.data && /[^\d٠-٩]/.test(e.data)) e.preventDefault();
-});
-$("quick").addEventListener("click", e => {
-  const b = e.target.closest("button");
-  if (!b) return;
-  if (b.dataset.clear) return setPrice(0);
-  setPrice(Math.min(MAX_PRICE, parsePrice($("price").value) + Number(b.dataset.add)));
-});
-$("negotiable").addEventListener("change", e => {
-  state.negotiable = e.target.checked;
-  $("negTxt").textContent = state.negotiable ? "السعر قابل للتفاوض" : "السعر ثابت";
-  $("negTxt").style.color = state.negotiable ? "var(--ok)" : "var(--muted)";
-  invalidate(); sync();
-});
 
-function priceError(n){
-  if (!n) return "اكتب سعر البيع";
-  if (n < MIN_PRICE) return "السعر أقل من الحد الأدنى: 20 ألف د.ع";
-  if (n > MAX_PRICE) return "السعر يتجاوز الحد الأعلى: 5 ملايين د.ع";
-  return "";
-}
+document.querySelectorAll("[data-duration]").forEach(b => {
+  b.addEventListener("click", () => {
+    state.durationHours = Number(b.dataset.duration);
+    sync();
+  });
+});
 
 form.addEventListener("input", e => {
-  /* تغيير الموافقة لا يغيّر بيانات الجهاز، فلا نلغي الجهاز المحفوظ */
+  /* تغيير الموافقة لا يغيّر بيانات الجهاز، فلا نلغي المسودة المحفوظة */
   if (e.target.id === "agree") return;
   if (e.target.classList?.contains("in")) e.target.classList.remove("invalid");
   if (e.target.id === "modelCustom" || e.target.id === "brandOther"){ updateBattery(); renderSim(); renderRegion(); }
@@ -1365,6 +1319,7 @@ $("photos").addEventListener("click", e => {
   invalidate(); renderPhotos();
 });
 
+/* ===== قراءة الصورة الأصلية من دون قصّ أو إضافة خلفية ===== */
 async function readImage(file){
   try{
     const bmp = await createImageBitmap(file, { imageOrientation:"from-image" });
@@ -1391,20 +1346,22 @@ async function normalizePhotoForBrowser(file){
   const type = String(file?.type || "").toLowerCase();
   if (!HEIC_EXT.test(String(file?.name || "")) && !/image\/hei[cf]/i.test(type)) return file;
 
-  toast("جاري تحويل صورة iPhone…");
+  toast("جاري تحويل صورة iPhone إلى صيغة قابلة للمعالجة…");
   const heicModule = await import("https://esm.sh/heic2any@0.0.4");
   const convertHeic = heicModule.default || heicModule;
   if (typeof convertHeic !== "function") throw new Error("أداة تحويل HEIC غير متاحة حالياً");
 
-  const res = await convertHeic({ blob:file, toType:"image/jpeg", quality:0.94 });
-  const blob = Array.isArray(res) ? res[0] : res;
-  if (!(blob instanceof Blob) || !blob.size) throw new Error("تعذر تحويل صورة HEIC؛ احفظها بصيغة JPG وأعد رفعها");
+  const convertedResult = await convertHeic({ blob:file, toType:"image/jpeg", quality:0.94 });
+  const convertedBlob = Array.isArray(convertedResult) ? convertedResult[0] : convertedResult;
+  if (!(convertedBlob instanceof Blob) || !convertedBlob.size){
+    throw new Error("تعذر تحويل صورة HEIC؛ افتحها بالصور واحفظها بصيغة JPG ثم أعد رفعها");
+  }
 
-  const name = (String(file.name || "device-photo").replace(HEIC_EXT, "") || "device-photo") + ".jpg";
-  return new File([blob], name, { type:"image/jpeg", lastModified:file.lastModified || Date.now() });
+  const filename = (String(file.name || "device-photo.heic").replace(HEIC_EXT, "") || "device-photo") + ".jpg";
+  return new File([convertedBlob], filename, { type:"image/jpeg", lastModified:file.lastModified || Date.now() });
 }
 
-// نحافظ على الصورة الأصلية ونسبتها، ونقلّل الدقة فقط عند الحاجة
+// الصورة الأصلية هي المصدر الأساسي: نقلّل الدقة فقط عند الحاجة مع الحفاظ على النسبة
 async function shrink(file){
   let inputFile = file;
   try{ inputFile = await normalizePhotoForBrowser(file); }
@@ -1433,6 +1390,7 @@ async function shrink(file){
 
     const ctx = canvas.getContext("2d", { alpha:type !== "image/jpeg" });
     if (!ctx) return inputFile;
+    ctx.clearRect(0, 0, width, height);
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
     ctx.drawImage(im.src, 0, 0, width, height);
@@ -1486,14 +1444,13 @@ document.addEventListener("change", async e => {
     }
   }
 
-  if (failed) toast("تعذر تجهيز " + failed + " صورة: " + (lastErr.slice(0, 100) || "خطأ غير معروف"));
+  if (failed) toast("تعذر تجهيز " + failed + " صورة: " + (lastErr.slice(0, 110) || "خطأ غير معروف"));
   else if (rejected) toast("تم تجاهل " + rejected + " صورة. الحد " + MAX_MB + "MB للصورة و" + MAX_PHOTOS + " صور للجهاز");
 });
 
 /* ===== الملخص والمعاينة ===== */
-const IC_OK = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
-const IC_NO = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
-let lastPct = -1, dpKey = null;
+const PH_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="#6246d9" stroke-width="1.6"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M9.5 5.5h5"/><path d="M11 18.5h2"/></svg>';
+let lastCover = null, lastSpecs = null, lastPct = -1;
 
 const titleOf = () => {
   const b = getBrand(), m = getModel();
@@ -1503,15 +1460,16 @@ const offWorks = () => WORKS.filter(w => state.works[w.k] === false);
 
 const camPart = k => [state.v[k], state.works[k] === false ? "لا تعمل" : ""].filter(Boolean).join("، ");
 const replacedValue = () => {
-  if (!state.replaced) return "لا توجد";
+  if (!state.replaced) return "لا يوجد";
   const p = [...state.rep];
   if (val("replaced")) p.push(val("replaced"));
   const parts = p.join("، ") || "نعم";
   return state.v.quality ? parts + " | نوع القطع: " + state.v.quality : parts;
 };
+const durLabel = () => state.durationHours === 1 ? "ساعة" : state.durationHours + " ساعات";
 
 function renderReview(){
-  const v = state.v, off = offWorks(), price = parsePrice($("price").value);
+  const v = state.v, off = offWorks();
   const cond = [v.condition, v.screen && "شاشة: " + v.screen, v.body && "هيكل: " + v.body, v.back && "ظهر: " + v.back, v.camF && "أمامية: " + v.camF, v.camB && "خلفية: " + v.camB].filter(Boolean).join(" • ");
   const rows = [
     ["الجهاز", titleOf() || "—", "", 1],
@@ -1523,8 +1481,7 @@ function renderReview(){
     ["الصور", state.files.length + " صور", "", 4]
   ];
   $("review").innerHTML = rows.map(([k, t, cls, s]) => `
-    <div class="rv"><span class="k">${esc(k)}</span><span class="v ${cls}">${esc(t)}</span><button type="button" class="edit" data-go="${s}">تعديل</button></div>`).join("") +
-    `<div class="rv"><span class="k">السعر</span><span class="v">${price ? esc(money(price)) + (state.negotiable ? " • قابل للتفاوض" : "") : "—"}</span></div>`;
+    <div class="rv"><span class="k">${esc(k)}</span><span class="v ${cls}">${esc(t)}</span><button type="button" class="edit" data-go="${s}">تعديل</button></div>`).join("");
 }
 
 $("review").addEventListener("click", e => {
@@ -1532,93 +1489,23 @@ $("review").addEventListener("click", e => {
   if (b) goStep(+b.dataset.go);
 });
 
-/* ===== معاينة صفحة الجهاز: الصور كاملة + صندوق المعلومات (أي قسم فاضي ما يظهر) ===== */
-function fitDp(){
-  const el = $("dpGal");
-  if (!el || !el.clientWidth) return;
-  const i = Math.round(Math.abs(el.scrollLeft) / el.clientWidth);
-  const sl = el.children[i];
-  if (!sl) return;
-  const im = sl.querySelector("img");
-  const h = (im && im.complete && im.naturalWidth) ? im.getBoundingClientRect().height : sl.getBoundingClientRect().height;
-  if (h > 0) el.style.height = h + "px";
-  [...$("dpDots").children].forEach((d, k) => d.classList.toggle("on", k === i));
-}
-window.__fitDp = fitDp;
-$("dpGal").addEventListener("scroll", fitDp, { passive:true });
-window.addEventListener("resize", fitDp, { passive:true });
-
-function infoHtml(){
-  const v = state.v;
-  const tone = x => /مكسور|لا يعمل|لا تعمل|ضربات|انبعاج|خدوش واضحة|مبدل|متوسط/.test(x) ? "warn" : /^(سليمة|نظيف|يعمل|جديد|ممتاز|جيد|كلها أصلية|لا توجد)/.test(x) ? "ok" : "";
-  const R = (label, x, t) => { if (!x) return ""; const c = t === undefined ? tone(x) : t; return `<div class="ir${c ? " " + c : ""}"><span>${esc(label)}</span><strong>${esc(x)}</strong></div>`; };
-  const G = (title, body) => body ? `<div class="gi">${esc(title)}</div>${body}` : "";
-
-  const bat = batteryValue();
-  const bn = parseInt(bat, 10);
-  const bt = bat && /%$/.test(bat) ? (bn >= 85 ? "ok" : bn < 80 ? "warn" : "") : undefined;
-
-  const specs = R("الحالة العامة", v.condition) + R("السعة", v.storage, "") + R("اللون", getColor(), "") + R("صحة البطارية", bat, bt)
-    + R("نوع الشريحة", v.sim, "") + R("إصدار الآيفون", getRegion(), "");
-
-  const look = R("الشاشة", v.screen) + R("الهيكل", v.body) + R("الظهر", v.back)
-    + R("الكاميرا الأمامية", v.camF ? camPart("camF") : "") + R("الكاميرا الخلفية", v.camB ? camPart("camB") : "");
-
-  const decided = WORKS.filter(w => state.works[w.k] !== null);
-  const works = decided.length
-    ? `<div class="wgrid">${decided.map(w => { const off = state.works[w.k] === false; return `<div class="wk${off ? " off" : ""}">${off ? IC_NO : IC_OK}<span>${esc(w.t)}</span></div>`; }).join("")}</div>`
-    : "";
-
-  let parts = "";
-  if (state.replaced === false) parts = R("القطع المبدّلة", "لا توجد، الجهاز أصلي", "ok");
-  else if (state.replaced === true){
-    const list = [...state.rep, val("replaced")].filter(Boolean).join("، ") || "نعم";
-    parts = R("القطع المبدّلة", list, "warn") + R("نوع القطع", v.quality, "");
-  }
-
-  const extras = R("الضمان", v.warranty, "") + R("الملحقات", state.acc.size ? [...state.acc].join("، ") : "", "");
-  const notes = val("notes");
-
-  return G("مواصفات الجهاز", specs) + G("شكل الجهاز", look) + G("فحص الوظائف", works) + G("القطع", parts) + G("الضمان والملحقات", extras)
-    + G("ملاحظاتك", notes ? `<div class="nbox">${esc(notes)}</div>` : "");
-}
-
-function renderDetailsPreview(){
-  const gal = $("dpGal");
-  const key = state.files.map(f => f.url).join("|");
-  if (key !== dpKey){
-    dpKey = key;
-    gal.style.height = "";
-    gal.scrollLeft = 0;
-    gal.innerHTML = state.files.map((f, i) => `<div class="sl"><img src="${f.url}" alt="صورة ${i + 1}" draggable="false" onload="window.__fitDp&&window.__fitDp()"></div>`).join("");
-    $("dpDots").innerHTML = state.files.length > 1 ? state.files.map((_, i) => `<span class="dpd${i ? "" : " on"}"></span>`).join("") : "";
-  }
-  gal.style.display = state.files.length ? "" : "none";
-
-  const price = parsePrice($("price").value);
-  $("dpTitle").textContent = titleOf() || "اسم الجهاز";
-  $("dpPrice").textContent = price ? money(price) : "—";
-  $("dpTags").innerHTML = ["بيع مباشر", state.negotiable ? "قابل للتفاوض" : "", "النجف"].filter(Boolean).map(t => `<span class="spec">${esc(t)}</span>`).join("");
-  $("dpInfo").innerHTML = infoHtml();
-  requestAnimationFrame(fitDp);
-}
-
-/* ===== رسالة التأكيد ===== */
 function renderConfirm(){
-  const price = parsePrice($("price").value);
+  const price = numOf($("price").value);
   $("cfName").textContent = titleOf() || "—";
   $("cfPrice").textContent = price ? money(price) : "—";
-  $("cfPhotos").textContent = state.files.length + " صور";
+  $("cfDur").textContent = durLabel();
 }
 
 function renderMeter(){
   const v = state.v;
   const items = [
     ["الشركة", !!getBrand()], ["الموديل", !!getModel()], ["السعة", !!v.storage], ["اللون", !!getColor()],
-    ["نوع الشريحة", !!v.sim], ["الحالة العامة", !!v.condition], ["الشاشة", !!v.screen], ["الهيكل", !!v.body], ["الظهر", !!v.back],
+    ["نوع الشريحة", !!v.sim],
+    ["الحالة العامة", !!v.condition], ["الشاشة", !!v.screen], ["الهيكل", !!v.body], ["الظهر", !!v.back],
     ["الكاميرا الأمامية", !!v.camF], ["الكاميرا الخلفية", !!v.camB],
     ["3 صور أو أكثر", state.files.length >= 3], ["الضمان", !!v.warranty], ["ملاحظات", val("notes").length > 0],
-    ["السعر", !priceError(parsePrice($("price").value))]
+    ["السعر", numOf($("price").value) > 0],
+    ["مدة المزاد", [1,4,8].includes(state.durationHours)]
   ];
   if (isApple()) items.push(["صحة البطارية", state.batteryTouched || batteryReplaced()], ["إصدار الآيفون", !!getRegion()]);
 
@@ -1632,21 +1519,41 @@ function renderMeter(){
     $("mPct").textContent = pct + "%";
   }
   $("mTitle").textContent = pct >= 90 ? "إعلان ممتاز" : pct >= 70 ? "إعلان جيد" : "أكمل بياناتك";
-  $("mSub").textContent = missing.length ? "تفاصيل أكثر = ثقة أكثر ومبيعات أسرع" : "كل البيانات مكتملة";
+  $("mSub").textContent = missing.length ? "تفاصيل أكثر = ثقة أكثر ومزايدين أكثر" : "كل البيانات مكتملة";
   $("miss").innerHTML = missing.slice(0, 5).map(m => `<span>${esc(m)}</span>`).join("");
 }
 
 function sync(){
-  const price = parsePrice($("price").value);
+  const price = numOf($("price").value);
+  const title = titleOf();
+  const increment = price >= 400000 ? 10000 : 5000;
+  $("incrementHelp").textContent = "أقل زيادة مطلوبة: " + money(increment) + (price >= 400000 ? " لأن سعر البداية 400 ألف دينار أو أكثر." : " لأن سعر البداية أقل من 400 ألف دينار.");
+  document.querySelectorAll("[data-duration]").forEach(b => {
+    const active = Number(b.dataset.duration) === state.durationHours;
+    b.classList.toggle("on", active);
+    b.setAttribute("aria-pressed", String(active));
+  });
+  $("durationHelp").textContent = "ينتهي المزاد بعد " + (state.durationHours === 1 ? "ساعة واحدة" : state.durationHours + " ساعات") + " من بدء المزاد الفعلي بعد موافقة الإدارة.";
+  $("rowDur").textContent = state.durationHours * 60 + " دقيقة";
 
-  const hint = $("priceHint");
-  if (hint){
-    const perr = price ? priceError(price) : "";
-    hint.textContent = !price ? "أرقام صحيحة فقط بدون كسور، من 20,000 إلى 5,000,000 د.ع." : (perr || "السعر مقبول: " + money(price));
-    hint.className = "help" + (!price ? "" : perr ? " hint-bad" : " hint-ok");
+  $("pvTitle").textContent = title || "اسم الجهاز";
+  $("pvPrice").textContent = price ? money(price) : "—";
+  $("pvDuration").textContent = ({1:"01:00:00",4:"04:00:00",8:"08:00:00"})[state.durationHours] || "01:00:00";
+
+  const specs = [state.v.storage, getColor(), batteryValue() ? "بطارية " + batteryValue() : ""].filter(Boolean).slice(0, 3);
+  const key = specs.join("|");
+  if (key !== lastSpecs){
+    lastSpecs = key;
+    $("pvSpecs").innerHTML = specs.map(s => `<span class="spec">${esc(s)}</span>`).join("");
   }
 
-  if (state.step === 5){ renderFactors(); renderDetailsPreview(); renderReview(); renderMeter(); renderConfirm(); }
+  const cover = state.files[0]?.url || "";
+  if (cover !== lastCover){
+    lastCover = cover;
+    $("pvMedia").innerHTML = cover ? `<img src="${cover}" alt="">` : `<div class="ph" style="position:relative;height:150px;background:var(--p-soft)">${PH_ICON}</div>`;
+  }
+
+  if (state.step === 5){ renderFactors(); renderReview(); renderMeter(); renderConfirm(); }
   renderBar();
 }
 
@@ -1694,9 +1601,9 @@ function validateStep(n){
   }
   if (n === 4 && !state.files.length) return need($("addTile"), state.pending ? "لحظة، نجهّز الصور…" : "أضف صورة وحدة على الأقل");
   if (n === 5){
-    const err = priceError(parsePrice($("price").value));
-    if (err){ flag($("price")); $("price").focus(); toast(err); return false; }
-    /* آخر شي: موافقة المستخدم على رسالة التأكيد */
+    if (numOf($("price").value) <= 0){
+      flag($("price")); $("price").focus(); toast("اكتب السعر الابتدائي"); return false;
+    }
     if (!state.agreed) return need($("agreeBox"), "وافق على التأكيد قبل النشر");
   }
   return true;
@@ -1714,8 +1621,8 @@ function renderProgress(){
 function renderBar(){
   const last = state.step === TOTAL;
   $("bPrev").classList.toggle("off", state.step === 1);
-  $("bText").textContent = last ? "نشر الجهاز" : "التالي";
-  $("bNext").classList.toggle("ready", last && !state.busy && state.agreed && !!getBrand() && !!getModel() && state.files.length > 0 && !priceError(parsePrice($("price").value)));
+  $("bText").textContent = last ? "نشر المزاد" : "التالي";
+  $("bNext").classList.toggle("ready", last && !state.busy && state.agreed && !!getBrand() && !!getModel() && state.files.length > 0 && numOf($("price").value) > 0);
 }
 
 function goStep(n){
@@ -1747,7 +1654,7 @@ $("bNext").addEventListener("click", () => {
 async function auth(){
   const { data, error } = await supabase.auth.getUser();
   if (error || !data.user){
-    location.href = "index.html?login=1&returnTo=" + encodeURIComponent("sell.html");
+    location.href = "index.html?login=1&returnTo=sell-auction.html";
     return false;
   }
   state.user = data.user;
@@ -1758,37 +1665,23 @@ const extFor = (blob, file) => {
   if (blob.type === "image/png") return "png";
   if (blob.type === "image/jpeg") return "jpg";
   if (blob.type === "image/webp") return "webp";
-  const e = (file.name.split(".").pop() || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-  return e || "jpg";
+  return (file.name.split(".").pop() || "png").toLowerCase().replace(/[^a-z0-9]/g, "") || "png";
 };
 
 async function uploadImages(deviceId){
   const rows = [];
-  const uploaded = [];
-  try{
-    for (let i = 0; i < state.files.length; i++){
-      const item = state.files[i];
-      const blob = item.blob || await shrink(item.file);
-      const path = state.user.id + "/" + deviceId + "/" + Date.now() + "-" + crypto.randomUUID() + "." + extFor(blob, item.file);
-      $("bText").textContent = "رفع الصورة " + (i + 1) + " من " + state.files.length + "…";
-      const up = await supabase.storage.from("device-images").upload(path, blob, {
-        cacheControl:"31536000", upsert:false, contentType:blob.type || item.file.type || "image/jpeg"
-      });
-      if (up.error) throw up.error;
-      uploaded.push(path);
-      rows.push({ device_id:deviceId, storage_path:path, sort_order:i, is_primary:i === 0 });
-    }
+  for (let i = 0; i < state.files.length; i++){
+    const item = state.files[i];
+    const file = item.file;
+    const blob = item.blob || await shrink(file);
+    const path = state.user.id + "/" + deviceId + "/" + crypto.randomUUID() + "." + extFor(blob, file);
+    const up = await supabase.storage.from("device-images").upload(path, blob, { upsert:false, contentType:blob.type || file.type || "image/jpeg" });
+    if (up.error) throw up.error;
+    rows.push({ device_id:deviceId, storage_path:path, sort_order:i, is_primary:i === 0 });
+  }
+  if (rows.length){
     const ins = await supabase.from("mzad_device_images").insert(rows);
-    if (ins.error){
-      const err = new Error("IMAGE_LINK_FAILED");
-      err.cause = ins.error;
-      throw err;
-    }
-  }catch(error){
-    if (uploaded.length){
-      try{ await supabase.storage.from("device-images").remove(uploaded); }catch(cleanupError){ console.error("IMAGE CLEANUP ERROR:", cleanupError); }
-    }
-    throw error;
+    if (ins.error) throw ins.error;
   }
 }
 
@@ -1798,18 +1691,14 @@ const cameraValue = () => {
   return p.length ? p.join(" | ") : "تعمل بالكامل";
 };
 const biometricValue = () => state.works.bio === false ? "لا يعمل" : "يعمل";
-const faultsValue = () => {
-  const o = offWorks(), p = [];
-  if (o.length) p.push("لا يعمل: " + o.map(w => w.t).join("، "));
-  return p.length ? p.join(" | ") : null;
-};
+const faultsValue    = () => { const o = offWorks(); return o.length ? "لا يعمل: " + o.map(w => w.t).join("، ") : null; };
 const bodyBackValue  = () => {
   const p = [state.v.body && "الهيكل: " + state.v.body, state.v.back && "الظهر: " + state.v.back].filter(Boolean);
   return p.length ? p.join(" | ") : null;
 };
 const accessoriesValue = () => state.acc.size ? [...state.acc].join("، ") : "بدون ملحقات";
 const notesValue = () => {
-  const p = [val("notes"), state.v.warranty ? "الضمان: " + state.v.warranty : "", state.negotiable ? "السعر قابل للتفاوض" : ""].filter(Boolean);
+  const p = [val("notes"), state.v.warranty ? "الضمان: " + state.v.warranty : ""].filter(Boolean);
   return p.length ? p.join("\n") : null;
 };
 
@@ -1834,36 +1723,31 @@ async function createDevice(){
     p_seller_notes: notesValue()
   });
   if (r.error) throw r.error;
-  const d = r.data;
-  return typeof d === "string" ? d : (d?.id || d?.device_id || d?.[0]?.id || d?.[0]?.device_id || null);
+  return typeof r.data === "string" ? r.data : (r.data?.device_id || r.data?.id);
 }
 
-async function createDirectSale(deviceId, price){
-  const r = await supabase.rpc("mzad_create_direct_sale", {
+async function createDraft(deviceId, price){
+  const r = await supabase.rpc("mzad_create_auction_draft", {
     p_device_id: deviceId,
-    p_asking_price_iqd: price
+    p_starting_price_iqd: price,
+    p_duration_hours: state.durationHours
   });
   if (r.error) throw r.error;
-  const d = r.data;
-  return typeof d === "string" ? d : (d?.id || d?.sale_id || d?.[0]?.id || d?.[0]?.sale_id || null);
+  return typeof r.data === "string" ? r.data : (r.data?.auction_id || r.data?.id);
 }
 
 const ERRORS = {
-  AUTH_REQUIRED:"لازم تسجل الدخول بحساب فعال حتى تنشر الجهاز.",
-  PROFILE_NOT_FOUND:"لازم تسجل الدخول بحساب فعال حتى تنشر الجهاز.",
-  ACCOUNT_DISABLED:"لازم تسجل الدخول بحساب فعال حتى تنشر الجهاز.",
+  AUTH_REQUIRED:"يجب تسجيل الدخول أولاً.",
+  ACCOUNT_DISABLED:"الحساب غير فعال.",
+  REQUIRED_FIELDS:"أكمل كل الحقول المطلوبة وارفع صورة واحدة على الأقل.",
   DEVICE_SUBMISSIONS_DISABLED:"استقبال الأجهزة متوقف حالياً.",
-  MAINTENANCE_MODE:"استقبال الأجهزة متوقف حالياً.",
-  DIRECT_SALES_DISABLED:"البيع المباشر متوقف حالياً.",
   USER_SELL_RESTRICTED:"حسابك مقيّد من البيع حالياً.",
-  INVALID_PRICE:"السعر غير صالح.",
-  DEVICE_NOT_APPROVED:"الجهاز غير معتمد للنشر بعد.",
-  DEVICE_NOT_FOUND:"تعذر العثور على الجهاز.",
-  NOT_DEVICE_OWNER:"لا تملك صلاحية استخدام هذا الجهاز.",
-  DEVICE_ALREADY_FOR_DIRECT_SALE:"هذا الجهاز معروض للبيع المباشر بالفعل.",
-  IMAGE_LINK_FAILED:"تعذر ربط صور الجهاز. حاول مرة ثانية.",
-  DEVICE_ID_MISSING:"تعذر استلام رقم الجهاز من النظام.",
-  DIRECT_SALE_ID_MISSING:"تم إنشاء الجهاز لكن لم نستلم رقم إعلان البيع. لا تعيد النشر؛ راجع صفحة إعلاناتي."
+  DEVICE_ID_NOT_RETURNED:"تعذر إنشاء الجهاز.",
+  AUCTION_ID_NOT_RETURNED:"تعذر إنشاء مسودة المزاد.",
+  AUCTION_ALREADY_EXISTS:"هذا الجهاز مرتبط بمزاد قائم بالفعل.",
+  DEVICE_LOCKED:"الجهاز مرتبط بعملية أخرى.",
+  ACCESS_DENIED:"لا تملك صلاحية استخدام هذا الجهاز.",
+  INVALID_STARTING_PRICE:"السعر الابتدائي غير صالح."
 };
 
 /* ===== النشر ===== */
@@ -1879,47 +1763,42 @@ async function publish(){
   $("bNext").disabled = true;
   hideMsg();
 
-  let saleCreated = false;
-
   try{
     if (!(await auth())) return;
 
-    const price = parsePrice($("price").value);
+    const price = numOf($("price").value);
+    if (!getBrand() || !getModel() || !price || !state.files.length) throw new Error("REQUIRED_FIELDS");
 
     if (!state.deviceId){
       state.deviceId = await createDevice();
-      if (!state.deviceId) throw new Error("DEVICE_ID_MISSING");
+      if (!state.deviceId) throw new Error("DEVICE_ID_NOT_RETURNED");
     }
     if (!state.imagesDone){
       await uploadImages(state.deviceId);
       state.imagesDone = true;
     }
+    if (!state.auctionId){
+      state.auctionId = await createDraft(state.deviceId, price);
+      if (!state.auctionId) throw new Error("AUCTION_ID_NOT_RETURNED");
+    }
 
-    const saleId = await createDirectSale(state.deviceId, price);
-    saleCreated = true;
-    if (!saleId) throw new Error("DIRECT_SALE_ID_MISSING");
+    const dep = await supabase.rpc("mzad_create_auction_deposit", { p_auction_id: state.auctionId, p_role: "seller" });
+    if (dep.error) throw dep.error;
 
     state.done = true;
     $("done").classList.add("show");
-    setTimeout(() => location.href = "my-listings.html", 1700);
+    setTimeout(() => location.href = "auction-seller-deposit.html?auction=" + encodeURIComponent(state.auctionId), 1700);
 
   }catch(e){
-    console.error("SELL DEVICE ERROR:", e);
+    console.error("SELL AUCTION ERROR:", e);
     const code = String(e?.message || "UNKNOWN_ERROR");
     const key = Object.keys(ERRORS).find(k => code.includes(k));
-    if (saleCreated){
-      // الإعلان انشأ فعلاً؛ لا نسمح بإعادة النشر
-      state.done = true;
-      showMsg(ERRORS.DIRECT_SALE_ID_MISSING);
-    } else {
-      showMsg(key ? ERRORS[key] : "تعذر نشر الجهاز. " + code);
-    }
+    showMsg(key ? ERRORS[key] : "تعذر تجهيز المزاد. " + code);
   }finally{
     if (!state.done){
       state.busy = false;
       $("bNext").classList.remove("busy");
       $("bNext").disabled = false;
-      $("bText").textContent = "نشر الجهاز";
       renderBar();
     }
   }
@@ -1932,8 +1811,6 @@ document.addEventListener("focusout", () => setTimeout(() => { if (!isText(docum
 
 /* ===== التشغيل ===== */
 $("back").addEventListener("click", () => history.length > 1 ? history.back() : location.href = "home.html");
-
-if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 
 renderColors();
 updateBrandUI();
