@@ -450,5 +450,45 @@ document.addEventListener("visibilitychange", () => { if (!document.hidden) load
 addEventListener("pagehide", () => { clearInterval(t1); clearInterval(t2); });
 </script>
 <script type="module" src="./js/platform-guard.js"></script>
+<style id="mzad-scroll-nav-style">
+.mzad-scroll-nav-target{transition:transform .32s cubic-bezier(.22,.8,.3,1)!important;will-change:transform}
+.mzad-scroll-nav-target.mzad-nav-hidden{transform:translate3d(0,calc(100% + 24px),0)!important;pointer-events:none!important}
+</style>
+<script>
+(function(){
+  const target = document.querySelector(".bottom-wrap") || document.querySelector(".bw") || document.querySelector("nav.bottom-nav") || (document.querySelector("nav.nav") ? document.querySelector("nav.nav").parentElement : null);
+  if(!target || target.dataset.scrollNavReady) return;
+  target.dataset.scrollNavReady = "1";
+  target.classList.add("mzad-scroll-nav-target");
+  let lastY = window.scrollY, acc = 0, hidden = false, ticking = false;
+  const setHidden = value => {
+    if(hidden === value) return;
+    hidden = value;
+    target.classList.toggle("mzad-nav-hidden", value);
+  };
+  const update = () => {
+    ticking = false;
+    const y = window.scrollY;
+    const max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    if(y <= 0 || y >= max - 1){
+      lastY = Math.min(Math.max(y,0),max); acc = 0;
+      if(y <= 0) setHidden(false);
+      return;
+    }
+    const diff = y - lastY; lastY = y;
+    if(y < 80){ setHidden(false); acc = 0; return; }
+    if(diff * acc < 0) acc = 0;
+    acc += diff;
+    if(acc > 28){ setHidden(true); acc = 0; }
+    else if(acc < -12){ setHidden(false); acc = 0; }
+  };
+  window.addEventListener("scroll", () => {
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  }, {passive:true});
+  window.addEventListener("pageshow", () => { lastY = window.scrollY; if(window.scrollY < 80) setHidden(false); });
+})();
+</script>
 </body>
 </html>
