@@ -237,11 +237,28 @@ async function fetchAuctions(){
   return list.map(x => ({ ...x, dev: devCache.get(x.device_id) || {}, bids: bids.get(x.id) || 0, img: urlCache.get(picCache.get(x.device_id))?.url || "" }));
 }
 
+async function preloadAuctionImages(items){
+  const urls = [...new Set(items.map(a => a.img).filter(Boolean))];
+  if (!urls.length) return;
+  // انتظر الصور كلها أو 4 ثوانٍ كحد أقصى، حتى لا تظهر البطاقات صورة وراء صورة.
+  await Promise.race([
+    Promise.allSettled(urls.map(url => new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = url;
+      if (img.complete) resolve(img.naturalWidth > 0);
+    }))),
+    new Promise(resolve => setTimeout(resolve, 4000))
+  ]);
+}
+
 async function load(first){
   if (loading) return; loading = true;
   try{
     if (first && !AU.length){ $("result").textContent = "جاري تحميل المزادات..."; $("list").innerHTML = '<div class="sk"></div><div class="sk"></div>'; }
     AU = await fetchAuctions();
+    if (first) await preloadAuctionImages(AU);
     render();
   }catch(e){
     console.error("AUCTIONS ERROR:", e);
