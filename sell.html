@@ -112,44 +112,49 @@ header{margin-inline:-14px;padding:0 14px 12px;background:linear-gradient(145deg
 .tg:active i:after{width:25px}
 .tg input:checked+i{background:var(--ok)}
 .tg input:checked+i:after{transform:translateX(-19px)}
-.sw-legend{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 4px}
-.sw-legend span{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:800;background:var(--p-soft);border:1px solid var(--edge);color:var(--p-dark)}
-.sw-legend i{width:8px;height:8px;border-radius:50%}
-.sw-legend .g i{background:#4cb78a}
-.sw-legend .r i{background:#e07088}
-.sw-legend .m i{background:#b7b0d6}
-#swCount{margin:0 2px 4px}
-.sw{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid #f1eefb}
-.sw:last-child{border-bottom:0}
-.sw-info b{display:block;font-size:13.5px;font-weight:900}
-.sw-info small{display:block;margin-top:2px;font-size:11px;font-weight:800;color:#a8b0bb;transition:color .35s}
-.sw.s-on small{color:var(--ok)}
-.sw.s-off small{color:var(--bad)}
-.sw-track{--pos:.5;position:relative;flex:0 0 138px;width:138px;height:42px;border-radius:99px;direction:ltr;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;background:#d9d6e8;transition:background .35s ease;outline:none;overflow:hidden}
-.sw.s-on .sw-track{background:var(--ok)}
-.sw.s-off .sw-track{background:var(--bad)}
-.sw-track:focus-visible{box-shadow:0 0 0 3px rgba(98,70,217,.3)}
-.sw-track.drag{cursor:grabbing}
-.sw-track.invalid{animation:shake .4s;box-shadow:0 0 0 2px var(--hot)}
-.sw-thumb{position:absolute;top:4px;left:calc(4px + var(--pos) * (100% - 42px));width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#fff;color:var(--p);box-shadow:0 2px 6px rgba(0,0,0,.2);transition:left .45s cubic-bezier(.3,1.35,.5,1),color .3s}
-.sw.s-on .sw-thumb{color:var(--ok)}
-.sw.s-off .sw-thumb{color:var(--bad)}
-.sw-track.drag .sw-thumb{transition:color .3s;width:40px;margin-left:-3px}
+.fn-prog{display:flex;align-items:center;gap:11px;margin:0 0 14px}
+.fn-bar{flex:1;height:6px;border-radius:99px;background:#e4defa;overflow:hidden}
+.fn-bar i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,#8b6cf0,#6246d9);transition:width .5s cubic-bezier(.3,1,.4,1),background .4s}
+.fn-bar.full i{background:linear-gradient(90deg,#34a874,#1e8a5a)}
+.fn-cnt{flex:0 0 auto;font-size:11.5px;font-weight:900;color:var(--muted);transition:color .3s}
+.fn-cnt.done{color:var(--ok)}
+.fn{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #f1eefb}
+.fn:last-child{border-bottom:0}
+.fn .ico{width:38px;height:38px;flex:0 0 38px;border-radius:12px;display:grid;place-items:center;background:var(--p-soft);color:var(--p);transition:background .35s,color .35s}
+.fn .ico svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fn .ico.land{animation:land .45s ease}
+@keyframes land{40%{transform:scale(1.14)}}
+.fn .nm{flex:1;min-width:0}
+.fn .nm b{display:block;font-size:13.5px;font-weight:900;line-height:1.45}
+.fn .nm small{display:block;margin-top:1px;font-size:11px;font-weight:800;color:#a8b0bb;transition:color .3s}
+.fn.s-on .ico{background:#e3f6ec;color:var(--ok)}
+.fn.s-off .ico{background:#fde8ed;color:var(--bad)}
+.fn.s-on .nm small{color:var(--ok)}
+.fn.s-off .nm small{color:var(--bad)}
+.swt{--pos:.5;position:relative;flex:0 0 112px;width:112px;height:34px;border-radius:99px;direction:ltr;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;background:#f1eefb;border:1.5px solid #e4defa;transition:background .35s,border-color .35s;outline:none;overflow:hidden}
+.fn.s-on .swt{background:#e3f6ec;border-color:#b6e2cb}
+.fn.s-off .swt{background:#fde8ed;border-color:#f5bfca}
+.swt:focus-visible{box-shadow:0 0 0 3px rgba(98,70,217,.3)}
+.swt.drag{cursor:grabbing}
+.swt.invalid{animation:shake .4s;box-shadow:0 0 0 2px var(--hot)}
+.sw-thumb{position:absolute;top:2px;left:calc(2px + var(--pos) * (100% - 31px));width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#a39bc9;box-shadow:0 1px 4px rgba(23,32,42,.22);transition:left .45s cubic-bezier(.3,1.35,.5,1),background .3s,color .3s}
+.fn.s-on .sw-thumb{background:var(--ok);color:#fff}
+.fn.s-off .sw-thumb{background:var(--bad);color:#fff}
+.swt.drag .sw-thumb{transition:background .3s,color .3s}
 .sw-thumb.land{animation:land .4s ease}
-@keyframes land{40%{transform:scale(1.12)}}
-.sw.s-mid .sw-thumb{animation:breathe 2.8s ease-in-out infinite}
-@keyframes breathe{50%{box-shadow:0 2px 6px rgba(0,0,0,.2),0 0 0 5px rgba(98,70,217,.12)}}
-.sw.hint.s-mid .sw-thumb{animation:swHint 1.7s ease-in-out 2 .6s}
-@keyframes swHint{0%,100%{transform:translateX(0)}30%{transform:translateX(22px)}70%{transform:translateX(-22px)}}
+.fn.s-mid .sw-thumb{animation:breathe 2.8s ease-in-out infinite}
+@keyframes breathe{50%{box-shadow:0 1px 4px rgba(23,32,42,.22),0 0 0 4px rgba(98,70,217,.1)}}
+.fn.hint.s-mid .sw-thumb{animation:swHint 1.7s ease-in-out 2 .6s}
+@keyframes swHint{0%,100%{transform:translateX(0)}30%{transform:translateX(18px)}70%{transform:translateX(-18px)}}
 .sw-thumb svg{grid-area:1/1}
 .sw-thumb .ic-ok,.sw-thumb .ic-no{display:none}
-.sw.s-on .ic-ok,.sw.s-off .ic-no{display:block;animation:icin .35s cubic-bezier(.3,1.5,.5,1)}
-.sw.s-on .ic-mid,.sw.s-off .ic-mid{display:none}
+.fn.s-on .ic-ok,.fn.s-off .ic-no{display:block;animation:icin .35s cubic-bezier(.3,1.5,.5,1)}
+.fn.s-on .ic-mid,.fn.s-off .ic-mid{display:none}
 @keyframes icin{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
-.sw-lb{position:absolute;top:50%;transform:translateY(-50%);font-size:12px;font-weight:900;color:#fff;opacity:0;pointer-events:none;transition:opacity .35s .1s}
-.sw-lb.on{left:15px}
-.sw-lb.off{right:14px}
-.sw.s-on .sw-lb.on,.sw.s-off .sw-lb.off{opacity:1}
+.sw-lb{position:absolute;top:50%;transform:translateY(-50%);font-size:11.5px;font-weight:900;opacity:0;pointer-events:none;transition:opacity .3s .1s}
+.sw-lb.on{left:13px;color:var(--ok)}
+.sw-lb.off{right:12px;color:var(--bad)}
+.fn.s-on .sw-lb.on,.fn.s-off .sw-lb.off{opacity:1}
 .link-btn{margin-top:10px;padding:8px 15px;border-radius:999px;background:var(--p-soft);border:1px solid var(--edge);color:var(--p-dark);font-size:12px;font-weight:900}
 .fold{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.3,1,.4,1)}
 .fold.open{grid-template-rows:1fr}
@@ -462,8 +467,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
 <div class="step" data-step="3">
   <section class="card">
     <div class="c-head"><span class="num">3</span><div><h2>فحص الوظائف</h2><p>اسحب الزر لكل وظيفة</p></div></div>
-    <div class="sw-legend"><span class="g"><i></i>يمين = يعمل</span><span class="r"><i></i>يسار = لا يعمل</span><span class="m"><i></i>وسط = لم تحدد</span></div>
-    <p class="help" id="swCount"></p>
+    <div class="fn-prog"><div class="fn-bar" id="fnBarBox"><i id="fnBar"></i></div><span class="fn-cnt" id="swCount"></span></div>
+    <p class="help" style="margin:-4px 2px 4px">اسحب الزر لليمين = يعمل، ولليسار = لا يعمل</p>
     <div id="works"></div>
     <button class="link-btn" id="allWork" type="button">كل الوظائف تعمل</button>
   </section>
@@ -757,13 +762,13 @@ const ACC = ["الشاحن","العلبة","كفر وحماية","الفاتور
 const REP_PARTS = ["الشاشة","البطارية","الكاميرا الأمامية","الكاميرا الخلفية","الظهر","الإطار","السماعة أو المايك","منفذ الشحن","البصمة / Face ID","اللوحة الأم"];
 
 const WORKS = [
-  { k:"bio",    t:"Face ID / البصمة" },
-  { k:"camF",   t:"الكاميرا الأمامية" },
-  { k:"camB",   t:"الكاميرا الخلفية" },
-  { k:"touch",  t:"اللمس والشاشة" },
-  { k:"audio",  t:"السماعات والمايك" },
-  { k:"charge", t:"الشحن والمنفذ" },
-  { k:"net",    t:"الشبكة والواي فاي" }
+  { k:"bio",    t:"Face ID / البصمة",  ic:'<path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M9 10v1.2M15 10v1.2M12 10v3.2h-1M9.5 15.6c1.5 1.1 3.5 1.1 5 0"/>' },
+  { k:"camF",   t:"الكاميرا الأمامية", ic:'<rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="10" r="2.6"/><path d="M7 17.5c.8-2.2 2.6-3.3 5-3.3s4.2 1.1 5 3.3"/>' },
+  { k:"camB",   t:"الكاميرا الخلفية",  ic:'<rect x="5" y="3" width="14" height="18" rx="3.5"/><circle cx="12" cy="9.5" r="3"/><circle cx="12" cy="9.5" r=".7"/><path d="M10 17h4"/>' },
+  { k:"touch",  t:"اللمس والشاشة",     ic:'<path d="M8 12V5.5a1.5 1.5 0 0 1 3 0V11"/><path d="M11 10.5a1.5 1.5 0 0 1 3 0V12"/><path d="M14 11.5a1.5 1.5 0 0 1 3 0V15c0 3-2 5-5 5h-1.2a5 5 0 0 1-4-2L4.5 14.5a1.4 1.4 0 0 1 2.2-1.7L8 14"/>' },
+  { k:"audio",  t:"السماعات والمايك",  ic:'<path d="M5 9.5h3l4-3.5v12l-4-3.5H5z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/>' },
+  { k:"charge", t:"الشحن والمنفذ",     ic:'<path d="M13 3 6 13.5h5L10 21l7-10.5h-5z"/>' },
+  { k:"net",    t:"الشبكة والواي فاي", ic:'<path d="M3 9.5a14 14 0 0 1 18 0M6 13a9.5 9.5 0 0 1 12 0M9 16.5a5 5 0 0 1 6 0"/><circle cx="12" cy="19.5" r=".9"/>' }
 ];
 WORKS.forEach(w => state.works[w.k] = null);
 
@@ -775,14 +780,15 @@ $("ch-acc").innerHTML = ACC.map(v => `<button type="button" class="opt" data-acc
 $("ch-rep").innerHTML = REP_PARTS.map(v => `<button type="button" class="opt" data-rep="${esc(v)}" aria-pressed="false">${esc(v)}</button>`).join("");
 
 $("works").innerHTML = WORKS.map((w, i) => `
-  <div class="sw s-mid${i === 0 ? " hint" : ""}" data-k="${w.k}">
-    <div class="sw-info"><b>${esc(w.t)}</b><small>اسحب الزر</small></div>
-    <div class="sw-track" role="switch" aria-checked="mixed" aria-label="${esc(w.t)}" tabindex="0">
+  <div class="fn s-mid${i === 0 ? " hint" : ""}" data-k="${w.k}">
+    <span class="ico"><svg viewBox="0 0 24 24">${w.ic}</svg></span>
+    <div class="nm"><b>${esc(w.t)}</b><small>اسحب الزر</small></div>
+    <div class="swt" role="switch" aria-checked="mixed" aria-label="${esc(w.t)}" tabindex="0">
       <span class="sw-lb on">يعمل</span><span class="sw-lb off">لا يعمل</span>
       <span class="sw-thumb">
-        <svg class="ic-mid" width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="currentColor" opacity=".8"/></svg>
-        <svg class="ic-ok" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
-        <svg class="ic-no" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        <svg class="ic-mid" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="8" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="16" cy="12" r="1.7"/></svg>
+        <svg class="ic-ok" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        <svg class="ic-no" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </span>
     </div>
   </div>`).join("");
@@ -1150,33 +1156,38 @@ $("sheetList").addEventListener("click", e => {
   }
 });
 
-/* ===== مفاتيح التشغيل ===== */
+/* ===== فحص الوظائف ===== */
 const SW_TXT = { on:"يعمل", off:"لا يعمل", mid:"اسحب لليمين أو اليسار" };
-const SW_THUMB = 42;
+const SW_THUMB = 31;
 const swKey = v => v === true ? "on" : v === false ? "off" : "mid";
 const swZone = q => q >= .67 ? "on" : q <= .33 ? "off" : "mid";
 
 function updateWorkCount(){
   const n = WORKS.filter(w => state.works[w.k] !== null).length;
+  const full = n === WORKS.length;
   const el = $("swCount");
-  el.textContent = n === WORKS.length ? "تم فحص كل الوظائف ✓" : `تم فحص ${n} من ${WORKS.length}`;
-  el.className = "help" + (n === WORKS.length ? " hint-ok" : "");
+  el.textContent = full ? "اكتمل الفحص ✓" : `${n} من ${WORKS.length}`;
+  el.classList.toggle("done", full);
+  $("fnBar").style.width = (n / WORKS.length * 100) + "%";
+  $("fnBarBox").classList.toggle("full", full);
 }
 
 function paintWork(k, land){
-  const row = document.querySelector(`.sw[data-k="${k}"]`);
+  const row = document.querySelector(`.fn[data-k="${k}"]`);
   if (!row) return;
   const v = state.works[k], z = swKey(v);
   row.classList.remove("s-on", "s-off", "s-mid");
   row.classList.add("s-" + z);
-  const tr = row.querySelector(".sw-track");
+  const tr = row.querySelector(".swt");
   tr.style.setProperty("--pos", v === true ? 1 : v === false ? 0 : .5);
   tr.setAttribute("aria-checked", v === null ? "mixed" : String(v));
   tr.classList.remove("invalid");
   row.querySelector("small").textContent = SW_TXT[z];
   if (land){
-    const t = row.querySelector(".sw-thumb");
-    t.classList.remove("land"); void t.offsetWidth; t.classList.add("land");
+    for (const sel of [".sw-thumb", ".ico"]){
+      const t = row.querySelector(sel);
+      t.classList.remove("land"); void t.offsetWidth; t.classList.add("land");
+    }
   }
   updateWorkCount();
 }
@@ -1190,10 +1201,10 @@ function setWork(k, v, fromUser){
 }
 
 $("works").addEventListener("pointerdown", e => {
-  const track = e.target.closest(".sw-track");
+  const track = e.target.closest(".swt");
   if (!track || (e.pointerType === "mouse" && e.button !== 0)) return;
-  const row = track.closest(".sw"), k = row.dataset.k;
-  document.querySelectorAll(".sw.hint").forEach(r => r.classList.remove("hint"));
+  const row = track.closest(".fn"), k = row.dataset.k;
+  document.querySelectorAll(".fn.hint").forEach(r => r.classList.remove("hint"));
 
   const rect = track.getBoundingClientRect();
   const travel = Math.max(1, track.clientWidth - SW_THUMB);
@@ -1241,9 +1252,9 @@ $("works").addEventListener("pointerdown", e => {
 });
 
 $("works").addEventListener("keydown", e => {
-  const track = e.target.closest(".sw-track");
+  const track = e.target.closest(".swt");
   if (!track) return;
-  const k = track.closest(".sw").dataset.k, cur = state.works[k];
+  const k = track.closest(".fn").dataset.k, cur = state.works[k];
   if (e.key === "ArrowRight"){ e.preventDefault(); setWork(k, true, true); }
   else if (e.key === "ArrowLeft"){ e.preventDefault(); setWork(k, false, true); }
   else if (e.key === "Backspace" || e.key === "Delete"){ e.preventDefault(); setWork(k, null, true); }
@@ -1677,7 +1688,7 @@ function validateStep(n){
   }
   if (n === 3){
     const und = WORKS.find(w => state.works[w.k] === null);
-    if (und) return need(document.querySelector(`.sw[data-k="${und.k}"] .sw-track`), "حدد حالة: " + und.t);
+    if (und) return need(document.querySelector(`.fn[data-k="${und.k}"] .swt`), "حدد حالة: " + und.t);
     if (!state.v.warranty) return need($("ch-warranty"), "اختر الضمان");
     if (!state.acc.size) return need($("ch-acc"), "اختر الملحقات");
   }
