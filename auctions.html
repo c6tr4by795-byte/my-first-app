@@ -179,11 +179,27 @@ const devCache = new Map();
 const picCache = new Map();
 const urlCache = new Map();
 
-/* المفضلة */
-const FK = "mzad_favorite_auctions";
-const getFavs = () => { try{ const p = JSON.parse(localStorage.getItem(FK) || "[]"); return new Set(Array.isArray(p) ? p.map(String) : []); }catch{ return new Set(); } };
+/* المفضلة: استخدم نفس مفتاح صفحة المفضلة وبحسب الحساب المسجّل */
+let FAV_KEY = "mzad_phone_favorites:guest";
+try {
+  const { data, error } = await supabase.auth.getUser();
+  if (!error && data?.user?.id) FAV_KEY = "mzad_phone_favorites:user:" + data.user.id;
+} catch {}
+const getFavs = () => {
+  try {
+    const a = JSON.parse(localStorage.getItem(FAV_KEY) || "[]");
+    const b = JSON.parse(localStorage.getItem("mzad_favorite_auctions") || "[]");
+    const c = JSON.parse(localStorage.getItem("mzad_favorite_auction_" + (FAV_KEY.split(":").pop())) || "[]");
+    return new Set([...(Array.isArray(a)?a:[]), ...(Array.isArray(b)?b:[]), ...(Array.isArray(c)?c:[])].map(String));
+  } catch { return new Set(); }
+};
 const favs = getFavs();
-const saveFavs = () => { try{ localStorage.setItem(FK, JSON.stringify([...favs])); }catch{} };
+const saveFavs = () => {
+  try {
+    localStorage.setItem(FAV_KEY, JSON.stringify([...favs]));
+    localStorage.setItem("mzad_favorite_auctions", JSON.stringify([...favs]));
+  } catch {}
+};
 
 /* بحث عربي/إنجليزي */
 const norm = v => String(v||"").toLowerCase().normalize("NFKC")
