@@ -107,19 +107,53 @@ h1{margin:10px 0 4px;font-size:23px;font-weight:950;letter-spacing:-.035em}
 .pick:disabled{background:#f7f7fa;opacity:.7;cursor:not-allowed}
 .pick svg{width:16px;height:16px;flex:0 0 16px;fill:none;stroke:var(--p);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 
-.tg{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 2px;border-bottom:1px solid #f1eefb;cursor:pointer}
-.tg:last-of-type{border-bottom:0}
-.tg b{display:block;font-size:13px;font-weight:900}
-.tg small{display:block;margin-top:2px;font-size:10.5px;font-weight:800;color:var(--ok);transition:color .25s}
-.tg.off small{color:var(--hot)}
-.tg input{position:absolute;opacity:0;pointer-events:none}
-.tg i{position:relative;width:46px;height:27px;flex:0 0 46px;border-radius:99px;background:#d9d6e8;transition:background .3s}
-.tg i:after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:21px;height:21px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:transform .3s cubic-bezier(.3,1.4,.5,1)}
-.tg:active i:after{width:25px}
-.tg input:checked+i{background:var(--ok)}
-.tg input:checked+i:after{transform:translateX(-19px)}
-.tg.warn input:checked+i{background:var(--hot)}
 .link-btn{margin-top:10px;padding:7px 13px;border-radius:999px;background:var(--p-soft);border:1px solid #e4defa;color:var(--p-dark);font-size:10.5px;font-weight:900}
+
+/* ===== فحص الوظائف (مفاتيح السحب) ===== */
+.fn-prog{display:flex;align-items:center;gap:11px;margin:0 0 14px}
+.fn-bar{flex:1;height:6px;border-radius:99px;background:#e4defa;overflow:hidden}
+.fn-bar i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,#8b6cf0,#6246d9);transition:width .5s cubic-bezier(.3,1,.4,1),background .4s}
+.fn-bar.full i{background:linear-gradient(90deg,#34a874,#1e8a5a)}
+.fn-cnt{flex:0 0 auto;font-size:11.5px;font-weight:900;color:var(--muted);transition:color .3s}
+.fn-cnt.done{color:var(--ok)}
+.fn{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #f1eefb}
+.fn:last-child{border-bottom:0}
+.fn .ico{width:38px;height:38px;flex:0 0 38px;border-radius:12px;display:grid;place-items:center;background:var(--p-soft);color:var(--p);transition:background .35s,color .35s}
+.fn .ico svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fn .ico.land{animation:land .45s ease}
+@keyframes land{40%{transform:scale(1.14)}}
+.fn .nm{flex:1;min-width:0}
+.fn .nm b{display:block;font-size:13.5px;font-weight:900;line-height:1.45}
+.fn .nm small{display:block;margin-top:1px;font-size:11px;font-weight:800;color:#a8b0bb;transition:color .3s}
+.fn.s-on .ico{background:#e3f6ec;color:var(--ok)}
+.fn.s-off .ico{background:#fde8ed;color:var(--bad)}
+.fn.s-on .nm small{color:var(--ok)}
+.fn.s-off .nm small{color:var(--bad)}
+.swt{--pos:.5;position:relative;flex:0 0 112px;width:112px;height:34px;border-radius:99px;direction:ltr;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;background:#f1eefb;border:1.5px solid #e4defa;transition:background .35s,border-color .35s;outline:none;overflow:hidden}
+.fn.s-on .swt{background:#e3f6ec;border-color:#b6e2cb}
+.fn.s-off .swt{background:#fde8ed;border-color:#f5bfca}
+.swt:focus-visible{box-shadow:0 0 0 3px rgba(98,70,217,.3)}
+.swt.drag{cursor:grabbing}
+.swt.invalid{animation:shake .4s;box-shadow:0 0 0 2px var(--hot)}
+.sw-thumb{position:absolute;top:2px;left:calc(2px + var(--pos) * (100% - 31px));width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#a39bc9;box-shadow:0 1px 4px rgba(23,32,42,.22);transition:left .45s cubic-bezier(.3,1.35,.5,1),background .3s,color .3s}
+.fn.s-on .sw-thumb{background:var(--ok);color:#fff}
+.fn.s-off .sw-thumb{background:var(--bad);color:#fff}
+.swt.drag .sw-thumb{transition:background .3s,color .3s}
+.sw-thumb.land{animation:land .4s ease}
+.fn.s-mid .sw-thumb{animation:breathe 2.8s ease-in-out infinite}
+@keyframes breathe{50%{box-shadow:0 1px 4px rgba(23,32,42,.22),0 0 0 4px rgba(98,70,217,.1)}}
+.fn.swhint.s-mid .sw-thumb{animation:swHint 1.7s ease-in-out 2 .6s}
+@keyframes swHint{0%,100%{transform:translateX(0)}30%{transform:translateX(18px)}70%{transform:translateX(-18px)}}
+.sw-thumb svg{grid-area:1/1}
+.sw-thumb .ic-ok,.sw-thumb .ic-no{display:none}
+.fn.s-on .ic-ok,.fn.s-off .ic-no{display:block;animation:icin .35s cubic-bezier(.3,1.5,.5,1)}
+.fn.s-on .ic-mid,.fn.s-off .ic-mid{display:none}
+@keyframes icin{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
+.sw-lb{position:absolute;top:50%;transform:translateY(-50%);font-size:11.5px;font-weight:900;opacity:0;pointer-events:none;transition:opacity .3s .1s}
+.sw-lb.on{left:13px;color:var(--ok)}
+.sw-lb.off{right:12px;color:var(--bad)}
+.fn.s-on .sw-lb.on,.fn.s-off .sw-lb.off{opacity:1}
+.help.hint-ok{color:var(--ok)}
 .fold{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.3,1,.4,1)}
 .fold.open{grid-template-rows:1fr}
 .fold>div{overflow:hidden}
@@ -292,13 +326,6 @@ header{padding:0 14px 12px;border-radius:0 0 20px 20px;box-shadow:0 6px 18px rgb
 .opt{padding:10px 15px;font-size:13px}
 .pick{height:52px;font-size:14.5px;border-radius:15px}
 .pick svg{width:17px;height:17px;flex-basis:17px}
-.tg{padding:13px 2px}
-.tg b{font-size:14.5px}
-.tg small{font-size:11.5px;margin-top:3px}
-.tg i{width:46px;height:27px;flex-basis:46px}
-.tg i:after{width:21px;height:21px}
-.tg input:checked+i:after{transform:translateX(-19px)}
-.tg:active i:after{width:25px}
 .link-btn{font-size:12px;padding:8px 15px}
 .bat output{font-size:15px;min-width:62px;padding:8px 0}
 .bat output.idle{font-size:12px}
@@ -355,6 +382,9 @@ header{padding:0 14px 12px;border-radius:0 0 20px 20px;box-shadow:0 6px 18px rgb
   .photos{gap:7px}
   .thumb .x{width:24px;height:24px}
   .thumb .mk{height:23px;padding:0 7px}
+  .fn{gap:9px}
+  .fn .ico{width:34px;height:34px;flex-basis:34px}
+  .swt{flex-basis:104px;width:104px}
 }
 
 </style>
@@ -450,7 +480,9 @@ header{padding:0 14px 12px;border-radius:0 0 20px 20px;box-shadow:0 6px 18px rgb
 
 <div class="step" data-step="3">
   <section class="card">
-    <div class="c-head"><span class="num">3</span><div><h2>فحص الوظائف</h2><p>المفتاح مشغّل = يعمل</p></div></div>
+    <div class="c-head"><span class="num">3</span><div><h2>فحص الوظائف</h2><p>اسحب الزر لكل وظيفة</p></div></div>
+    <div class="fn-prog"><div class="fn-bar" id="fnBarBox"><i id="fnBar"></i></div><span class="fn-cnt" id="swCount"></span></div>
+    <p class="help" style="margin:-4px 2px 4px">اسحب الزر لليمين = يعمل، ولليسار = لا يعمل</p>
     <div id="works"></div>
     <button class="link-btn" id="allWork" type="button">كل الوظائف تعمل</button>
   </section>
@@ -700,15 +732,15 @@ const ACC = ["الشاحن","العلبة","كفر وحماية","الفاتور
 const REP_PARTS = ["الشاشة","البطارية","الكاميرا الأمامية","الكاميرا الخلفية","الظهر","الإطار","السماعة أو المايك","منفذ الشحن","البصمة / Face ID","اللوحة الأم"];
 
 const WORKS = [
-  { k:"bio",    t:"Face ID / البصمة" },
-  { k:"camF",   t:"الكاميرا الأمامية" },
-  { k:"camB",   t:"الكاميرا الخلفية" },
-  { k:"touch",  t:"اللمس والشاشة" },
-  { k:"audio",  t:"السماعات والمايك" },
-  { k:"charge", t:"الشحن والمنفذ" },
-  { k:"net",    t:"الشبكة والواي فاي" }
+  { k:"bio",    t:"Face ID / البصمة",  ic:'<path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M9 10v1.2M15 10v1.2M12 10v3.2h-1M9.5 15.6c1.5 1.1 3.5 1.1 5 0"/>' },
+  { k:"camF",   t:"الكاميرا الأمامية", ic:'<rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="10" r="2.6"/><path d="M7 17.5c.8-2.2 2.6-3.3 5-3.3s4.2 1.1 5 3.3"/>' },
+  { k:"camB",   t:"الكاميرا الخلفية",  ic:'<rect x="5" y="3" width="14" height="18" rx="3.5"/><circle cx="12" cy="9.5" r="3"/><circle cx="12" cy="9.5" r=".7"/><path d="M10 17h4"/>' },
+  { k:"touch",  t:"اللمس والشاشة",     ic:'<path d="M8 12V5.5a1.5 1.5 0 0 1 3 0V11"/><path d="M11 10.5a1.5 1.5 0 0 1 3 0V12"/><path d="M14 11.5a1.5 1.5 0 0 1 3 0V15c0 3-2 5-5 5h-1.2a5 5 0 0 1-4-2L4.5 14.5a1.4 1.4 0 0 1 2.2-1.7L8 14"/>' },
+  { k:"audio",  t:"السماعات والمايك",  ic:'<path d="M5 9.5h3l4-3.5v12l-4-3.5H5z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/>' },
+  { k:"charge", t:"الشحن والمنفذ",     ic:'<path d="M13 3 6 13.5h5L10 21l7-10.5h-5z"/>' },
+  { k:"net",    t:"الشبكة والواي فاي", ic:'<path d="M3 9.5a14 14 0 0 1 18 0M6 13a9.5 9.5 0 0 1 12 0M9 16.5a5 5 0 0 1 6 0"/><circle cx="12" cy="19.5" r=".9"/>' }
 ];
-WORKS.forEach(w => state.works[w.k] = true);
+WORKS.forEach(w => state.works[w.k] = null);
 
 /* ===== بناء الواجهة ===== */
 
@@ -718,11 +750,19 @@ Object.entries(OPTS).forEach(([g, list]) => {
 $("ch-acc").innerHTML = ACC.map(v => `<button type="button" class="opt" data-acc="${esc(v)}" aria-pressed="false">${esc(v)}</button>`).join("");
 $("ch-rep").innerHTML = REP_PARTS.map(v => `<button type="button" class="opt" data-rep="${esc(v)}" aria-pressed="false">${esc(v)}</button>`).join("");
 
-$("works").innerHTML = WORKS.map(w => `
-  <label class="tg" data-k="${w.k}">
-    <div><b>${esc(w.t)}</b><small>يعمل</small></div>
-    <input type="checkbox" data-w="${w.k}" checked><i></i>
-  </label>`).join("");
+$("works").innerHTML = WORKS.map((w, i) => `
+  <div class="fn s-mid${i === 0 ? " swhint" : ""}" data-k="${w.k}">
+    <span class="ico"><svg viewBox="0 0 24 24">${w.ic}</svg></span>
+    <div class="nm"><b>${esc(w.t)}</b><small>اسحب الزر</small></div>
+    <div class="swt" role="switch" aria-checked="mixed" aria-label="${esc(w.t)}" tabindex="0">
+      <span class="sw-lb on">يعمل</span><span class="sw-lb off">لا يعمل</span>
+      <span class="sw-thumb">
+        <svg class="ic-mid" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="8" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="16" cy="12" r="1.7"/></svg>
+        <svg class="ic-ok" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        <svg class="ic-no" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </span>
+    </div>
+  </div>`).join("");
 
 function syncChips(g){
   document.querySelectorAll(`.opt[data-g="${g}"]`).forEach(b => {
@@ -960,28 +1000,117 @@ $("sheetList").addEventListener("click", e => {
   }
 });
 
-/* ===== مفاتيح التشغيل ===== */
-function paintWork(k){
-  const row = document.querySelector(`.tg[data-k="${k}"]`);
-  const on = state.works[k];
-  row.classList.toggle("off", !on);
-  row.querySelector("small").textContent = on ? "يعمل" : "لا يعمل";
-  row.querySelector("input").checked = on;
+/* ===== فحص الوظائف ===== */
+const SW_TXT = { on:"يعمل", off:"لا يعمل", mid:"اسحب لليمين أو اليسار" };
+const SW_THUMB = 31;
+const swKey = v => v === true ? "on" : v === false ? "off" : "mid";
+const swZone = q => q >= .67 ? "on" : q <= .33 ? "off" : "mid";
+
+function updateWorkCount(){
+  const n = WORKS.filter(w => state.works[w.k] !== null).length;
+  const full = n === WORKS.length;
+  const el = $("swCount");
+  el.textContent = full ? "اكتمل الفحص ✓" : `${n} من ${WORKS.length}`;
+  el.classList.toggle("done", full);
+  $("fnBar").style.width = (n / WORKS.length * 100) + "%";
+  $("fnBarBox").classList.toggle("full", full);
 }
 
-$("works").addEventListener("change", e => {
-  const k = e.target.dataset.w;
-  if (!k) return;
-  state.works[k] = e.target.checked;
-  paintWork(k); invalidate(); sync();
+function paintWork(k, land){
+  const row = document.querySelector(`.fn[data-k="${k}"]`);
+  if (!row) return;
+  const v = state.works[k], z = swKey(v);
+  row.classList.remove("s-on", "s-off", "s-mid");
+  row.classList.add("s-" + z);
+  const tr = row.querySelector(".swt");
+  tr.style.setProperty("--pos", v === true ? 1 : v === false ? 0 : .5);
+  tr.setAttribute("aria-checked", v === null ? "mixed" : String(v));
+  tr.classList.remove("invalid");
+  row.querySelector("small").textContent = SW_TXT[z];
+  if (land){
+    for (const sel of [".sw-thumb", ".ico"]){
+      const t = row.querySelector(sel);
+      t.classList.remove("land"); void t.offsetWidth; t.classList.add("land");
+    }
+  }
+  updateWorkCount();
+}
+
+function setWork(k, v, fromUser){
+  if (state.works[k] === v){ paintWork(k); return; }
+  state.works[k] = v;
+  paintWork(k, true);
+  if (fromUser){ try{ navigator.vibrate && navigator.vibrate(10); }catch{} }
+  invalidate(); sync();
+}
+
+$("works").addEventListener("pointerdown", e => {
+  const track = e.target.closest(".swt");
+  if (!track || (e.pointerType === "mouse" && e.button !== 0)) return;
+  const row = track.closest(".fn"), k = row.dataset.k;
+  document.querySelectorAll(".fn.swhint").forEach(r => r.classList.remove("swhint"));
+
+  const rect = track.getBoundingClientRect();
+  const travel = Math.max(1, track.clientWidth - SW_THUMB);
+  const cur = state.works[k];
+  const startP = cur === true ? 1 : cur === false ? 0 : .5;
+  const startX = e.clientX, onThumb = !!e.target.closest(".sw-thumb");
+  let p = startP, moved = false;
+  try{ track.setPointerCapture(e.pointerId); }catch{}
+
+  const move = ev => {
+    const dx = ev.clientX - startX;
+    if (!moved && Math.abs(dx) < 5) return;
+    if (!moved){ moved = true; track.classList.add("drag"); }
+    p = Math.min(1, Math.max(0, startP + dx / travel));
+    track.style.setProperty("--pos", p);
+    const z = swZone(p);
+    row.classList.remove("s-on", "s-off", "s-mid");
+    row.classList.add("s-" + z);
+    row.querySelector("small").textContent = SW_TXT[z];
+  };
+  const cleanup = ev => {
+    track.removeEventListener("pointermove", move);
+    track.removeEventListener("pointerup", up);
+    track.removeEventListener("pointercancel", cancel);
+    track.classList.remove("drag");
+    try{ track.releasePointerCapture(ev.pointerId); }catch{}
+  };
+  const up = ev => {
+    cleanup(ev);
+    if (moved){
+      const z = swZone(p);
+      setWork(k, z === "on" ? true : z === "off" ? false : null, true);
+    } else if (onThumb){
+      setWork(k, cur === true ? false : true, true);
+    } else {
+      setWork(k, (ev.clientX - rect.left) > rect.width / 2, true);
+    }
+    paintWork(k);
+  };
+  const cancel = ev => { cleanup(ev); paintWork(k); };
+
+  track.addEventListener("pointermove", move);
+  track.addEventListener("pointerup", up);
+  track.addEventListener("pointercancel", cancel);
+});
+
+$("works").addEventListener("keydown", e => {
+  const track = e.target.closest(".swt");
+  if (!track) return;
+  const k = track.closest(".fn").dataset.k, cur = state.works[k];
+  if (e.key === "ArrowRight"){ e.preventDefault(); setWork(k, true, true); }
+  else if (e.key === "ArrowLeft"){ e.preventDefault(); setWork(k, false, true); }
+  else if (e.key === "Backspace" || e.key === "Delete"){ e.preventDefault(); setWork(k, null, true); }
+  else if (e.key === " " || e.key === "Enter"){ e.preventDefault(); setWork(k, cur === true ? false : true, true); }
 });
 
 $("allWork").addEventListener("click", () => {
-  WORKS.forEach(w => { state.works[w.k] = true; paintWork(w.k); });
+  WORKS.forEach(w => { state.works[w.k] = true; paintWork(w.k, true); });
   invalidate(); sync(); toast("تم تعيين كل الوظائف: تعمل");
 });
 
-
+WORKS.forEach(w => paintWork(w.k));
 
 $("battery").style.setProperty("--p-fill", "75%");
 $("battery").addEventListener("input", e => {
@@ -1229,9 +1358,9 @@ const titleOf = () => {
   const b = getBrand(), m = getModel();
   return m && b && m.toLowerCase().startsWith(b.toLowerCase()) ? m : [b, m].filter(Boolean).join(" ");
 };
-const offWorks = () => WORKS.filter(w => !state.works[w.k]);
+const offWorks = () => WORKS.filter(w => state.works[w.k] === false);
 
-const camPart = k => [state.v[k], state.works[k] ? "" : "لا تعمل"].filter(Boolean).join("، ");
+const camPart = k => [state.v[k], state.works[k] === false ? "لا تعمل" : ""].filter(Boolean).join("، ");
 const replacedValue = () => {
   if (!state.replaced) return "لا يوجد";
   const p = [...state.rep];
@@ -1349,6 +1478,8 @@ function validateStep(n){
     if (isApple() && !batteryReplaced() && !state.batteryTouched) return need($("battery"), "حدد صحة البطارية");
   }
   if (n === 3){
+    const und = WORKS.find(w => state.works[w.k] === null);
+    if (und) return need(document.querySelector(`.fn[data-k="${und.k}"] .swt`), "حدد حالة: " + und.t);
     if (!state.v.warranty) return need($("ch-warranty"), "اختر الضمان");
     if (!state.acc.size) return need($("ch-acc"), "اختر الملحقات");
   }
@@ -1440,7 +1571,7 @@ const cameraValue = () => {
   const p = [f && "الأمامية: " + f, b && "الخلفية: " + b].filter(Boolean);
   return p.length ? p.join(" | ") : "تعمل بالكامل";
 };
-const biometricValue = () => state.works.bio ? "يعمل" : "لا يعمل";
+const biometricValue = () => state.works.bio === false ? "لا يعمل" : "يعمل";
 const faultsValue    = () => { const o = offWorks(); return o.length ? "لا يعمل: " + o.map(w => w.t).join("، ") : null; };
 const bodyBackValue  = () => {
   const p = [state.v.body && "الهيكل: " + state.v.body, state.v.back && "الظهر: " + state.v.back].filter(Boolean);
