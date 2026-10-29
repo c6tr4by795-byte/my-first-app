@@ -497,7 +497,13 @@ async function load(){
       fetchLegacy(),
       fetchMzad().catch(e => { console.warn("MZAD LISTINGS:", e); return []; })
     ]);
-    state.devices = [...legacyRows, ...mzadRows].map(normalizeDevice).sort((a,b) => b._created - a._created);
+    // السوق مخصص للبيع المباشر. سجلات المزاد القديمة في جدول devices لا تمثل
+    // مزادات النظام الجديد؛ عرضها هنا كان يفتح device.html ويظهرها كبيع مباشر.
+    const legacyDirectRows = legacyRows.filter(row =>
+      !String(row.sale_type || "").toLowerCase().includes("auction") &&
+      !String(row.sale_type || "").includes("مزاد")
+    );
+    state.devices = [...legacyDirectRows, ...mzadRows].map(normalizeDevice).sort((a,b) => b._created - a._created);
     state.byId = new Map(state.devices.map(d => [d.id, d]));
     render();
   }catch(e){
@@ -688,8 +694,7 @@ grid.addEventListener("click", e => {
   if(!card) return;
   const d = state.byId.get(card.dataset.id);
   if(!d) return;
-  // بطاقات السوق القديمة تأتي من جدول devices ومعرّفاتها رقمية؛
-  // صفحة auction-details تتطلب UUID من جدول mzad_auctions، فلا نرسل لها رقم الجهاز القديم.
+  // صفحة السوق تعرض البيع المباشر فقط؛ تفاصيل البيع المباشر تبقى في device.html.
   window.location.href = `device.html?id=${encodeURIComponent(d.id)}`;
 });
 
