@@ -688,8 +688,9 @@ grid.addEventListener("click", e => {
   if(!card) return;
   const d = state.byId.get(card.dataset.id);
   if(!d) return;
-  const page = d._auction ? "auction-details.html" : "device.html";
-  window.location.href = `${page}?id=${encodeURIComponent(d.id)}`;
+  // بطاقات السوق القديمة تأتي من جدول devices ومعرّفاتها رقمية؛
+  // صفحة auction-details تتطلب UUID من جدول mzad_auctions، فلا نرسل لها رقم الجهاز القديم.
+  window.location.href = `device.html?id=${encodeURIComponent(d.id)}`;
 });
 
 chips.addEventListener("click", e => {
