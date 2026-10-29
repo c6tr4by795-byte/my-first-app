@@ -759,16 +759,14 @@ function createDeviceCard(device, index){
         showToast("تم حذف إعلان البيع المباشر وبياناته.");
       } else {
         // الإعلانات القديمة في جدول devices قد يكون معرّفها رقمياً (مثل 14)، وليس UUID.
-        const { data: deletedRows, error } = await supabase
-          .from("devices")
-          .delete()
-          .eq("id", device.id)
-          .eq("seller_id", authData.user.id)
-          .select("id");
-        if (error) throw error;
-        if (!deletedRows || deletedRows.length === 0) {
-          throw new Error("LEGACY_DELETE_NOT_ALLOWED");
+        const legacyId = Number(device.id);
+        if (!Number.isSafeInteger(legacyId) || legacyId <= 0) {
+          throw new Error("LEGACY_DEVICE_ID_INVALID");
         }
+        const { error } = await supabase.rpc("mzad_seller_delete_legacy_direct_device", {
+          p_device_id: legacyId
+        });
+        if (error) throw error;
         showToast("تم حذف الجهاز القديم.");
       }
 
