@@ -765,12 +765,15 @@ function createDeviceCard(device, index){
       console.error("PERMANENT LISTING DELETE", error);
 
       const deleteError = String(error?.message || error?.details || error?.hint || "خطأ غير معروف");
-
-      showToast(
-        error?.message === "AUTH_REQUIRED"
-          ? "انتهت الجلسة، سجّل الدخول من جديد."
-          : "سبب فشل الحذف: " + deleteError.slice(0,180)
-      );
+      const deleteErrorUpper = deleteError.toUpperCase();
+      const deleteMessage =
+        deleteErrorUpper.includes("AUTH_REQUIRED") ? "انتهت الجلسة، سجّل الدخول من جديد." :
+        deleteErrorUpper.includes("NOT_LISTING_OWNER") ? "ما نكدر نحذف الإعلان لأنّه مو تابع لحسابك." :
+        deleteErrorUpper.includes("LISTING_HAS_ACTIVITY") ? "ما ينحذف هذا الجهاز لأن عليه عملية أو تأمين مرتبط. لازم تنحل العملية أولاً." :
+        deleteErrorUpper.includes("DEVICE_LINKED_TO_AUCTION") ? "هذا الجهاز مرتبط بمزاد. احذف المزاد من صفحة مزاداتي أولاً إذا كان مسموحاً." :
+        deleteErrorUpper.includes("FOREIGN KEY") || deleteErrorUpper.includes("23503") ? "باقي بيانات مرتبطة بهذا الجهاز تمنع الحذف الآمن. راجع العمليات المرتبطة قبل الحذف." :
+        "تعذّر الحذف: " + deleteError.slice(0,160);
+      showToast(deleteMessage);
 
       deleteButton.disabled = false;
       deleteButton.innerHTML = ICON_TRASH + "حذف";
