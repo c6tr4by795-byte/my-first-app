@@ -182,6 +182,28 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
 .admin-group+.admin-group{margin-top:12px}
 .sec[id]{scroll-margin-top:14px}
 @media(max-width:360px){.admin-jumps{grid-template-columns:1fr}}
+
+/* دليل المستخدمين الموسّع */
+.user-directory-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
+.user-directory-summary .stat{padding:11px;border:1px solid var(--edge);border-radius:14px;background:#fff}
+.user-directory-summary small{display:block;color:var(--muted);font-size:10px}
+.user-directory-summary b{display:block;margin-top:4px;font-size:15px}
+.user-card-extra{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.user-mini{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:10px;background:var(--ps);font-size:10.5px;color:var(--pd);max-width:100%;overflow-wrap:anywhere}
+.user-mini.online{background:#eaf8f0;color:#13804b}
+.user-mini.offline{background:#f2f3f6;color:#6c7180}
+.user-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
+.user-detail-cell{min-width:0;padding:10px;border:1px solid var(--edge);border-radius:13px;background:#fff}
+.user-detail-cell small{display:block;color:var(--muted);font-size:10px}
+.user-detail-cell b{display:block;margin-top:4px;font-size:12px;overflow-wrap:anywhere}
+.user-listings{margin-top:16px}
+.user-listing{display:grid;grid-template-columns:76px minmax(0,1fr);gap:10px;padding:10px 0;border-bottom:1px solid var(--edge)}
+.user-listing img{width:76px;height:76px;object-fit:cover;border-radius:13px;background:var(--ps)}
+.user-listing .ul-name{font-size:12px;font-weight:900;line-height:1.6}
+.user-listing .ul-meta{font-size:10.5px;color:var(--muted);line-height:1.8;margin-top:3px}
+.user-listing .ul-price{font-size:11px;font-weight:900;color:var(--pd);margin-top:4px}
+.user-status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#16a36a;margin-left:4px}
+@media(max-width:370px){.user-directory-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.user-listing{grid-template-columns:64px minmax(0,1fr)}.user-listing img{width:64px;height:64px}}
 </style>
 </head>
 <body>
@@ -237,7 +259,13 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
 <section class="panel" id="p-users" hidden>
   <div class="sec">
     <div class="sh"><h2>إدارة المستخدمين</h2><small id="uCount"></small></div>
-    <input class="search" id="uSearch" type="search" placeholder="كود المشتري (MZ-…) أو الهاتف أو الإيميل أو المعرّف" autocomplete="off">
+    <div class="admin-intro">ملف موحّد لكل مستخدم: معلومات الحساب والبريد والحضور وآخر جلسة، مع جميع أجهزة البيع المباشر والمزادات التي نشرها. اضغط على المستخدم لفتح ملفه الكامل.</div>
+    <div class="user-directory-summary">
+      <div class="stat"><small>نتائج البحث</small><b id="uTotal">—</b></div>
+      <div class="stat"><small>متصلون الآن</small><b id="uOnline">—</b></div>
+      <div class="stat"><small>حسابات مقيّدة</small><b id="uRestricted">—</b></div>
+    </div>
+    <input class="search" id="uSearch" type="search" placeholder="ابحث بالاسم أو البريد أو الهاتف أو كود المشتري أو المعرّف" autocomplete="off">
     <div class="chips" id="uFilters"></div>
     <div class="list" id="uList"></div>
   </div>
@@ -882,30 +910,109 @@ $("uSearch").addEventListener("input", e => { S.uq = e.target.value.trim(); clea
 $("uFilters").addEventListener("click", e => { const b=e.target.closest("[data-uf]"); if(!b) return; S.uf=b.dataset.uf; renderFilters(); renderUsers(); });
 const activeRestr = u => { const r = u.restriction; if(!r) return null; if(r.until_at && new Date(r.until_at) < new Date()) return null; return (r.banned||r.no_bid||r.no_sell||r.no_deposit) ? r : null; };
 async function fetchUsers(q){ const r = await supabase.rpc("mzad_admin_find_users",{ p_q:q }); if(r.error) throw r.error; return Array.isArray(r.data) ? r.data : []; }
+function sessionDuration(seconds){
+  if(seconds===null || seconds===undefined || !Number.isFinite(Number(seconds))) return "غير متوفر";
+  let n=Math.max(0,Math.floor(Number(seconds)));
+  const d=Math.floor(n/86400); n%=86400;
+  const h=Math.floor(n/3600); n%=3600;
+  const m=Math.floor(n/60); const sec=n%60;
+  return [d?d+" يوم":"",h?h+" ساعة":"",m?m+" دقيقة":"",(!d&&!h&&!m?sec+" ثانية":"")].filter(Boolean).join(" و");
+}
+function userOnline(u){ return !!u.last_seen_at && (Date.now()-new Date(u.last_seen_at).getTime())<=40000; }
+function userPresence(u){
+  if(!u.last_seen_at) return "لم يسجل دخول بعد";
+  const ms=Math.max(0,Date.now()-new Date(u.last_seen_at).getTime());
+  if(ms<=40000) return "متصل الآن";
+  return "آخر ظهور "+ago(u.last_seen_at);
+}
 async function loadUsers(){
   if(S.uq.length===1) return;
   try{ S.users = await fetchUsers(S.uq); S.loaded.users = true; renderUsers(); }
-  catch(e){ $("uList").innerHTML = `<div class="empty">تعذر تحميل المستخدمين<br><small>${esc(rpcErr(e))}</small><br>تأكد من تشغيل ملف mzad-admin.sql</div>`; }
+  catch(e){ $("uList").innerHTML = `<div class="empty">تعذر تحميل المستخدمين<br><small>${esc(rpcErr(e))}</small></div>`; }
 }
 function renderUsers(){
   const rows = S.users.filter(u => S.uf==="all" || activeRestr(u));
-  $("uCount").textContent = S.uq ? n0(rows.length)+" نتيجة" : "آخر المسجلين";
-  if(!rows.length){ $("uList").innerHTML = `<div class="empty">${S.uq?"لا توجد نتائج":S.uf==="restricted"?"لا توجد حسابات مقيّدة 🎉":"لا يوجد مستخدمون"}</div>`; return; }
-  $("uList").innerHTML = rows.map(u => { const r = activeRestr(u), name = u.buyer_code || u.email || String(u.user_id).slice(0,8);
-    const badge = !r ? "" : r.banned ? '<span class="badge bad">محظور</span>' : '<span class="badge warn">مقيّد</span>';
-    return `<button class="q" type="button" data-u="${S.users.indexOf(u)}"><div class="q-top"><div class="u-id"><span class="u-av">${esc(String(u.email||u.buyer_code||"?").slice(0,1).toUpperCase())}</span><div><div class="q-name" style="margin:0;direction:ltr;text-align:start">${esc(name)}</div><div class="q-sub" style="direction:ltr;text-align:start">${esc([u.email&&u.buyer_code?u.email:"", u.phone].filter(Boolean).join(" · "))}</div></div></div>${badge}</div>
-      <div class="stt"><span>🔨 ${n0(u.bids)} مزايدة</span><span>🛡️ ${n0(u.deposits)} تأمين</span><span>📱 ${n0(u.selling)} مزاد كبائع</span></div></button>`; }).join("");
+  $("uCount").textContent = S.uq ? n0(rows.length)+" نتيجة" : "آخر الحسابات المسجلة";
+  if($("uTotal")) $("uTotal").textContent=n0(rows.length);
+  if($("uOnline")) $("uOnline").textContent=n0(rows.filter(userOnline).length);
+  if($("uRestricted")) $("uRestricted").textContent=n0(S.users.filter(u=>activeRestr(u)).length);
+  if(!rows.length){ $("uList").innerHTML = `<div class="empty">${S.uq?"لا توجد نتائج":S.uf==="restricted"?"لا توجد حسابات مقيّدة":"لا يوجد مستخدمون"}</div>`; return; }
+  $("uList").innerHTML = rows.map(u => {
+    const r=activeRestr(u), online=userOnline(u);
+    const name=u.full_name||u.buyer_code||u.email||String(u.user_id).slice(0,8);
+    const badge=!r?"":r.banned?'<span class="badge bad">محظور</span>':'<span class="badge warn">مقيّد</span>';
+    const avatar=u.avatar_url?'<img src="'+esc(u.avatar_url)+'" alt="" style="width:34px;height:34px;border-radius:50%;object-fit:cover">':esc(String(name).slice(0,1));
+    return `<button class="q" type="button" data-u="${S.users.indexOf(u)}">
+      <div class="q-top">
+        <div class="u-id"><span class="u-av">${avatar}</span><div>
+          <div class="q-name" style="margin:0">${esc(name)}</div>
+          <div class="q-sub" style="direction:ltr;text-align:start">${esc(u.email||"لا يوجد بريد إلكتروني")}</div>
+          <div class="q-sub">${esc([u.phone,u.city,u.buyer_code].filter(Boolean).join(" · ")||"لا توجد بيانات إضافية")}</div>
+        </div></div>${badge}
+      </div>
+      <div class="user-card-extra">
+        <span class="user-mini ${online?"online":"offline"}">${online?"● متصل الآن":"آخر ظهور: "+esc(u.last_seen_at?ago(u.last_seen_at):"غير مسجل")}</span>
+        <span class="user-mini">انضم: ${esc(u.joined?ago(u.joined):"—")}</span>
+        <span class="user-mini">مدة آخر جلسة: ${esc(sessionDuration(u.last_session_seconds))}</span>
+      </div>
+      <div class="stt">
+        <span>مزايدات ${n0(u.bids)}</span><span>تأمينات ${n0(u.deposits)}</span>
+        <span>أجهزة مباشرة ${n0(u.direct_listings)}</span><span>مزادات ${n0(u.auction_listings)}</span>
+      </div>
+    </button>`;
+  }).join("");
 }
 $("uList").addEventListener("click", e => { const b=e.target.closest("[data-u]"); if(b) openUser(S.users[+b.dataset.u]); });
 
+async function loadUserListings(u){
+  const box=$("userListings");
+  if(!box) return;
+  box.innerHTML='<div class="empty">جاري تحميل الأجهزة والمنشورات...</div>';
+  const {data,error}=await supabase.rpc("mzad_admin_user_listings",{p_user_id:u.user_id});
+  if(error){box.innerHTML='<div class="empty">تعذر تحميل المنشورات: '+esc(rpcErr(error))+'</div>';return;}
+  const rows=Array.isArray(data)?data:[];
+  if(!rows.length){box.innerHTML='<div class="empty">هذا المستخدم لم ينشر أجهزة حتى الآن.</div>';return;}
+  const images=await Promise.all(rows.map(async x=>{
+    if(!x.image_path)return "";
+    const {data:sign}=await supabase.storage.from("device-images").createSignedUrl(x.image_path,3600);
+    return sign?.signedUrl||supabase.storage.from("device-images").getPublicUrl(x.image_path).data?.publicUrl||"";
+  }));
+  box.innerHTML=rows.map((x,i)=>{
+    const name=[x.brand,x.model,x.storage].filter(Boolean).join(" ")||"جهاز بدون اسم";
+    const kind=x.kind==="direct"?"بيع مباشر":"مزاد";
+    const status=({active:"منشور",reserved:"محجوز",pending_handover:"بانتظار التسليم",completed:"مكتمل",ended:"منتهي",cancelled:"ملغي",draft:"مسودة"})[x.status]||x.status||"—";
+    const price=Number(x.price_iqd||0).toLocaleString("en-US")+" د.ع";
+    return `<div class="user-listing">
+      ${images[i]?'<img src="'+esc(images[i])+'" alt="">':'<div class="user-listing img" style="display:grid;place-items:center">جهاز</div>'}
+      <div><div class="ul-name">${esc(name)}</div>
+        <div class="ul-meta">${kind} · ${esc(status)} · ${esc(x.number||"")}</div>
+        <div class="ul-meta">${esc(x.created_at?fmtT(x.created_at):"")}</div>
+        <div class="ul-price">${esc(price)}</div>
+      </div>
+    </div>`;
+  }).join("");
+}
 function openUser(u){
   if(!u) return;
-  const r = activeRestr(u) || {}, kv = (k,v,ltr) => v ? `<div class="kv"><span>${k}</span><strong class="${ltr?"ltr":""}">${esc(v)}</strong></div>` : "";
-  const state = r.banned ? "محظور" + (r.until_at?" حتى "+fmtT(r.until_at):" بشكل دائم") : (r.no_bid||r.no_sell||r.no_deposit) ? "مقيّد" + (r.until_at?" حتى "+fmtT(r.until_at):"") : "طبيعي";
-  const tg = (on, off, onT, offT) => `<button type="button" class="${on?"on":""}" data-act="${off}">${on?"رفع: "+onT:offT}</button>`;
-  openSheet(`<div class="grab"></div><h3>${esc(u.buyer_code||u.email||"مستخدم")}</h3>
-    ${kv("الحالة",state)}${kv("كود المشتري",u.buyer_code,true)}${kv("الإيميل",u.email,true)}${kv("الهاتف",u.phone,true)}${kv("انضم",u.joined?fmtT(u.joined):"")}${kv("مزايداته",n0(u.bids))}${kv("تأميناته",n0(u.deposits))}${kv("أجهزته المعروضة",n0(u.selling))}${kv("سبب التقييد",r.reason)}
+  const r=activeRestr(u)||{};
+  const state=r.banned?"محظور":(r.no_bid||r.no_sell||r.no_deposit)?"مقيّد":(u.is_active===false?"حساب معطّل":"طبيعي");
+  const kv=(k,v,ltr=false)=>v!==null&&v!==undefined&&v!==""?`<div class="user-detail-cell"><small>${k}</small><b class="${ltr?"ltr":""}">${esc(v)}</b></div>`:"";
+  const online=userOnline(u);
+  const tg=(on,off,onT,offT)=>`<button type="button" class="${on?"on":""}" data-act="${off}">${on?"رفع: "+onT:offT}</button>`;
+  openSheet(`<div class="grab"></div><h3>${esc(u.full_name||u.buyer_code||u.email||"مستخدم")}</h3>
+    <div class="user-detail-grid">
+      ${kv("حالة الحساب",state)}${kv("البريد الإلكتروني",u.email||"غير مسجل",true)}
+      ${kv("كود المشتري",u.buyer_code||"—",true)}${kv("رقم الهاتف",u.phone||"—",true)}
+      ${kv("المحافظة",u.city||"غير محددة")}${kv("تاريخ التسجيل",u.joined?fmtT(u.joined):"—")}
+      ${kv("آخر ظهور",userPresence(u))}${kv("آخر دخول",u.last_login_at?fmtT(u.last_login_at):"غير مسجل")}
+      ${kv("آخر خروج",u.last_logout_at?fmtT(u.last_logout_at):"غير مسجل")}${kv("مدة آخر جلسة",sessionDuration(u.last_session_seconds))}
+      ${kv("الثقة",n0(u.trust_score))}${kv("المزايدات",n0(u.bids))}${kv("التأمينات",n0(u.deposits))}
+      ${kv("أجهزة البيع المباشر",n0(u.direct_listings))}${kv("مزادات منشورة",n0(u.auction_listings))}
+      ${kv("المعرّف",u.user_id,true)}
+    </div>
+    <div class="user-card-extra"><span class="user-mini ${online?"online":"offline"}">${online?"● متصل الآن":"غير متصل"}</span></div>
     <div class="pair">${u.phone?`<a class="b2 gn" href="tel:${esc(u.phone)}">اتصال</a><a class="b2 lt" href="${waLink(u.phone)}" target="_blank" rel="noopener">واتساب</a>`:""}</div>
+    <div class="user-listings"><div class="sh"><h3>الأجهزة والمنشورات</h3><small>${n0(Number(u.direct_listings||0)+Number(u.auction_listings||0))} منشور</small></div><div id="userListings"><div class="empty">جاري التحميل...</div></div></div>
     <span class="lbl">مدة التقييد الجديد</span>${seg("dur",[["1","ساعة"],["24","يوم"],["168","أسبوع"],["","دائم"]],"24")}
     <textarea class="note" id="urs" maxlength="160" placeholder="سبب التقييد (يظهر للمستخدم)">${esc(r.reason||"")}</textarea>
     <div class="ubtn">${tg(r.no_bid,"bid","المزايدة","منع المزايدة")}${tg(r.no_sell,"sell","البيع","منع بيع الأجهزة")}${tg(r.no_deposit,"dep","التأمين","منع دفع التأمين")}${tg(r.banned,"ban","الحظر","حظر الحساب كاملاً")}
@@ -914,6 +1021,7 @@ function openUser(u){
   { bid:()=>userRestr(u,{no_bid:!r.no_bid}), sell:()=>userRestr(u,{no_sell:!r.no_sell}), dep:()=>userRestr(u,{no_deposit:!r.no_deposit}),
     ban:()=>userRestr(u,{banned:!r.banned}), lift:()=>userRestr(u,{banned:false,no_bid:false,no_sell:false,no_deposit:false}),
     copy:async()=>{ try{ await navigator.clipboard.writeText(u.user_id); toast("تم النسخ","ok"); }catch{ toast(u.user_id); } } });
+  loadUserListings(u);
 }
 async function userRestr(u, patch){
   const cur = activeRestr(u) || {};
@@ -979,7 +1087,7 @@ $("logout").onclick = async () => { await supabase.auth.signOut(); location.href
     renderCmds();
     const h = location.hash.replace("#","");
     if(["review","auctions","users","settings"].includes(h)) setTab(h);
-    setInterval(() => { if(!document.hidden && !S.busy) refreshActive(); }, POLL_MS);
+    setInterval(() => { if(!document.hidden && !S.busy) refreshActive(); if(!document.hidden && S.tab==="users") loadUsers(); }, POLL_MS);
     document.addEventListener("visibilitychange", () => { if(!document.hidden) refreshActive(); });
   }catch(e){
     console.error(e);
