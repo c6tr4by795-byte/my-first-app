@@ -204,6 +204,15 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
 .user-listing .ul-price{font-size:11px;font-weight:900;color:var(--pd);margin-top:4px}
 .user-status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#16a36a;margin-left:4px}
 @media(max-width:370px){.user-directory-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.user-listing{grid-template-columns:64px minmax(0,1fr)}.user-listing img{width:64px;height:64px}}
+
+.user-online-clock{font-variant-numeric:tabular-nums;font-weight:900;direction:ltr;display:inline-block}
+.user-action-group{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+.user-action-group button{min-height:42px;padding:9px;border:1px solid var(--edge);border-radius:12px;background:#fff;color:var(--pd);font-size:11px;font-weight:850}
+.user-action-group button.danger{color:#b43b4b}
+.user-message-box{display:grid;gap:9px;margin:15px 0;padding:12px;border:1px solid var(--edge);border-radius:15px;background:#fff}
+.user-message-box input,.user-message-box textarea{width:100%;padding:11px;border:1px solid var(--edge);border-radius:11px;font:inherit;font-size:12px}
+.user-message-box textarea{min-height:85px;resize:vertical}
+.user-message-box button{padding:11px;border:0;border-radius:11px;background:var(--pd);color:#fff;font-weight:900}
 </style>
 </head>
 <body>
@@ -918,12 +927,29 @@ function sessionDuration(seconds){
   const m=Math.floor(n/60); const sec=n%60;
   return [d?d+" يوم":"",h?h+" ساعة":"",m?m+" دقيقة":"",(!d&&!h&&!m?sec+" ثانية":"")].filter(Boolean).join(" و");
 }
-function userOnline(u){ return !!u.last_seen_at && (Date.now()-new Date(u.last_seen_at).getTime())<=40000; }
+const PRESENCE_TIMEOUT_MS=95000;
+function userOnline(u){ return !!u.last_seen_at && (Date.now()-new Date(u.last_seen_at).getTime())<=PRESENCE_TIMEOUT_MS; }
+function elapsedClock(seconds){
+  let n=Math.max(0,Math.floor(Number(seconds)||0));
+  const h=Math.floor(n/3600); n%=3600;
+  const m=Math.floor(n/60); const sec=n%60;
+  return [h,m,sec].map(x=>String(x).padStart(2,"0")).join(":");
+}
 function userPresence(u){
-  if(!u.last_seen_at) return "لم يسجل دخول بعد";
-  const ms=Math.max(0,Date.now()-new Date(u.last_seen_at).getTime());
-  if(ms<=40000) return "متصل الآن";
-  return "آخر ظهور "+ago(u.last_seen_at);
+  if(!u.last_seen_at) return "لا توجد إشارة حضور مسجلة";
+  const seconds=Math.max(0,Math.floor((Date.now()-new Date(u.last_seen_at).getTime())/1000));
+  return userOnline(u)?"داخل المنصة منذ "+elapsedClock(seconds):"خارج المنصة منذ "+elapsedClock(seconds);
+}
+function refreshPresenceClocks(){
+  document.querySelectorAll("[data-presence-user]").forEach(el=>{
+    const u=S.users.find(x=>x.user_id===el.dataset.presenceUser);
+    if(!u)return;
+    const online=userOnline(u);
+    el.classList.toggle("online",online);
+    el.classList.toggle("offline",!online);
+    el.textContent=userPresence(u);
+  });
+  if(S.tab==="users" && $("uOnline")) $("uOnline").textContent=n0(S.users.filter(userOnline).length);
 }
 async function loadUsers(){
   if(S.uq.length===1) return;
@@ -951,7 +977,7 @@ function renderUsers(){
         </div></div>${badge}
       </div>
       <div class="user-card-extra">
-        <span class="user-mini ${online?"online":"offline"}">${online?"● متصل الآن":"آخر ظهور: "+esc(u.last_seen_at?ago(u.last_seen_at):"غير مسجل")}</span>
+        <span class="user-mini ${online?"online":"offline"}" data-presence-user="${esc(u.user_id)}">${esc(userPresence(u))}</span>
         <span class="user-mini">انضم: ${esc(u.joined?ago(u.joined):"—")}</span>
         <span class="user-mini">مدة آخر جلسة: ${esc(sessionDuration(u.last_session_seconds))}</span>
       </div>
@@ -963,6 +989,21 @@ function renderUsers(){
   }).join("");
 }
 $("uList").addEventListener("click", e => { const b=e.target.closest("[data-u]"); if(b) openUser(S.users[+b.dataset.u]); });
+
+async function sendAdminUserMessage(u){
+  const title=($("adminMessageTitle")?.value||"").trim();
+  const body=($("adminMessageBody")?.value||"").trim();
+  if(title.length<2||!body){toast("اكتب عنوان الرسالة ومحتواها أولاً","bad");return;}
+  const ok=await confirmSheet({title:"إرسال رسالة خاصة",text:"ستصل هذه الرسالة إلى إشعارات المستخدم داخل التطبيق. هل تريد إرسالها؟",ok:"إرسال الرسالة"});
+  if(!ok)return;
+  try{
+    const {error}=await supabase.rpc("mzad_admin_send_user_message",{p_user_id:u.user_id,p_title:title,p_body:body});
+    if(error)throw error;
+    toast("تم إرسال الرسالة إلى المستخدم","ok");
+    $("adminMessageTitle").value="";
+    $("adminMessageBody").value="";
+  }catch(e){toast("تعذر إرسال الرسالة: "+rpcErr(e),"bad");}
+}
 
 async function toggleUserActive(u){
   const next=!u.is_active;
@@ -1020,7 +1061,7 @@ function openUser(u){
   const state=r.banned?"محظور":(r.no_bid||r.no_sell||r.no_deposit)?"مقيّد":(u.is_active===false?"حساب معطّل":"طبيعي");
   const kv=(k,v,ltr=false)=>v!==null&&v!==undefined&&v!==""?`<div class="user-detail-cell"><small>${k}</small><b class="${ltr?"ltr":""}">${esc(v)}</b></div>`:"";
   const online=userOnline(u);
-  const tg=(on,off,onT,offT)=>`<button type="button" class="${on?"on":""}" data-act="${off}">${on?"رفع: "+onT:offT}</button>`;
+  const tg=(on,off,onT,offT)=>`<button type="button" class="${on?"on":""}" data-act="${off}">${on?"إلغاء "+onT:offT}</button>`;
   openSheet(`<div class="grab"></div><h3>${esc(u.full_name||u.buyer_code||u.email||"مستخدم")}</h3>
     <div class="user-detail-grid">
       ${kv("حالة الحساب",state)}${kv("البريد الإلكتروني",u.email||"غير مسجل",true)}
@@ -1033,18 +1074,34 @@ function openUser(u){
       ${kv("أجهزة البيع المباشر",n0(u.direct_listings))}${kv("مزادات منشورة",n0(u.auction_listings))}
       ${kv("المعرّف",u.user_id,true)}
     </div>
-    <div class="user-card-extra"><span class="user-mini ${online?"online":"offline"}">${online?"● متصل الآن":"غير متصل"}</span></div>
+    <div class="user-card-extra"><span class="user-mini ${online?"online":"offline"}" data-presence-user="${esc(u.user_id)}">${esc(userPresence(u))}</span></div>
     <div class="pair">${u.phone?`<a class="b2 gn" href="tel:${esc(u.phone)}">اتصال</a><a class="b2 lt" href="${waLink(u.phone)}" target="_blank" rel="noopener">واتساب</a>`:""}</div>
     <div class="user-listings"><div class="sh"><h3>الأجهزة والمنشورات</h3><small>${n0(Number(u.direct_listings||0)+Number(u.auction_listings||0))} منشور</small></div><div id="userListings"><div class="empty">جاري التحميل...</div></div></div>
     <span class="lbl">مدة التقييد الجديد</span>${seg("dur",[["1","ساعة"],["24","يوم"],["168","أسبوع"],["","دائم"]],"24")}
     <textarea class="note" id="urs" maxlength="160" placeholder="سبب التقييد (يظهر للمستخدم)">${esc(r.reason||"")}</textarea>
-    <div class="ubtn">
-      <button type="button" class="${u.is_active?"on":"okk"} full" data-act="active">${u.is_active?"تعطيل الحساب":"تفعيل الحساب"}</button>
-      ${tg(r.no_bid,"bid","المزايدة","منع المزايدة")}${tg(r.no_sell,"sell","البيع","منع بيع الأجهزة")}${tg(r.no_deposit,"dep","التأمين","منع دفع التأمين")}${tg(r.banned,"ban","الحظر","حظر الحساب كاملاً")}
-      ${Object.keys(r).length?'<button type="button" class="okk full" data-act="lift">رفع كل القيود</button>':""}<button type="button" class="full" data-act="copy">نسخ المعرّف</button></div>
+    <div class="user-action-group">
+      <button type="button" data-act="message">إرسال رسالة خاصة</button>
+      <button type="button" data-act="active" class="danger">${u.is_active?"تعطيل الحساب":"تفعيل الحساب"}</button>
+      ${r.banned?'<button type="button" data-act="ban" class="danger">إلغاء الحظر</button>':'<button type="button" data-act="ban" class="danger">حظر الحساب</button>'}
+      ${r.no_bid?'<button type="button" data-act="bid">إلغاء منع المزايدة</button>':'<button type="button" data-act="bid">منع المزايدة</button>'}
+      ${r.no_sell?'<button type="button" data-act="sell">إلغاء منع البيع</button>':'<button type="button" data-act="sell">منع البيع</button>'}
+      ${r.no_deposit?'<button type="button" data-act="dep">إلغاء منع التأمين</button>':'<button type="button" data-act="dep">منع التأمين</button>'}
+      <button type="button" data-act="lift" class="danger" ${(!r.banned&&!r.no_bid&&!r.no_sell&&!r.no_deposit)?"disabled":""}>إلغاء جميع القيود</button>
+      <button type="button" data-act="copy">نسخ المعرّف</button>
+    </div>
+    <div class="user-message-box">
+      <b>رسالة خاصة من الإدارة</b>
+      <input id="adminMessageTitle" maxlength="180" placeholder="عنوان الرسالة">
+      <textarea id="adminMessageBody" maxlength="1200" placeholder="اكتب رسالتك للمستخدم..."></textarea>
+      <button type="button" data-act="sendMessage">إرسال الرسالة إلى حسابه</button>
+      <small style="color:var(--muted)">ستصل الرسالة داخل إشعارات المستخدم في التطبيق.</small>
+    </div>
     <button class="b3" data-act="no" type="button">إغلاق</button>`,
   { active:()=>toggleUserActive(u), bid:()=>userRestr(u,{no_bid:!r.no_bid}), sell:()=>userRestr(u,{no_sell:!r.no_sell}), dep:()=>userRestr(u,{no_deposit:!r.no_deposit}),
-    ban:()=>userRestr(u,{banned:!r.banned}), lift:()=>userRestr(u,{banned:false,no_bid:false,no_sell:false,no_deposit:false}),
+    ban:()=>userRestr(u,{banned:!r.banned,no_bid:r.banned?false:r.no_bid,no_sell:r.banned?false:r.no_sell,no_deposit:r.banned?false:r.no_deposit}),
+    lift:()=>userRestr(u,{banned:false,no_bid:false,no_sell:false,no_deposit:false}),
+    message:()=>{ $("adminMessageTitle")?.focus(); },
+    sendMessage:()=>sendAdminUserMessage(u),
     copy:async()=>{ try{ await navigator.clipboard.writeText(u.user_id); toast("تم النسخ","ok"); }catch{ toast(u.user_id); } } });
   loadUserListings(u);
 }
@@ -1052,7 +1109,7 @@ async function userRestr(u, patch){
   const cur = activeRestr(u) || {};
   const f = { banned:!!cur.banned, no_bid:!!cur.no_bid, no_sell:!!cur.no_sell, no_deposit:!!cur.no_deposit, ...patch };
   const adding = Object.values(patch).some(Boolean), hrs = getSeg("dur");
-  const until = adding ? (hrs ? iso(Number(hrs)*60) : null) : (cur.until_at || null);
+  const until = adding ? (hrs ? iso(Number(hrs)*60) : null) : null;
   const reason = ($("urs")?.value || "").trim() || null;
   if(patch.banned===true){ const ok = await confirmSheet({ title:"حظر الحساب", text:"سيرى المستخدم شاشة «حسابك موقوف» ولن يقدر يستخدم التطبيق"+(hrs?" لمدة محددة.":" حتى ترفع الحظر."), ok:"حظر", danger:true }); if(!ok){ openUser(u); return; } }
   try{
@@ -1112,7 +1169,8 @@ $("logout").onclick = async () => { await supabase.auth.signOut(); location.href
     renderCmds();
     const h = location.hash.replace("#","");
     if(["review","auctions","users","settings"].includes(h)) setTab(h);
-    setInterval(() => { if(!document.hidden && !S.busy) refreshActive(); if(!document.hidden && S.tab==="users") loadUsers(); }, POLL_MS);
+    setInterval(() => { if(!document.hidden && !S.busy) refreshActive(); if(!document.hidden && S.tab==="users") loadUsers(); refreshPresenceClocks(); }, POLL_MS);
+setInterval(refreshPresenceClocks,1000);
     document.addEventListener("visibilitychange", () => { if(!document.hidden) refreshActive(); });
   }catch(e){
     console.error(e);
