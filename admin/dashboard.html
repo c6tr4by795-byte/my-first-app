@@ -964,6 +964,28 @@ function renderUsers(){
 }
 $("uList").addEventListener("click", e => { const b=e.target.closest("[data-u]"); if(b) openUser(S.users[+b.dataset.u]); });
 
+async function toggleUserActive(u){
+  const next=!u.is_active;
+  const ok=await confirmSheet({
+    title:next?"تفعيل حساب المستخدم":"تعطيل حساب المستخدم",
+    text:next?"سيتم إعادة تفعيل الحساب والسماح له باستخدام الخدمات المتاحة.":"سيتم إيقاف الحساب عن استخدام الخدمات. لا تُحذف بياناته أو منشوراته.",
+    ok:next?"تفعيل الحساب":"تعطيل الحساب",
+    danger:!next
+  });
+  if(!ok) return;
+  const reason=prompt("سبب الإجراء (اختياري):")||null;
+  try{
+    const {error}=await supabase.rpc("mzad_admin_set_user_active",{
+      p_user_id:u.user_id,p_is_active:next,p_reason:reason
+    });
+    if(error) throw error;
+    toast(next?"تم تفعيل الحساب":"تم تعطيل الحساب","ok");
+    await loadUsers();
+    const fresh=S.users.find(x=>x.user_id===u.user_id);
+    if(fresh) openUser(fresh);
+  }catch(e){toast("تعذر تغيير حالة الحساب: "+rpcErr(e),"bad");}
+}
+
 async function loadUserListings(u){
   const box=$("userListings");
   if(!box) return;
@@ -1004,6 +1026,7 @@ function openUser(u){
       ${kv("حالة الحساب",state)}${kv("البريد الإلكتروني",u.email||"غير مسجل",true)}
       ${kv("كود المشتري",u.buyer_code||"—",true)}${kv("رقم الهاتف",u.phone||"—",true)}
       ${kv("المحافظة",u.city||"غير محددة")}${kv("تاريخ التسجيل",u.joined?fmtT(u.joined):"—")}
+      ${kv("مدة العضوية",u.joined?ago(u.joined).replace("قبل ","منذ "):"—")}
       ${kv("آخر ظهور",userPresence(u))}${kv("آخر دخول",u.last_login_at?fmtT(u.last_login_at):"غير مسجل")}
       ${kv("آخر خروج",u.last_logout_at?fmtT(u.last_logout_at):"غير مسجل")}${kv("مدة آخر جلسة",sessionDuration(u.last_session_seconds))}
       ${kv("الثقة",n0(u.trust_score))}${kv("المزايدات",n0(u.bids))}${kv("التأمينات",n0(u.deposits))}
@@ -1015,10 +1038,12 @@ function openUser(u){
     <div class="user-listings"><div class="sh"><h3>الأجهزة والمنشورات</h3><small>${n0(Number(u.direct_listings||0)+Number(u.auction_listings||0))} منشور</small></div><div id="userListings"><div class="empty">جاري التحميل...</div></div></div>
     <span class="lbl">مدة التقييد الجديد</span>${seg("dur",[["1","ساعة"],["24","يوم"],["168","أسبوع"],["","دائم"]],"24")}
     <textarea class="note" id="urs" maxlength="160" placeholder="سبب التقييد (يظهر للمستخدم)">${esc(r.reason||"")}</textarea>
-    <div class="ubtn">${tg(r.no_bid,"bid","المزايدة","منع المزايدة")}${tg(r.no_sell,"sell","البيع","منع بيع الأجهزة")}${tg(r.no_deposit,"dep","التأمين","منع دفع التأمين")}${tg(r.banned,"ban","الحظر","حظر الحساب كاملاً")}
+    <div class="ubtn">
+      <button type="button" class="${u.is_active?"on":"okk"} full" data-act="active">${u.is_active?"تعطيل الحساب":"تفعيل الحساب"}</button>
+      ${tg(r.no_bid,"bid","المزايدة","منع المزايدة")}${tg(r.no_sell,"sell","البيع","منع بيع الأجهزة")}${tg(r.no_deposit,"dep","التأمين","منع دفع التأمين")}${tg(r.banned,"ban","الحظر","حظر الحساب كاملاً")}
       ${Object.keys(r).length?'<button type="button" class="okk full" data-act="lift">رفع كل القيود</button>':""}<button type="button" class="full" data-act="copy">نسخ المعرّف</button></div>
     <button class="b3" data-act="no" type="button">إغلاق</button>`,
-  { bid:()=>userRestr(u,{no_bid:!r.no_bid}), sell:()=>userRestr(u,{no_sell:!r.no_sell}), dep:()=>userRestr(u,{no_deposit:!r.no_deposit}),
+  { active:()=>toggleUserActive(u), bid:()=>userRestr(u,{no_bid:!r.no_bid}), sell:()=>userRestr(u,{no_sell:!r.no_sell}), dep:()=>userRestr(u,{no_deposit:!r.no_deposit}),
     ban:()=>userRestr(u,{banned:!r.banned}), lift:()=>userRestr(u,{banned:false,no_bid:false,no_sell:false,no_deposit:false}),
     copy:async()=>{ try{ await navigator.clipboard.writeText(u.user_id); toast("تم النسخ","ok"); }catch{ toast(u.user_id); } } });
   loadUserListings(u);
