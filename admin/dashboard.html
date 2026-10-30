@@ -734,7 +734,7 @@ $("dpSave").onclick=async()=>{
 /* ===== المراجعة ===== */
 function renderFilters(){
   $("qFilters").innerHTML = Q_FILTERS.map(f => `<button class="chip ${S.qf===f[0]?"on":""}" type="button" data-qf="${f[0]}">${f[1]}</button>`).join("");
-  $("uFilters").innerHTML = [["all","الكل"],["restricted","المقيّدون"]].map(f => `<button class="chip ${S.uf===f[0]?"on":""}" type="button" data-uf="${f[0]}">${f[1]}</button>`).join("");
+  $("uFilters").innerHTML = [["all","الكل"],["restricted","المقيّدون"],["deposit_paid","دافعو التأمين"],["deposit_unpaid","غير الدافعين"],["deposit_pending","إثبات قيد المراجعة"]].map(f => `<button class="chip ${S.uf===f[0]?"on":""}" type="button" data-uf="${f[0]}">${f[1]}</button>`).join("");
   $("aFilters").innerHTML = A_FILTERS.map(f => `<button class="chip ${S.af===f[0]?"on":""}" type="button" data-af="${f[0]}">${f[1]}</button>`).join("");
 }
 $("qFilters").addEventListener("click", e => { const b=e.target.closest("[data-qf]"); if(!b) return; S.qf=b.dataset.qf; renderFilters(); $("qList").innerHTML='<div class="sk"></div>'; loadQueue(); });
@@ -959,13 +959,50 @@ async function loadUsers(){
   try{ S.users = await fetchUsers(S.uq); S.loaded.users = true; renderUsers(); }
   catch(e){ $("uList").innerHTML = `<div class="empty">تعذر تحميل المستخدمين<br><small>${esc(rpcErr(e))}</small></div>`; }
 }
+function depositSummary(u){
+  const active=Number(u.deposit_active_count||0);
+  const pending=Number(u.deposit_pending_count||0);
+  const paid=Number(u.deposit_paid_count||0);
+  if(active>0)return "التأمين: مدفوع وفعّال ("+active+")";
+  if(pending>0)return "التأمين: إثبات بانتظار المراجعة ("+pending+")";
+  if(paid>0)return "التأمين: مدفوع سابقاً لكن مسترد/منتهي";
+  return "التأمين: لا يوجد دفع مسجل";
+}
+function depositPaidSummary(u){
+  const history=Array.isArray(u.deposit_history)?u.deposit_history:[];
+  const paid=history.filter(d=>!!d.paid_at||["approved","refundable","refund_requested","refunded","forfeited"].includes(d.status)).length;
+  return "عمليات دفع مثبتة: "+paid;
+}
+function depositStatusLabel(d){
+  const paid=!!d.paid_at||["approved","refundable","refund_requested","refunded","forfeited"].includes(d.status);
+  const status=({
+    pending_payment:"لم يثبت الدفع",
+    proof_submitted:"تم إرسال إثبات الدفع",
+    under_review:"إثبات الدفع قيد المراجعة",
+    approved:"مدفوع ومقبول",
+    rejected:paid?"دفع سابق مرفوض بعد المراجعة":"مرفوض ولم يثبت الدفع",
+    refundable:"مدفوع وقابل للاسترداد",
+    refund_requested:"مدفوع وطلب الاسترداد قيد المراجعة",
+    refunded:"مدفوع وتم استرداده",
+    forfeited:"مدفوع وتمت مصادرته",
+    cancelled:paid?"دفع سابق ثم أُلغي":"ملغي دون دفع مثبت"
+  })[d.status]||d.status||"حالة غير معروفة";
+  return {label:status,paid};
+}
 function renderUsers(){
-  const rows = S.users.filter(u => S.uf==="all" || activeRestr(u));
+  const rows = S.users.filter(u => {
+    if(S.uf==="all")return true;
+    if(S.uf==="restricted")return !!activeRestr(u);
+    if(S.uf==="deposit_paid")return Number(u.deposit_paid_count||0)>0;
+    if(S.uf==="deposit_unpaid")return Number(u.deposit_paid_count||0)===0;
+    if(S.uf==="deposit_pending")return Number(u.deposit_pending_count||0)>0;
+    return true;
+  });
   $("uCount").textContent = S.uq ? n0(rows.length)+" نتيجة" : "آخر الحسابات المسجلة";
   if($("uTotal")) $("uTotal").textContent=n0(rows.length);
   if($("uOnline")) $("uOnline").textContent=n0(rows.filter(userOnline).length);
   if($("uRestricted")) $("uRestricted").textContent=n0(S.users.filter(u=>activeRestr(u)).length);
-  if(!rows.length){ $("uList").innerHTML = `<div class="empty">${S.uq?"لا توجد نتائج":S.uf==="restricted"?"لا توجد حسابات مقيّدة":"لا يوجد مستخدمون"}</div>`; return; }
+  if(!rows.length){ $("uList").innerHTML = `<div class="empty">${S.uq?"لا توجد نتائج":S.uf==="restricted"?"لا توجد حسابات مقيّدة":S.uf==="deposit_paid"?"لا يوجد مستخدمون لديهم دفعات تأمين مثبتة":S.uf==="deposit_unpaid"?"لا يوجد مستخدمون بلا دفعات تأمين مثبتة":S.uf==="deposit_pending"?"لا توجد إثباتات دفع بانتظار المراجعة":"لا يوجد مستخدمون"}</div>`; return; }
   $("uList").innerHTML = rows.map(u => {
     const r=activeRestr(u), online=userOnline(u);
     const name=u.full_name||u.buyer_code||u.email||String(u.user_id).slice(0,8);
@@ -983,6 +1020,10 @@ function renderUsers(){
         <span class="user-mini ${online?"online":"offline"}" data-presence-user="${esc(u.user_id)}">${esc(userPresence(u))}</span>
         <span class="user-mini">انضم: ${esc(u.joined?ago(u.joined):"—")}</span>
         <span class="user-mini">مدة آخر جلسة: ${esc(sessionDuration(u.last_session_seconds))}</span>
+      </div>
+      <div class="user-card-extra">
+        <span class="user-mini">${esc(depositSummary(u))}</span>
+        <span class="user-mini">${esc(depositPaidSummary(u))}</span>
       </div>
       <div class="stt">
         <span>مزايدات ${n0(u.bids)}</span><span>تأمينات ${n0(u.deposits)}</span>
@@ -1085,11 +1126,26 @@ function openUser(u){
       ${kv("مدة العضوية",u.joined?ago(u.joined).replace("قبل ","منذ "):"—")}
       ${kv("آخر ظهور",userPresence(u))}${kv("آخر دخول",u.last_login_at?fmtT(u.last_login_at):"غير مسجل")}
       ${kv("آخر خروج",u.last_logout_at?fmtT(u.last_logout_at):"غير مسجل")}${kv("مدة آخر جلسة",sessionDuration(u.last_session_seconds))}
-      ${kv("الثقة",n0(u.trust_score))}${kv("المزايدات",n0(u.bids))}${kv("التأمينات",n0(u.deposits))}
+      ${kv("الثقة",n0(u.trust_score))}${kv("المزايدات",n0(u.bids))}${kv("عدد عمليات التأمين",n0(u.deposits))}
+      ${kv("التأمين المدفوع والفعّال",n0(u.deposit_active_count))}${kv("إثباتات دفع بانتظار المراجعة",n0(u.deposit_pending_count))}${kv("مدفوع سابقاً (يشمل المسترد والمنتهي)",n0(u.deposit_paid_count))}
       ${kv("أجهزة البيع المباشر",n0(u.direct_listings))}${kv("مزادات منشورة",n0(u.auction_listings))}
       ${kv("المعرّف",u.user_id,true)}
     </div>
     <div class="user-card-extra"><span class="user-mini ${online?"online":"offline"}" data-presence-user="${esc(u.user_id)}">${esc(userPresence(u))}</span></div>
+    <div class="user-listings">
+      <div class="sh"><h3>سجل التأمينات والمدفوعات</h3><small>${n0((u.deposit_history||[]).length)} عملية</small></div>
+      ${(u.deposit_history||[]).length?(u.deposit_history||[]).map(d=>{
+        const st=depositStatusLabel(d);
+        const kind=({auction_buyer:"تأمين مشتري مزاد",auction_seller:"تأمين بائع مزاد",direct_buyer:"تأمين مشتري بيع مباشر"})[d.type]||d.type;
+        return `<div class="user-detail-cell" style="margin-bottom:8px">
+          <b>${esc(kind)} — ${esc(st.label)}</b>
+          <small>المبلغ: ${n0(d.amount_iqd)} د.ع · رقم العملية: ${esc(d.number||"—")}</small>
+          <small>الدفع: ${esc(d.paid_at?fmtT(d.paid_at):"لا يوجد وقت دفع مثبت")} · الاعتماد: ${esc(d.approved_at?fmtT(d.approved_at):"—")}</small>
+          ${d.refunded_at?`<small>الاسترداد: ${esc(fmtT(d.refunded_at))}</small>`:""}
+          ${d.forfeited_at?`<small>المصادرة: ${esc(fmtT(d.forfeited_at))}</small>`:""}
+        </div>`;
+      }).join(""):'<div class="empty">لا توجد عمليات تأمين مسجلة لهذا المستخدم.</div>'}
+    </div>
     <div class="user-listings"><div class="sh"><h3>القيود الفعّالة</h3><small>${n0((u.restriction_details||[]).length)} قيد</small></div><div class="user-detail-grid">${renderRestrictionDetails(u)}</div></div>
     <div class="pair">${u.phone?`<a class="b2 gn" href="tel:${esc(u.phone)}">اتصال</a><a class="b2 lt" href="${waLink(u.phone)}" target="_blank" rel="noopener">واتساب</a>`:""}</div>
     <div class="user-listings"><div class="sh"><h3>الأجهزة والمنشورات</h3><small>${n0(Number(u.direct_listings||0)+Number(u.auction_listings||0))} منشور</small></div><div id="userListings"><div class="empty">جاري التحميل...</div></div></div>
