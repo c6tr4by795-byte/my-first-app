@@ -172,6 +172,16 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
 @media(min-width:620px){.kpis{grid-template-columns:repeat(3,1fr)}.kpi.hero{grid-column:span 3}.fields{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:380px){.fields{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* تنظيم لوحة الإدارة */
+.admin-intro{margin:0 0 12px;padding:12px 14px;border:1px solid var(--edge);border-radius:15px;background:#fff;color:var(--muted);font-size:12px;line-height:1.9}
+.admin-jumps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0 18px}
+.admin-jump{display:flex;align-items:center;justify-content:space-between;gap:7px;min-height:48px;padding:11px;border:1px solid var(--edge);border-radius:14px;background:#fff;color:var(--pd);font-size:12px;font-weight:900;text-decoration:none}
+.admin-jump small{display:block;color:var(--muted);font-size:10px;font-weight:600}
+.admin-group{padding:13px;border:1px solid var(--edge);border-radius:18px;background:#fff}
+.admin-group+.admin-group{margin-top:12px}
+.sec[id]{scroll-margin-top:14px}
+@media(max-width:360px){.admin-jumps{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -190,12 +200,17 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
 
 <!-- نظرة عامة -->
 <section class="panel" id="p-overview">
-  <div class="sec"><div class="sh"><h2>يحتاج انتباهك</h2><small>يُحدَّث تلقائياً</small></div><div class="alerts" id="alerts"><div class="sk" style="height:70px"></div></div></div>
-  <div class="sec"><div class="sh"><h2>الأرقام الآن</h2></div><div class="kpis" id="kpis"><div class="sk"></div><div class="sk"></div></div></div>
-  <div class="sec"><div class="sh"><h2>تحكم سريع</h2><small>يطبّق فوراً، ويمكن التراجع</small></div><div class="card" id="presets"></div></div>
-  <div class="sec"><div class="sh"><h2>مركز الأوامر</h2><small>تحكم مباشر بالمنصة</small></div><div class="card" id="cmds"></div></div>
-  <div class="sec"><div class="sh"><h2>اختصارات</h2></div>
-    <div class="chips" style="flex-wrap:wrap;overflow:visible"><a class="chip" href="payment-methods.html">طرق الدفع</a><a class="chip" href="auctions.html?tab=sale">التأمينات والاسترداد</a><a class="chip" href="../auctions.html">المزادات</a><a class="chip" href="../home.html">الرئيسية</a></div>
+  <div class="sec"><div class="sh"><h2>يحتاج انتباهك</h2><small>طلبات تحتاج قرارك</small></div><div class="alerts" id="alerts"><div class="sk" style="height:70px"></div></div></div>
+  <div class="sec"><div class="sh"><h2>ملخص المنصة</h2><small>الأرقام الحالية</small></div><div class="kpis" id="kpis"><div class="sk"></div><div class="sk"></div></div></div>
+  <div class="sec"><div class="sh"><h2>انتقال سريع</h2><small>افتح القسم المطلوب مباشرة</small></div>
+    <div class="chips" style="flex-wrap:wrap;overflow:visible">
+      <button class="chip" type="button" data-go="review">مراجعة التأمينات</button>
+      <button class="chip" type="button" data-go="auctions">المزادات</button>
+      <button class="chip" type="button" data-go="users">المستخدمون</button>
+      <button class="chip" type="button" data-go="settings">الإعدادات</button>
+      <a class="chip" href="payment-methods.html">طرق الدفع</a>
+      <a class="chip" href="auctions.html?tab=sale">الاسترداد</a>
+    </div>
   </div>
 </section>
 
@@ -230,40 +245,59 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
 
 <!-- الإعدادات -->
 <section class="panel" id="p-settings" hidden>
-  <div class="sec"><div class="sh"><h2>مفاتيح التشغيل</h2><small>الحساسة تطلب تأكيد</small></div><div class="card" id="tCore"></div>
-    <div class="adv"><button id="advBtn" type="button"><span>مفاتيح إضافية</span><span id="advArrow">‹</span></button><div class="card" id="tAdv" hidden></div></div>
+  <p class="admin-intro">هذه الصفحة مقسمة حسب المهمة. تسعير البيع المباشر مستقل عن المزادات. أي تعديل على التسعير يخص الإعلانات الجديدة فقط؛ الإعلانات المنشورة تبقى على اتفاقها وسعرها المحفوظ.</p>
+  <div class="admin-jumps" aria-label="أقسام الإعدادات">
+    <a class="admin-jump" href="#admin-ops">تشغيل المنصة <small>فتح وإيقاف الخدمات</small></a>
+    <a class="admin-jump" href="#admin-fees">الرسوم العامة <small>القيم والتأمينات</small></a>
+    <a class="admin-jump" href="#admin-direct-pricing">البيع المباشر <small>الهامش ورسوم الطرفين</small></a>
+    <a class="admin-jump" href="#admin-tools">أدوات الإدارة <small>الأوامر والإعلانات</small></a>
   </div>
-  <div class="sec"><div class="sh"><h2>القيم والرسوم</h2><small>تُحفظ الحقول المعدّلة فقط</small></div><div id="fields"></div></div>
-  <div class="sec">
-    <div class="sh"><h2>تسعير البيع المباشر</h2><small>لا يؤثر على المزادات</small></div>
-    <div class="card" style="padding:14px">
-      <p style="margin:0 0 12px;color:var(--muted);font-size:11.5px;line-height:1.8">حدد هامش المنصة الذي يضاف على سعر البائع، ثم حدد رسوم كل طرف بشكل مستقل. الإعداد الحالي يحافظ على الرسوم القديمة.</p>
-      <label class="lbl" for="dpmode">طريقة هامش الربح</label>
+  <div class="sec" id="admin-ops">
+    <div class="sh"><h2>1 ـ تشغيل المنصة</h2><small>تفعيل وإيقاف الخصائص</small></div>
+    <div class="admin-group">
+      <div class="grp">المفاتيح الأساسية</div><div class="card" id="tCore"></div>
+      <div class="adv"><button id="advBtn" type="button"><span>إعدادات تشغيل إضافية</span><span id="advArrow">‹</span></button><div class="card" id="tAdv" hidden></div></div>
+    </div>
+  </div>
+  <div class="sec" id="admin-fees">
+    <div class="sh"><h2>2 ـ الرسوم والقيم العامة</h2><small>إعدادات التأمين والعمليات</small></div>
+    <p class="admin-intro">هذه القيم العامة تبقى منفصلة عن تسعير البيع المباشر. لا تغيّر أسعار الإعلانات المباشرة المنشورة.</p>
+    <div class="admin-group"><div id="fields"></div></div>
+  </div>
+  <div class="sec" id="admin-direct-pricing">
+    <div class="sh"><h2>3 ـ تسعير البيع المباشر</h2><small>لا يؤثر على المزادات</small></div>
+    <p class="admin-intro">حدد طريقة احتساب هامش المنصة ورسوم البائع والمشتري. تظهر تفاصيل أي تغيير للبائع قبل النشر ويوافق عليها. بعد النشر تثبت تفاصيل الإعلان ولا تتغير بتعديل الإعدادات لاحقاً.</p>
+    <div class="admin-group">
+      <p style="margin:0 0 12px;color:var(--muted);font-size:11.5px;line-height:1.8">ابدأ باختيار طريقة الهامش، ثم حدد رسوم كل طرف. إذا لا تريد رسوماً لطرف، اختر «بدون رسوم».</p>
+      <label class="lbl" for="dpmode">طريقة هامش المنصة</label>
       <select class="inp" id="dpmode">
-        <option value="none">بدون هامش إضافي</option><option value="fixed">مبلغ ثابت</option>
-        <option value="percent">نسبة مئوية</option><option value="fixed_percent">مبلغ ثابت + نسبة</option>
-        <option value="tiers">شرائح حسب سعر الجهاز</option>
+        <option value="none">بدون هامش إضافي</option><option value="fixed">مبلغ ثابت</option><option value="percent">نسبة مئوية</option><option value="fixed_percent">مبلغ ثابت + نسبة</option><option value="tiers">شرائح حسب سعر الجهاز</option>
       </select>
       <div class="fields" style="margin-top:10px">
-        <div class="fd"><label for="dpfixed">الهامش الثابت — د.ع</label><input id="dpfixed" type="number" min="0" inputmode="numeric" value="0"></div>
-        <div class="fd"><label for="dppercent">النسبة — %</label><input id="dppercent" type="number" min="0" max="100" step="0.1" inputmode="decimal" value="0"></div>
+        <div class="fd"><label for="dpfixed">المبلغ الثابت ـ د.ع</label><input id="dpfixed" type="number" min="0" inputmode="numeric" value="0"></div>
+        <div class="fd"><label for="dppercent">النسبة ـ %</label><input id="dppercent" type="number" min="0" max="100" step="0.1" inputmode="decimal" value="0"></div>
       </div>
-      <label class="lbl" for="dptiers">الشرائح (عند اختيار الشرائح فقط)</label>
+      <label class="lbl" for="dptiers">تفاصيل الشرائح (تُستخدم عند اختيار الشرائح)</label>
       <textarea class="note" id="dptiers" rows="4" style="width:100%;direction:ltr;text-align:left" placeholder='[{"up_to_iqd":100000,"fixed_iqd":5000,"percent":0},{"up_to_iqd":300000,"fixed_iqd":10000,"percent":2}]'></textarea>
-      <p style="margin:4px 0 12px;color:var(--muted);font-size:10.5px;line-height:1.7">كل شريحة تحدد أعلى سعر تنطبق عليه، ثم مبلغاً ثابتاً ونسبة. أضف شريحة أخيرة بسقف كبير لتغطية كل الأسعار.</p>
+      <p style="margin:4px 0 12px;color:var(--muted);font-size:10.5px;line-height:1.7">كل شريحة تحدد الحد الأعلى للسعر، ثم المبلغ الثابت والنسبة. أضف شريحة أخيرة تغطي أعلى الأسعار.</p>
       <div class="divider" style="height:1px;background:var(--line);margin:12px 0"></div>
       <label class="lbl" for="dpsellermode">رسوم البائع</label>
-      <select class="inp" id="dpsellermode"><option value="legacy">القيمة القديمة من إعدادات الرسوم</option><option value="none">بدون رسوم</option><option value="fixed">مبلغ ثابت</option><option value="percent">نسبة من سعر البائع</option></select>
-      <input class="inp" id="dpsellervalue" type="number" min="0" inputmode="decimal" style="margin-top:8px" value="0" placeholder="قيمة الرسوم">
-      <label class="lbl" for="dpbuyermode">رسوم المشتري (إضافية على السعر الظاهر)</label>
-      <select class="inp" id="dpbuyermode"><option value="legacy">القيمة القديمة من إعدادات الرسوم</option><option value="none">بدون رسوم إضافية</option><option value="fixed">مبلغ ثابت</option><option value="percent">نسبة من سعر البائع</option></select>
-      <input class="inp" id="dpbuyervalue" type="number" min="0" inputmode="decimal" style="margin-top:8px" value="0" placeholder="قيمة الرسوم">
-      <div class="card" style="margin-top:14px;padding:12px;background:var(--ps);border-color:var(--edge)">
-        <b style="font-size:12px">معاينة على جهاز سعره 55,000 د.ع</b>
+      <select class="inp" id="dpsellermode"><option value="legacy">استخدام الرسوم العامة القديمة</option><option value="none">بدون رسوم</option><option value="fixed">مبلغ ثابت</option><option value="percent">نسبة من سعر البائع</option></select>
+      <input class="inp" id="dpsellervalue" type="number" min="0" inputmode="decimal" style="margin-top:8px" value="0" placeholder="قيمة رسوم البائع">
+      <label class="lbl" for="dpbuyermode">رسوم المشتري</label>
+      <select class="inp" id="dpbuyermode"><option value="legacy">استخدام الرسوم العامة القديمة</option><option value="none">بدون رسوم إضافية</option><option value="fixed">مبلغ ثابت</option><option value="percent">نسبة من سعر البائع</option></select>
+      <input class="inp" id="dpbuyervalue" type="number" min="0" inputmode="decimal" style="margin-top:8px" value="0" placeholder="قيمة رسوم المشتري">
+      <div class="admin-group" style="margin-top:14px;background:var(--ps)">
+        <b style="font-size:12px">مثال توضيحي على سعر 55,000 د.ع</b>
         <div id="dpPreview" style="margin-top:8px;font-size:12px;line-height:2;color:var(--pd)">—</div>
       </div>
-      <button class="b2" id="dpSave" type="button">حفظ تسعير البيع المباشر</button>
+      <button class="b2" id="dpSave" type="button">حفظ إعدادات البيع المباشر</button>
     </div>
+  </div>
+  <div class="sec" id="admin-tools">
+    <div class="sh"><h2>4 ـ أدوات الإدارة</h2><small>إجراءات تشغيلية</small></div>
+    <div class="admin-group"><div class="grp">إجراءات سريعة</div><div id="presets"></div></div>
+    <div class="admin-group" style="margin-top:12px"><div class="grp">إعلانات وأوامر المنصة</div><div id="cmds"></div></div>
   </div>
 </section>
 </main>
@@ -271,7 +305,7 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
 <div class="dirty" id="dirty" role="status"><span id="dirtyTxt"></span><button class="rs" id="dReset" type="button">تراجع</button><button class="sv" id="dSave" type="button">حفظ</button></div>
 
 <div class="tabs"><nav aria-label="أقسام اللوحة">
-  <button class="tb on" data-tab="overview" type="button"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg>نظرة عامة</button>
+  <button class="tb on" data-tab="overview" type="button"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg>الرئيسية</button>
   <button class="tb" data-tab="review" type="button"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 7.8 7 10 4-2.2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg>المراجعة<i id="bdgReview" hidden>0</i></button>
   <button class="tb" data-tab="auctions" type="button"><svg viewBox="0 0 24 24"><path d="M14 4 8 10l4 4 6-6M7 11 3.5 14.5 9.5 20.5 13 17M16 20h5"/></svg>المزادات</button>
   <button class="tb" data-tab="users" type="button"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.5-3.6 3.1-5.5 6.5-5.5s6 1.9 6.5 5.5M16 4.8a3.4 3.4 0 0 1 0 6.4M18 14.8c1.9.6 3.2 2.2 3.5 5.2"/></svg>المستخدمون</button>
