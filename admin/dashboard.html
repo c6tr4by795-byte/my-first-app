@@ -1057,6 +1057,18 @@ async function loadUserListings(u){
     </div>`;
   }).join("");
 }
+function restrictionName(type){
+  return ({all:"حظر كامل",bid:"منع المزايدة",sell:"منع البيع",deposit:"منع التأمين",buy:"منع الشراء"})[type]||type||"قيد";
+}
+function renderRestrictionDetails(u){
+  const rows=Array.isArray(u.restriction_details)?u.restriction_details:[];
+  if(!rows.length)return '<div class="empty">لا توجد قيود فعّالة على هذا الحساب.</div>';
+  return rows.map(r=>`<div class="user-detail-cell">
+    <b>${esc(restrictionName(r.type))}</b>
+    <small>${esc(r.reason||"لم يُذكر سبب")}</small>
+    <small>${r.expires_at?"ينتهي: "+esc(fmtT(r.expires_at)):"المدة: دائم"}</small>
+  </div>`).join("");
+}
 function openUser(u){
   if(!u) return;
   const r=activeRestr(u)||{};
@@ -1077,6 +1089,7 @@ function openUser(u){
       ${kv("المعرّف",u.user_id,true)}
     </div>
     <div class="user-card-extra"><span class="user-mini ${online?"online":"offline"}" data-presence-user="${esc(u.user_id)}">${esc(userPresence(u))}</span></div>
+    <div class="user-listings"><div class="sh"><h3>القيود الفعّالة</h3><small>${n0((u.restriction_details||[]).length)} قيد</small></div><div class="user-detail-grid">${renderRestrictionDetails(u)}</div></div>
     <div class="pair">${u.phone?`<a class="b2 gn" href="tel:${esc(u.phone)}">اتصال</a><a class="b2 lt" href="${waLink(u.phone)}" target="_blank" rel="noopener">واتساب</a>`:""}</div>
     <div class="user-listings"><div class="sh"><h3>الأجهزة والمنشورات</h3><small>${n0(Number(u.direct_listings||0)+Number(u.auction_listings||0))} منشور</small></div><div id="userListings"><div class="empty">جاري التحميل...</div></div></div>
     <span class="lbl">مدة التقييد الجديد</span>${seg("dur",[["1","ساعة"],["24","يوم"],["168","أسبوع"],["","دائم"]],"24")}
