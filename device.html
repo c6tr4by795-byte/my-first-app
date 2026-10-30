@@ -147,8 +147,13 @@ function toast(t){ const e = $("toast"); e.textContent = t; e.classList.add("sho
 function imgURL(p){
   const v = cl(p);
   if (!v) return "";
-  if (/^(https?:|data:|blob:)/.test(v)) return v;
-  return supabase.storage.from("device-images").getPublicUrl(v).data?.publicUrl || "";
+  if (/^(https?:|data:|blob:)/i.test(v)) return v;
+  const marker = /\/storage\/v1\/object\/(?:public|sign|authenticated)\/device-images\//i;
+  const match = v.match(marker);
+  let clean = match ? v.slice(match.index + match[0].length).split("?")[0] : v;
+  clean = clean.replace(/^\/+/, "").replace(/^device-images\//i, "");
+  try { clean = decodeURIComponent(clean); } catch {}
+  return supabase.storage.from("device-images").getPublicUrl(clean).data?.publicUrl || "";
 }
 
 /* ===== تحميل ===== */
