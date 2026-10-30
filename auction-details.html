@@ -356,8 +356,20 @@ async function loadStatic(){
     const im = (await supabase.from("mzad_device_images").select("storage_path,is_primary,sort_order").eq("device_id", S.a.device_id).order("sort_order",{ascending:true}).limit(8)).data || [];
     im.sort((x,y) => (y.is_primary?1:0) - (x.is_primary?1:0));
     if (im.length){
-      const sg = await supabase.storage.from("device-images").createSignedUrls(im.map(x => x.storage_path), 3600);
-      S.imgs = (sg.data || []).map(x => x.signedUrl).filter(Boolean);
+      const paths = im.map(x => {
+        let p = String(x.storage_path || "").trim();
+        const marker = /\/storage\/v1\/object\/(?:public|sign|authenticated)\/device-images\//i;
+        const match = p.match(marker);
+        if (match) p = p.slice(match.index + match[0].length).split("?")[0];
+        p = p.replace(/^\/+/, "").replace(/^device-images\//i, "").split("?")[0];
+        try { p = decodeURIComponent(p); } catch {}
+        return p;
+      }).filter(Boolean);
+      const sg = await supabase.storage.from("device-images").createSignedUrls(paths, 3600);
+      S.imgs = (sg.data || []).map(x => x.signedUrl || "").filter(Boolean);
+      if (!S.imgs.length) {
+        S.imgs = paths.map(p => supabase.storage.from("device-images").getPublicUrl(p).data?.publicUrl || "").filter(Boolean);
+      }
     }
   }catch(e){ console.error("IMG:", e); }
 }
