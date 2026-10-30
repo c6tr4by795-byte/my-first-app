@@ -459,6 +459,9 @@ async function fetchMzad(){
   if(error) throw error;
 
   const rows = (data || []).filter(i => i.device);
+  const priceResult = rows.length ? await supabase.rpc("mzad_public_direct_sale_price_breakdowns", { p_prices: rows.map(x => Number(x.asking_price_iqd)) }) : {data:[],error:null};
+  if(priceResult.error) throw priceResult.error;
+  const buyerPrices = new Map((priceResult.data || []).map(x => [Number(x.asking_price_iqd), Number(x.display_price_iqd)]));
   const deviceIds = [...new Set(rows.map(item => item.device.id).filter(Boolean))];
   const imageResult = deviceIds.length
     ? await supabase.from("mzad_device_images")
@@ -481,7 +484,7 @@ async function fetchMzad(){
     return {
       id:d.id, created_at:item.created_at, brand:d.brand, model:d.model, storage:d.storage, color:d.color,
       battery_health:d.battery_health, condition:d.condition_grade, body_condition:d.condition_grade,
-      screen_condition:d.screen_condition, price:item.asking_price_iqd, location:"النجف",
+      screen_condition:d.screen_condition, price:buyerPrices.get(Number(item.asking_price_iqd)) ?? item.asking_price_iqd, location:"النجف",
       sale_type:"direct", images:urls.filter(Boolean), notes:d.seller_notes, _mzad:true
     };
   }));
