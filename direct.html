@@ -2020,10 +2020,22 @@ function getDeviceImages(value){
 }
 
 
+function directImageUrl(path){
+  const value = String(path || "").trim();
+  if (!value) return "";
+  if (/^(https?:|data:|blob:)/i.test(value)) return value;
+  const marker = /\/storage\/v1\/object\/(?:public|sign|authenticated)\/device-images\//i;
+  const match = value.match(marker);
+  let clean = match ? value.slice(match.index + match[0].length).split("?")[0] : value;
+  clean = clean.replace(/^\/+/, "").replace(/^device-images\//i, "");
+  try { clean = decodeURIComponent(clean); } catch {}
+  return supabase.storage.from("device-images").getPublicUrl(clean).data?.publicUrl || "";
+}
+
 function normalizeDevice(device){
 
   const images =
-    getDeviceImages(device.images);
+    getDeviceImages(device.images).map(directImageUrl).filter(Boolean);
 
   return {
 
