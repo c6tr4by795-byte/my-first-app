@@ -1888,9 +1888,12 @@ async function createDevice(){
 }
 
 async function createDirectSale(deviceId, price){
+  const preview = state.pricingPreview;
+  if (!preview || Number(preview.asking_price_iqd) !== price) throw new Error("PRICING_CONFIRMATION_REQUIRED");
   const r = await supabase.rpc("mzad_create_direct_sale", {
     p_device_id: deviceId,
-    p_asking_price_iqd: price
+    p_asking_price_iqd: price,
+    p_expected_pricing: preview
   });
   if (r.error) throw r.error;
   const d = r.data;
@@ -1904,6 +1907,8 @@ const ERRORS = {
   DEVICE_SUBMISSIONS_DISABLED:"استقبال الأجهزة متوقف حالياً.",
   MAINTENANCE_MODE:"استقبال الأجهزة متوقف حالياً.",
   DIRECT_SALES_DISABLED:"البيع المباشر متوقف حالياً.",
+  PRICING_CHANGED_REVIEW_REQUIRED:"تغيّرت تفاصيل التسعير قبل إكمال النشر. راجع التفاصيل ووافق عليها من جديد.",
+  PRICING_CONFIRMATION_REQUIRED:"يجب مراجعة تفاصيل السعر قبل نشر الجهاز.",
   USER_SELL_RESTRICTED:"حسابك مقيّد من البيع حالياً.",
   INVALID_PRICE:"السعر غير صالح.",
   DEVICE_NOT_APPROVED:"الجهاز غير معتمد للنشر بعد.",
@@ -1956,6 +1961,16 @@ async function publish(){
     console.error("SELL DEVICE ERROR:", e);
     const code = String(e?.message || "UNKNOWN_ERROR");
     const key = Object.keys(ERRORS).find(k => code.includes(k));
+    if (code.includes("PRICING_CHANGED_REVIEW_REQUIRED")){
+      state.pricingRequest++;
+      state.pricingPreview=null;
+      state.pricingPrice=null;
+      state.pricingLoading=false;
+      state.agreedPricing=false;
+      $("sellerPricingAgree").checked=false;
+      $("sellerPricingNote").hidden=true;
+      loadSellerPricingPreview(parsePrice($("price").value));
+    }
     if (saleCreated){
       // الإعلان انشأ فعلاً؛ لا نسمح بإعادة النشر
       state.done = true;
