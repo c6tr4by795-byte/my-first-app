@@ -1036,32 +1036,44 @@ $("uList").addEventListener("click", e => { const b=e.target.closest("[data-u]")
 
 async function archiveAdminUserListing(u,kind,id){
   const ok=await confirmSheet({
-    title:"حذف المنشور من المنصة",
-    text:"سيتم إخفاء المنشور من المنصة مع الاحتفاظ بسجل الإدارة. لا يمكن تنفيذ الحذف إذا كان عليه تأمين مدفوع غير مسترد أو إثبات دفع قيد المراجعة أو مزايدات أو صفقة أو شكوى مفتوحة.",
-    ok:"تأكيد حذف المنشور",
+    title:"حذف نهائي للمنشور",
+    text:"سيتم حذف المنشور المحدد نهائياً مع سجلاته المرتبطة به فقط، بما فيها المزايدات والصفقات والتأمينات وطلبات الدفع وإثباتاتها وسجلات التسليم والتقييم. لا يمكن التراجع عن هذا الإجراء.",
+    ok:"حذف نهائي",
     danger:true
   });
   if(!ok)return;
   try{
-    const {data,error}=await supabase.rpc("mzad_admin_archive_user_listing",{
-      p_kind:kind,p_listing_id:String(id),p_user_id:u.user_id
+    const {data,error}=await supabase.rpc("mzad_admin_delete_user_listing",{
+      p_kind:kind,p_listing_id:String(id)
     });
     if(error)throw error;
-    toast("تم حذف/أرشفة المنشور بنجاح","ok");
+    if(!data?.deleted) throw new Error("لم يؤكد النظام حذف المنشور");
+
+    const cleanPaths = value => Array.isArray(value)
+      ? [...new Set(value.map(x=>String(x||"").trim()).filter(Boolean))]
+      : [];
+    const imagePaths=cleanPaths(data.image_paths);
+    const proofPaths=cleanPaths(data.proof_paths);
+
+    const cleanup=[];
+    if(imagePaths.length) cleanup.push(supabase.storage.from("device-images").remove(imagePaths));
+    if(proofPaths.length) cleanup.push(supabase.storage.from("mzad-payment-proofs").remove(proofPaths));
+    const cleanupResults=await Promise.all(cleanup);
+    const cleanupErrors=cleanupResults.filter(x=>x?.error).map(x=>x.error.message||"storage_remove_failed");
+
+    closeSheet(false);
+    if(cleanupErrors.length){
+      toast("انحذف المنشور وبياناته، لكن تعذر حذف بعض ملفات التخزين. راجع السجل.","bad");
+      console.error("MZAD storage cleanup errors",cleanupErrors);
+    }else{
+      toast("تم الحذف النهائي وتنظيف الملفات المرتبطة","ok");
+    }
     await loadUsers();
     const fresh=S.users.find(x=>x.user_id===u.user_id)||u;
     openUser(fresh);
   }catch(e){
     const msg=rpcErr(e);
-    const ar={
-      DEPOSIT_MUST_BE_REFUNDED_OR_REVIEWED:"لا يمكن الحذف: يجب استرداد التأمين المدفوع أولاً، أو إنهاء مراجعة إثبات الدفع.",
-      LISTING_HAS_TRANSACTION:"لا يمكن الحذف لأن المنشور مرتبط بصفقة محفوظة.",
-      LISTING_HAS_OPEN_DISPUTE:"لا يمكن الحذف لوجود شكوى مفتوحة.",
-      AUCTION_HAS_BIDS:"لا يمكن حذف مزاد يحتوي على مزايدات.",
-      AUCTION_STILL_ACTIVE:"لا يمكن حذف مزاد نشط أو بانتظار الافتتاح.",
-      LEGACY_LISTING_HAS_BIDS:"لا يمكن حذف منشور قديم عليه مزايدات."
-    };
-    toast(ar[msg]||("تعذر حذف المنشور: "+msg),"bad");
+    toast("تعذر الحذف النهائي: "+msg,"bad");
   }
 }
 
@@ -1139,10 +1151,7 @@ async function loadUserListings(u){
     const unpaid=Number(x.deposit_unreturned_count||0);
     const depositText=paid?("تأمينات مدفوعة: "+paid+(unpaid?" · غير مستردة: "+unpaid:" · تم استردادها")):
       pending?"إثبات تأمين بانتظار المراجعة":"لا يوجد تأمين مدفوع مثبت";
-    const blocked=!x.can_delete;
-    const button=x.can_delete
-      ?`<button type="button" class="b2 dg" data-act="deleteListing" data-listing-kind="${esc(x.kind)}" data-listing-id="${esc(x.id)}">حذف المنشور</button>`
-      :`<div class="ul-meta" style="color:#a45b24;font-weight:800">الحذف متوقف: ${esc(x.delete_block_reason||"توجد بيانات مرتبطة")}</div>`;
+    const button=`<button type="button" class="b2 dg" data-act="deleteListing" data-listing-kind="${esc(x.kind)}" data-listing-id="${esc(x.id)}">حذف نهائي للمنشور وبياناته</button>`;
     return `<div class="user-listing" style="grid-template-columns:76px minmax(0,1fr)">
       ${images[i]?'<img src="'+esc(images[i])+'" alt="">':'<div class="user-listing img" style="display:grid;place-items:center">جهاز</div>'}
       <div><div class="ul-name">${esc(name)}</div>
