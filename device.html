@@ -193,7 +193,11 @@ async function load(){
         n = { brand:d.brand, model:d.model, storage:d.storage, color:d.color, battery:d.battery_health, cond:d.condition_grade,
           screen:d.screen_condition, body:d.scratches_dents, cams:d.camera_condition, bio:d.biometric_condition,
           replaced:d.replaced_parts, faults:d.faults, acc:d.accessories, sim:d.sim_network, notes:d.seller_notes,
-          price:r.data.asking_price_iqd, images:(im.data || []).map(x => x.storage_path) };
+          price:r.data.asking_price_iqd, images:(im.data || []).map(x => x.storage_path), _directSaleAskingPrice:r.data.asking_price_iqd };
+        const priceResult=await supabase.rpc("mzad_public_direct_sale_price_breakdowns",{p_prices:[Number(r.data.asking_price_iqd)]});
+        if(priceResult.error) throw priceResult.error;
+        const shown=priceResult.data?.[0]?.display_price_iqd;
+        if(Number.isFinite(Number(shown))) n.price=Number(shown);
       }
     }
     if (!n) return fail("الجهاز غير موجود أو لم يعد معروضاً للبيع");
