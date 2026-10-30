@@ -2381,15 +2381,13 @@ async function fetchLiveAuctions(){
 async function fetchMZADDirectSales(){
   const {data,error}=await supabase
     .from("mzad_direct_sales")
-    .select("id,created_at,asking_price_iqd,status,device_id,device:mzad_devices!mzad_direct_sales_device_id_fkey(id,brand,model,storage,color,battery_health,condition_grade,screen_condition,seller_notes)")
+    .select("id,created_at,asking_price_iqd,display_price_iqd,status,device_id,device:mzad_devices!mzad_direct_sales_device_id_fkey(id,brand,model,storage,color,battery_health,condition_grade,screen_condition,seller_notes)")
     .in("status",["active","reserved","pending_handover"])
     .order("created_at",{ascending:false})
     .limit(40);
   if(error){console.error("HOME MZAD DIRECT SALES ERROR:",error);return [];}
   const rows=(data||[]).filter(x=>x.device);
-  const priceResult=rows.length?await supabase.rpc("mzad_public_direct_sale_price_breakdowns",{p_prices:rows.map(x=>Number(x.asking_price_iqd))}):{data:[],error:null};
-  if(priceResult.error) throw priceResult.error;
-  const buyerPrices=new Map((priceResult.data||[]).map(x=>[Number(x.asking_price_iqd),Number(x.display_price_iqd)]));
+  // سعر كل إعلان محفوظ وقت نشره ولا يتغير مع إعدادات الإدارة الجديدة.
   const ids=[...new Set(rows.map(x=>x.device.id).filter(Boolean))];
   const ir=ids.length?await supabase.from("mzad_device_images").select("device_id,storage_path,sort_order,is_primary").in("device_id",ids).order("sort_order",{ascending:true}):{data:[],error:null};
   if(ir.error) console.error("HOME MZAD DEVICE IMAGES ERROR:",ir.error);
@@ -2398,7 +2396,7 @@ async function fetchMZADDirectSales(){
   return rows.map(item=>{
     const d=item.device;
     const images=(byId.get(String(d.id))||[]).sort((a,b)=>(Number(b.is_primary)-Number(a.is_primary))||(Number(a.sort_order)-Number(b.sort_order))).map(im=>getDeviceImageUrl(im.storage_path)).filter(Boolean);
-    return {id:d.id,created_at:item.created_at,brand:d.brand,model:d.model,storage:d.storage,color:d.color,battery_health:d.battery_health,condition:d.condition_grade,screen_condition:d.screen_condition,body_condition:d.condition_grade,price:buyerPrices.get(Number(item.asking_price_iqd))??item.asking_price_iqd,location:"النجف",sale_type:"direct",images,notes:d.seller_notes,_mzad:true};
+    return {id:d.id,created_at:item.created_at,brand:d.brand,model:d.model,storage:d.storage,color:d.color,battery_health:d.battery_health,condition:d.condition_grade,screen_condition:d.screen_condition,body_condition:d.condition_grade,price:Number(item.display_price_iqd??item.asking_price_iqd),location:"النجف",sale_type:"direct",images,notes:d.seller_notes,_mzad:true};
   });
 }
 
