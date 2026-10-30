@@ -144,6 +144,18 @@ function pairs(s){
 let tt;
 function toast(t){ const e = $("toast"); e.textContent = t; e.classList.add("show"); clearTimeout(tt); tt = setTimeout(() => e.classList.remove("show"), 2400); }
 
+function parseDeviceImages(value){
+  if (Array.isArray(value)) return value.filter(Boolean).map(String);
+  if (typeof value !== "string" || !value.trim()) return [];
+  let parsed = value.trim();
+  for (let i = 0; i < 2 && typeof parsed === "string"; i++){
+    try { parsed = JSON.parse(parsed); } catch { return []; }
+  }
+  if (Array.isArray(parsed)) return parsed.filter(Boolean).map(String);
+  if (typeof parsed === "string" && parsed.trim()) return [parsed.trim()];
+  return [];
+}
+
 function imgURL(p){
   const v = cl(p);
   if (!v) return "";
@@ -167,7 +179,7 @@ async function load(){
       const d = r.data;
       if (d) n = { brand:d.brand, model:d.model, storage:d.storage, color:d.color, battery:d.battery_health, cond:d.condition,
         screen:d.screen_condition, body:d.body_condition, cams:d.cameras, bio:d.face_id, replaced:d.replaced_parts,
-        notes:d.notes, price:d.price, seller:d.seller_name, images:Array.isArray(d.images) ? d.images : [] };
+        notes:d.notes, price:d.price, seller:d.seller_name, images:parseDeviceImages(d.images) };
     }
     if (!n){
       const r = await supabase.from("mzad_direct_sales")
