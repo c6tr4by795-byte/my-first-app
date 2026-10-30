@@ -1896,13 +1896,19 @@ function getDeviceImageUrl(path){
 
   const value = String(path).trim();
 
-  if(/^(https?:|data:)/.test(value))
+  if(/^(https?:|data:|blob:)/i.test(value))
     return value;
+
+  const marker = /\/storage\/v1\/object\/(?:public|sign|authenticated)\/device-images\//i;
+  const match = value.match(marker);
+  let clean = match ? value.slice(match.index + match[0].length).split("?")[0] : value;
+  clean = clean.replace(/^\/+/, "").replace(/^device-images\//i, "");
+  try { clean = decodeURIComponent(clean); } catch {}
 
   const { data } =
     supabase.storage
       .from("device-images")
-      .getPublicUrl(value);
+      .getPublicUrl(clean);
 
   return data?.publicUrl || "";
 }
