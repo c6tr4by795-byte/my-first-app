@@ -370,12 +370,25 @@ function parseImages(v){
   }
   return [];
 }
+function normalizeImagePath(path){
+  let v = String(path ?? "").trim();
+  if(!v) return "";
+  if (/^https?:/i.test(v)) {
+    const marker = /\/storage\/v1\/object\/(?:public|sign|authenticated)\/device-images\//i;
+    const match = v.match(marker);
+    if (!match) return v;
+    v = v.slice(match.index + match[0].length).split("?")[0];
+  }
+  v = v.replace(/^\/+/, "").replace(/^device-images\//i, "").split("?")[0];
+  try { v = decodeURIComponent(v); } catch {}
+  return v;
+}
 function publicImage(path){
   const v = String(path ?? "").trim();
   if(!v) return "";
-  if(/^(https?:|data:)/i.test(v)) return v;
-  const clean = v.replace(/^\/+/, "").replace(/^device-images\//i, "");
-  return supabase.storage.from(BUCKET).getPublicUrl(clean).data?.publicUrl || "";
+  if(/^(https?:|data:|blob:)/i.test(v) && !/\/storage\/v1\/object\/(?:public|sign|authenticated)\/device-images\//i.test(v)) return v;
+  const clean = normalizeImagePath(v);
+  return clean ? supabase.storage.from(BUCKET).getPublicUrl(clean).data?.publicUrl || "" : "";
 }
 
 /* ---------- search ---------- */
@@ -430,7 +443,7 @@ async function fetchLegacy(){
   throw lastError;
 }
 async function signImage(image){
-  const path = String(image.storage_path || "").replace(/^\/+/, "");
+  const path = normalizeImagePath(image.storage_path);
   if(!path) return "";
   if(/^(https?:|data:)/i.test(path)) return path;
   const { data, error } = await supabase.storage.from(BUCKET).createSignedUrl(path, 3600);
