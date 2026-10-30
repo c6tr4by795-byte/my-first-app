@@ -243,14 +243,23 @@ async function fetchAuctions(){
   (b.data||[]).forEach(r => bids.set(r.auction_id, (bids.get(r.auction_id)||0) + 1));
 
   const now = Date.now();
-  const missing = [...new Set(devIds.map(i => picCache.get(i)).filter(p => p && (!urlCache.get(p) || now - urlCache.get(p).t > 45*6e4)))];
+  const normalizeAuctionImagePath = value => {
+    let p = String(value || "").trim();
+    const marker = /\/storage\/v1\/object\/(?:public|sign|authenticated)\/device-images\//i;
+    const match = p.match(marker);
+    if (match) p = p.slice(match.index + match[0].length).split("?")[0];
+    p = p.replace(/^\/+/, "").replace(/^device-images\//i, "").split("?")[0];
+    try { p = decodeURIComponent(p); } catch {}
+    return p;
+  };
+  const missing = [...new Set(devIds.map(i => normalizeAuctionImagePath(picCache.get(i))).filter(p => p && (!urlCache.get(p) || now - urlCache.get(p).t > 45*6e4)))];
   if (missing.length){
     try{
       const s = await supabase.storage.from("device-images").createSignedUrls(missing, 3600);
       (s.data||[]).forEach(r => { if (r.signedUrl) urlCache.set(r.path, { url:r.signedUrl, t:now }); });
     }catch(e){ console.error("IMG:", e); }
   }
-  return list.map(x => ({ ...x, dev: devCache.get(x.device_id) || {}, bids: bids.get(x.id) || 0, img: urlCache.get(picCache.get(x.device_id))?.url || "" }));
+  return list.map(x => ({ ...x, dev: devCache.get(x.device_id) || {}, bids: bids.get(x.id) || 0, img: urlCache.get(normalizeAuctionImagePath(picCache.get(x.device_id)))?.url || "" }));
 }
 
 async function preloadAuctionImages(items){
