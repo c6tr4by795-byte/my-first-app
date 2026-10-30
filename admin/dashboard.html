@@ -234,6 +234,37 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
     <div class="adv"><button id="advBtn" type="button"><span>مفاتيح إضافية</span><span id="advArrow">‹</span></button><div class="card" id="tAdv" hidden></div></div>
   </div>
   <div class="sec"><div class="sh"><h2>القيم والرسوم</h2><small>تُحفظ الحقول المعدّلة فقط</small></div><div id="fields"></div></div>
+  <div class="sec">
+    <div class="sh"><h2>تسعير البيع المباشر</h2><small>لا يؤثر على المزادات</small></div>
+    <div class="card" style="padding:14px">
+      <p style="margin:0 0 12px;color:var(--muted);font-size:11.5px;line-height:1.8">حدد هامش المنصة الذي يضاف على سعر البائع، ثم حدد رسوم كل طرف بشكل مستقل. الإعداد الحالي يحافظ على الرسوم القديمة.</p>
+      <label class="lbl" for="dpmode">طريقة هامش الربح</label>
+      <select class="inp" id="dpmode">
+        <option value="none">بدون هامش إضافي</option><option value="fixed">مبلغ ثابت</option>
+        <option value="percent">نسبة مئوية</option><option value="fixed_percent">مبلغ ثابت + نسبة</option>
+        <option value="tiers">شرائح حسب سعر الجهاز</option>
+      </select>
+      <div class="fields" style="margin-top:10px">
+        <div class="fd"><label for="dpfixed">الهامش الثابت — د.ع</label><input id="dpfixed" type="number" min="0" inputmode="numeric" value="0"></div>
+        <div class="fd"><label for="dppercent">النسبة — %</label><input id="dppercent" type="number" min="0" max="100" step="0.1" inputmode="decimal" value="0"></div>
+      </div>
+      <label class="lbl" for="dptiers">الشرائح (عند اختيار الشرائح فقط)</label>
+      <textarea class="note" id="dptiers" rows="4" style="width:100%;direction:ltr;text-align:left" placeholder='[{"up_to_iqd":100000,"fixed_iqd":5000,"percent":0},{"up_to_iqd":300000,"fixed_iqd":10000,"percent":2}]'></textarea>
+      <p style="margin:4px 0 12px;color:var(--muted);font-size:10.5px;line-height:1.7">كل شريحة تحدد أعلى سعر تنطبق عليه، ثم مبلغاً ثابتاً ونسبة. أضف شريحة أخيرة بسقف كبير لتغطية كل الأسعار.</p>
+      <div class="divider" style="height:1px;background:var(--line);margin:12px 0"></div>
+      <label class="lbl" for="dpsellermode">رسوم البائع</label>
+      <select class="inp" id="dpsellermode"><option value="legacy">القيمة القديمة من إعدادات الرسوم</option><option value="none">بدون رسوم</option><option value="fixed">مبلغ ثابت</option><option value="percent">نسبة من سعر البائع</option></select>
+      <input class="inp" id="dpsellervalue" type="number" min="0" inputmode="decimal" style="margin-top:8px" value="0" placeholder="قيمة الرسوم">
+      <label class="lbl" for="dpbuyermode">رسوم المشتري (إضافية على السعر الظاهر)</label>
+      <select class="inp" id="dpbuyermode"><option value="legacy">القيمة القديمة من إعدادات الرسوم</option><option value="none">بدون رسوم إضافية</option><option value="fixed">مبلغ ثابت</option><option value="percent">نسبة من سعر البائع</option></select>
+      <input class="inp" id="dpbuyervalue" type="number" min="0" inputmode="decimal" style="margin-top:8px" value="0" placeholder="قيمة الرسوم">
+      <div class="card" style="margin-top:14px;padding:12px;background:var(--ps);border-color:var(--edge)">
+        <b style="font-size:12px">معاينة على جهاز سعره 55,000 د.ع</b>
+        <div id="dpPreview" style="margin-top:8px;font-size:12px;line-height:2;color:var(--pd)">—</div>
+      </div>
+      <button class="b2" id="dpSave" type="button">حفظ تسعير البيع المباشر</button>
+    </div>
+  </div>
 </section>
 </main>
 
@@ -299,7 +330,7 @@ const FIELDS = [
     { k:"anti_snipe_max_extensions",    l:"أقصى عدد تمديدات", u:"c", min:0 } ]}
 ];
 const NUM_KEYS = FIELDS.flatMap(g => g.items.map(i => i.k));
-const ALL_KEYS = [...CORE, ...ADV].map(x => x.k).concat(NUM_KEYS);
+const ALL_KEYS = [...CORE, ...ADV].map(x => x.k).concat(NUM_KEYS, ["direct_sale_pricing"]);
 
 const PRESETS = [
   { id:"stopbid", icon:"⏸️", t:"إيقاف المزايدة فوراً", d:"يمنع أي مزايدة جديدة والمزادات تبقى ظاهرة.", set:{ bidding_enabled:false }, rev:{ bidding_enabled:true }, ask:"سيتوقف تسجيل أي مزايدة جديدة على كل المزادات حتى تعيد تشغيله." },
@@ -372,7 +403,7 @@ async function loadSettings(){
   if(r.error) throw r.error;
   S.saved = new Map((r.data||[]).map(x => [x.key, x.value_json]));
   [...CORE,...ADV].forEach(t => { S.tog[t.k] = isOn(S.saved.get(t.k)); });
-  renderToggles(); renderPresets(); renderFields(); renderStatus(); renderAlerts();
+  renderToggles(); renderPresets(); renderFields(); renderDirectPricing(); renderStatus(); renderAlerts();
 }
 async function loadPub(){
   const r = await supabase.rpc("mzad_public_status");
@@ -545,6 +576,88 @@ $("dSave").onclick = async () => {
     toast("تم حفظ التغييرات","ok"); }
   catch(e){ toast(e.message,"bad"); }
   finally{ S.busy = false; $("dSave").disabled = false; $("dSave").textContent = "حفظ"; renderFields(); }
+};
+
+
+/* ===== تسعير البيع المباشر فقط ===== */
+const DP_DEFAULT = {mode:"none",fixed_iqd:0,percent:0,tiers:[],seller_fee_mode:"legacy",seller_fee_value:0,buyer_fee_mode:"legacy",buyer_fee_value:0};
+function directPricingConfig(){
+  const v=S.saved.get("direct_sale_pricing");
+  return v && typeof v==="object" ? {...DP_DEFAULT,...v} : {...DP_DEFAULT};
+}
+function renderDirectPricing(){
+  const c=directPricingConfig();
+  $("dpmode").value=c.mode||"none";
+  $("dpfixed").value=Number(c.fixed_iqd||0);
+  $("dppercent").value=Number(c.percent||0);
+  $("dptiers").value=JSON.stringify(c.tiers||[],null,2);
+  $("dpsellermode").value=c.seller_fee_mode||"legacy";
+  $("dpsellervalue").value=Number(c.seller_fee_value||0);
+  $("dpbuyermode").value=c.buyer_fee_mode||"legacy";
+  $("dpbuyervalue").value=Number(c.buyer_fee_value||0);
+  updateDirectPricingPreview();
+}
+function updateDirectPricingPreview(){
+  const c={mode:$("dpmode").value,fixed_iqd:Number($("dpfixed").value||0),percent:Number($("dppercent").value||0)};
+  let markup=0,base=55000;
+  if(c.mode==="fixed") markup=c.fixed_iqd;
+  if(c.mode==="percent") markup=Math.round(base*c.percent/100);
+  if(c.mode==="fixed_percent") markup=c.fixed_iqd+Math.round(base*c.percent/100);
+  if(c.mode==="tiers"){
+    try{
+      const tiers=JSON.parse($("dptiers").value||"[]");
+      const t=tiers.find(x=>base<=Number(x.up_to_iqd))||tiers[tiers.length-1];
+      if(t) markup=Number(t.fixed_iqd||0)+Math.round(base*Number(t.percent||0)/100);
+    }catch{ $("dpPreview").textContent="صيغة الشرائح غير صحيحة"; return; }
+  }
+  const fee=(who)=>{
+    const mode=$("dp"+who+"mode").value, value=Number($("dp"+who+"value").value||0);
+    if(mode==="none") return 0;
+    if(mode==="fixed") return value;
+    if(mode==="percent") return Math.round(base*value/100);
+    return Number(S.saved.get(who==="seller"?"seller_platform_fee_iqd":"buyer_platform_fee_iqd")||3000);
+  };
+  const buyerFee=fee("buyer"),sellerFee=fee("seller");
+  $("dpPreview").innerHTML=
+    "سعر البائع: <b>"+iqd(base)+"</b><br>"+
+    "هامش المنصة: <b>"+iqd(markup)+"</b><br>"+
+    "السعر الظاهر للمشتري: <b>"+iqd(base+markup)+"</b><br>"+
+    "رسوم المشتري الإضافية: <b>"+iqd(buyerFee)+"</b><br>"+
+    "رسوم البائع: <b>"+iqd(sellerFee)+"</b><br>"+
+    "صافي البائع بعد الرسوم: <b>"+iqd(base-sellerFee)+"</b>";
+}
+["dpmode","dpfixed","dppercent","dptiers","dpsellermode","dpsellervalue","dpbuyermode","dpbuyervalue"].forEach(id=>{
+  $(id).addEventListener("input",updateDirectPricingPreview);
+  $(id).addEventListener("change",updateDirectPricingPreview);
+});
+$("dpSave").onclick=async()=>{
+  try{
+    const mode=$("dpmode").value;
+    let tiers=[];
+    if(mode==="tiers"){
+      tiers=JSON.parse($("dptiers").value||"[]");
+      if(!Array.isArray(tiers)||!tiers.length) throw new Error("أدخل شرائح صحيحة بصيغة JSON.");
+    }
+    const cfg={
+      mode,
+      fixed_iqd:Number($("dpfixed").value||0),
+      percent:Number($("dppercent").value||0),
+      tiers,
+      seller_fee_mode:$("dpsellermode").value,
+      seller_fee_value:Number($("dpsellervalue").value||0),
+      buyer_fee_mode:$("dpbuyermode").value,
+      buyer_fee_value:Number($("dpbuyervalue").value||0)
+    };
+    if([cfg.fixed_iqd,cfg.percent,cfg.seller_fee_value,cfg.buyer_fee_value].some(x=>!Number.isFinite(x)||x<0)) throw new Error("تأكد من القيم؛ لا تقبل أرقاماً سالبة.");
+    if(cfg.percent>100||cfg.seller_fee_value>100||cfg.buyer_fee_value>100) throw new Error("النسبة لا يمكن أن تتجاوز 100%.");
+    const ok=await confirmSheet({title:"حفظ تسعير البيع المباشر",text:"التغيير يطبق على حجوزات البيع المباشر الجديدة فقط. المزادات والصفقات القديمة لا تتغير.",ok:"حفظ الإعدادات",danger:false});
+    if(!ok)return;
+    $("dpSave").disabled=true;
+    await saveSetting("direct_sale_pricing",cfg);
+    toast("تم حفظ تسعير البيع المباشر","ok");
+    await loadSettings();
+  }catch(e){toast("تعذر الحفظ: "+rpcErr(e),"bad");}
+  finally{$("dpSave").disabled=false;}
 };
 
 /* ===== المراجعة ===== */
