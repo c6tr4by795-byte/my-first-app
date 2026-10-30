@@ -937,7 +937,8 @@ function elapsedClock(seconds){
 }
 function userPresence(u){
   const online=userOnline(u);
-  const since=online?(u.last_login_at||u.last_seen_at):(u.last_logout_at||u.last_seen_at);
+  const hasCurrentLogout=!!u.last_logout_at && (!u.last_login_at || new Date(u.last_logout_at)>=new Date(u.last_login_at));
+  const since=online?(u.last_login_at||u.last_seen_at):(hasCurrentLogout?u.last_logout_at:u.last_seen_at);
   if(!since) return "لا توجد إشارة حضور مسجلة";
   const seconds=Math.max(0,Math.floor((Date.now()-new Date(since).getTime())/1000));
   return online?"داخل المنصة منذ "+elapsedClock(seconds):"خارج المنصة منذ "+elapsedClock(seconds);
