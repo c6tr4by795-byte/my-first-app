@@ -1034,6 +1034,37 @@ function renderUsers(){
 }
 $("uList").addEventListener("click", e => { const b=e.target.closest("[data-u]"); if(b) openUser(S.users[+b.dataset.u]); });
 
+async function archiveAdminUserListing(u,kind,id){
+  const ok=await confirmSheet({
+    title:"حذف المنشور من المنصة",
+    text:"سيتم إخفاء المنشور من المنصة مع الاحتفاظ بسجل الإدارة. لا يمكن تنفيذ الحذف إذا كان عليه تأمين مدفوع غير مسترد أو إثبات دفع قيد المراجعة أو مزايدات أو صفقة أو شكوى مفتوحة.",
+    ok:"تأكيد حذف المنشور",
+    danger:true
+  });
+  if(!ok)return;
+  try{
+    const {data,error}=await supabase.rpc("mzad_admin_archive_user_listing",{
+      p_kind:kind,p_listing_id:String(id),p_user_id:u.user_id
+    });
+    if(error)throw error;
+    toast("تم حذف/أرشفة المنشور بنجاح","ok");
+    await loadUsers();
+    const fresh=S.users.find(x=>x.user_id===u.user_id)||u;
+    openUser(fresh);
+  }catch(e){
+    const msg=rpcErr(e);
+    const ar={
+      DEPOSIT_MUST_BE_REFUNDED_OR_REVIEWED:"لا يمكن الحذف: يجب استرداد التأمين المدفوع أولاً، أو إنهاء مراجعة إثبات الدفع.",
+      LISTING_HAS_TRANSACTION:"لا يمكن الحذف لأن المنشور مرتبط بصفقة محفوظة.",
+      LISTING_HAS_OPEN_DISPUTE:"لا يمكن الحذف لوجود شكوى مفتوحة.",
+      AUCTION_HAS_BIDS:"لا يمكن حذف مزاد يحتوي على مزايدات.",
+      AUCTION_STILL_ACTIVE:"لا يمكن حذف مزاد نشط أو بانتظار الافتتاح.",
+      LEGACY_LISTING_HAS_BIDS:"لا يمكن حذف منشور قديم عليه مزايدات."
+    };
+    toast(ar[msg]||("تعذر حذف المنشور: "+msg),"bad");
+  }
+}
+
 async function sendAdminUserMessage(u){
   const title=($("adminMessageTitle")?.value||"").trim();
   const body=($("adminMessageBody")?.value||"").trim();
@@ -1074,27 +1105,53 @@ async function toggleUserActive(u){
 async function loadUserListings(u){
   const box=$("userListings");
   if(!box) return;
-  box.innerHTML='<div class="empty">جاري تحميل الأجهزة والمنشورات...</div>';
+  box.innerHTML='<div class="empty">جاري تحميل جميع المنشورات القديمة والجديدة...</div>';
   const {data,error}=await supabase.rpc("mzad_admin_user_listings",{p_user_id:u.user_id});
   if(error){box.innerHTML='<div class="empty">تعذر تحميل المنشورات: '+esc(rpcErr(error))+'</div>';return;}
   const rows=Array.isArray(data)?data:[];
   if(!rows.length){box.innerHTML='<div class="empty">هذا المستخدم لم ينشر أجهزة حتى الآن.</div>';return;}
   const images=await Promise.all(rows.map(async x=>{
-    if(!x.image_path)return "";
-    const {data:sign}=await supabase.storage.from("device-images").createSignedUrl(x.image_path,3600);
-    return sign?.signedUrl||supabase.storage.from("device-images").getPublicUrl(x.image_path).data?.publicUrl||"";
+    if(x.image_path){
+      const {data:sign}=await supabase.storage.from("device-images").createSignedUrl(x.image_path,3600);
+      if(sign?.signedUrl)return sign.signedUrl;
+      const pub=supabase.storage.from("device-images").getPublicUrl(x.image_path).data?.publicUrl;
+      if(pub)return pub;
+    }
+    if(x.image_url){
+      let raw=String(x.image_url);
+      try{const parsed=JSON.parse(raw);raw=Array.isArray(parsed)?String(parsed[0]||""):String(parsed.url||raw);}catch{}
+      if(/^https?:\/\//i.test(raw))return raw;
+      if(raw)return supabase.storage.from("device-images").getPublicUrl(raw).data?.publicUrl||"";
+    }
+    return "";
   }));
+  const kindLabel=x=>({direct:"بيع مباشر",auction:"مزاد",legacy_direct:"بيع مباشر قديم",legacy_auction:"مزاد قديم"})[x.kind]||"منشور";
+  const statusLabel=x=>({
+    active:"منشور",reserved:"محجوز",pending_handover:"بانتظار التسليم",completed:"مكتمل",
+    ended:"منتهي",cancelled:"ملغي",draft:"مسودة",pending_review:"بانتظار المراجعة",
+    scheduled:"مجدول",live:"مباشر",archived:"مؤرشف",expired:"منتهي",disputed:"عليه نزاع"
+  })[x.status]||x.status||"—";
   box.innerHTML=rows.map((x,i)=>{
     const name=[x.brand,x.model,x.storage].filter(Boolean).join(" ")||"جهاز بدون اسم";
-    const kind=x.kind==="direct"?"بيع مباشر":"مزاد";
-    const status=({active:"منشور",reserved:"محجوز",pending_handover:"بانتظار التسليم",completed:"مكتمل",ended:"منتهي",cancelled:"ملغي",draft:"مسودة"})[x.status]||x.status||"—";
     const price=Number(x.price_iqd||0).toLocaleString("en-US")+" د.ع";
-    return `<div class="user-listing">
+    const paid=Number(x.deposit_paid_count||0);
+    const pending=Number(x.deposit_pending_count||0);
+    const unpaid=Number(x.deposit_unreturned_count||0);
+    const depositText=paid?("تأمينات مدفوعة: "+paid+(unpaid?" · غير مستردة: "+unpaid:" · تم استردادها")):
+      pending?"إثبات تأمين بانتظار المراجعة":"لا يوجد تأمين مدفوع مثبت";
+    const blocked=!x.can_delete;
+    const button=x.can_delete
+      ?`<button type="button" class="b2 dg" data-act="deleteListing" data-listing-kind="${esc(x.kind)}" data-listing-id="${esc(x.id)}">حذف المنشور</button>`
+      :`<div class="ul-meta" style="color:#a45b24;font-weight:800">الحذف متوقف: ${esc(x.delete_block_reason||"توجد بيانات مرتبطة")}</div>`;
+    return `<div class="user-listing" style="grid-template-columns:76px minmax(0,1fr)">
       ${images[i]?'<img src="'+esc(images[i])+'" alt="">':'<div class="user-listing img" style="display:grid;place-items:center">جهاز</div>'}
       <div><div class="ul-name">${esc(name)}</div>
-        <div class="ul-meta">${kind} · ${esc(status)} · ${esc(x.number||"")}</div>
+        <div class="ul-meta">${esc(kindLabel(x))} · ${esc(statusLabel(x))} · ${esc(x.number||"")}</div>
         <div class="ul-meta">${esc(x.created_at?fmtT(x.created_at):"")}</div>
         <div class="ul-price">${esc(price)}</div>
+        <div class="ul-meta">${esc(depositText)}</div>
+        <div class="ul-meta">المزايدات: ${n0(x.bid_count)} · الصفقات: ${n0(x.transaction_count)}</div>
+        ${button}
       </div>
     </div>`;
   }).join("");
@@ -1148,7 +1205,7 @@ function openUser(u){
     </div>
     <div class="user-listings"><div class="sh"><h3>القيود الفعّالة</h3><small>${n0((u.restriction_details||[]).length)} قيد</small></div><div class="user-detail-grid">${renderRestrictionDetails(u)}</div></div>
     <div class="pair">${u.phone?`<a class="b2 gn" href="tel:${esc(u.phone)}">اتصال</a><a class="b2 lt" href="${waLink(u.phone)}" target="_blank" rel="noopener">واتساب</a>`:""}</div>
-    <div class="user-listings"><div class="sh"><h3>الأجهزة والمنشورات</h3><small>${n0(Number(u.direct_listings||0)+Number(u.auction_listings||0))} منشور</small></div><div id="userListings"><div class="empty">جاري التحميل...</div></div></div>
+    <div class="user-listings"><div class="sh"><h3>كل الأجهزة والمنشورات</h3><small>قديم وجديد · ${n0(Number(u.direct_listings||0)+Number(u.auction_listings||0))} منشور حديث</small></div><div id="userListings"><div class="empty">جاري التحميل...</div></div></div>
     <span class="lbl">مدة التقييد الجديد</span>${seg("dur",[["1","ساعة"],["24","يوم"],["168","أسبوع"],["","دائم"]],"24")}
     <textarea class="note" id="urs" maxlength="160" placeholder="سبب التقييد (يظهر للمستخدم)">${esc(r.reason||"")}</textarea>
     <div class="user-action-group">
@@ -1174,6 +1231,7 @@ function openUser(u){
     lift:()=>userRestr(u,{banned:false,no_bid:false,no_sell:false,no_deposit:false}),
     message:()=>{ $("adminMessageTitle")?.focus(); },
     sendMessage:()=>sendAdminUserMessage(u),
+    deleteListing:(b)=>archiveAdminUserListing(u,b.dataset.listingKind,b.dataset.listingId),
     copy:async()=>{ try{ await navigator.clipboard.writeText(u.user_id); toast("تم النسخ","ok"); }catch{ toast(u.user_id); } } });
   loadUserListings(u);
 }
