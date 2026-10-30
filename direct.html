@@ -2144,8 +2144,12 @@ async function loadDevices(){
   }
 
 
+  const directRows=(data||[]).filter(row=>row.device);
+  const priceResult=directRows.length?await supabase.rpc("mzad_public_direct_sale_price_breakdowns",{p_prices:directRows.map(row=>Number(row.asking_price_iqd))}):{data:[],error:null};
+  if(priceResult.error) throw priceResult.error;
+  const buyerPrices=new Map((priceResult.data||[]).map(x=>[Number(x.asking_price_iqd),Number(x.display_price_iqd)]));
   devices =
-    (data || [])
+    directRows
       .filter(row => row.device)
       .map(row => {
         const d = row.device;
@@ -2171,7 +2175,7 @@ async function loadDevices(){
           cameras: d.camera_condition,
           charging: "",
           replaced_parts: d.replaced_parts,
-          price: row.asking_price_iqd,
+          price: buyerPrices.get(Number(row.asking_price_iqd)) ?? row.asking_price_iqd,
           location: "النجف",
           sale_type: "direct",
           seller_id: row.seller_user_id,
