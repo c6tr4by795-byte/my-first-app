@@ -583,6 +583,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
       <div><small>الصور</small><b id="cfPhotos">0</b></div>
     </div>
 
+    <section id="sellerPricingNote" hidden style="margin:14px 0;padding:14px;border:1px solid #e6defb;border-radius:16px;background:#faf9ff"><b>توضيح بخصوص سعر البيع</b><p>قبل النشر نوضح لك التغيير على السعر والمبلغ اللي راح تستلمه. هذه التفاصيل خاصة بك كبائع.</p><div id="sellerPricingRows"></div><label class="agree" id="sellerPricingAgreeBox"><input type="checkbox" id="sellerPricingAgree"><i class="ck"></i><span class="tx">أوافق على تفاصيل التغيير بالسعر قبل النشر.</span></label></section>
     <ul class="cf-list">
       <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>كل المعلومات والصور اللي أضفتها صحيحة وتخص جهازي.</span></li>
       <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>ذكرت كل العيوب والقطع المبدلة الموجودة بالجهاز.</span></li>
@@ -649,7 +650,8 @@ const state = {
   user:null, step:1, files:[], busy:false, done:false, pending:0,
   v:{}, acc:new Set(), rep:new Set(), works:{}, replaced:null,
   modelOther:false, colorOther:false, regionOther:false, batteryTouched:false,
-  deviceId:null, imagesDone:false, negotiable:false, agreed:false
+  deviceId:null, imagesDone:false, negotiable:false, agreed:false,
+  pricingPreview:null, pricingPrice:null, pricingLoading:false, pricingRequest:0, agreedPricing:false
 };
 
 const val = id => $(id).value.trim();
@@ -1316,7 +1318,8 @@ function priceError(n){
 
 form.addEventListener("input", e => {
   /* تغيير الموافقة لا يغيّر بيانات الجهاز، فلا نلغي الجهاز المحفوظ */
-  if (e.target.id === "agree") return;
+  if (e.target.id === "agree" || e.target.id === "sellerPricingAgree") return;
+  if(e.target.id==="price"){ state.pricingRequest++; state.pricingPrice=null; state.pricingPreview=null; state.pricingLoading=false; state.agreedPricing=false; $("sellerPricingAgree").checked=false; $("sellerPricingNote").hidden=true; }
   if (e.target.classList?.contains("in")) e.target.classList.remove("invalid");
   if (e.target.id === "modelCustom" || e.target.id === "brandOther"){ updateBattery(); renderSim(); renderRegion(); }
   invalidate(); sync();
@@ -1330,6 +1333,7 @@ $("agree").addEventListener("change", e => {
   hideMsg();
   renderBar();
 });
+$("sellerPricingAgree").addEventListener("change", e => { state.agreedPricing=e.target.checked; $("sellerPricingAgreeBox").classList.toggle("on",state.agreedPricing); $("sellerPricingAgreeBox").classList.remove("invalid"); hideMsg(); renderBar(); });
 
 /* ===== الصور ===== */
 function renderPhotos(){
@@ -1604,11 +1608,53 @@ function renderDetailsPreview(){
 }
 
 /* ===== رسالة التأكيد ===== */
+async function loadSellerPricingPreview(price){
+  if (!price || priceError(price)){
+    state.pricingPreview=null; state.pricingPrice=price; state.pricingLoading=false; state.agreedPricing=false;
+    $("sellerPricingNote").hidden=true; $("sellerPricingAgree").checked=false; renderBar(); return;
+  }
+  if(state.pricingPrice===price && (state.pricingPreview || state.pricingLoading)) return;
+  state.pricingPrice=price; state.pricingPreview=null; state.pricingLoading=true; state.agreedPricing=false;
+  $("sellerPricingNote").hidden=true; $("sellerPricingAgree").checked=false;
+  const request=++state.pricingRequest; renderBar();
+  try{
+    const result=await supabase.rpc("mzad_preview_my_direct_sale_pricing",{p_asking_price_iqd:price});
+    if(request!==state.pricingRequest) return;
+    if(result.error) throw result.error;
+    const data=result.data; state.pricingPreview=data || null; state.pricingLoading=false;
+    if(data && data.changed){
+      const rows=[["السعر اللي حددته",money(data.asking_price_iqd)]];
+      if(Number(data.markup_iqd)>0) rows.push([data.markup_label || "إضافة على السعر",money(data.markup_iqd)]);
+      if(Number(data.seller_fee_iqd)>0) rows.push([data.seller_fee_label || "استقطاع من البائع",money(data.seller_fee_iqd)]);
+      rows.push(["السعر اللي يظهر للمشتري",money(data.display_price_iqd)]);
+      rows.push(["المبلغ اللي تستلمه",money(data.seller_receives_iqd)]);
+      const host=$("sellerPricingRows"); host.replaceChildren();
+      rows.forEach(row=>{
+        const line=document.createElement("div");
+        const label=document.createElement("span"); label.textContent=row[0];
+        const value=document.createElement("b"); value.textContent=row[1];
+        line.style.cssText="display:flex;justify-content:space-between;gap:12px;margin:8px 0";
+        line.append(label,value); host.append(line);
+      });
+      $("sellerPricingNote").hidden=false;
+    }else{
+      $("sellerPricingNote").hidden=true; $("sellerPricingAgree").checked=false; state.agreedPricing=false;
+    }
+    renderBar();
+  }catch(error){
+    if(request!==state.pricingRequest) return;
+    state.pricingPreview=null; state.pricingLoading=false; state.pricingPrice=null;
+    $("sellerPricingNote").hidden=true;
+    console.error("SELLER PRICING PREVIEW ERROR:",error);
+    toast("تعذر تحميل تفاصيل السعر. حاول مرة ثانية قبل النشر."); renderBar();
+  }
+}
 function renderConfirm(){
-  const price = parsePrice($("price").value);
-  $("cfName").textContent = titleOf() || "—";
-  $("cfPrice").textContent = price ? money(price) : "—";
-  $("cfPhotos").textContent = state.files.length + " صور";
+  const price=parsePrice($("price").value);
+  $("cfName").textContent=titleOf() || "—";
+  $("cfPrice").textContent=price ? money(price) : "—";
+  $("cfPhotos").textContent=state.files.length+" صور";
+  loadSellerPricingPreview(price);
 }
 
 function renderMeter(){
@@ -1698,6 +1744,9 @@ function validateStep(n){
     if (err){ flag($("price")); $("price").focus(); toast(err); return false; }
     /* آخر شي: موافقة المستخدم على رسالة التأكيد */
     if (!state.agreed) return need($("agreeBox"), "وافق على التأكيد قبل النشر");
+    if (state.pricingLoading || state.pricingPrice !== parsePrice($("price").value)) return need($("sellerPricingNote"), "لحظة، نتحقق من تفاصيل سعر البيع");
+    if (!state.pricingPreview) return need($("sellerPricingNote"), "تعذر تحميل تفاصيل السعر. أعد المحاولة قبل النشر");
+    if (state.pricingPreview.changed && !state.agreedPricing) return need($("sellerPricingAgreeBox"), "وافق على تفاصيل التغيير بالسعر قبل النشر");
   }
   return true;
 }
