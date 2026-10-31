@@ -213,6 +213,12 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
 .user-message-box input,.user-message-box textarea{width:100%;padding:11px;border:1px solid var(--edge);border-radius:11px;font:inherit;font-size:12px}
 .user-message-box textarea{min-height:85px;resize:vertical}
 .user-message-box button{padding:11px;border:0;border-radius:11px;background:var(--pd);color:#fff;font-weight:900}
+
+.admin-jump.on{background:var(--p);color:#fff;border-color:var(--p)}
+.admin-jump.on small{color:rgba(255,255,255,.85)}
+.utabs{display:flex;gap:6px;margin:12px 0;position:sticky;top:0;background:#fff;padding:6px 0;z-index:2}
+.utabs button{flex:1;min-height:40px;border-radius:12px;border:1.5px solid var(--edge);background:#fff;color:var(--muted);font-size:12px;font-weight:900}
+.utabs button.on{background:var(--ps);border-color:var(--p);color:var(--pd)}
 </style>
 </head>
 <body>
@@ -1183,62 +1189,75 @@ function openUser(u){
   const state=r.banned?"محظور":(r.no_bid||r.no_sell||r.no_deposit)?"مقيّد":(u.is_active===false?"حساب معطّل":"طبيعي");
   const kv=(k,v,ltr=false)=>v!==null&&v!==undefined&&v!==""?`<div class="user-detail-cell"><small>${k}</small><b class="${ltr?"ltr":""}">${esc(v)}</b></div>`:"";
   const online=userOnline(u);
-  const tg=(on,off,onT,offT)=>`<button type="button" class="${on?"on":""}" data-act="${off}">${on?"إلغاء "+onT:offT}</button>`;
+  const dep=(u.deposit_history||[]).length?(u.deposit_history||[]).map(d=>{
+    const st=depositStatusLabel(d);
+    const kind=({auction_buyer:"تأمين مشتري مزاد",auction_seller:"تأمين بائع مزاد",direct_buyer:"تأمين مشتري بيع مباشر"})[d.type]||d.type;
+    return `<div class="user-detail-cell" style="margin-bottom:8px"><b>${esc(kind)} — ${esc(st.label)}</b>
+      <small>المبلغ: ${n0(d.amount_iqd)} د.ع · رقم العملية: ${esc(d.number||"—")}</small>
+      <small>الدفع: ${esc(d.paid_at?fmtT(d.paid_at):"لا يوجد وقت دفع مثبت")} · الاعتماد: ${esc(d.approved_at?fmtT(d.approved_at):"—")}</small>
+      ${d.refunded_at?`<small>الاسترداد: ${esc(fmtT(d.refunded_at))}</small>`:""}
+      ${d.forfeited_at?`<small>المصادرة: ${esc(fmtT(d.forfeited_at))}</small>`:""}</div>`;
+  }).join(""):'<div class="empty">لا توجد عمليات تأمين مسجلة.</div>';
   openSheet(`<div class="grab"></div><h3>${esc(u.full_name||u.buyer_code||u.email||"مستخدم")}</h3>
-    <div class="user-detail-grid">
-      ${kv("حالة الحساب",state)}${kv("البريد الإلكتروني",u.email||"غير مسجل",true)}
-      ${kv("كود المشتري",u.buyer_code||"—",true)}${kv("رقم الهاتف",u.phone||"—",true)}
-      ${kv("المحافظة",u.city||"غير محددة")}${kv("تاريخ التسجيل",u.joined?fmtT(u.joined):"—")}
-      ${kv("مدة العضوية",u.joined?ago(u.joined).replace("قبل ","منذ "):"—")}
-      ${kv("آخر ظهور",userPresence(u))}${kv("آخر دخول",u.last_login_at?fmtT(u.last_login_at):"غير مسجل")}
-      ${kv("آخر خروج",u.last_logout_at?fmtT(u.last_logout_at):"غير مسجل")}${kv("مدة آخر جلسة",sessionDuration(u.last_session_seconds))}
-      ${kv("الثقة",n0(u.trust_score))}${kv("المزايدات",n0(u.bids))}${kv("عدد عمليات التأمين",n0(u.deposits))}
-      ${kv("التأمين المدفوع والفعّال",n0(u.deposit_active_count))}${kv("إثباتات دفع بانتظار المراجعة",n0(u.deposit_pending_count))}${kv("مدفوع سابقاً (يشمل المسترد والمنتهي)",n0(u.deposit_paid_count))}
-      ${kv("أجهزة البيع المباشر",n0(u.direct_listings))}${kv("مزادات منشورة",n0(u.auction_listings))}
-      ${kv("المعرّف",u.user_id,true)}
+    <div class="utabs">
+      <button type="button" class="on" data-act="tab" data-t="info">الملف</button>
+      <button type="button" data-act="tab" data-t="dep">التأمينات</button>
+      <button type="button" data-act="tab" data-t="list">المنشورات</button>
+      <button type="button" data-act="tab" data-t="act">الإجراءات</button>
     </div>
-    <div class="user-card-extra"><span class="user-mini ${online?"online":"offline"}" data-presence-user="${esc(u.user_id)}">${esc(userPresence(u))}</span></div>
-    <div class="user-listings">
-      <div class="sh"><h3>سجل التأمينات والمدفوعات</h3><small>${n0((u.deposit_history||[]).length)} عملية</small></div>
-      ${(u.deposit_history||[]).length?(u.deposit_history||[]).map(d=>{
-        const st=depositStatusLabel(d);
-        const kind=({auction_buyer:"تأمين مشتري مزاد",auction_seller:"تأمين بائع مزاد",direct_buyer:"تأمين مشتري بيع مباشر"})[d.type]||d.type;
-        return `<div class="user-detail-cell" style="margin-bottom:8px">
-          <b>${esc(kind)} — ${esc(st.label)}</b>
-          <small>المبلغ: ${n0(d.amount_iqd)} د.ع · رقم العملية: ${esc(d.number||"—")}</small>
-          <small>الدفع: ${esc(d.paid_at?fmtT(d.paid_at):"لا يوجد وقت دفع مثبت")} · الاعتماد: ${esc(d.approved_at?fmtT(d.approved_at):"—")}</small>
-          ${d.refunded_at?`<small>الاسترداد: ${esc(fmtT(d.refunded_at))}</small>`:""}
-          ${d.forfeited_at?`<small>المصادرة: ${esc(fmtT(d.forfeited_at))}</small>`:""}
-        </div>`;
-      }).join(""):'<div class="empty">لا توجد عمليات تأمين مسجلة لهذا المستخدم.</div>'}
+    <div class="upane" data-pane="info">
+      <div class="user-detail-grid">
+        ${kv("حالة الحساب",state)}${kv("البريد الإلكتروني",u.email||"غير مسجل",true)}
+        ${kv("كود المشتري",u.buyer_code||"—",true)}${kv("رقم الهاتف",u.phone||"—",true)}
+        ${kv("المحافظة",u.city||"غير محددة")}${kv("تاريخ التسجيل",u.joined?fmtT(u.joined):"—")}
+        ${kv("مدة العضوية",u.joined?ago(u.joined).replace("قبل ","منذ "):"—")}
+        ${kv("آخر دخول",u.last_login_at?fmtT(u.last_login_at):"غير مسجل")}
+        ${kv("آخر خروج",u.last_logout_at?fmtT(u.last_logout_at):"غير مسجل")}${kv("مدة آخر جلسة",sessionDuration(u.last_session_seconds))}
+        ${kv("الثقة",n0(u.trust_score))}${kv("المزايدات",n0(u.bids))}
+        ${kv("أجهزة البيع المباشر",n0(u.direct_listings))}${kv("مزادات منشورة",n0(u.auction_listings))}
+        ${kv("المعرّف",u.user_id,true)}
+      </div>
+      <div class="user-card-extra"><span class="user-mini ${online?"online":"offline"}" data-presence-user="${esc(u.user_id)}">${esc(userPresence(u))}</span></div>
+      <div class="pair">${u.phone?`<a class="b2 gn" href="tel:${esc(u.phone)}">اتصال</a><a class="b2 lt" href="${waLink(u.phone)}" target="_blank" rel="noopener">واتساب</a>`:""}</div>
     </div>
-    <div class="user-listings"><div class="sh"><h3>القيود الفعّالة</h3><small>${n0((u.restriction_details||[]).length)} قيد</small></div><div class="user-detail-grid">${renderRestrictionDetails(u)}</div></div>
-    <div class="pair">${u.phone?`<a class="b2 gn" href="tel:${esc(u.phone)}">اتصال</a><a class="b2 lt" href="${waLink(u.phone)}" target="_blank" rel="noopener">واتساب</a>`:""}</div>
-    <div class="user-listings"><div class="sh"><h3>كل الأجهزة والمنشورات</h3><small>قديم وجديد · ${n0(Number(u.direct_listings||0)+Number(u.auction_listings||0))} منشور حديث</small></div><div id="userListings"><div class="empty">جاري التحميل...</div></div></div>
-    <span class="lbl">مدة التقييد الجديد</span>${seg("dur",[["1","ساعة"],["24","يوم"],["168","أسبوع"],["","دائم"]],"24")}
-    <textarea class="note" id="urs" maxlength="160" placeholder="سبب التقييد (يظهر للمستخدم)">${esc(r.reason||"")}</textarea>
-    <div class="user-action-group">
-      <button type="button" data-act="message">إرسال رسالة خاصة</button>
-      <button type="button" data-act="active" class="danger">${u.is_active?"تعطيل الحساب":"تفعيل الحساب"}</button>
-      ${r.banned?'<button type="button" data-act="ban" class="danger">إلغاء الحظر</button>':'<button type="button" data-act="ban" class="danger">حظر الحساب</button>'}
-      ${r.no_bid?'<button type="button" data-act="bid">إلغاء منع المزايدة</button>':'<button type="button" data-act="bid">منع المزايدة</button>'}
-      ${r.no_sell?'<button type="button" data-act="sell">إلغاء منع البيع</button>':'<button type="button" data-act="sell">منع البيع</button>'}
-      ${r.no_deposit?'<button type="button" data-act="dep">إلغاء منع التأمين</button>':'<button type="button" data-act="dep">منع التأمين</button>'}
-      <button type="button" data-act="lift" class="danger" ${(!r.banned&&!r.no_bid&&!r.no_sell&&!r.no_deposit)?"disabled":""}>إلغاء جميع القيود</button>
-      <button type="button" data-act="copy">نسخ المعرّف</button>
+    <div class="upane" data-pane="dep" hidden>
+      <div class="user-detail-grid">
+        ${kv("عدد عمليات التأمين",n0(u.deposits))}${kv("مدفوع وفعّال",n0(u.deposit_active_count))}
+        ${kv("بانتظار المراجعة",n0(u.deposit_pending_count))}${kv("مدفوع سابقاً",n0(u.deposit_paid_count))}
+      </div>${dep}
     </div>
-    <div class="user-message-box">
-      <b>رسالة خاصة من الإدارة</b>
-      <input id="adminMessageTitle" maxlength="180" placeholder="عنوان الرسالة">
-      <textarea id="adminMessageBody" maxlength="1200" placeholder="اكتب رسالتك للمستخدم..."></textarea>
-      <button type="button" data-act="sendMessage">إرسال الرسالة إلى حسابه</button>
-      <small style="color:var(--muted)">ستصل الرسالة داخل إشعارات المستخدم في التطبيق.</small>
+    <div class="upane" data-pane="list" hidden>
+      <div id="userListings"><div class="empty">جاري التحميل...</div></div>
+    </div>
+    <div class="upane" data-pane="act" hidden>
+      <div class="sh"><h3>القيود الفعّالة</h3><small>${n0((u.restriction_details||[]).length)} قيد</small></div>
+      <div class="user-detail-grid">${renderRestrictionDetails(u)}</div>
+      <span class="lbl">مدة التقييد الجديد</span>${seg("dur",[["1","ساعة"],["24","يوم"],["168","أسبوع"],["","دائم"]],"24")}
+      <textarea class="note" id="urs" maxlength="160" placeholder="سبب التقييد (يظهر للمستخدم)">${esc(r.reason||"")}</textarea>
+      <div class="user-action-group">
+        <button type="button" data-act="ban" class="danger">${r.banned?"إلغاء الحظر":"حظر الحساب"}</button>
+        <button type="button" data-act="active" class="danger">${u.is_active?"تعطيل الحساب":"تفعيل الحساب"}</button>
+        <button type="button" data-act="bid">${r.no_bid?"إلغاء منع المزايدة":"منع المزايدة"}</button>
+        <button type="button" data-act="sell">${r.no_sell?"إلغاء منع البيع":"منع البيع"}</button>
+        <button type="button" data-act="dep">${r.no_deposit?"إلغاء منع التأمين":"منع التأمين"}</button>
+        <button type="button" data-act="lift" class="danger" ${(!r.banned&&!r.no_bid&&!r.no_sell&&!r.no_deposit)?"disabled":""}>إلغاء جميع القيود</button>
+        <button type="button" data-act="copy">نسخ المعرّف</button>
+      </div>
+      <div class="user-message-box">
+        <b>رسالة خاصة من الإدارة</b>
+        <input id="adminMessageTitle" maxlength="180" placeholder="عنوان الرسالة">
+        <textarea id="adminMessageBody" maxlength="1200" placeholder="اكتب رسالتك للمستخدم..."></textarea>
+        <button type="button" data-act="sendMessage">إرسال الرسالة</button>
+      </div>
     </div>
     <button class="b3" data-act="no" type="button">إغلاق</button>`,
-  { active:()=>toggleUserActive(u), bid:()=>userRestr(u,{no_bid:!r.no_bid}), sell:()=>userRestr(u,{no_sell:!r.no_sell}), dep:()=>userRestr(u,{no_deposit:!r.no_deposit}),
+  { tab:(b)=>{
+      $("sheet").querySelectorAll(".upane").forEach(p=>{p.hidden=p.dataset.pane!==b.dataset.t;});
+      $("sheet").querySelectorAll(".utabs button").forEach(x=>x.classList.toggle("on",x===b));
+    },
+    active:()=>toggleUserActive(u), bid:()=>userRestr(u,{no_bid:!r.no_bid}), sell:()=>userRestr(u,{no_sell:!r.no_sell}), dep:()=>userRestr(u,{no_deposit:!r.no_deposit}),
     ban:()=>userRestr(u,{banned:!r.banned,no_bid:r.banned?false:r.no_bid,no_sell:r.banned?false:r.no_sell,no_deposit:r.banned?false:r.no_deposit}),
     lift:()=>userRestr(u,{banned:false,no_bid:false,no_sell:false,no_deposit:false}),
-    message:()=>{ $("adminMessageTitle")?.focus(); },
     sendMessage:()=>sendAdminUserMessage(u),
     deleteListing:(b)=>archiveAdminUserListing(u,b.dataset.listingKind,b.dataset.listingId),
     copy:async()=>{ try{ await navigator.clipboard.writeText(u.user_id); toast("تم النسخ","ok"); }catch{ toast(u.user_id); } } });
@@ -1281,6 +1300,17 @@ async function auctionAct(a, action, minutes, reason){
     closeSheet(false); toast(action==="extend"?"تم التمديد":action==="start_now"?"تم فتح المزاد":"تم إلغاء المزاد","ok"); await Promise.allSettled([loadAuctions(), loadDash()]); }
   catch(e){ toast("فشل: "+rpcErr(e),"bad"); }
 }
+
+const SET_SECS=["admin-ops","admin-fees","admin-direct-pricing","admin-tools"];
+function showSet(id){
+  SET_SECS.forEach(x=>{$(x).hidden=x!==id;});
+  document.querySelectorAll(".admin-jump").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+id));
+}
+document.querySelector(".admin-jumps").addEventListener("click",e=>{
+  const a=e.target.closest(".admin-jump"); if(!a)return;
+  e.preventDefault(); showSet(a.getAttribute("href").slice(1));
+});
+showSet("admin-ops");
 
 /* ===== التبويبات ===== */
 function setTab(t){
