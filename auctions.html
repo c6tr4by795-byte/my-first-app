@@ -471,10 +471,39 @@ function toast(m){ const el = $("toast"); el.textContent = m; el.classList.add("
 
 load(true);
 
-const t1 = setInterval(tick, 1000);
-const t2 = setInterval(() => { if (!document.hidden) load(false); }, 10000);
-document.addEventListener("visibilitychange", () => { if (!document.hidden) load(false); });
-addEventListener("pagehide", () => { clearInterval(t1); clearInterval(t2); });
+let auctionTickTimer = null;
+let auctionRefreshTimer = null;
+
+function startAuctionPageTimers(){
+  if (document.hidden) return;
+  if (!auctionTickTimer) auctionTickTimer = setInterval(tick, 1000);
+  if (!auctionRefreshTimer) auctionRefreshTimer = setInterval(() => {
+    if (!document.hidden) load(false);
+  }, 10000);
+}
+
+function stopAuctionPageTimers(){
+  if (auctionTickTimer) clearInterval(auctionTickTimer);
+  if (auctionRefreshTimer) clearInterval(auctionRefreshTimer);
+  auctionTickTimer = null;
+  auctionRefreshTimer = null;
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) stopAuctionPageTimers();
+  else {
+    startAuctionPageTimers();
+    load(false);
+  }
+});
+
+addEventListener("pagehide", stopAuctionPageTimers);
+addEventListener("pageshow", () => {
+  startAuctionPageTimers();
+  if (!document.hidden) load(false);
+});
+
+startAuctionPageTimers();
 </script>
 <script type="module" src="./js/platform-guard.js"></script>
 <style id="mzad-scroll-nav-style">
