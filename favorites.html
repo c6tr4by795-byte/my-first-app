@@ -680,6 +680,28 @@ async function loadOne(id){
           storage:modernDevice.data.storage,color:modernDevice.data.color,battery_health:modernDevice.data.battery_health,
           price:Number(a.current_price_iqd||a.starting_price_iqd)||0,ends_at:a.ends_at,status:a.status,images:imgs};
       }
+
+      // الأجهزة الحديثة للبيع المباشر موجودة في mzad_devices وترتبط بإعلان في mzad_direct_sales.
+      const directSale = await supabase.from("mzad_direct_sales")
+        .select("id,asking_price_iqd,display_price_iqd,status")
+        .eq("device_id", modernDevice.data.id)
+        .in("status", ["active","reserved","pending_handover","completed"])
+        .order("created_at", {ascending:false})
+        .limit(1);
+      if(directSale.error) return {failed:true};
+      if(directSale.data?.length) {
+        const images = await supabase.from("mzad_device_images")
+          .select("storage_path,is_primary,sort_order")
+          .eq("device_id", modernDevice.data.id).limit(8);
+        if(images.error) return {failed:true};
+        const imgs = [...(images.data||[])]
+          .sort((x,y)=>(Number(y.is_primary)-Number(x.is_primary))||(Number(x.sort_order)-Number(y.sort_order)))
+          .map(x=>x.storage_path).filter(Boolean);
+        const sale = directSale.data[0];
+        return {id:String(modernDevice.data.id),kind:"direct",brand:modernDevice.data.brand,model:modernDevice.data.model,
+          storage:modernDevice.data.storage,color:modernDevice.data.color,battery_health:modernDevice.data.battery_health,
+          price:Number(sale.display_price_iqd ?? sale.asking_price_iqd)||0,images:imgs};
+      }
       return null;
     }
   } catch { hadError = true; }
