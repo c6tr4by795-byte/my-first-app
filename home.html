@@ -2941,25 +2941,49 @@ notificationButton.addEventListener("click",async()=>{
 window.addEventListener("resize",positionNotificationPanel,{passive:true});
 window.addEventListener("scroll",positionNotificationPanel,{passive:true});
 
-/* تحديث عدّاد الإشعارات عند الدخول ودورياً، من دون إعادة تحميل الصفحة */
+/* مزامنة عداد الإشعارات مبكراً وبعد جاهزية جلسة تسجيل الدخول */
+let notificationBadgeRequest=0;
 async function refreshNotificationBadge(){
+  const request=++notificationBadgeRequest;
   try{
-    const {data:{user},error:authError}=await supabase.auth.getUser();
-    if(authError || !user) { updateNotificationBadge(0); return; }
-    const {count,error}=await supabase.from("mzad_notifications")
+    const auth=await supabase.auth.getUser();
+    const user=auth?.data?.user;
+    if(request!==notificationBadgeRequest)return;
+    if(auth?.error || !user){updateNotificationBadge(0);return;}
+    const result=await supabase.from("mzad_notifications")
       .select("id",{count:"exact",head:true})
       .eq("user_id",user.id)
       .eq("is_read",false);
-    if(error) console.error("MZAD notification badge:",error);
-    else updateNotificationBadge(count||0);
+    if(request!==notificationBadgeRequest)return;
+    if(result.error){
+      console.error("MZAD notification badge:",result.error);
+      return;
+    }
+    updateNotificationBadge(result.count||0);
   }catch(error){
-    console.debug("Notification badge unavailable until the notifications migration is applied.");
+    console.error("MZAD notification badge load failed:",error);
   }
 }
-refreshNotificationBadge();
+const refreshBadgeAfterSession=()=>{
+  refreshNotificationBadge();
+  setTimeout(refreshNotificationBadge,700);
+  setTimeout(refreshNotificationBadge,1800);
+};
+refreshBadgeAfterSession();
+window.addEventListener("load",refreshBadgeAfterSession,{once:true});
+document.addEventListener("visibilitychange",()=>{
+  if(!document.hidden)refreshNotificationBadge();
+});
+supabase.auth.onAuthStateChange((event)=>{
+  if(event==="SIGNED_IN" || event==="INITIAL_SESSION" || event==="TOKEN_REFRESHED"){
+    setTimeout(refreshNotificationBadge,0);
+  }else if(event==="SIGNED_OUT"){
+    updateNotificationBadge(0);
+  }
+});
 setInterval(()=>{
-  if(!document.hidden) refreshNotificationBadge();
-},45000);
+  if(!document.hidden)refreshNotificationBadge();
+},20000);
 
 /* ================================
    الانتقال السريع للأقسام
