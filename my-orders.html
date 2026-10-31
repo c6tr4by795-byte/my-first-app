@@ -31,22 +31,31 @@ const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const money=n=>Number(n||0).toLocaleString("en-US")+" د.ع";
 const fmt=v=>v?new Date(v).toLocaleString("ar-IQ",{dateStyle:"medium",timeStyle:"short"}):"—";
-const labels={pending:"طلب جديد",contacted:"تم التواصل",confirmed:"تم تأكيد الطلب",inspection:"قيد الفحص والتسليم",completed:"مكتمل",cancelled:"ملغى"};
+const labels={pending:"طلب جديد — بانتظار المراجعة",contacted:"تم التواصل",confirmed:"تم تأكيد الطلب",inspection:"قيد الفحص والتسليم",completed:"تم البيع بنجاح",cancelled:"ملغى"};
 async function load(){
   $("list").innerHTML='<div class="empty">جاري تحميل طلباتك...</div>';
   const {data:{user}}=await supabase.auth.getUser();
   if(!user){location.href="index.html?login=1&returnTo="+encodeURIComponent(location.href);return;}
-  const {data,error}=await supabase.from("mzad_orders").select("*").eq("buyer_user_id",user.id).order("created_at",{ascending:false}).limit(100);
-  if(error){$("list").innerHTML='<div class="empty">تعذر تحميل الطلبات. حاول مرة ثانية.</div>';console.error(error);return;}
-  if(!data?.length){$("list").innerHTML='<div class="empty">ما عندك طلبات شراء حالياً.<br>لما تطلب جهاز من السوق راح يظهر هنا.</div>';return;}
-  $("list").innerHTML=data.map(o=>{
-    const d=o.device_snapshot||{}, name=[d.brand,d.model,d.storage,d.color].filter(Boolean).join(" ")||"جهاز";
-    return '<article class="item"><div class="top"><span class="code">'+esc(o.order_number)+'</span><span class="badge">'+esc(labels[o.status]||o.status)+'</span></div>'+
-      '<div class="name">'+esc(name)+'</div><div class="meta">تاريخ الطلب: '+esc(fmt(o.created_at))+'</div>'+
-      '<div class="meta">طريقة الاستلام: '+(o.payment_method==="office"?"من المكتب":"عند الاستلام")+'</div>'+
-      (o.admin_note?'<div class="meta">ملاحظة الإدارة: '+esc(o.admin_note)+'</div>':'')+
-      '<div class="price">'+money(o.price_iqd)+'</div></article>';
-  }).join("");
+  const [buyer,seller]=await Promise.all([
+    supabase.from("mzad_orders").select("*").eq("buyer_user_id",user.id).order("created_at",{ascending:false}).limit(100),
+    supabase.from("mzad_orders").select("*").eq("seller_user_id",user.id).order("created_at",{ascending:false}).limit(100)
+  ]);
+  if(buyer.error||seller.error){$("list").innerHTML='<div class="empty">تعذر تحميل الطلبات. حاول مرة ثانية.</div>';console.error(buyer.error||seller.error);return;}
+  const render=(rows,role)=>{
+    if(!rows.length)return '<div class="empty">'+(role==="buyer"?"ما عندك طلبات شراء حالياً.":"ما عندك طلبات على أجهزتك حالياً.")+'</div>';
+    return rows.map(o=>{
+      const d=o.device_snapshot||{},name=[d.brand,d.model,d.storage,d.color].filter(Boolean).join(" ")||"جهاز";
+      return '<article class="item"><div class="top"><span class="code">'+esc(o.order_number)+'</span><span class="badge">'+esc(labels[o.status]||o.status)+'</span></div>'+
+        '<div class="name">'+esc(name)+'</div><div class="meta">'+(role==="buyer"?"طلب شراء":"طلب على جهازك")+'</div>'+
+        (role==="buyer"?'<div class="meta">البائع: '+esc(o.seller_name||"")+'</div>':'<div class="meta">المشتري: '+esc(o.buyer_name)+' · '+esc(o.buyer_phone)+'</div>')+
+        '<div class="meta">تاريخ الطلب: '+esc(fmt(o.created_at))+'</div>'+
+        '<div class="meta">طريقة الاستلام: '+(o.payment_method==="office"?"من المكتب":"عند الاستلام")+'</div>'+
+        (o.admin_note?'<div class="meta">ملاحظة الإدارة: '+esc(o.admin_note)+'</div>':'')+
+        '<div class="price">'+money(o.price_iqd)+'</div></article>';
+    }).join("");
+  };
+  $("list").innerHTML='<h2 style="font-size:15px;margin:18px 2px 8px">مشترياتي</h2>'+render(buyer.data||[],"buyer")+
+    '<h2 style="font-size:15px;margin:24px 2px 8px">طلبات على أجهزتي</h2>'+render(seller.data||[],"seller");
 }
 $("back").onclick=()=>history.length>1?history.back():location.href="market.html";
 $("refresh").onclick=load;load();
