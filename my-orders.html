@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6246d9">
+<title>طلباتي — MZAD PHONE</title>
+<style>
+:root{--bg:#f8f7fc;--ink:#202033;--muted:#77778a;--line:#e9e5f5;--p:#6246d9;--soft:#f1edff;--sb:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;padding-bottom:calc(25px + var(--sb))}
+.wrap{width:min(100%,560px);margin:auto;padding:14px}
+header{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.back{width:40px;height:40px;border-radius:13px;background:var(--soft);color:var(--p);font-size:22px}
+h1{font-size:17px;margin:0;font-weight:950}.sub{font-size:11px;color:var(--muted);margin-top:3px}
+.item{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;margin:12px 0;box-shadow:0 8px 22px -18px #6246d9}
+.top{display:flex;justify-content:space-between;gap:8px;align-items:center}.code{direction:ltr;color:var(--p);font-size:11px;font-weight:900}
+.badge{padding:6px 9px;border-radius:99px;background:var(--soft);color:var(--p);font-size:10px;font-weight:900}
+.name{font-weight:950;font-size:15px;margin:12px 0 4px}.meta{font-size:11px;line-height:1.9;color:var(--muted)}
+.price{font-size:16px;font-weight:950;margin-top:8px;color:#4c3bb0}
+.empty{padding:42px 16px;text-align:center;color:var(--muted);font-size:13px;line-height:2;background:#fff;border:1px solid var(--line);border-radius:18px;margin-top:18px}
+.refresh{border:0;border-radius:12px;background:var(--soft);color:var(--p);padding:9px 13px;font-weight:900}
+</style>
+</head>
+<body>
+<header><button class="back" id="back" aria-label="رجوع">›</button><div style="flex:1"><h1>طلباتي</h1><div class="sub">متابعة طلبات الشراء المباشر</div></div><button class="refresh" id="refresh">تحديث</button></header>
+<main class="wrap"><div id="list"><div class="empty">جاري تحميل طلباتك...</div></div></main>
+<script type="module">
+import {supabase} from "./js/supabase.js";
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=n=>Number(n||0).toLocaleString("en-US")+" د.ع";
+const fmt=v=>v?new Date(v).toLocaleString("ar-IQ",{dateStyle:"medium",timeStyle:"short"}):"—";
+const labels={pending:"طلب جديد",contacted:"تم التواصل",confirmed:"تم تأكيد الطلب",inspection:"قيد الفحص والتسليم",completed:"مكتمل",cancelled:"ملغى"};
+async function load(){
+  $("list").innerHTML='<div class="empty">جاري تحميل طلباتك...</div>';
+  const {data:{user}}=await supabase.auth.getUser();
+  if(!user){location.href="index.html?login=1&returnTo="+encodeURIComponent(location.href);return;}
+  const {data,error}=await supabase.from("mzad_orders").select("*").eq("buyer_user_id",user.id).order("created_at",{ascending:false}).limit(100);
+  if(error){$("list").innerHTML='<div class="empty">تعذر تحميل الطلبات. حاول مرة ثانية.</div>';console.error(error);return;}
+  if(!data?.length){$("list").innerHTML='<div class="empty">ما عندك طلبات شراء حالياً.<br>لما تطلب جهاز من السوق راح يظهر هنا.</div>';return;}
+  $("list").innerHTML=data.map(o=>{
+    const d=o.device_snapshot||{}, name=[d.brand,d.model,d.storage,d.color].filter(Boolean).join(" ")||"جهاز";
+    return '<article class="item"><div class="top"><span class="code">'+esc(o.order_number)+'</span><span class="badge">'+esc(labels[o.status]||o.status)+'</span></div>'+
+      '<div class="name">'+esc(name)+'</div><div class="meta">تاريخ الطلب: '+esc(fmt(o.created_at))+'</div>'+
+      '<div class="meta">طريقة الاستلام: '+(o.payment_method==="office"?"من المكتب":"عند الاستلام")+'</div>'+
+      (o.admin_note?'<div class="meta">ملاحظة الإدارة: '+esc(o.admin_note)+'</div>':'')+
+      '<div class="price">'+money(o.price_iqd)+'</div></article>';
+  }).join("");
+}
+$("back").onclick=()=>history.length>1?history.back():location.href="market.html";
+$("refresh").onclick=load;load();
+</script>
+</body></html>
