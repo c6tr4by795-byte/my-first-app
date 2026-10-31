@@ -643,16 +643,20 @@ async function loadAuctionItem(id){
 async function loadOne(id){
   let hadError = false;
 
-  // البيع المباشر القديم يستخدم public.devices (معرّف رقمي).
-  try {
-    const direct = await supabase.from("devices").select(COLS).eq("id", id).maybeSingle();
-    if(direct.data) {
-      return isAuctionType(direct.data.sale_type)
-        ? { ...direct.data, id:String(direct.data.id), kind:"auction", ends_at:direct.data.auction_ends_at || null }
-        : { ...direct.data, id:String(direct.data.id), kind:"direct" };
-    }
-    if(direct.error) hadError = true;
-  } catch { hadError = true; }
+  // البيع المباشر القديم يستخدم public.devices بمعرّف رقمي.
+  // لا نرسل UUID إلى عمود رقمي حتى لا يتحول الجهاز الحديث إلى "تعذر تحميله".
+  const looksLikeUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(id));
+  if(!looksLikeUuid){
+    try {
+      const direct = await supabase.from("devices").select(COLS).eq("id", id).maybeSingle();
+      if(direct.data) {
+        return isAuctionType(direct.data.sale_type)
+          ? { ...direct.data, id:String(direct.data.id), kind:"auction", ends_at:direct.data.auction_ends_at || null }
+          : { ...direct.data, id:String(direct.data.id), kind:"direct" };
+      }
+      if(direct.error) hadError = true;
+    } catch { hadError = true; }
+  }
 
   // نظام المزاد الجديد يستخدم UUID في mzad_devices، وقد يكون المحفوظ هو device_id.
   try {
@@ -683,9 +687,9 @@ async function loadOne(id){
 
       // الأجهزة الحديثة للبيع المباشر موجودة في mzad_devices وترتبط بإعلان في mzad_direct_sales.
       const directSale = await supabase.from("mzad_direct_sales")
-        .select("id,asking_price_iqd,display_price_iqd,status")
+        .select("id,asking_price_iqd,display_price_iqd,status,device_id,created_at")
         .eq("device_id", modernDevice.data.id)
-        .in("status", ["active","reserved","pending_handover","completed"])
+        .in("status", ["active","reserved","pending_handover"])
         .order("created_at", {ascending:false})
         .limit(1);
       if(directSale.error) return {failed:true};
@@ -906,8 +910,10 @@ async function loadFavorites(){
   state.loading = false;
   render();
 
-  if(results.some(r => r && r.failed))
-    showToast("بعض الأجهزة تعذر تحميلها، حاول التحديث");
+  if(results.some(r => r && r.failed)){
+    console.warn("FAVORITES LOAD FAILED:", ids.filter((id,i) => results[i]?.failed));
+    showToast("تعذر جلب بعض الأجهزة من قاعدة البيانات");
+  }
 }
 
 /* ================================
