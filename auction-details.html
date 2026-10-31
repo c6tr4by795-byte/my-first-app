@@ -817,9 +817,23 @@ function fail(t, p, link, detail){
     $("ld").hidden = true; $("pg").hidden = false;
     renderStatic(); renderLive(); await renderRefundAction(); S.loaded = true;
     fitGallery();
-    setInterval(() => { if (!document.hidden) refresh(); }, 5000);
-    document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
-    setInterval(() => { document.querySelectorAll(".who>span:last-child").length && (S.sig = ""); }, 60000);
+    let liveRefreshTimer = null;
+    const startLiveRefresh = () => {
+      if (document.hidden || liveRefreshTimer) return;
+      refresh();
+      liveRefreshTimer = setInterval(() => {
+        if (!document.hidden) refresh();
+      }, 5000);
+    };
+    const stopLiveRefresh = () => {
+      if (liveRefreshTimer) clearInterval(liveRefreshTimer);
+      liveRefreshTimer = null;
+    };
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stopLiveRefresh();
+      else startLiveRefresh();
+    });
+    startLiveRefresh();
   }catch(e){
     console.error("DETAILS ERROR:", e);
     const m = String(e?.message||"");
