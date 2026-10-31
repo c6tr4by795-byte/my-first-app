@@ -781,12 +781,18 @@ initScope().finally(load);
 .dock{transition:transform .32s cubic-bezier(.22,.8,.3,1)!important;will-change:transform}
 .dock.mzad-nav-hidden{transform:translate3d(0,calc(100% + 24px),0)!important;pointer-events:none!important}
 
-/* توحيد موضع زر الرجوع في واجهات MZAD العربية */
-#backBtn{order:-10}
 </style>
 <script>
 (function(){
-  const target=document.querySelector(".dock");
+  const target=document.querySelector("
+/* موضع عناصر الهيدر: زر الرجوع يمين والشعار يسار */
+header .top, header .topbar, header .top-row, .topbar, .top-row, .top{
+  direction:rtl;
+}
+header [aria-label="رجوع"], [aria-label="رجوع"]{
+  order:-10;
+}
+.dock");
   if(!target||target.dataset.scrollNavReady)return;
   target.dataset.scrollNavReady="1";
   target.classList.add("mzad-scroll-nav-target");
