@@ -513,7 +513,23 @@ function tick(){
 
 }
 
-setInterval(tick,1000);
+let adminAuctionTickTimer=null;
+function startAdminAuctionTick(){
+  if(document.hidden || adminAuctionTickTimer) return;
+  tick();
+  adminAuctionTickTimer=setInterval(tick,1000);
+}
+function stopAdminAuctionTick(){
+  if(adminAuctionTickTimer) clearInterval(adminAuctionTickTimer);
+  adminAuctionTickTimer=null;
+}
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden) stopAdminAuctionTick();
+  else startAdminAuctionTick();
+});
+addEventListener("pagehide",stopAdminAuctionTick);
+addEventListener("pageshow",startAdminAuctionTick);
+startAdminAuctionTick();
 
 function ask(o){
 
@@ -693,22 +709,23 @@ $("tabs").addEventListener("click",e=>{
 
 });
 
+let adminAuctionReloadPromise=null;
 async function reload(){
-
+  if(document.hidden) return;
+  if(adminAuctionReloadPromise) return adminAuctionReloadPromise;
   $("reload").classList.add("spin");
-
-  try{await loadAll();$("warn").hidden=true;render()}
-
-  catch(e){
-
-    console.error("ADMIN AUCTIONS LOAD",e);
-
-    $("warn").hidden=false;
-
-    $("warn").textContent="تعذر تحميل البيانات: "+(e.message||e)+(e.code==="42501"?" — تحقق من صلاحيات RLS للأدمن.":"");
-
-  }finally{$("reload").classList.remove("spin")}
-
+  adminAuctionReloadPromise=(async()=>{
+    try{await loadAll();$("warn").hidden=true;render()}
+    catch(e){
+      console.error("ADMIN AUCTIONS LOAD",e);
+      $("warn").hidden=false;
+      $("warn").textContent="تعذر تحميل البيانات: "+(e.message||e)+(e.code==="42501"?" — تحقق من صلاحيات RLS للأدمن.":"");
+    }finally{
+      $("reload").classList.remove("spin");
+      adminAuctionReloadPromise=null;
+    }
+  })();
+  return adminAuctionReloadPromise;
 }
 
 $("reload").addEventListener("click",reload);
@@ -760,7 +777,24 @@ $("back").addEventListener("click",()=>history.length>1?history.back():location.
       $("warn").hidden=false;
       $("warn").textContent="هذه الجلسة لا تقرأ سجلات التأمين أو إثباتات متوقعة. قارن سطر التشخيص بين المتصفحين؛ لا تغيّر صلاحيات قاعدة البيانات الآن.";
     }
-    setInterval(()=>{if(!document.hidden&&!D.busy&&!$("ov").classList.contains("show"))reload().then(showDiag)},20000);
+    let adminAuctionPollTimer=null;
+    const startAdminAuctionPolling=()=>{
+      if(document.hidden || adminAuctionPollTimer) return;
+      adminAuctionPollTimer=setInterval(()=>{
+        if(!D.busy&&!$("ov").classList.contains("show"))reload().then(showDiag);
+      },20000);
+    };
+    const stopAdminAuctionPolling=()=>{
+      if(adminAuctionPollTimer) clearInterval(adminAuctionPollTimer);
+      adminAuctionPollTimer=null;
+    };
+    document.addEventListener("visibilitychange",()=>{
+      if(document.hidden) stopAdminAuctionPolling();
+      else {startAdminAuctionPolling();reload().then(showDiag);}
+    });
+    addEventListener("pagehide",stopAdminAuctionPolling);
+    addEventListener("pageshow",startAdminAuctionPolling);
+    startAdminAuctionPolling();
 
   }catch(e){
 
