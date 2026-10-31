@@ -2354,19 +2354,32 @@ async function fetchLiveAuctions(){
     return [];
   }
 
-  return Promise.all((r.data || []).map(async a => {
+  const rows = r.data || [];
+  const deviceIds = [...new Set(rows.map(a => a.device_id).filter(Boolean))];
+  if(!deviceIds.length) return [];
 
-    const [dr, ir] = await Promise.all([
-      supabase.from("mzad_devices").select("brand,model,storage").eq("id", a.device_id).maybeSingle(),
-      supabase.from("mzad_device_images").select("storage_path,is_primary,sort_order").eq("device_id", a.device_id).limit(8)
-    ]);
+  const [devicesResult,imagesResult] = await Promise.all([
+    supabase.from("mzad_devices").select("id,brand,model,storage").in("id",deviceIds),
+    supabase.from("mzad_device_images").select("device_id,storage_path,is_primary,sort_order").in("device_id",deviceIds).order("sort_order",{ascending:true})
+  ]);
+  if(devicesResult.error) throw devicesResult.error;
+  if(imagesResult.error) throw imagesResult.error;
 
-    const imgs = [...(ir.data || [])]
+  const deviceMap = new Map((devicesResult.data || []).map(d => [String(d.id),d]));
+  const imageMap = new Map();
+  for(const image of imagesResult.data || []){
+    const key=String(image.device_id);
+    if(!imageMap.has(key)) imageMap.set(key,[]);
+    imageMap.get(key).push(image);
+  }
+
+  return rows.map(a => {
+    const d = deviceMap.get(String(a.device_id)) || {};
+    const imgs = (imageMap.get(String(a.device_id)) || [])
       .sort((x,y) => (Number(y.is_primary) - Number(x.is_primary)) || (Number(x.sort_order) - Number(y.sort_order)))
+      .slice(0,8)
       .map(i => i.storage_path)
       .filter(Boolean);
-
-    const d = dr.data || {};
 
     return {
       id: a.id,
@@ -2379,7 +2392,7 @@ async function fetchLiveAuctions(){
       ends_at: a.ends_at,
       images: imgs
     };
-  }));
+  });
 }
 
 /* البيع المباشر الحديث من جداول MZAD، حتى يظهر بالهوم مثل السوق */
