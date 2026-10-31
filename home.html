@@ -89,8 +89,10 @@ header{
 .brand-mini{flex:0 0 auto;white-space:nowrap}
 .topbar-side{display:flex;align-items:center;gap:8px;flex:0 0 auto;min-width:0}
 #locationBtn{flex:0 0 auto;white-space:nowrap}
-#notificationBtn{position:relative;isolation:isolate;width:40px;min-width:40px;height:40px;padding:0;flex:0 0 40px;overflow:visible;transform:none}
-#notificationBtn svg{display:block;flex:0 0 auto}
+#notificationBtn{position:relative;isolation:isolate;display:grid;place-items:center;width:42px;min-width:42px;height:42px;padding:0;flex:0 0 42px;overflow:visible;transform:none;border-radius:13px;background:rgba(255,255,255,.96);border:1px solid rgba(255,255,255,.72);color:#5b3fe0;box-shadow:0 5px 14px rgba(34,24,92,.12);-webkit-tap-highlight-color:transparent}
+#notificationBtn svg{display:block;width:22px;height:22px;flex:0 0 22px;pointer-events:none}
+#notificationBtn:active{transform:scale(.96)}
+#notificationBtn:focus-visible{outline:3px solid rgba(255,255,255,.75);outline-offset:2px}
 @media(max-width:370px){
   .topbar{gap:5px;padding-inline:0}
   .topbar-side{gap:6px}
@@ -2791,11 +2793,13 @@ function ensureNotificationPanel(){
   if(notificationPanel) return notificationPanel;
   const style = document.createElement("style");
   style.textContent = `
-    .mzad-notify-panel{position:fixed;z-index:999;top:64px;right:12px;left:auto;width:min(360px,calc(100vw - 24px));max-width:calc(100vw - 24px);margin:0;max-height:min(72dvh,620px);overflow:auto;background:#fff;border:1px solid #e8e4f7;border-radius:20px;box-shadow:0 18px 55px rgba(24,20,55,.2);padding:14px;direction:rtl}
+    .mzad-notify-panel{position:fixed;z-index:9999;top:64px;right:12px;left:auto;width:min(360px,calc(100vw - 20px));max-width:calc(100vw - 20px);margin:0;max-height:min(72dvh,620px);overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:#fff;border:1px solid #e8e4f7;border-radius:20px;box-shadow:0 18px 55px rgba(24,20,55,.2);padding:14px;direction:rtl}
     @media(max-width:380px){.mzad-notify-panel{width:calc(100vw - 20px);max-width:calc(100vw - 20px)}}
     .mzad-notify-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:11px;border-bottom:1px solid #f0edf8}
     .mzad-notify-title{font-size:15px;font-weight:950;color:#17202a}
-    .mzad-notify-close{width:32px;height:32px;border-radius:10px;background:#f5f3fc;font-size:20px}
+    .mzad-notify-close{width:34px;height:34px;min-width:34px;border-radius:10px;background:#f5f3fc;font-size:20px;display:grid;place-items:center}
+    .mzad-notify-item{cursor:pointer;min-height:70px}
+    .mzad-notify-item:active{transform:scale(.99)}
     .mzad-notify-list{display:grid;gap:8px;padding-top:10px}
     .mzad-notify-item{display:block;width:100%;padding:12px;text-align:right;border:1px solid #eeeaf8;border-radius:14px;background:#fff}
     .mzad-notify-item.unread{background:#f7f5ff;border-color:#ded7ff}
@@ -2804,7 +2808,7 @@ function ensureNotificationPanel(){
     .mzad-notify-item time{display:block;margin-top:7px;font-size:9px;color:#8a91a0}
     .mzad-notify-empty{padding:24px 10px;text-align:center;color:#737b89;font-size:12px;line-height:1.7}
     /* نقطة حمراء صغيرة بدون رقم، بزاوية الجرس العليا */
-    .mzad-notify-badge{position:absolute;z-index:2;top:6px;inset-inline-start:9px;width:10px;height:10px;min-width:0;padding:0;border:2px solid #fff;border-radius:50%;background:#e5365f;box-shadow:0 2px 6px rgba(229,54,95,.4);font-size:0;line-height:0;color:transparent;overflow:hidden;pointer-events:none;transform:none}
+    .mzad-notify-badge{position:absolute;z-index:3;top:4px;right:5px;width:10px;height:10px;min-width:10px;padding:0;border:2px solid #fff;border-radius:50%;background:#e5365f;box-shadow:0 2px 6px rgba(229,54,95,.4);font-size:0;line-height:0;color:transparent;overflow:hidden;pointer-events:none;transform:none}
     #notificationBtn{position:relative;overflow:visible}
     #notificationBtn .mzad-notify-badge[hidden]{display:none}
   `;
@@ -2856,7 +2860,7 @@ async function loadUserNotifications(){
     return;
   }
   const result=await supabase.from("mzad_notifications")
-    .select("id,user_id,type,title_ar,body_ar,data_json,is_read,created_at")
+    .select("id,user_id,type,title_ar,body_ar,data_json,link,is_read,created_at")
     .eq("user_id",user.id)
     .order("created_at",{ascending:false})
     .limit(30);
@@ -2867,21 +2871,7 @@ async function loadUserNotifications(){
   }
   const rows=result.data||[];
   const unreadRows=rows.filter(item=>!item.is_read);
-  if(unreadRows.length){
-    const markAllRead=await supabase.from("mzad_notifications")
-      .update({is_read:true})
-      .eq("user_id",user.id)
-      .eq("is_read",false);
-    if(markAllRead.error){
-      console.error("MZAD mark notifications read on open:",markAllRead.error);
-      updateNotificationBadge(unreadRows.length);
-    }else{
-      rows.forEach(item=>{item.is_read=true;});
-      updateNotificationBadge(0);
-    }
-  }else{
-    updateNotificationBadge(0);
-  }
+  updateNotificationBadge(unreadRows.length);
   if(!rows.length){
     list.innerHTML='<div class="mzad-notify-empty">ما عندك إشعارات حالياً. راح تظهر هنا تحديثات المزاد والطلبات لما تتفعّل أحداث الإشعارات.</div>';
     return;
@@ -2901,11 +2891,21 @@ async function loadUserNotifications(){
     button.addEventListener("click",async()=>{
       if(!item.is_read){
         const update=await supabase.from("mzad_notifications").update({is_read:true}).eq("id",item.id).eq("user_id",user.id);
-        if(!update.error){item.is_read=true;button.classList.remove("unread");updateNotificationBadge(Math.max(0,notificationUnreadCount-1));}
+        if(update.error){
+          console.error("MZAD mark notification read:",update.error);
+        }else{
+          item.is_read=true;
+          button.classList.remove("unread");
+          updateNotificationBadge(Math.max(0,notificationUnreadCount-1));
+        }
       }
-      const link = item.data_json && typeof item.data_json === "object" ? item.data_json.link : null;
+      const dataLink=item.data_json && typeof item.data_json === "object" ? item.data_json.link : null;
+      const link=item.link || dataLink;
       if(link){
-        try{const target=new URL(link,location.origin);if(target.origin===location.origin)location.href=target.href;}catch{}
+        try{
+          const target=new URL(link,location.origin);
+          if(target.origin===location.origin)location.href=target.href;
+        }catch(error){console.warn("Invalid notification link:",error);}
       }
     });
     list.appendChild(button);
@@ -2922,9 +2922,13 @@ function positionNotificationPanel(){
   notificationPanel.style.left="auto";
   notificationPanel.style.width=width+"px";
 }
+notificationButton.setAttribute("aria-haspopup","dialog");
+notificationButton.setAttribute("aria-expanded","false");
+notificationButton.setAttribute("title","الإشعارات");
 notificationButton.addEventListener("click",async()=>{
   const panel=ensureNotificationPanel();
   panel.hidden=!panel.hidden;
+  notificationButton.setAttribute("aria-expanded",String(!panel.hidden));
   if(!panel.hidden){
     positionNotificationPanel();
     await loadUserNotifications();
