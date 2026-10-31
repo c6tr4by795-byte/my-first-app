@@ -16,24 +16,45 @@ export const supabase = createClient(
 if (typeof window !== "undefined") {
   let presenceTimer;
   let presenceBusy = false;
-  let lastPresenceState = null;
+  let lastPresenceKey = null;
+  let pendingPresenceState = null;
 
   async function updatePresence(online = !document.hidden) {
-    const nextState = !!online;
-    if (presenceBusy || lastPresenceState === nextState) return;
+    // Keep only the latest requested state; do not lose a hide/show transition
+    // merely because the previous heartbeat is still in flight.
+    pendingPresenceState = !!online;
+    if (presenceBusy) return;
+
     presenceBusy = true;
     try {
-      const { data } = await supabase.auth.getSession();
-      if (data?.session?.user) {
-        const { error } = await supabase.rpc("mzad_presence_ping", { p_online: nextState });
+      while (pendingPresenceState !== null) {
+        const nextState = pendingPresenceState;
+        pendingPresenceState = null;
+
+        const { data } = await supabase.auth.getSession();
+        const userId = data?.session?.user?.id;
+        if (!userId) {
+          lastPresenceKey = null;
+          continue;
+        }
+
+        const stateKey = userId + ":" + (nextState ? "online" : "offline");
+        if (lastPresenceKey === stateKey) continue;
+
+        const { error } = await supabase.rpc("mzad_presence_ping", {
+          p_online: nextState
+        });
+
         if (error) {
           console.warn("Presence update failed:", error.message);
         } else {
-          lastPresenceState = nextState;
+          lastPresenceKey = stateKey;
         }
       }
     } finally {
       presenceBusy = false;
+      // A state can be queued just as the worker is finishing.
+      if (pendingPresenceState !== null) updatePresence(pendingPresenceState);
     }
   }
 
@@ -53,9 +74,13 @@ if (typeof window !== "undefined") {
 
   supabase.auth.onAuthStateChange((event, session) => {
     if (session?.user && ["INITIAL_SESSION", "SIGNED_IN"].includes(event)) {
+      // The same page may be used by another account; presence is tracked per user.
       startPresence();
     }
-    if (event === "SIGNED_OUT") stopPresence();
+    if (event === "SIGNED_OUT") {
+      lastPresenceKey = null;
+      stopPresence();
+    }
   });
 
   document.addEventListener("visibilitychange", () => {
