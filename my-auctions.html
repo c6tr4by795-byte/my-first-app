@@ -266,8 +266,22 @@ async function load(){
     const paymentMap = new Map();
     for (const payment of paymentsResult.data || []) if (!paymentMap.has(payment.deposit_id)) paymentMap.set(payment.deposit_id,payment);
 
-    const statsResults = await Promise.all(rows.map(a => supabase.rpc("mzad_auction_stats",{p_auction_id:a.id})));
-    statsResults.forEach(result => { if (result.error) console.warn("AUCTION STATS:",result.error.message); });
+    // لا نطلق RPC لكل المزادات دفعة واحدة؛ نحدّ التزامن إلى 4 طلبات.
+    const statsResults = new Array(rows.length);
+    let statsIndex = 0;
+    const statsWorker = async () => {
+      while(true){
+        const index = statsIndex++;
+        if(index >= rows.length) return;
+        try{
+          statsResults[index] = await supabase.rpc("mzad_auction_stats",{p_auction_id:rows[index].id});
+        }catch(error){
+          statsResults[index] = {data:null,error};
+        }
+      }
+    };
+    await Promise.all(Array.from({length:Math.min(4,rows.length)}, () => statsWorker()));
+    statsResults.forEach(result => { if (result?.error) console.warn("AUCTION STATS:",result.error.message); });
 
     auctions = rows.map((a,index) => {
       const device = deviceMap.get(a.device_id) || {};
