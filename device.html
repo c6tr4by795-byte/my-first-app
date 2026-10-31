@@ -194,7 +194,7 @@ async function load(){
     if (!n){
       const r = await supabase.from("mzad_direct_sales")
         .select("id, asking_price_iqd, display_price_iqd, status, seller_user_id, device:mzad_devices!mzad_direct_sales_device_id_fkey(*)")
-        .eq("device_id", id).in("status", ["active","reserved","pending_handover"]).maybeSingle();
+        .eq("device_id", id).in("status", ["active","reserved","pending_handover","completed"]).maybeSingle();
       if (r.error) throw r.error;
       const d = r.data?.device;
       if (d){
@@ -276,6 +276,7 @@ function render(){
 
     <section class="title"><small>${esc(cl(d.brand) || "هاتف")}</small><h1>${esc(cl(d.model) || "جهاز")}</h1>${qc ? `<div class="qc">${qc}</div>` : ""}</section>
 
+    ${d.saleStatus && d.saleStatus !== "active" ? `<div class="card" style="margin:10px 0;padding:12px 14px;border:1px solid #e8dffb;border-radius:14px;background:#f7f4ff;color:#5540bd;font-size:13px;font-weight:900;text-align:center">${d.saleStatus === "reserved" ? "هذا الجهاز محجوز حالياً" : d.saleStatus === "pending_handover" ? "جارٍ فحص الجهاز وإكمال إجراءات التسليم" : d.saleStatus === "completed" ? "تم بيع هذا الجهاز" : "هذا الجهاز غير متاح حالياً"}</div>` : ""}
     <section class="card price"><i class="orb"></i>
       <div><small>السعر للمشتري</small><b>${money(d.price)}</b>${neg ? '<small style="margin-top:4px;color:var(--p-dark)">قابل للتفاوض</small>' : ""}</div>
       <span class="tag">بيع مباشر</span>
