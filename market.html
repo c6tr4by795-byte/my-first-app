@@ -550,32 +550,37 @@ async function load(){
 async function loadMore(){
   const p = state.paging;
   if(p.loading || (!p.legacyMore && !p.mzadMore)) return;
+  const scanAll = !!state.query || state.brand !== "all";
   p.loading = true;
+  p.searchingAll = scanAll;
   renderLoadMore();
   try{
-    const [legacyRows, mzadRows] = await Promise.all([
-      p.legacyMore ? fetchLegacy(p.legacyOffset) : Promise.resolve([]),
-      p.mzadMore ? fetchMzad(p.mzadOffset) : Promise.resolve({items:[],fetchedCount:0})
-    ]);
-    p.legacyOffset += legacyRows.length;
-    p.mzadOffset += mzadRows.fetchedCount;
-    p.legacyMore = legacyRows.length === PAGE_SIZE;
-    p.mzadMore = mzadRows.fetchedCount === PAGE_SIZE;
-    const legacyDirectRows = legacyRows.filter(row =>
-      !String(row.sale_type || "").toLowerCase().includes("auction") &&
-      !String(row.sale_type || "").includes("مزاد")
-    );
-    const incoming = [...legacyDirectRows, ...mzadRows.items].map(normalizeDevice);
-    const known = new Set(state.devices.map(d => d.id));
-    for(const device of incoming) if(!known.has(device.id)){ state.devices.push(device); known.add(device.id); }
-    state.devices.sort((a,b) => b._created - a._created);
-    state.byId = new Map(state.devices.map(d => [d.id, d]));
-    render();
+    do {
+      const [legacyRows, mzadRows] = await Promise.all([
+        p.legacyMore ? fetchLegacy(p.legacyOffset) : Promise.resolve([]),
+        p.mzadMore ? fetchMzad(p.mzadOffset) : Promise.resolve({items:[],fetchedCount:0})
+      ]);
+      p.legacyOffset += legacyRows.length;
+      p.mzadOffset += mzadRows.fetchedCount;
+      p.legacyMore = legacyRows.length === PAGE_SIZE;
+      p.mzadMore = mzadRows.fetchedCount === PAGE_SIZE;
+      const legacyDirectRows = legacyRows.filter(row =>
+        !String(row.sale_type || "").toLowerCase().includes("auction") &&
+        !String(row.sale_type || "").includes("مزاد")
+      );
+      const incoming = [...legacyDirectRows, ...mzadRows.items].map(normalizeDevice);
+      const known = new Set(state.devices.map(d => d.id));
+      for(const device of incoming) if(!known.has(device.id)){ state.devices.push(device); known.add(device.id); }
+      state.devices.sort((a,b) => b._created - a._created);
+      state.byId = new Map(state.devices.map(d => [d.id, d]));
+      render();
+    } while(scanAll && (p.legacyMore || p.mzadMore));
   }catch(e){
     console.error("LOAD MORE ERROR:", e);
     toast("تعذر تحميل بقية الأجهزة، حاول مرة ثانية");
   }finally{
     p.loading = false;
+    p.searchingAll = false;
     renderLoadMore();
   }
 }
@@ -689,7 +694,10 @@ function renderLoadMore(){
   const more = state.paging.legacyMore || state.paging.mzadMore;
   el.hidden = !more && !state.paging.loading;
   el.disabled = state.paging.loading;
-  el.textContent = state.paging.loading ? "جاري تحميل المزيد…" : "تحميل المزيد";
+  const filtered = !!state.query || state.brand !== "all";
+  el.textContent = state.paging.loading
+    ? (state.paging.searchingAll ? "جاري فحص بقية الإعلانات…" : "جاري تحميل المزيد…")
+    : (filtered ? "بحث ببقية الإعلانات" : "تحميل المزيد");
 }
 function refreshPublishedTimes(){
   document.querySelectorAll("[data-created]").forEach(el => {
