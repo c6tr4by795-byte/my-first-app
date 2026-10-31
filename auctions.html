@@ -234,20 +234,31 @@ async function fetchAuctions(){
   const devIds = [...new Set(list.map(x => x.device_id).filter(Boolean))];
   const needDev = devIds.filter(i => !devCache.has(i));
   const needPic = devIds.filter(i => !picCache.has(i));
+  const auctionSignature = [...ids].sort().join("|");
+  const refreshBids = !window.__mzadBidCache ||
+    window.__mzadBidCache.signature !== auctionSignature ||
+    Date.now() - window.__mzadBidCache.updatedAt >= 30000;
 
   const [d, im, b] = await Promise.all([
     needDev.length ? supabase.from("mzad_devices").select("id,brand,model,storage,color,condition_grade,battery_health").in("id", needDev) : null,
     needPic.length ? supabase.from("mzad_device_images").select("device_id,storage_path,is_primary,sort_order").in("device_id", needPic).order("sort_order",{ascending:true}) : null,
-    supabase.from("mzad_auction_bids").select("auction_id").in("auction_id", ids).eq("accepted", true)
+    refreshBids ? supabase.from("mzad_auction_bids").select("auction_id").in("auction_id", ids).eq("accepted", true) : null
   ]);
+  if (d?.error) throw d.error;
+  if (im?.error) throw im.error;
+  if (b?.error) throw b.error;
   (d?.data||[]).forEach(x => devCache.set(x.id, x));
   if (im){
     const pick = new Map();
     (im.data||[]).forEach(r => { const cur = pick.get(r.device_id); if (!cur || (r.is_primary && !cur.is_primary)) pick.set(r.device_id, r); });
     needPic.forEach(id => picCache.set(id, pick.get(id)?.storage_path || ""));
   }
-  const bids = new Map();
-  (b.data||[]).forEach(r => bids.set(r.auction_id, (bids.get(r.auction_id)||0) + 1));
+  if (refreshBids){
+    const bids = new Map();
+    (b.data||[]).forEach(r => bids.set(r.auction_id, (bids.get(r.auction_id)||0) + 1));
+    window.__mzadBidCache = { signature:auctionSignature, updatedAt:Date.now(), counts:bids };
+  }
+  const bids = window.__mzadBidCache?.counts || new Map();
 
   const now = Date.now();
   const normalizeAuctionImagePath = value => {
