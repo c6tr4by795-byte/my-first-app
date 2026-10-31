@@ -222,18 +222,33 @@ async function submit(){
 
   const btn=$("go"); btn.disabled=true; btn.textContent="جاري الإرسال…";
   try{
+    // منع تكرار الطلب: إذا سبق إنشاء طلب لهذا الإعلان نعرض نفس الطلب بدلاً من إرسال طلب ثانٍ.
+    const {data:existing,error:checkError}=await supabase.from("mzad_orders")
+      .select("id,order_number,buyer_user_id,status")
+      .eq("direct_sale_id",S.dev.saleId)
+      .in("status",["pending","contacted","confirmed","inspection"])
+      .maybeSingle();
+    if(checkError) throw checkError;
+    if(existing){
+      if(existing.buyer_user_id===S.user){success(existing);return;}
+      throw new Error("SALE_ALREADY_RESERVED");
+    }
     const { data:order, error } = await supabase.from("mzad_orders").insert({
       direct_sale_id:S.dev.saleId, device_id:S.dev.id, buyer_user_id:S.user, seller_user_id:S.dev.sellerUserId,
       buyer_name:name, buyer_phone:phone, address:addr, notes:$("notes").value.trim()||null,
       payment_method:S.pay, price_iqd:S.dev.price,
       device_snapshot:{brand:S.dev.brand,model:S.dev.model,storage:S.dev.storage,color:S.dev.color,battery_health:S.dev.battery},
       status:"pending"
-    }).select("id,order_number").single();
+    }).select("id,order_number,buyer_user_id").single();
     if(error) throw error;
     success(order);
   }catch(e){
     console.error("ORDER ERROR:", e);
-    toast("ما قدرنا نرسل الطلب، جرّب مرة ثانية");
+    if(e.message==="SALE_ALREADY_RESERVED" || e.code==="23505"){
+      toast("هذا الجهاز عليه طلب شراء قيد المعالجة حالياً");
+    }else{
+      toast("ما قدرنا نرسل الطلب، جرّب مرة ثانية");
+    }
     btn.disabled=false; btn.textContent="تأكيد الطلب";
   }
 }
@@ -245,7 +260,8 @@ function success(order){
     <h2>تم استلام طلبك</h2>
     <p>فريق المنصة راح يتواصل ويا البائع وبعدها يتصل بيك على رقمك لتأكيد موعد الفحص والتسليم.</p>
     <div class="code">${ref}</div>
-    <a class="btn2" href="my-orders.html">متابعة طلباتي</a></section>`;
+    <a class="btn2" href="my-orders.html">متابعة طلباتي</a>
+    <a class="btn2 home-btn" href="home.html">الصفحة الرئيسية</a></section>`;
 }
 
 $("back").addEventListener("click",()=>history.length>1?history.back():location.href="market.html");
