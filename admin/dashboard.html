@@ -1353,15 +1353,25 @@ async function loadDirectOrders(){
   if(error){box.innerHTML='<div class="empty">تعذر تحميل الطلبات: '+esc(rpcErr(error))+'</div>';return;}
   S.orders=data||[];S.loaded.orders=true;renderDirectOrders();
 }
-function openDirectOrder(o){
+let activeDirectOrderId=null;
+async function openDirectOrder(o){
   if(!o)return;
+  activeDirectOrderId=o.id;
   const d=o.device_snapshot||{},name=[d.brand,d.model,d.storage,d.color].filter(Boolean).join(" ")||"جهاز";
   const kv=(k,v)=>'<div class="kv"><span>'+k+'</span><strong>'+esc(v??"—")+'</strong></div>';
   openSheet('<div class="grab"></div><h3>طلب '+esc(o.order_number)+'</h3>'+kv("الجهاز",name)+kv("المشتري",o.buyer_name)+kv("رقم الهاتف",o.buyer_phone)+kv("العنوان",o.address)+kv("السعر المثبت",iqd(o.price_iqd))+kv("طريقة الاستلام",o.payment_method==="office"?"من المكتب":"عند الاستلام")+kv("تاريخ الطلب",fmtT(o.created_at))+
     '<label class="lbl">حالة الطلب</label><select class="inp" id="directOrderStatus">'+ORDER_FILTERS.filter(x=>x[0]!=="all").map(([k,v])=>'<option value="'+k+'" '+(o.status===k?"selected":"")+'>'+v+'</option>').join("")+'</select>'+
     '<label class="lbl">ملاحظة الإدارة</label><textarea class="note" id="directOrderNote" maxlength="1000">'+esc(o.admin_note||"")+'</textarea>'+
-    '<button class="b2" data-act="saveDirectOrder" type="button">حفظ التحديث</button><button class="b3" data-act="no" type="button">إغلاق</button>',
+    '<button class="b2" data-act="saveDirectOrder" type="button">حفظ التحديث</button><div id="directOrderTimeline" class="log" style="margin-top:14px">جاري تحميل سجل الطلب...</div><button class="b3" data-act="no" type="button">إغلاق</button>',
     {saveDirectOrder:()=>saveDirectOrder(o)});
+  const {data,error}=await supabase.from("mzad_order_events").select("event_type,old_status,new_status,note,created_at").eq("order_id",o.id).order("created_at",{ascending:false}).limit(30);
+  if(activeDirectOrderId!==o.id||!$("directOrderTimeline"))return;
+  const events=data||[];
+  const timeline=error?'<div class="empty">تعذر تحميل سجل التغييرات.</div>':events.length?events.map(e=>{
+    const desc=e.event_type==="order_created"?"تم إنشاء الطلب":("تغيير الحالة: "+(ORDER_LABELS[e.old_status]||e.old_status||"—")+" ← "+(ORDER_LABELS[e.new_status]||e.new_status||"—"));
+    return '<div class="log"><b>'+esc(desc)+'</b>'+(e.note?'<small>'+esc(e.note)+'</small>':'')+'<small>'+esc(fmtT(e.created_at))+'</small></div>';
+  }).join(""):'<div class="empty">لا يوجد سجل تغييرات إضافي.</div>';
+  $("directOrderTimeline").innerHTML='<b>سجل الطلب</b>'+timeline;
 }
 async function saveDirectOrder(o){
   const status=$("directOrderStatus").value,note=$("directOrderNote").value.trim()||null;
