@@ -19,17 +19,17 @@ if (typeof window !== "undefined") {
   let lastPresenceKey = null;
   let pendingPresenceState = null;
 
-  async function updatePresence(online = !document.hidden) {
-    // Keep only the latest requested state; do not lose a hide/show transition
-    // merely because the previous heartbeat is still in flight.
-    pendingPresenceState = !!online;
+  async function updatePresence(online = !document.hidden, heartbeat = false) {
+    // Keep the latest requested state and whether it is a scheduled heartbeat.
+    pendingPresenceState = { online: !!online, heartbeat: !!heartbeat };
     if (presenceBusy) return;
 
     presenceBusy = true;
     try {
       while (pendingPresenceState !== null) {
-        const nextState = pendingPresenceState;
+        const request = pendingPresenceState;
         pendingPresenceState = null;
+        const nextState = request.online;
 
         const { data } = await supabase.auth.getSession();
         const userId = data?.session?.user?.id;
@@ -39,7 +39,9 @@ if (typeof window !== "undefined") {
         }
 
         const stateKey = userId + ":" + (nextState ? "online" : "offline");
-        if (lastPresenceKey === stateKey) continue;
+        // Skip duplicate state transitions, but NEVER skip a scheduled online
+        // heartbeat: it refreshes last_seen so an active user stays online.
+        if (!request.heartbeat && lastPresenceKey === stateKey) continue;
 
         const { error } = await supabase.rpc("mzad_presence_ping", {
           p_online: nextState
@@ -54,7 +56,7 @@ if (typeof window !== "undefined") {
     } finally {
       presenceBusy = false;
       // A state can be queued just as the worker is finishing.
-      if (pendingPresenceState !== null) updatePresence(pendingPresenceState);
+      if (pendingPresenceState !== null) updatePresence(pendingPresenceState.online, pendingPresenceState.heartbeat);
     }
   }
 
@@ -62,7 +64,7 @@ if (typeof window !== "undefined") {
     if (document.hidden || presenceTimer) return;
     updatePresence(true);
     presenceTimer = setInterval(() => {
-      if (!document.hidden) updatePresence(true);
+      if (!document.hidden) updatePresence(true, true);
     }, 45000);
   }
 
