@@ -463,12 +463,18 @@ addEventListener("pagehide", () => { clearInterval(t1); clearInterval(t2); });
 .mzad-scroll-nav-target{transition:transform .32s cubic-bezier(.22,.8,.3,1)!important;will-change:transform}
 .mzad-scroll-nav-target.mzad-nav-hidden{transform:translate3d(0,calc(100% + 24px),0)!important;pointer-events:none!important}
 
-/* توحيد موضع زر الرجوع في واجهات MZAD العربية */
-#backBtn{order:-10}
 </style>
 <script>
 (function(){
-  const target = document.querySelector(".bottom-wrap") || document.querySelector(".bw") || document.querySelector("nav.bottom-nav") || (document.querySelector("nav.nav") ? document.querySelector("nav.nav").parentElement : null);
+  const target = document.querySelector
+/* موضع عناصر الهيدر: زر الرجوع يمين والشعار يسار */
+header .top, header .topbar, header .top-row, .topbar, .top-row, .top{
+  direction:rtl;
+}
+header [aria-label="رجوع"], [aria-label="رجوع"]{
+  order:-10;
+}
+(".bottom-wrap") || document.querySelector(".bw") || document.querySelector("nav.bottom-nav") || (document.querySelector("nav.nav") ? document.querySelector("nav.nav").parentElement : null);
   if(!target || target.dataset.scrollNavReady) return;
   target.dataset.scrollNavReady = "1";
   target.classList.add("mzad-scroll-nav-target");
