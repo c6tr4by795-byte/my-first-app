@@ -489,18 +489,28 @@ function stopAuctionPageTimers(){
   auctionRefreshTimer = null;
 }
 
+let lastResumeRefreshAt = 0;
+function refreshAuctionsAfterResume(){
+  if(document.hidden) return;
+  const now = Date.now();
+  // visibilitychange و pageshow قد يحدثان معاً عند الرجوع من الخلفية.
+  if(now - lastResumeRefreshAt < 1200) return;
+  lastResumeRefreshAt = now;
+  load(false);
+}
+
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) stopAuctionPageTimers();
   else {
     startAuctionPageTimers();
-    load(false);
+    refreshAuctionsAfterResume();
   }
 });
 
 addEventListener("pagehide", stopAuctionPageTimers);
 addEventListener("pageshow", () => {
   startAuctionPageTimers();
-  if (!document.hidden) load(false);
+  refreshAuctionsAfterResume();
 });
 
 startAuctionPageTimers();
