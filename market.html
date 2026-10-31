@@ -259,6 +259,7 @@ body.kb .dock{transform:translateY(140%)}
     </div>
   </div>
   <section class="grid" id="grid" aria-live="polite"></section>
+  <div class="market-more-wrap"><button id="marketLoadMore" class="market-more" type="button" hidden>تحميل المزيد</button></div>
 </main>
 
 <div class="sheet-wrap" id="sheet" hidden>
@@ -318,8 +319,10 @@ const SVG = {
   alert:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16.5h.01"/></svg>'
 };
 
+const PAGE_SIZE = 40;
 const state = { devices:[], byId:new Map(), brand:"all", query:"", sort:"newest", userId:null,
-  favKey:"mzad_phone_favorites:guest", favs:new Set(), pendingDelete:null };
+  favKey:"mzad_phone_favorites:guest", favs:new Set(), pendingDelete:null,
+  paging:{ legacyOffset:0, mzadOffset:0, legacyMore:true, mzadMore:true, loading:false } };
 
 const $ = id => document.getElementById(id);
 const grid=$("grid"), chips=$("brands"), countEl=$("count"), input=$("q"),
@@ -437,11 +440,13 @@ async function initScope(){
 function saveFavs(){
   try{ localStorage.setItem(state.favKey, JSON.stringify([...state.favs])); }catch{}
 }
-async function fetchLegacy(){
+async function fetchLegacy(offset = 0){
   const variants = [`${LEGACY_BASE},user_id,ends_at`,`${LEGACY_BASE},user_id`,`${LEGACY_BASE},ends_at`,LEGACY_BASE];
   let lastError = null;
   for(const cols of variants){
-    const { data, error } = await supabase.from("devices").select(cols).order("created_at",{ascending:false});
+    const { data, error } = await supabase.from("devices").select(cols)
+      .order("created_at",{ascending:false})
+      .range(offset, offset + PAGE_SIZE - 1);
     if(!error) return data || [];
     lastError = error;
   }
@@ -455,12 +460,13 @@ async function signImage(image){
   if(!error && data?.signedUrl) return data.signedUrl;
   return publicImage(path);
 }
-async function fetchMzad(){
+async function fetchMzad(offset = 0){
   const { data, error } = await supabase
     .from("mzad_direct_sales")
     .select("id,created_at,asking_price_iqd,display_price_iqd,status,device_id,device:mzad_devices!mzad_direct_sales_device_id_fkey(id,brand,model,storage,color,battery_health,condition_grade,screen_condition,camera_condition,biometric_condition,seller_notes,mzad_device_images(storage_path,sort_order,is_primary))")
     .in("status", ["active","reserved","pending_handover"])
-    .order("created_at",{ascending:false});
+    .order("created_at",{ascending:false})
+    .range(offset, offset + PAGE_SIZE - 1);
   if(error) throw error;
 
   const rows = (data || []).filter(i => i.device);
@@ -510,26 +516,68 @@ function normalizeDevice(raw){
   };
 }
 async function load(){
+  if(state.paging.loading) return;
+  state.paging = { legacyOffset:0, mzadOffset:0, legacyMore:true, mzadMore:true, loading:true };
+  state.devices = [];
+  state.byId = new Map();
   showSkeleton();
   try{
     const [legacyRows, mzadRows] = await Promise.all([
-      fetchLegacy(),
-      fetchMzad().catch(e => { console.warn("MZAD LISTINGS:", e); return []; })
+      fetchLegacy(0),
+      fetchMzad(0).catch(e => { console.warn("MZAD LISTINGS:", e); state.paging.mzadMore = false; return []; })
     ]);
-    // السوق مخصص للبيع المباشر. سجلات المزاد القديمة في جدول devices لا تمثل
-    // مزادات النظام الجديد؛ عرضها هنا كان يفتح device.html ويظهرها كبيع مباشر.
+    // السوق مخصص للبيع المباشر. سجلات المزاد القديمة لا تظهر هنا.
     const legacyDirectRows = legacyRows.filter(row =>
       !String(row.sale_type || "").toLowerCase().includes("auction") &&
       !String(row.sale_type || "").includes("مزاد")
     );
-    state.devices = [...legacyDirectRows, ...mzadRows].map(normalizeDevice).sort((a,b) => b._created - a._created);
+    state.paging.legacyOffset = legacyRows.length;
+    state.paging.mzadOffset = mzadRows.length;
+    state.paging.legacyMore = legacyRows.length === PAGE_SIZE;
+    if(state.paging.mzadMore) state.paging.mzadMore = mzadRows.length === PAGE_SIZE;
+    state.devices = [...legacyDirectRows, ...mzadRows].map(normalizeDevice);
     state.byId = new Map(state.devices.map(d => [d.id, d]));
     render();
   }catch(e){
     console.error("LOAD DEVICES ERROR:", e);
     showError();
+  }finally{
+    state.paging.loading = false;
   }
 }
+async function loadMore(){
+  const p = state.paging;
+  if(p.loading || (!p.legacyMore && !p.mzadMore)) return;
+  p.loading = true;
+  renderLoadMore();
+  try{
+    const [legacyRows, mzadRows] = await Promise.all([
+      p.legacyMore ? fetchLegacy(p.legacyOffset) : Promise.resolve([]),
+      p.mzadMore ? fetchMzad(p.mzadOffset) : Promise.resolve([])
+    ]);
+    p.legacyOffset += legacyRows.length;
+    p.mzadOffset += mzadRows.length;
+    p.legacyMore = legacyRows.length === PAGE_SIZE;
+    p.mzadMore = mzadRows.length === PAGE_SIZE;
+    const legacyDirectRows = legacyRows.filter(row =>
+      !String(row.sale_type || "").toLowerCase().includes("auction") &&
+      !String(row.sale_type || "").includes("مزاد")
+    );
+    const incoming = [...legacyDirectRows, ...mzadRows].map(normalizeDevice);
+    const known = new Set(state.devices.map(d => d.id));
+    for(const device of incoming) if(!known.has(device.id)){ state.devices.push(device); known.add(device.id); }
+    state.devices.sort((a,b) => b._created - a._created);
+    state.byId = new Map(state.devices.map(d => [d.id, d]));
+    render();
+  }catch(e){
+    console.error("LOAD MORE ERROR:", e);
+    toast("تعذر تحميل بقية الأجهزة، حاول مرة ثانية");
+  }finally{
+    p.loading = false;
+    renderLoadMore();
+  }
+}
+
 
 /* ---------- filter ---------- */
 function visibleDevices(){
@@ -626,8 +674,20 @@ function render(){
   const list = visibleDevices();
   renderChips();
   document.querySelectorAll("[data-sort]").forEach(b => b.classList.toggle("on", b.dataset.sort === state.sort));
-  countEl.innerHTML = state.query ? `<b>${list.length}</b> نتيجة` : `<b>${list.length}</b> جهاز`;
+  const totalLoaded = state.devices.length;
+  const stillLoading = state.paging.legacyMore || state.paging.mzadMore;
+  countEl.innerHTML = (state.query ? `<b>${list.length}</b> نتيجة` : `<b>${list.length}</b> جهاز`)
+    + (stillLoading ? ` <small class="market-partial">— تم تحميل ${totalLoaded} إعلاناً</small>` : "");
   grid.innerHTML = list.length ? list.map(cardHTML).join("") : emptyHTML();
+  renderLoadMore();
+}
+function renderLoadMore(){
+  let el = $("marketLoadMore");
+  if(!el) return;
+  const more = state.paging.legacyMore || state.paging.mzadMore;
+  el.hidden = !more && !state.paging.loading;
+  el.disabled = state.paging.loading;
+  el.textContent = state.paging.loading ? "جاري تحميل المزيد…" : "تحميل المزيد";
 }
 function refreshPublishedTimes(){
   document.querySelectorAll("[data-created]").forEach(el => {
@@ -696,6 +756,8 @@ function syncUrlBrand(){
   else url.searchParams.set("brand", state.brand === "Apple" ? "iphone" : state.brand.toLowerCase());
   window.history.replaceState({}, "", url);
 }
+
+$("marketLoadMore").addEventListener("click", loadMore);
 
 grid.addEventListener("click", e => {
   if(e.target.closest("[data-retry]")){ load(); return; }
@@ -808,5 +870,12 @@ initScope().finally(load);
   window.addEventListener("pageshow",()=>{lastY=window.scrollY;if(window.scrollY<80)setHidden(false)});
 })();
 </script>
+<style id="market-pagination-style">
+.market-more-wrap{display:flex;justify-content:center;padding:18px 12px 34px}
+.market-more{min-width:170px;padding:12px 22px;border:1px solid #d9dce5;border-radius:13px;background:#fff;color:#5b3fe0;font:inherit;font-weight:700;cursor:pointer}
+.market-more:disabled{opacity:.6;cursor:wait}
+.market-more[hidden]{display:none}
+.market-partial{font-size:11px;font-weight:500;color:#7b8190}
+</style>
 </body>
 </html>
