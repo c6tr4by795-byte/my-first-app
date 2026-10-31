@@ -231,19 +231,60 @@ async function load(){
     if (!user){ location.href = "index.html?login=1&returnTo=" + encodeURIComponent("my-auctions.html" + location.search); return; }
     const r = await supabase.from("mzad_auctions").select("id,auction_number,device_id,seller_user_id,starting_price_iqd,current_price_iqd,status,starts_at,ends_at,created_at").eq("seller_user_id", user.id).order("created_at",{ascending:false}).limit(100);
     if (r.error) throw r.error;
-    auctions = await Promise.all((r.data || []).map(async a => {
-      const [dr, br, sr, img, dep] = await Promise.all([
-        supabase.from("mzad_devices").select("brand,model,storage").eq("id", a.device_id).maybeSingle(),
-        supabase.from("mzad_auction_bids").select("id",{count:"exact",head:true}).eq("auction_id", a.id).eq("accepted", true),
-        supabase.rpc("mzad_auction_stats",{ p_auction_id:a.id }),
-        getImage(a.device_id),
-        supabase.from("mzad_deposits").select("id,status,amount_iqd").eq("auction_id", a.id).eq("user_id", user.id).eq("deposit_type","auction_seller").order("created_at",{ascending:false}).limit(1).maybeSingle()
-      ]);
-      const pr = dep.data?.id ? await supabase.from("mzad_payment_requests").select("status").eq("deposit_id", dep.data.id).eq("user_id", user.id).order("created_at",{ascending:false}).limit(1).maybeSingle() : { data:null };
-      const done = ["proof_submitted","approved","refunded"].includes(String(pr.data?.status || "").toLowerCase()) || ["approved","refunded"].includes(String(dep.data?.status || "").toLowerCase());
-      return { ...a, device:dr.data || {}, bidCount:br.count ?? 0, reserved:Number(sr.data?.reserved) || 0, views:Number(sr.data?.viewers) || 0, image:img,
-               hasDeposit:!!dep.data, depositId:dep.data?.id || null, depositStatus:String(dep.data?.status || "").toLowerCase(), depositAmount:Number(dep.data?.amount_iqd)||0, depositPaid:!!dep.data && done, depositPending:!!dep.data && !done };
-    }));
+    const rows = r.data || [];
+    const auctionIds = rows.map(a => a.id);
+    const deviceIds = [...new Set(rows.map(a => a.device_id).filter(Boolean))];
+
+    // اجلب معلومات الأجهزة والصور والمزايدات والتأمينات دفعة واحدة بدل طلب مستقل لكل مزاد.
+    const [devicesResult, imagesResult, bidsResult, depositsResult] = await Promise.all([
+      deviceIds.length ? supabase.from("mzad_devices").select("id,brand,model,storage").in("id", deviceIds) : Promise.resolve({data:[],error:null}),
+      deviceIds.length ? supabase.from("mzad_device_images").select("device_id,storage_path,is_primary,sort_order").in("device_id", deviceIds).order("sort_order",{ascending:true}) : Promise.resolve({data:[],error:null}),
+      auctionIds.length ? supabase.from("mzad_auction_bids").select("auction_id").in("auction_id", auctionIds).eq("accepted", true) : Promise.resolve({data:[],error:null}),
+      auctionIds.length ? supabase.from("mzad_deposits").select("id,auction_id,status,amount_iqd,created_at").in("auction_id", auctionIds).eq("user_id", user.id).eq("deposit_type","auction_seller").order("created_at",{ascending:false}) : Promise.resolve({data:[],error:null})
+    ]);
+    for (const result of [devicesResult,imagesResult,bidsResult,depositsResult]) if (result.error) throw result.error;
+
+    const deviceMap = new Map((devicesResult.data || []).map(d => [d.id,d]));
+    const imageMap = new Map();
+    for (const image of imagesResult.data || []) {
+      const current = imageMap.get(image.device_id);
+      if (!current || (image.is_primary && !current.is_primary) ||
+          (Boolean(image.is_primary) === Boolean(current.is_primary) && Number(image.sort_order) < Number(current.sort_order))) {
+        imageMap.set(image.device_id,image);
+      }
+    }
+    const bidMap = new Map();
+    for (const bid of bidsResult.data || []) bidMap.set(bid.auction_id,(bidMap.get(bid.auction_id)||0)+1);
+    const depositMap = new Map();
+    for (const deposit of depositsResult.data || []) if (!depositMap.has(deposit.auction_id)) depositMap.set(deposit.auction_id,deposit);
+
+    const depositIds = [...new Set([...depositMap.values()].map(d => d.id))];
+    const paymentsResult = depositIds.length
+      ? await supabase.from("mzad_payment_requests").select("id,deposit_id,status,created_at").in("deposit_id",depositIds).eq("user_id",user.id).order("created_at",{ascending:false})
+      : {data:[],error:null};
+    if (paymentsResult.error) throw paymentsResult.error;
+    const paymentMap = new Map();
+    for (const payment of paymentsResult.data || []) if (!paymentMap.has(payment.deposit_id)) paymentMap.set(payment.deposit_id,payment);
+
+    const statsResults = await Promise.all(rows.map(a => supabase.rpc("mzad_auction_stats",{p_auction_id:a.id})));
+    statsResults.forEach(result => { if (result.error) console.warn("AUCTION STATS:",result.error.message); });
+
+    auctions = rows.map((a,index) => {
+      const device = deviceMap.get(a.device_id) || {};
+      const imageRow = imageMap.get(a.device_id);
+      const imagePath = String(imageRow?.storage_path || "");
+      const image = imagePath
+        ? (/^https?:\/\//i.test(imagePath) ? imagePath : SUPABASE_URL + "/storage/v1/object/public/device-images/" + imagePath.split("/").map(encodeURIComponent).join("/"))
+        : "";
+      const dep = depositMap.get(a.id) || null;
+      const payment = dep ? paymentMap.get(dep.id) : null;
+      const done = ["proof_submitted","approved","refunded"].includes(String(payment?.status || "").toLowerCase()) ||
+                   ["approved","refunded"].includes(String(dep?.status || "").toLowerCase());
+      const stats = statsResults[index]?.data || {};
+      return { ...a, device, bidCount:bidMap.get(a.id)||0, reserved:Number(stats.reserved)||0, views:Number(stats.viewers)||0, image,
+        hasDeposit:!!dep, depositId:dep?.id||null, depositStatus:String(dep?.status||"").toLowerCase(), depositAmount:Number(dep?.amount_iqd)||0,
+        depositPaid:!!dep && done, depositPending:!!dep && !done };
+    });
     $("sTotal").textContent = money(auctions.length);
     $("sBids").textContent = money(auctions.reduce((n,a) => n + a.bidCount, 0));
     $("sRes").textContent = money(auctions.reduce((n,a) => n + a.reserved, 0));
