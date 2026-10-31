@@ -1157,7 +1157,7 @@ async function loadUserListings(u){
   }));
   const kindLabel=x=>({direct:"بيع مباشر",auction:"مزاد",legacy_direct:"بيع مباشر قديم",legacy_auction:"مزاد قديم"})[x.kind]||"منشور";
   const statusLabel=x=>({
-    active:"منشور",reserved:"محجوز",pending_handover:"بانتظار التسليم",completed:"مكتمل",
+    active:"منشور",reserved:"محجوز",pending_handover:"بانتظار التسليم",completed:"تم البيع",
     ended:"منتهي",cancelled:"ملغي",draft:"مسودة",pending_review:"بانتظار المراجعة",
     scheduled:"مجدول",live:"مباشر",archived:"مؤرشف",expired:"منتهي",disputed:"عليه نزاع"
   })[x.status]||x.status||"—";
@@ -1325,7 +1325,7 @@ document.querySelector(".admin-jumps").addEventListener("click",e=>{
 showSet("admin-ops");
 
 /* ===== طلبات الشراء المباشر ===== */
-const ORDER_FILTERS=[["all","الكل"],["pending","جديدة"],["contacted","تم التواصل"],["confirmed","مؤكدة"],["inspection","الفحص والتسليم"],["completed","مكتملة"],["cancelled","ملغاة"]];
+const ORDER_FILTERS=[["all","الكل"],["pending","جديدة"],["contacted","تم التواصل"],["confirmed","مؤكدة"],["inspection","قيد الفحص والتسليم"],["completed","تم البيع"],["cancelled","ملغاة"]];
 const ORDER_LABELS={pending:"طلب جديد",contacted:"تم التواصل",confirmed:"مؤكد",inspection:"قيد الفحص والتسليم",completed:"مكتمل",cancelled:"ملغى"};
 function renderOrderFilters(){
   $("orderFilters").innerHTML=ORDER_FILTERS.map(([k,v])=>'<button class="chip '+(S.of===k?"on":"")+'" data-of="'+k+'" type="button">'+v+'</button>').join("");
