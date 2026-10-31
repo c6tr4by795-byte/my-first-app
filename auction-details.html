@@ -761,7 +761,7 @@ async function activate(){
   try{ await supabase.rpc("mzad_activate_due_auctions"); await refresh(); }catch(e){ console.warn("ACTIVATE:", e); }
   setTimeout(() => { S.activating = false; }, 5000);
 }
-setInterval(tick, 1000);
+// مؤقت العدّاد يُدار مع ظهور الصفحة لتجنب عمله بالخلفية.
 
 async function refresh(){
   if (S.busy || S.polling) return;
@@ -818,21 +818,28 @@ function fail(t, p, link, detail){
     renderStatic(); renderLive(); await renderRefundAction(); S.loaded = true;
     fitGallery();
     let liveRefreshTimer = null;
+    let auctionTickTimer = null;
     const startLiveRefresh = () => {
-      if (document.hidden || liveRefreshTimer) return;
-      refresh();
-      liveRefreshTimer = setInterval(() => {
-        if (!document.hidden) refresh();
-      }, 5000);
+      if (document.hidden) return;
+      if (!auctionTickTimer) auctionTickTimer = setInterval(tick, 1000);
+      if (!liveRefreshTimer) {
+        refresh();
+        liveRefreshTimer = setInterval(() => {
+          if (!document.hidden) refresh();
+        }, 5000);
+      }
     };
     const stopLiveRefresh = () => {
       if (liveRefreshTimer) clearInterval(liveRefreshTimer);
+      if (auctionTickTimer) clearInterval(auctionTickTimer);
       liveRefreshTimer = null;
+      auctionTickTimer = null;
     };
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) stopLiveRefresh();
       else startLiveRefresh();
     });
+    addEventListener("pagehide", stopLiveRefresh);
     startLiveRefresh();
   }catch(e){
     console.error("DETAILS ERROR:", e);
