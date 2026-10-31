@@ -65,7 +65,7 @@ async function load(){
   await auth();
 
   const p=await supabase.from("mzad_payment_proofs")
-   .select("*")
+   .select("id,request_id,review_status,created_at,proof_storage_path,paid_amount_iqd,reference_number,user_id")
    .eq("review_status","pending")
    .order("created_at",{ascending:true});
   if(p.error)throw p.error;
@@ -74,31 +74,42 @@ async function load(){
   if(!proofs.length){$("list").innerHTML='<div class="empty">لا توجد إثباتات بانتظار المراجعة.</div>';return}
 
   const rids=[...new Set(proofs.map(x=>x.request_id).filter(Boolean))];
-  const rq=await supabase.from("mzad_payment_requests").select("*").in("id",rids);
+  const rq=await supabase.from("mzad_payment_requests").select("id,request_number,deposit_id,payment_method_id,amount_iqd,payment_reference").in("id",rids);
   if(rq.error)throw rq.error;
   const reqs=rq.data||[],rm=new Map(reqs.map(x=>[x.id,x]));
 
   const dids=[...new Set(reqs.map(x=>x.deposit_id).filter(Boolean))];
-  const dp=await supabase.from("mzad_deposits").select("*").in("id",dids);
+  const dp=await supabase.from("mzad_deposits").select("id,auction_id,amount_iqd,user_id,deposit_type").in("id",dids);
   if(dp.error)throw dp.error;
   const deps=dp.data||[],dm=new Map(deps.map(x=>[x.id,x]));
 
   const aids=[...new Set(deps.map(x=>x.auction_id).filter(Boolean))];
-  const au=aids.length?await supabase.from("mzad_auctions").select("*").in("id",aids):{data:[],error:null};
+  const au=aids.length?await supabase.from("mzad_auctions").select("id,device_id,auction_number").in("id",aids):{data:[],error:null};
   if(au.error)throw au.error;
   const auctions=au.data||[],am=new Map(auctions.map(x=>[x.id,x]));
 
   const vids=[...new Set(auctions.map(x=>x.device_id).filter(Boolean))];
-  const dv=vids.length?await supabase.from("mzad_devices").select("*").in("id",vids):{data:[],error:null};
+  const dv=vids.length?await supabase.from("mzad_devices").select("id,brand,model,storage").in("id",vids):{data:[],error:null};
   if(dv.error)throw dv.error;
   const devices=dv.data||[],vm=new Map(devices.map(x=>[x.id,x]));
 
   const mids=[...new Set(reqs.map(x=>x.payment_method_id).filter(Boolean))];
-  const mt=mids.length?await supabase.from("mzad_payment_methods").select("*").in("id",mids):{data:[],error:null};
+  const mt=mids.length?await supabase.from("mzad_payment_methods").select("id,name_ar,name,code").in("id",mids):{data:[],error:null};
   if(mt.error)throw mt.error;
   const methods=mt.data||[],mm=new Map(methods.map(x=>[x.id,x]));
 
-  const urls=await Promise.all(proofs.map(x=>signed(x.proof_storage_path)));
+  // إنشاء روابط الإثباتات بتزامن محدود حتى لا نطلق طلبات Storage كثيرة دفعة واحدة.
+  const urls=new Array(proofs.length);
+  let signedIndex=0;
+  const signedWorker=async()=>{
+   while(true){
+    const index=signedIndex++;
+    if(index>=proofs.length)return;
+    try{urls[index]=await signed(proofs[index].proof_storage_path);}
+    catch(error){console.warn("SIGNED PROOF URL:",error);urls[index]=null;}
+   }
+  };
+  await Promise.all(Array.from({length:Math.min(4,proofs.length)},()=>signedWorker()));
 
   $("list").innerHTML=proofs.map((p,i)=>{
    const q=rm.get(p.request_id)||{};
