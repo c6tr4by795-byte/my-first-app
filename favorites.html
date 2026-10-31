@@ -878,7 +878,24 @@ function tickTimers(){
   });
 }
 
-setInterval(tickTimers, 1000);
+let favoritesTimer = null;
+function startFavoritesTimer(){
+  if(document.hidden || favoritesTimer) return;
+  tickTimers();
+  favoritesTimer = setInterval(tickTimers, 1000);
+}
+function stopFavoritesTimer(){
+  if(favoritesTimer){
+    clearInterval(favoritesTimer);
+    favoritesTimer = null;
+  }
+}
+document.addEventListener("visibilitychange", () => {
+  if(document.hidden) stopFavoritesTimer();
+  else startFavoritesTimer();
+});
+window.addEventListener("pagehide", stopFavoritesTimer);
+startFavoritesTimer();
 
 /* ================================
    التحميل
@@ -886,35 +903,53 @@ setInterval(tickTimers, 1000);
 
 async function loadFavorites(){
 
+  if(state.loading && state.loadStarted) return;
   state.loading = true;
+  state.loadStarted = true;
   render();
 
-  const ids = favoriteIds();
+  try{
+    const ids = favoriteIds();
 
-  if(!ids.length){
-    state.items = [];
+    if(!ids.length){
+      state.items = [];
+      return;
+    }
+
+    // حد أقصى 4 عناصر قيد الفحص بنفس الوقت لتجنب اندفاع طلبات الشبكة.
+    const results = new Array(ids.length);
+    let nextIndex = 0;
+    const worker = async () => {
+      while(true){
+        const index = nextIndex++;
+        if(index >= ids.length) return;
+        try{
+          results[index] = await loadOne(ids[index]);
+        }catch(error){
+          console.warn("FAVORITE ITEM LOAD:", ids[index], error);
+          results[index] = {failed:true};
+        }
+      }
+    };
+    await Promise.all(Array.from({length:Math.min(4,ids.length)}, () => worker()));
+
+    /* ننظف فقط الأجهزة المحذوفة فعلاً، وما نحذف شي إذا الفحص فشل */
+    ids.forEach((id, i) => {
+      if(results[i] === null) removeId(id);
+    });
+
+    state.items = results.filter(r => r && !r.failed);
+
+    if(results.some(r => r && r.failed)){
+      const failed = results.filter(r => r && r.failed);
+      console.error("FAVORITES LOAD FAILED:", failed);
+      const reason = failed[0]?.reason || "خطأ غير محدد";
+      showToast("سبب التعذر: " + reason);
+    }
+  }finally{
     state.loading = false;
+    state.loadStarted = false;
     render();
-    return;
-  }
-
-  const results = await Promise.all(ids.map(loadOne));
-
-  /* ننظف فقط الأجهزة المحذوفة فعلاً، وما نحذف شي إذا الفحص فشل */
-  ids.forEach((id, i) => {
-    if(results[i] === null) removeId(id);
-  });
-
-  state.items = results.filter(r => r && !r.failed);
-
-  state.loading = false;
-  render();
-
-  if(results.some(r => r && r.failed)){
-    const failed = results.filter(r => r && r.failed);
-    console.error("FAVORITES LOAD FAILED:", failed);
-    const reason = failed[0]?.reason || "خطأ غير محدد";
-    showToast("سبب التعذر: " + reason);
   }
 }
 
