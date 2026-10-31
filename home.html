@@ -2941,43 +2941,47 @@ notificationButton.addEventListener("click",async()=>{
 window.addEventListener("resize",positionNotificationPanel,{passive:true});
 window.addEventListener("scroll",positionNotificationPanel,{passive:true});
 
-/* مزامنة عداد الإشعارات مبكراً وبعد جاهزية جلسة تسجيل الدخول */
+/* مزامنة عداد الإشعارات: طلب واحد عند الجلسة، ثم تحديث دوري */
 let notificationBadgeRequest=0;
-async function refreshNotificationBadge(){
+let notificationBadgeInFlight=null;
+let notificationBadgeLastAt=0;
+async function refreshNotificationBadge(force=false){
+  if(notificationBadgeInFlight) return notificationBadgeInFlight;
+  if(!force && Date.now()-notificationBadgeLastAt<5000) return;
+  notificationBadgeLastAt=Date.now();
   const request=++notificationBadgeRequest;
-  try{
-    const auth=await supabase.auth.getUser();
-    const user=auth?.data?.user;
-    if(request!==notificationBadgeRequest)return;
-    if(auth?.error || !user){updateNotificationBadge(0);return;}
-    const result=await supabase.from("mzad_notifications")
-      .select("id",{count:"exact",head:true})
-      .eq("user_id",user.id)
-      .eq("is_read",false);
-    if(request!==notificationBadgeRequest)return;
-    if(result.error){
-      console.error("MZAD notification badge:",result.error);
-      return;
+  notificationBadgeInFlight=(async()=>{
+    try{
+      const auth=await supabase.auth.getUser();
+      const user=auth?.data?.user;
+      if(request!==notificationBadgeRequest)return;
+      if(auth?.error || !user){updateNotificationBadge(0);return;}
+      const result=await supabase.from("mzad_notifications")
+        .select("id",{count:"exact",head:true})
+        .eq("user_id",user.id)
+        .eq("is_read",false);
+      if(request!==notificationBadgeRequest)return;
+      if(result.error){
+        console.error("MZAD notification badge:",result.error);
+        return;
+      }
+      updateNotificationBadge(result.count||0);
+    }catch(error){
+      console.error("MZAD notification badge load failed:",error);
+    }finally{
+      notificationBadgeInFlight=null;
     }
-    updateNotificationBadge(result.count||0);
-  }catch(error){
-    console.error("MZAD notification badge load failed:",error);
-  }
+  })();
+  return notificationBadgeInFlight;
 }
-const refreshBadgeAfterSession=()=>{
-  refreshNotificationBadge();
-  setTimeout(refreshNotificationBadge,700);
-  setTimeout(refreshNotificationBadge,1800);
-};
-refreshBadgeAfterSession();
-window.addEventListener("load",refreshBadgeAfterSession,{once:true});
 document.addEventListener("visibilitychange",()=>{
   if(!document.hidden)refreshNotificationBadge();
 });
 supabase.auth.onAuthStateChange((event)=>{
-  if(event==="SIGNED_IN" || event==="INITIAL_SESSION" || event==="TOKEN_REFRESHED"){
-    setTimeout(refreshNotificationBadge,0);
+  if(event==="SIGNED_IN" || event==="INITIAL_SESSION"){
+    setTimeout(()=>refreshNotificationBadge(true),0);
   }else if(event==="SIGNED_OUT"){
+    notificationBadgeRequest++;
     updateNotificationBadge(0);
   }
 });
