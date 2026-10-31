@@ -1414,9 +1414,41 @@ $("logout").onclick = async () => { await supabase.auth.signOut(); location.href
     const h = location.hash.replace("#","");
     if(["review","auctions","users","orders","settings"].includes(h)) setTab(h);
     renderOrderFilters();
-    setInterval(() => { if(!document.hidden && !S.busy) refreshActive(); if(!document.hidden && S.tab==="users") loadUsers(); if(!document.hidden && S.tab==="orders") loadDirectOrders(); refreshPresenceClocks(); }, POLL_MS);
-setInterval(refreshPresenceClocks,1000);
-    document.addEventListener("visibilitychange", () => { if(!document.hidden) refreshActive(); });
+    let adminPollTimer = null;
+    let presenceClockTimer = null;
+    let adminRefreshPromise = null;
+    const safeRefreshActive = () => {
+      if(document.hidden || adminRefreshPromise) return adminRefreshPromise;
+      adminRefreshPromise = refreshActive().finally(() => { adminRefreshPromise = null; });
+      return adminRefreshPromise;
+    };
+    const startAdminTimers = () => {
+      if(document.hidden) return;
+      if(!adminPollTimer) {
+        adminPollTimer = setInterval(() => {
+          if(!S.busy) safeRefreshActive();
+          if(S.tab==="orders") loadDirectOrders();
+        }, POLL_MS);
+      }
+      if(!presenceClockTimer) presenceClockTimer = setInterval(refreshPresenceClocks,1000);
+    };
+    const stopAdminTimers = () => {
+      if(adminPollTimer) clearInterval(adminPollTimer);
+      if(presenceClockTimer) clearInterval(presenceClockTimer);
+      adminPollTimer = null;
+      presenceClockTimer = null;
+    };
+    startAdminTimers();
+    document.addEventListener("visibilitychange", () => {
+      if(document.hidden) stopAdminTimers();
+      else {
+        startAdminTimers();
+        safeRefreshActive();
+        if(S.tab==="orders") loadDirectOrders();
+      }
+    });
+    addEventListener("pagehide", stopAdminTimers);
+    addEventListener("pageshow", startAdminTimers);
   }catch(e){
     console.error(e);
     if(e.message!=="AUTH_REQUIRED" && e.message!=="ADMIN_REQUIRED") showErr("تعذر تحميل لوحة الإدارة: "+rpcErr(e));
