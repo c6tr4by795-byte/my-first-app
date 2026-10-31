@@ -184,7 +184,7 @@ async function load(){
   try{
     let n = null;
     if (/^\d+$/.test(id)){
-      const r = await supabase.from("devices").select("*").eq("id", id).maybeSingle();
+      const r = await supabase.from("devices").select("id,brand,model,storage,color,battery_health,condition,screen_condition,body_condition,cameras,face_id,replaced_parts,notes,price,seller_name,images").eq("id", id).maybeSingle();
       if (r.error) throw r.error;
       const d = r.data;
       if (d) n = { brand:d.brand, model:d.model, storage:d.storage, color:d.color, battery:d.battery_health, cond:d.condition,
@@ -193,7 +193,7 @@ async function load(){
     }
     if (!n){
       const r = await supabase.from("mzad_direct_sales")
-        .select("id, asking_price_iqd, display_price_iqd, status, seller_user_id, device:mzad_devices!mzad_direct_sales_device_id_fkey(*)")
+        .select("id, asking_price_iqd, display_price_iqd, status, seller_user_id, device:mzad_devices!mzad_direct_sales_device_id_fkey(id,brand,model,storage,color,battery_health,condition_grade,scratches_dents,camera_condition,biometric_condition,replaced_parts,faults,accessories,sim_network,seller_notes)")
         .eq("device_id", id).in("status", ["active","reserved","pending_handover","completed"]).maybeSingle();
       if (r.error) throw r.error;
       const d = r.data?.device;
