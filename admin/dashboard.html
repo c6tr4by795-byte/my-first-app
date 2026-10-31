@@ -244,6 +244,7 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
       <button class="chip" type="button" data-go="review">مراجعة التأمينات</button>
       <button class="chip" type="button" data-go="auctions">المزادات</button>
       <button class="chip" type="button" data-go="users">المستخدمون</button>
+      <button class="chip" type="button" data-go="orders">طلبات الشراء</button>
       <button class="chip" type="button" data-go="settings">الإعدادات</button>
       <a class="chip" href="payment-methods.html">طرق الدفع</a>
       <a class="chip" href="auctions.html?tab=sale">الاسترداد</a>
@@ -267,6 +268,16 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
     <div class="sh"><h2>مراقبة المزادات</h2><small id="aCount"></small></div>
     <div class="chips" id="aFilters"></div>
     <div class="list" id="aList"></div>
+  </div>
+</section>
+
+<!-- طلبات الشراء المباشر -->
+<section class="panel" id="p-orders" hidden>
+  <div class="sec">
+    <div class="sh"><h2>طلبات الشراء المباشر</h2><small id="orderCount"></small></div>
+    <input class="search" id="orderSearch" type="search" placeholder="ابحث برقم الطلب أو اسم المشتري أو الهاتف أو الجهاز">
+    <div class="chips" id="orderFilters"></div>
+    <div class="list" id="orderList"><div class="sk"></div></div>
   </div>
 </section>
 
@@ -352,6 +363,7 @@ textarea.note:focus{border-color:#a99cf0;box-shadow:0 0 0 4px rgba(98,70,217,.1)
   <button class="tb" data-tab="review" type="button"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 7.8 7 10 4-2.2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg>المراجعة<i id="bdgReview" hidden>0</i></button>
   <button class="tb" data-tab="auctions" type="button"><svg viewBox="0 0 24 24"><path d="M14 4 8 10l4 4 6-6M7 11 3.5 14.5 9.5 20.5 13 17M16 20h5"/></svg>المزادات</button>
   <button class="tb" data-tab="users" type="button"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.5-3.6 3.1-5.5 6.5-5.5s6 1.9 6.5 5.5M16 4.8a3.4 3.4 0 0 1 0 6.4M18 14.8c1.9.6 3.2 2.2 3.5 5.2"/></svg>المستخدمون</button>
+  <button class="tb" data-tab="orders" type="button"><svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>الطلبات<i id="bdgOrders" hidden>0</i></button>
   <button class="tb" data-tab="settings" type="button"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>الإعدادات</button>
 </nav></div>
 
@@ -422,7 +434,7 @@ const A_STATUS = { live:["مباشر","ok"], scheduled:["بانتظار الاف
 const REQ_STATUS = { pending:["بانتظار الدفع","warn"], proof_submitted:["بانتظار المراجعة","warn"], approved:["مقبول","ok"], rejected:["مرفوض","bad"], cancelled:["ملغى",""], refunded:["مسترد",""] };
 
 /* ===== الحالة ===== */
-const S = { users:[], uf:"all", uq:"", pub:null, tab:"overview", dash:null, saved:new Map(), tog:{}, queue:[], qf:"pending", qs:"", auctions:[], af:"live", loaded:{}, busy:false, dirty:{} };
+const S = { users:[], uf:"all", uq:"", pub:null, tab:"overview", dash:null, saved:new Map(), tog:{}, queue:[], qf:"pending", qs:"", auctions:[], af:"live", orders:[], of:"all", os:"", loaded:{}, busy:false, dirty:{} };
 
 /* ===== أدوات ===== */
 let tt; function toast(m, kind){ const e=$("toast"); e.textContent=m; e.className="toast show"+(kind?" "+kind:""); clearTimeout(tt); tt=setTimeout(()=>e.classList.remove("show"),2600); }
@@ -1312,16 +1324,69 @@ document.querySelector(".admin-jumps").addEventListener("click",e=>{
 });
 showSet("admin-ops");
 
+/* ===== طلبات الشراء المباشر ===== */
+const ORDER_FILTERS=[["all","الكل"],["pending","جديدة"],["contacted","تم التواصل"],["confirmed","مؤكدة"],["inspection","الفحص والتسليم"],["completed","مكتملة"],["cancelled","ملغاة"]];
+const ORDER_LABELS={pending:"طلب جديد",contacted:"تم التواصل",confirmed:"مؤكد",inspection:"قيد الفحص والتسليم",completed:"مكتمل",cancelled:"ملغى"};
+function renderOrderFilters(){
+  $("orderFilters").innerHTML=ORDER_FILTERS.map(([k,v])=>'<button class="chip '+(S.of===k?"on":"")+'" data-of="'+k+'" type="button">'+v+'</button>').join("");
+}
+function renderDirectOrders(){
+  const rows=S.orders.filter(o=>{
+    const d=o.device_snapshot||{},s=[o.order_number,o.buyer_name,o.buyer_phone,o.address,d.brand,d.model,d.storage].join(" ").toLowerCase();
+    return (S.of==="all"||o.status===S.of)&&(!S.os||s.includes(S.os));
+  });
+  $("orderCount").textContent=n0(rows.length)+" طلب";
+  const pending=S.orders.filter(x=>x.status==="pending").length;
+  if($("bdgOrders")){$("bdgOrders").hidden=!pending;$("bdgOrders").textContent=n0(pending);}
+  if(!rows.length){$("orderList").innerHTML='<div class="empty">لا توجد طلبات بهذا الاختيار.</div>';return;}
+  $("orderList").innerHTML=rows.map(o=>{
+    const d=o.device_snapshot||{},name=[d.brand,d.model,d.storage,d.color].filter(Boolean).join(" ")||"جهاز";
+    return '<button class="q" type="button" data-order="'+esc(o.id)+'"><div class="q-top"><span class="code">'+esc(o.order_number)+'</span><span class="badge warn">'+esc(ORDER_LABELS[o.status]||o.status)+'</span></div>'+
+      '<div class="q-name">'+esc(name)+'</div><div class="q-sub">المشتري: '+esc(o.buyer_name)+' · '+esc(o.buyer_phone)+'</div>'+
+      '<div class="q-bot"><strong>'+iqd(o.price_iqd)+'</strong><span class="q-sub">'+esc(fmtT(o.created_at))+'</span></div></button>';
+  }).join("");
+}
+async function loadDirectOrders(){
+  const box=$("orderList");if(!box)return;
+  box.innerHTML='<div class="sk"></div><div class="sk"></div>';
+  const {data,error}=await supabase.from("mzad_orders").select("*").order("created_at",{ascending:false}).limit(300);
+  if(error){box.innerHTML='<div class="empty">تعذر تحميل الطلبات: '+esc(rpcErr(error))+'</div>';return;}
+  S.orders=data||[];S.loaded.orders=true;renderDirectOrders();
+}
+function openDirectOrder(o){
+  if(!o)return;
+  const d=o.device_snapshot||{},name=[d.brand,d.model,d.storage,d.color].filter(Boolean).join(" ")||"جهاز";
+  const kv=(k,v)=>'<div class="kv"><span>'+k+'</span><strong>'+esc(v??"—")+'</strong></div>';
+  openSheet('<div class="grab"></div><h3>طلب '+esc(o.order_number)+'</h3>'+kv("الجهاز",name)+kv("المشتري",o.buyer_name)+kv("رقم الهاتف",o.buyer_phone)+kv("العنوان",o.address)+kv("السعر المثبت",iqd(o.price_iqd))+kv("طريقة الاستلام",o.payment_method==="office"?"من المكتب":"عند الاستلام")+kv("تاريخ الطلب",fmtT(o.created_at))+
+    '<label class="lbl">حالة الطلب</label><select class="inp" id="directOrderStatus">'+ORDER_FILTERS.filter(x=>x[0]!=="all").map(([k,v])=>'<option value="'+k+'" '+(o.status===k?"selected":"")+'>'+v+'</option>').join("")+'</select>'+
+    '<label class="lbl">ملاحظة الإدارة</label><textarea class="note" id="directOrderNote" maxlength="1000">'+esc(o.admin_note||"")+'</textarea>'+
+    '<button class="b2" data-act="saveDirectOrder" type="button">حفظ التحديث</button><button class="b3" data-act="no" type="button">إغلاق</button>',
+    {saveDirectOrder:()=>saveDirectOrder(o)});
+}
+async function saveDirectOrder(o){
+  const status=$("directOrderStatus").value,note=$("directOrderNote").value.trim()||null;
+  try{
+    const {data,error}=await supabase.from("mzad_orders").update({status,admin_note:note,handled_by:(await supabase.auth.getUser()).data.user.id}).eq("id",o.id).select("*").single();
+    if(error)throw error;
+    try{await supabase.rpc("mzad_admin_log",{p_action:"direct_order_status",p_target:o.id,p_details:{order_number:o.order_number,status}});}catch{}
+    closeSheet(false);toast("تم تحديث الطلب","ok");await Promise.allSettled([loadDirectOrders(),loadDash()]);
+  }catch(e){toast("تعذر تحديث الطلب: "+rpcErr(e),"bad");}
+}
+$("orderFilters").addEventListener("click",e=>{const b=e.target.closest("[data-of]");if(!b)return;S.of=b.dataset.of;renderOrderFilters();renderDirectOrders();});
+$("orderSearch").addEventListener("input",e=>{S.os=e.target.value.trim().toLowerCase();renderDirectOrders();});
+$("orderList").addEventListener("click",e=>{const b=e.target.closest("[data-order]");if(b)openDirectOrder(S.orders.find(o=>o.id===b.dataset.order));});
+
 /* ===== التبويبات ===== */
 function setTab(t){
   S.tab = t;
-  ["overview","review","auctions","users","settings"].forEach(x => { $("p-"+x).hidden = x!==t; });
+  ["overview","review","auctions","users","orders","settings"].forEach(x => { $("p-"+x).hidden = x!==t; });
   document.querySelectorAll(".tb").forEach(b => b.classList.toggle("on", b.dataset.tab===t));
   try{ history.replaceState(null,"","#"+t); }catch{}
   updateDirty(); window.scrollTo({ top:0 });
   if(t==="review"){ renderFilters(); if(!S.loaded.review) $("qList").innerHTML='<div class="sk"></div><div class="sk"></div>'; loadQueue(); }
   if(t==="users"){ renderFilters(); if(!S.loaded.users) $("uList").innerHTML='<div class="sk"></div><div class="sk"></div>'; loadUsers(); }
   if(t==="auctions"){ renderFilters(); if(!S.loaded.auctions) $("aList").innerHTML='<div class="sk"></div><div class="sk"></div>'; loadAuctions(); }
+  if(t==="orders"){renderOrderFilters();if(!S.loaded.orders)loadDirectOrders();}
 }
 document.querySelector(".tabs").addEventListener("click", e => { const b=e.target.closest("[data-tab]"); if(b) setTab(b.dataset.tab); });
 document.addEventListener("click", e => { const g=e.target.closest("[data-go]"); if(g && !g.closest(".tabs")) setTab(g.dataset.go); });
@@ -1337,8 +1402,9 @@ $("logout").onclick = async () => { await supabase.auth.signOut(); location.href
     await Promise.allSettled([loadSettings(), loadDash(), loadPub()]);
     renderCmds();
     const h = location.hash.replace("#","");
-    if(["review","auctions","users","settings"].includes(h)) setTab(h);
-    setInterval(() => { if(!document.hidden && !S.busy) refreshActive(); if(!document.hidden && S.tab==="users") loadUsers(); refreshPresenceClocks(); }, POLL_MS);
+    if(["review","auctions","users","orders","settings"].includes(h)) setTab(h);
+    renderOrderFilters();
+    setInterval(() => { if(!document.hidden && !S.busy) refreshActive(); if(!document.hidden && S.tab==="users") loadUsers(); if(!document.hidden && S.tab==="orders") loadDirectOrders(); refreshPresenceClocks(); }, POLL_MS);
 setInterval(refreshPresenceClocks,1000);
     document.addEventListener("visibilitychange", () => { if(!document.hidden) refreshActive(); });
   }catch(e){
