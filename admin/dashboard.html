@@ -972,10 +972,23 @@ function refreshPresenceClocks(){
   });
   if(S.tab==="users" && $("uOnline")) $("uOnline").textContent=n0(S.users.filter(userOnline).length);
 }
+let usersLoadSequence=0;
+let usersLoadPromise=null;
 async function loadUsers(){
   if(S.uq.length===1) return;
-  try{ S.users = await fetchUsers(S.uq); S.loaded.users = true; renderUsers(); }
-  catch(e){ $("uList").innerHTML = `<div class="empty">تعذر تحميل المستخدمين<br><small>${esc(rpcErr(e))}</small></div>`; }
+  const query=S.uq;
+  const sequence=++usersLoadSequence;
+  try{
+    // بحث جديد يلغي اعتماد نتيجة البحث السابق إذا وصلت متأخرة.
+    const rows=await fetchUsers(query);
+    if(sequence!==usersLoadSequence || query!==S.uq) return;
+    S.users=rows;
+    S.loaded.users=true;
+    renderUsers();
+  }catch(e){
+    if(sequence!==usersLoadSequence || query!==S.uq) return;
+    $("uList").innerHTML = `<div class="empty">تعذر تحميل المستخدمين<br><small>${esc(rpcErr(e))}</small></div>`;
+  }
 }
 function depositSummary(u){
   const active=Number(u.deposit_active_count||0);
@@ -1140,21 +1153,35 @@ async function loadUserListings(u){
   if(error){box.innerHTML='<div class="empty">تعذر تحميل المنشورات: '+esc(rpcErr(error))+'</div>';return;}
   const rows=Array.isArray(data)?data:[];
   if(!rows.length){box.innerHTML='<div class="empty">هذا المستخدم لم ينشر أجهزة حتى الآن.</div>';return;}
-  const images=await Promise.all(rows.map(async x=>{
-    if(x.image_path){
-      const {data:sign}=await supabase.storage.from("device-images").createSignedUrl(x.image_path,3600);
-      if(sign?.signedUrl)return sign.signedUrl;
-      const pub=supabase.storage.from("device-images").getPublicUrl(x.image_path).data?.publicUrl;
-      if(pub)return pub;
+  // حد أقصى 4 عمليات توقيع صور بالتزامن لتخفيف ضغط Storage.
+  const images=new Array(rows.length);
+  let imageIndex=0;
+  const imageWorker=async()=>{
+    while(true){
+      const index=imageIndex++;
+      if(index>=rows.length)return;
+      const x=rows[index];
+      try{
+        if(x.image_path){
+          const {data:sign}=await supabase.storage.from("device-images").createSignedUrl(x.image_path,3600);
+          if(sign?.signedUrl){images[index]=sign.signedUrl;continue;}
+          const pub=supabase.storage.from("device-images").getPublicUrl(x.image_path).data?.publicUrl;
+          if(pub){images[index]=pub;continue;}
+        }
+        if(x.image_url){
+          let raw=String(x.image_url);
+          try{const parsed=JSON.parse(raw);raw=Array.isArray(parsed)?String(parsed[0]||""):String(parsed.url||raw);}catch{}
+          if(/^https?:\/\//i.test(raw)){images[index]=raw;continue;}
+          if(raw){images[index]=supabase.storage.from("device-images").getPublicUrl(raw).data?.publicUrl||"";continue;}
+        }
+        images[index]="";
+      }catch(error){
+        console.warn("USER LISTING IMAGE:",x.id,error);
+        images[index]="";
+      }
     }
-    if(x.image_url){
-      let raw=String(x.image_url);
-      try{const parsed=JSON.parse(raw);raw=Array.isArray(parsed)?String(parsed[0]||""):String(parsed.url||raw);}catch{}
-      if(/^https?:\/\//i.test(raw))return raw;
-      if(raw)return supabase.storage.from("device-images").getPublicUrl(raw).data?.publicUrl||"";
-    }
-    return "";
-  }));
+  };
+  await Promise.all(Array.from({length:Math.min(4,rows.length)},()=>imageWorker()));
   const kindLabel=x=>({direct:"بيع مباشر",auction:"مزاد",legacy_direct:"بيع مباشر قديم",legacy_auction:"مزاد قديم"})[x.kind]||"منشور";
   const statusLabel=x=>({
     active:"منشور",reserved:"محجوز",pending_handover:"بانتظار التسليم",completed:"تم البيع",
