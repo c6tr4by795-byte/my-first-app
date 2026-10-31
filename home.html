@@ -2465,7 +2465,7 @@ async function loadLiveCount(){
   }
 }
 
-async function loadDevices(){
+async function loadDevicesInternal(){
 
   skeletons("featuredTrack");
   skeletons("latestTrack");
@@ -2587,6 +2587,16 @@ async function loadDevices(){
     );
 
   }
+}
+
+// امنع تكرار تحميل الرئيسية إذا تزامن فتح الصفحة مع ضغط زر إعادة المحاولة.
+let homeDevicesLoadPromise = null;
+function loadDevices(){
+  if(homeDevicesLoadPromise) return homeDevicesLoadPromise;
+  homeDevicesLoadPromise = loadDevicesInternal().finally(()=>{
+    homeDevicesLoadPromise = null;
+  });
+  return homeDevicesLoadPromise;
 }
 
 document.addEventListener("click", event => {
