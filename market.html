@@ -485,7 +485,7 @@ async function fetchMzad(offset = 0){
     if (!imagesByDevice.has(key)) imagesByDevice.set(key, []);
     imagesByDevice.get(key).push(image);
   }
-  return Promise.all(rows.map(async item => {
+  const items = await Promise.all(rows.map(async item => {
     const d = item.device;
     const imgs = imagesByDevice.get(String(d.id)) || [];
     // device-images مخزن عام؛ استخدم الرابط العام مباشرة.
@@ -497,6 +497,8 @@ async function fetchMzad(offset = 0){
       sale_type:"direct", images:urls.filter(Boolean), notes:d.seller_notes, _mzad:true
     };
   }));
+  // احتفظ بعدد الصفوف الخام حتى لا يتكرر offset إذا كان بعض السجلات بلا جهاز مرتبط.
+  return { items, fetchedCount:(data || []).length };
 }
 function normalizeDevice(raw){
   const brand = canonicalBrand(raw.brand);
@@ -524,7 +526,7 @@ async function load(){
   try{
     const [legacyRows, mzadRows] = await Promise.all([
       fetchLegacy(0),
-      fetchMzad(0).catch(e => { console.warn("MZAD LISTINGS:", e); state.paging.mzadMore = false; return []; })
+      fetchMzad(0).catch(e => { console.warn("MZAD LISTINGS:", e); state.paging.mzadMore = false; return {items:[],fetchedCount:0}; })
     ]);
     // السوق مخصص للبيع المباشر. سجلات المزاد القديمة لا تظهر هنا.
     const legacyDirectRows = legacyRows.filter(row =>
@@ -532,10 +534,10 @@ async function load(){
       !String(row.sale_type || "").includes("مزاد")
     );
     state.paging.legacyOffset = legacyRows.length;
-    state.paging.mzadOffset = mzadRows.length;
+    state.paging.mzadOffset = mzadRows.fetchedCount;
     state.paging.legacyMore = legacyRows.length === PAGE_SIZE;
-    if(state.paging.mzadMore) state.paging.mzadMore = mzadRows.length === PAGE_SIZE;
-    state.devices = [...legacyDirectRows, ...mzadRows].map(normalizeDevice);
+    if(state.paging.mzadMore) state.paging.mzadMore = mzadRows.fetchedCount === PAGE_SIZE;
+    state.devices = [...legacyDirectRows, ...mzadRows.items].map(normalizeDevice);
     state.byId = new Map(state.devices.map(d => [d.id, d]));
     render();
   }catch(e){
@@ -553,17 +555,17 @@ async function loadMore(){
   try{
     const [legacyRows, mzadRows] = await Promise.all([
       p.legacyMore ? fetchLegacy(p.legacyOffset) : Promise.resolve([]),
-      p.mzadMore ? fetchMzad(p.mzadOffset) : Promise.resolve([])
+      p.mzadMore ? fetchMzad(p.mzadOffset) : Promise.resolve({items:[],fetchedCount:0})
     ]);
     p.legacyOffset += legacyRows.length;
-    p.mzadOffset += mzadRows.length;
+    p.mzadOffset += mzadRows.fetchedCount;
     p.legacyMore = legacyRows.length === PAGE_SIZE;
-    p.mzadMore = mzadRows.length === PAGE_SIZE;
+    p.mzadMore = mzadRows.fetchedCount === PAGE_SIZE;
     const legacyDirectRows = legacyRows.filter(row =>
       !String(row.sale_type || "").toLowerCase().includes("auction") &&
       !String(row.sale_type || "").includes("مزاد")
     );
-    const incoming = [...legacyDirectRows, ...mzadRows].map(normalizeDevice);
+    const incoming = [...legacyDirectRows, ...mzadRows.items].map(normalizeDevice);
     const known = new Set(state.devices.map(d => d.id));
     for(const device of incoming) if(!known.has(device.id)){ state.devices.push(device); known.add(device.id); }
     state.devices.sort((a,b) => b._created - a._created);
