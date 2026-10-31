@@ -166,8 +166,19 @@ export async function applyStatus(st, force){
   } else dropBanner("restrict");
 }
 
+let guardPollPromise = null;
+let guardPollTimer = null;
 async function poll(){
-  try{ const r = await supabase.rpc("mzad_public_status"); if(!r.error && r.data) await applyStatus(r.data); }catch{}
+  if(document.hidden) return;
+  if(guardPollPromise) return guardPollPromise;
+  guardPollPromise = (async()=>{
+    try{
+      const r = await supabase.rpc("mzad_public_status");
+      if(!r.error && r.data) await applyStatus(r.data);
+    }catch{}
+    finally{ guardPollPromise = null; }
+  })();
+  return guardPollPromise;
 }
 
 /* معاينة من لوحة الإدارة (لا تلمس الإعدادات الفعلية) */
@@ -178,6 +189,23 @@ export function previewOverlay(o, ms=6000){
 export function closePreview(){ hideOverlay(); }
 
 if(!SKIP){
-  const start = () => { poll(); setInterval(()=>{ if(!document.hidden) poll(); }, POLL_MS); document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) poll(); }); };
-  if(document.body) start(); else document.addEventListener("DOMContentLoaded", start);
+  const stopGuardPolling = () => {
+    if(guardPollTimer) clearInterval(guardPollTimer);
+    guardPollTimer = null;
+  };
+  const startGuardPolling = () => {
+    if(document.hidden || guardPollTimer) return;
+    poll();
+    guardPollTimer = setInterval(poll, POLL_MS);
+  };
+  const start = () => {
+    startGuardPolling();
+    document.addEventListener("visibilitychange", () => {
+      if(document.hidden) stopGuardPolling();
+      else startGuardPolling();
+    });
+    addEventListener("pagehide", stopGuardPolling);
+    addEventListener("pageshow", startGuardPolling);
+  };
+  if(document.body) start(); else document.addEventListener("DOMContentLoaded", start, {once:true});
 }
