@@ -90,7 +90,9 @@ header{
 .topbar-side{display:flex;align-items:center;gap:8px;flex:0 0 auto;min-width:0}
 #locationBtn{flex:0 0 auto;white-space:nowrap}
 #notificationBtn{position:relative;isolation:isolate;display:grid;place-items:center;width:42px;min-width:42px;height:42px;padding:0;flex:0 0 42px;overflow:visible;transform:none;border-radius:13px;background:rgba(255,255,255,.96);border:1px solid rgba(255,255,255,.72);color:#5b3fe0;box-shadow:0 5px 14px rgba(34,24,92,.12);-webkit-tap-highlight-color:transparent}
-#notificationBtn svg{display:block;width:22px;height:22px;flex:0 0 22px;pointer-events:none}
+#notificationBtn .notification-bell-icon{display:block;width:23px;height:23px;flex:0 0 23px;pointer-events:none}
+#notificationBtn .mzad-notify-badge{position:absolute;z-index:5;top:-8px;right:-8px;display:flex;align-items:center;justify-content:center;min-width:19px;height:19px;padding:0 5px;border:2px solid #fff;border-radius:999px;background:#e53958;color:#fff;font-size:10px;font-weight:900;line-height:1;box-shadow:0 2px 7px rgba(229,57,88,.28);pointer-events:none;overflow:visible}
+#notificationBtn .mzad-notify-badge[hidden]{display:none}
 #notificationBtn:active{transform:scale(.96)}
 #notificationBtn:focus-visible{outline:3px solid rgba(255,255,255,.75);outline-offset:2px}
 @media(max-width:370px){
@@ -859,10 +861,11 @@ body.is-scrolling .cd:before{
 
     </button>
 
-      <button class="icon-btn" id="notificationBtn" type="button" aria-label="الإشعارات">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
-        <path d="M10 21h4"/>
+      <button class="icon-btn" id="notificationBtn" type="button" aria-label="الإشعارات" title="الإشعارات">
+      <svg class="notification-bell-icon" width="23" height="23" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M18 9a6 6 0 0 0-12 0c0 7-2.5 7.5-2.5 9h17C20.5 16.5 18 16 18 9Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M9.5 21h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M10 3.2a2.2 2.2 0 0 1 4 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
       </svg>
     </button>
 
@@ -2793,7 +2796,8 @@ function ensureNotificationPanel(){
   if(notificationPanel) return notificationPanel;
   const style = document.createElement("style");
   style.textContent = `
-    .mzad-notify-panel{position:fixed;z-index:9999;top:64px;right:12px;left:auto;width:min(360px,calc(100vw - 20px));max-width:calc(100vw - 20px);margin:0;max-height:min(72dvh,620px);overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:#fff;border:1px solid #e8e4f7;border-radius:20px;box-shadow:0 18px 55px rgba(24,20,55,.2);padding:14px;direction:rtl}
+    .mzad-notify-panel{position:fixed;z-index:9999;top:64px;right:12px;left:auto;width:min(360px,calc(100vw - 20px));max-width:calc(100vw - 20px);margin:0;max-height:min(72dvh,620px);overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:#fff;border:1px solid #e8e4f7;border-radius:20px;box-shadow:0 18px 55px rgba(24,20,55,.2);padding:14px;direction:rtl;transform-origin:top right;animation:mzadNotifyPop .18s ease-out}
+    @keyframes mzadNotifyPop{from{opacity:0;transform:translateY(-7px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
     @media(max-width:380px){.mzad-notify-panel{width:calc(100vw - 20px);max-width:calc(100vw - 20px)}}
     .mzad-notify-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:11px;border-bottom:1px solid #f0edf8}
     .mzad-notify-title{font-size:15px;font-weight:950;color:#17202a}
@@ -2826,7 +2830,7 @@ function ensureNotificationPanel(){
   return notificationPanel;
 }
 
-/* النقطة الحمراء: تظهر إذا فيه إشعارات غير مقروءة، بدون أي رقم */
+/* عداد الإشعارات: رقم واضح خارج زر الجرس من الأعلى */
 function updateNotificationBadge(count){
   notificationUnreadCount = Math.max(0, Number(count)||0);
   let badge = notificationButton.querySelector(".mzad-notify-badge");
@@ -2836,7 +2840,7 @@ function updateNotificationBadge(count){
     notificationButton.appendChild(badge);
   }
   if(badge){
-    badge.textContent="";
+    badge.textContent=notificationUnreadCount>99?"99+":String(notificationUnreadCount);
     badge.setAttribute("aria-label", notificationUnreadCount + " إشعارات غير مقروءة");
     badge.hidden=!notificationUnreadCount;
   }
@@ -2917,7 +2921,7 @@ function positionNotificationPanel(){
   const rect=notificationButton.getBoundingClientRect();
   const width=Math.min(360,window.innerWidth-20);
   const right=Math.max(10,Math.min(window.innerWidth-rect.right,window.innerWidth-width-10));
-  notificationPanel.style.top=Math.min(window.innerHeight-100,rect.bottom+8)+"px";
+  notificationPanel.style.top=Math.min(window.innerHeight-100,rect.bottom+9)+"px";
   notificationPanel.style.right=right+"px";
   notificationPanel.style.left="auto";
   notificationPanel.style.width=width+"px";
