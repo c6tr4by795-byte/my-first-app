@@ -5,19 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#6f5ce0">
 <title>MZAD PHONE — تأكيد الشراء</title>
-<!--
-جدول الطلبات (شغّل مرة وحدة بـ Supabase SQL Editor):
-create table mzad_orders(
-  id uuid primary key default gen_random_uuid(),
-  created_at timestamptz default now(),
-  device_id text, buyer_id uuid, buyer_name text, buyer_phone text,
-  address text, notes text, payment_method text, price_iqd numeric,
-  status text default 'pending'
-);
-alter table mzad_orders enable row level security;
-create policy "insert own" on mzad_orders for insert with check (true);
-create policy "read own" on mzad_orders for select using (auth.uid() = buyer_id);
--->
+<!-- طلبات الشراء المباشر تُنشأ وتُحمى بسياسات RLS في Supabase. -->
 <style>
 :root{--bg:#f9f8fd;--ink:#17202a;--muted:#6b7280;--line:#ece8fb;--edge:#ddd8f8;--p:#6246d9;--p2:#8b6cf0;--pd:#4a34b8;--soft:#f3f0ff;--danger:#e5365f;--ok:#1e8a5a;--st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -144,7 +132,9 @@ import { supabase } from "./js/supabase.js";
 const $ = id => document.getElementById(id);
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const money = n => new Intl.NumberFormat("en-US").format(n) + " د.ع";
-const id = new URLSearchParams(location.search).get("id");
+const params = new URLSearchParams(location.search);
+const id = params.get("id");
+const saleId = params.get("sale");
 const S = { dev:null, user:null, pay:"cash" };
 
 function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove("show"),2400)}
@@ -153,24 +143,15 @@ const imgUrl = p => { const v=String(p||"").trim(); if(!v) return ""; if(/^https
   return supabase.storage.from("device-images").getPublicUrl(clean).data?.publicUrl||"" };
 
 async function loadDevice(){
-  // الأجهزة الجديدة (mzad)
-  try{
-    const { data } = await supabase.from("mzad_direct_sales")
-      .select("display_price_iqd,asking_price_iqd,status,device:mzad_devices!mzad_direct_sales_device_id_fkey(id,brand,model,storage,color,battery_health,mzad_device_images(storage_path,sort_order))")
-      .eq("device_id", id).in("status",["active","reserved","pending_handover"]).limit(1);
-    const r = data?.[0];
-    if(r?.device){
-      const d=r.device, im=(d.mzad_device_images||[]).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0))[0];
-      return { id:d.id, brand:d.brand, model:d.model, storage:d.storage, color:d.color, battery:d.battery_health,
-        price:Number(r.display_price_iqd ?? r.asking_price_iqd), img:imgUrl(im?.storage_path) };
-    }
-  }catch(e){console.warn(e)}
-  // القديمة
-  const { data, error } = await supabase.from("devices").select("id,brand,model,storage,color,battery_health,price,images").eq("id", id).single();
-  if(error||!data) throw error||new Error("not found");
-  let imgs=data.images; if(typeof imgs==="string"){try{imgs=JSON.parse(imgs)}catch{imgs=[imgs]}}
-  return { id:data.id, brand:data.brand, model:data.model, storage:data.storage, color:data.color, battery:data.battery_health,
-    price:Number(data.price), img:imgUrl((imgs||[])[0]) };
+  if (!saleId) throw new Error("missing direct sale id");
+  const { data:r, error } = await supabase.from("mzad_direct_sales")
+    .select("id,device_id,seller_user_id,display_price_iqd,asking_price_iqd,status,device:mzad_devices!mzad_direct_sales_device_id_fkey(id,brand,model,storage,color,battery_health,mzad_device_images(storage_path,sort_order))")
+    .eq("id", saleId).eq("device_id", id).eq("status","active").maybeSingle();
+  if(error) throw error;
+  if(!r?.device) throw new Error("direct sale unavailable");
+  const d=r.device, im=(d.mzad_device_images||[]).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0))[0];
+  return { id:d.id, saleId:r.id, sellerUserId:r.seller_user_id, brand:d.brand, model:d.model, storage:d.storage, color:d.color,
+    battery:d.battery_health, price:Number(r.display_price_iqd ?? r.asking_price_iqd), img:imgUrl(im?.storage_path) };
 }
 
 const IC = {
@@ -241,37 +222,40 @@ async function submit(){
 
   const btn=$("go"); btn.disabled=true; btn.textContent="جاري الإرسال…";
   try{
-    const { error } = await supabase.from("mzad_orders").insert({
-      device_id:String(S.dev.id), buyer_id:S.user, buyer_name:name, buyer_phone:phone,
-      address:addr, notes:$("notes").value.trim()||null, payment_method:S.pay, price_iqd:S.dev.price, status:"pending"
-    });
+    const { data:order, error } = await supabase.from("mzad_orders").insert({
+      direct_sale_id:S.dev.saleId, device_id:S.dev.id, buyer_user_id:S.user, seller_user_id:S.dev.sellerUserId,
+      buyer_name:name, buyer_phone:phone, address:addr, notes:$("notes").value.trim()||null,
+      payment_method:S.pay, price_iqd:S.dev.price,
+      device_snapshot:{brand:S.dev.brand,model:S.dev.model,storage:S.dev.storage,color:S.dev.color,battery_health:S.dev.battery},
+      status:"pending"
+    }).select("id,order_number").single();
     if(error) throw error;
-    success();
+    success(order);
   }catch(e){
     console.error("ORDER ERROR:", e);
     toast("ما قدرنا نرسل الطلب، جرّب مرة ثانية");
     btn.disabled=false; btn.textContent="تأكيد الطلب";
   }
 }
-function success(){
-  const ref="MZ-"+Date.now().toString(36).toUpperCase().slice(-6);
+function success(order){
+  const ref=order?.order_number || "MZB";
   $("bar").hidden=true; window.scrollTo(0,0);
   $("main").innerHTML=`<section class="card done">
     <div class="c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
     <h2>تم استلام طلبك</h2>
     <p>فريق المنصة راح يتواصل ويا البائع وبعدها يتصل بيك على رقمك لتأكيد موعد الفحص والتسليم.</p>
     <div class="code">${ref}</div>
-    <a class="btn2" href="market.html">رجوع للسوق</a></section>`;
+    <a class="btn2" href="my-orders.html">متابعة طلباتي</a></section>`;
 }
 
 $("back").addEventListener("click",()=>history.length>1?history.back():location.href="market.html");
 $("go").addEventListener("click",submit);
 
 (async()=>{
-  if(!id){ $("main").innerHTML='<section class="card done"><h2>الجهاز غير موجود</h2><a class="btn2" href="market.html">رجوع للسوق</a></section>'; return; }
+  if(!id || !saleId){ $("main").innerHTML='<section class="card done"><h2>رابط الشراء غير صحيح</h2><p>ارجع إلى تفاصيل الجهاز واضغط شراء من جديد.</p><a class="btn2" href="market.html">رجوع للسوق</a></section>'; return; }
   try{ const { data } = await supabase.auth.getUser(); S.user=data?.user?.id||null; }catch{}
-  try{ S.dev=await loadDevice(); if(!(S.dev.price>0)) throw 0; view(); }
-  catch{ $("main").innerHTML='<section class="card done"><h2>تعذر تحميل الجهاز</h2><p>تأكد من الاتصال وحاول مرة ثانية.</p><a class="btn2" href="market.html">رجوع للسوق</a></section>'; }
+  try{ if(!S.user) throw new Error("يجب تسجيل الدخول"); S.dev=await loadDevice(); if(!(S.dev.price>0) || !S.dev.sellerUserId || S.dev.sellerUserId===S.user) throw new Error("غير متاح"); view(); }
+  catch(e){ console.error("CHECKOUT LOAD:",e); $("main").innerHTML='<section class="card done"><h2>الجهاز غير متاح للشراء</h2><p>قد يكون محجوزاً أو انتهى عرضه أو أن رابط الشراء غير صحيح.</p><a class="btn2" href="market.html">رجوع للسوق</a></section>'; }
 })();
 </script>
 </body>
