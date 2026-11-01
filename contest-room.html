@@ -5,7 +5,7 @@ main{max-width:520px;margin:auto}header{display:flex;align-items:center;gap:12px
 </style></head><body><main><header><a href="contests.html">‹</a><h1>غرفة المسابقة</h1></header><section class="card"><h2 id="title">جاري التحميل…</h2><p id="meta"></p><p class="muted">رتّب دعمك بعناية: دعم واحد لكل جولة، وتكدر تدعم متسابقاً واحداً غير مشاركتك.</p><div id="joinBox" hidden><p>بعدك ما حاجز مقعدك. تگدر تشارك مباشرة بدون نشر جهاز.</p><a class="btn" id="joinLink">احجز مقعدك</a></div><div id="board"></div><p id="msg"></p></section></main><script type="module">
 import {supabase} from "./js/supabase.js";
 const $=id=>document.getElementById(id),id=new URLSearchParams(location.search).get("id");
-const esc=v=>String(v??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const esc=v=>String(v??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));\nlet activeSupport=false;
 async function load(){
  const s=await supabase.auth.getSession();const user=s.data.session?.user;
  const r=await supabase.rpc("mzad_get_contest_home");if(r.error)throw r.error;
@@ -16,12 +16,12 @@ async function load(){
  $("board").innerHTML=(x.board||[]).map((m,i)=>'<div class="item row"><div><b>'+(i+1)+'. '+esc(m.name)+'</b><div class="muted">'+esc(m.device)+' · الدعم '+Number(m.support||0).toLocaleString("en-US")+'</div><a class="muted" href="contestant.html?id='+encodeURIComponent(m.id)+'">عرض ملف المتسابق</a></div><button class="btn support-hold" style="width:auto;margin:0;touch-action:none;user-select:none;-webkit-user-select:none" data-entry="'+m.id+'">اضغط باستمرار</button></div>').join("")||"لا يوجد مشاركون بعد.";
  $("board").querySelectorAll(".support-hold").forEach(b=>{
   let pressed=false,starting=false,timer=0,pointer=null;
-  const stop=async()=>{if(!pressed&&!starting)return;const active=pressed;pressed=false;starting=false;clearInterval(timer);timer=0;if(active)await supabase.rpc("mzad_contest_support_stop",{p_contest_id:c.id});b.textContent="اضغط باستمرار";b.style.background="";};
+  const stop=async()=>{if(!pressed&&!starting)return;const active=pressed;pressed=false;starting=false;activeSupport=false;clearInterval(timer);timer=0;if(active)await supabase.rpc("mzad_contest_support_stop",{p_contest_id:c.id});b.textContent="اضغط باستمرار";b.style.background="";};
   b.addEventListener("pointerdown",async e=>{
    if(!e.isPrimary||e.button!==0||pressed||starting)return;e.preventDefault();pointer=e.pointerId;
    if(!user){location.href="index.html?login=1&returnTo="+encodeURIComponent(location.pathname+location.search);return;}
    starting=true;b.textContent="جارٍ بدء الدعم…";
-   try{const v=await supabase.rpc("mzad_contest_support_start",{p_contest_id:c.id,p_entry_id:b.dataset.entry});if(v.error)throw v.error;if(!starting){await supabase.rpc("mzad_contest_support_stop",{p_contest_id:c.id});return;}starting=false;pressed=true;b.textContent="استمر بالضغط…";b.style.background="#16865b";
+   try{const v=await supabase.rpc("mzad_contest_support_start",{p_contest_id:c.id,p_entry_id:b.dataset.entry});if(v.error)throw v.error;if(!starting){await supabase.rpc("mzad_contest_support_stop",{p_contest_id:c.id});return;}starting=false;pressed=true;activeSupport=true;b.textContent="استمر بالضغط…";b.style.background="#16865b";
     timer=setInterval(async()=>{const h=await supabase.rpc("mzad_contest_support_heartbeat",{p_contest_id:c.id});if(h.error||h.data!==true){await stop();$("msg").textContent=h.error?.message||"انتهت الجولة."; }},2500);
    }catch(err){starting=false;b.textContent="اضغط باستمرار";$("msg").textContent=err.message||"تعذر بدء الدعم";}
   });
@@ -31,5 +31,5 @@ async function load(){
  });
 
 }
-load().catch(e=>$("msg").textContent=e.message||String(e));setInterval(()=>{if(!document.hidden)load()},4000);
+load().catch(e=>$("msg").textContent=e.message||String(e));addEventListener("pagehide",()=>{if(activeSupport)supabase.rpc("mzad_contest_support_stop",{p_contest_id:id||""});});setInterval(()=>{if(!document.hidden&&!activeSupport)load()},4000);
 </script></body></html>
