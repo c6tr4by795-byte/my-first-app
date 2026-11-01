@@ -695,8 +695,9 @@ function renderLoadMore(){
   el.hidden = !more && !state.paging.loading;
   el.disabled = state.paging.loading;
   const filtered = !!state.query || state.brand !== "all";
+  // لا نعرض عبارة التحميل داخل الزر حتى لا تظهر كلمة "جاري تحميل المزيد".
   el.textContent = state.paging.loading
-    ? (state.paging.searchingAll ? "جاري فحص بقية الإعلانات…" : "جاري تحميل المزيد…")
+    ? ""
     : (filtered ? "بحث ببقية الإعلانات" : "تحميل المزيد");
 }
 function refreshPublishedTimes(){
