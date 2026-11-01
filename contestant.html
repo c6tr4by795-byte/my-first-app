@@ -35,7 +35,8 @@ button.addEventListener("pointerdown",async e=>{
 async function release(e){if(e?.pointerId!==undefined&&pressPointer!==null&&e.pointerId!==pressPointer)return;pressPointer=null;await stopSupport();}
 button.addEventListener("pointerup",release);button.addEventListener("pointercancel",release);button.addEventListener("lostpointercapture",release);
 addEventListener("blur",()=>{if(holding||starting)release();});
-document.addEventListener("visibilitychange",()=>{if(document.hidden&&(holding||starting))release();});\naddEventListener("pagehide",()=>{if(holding&&detail?.contest_id)supabase.rpc("mzad_contest_support_stop",{p_contest_id:detail.contest_id});});
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&(holding||starting))release();});
+addEventListener("pagehide",()=>{if(holding&&detail?.contest_id)supabase.rpc("mzad_contest_support_stop",{p_contest_id:detail.contest_id});});
 
 boot().catch(e=>$("msg").textContent=e.message||String(e));
 </script></body></html>
