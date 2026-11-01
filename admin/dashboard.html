@@ -1481,19 +1481,19 @@ function finishOrderSwipe(dx,dy,row){
 $("orderList").addEventListener("pointerdown",e=>{
   const row=e.target.closest("[data-swipe-row]");
   if(!row||e.target.closest("[data-delete-order]"))return;
-  orderSwipeStart={row,id:e.pointerId,x:e.clientX,y:e.clientY,moved:false};
+  orderSwipeStart={row,id:e.pointerId,x:e.clientX,y:e.clientY};
 });
-$("orderList").addEventListener("pointermove",e=>{
+document.addEventListener("pointermove",e=>{
   if(!orderSwipeStart||e.pointerId!==orderSwipeStart.id)return;
   const dx=e.clientX-orderSwipeStart.x,dy=e.clientY-orderSwipeStart.y;
   if(Math.abs(dx)>12&&Math.abs(dx)>Math.abs(dy)*1.15)orderSwipeStart.moved=true;
-});
-$("orderList").addEventListener("pointerup",e=>{
+},{passive:true});
+document.addEventListener("pointerup",e=>{
   if(!orderSwipeStart||e.pointerId!==orderSwipeStart.id)return;
   finishOrderSwipe(e.clientX-orderSwipeStart.x,e.clientY-orderSwipeStart.y,orderSwipeStart.row);
   orderSwipeStart=null;
 });
-$("orderList").addEventListener("pointercancel",()=>{orderSwipeStart=null;});
+document.addEventListener("pointercancel",()=>{orderSwipeStart=null;});
 $("orderList").addEventListener("click",e=>{
   const del=e.target.closest("[data-delete-order]");
   if(del){e.preventDefault();e.stopPropagation();deleteDirectOrder(del.dataset.deleteOrder);return;}
