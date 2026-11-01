@@ -2575,12 +2575,10 @@ async function loadDevicesInternal(){
 
     }
 
-    const featuredIds = new Set(featured.map(d => String(d.id)));
-
+    // أحدث الأجهزة تشمل كل الأجهزة حتى لو ظهرت أيضاً ضمن الأجهزة المميزة.
     const latest =
       [...devices]
         .sort(byDate)
-        .filter(d => !featuredIds.has(String(d.id)))
         .slice(0,8);
 
     if(latest.length){
