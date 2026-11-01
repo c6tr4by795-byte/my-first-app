@@ -110,7 +110,8 @@ a{text-decoration:none;color:inherit}
 @media(hover:hover){.card:hover{transform:translateY(-6px);box-shadow:0 34px 50px -26px rgba(40,25,110,.7)}.card:hover::before{transform:translateX(-120%)}.card:hover .pic img{transform:scale(1.04)}}
 .card.removing{animation:out .28s ease forwards}
 @keyframes rise{from{opacity:0;transform:translateY(26px) scale(.97);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}@keyframes out{to{opacity:0;transform:scale(.9)}}
-.pic{position:absolute;inset:0;overflow:hidden;background:linear-gradient(160deg,#7b61e8,#3b2a92)}.pic::before{content:none}
+.pic{position:absolute;inset:0;overflow:hidden;background:linear-gradient(160deg,#7b61e8,#3b2a92)}
+.reserved-overlay{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;background:rgba(24,20,39,.4);backdrop-filter:blur(1.5px);-webkit-backdrop-filter:blur(1.5px);pointer-events:none}.reserved-overlay span{padding:8px 18px;border:1px solid rgba(255,255,255,.55);border-radius:11px;background:rgba(35,29,57,.48);color:#fff;font-size:16px;font-weight:950;text-shadow:0 1px 3px rgba(0,0,0,.3);box-shadow:0 4px 14px rgba(0,0,0,.15)}.pic::before{content:none}
 .ph{position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,255,255,.35);transition:opacity .2s ease}.ph svg{width:46px;height:46px}
 .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;padding:0;opacity:1;transition:transform .25s ease}.pic img.ready{opacity:1}.pic img.photo-portrait,.pic img.photo-landscape,.pic img.photo-square{object-fit:cover;object-position:center}.pic:has(img.ready) .ph{opacity:0}
 .fav,.del{position:absolute;top:10px;z-index:5;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.94);color:#6b6585;transition:transform .15s ease,color .2s ease}.fav{inset-inline-end:10px}.del{inset-inline-start:10px;color:var(--danger)}.fav:active,.del:active{transform:scale(.85)}.fav svg,.del svg{width:16px;height:16px}.fav.on{color:var(--danger)}.fav.on svg{fill:var(--danger)}.fav.pop{animation:pop .4s var(--ease)}@keyframes pop{40%{transform:scale(1.3)}}
@@ -494,7 +495,7 @@ async function fetchMzad(offset = 0){
       id:d.id, created_at:item.created_at, brand:d.brand, model:d.model, storage:d.storage, color:d.color,
       battery_health:d.battery_health, condition:d.condition_grade, body_condition:d.condition_grade,
       screen_condition:d.screen_condition, price:Number(item.display_price_iqd ?? item.asking_price_iqd), location:"النجف",
-      sale_type:"direct", images:urls.filter(Boolean), notes:d.seller_notes, _mzad:true
+      sale_type:"direct", status:item.status, _reserved:["reserved","pending_handover"].includes(String(item.status||"").toLowerCase()), images:urls.filter(Boolean), notes:d.seller_notes, _mzad:true
     };
   }));
   // احتفظ بعدد الصفوف الخام حتى لا يتكرر offset إذا كان بعض السجلات بلا جهاز مرتبط.
@@ -642,6 +643,7 @@ function cardHTML(d, i){
     <div class="pic"${d._img ? ` style="--img:url('${esc(d._img)}')"` : ""}>
       <div class="ph">${SVG.phone}</div>
       ${image}
+      ${d._reserved ? '<div class="reserved-overlay"><span>محجوز</span></div>' : ""}
       ${d._brand ? `<span class="btag">${esc(d._brand)}</span>` : ""}
       <button class="fav${fav ? " on" : ""}" type="button" data-fav="${esc(d.id)}" aria-label="المفضلة">${SVG.heart}</button>
       ${d._owned ? `<button class="del" type="button" data-del="${esc(d.id)}" aria-label="حذف منشوري">${SVG.trash}</button>` : ""}
