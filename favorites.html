@@ -118,7 +118,7 @@ header{
 .fcard.leaving{opacity:0;transform:translateX(12px) scale(.98)}
 .fmedia{position:relative;inset:auto;isolation:isolate;flex:0 0 116px;width:116px;min-height:142px;overflow:hidden;background:linear-gradient(145deg,#f1eff8,#faf9fd);border-inline-start:1px solid #f0edf6}
 .fmedia:before{content:none}
-.fmedia img{position:absolute;inset:0;z-index:1;width:100%;height:100%;padding:9px;object-fit:contain;object-position:center;background:transparent}
+.fmedia img{position:absolute;inset:0;z-index:1;display:block;width:100%;height:100%;padding:0;object-fit:cover;object-position:center;background:transparent}
 .no-img{position:absolute;inset:0;z-index:1;display:grid;place-items:center;color:#a69bc9}
 .no-img svg{width:35px;height:35px;opacity:.65}
 .shade{display:none}
@@ -887,8 +887,7 @@ async function loadFavorites(){
     if(results.some(r => r && r.failed)){
       const failed = results.filter(r => r && r.failed);
       console.error("FAVORITES LOAD FAILED:", failed);
-      const reason = failed[0]?.reason || "خطأ غير محدد";
-      showToast("سبب التعذر: " + reason);
+      showToast("تعذر تحميل بعض الأجهزة حالياً");
     }
   }finally{
     state.loading = false;
