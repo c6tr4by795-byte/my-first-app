@@ -13,13 +13,23 @@ async function load(){
  const c=x.contest;if(id&&id!==c.id)throw Error("هذه الغرفة ليست للمسابقة الحالية");
  $("title").textContent=c.title;$("meta").textContent="الجائزة: "+c.prize+" · "+(["التصفية","نصف النهائي","النهائي"][Number(c.round||1)-1]||("الجولة "+c.round));
  $("joinBox").hidden=!!x.myEntry;$("joinLink").href="contest-join.html?id="+encodeURIComponent(c.id);
- $("board").innerHTML=(x.board||[]).map((m,i)=>'<div class="item row"><div><b>'+(i+1)+'. '+esc(m.name)+'</b><div class="muted">'+esc(m.device)+' · الدعم '+Number(m.support||0).toLocaleString("en-US")+'</div><a class="muted" href="contestant.html?id='+encodeURIComponent(m.id)+'">عرض ملف المتسابق</a></div><button class="btn" style="width:auto;margin:0" data-entry="'+m.id+'">ادعم</button></div>').join("")||"لا يوجد مشاركون بعد.";
- $("board").querySelectorAll("[data-entry]").forEach(b=>b.onclick=async()=>{
-  if(!user){location.href="index.html?login=1&returnTo="+encodeURIComponent(location.pathname+location.search);return;}
-  b.disabled=true;
-  try{const v=await supabase.rpc("mzad_cast_contest_support",{p_contest_id:c.id,p_entry_id:b.dataset.entry});if(v.error)throw v.error;$("msg").textContent="تم تسجيل دعمك.";await load();}
-  catch(e){$("msg").textContent=e.message||"تعذر الدعم";b.disabled=false;}
+ $("board").innerHTML=(x.board||[]).map((m,i)=>'<div class="item row"><div><b>'+(i+1)+'. '+esc(m.name)+'</b><div class="muted">'+esc(m.device)+' · الدعم '+Number(m.support||0).toLocaleString("en-US")+'</div><a class="muted" href="contestant.html?id='+encodeURIComponent(m.id)+'">عرض ملف المتسابق</a></div><button class="btn support-hold" style="width:auto;margin:0;touch-action:none;user-select:none;-webkit-user-select:none" data-entry="'+m.id+'">اضغط باستمرار</button></div>').join("")||"لا يوجد مشاركون بعد.";
+ $("board").querySelectorAll(".support-hold").forEach(b=>{
+  let pressed=false,starting=false,timer=0,pointer=null;
+  const stop=async()=>{if(!pressed&&!starting)return;const active=pressed;pressed=false;starting=false;clearInterval(timer);timer=0;if(active)await supabase.rpc("mzad_contest_support_stop",{p_contest_id:c.id});b.textContent="اضغط باستمرار";b.style.background="";};
+  b.addEventListener("pointerdown",async e=>{
+   if(!e.isPrimary||e.button!==0||pressed||starting)return;e.preventDefault();pointer=e.pointerId;
+   if(!user){location.href="index.html?login=1&returnTo="+encodeURIComponent(location.pathname+location.search);return;}
+   starting=true;b.textContent="جارٍ بدء الدعم…";
+   try{const v=await supabase.rpc("mzad_contest_support_start",{p_contest_id:c.id,p_entry_id:b.dataset.entry});if(v.error)throw v.error;if(!starting){await supabase.rpc("mzad_contest_support_stop",{p_contest_id:c.id});return;}starting=false;pressed=true;b.textContent="استمر بالضغط…";b.style.background="#16865b";
+    timer=setInterval(async()=>{const h=await supabase.rpc("mzad_contest_support_heartbeat",{p_contest_id:c.id});if(h.error||h.data!==true){await stop();$("msg").textContent=h.error?.message||"انتهت الجولة."; }},2500);
+   }catch(err){starting=false;b.textContent="اضغط باستمرار";$("msg").textContent=err.message||"تعذر بدء الدعم";}
+  });
+  const release=e=>{if(e?.pointerId!==undefined&&pointer!==null&&e.pointerId!==pointer)return;pointer=null;stop();};
+  b.addEventListener("pointerup",release);b.addEventListener("pointercancel",release);b.addEventListener("lostpointercapture",release);
+  addEventListener("blur",release);document.addEventListener("visibilitychange",()=>{if(document.hidden)release();});
  });
+
 }
-load().catch(e=>$("msg").textContent=e.message||String(e));setInterval(()=>{if(!document.hidden)load()},20000);
+load().catch(e=>$("msg").textContent=e.message||String(e));setInterval(()=>{if(!document.hidden)load()},4000);
 </script></body></html>
