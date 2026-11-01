@@ -2450,7 +2450,7 @@ async function fetchMZADDirectSales(){
   return rows.map(item=>{
     const d=item.device;
     const images=(byId.get(String(d.id))||[]).sort((a,b)=>(Number(b.is_primary)-Number(a.is_primary))||(Number(a.sort_order)-Number(b.sort_order))).map(im=>getDeviceImageUrl(im.storage_path)).filter(Boolean);
-    return {id:d.id,created_at:item.created_at,brand:d.brand,model:d.model,storage:d.storage,color:d.color,battery_health:d.battery_health,condition:d.condition_grade,screen_condition:d.screen_condition,body_condition:d.condition_grade,price:Number(item.display_price_iqd??item.asking_price_iqd),location:"النجف",sale_type:"direct",status:item.status,reserved:["reserved","pending_handover"].includes(String(item.status||"").toLowerCase()),images,notes:d.seller_notes,_mzad:true};
+    return {id:d.id,created_at:item.created_at,brand:d.brand,model:d.model,storage:d.storage,color:d.color,battery_health:d.battery_health,condition:d.condition_grade,screen_condition:d.screen_condition,body_condition:d.condition_grade,price:Number(item.display_price_iqd??item.asking_price_iqd),location:"النجف",sale_type:"direct",status:item.status,reserved:["reserved","pending_handover","pending","new","contacted","confirmed","inspection"].includes(String(item.status||"").toLowerCase()),images,notes:d.seller_notes,_mzad:true};
   });
 }
 
