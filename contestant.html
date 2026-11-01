@@ -21,9 +21,9 @@ async function stopSupport(){
 }
 button.addEventListener("pointerdown",async e=>{
  if(!e.isPrimary||e.button!==0||holding||starting||!detail)return;
- e.preventDefault();const s=await supabase.auth.getSession();
- if(!s.data.session){location.href="index.html?login=1&returnTo="+encodeURIComponent(location.pathname+location.search);return;}
- starting=true;pressPointer=e.pointerId;button.textContent="جارٍ بدء الدعم…";
+ e.preventDefault();starting=true;pressPointer=e.pointerId;try{button.setPointerCapture(e.pointerId);}catch(_){}button.textContent="جارٍ بدء الدعم…";
+ const s=await supabase.auth.getSession();if(!starting)return;
+ if(!s.data.session){starting=false;location.href="index.html?login=1&returnTo="+encodeURIComponent(location.pathname+location.search);return;}
  try{
   const r=await supabase.rpc("mzad_contest_support_start",{p_contest_id:detail.contest_id,p_entry_id:entry});
   if(r.error)throw r.error;
@@ -35,7 +35,7 @@ button.addEventListener("pointerdown",async e=>{
 async function release(e){if(e?.pointerId!==undefined&&pressPointer!==null&&e.pointerId!==pressPointer)return;pressPointer=null;await stopSupport();}
 button.addEventListener("pointerup",release);button.addEventListener("pointercancel",release);button.addEventListener("lostpointercapture",release);
 addEventListener("blur",()=>{if(holding||starting)release();});
-document.addEventListener("visibilitychange",()=>{if(document.hidden&&(holding||starting))release();});
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&(holding||starting))release();});\naddEventListener("pagehide",()=>{if(holding&&detail?.contest_id)supabase.rpc("mzad_contest_support_stop",{p_contest_id:detail.contest_id});});
 
 boot().catch(e=>$("msg").textContent=e.message||String(e));
 </script></body></html>
