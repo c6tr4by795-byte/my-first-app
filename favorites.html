@@ -886,8 +886,8 @@ async function loadFavorites(){
 
     if(results.some(r => r && r.failed)){
       const failed = results.filter(r => r && r.failed);
-      console.error("FAVORITES LOAD FAILED:", failed);
-      showToast("تعذر تحميل بعض الأجهزة حالياً");
+      console.warn("تعذر تحميل بعض عناصر المفضلة:", failed);
+      // لا نعرض رسائل أخطاء للمستخدم؛ نحتفظ بتفاصيل التشخيص في وحدة التحكم فقط.
     }
   }finally{
     state.loading = false;
