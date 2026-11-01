@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#6f5ce0">
+<title>MZAD PHONE — الرئيسية</title>
+<style>html,body{margin:0;background:#f9f8fd}</style>
+</head>
+<body>
+<script>
+/* صفحة تجربة: تفتح الرئيسية الأصلية (home.html) وتضيف عليها الجرس الجديد والمحافظات */
+fetch("home.html", { cache: "no-cache" })
+  .then(function (r) {
+    if (!r.ok) throw new Error("load failed");
+    return r.text();
+  })
+  .then(function (html) {
+    html = html.replace("</body>", '<script src="./js/home-extras.js"><\/script></body>');
+    document.open();
+    document.write(html);
+    document.close();
+  })
+  .catch(function () {
+    location.replace("home.html");
+  });
+</script>
+</body>
+</html>
