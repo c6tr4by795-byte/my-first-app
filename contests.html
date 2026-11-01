@@ -284,7 +284,8 @@ function cta(){
     $("qMine").hidden = !me.hasSeat;
   const q = c && c.id ? "?id=" + encodeURIComponent(c.id) : "";
   $("allLink").href = "contest-room.html" + q; $("qMine").href = "contestant.html";
-  if(!c || c.status === "none") return set("لا توجد مسابقة حالياً", "#", true, "المسابقات الجديدة راح تظهر هنا عند نشرها من الإدارة.");\n  if(c.status === "ended") return set("انتهت المسابقة — شاهد النتائج", "contest-room.html" + q, false, "انتهى وقت المسابقة. تگدر تراجع الترتيب والنتائج.");
+  if(!c || c.status === "none") return set("لا توجد مسابقة حالياً", "#", true, "المسابقات الجديدة راح تظهر هنا عند نشرها من الإدارة.");
+  if(c.status === "ended") return set("انتهت المسابقة — شاهد النتائج", "contest-room.html" + q, false, "انتهى وقت المسابقة. تگدر تراجع الترتيب والنتائج.");
   if(me.hasSeat) return set("ادخل غرفتك", "contest-room.html" + q, false, "تابع ترتيبك، وشاهد بقية المتسابقين وادعم واحداً منهم.");
   if(c.seatsMax && c.seatsTaken >= c.seatsMax) return set("المقاعد مكتملة — شاهد المتسابقين", "#board", false, "اكتملت المقاعد، لكن تگدر تشاهد المتسابقين وتدعم واحداً منهم.");
   
