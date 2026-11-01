@@ -2,17 +2,24 @@
 :root{--p:#6246d9;--bg:#f8f7fc;--ink:#211d32;--muted:#777187;--line:#eae7f2;--ok:#16865b;--bad:#c64b5c}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Arabic",Tahoma,Arial,sans-serif;padding:env(safe-area-inset-top) 15px calc(24px + env(safe-area-inset-bottom));}
 main{max-width:520px;margin:auto}header{display:flex;align-items:center;gap:12px;padding:15px 0}header a{font-size:24px;color:var(--p)}h1{font-size:21px;margin:0}p{color:var(--muted);line-height:1.8}.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0}.field{display:block;margin:13px 0;font-weight:700;font-size:13px}input,select,textarea{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;background:white;font:inherit;margin-top:7px}.btn{display:block;width:100%;padding:14px;border:0;border-radius:14px;background:var(--p);color:#fff;font:inherit;font-weight:700;margin-top:12px}.btn:disabled{opacity:.5}.muted{color:var(--muted);font-size:12px}.error{color:var(--bad);white-space:pre-wrap}.item{padding:13px 0;border-bottom:1px solid var(--line)}.item:last-child{border:0}.row{display:flex;justify-content:space-between;gap:10px;align-items:center}.pill{padding:5px 10px;border-radius:20px;background:#f0edfc;color:var(--p);font-size:12px}
-</style></head><body><main><header><a href="contests.html">‹</a><h1>غرفة المسابقة</h1></header><section class="card"><h2 id="title">جاري التحميل…</h2><p id="meta"></p><div id="board"></div><p id="msg"></p></section></main><script type="module">
+</style></head><body><main><header><a href="contests.html">‹</a><h1>غرفة المسابقة</h1></header><section class="card"><h2 id="title">جاري التحميل…</h2><p id="meta"></p><div id="joinBox" hidden><p>بعدك ما حاجز مقعدك. تگدر تشارك وتختار جهازك المنشور.</p><a class="btn" id="joinLink">احجز مقعدك وشارك</a></div><div id="board"></div><p id="msg"></p></section></main><script type="module">
 import {supabase} from "./js/supabase.js";
 const $=id=>document.getElementById(id),id=new URLSearchParams(location.search).get("id");
 const esc=v=>String(v??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 async function load(){
- const s=await supabase.auth.getSession();if(!s.data.session){location.href="index.html?login=1";return;}
- const r=await supabase.rpc("mzad_get_contest_home");if(r.error)throw r.error;const x=r.data;if(!x.contest)throw Error("لا توجد مسابقة حالياً");
+ const s=await supabase.auth.getSession();const user=s.data.session?.user;
+ const r=await supabase.rpc("mzad_get_contest_home");if(r.error)throw r.error;
+ const x=r.data;if(!x.contest)throw Error("لا توجد مسابقة حالياً");
  const c=x.contest;if(id&&id!==c.id)throw Error("هذه الغرفة ليست للمسابقة الحالية");
  $("title").textContent=c.title;$("meta").textContent="الجائزة: "+c.prize+" · الجولة "+c.round;
- $("board").innerHTML=(x.board||[]).map((m,i)=>'<div class="item row"><div><b>'+(i+1)+'. '+esc(m.name)+'</b><div class="muted">'+esc(m.device)+' · الدعم '+Number(m.support||0).toLocaleString("en-US")+'</div></div><button class="btn" style="width:auto;margin:0" data-entry="'+m.id+'">ادعم</button></div>').join("")||"لا يوجد مشاركون بعد.";
- $("board").querySelectorAll("[data-entry]").forEach(b=>b.onclick=async()=>{b.disabled=true;try{const v=await supabase.rpc("mzad_cast_contest_support",{p_contest_id:c.id,p_entry_id:b.dataset.entry});if(v.error)throw v.error;$("msg").textContent="تم تسجيل دعمك.";await load();}catch(e){$("msg").textContent=e.message||"تعذر الدعم";}finally{b.disabled=false;}});
+ $("joinBox").hidden=!!x.myEntry;$("joinLink").href="contest-join.html?id="+encodeURIComponent(c.id);
+ $("board").innerHTML=(x.board||[]).map((m,i)=>'<div class="item row"><div><b>'+(i+1)+'. '+esc(m.name)+'</b><div class="muted">'+esc(m.device)+' · الدعم '+Number(m.support||0).toLocaleString("en-US")+'</div><a class="muted" href="contestant.html?id='+encodeURIComponent(m.id)+'">عرض ملف المتسابق</a></div><button class="btn" style="width:auto;margin:0" data-entry="'+m.id+'">ادعم</button></div>').join("")||"لا يوجد مشاركون بعد.";
+ $("board").querySelectorAll("[data-entry]").forEach(b=>b.onclick=async()=>{
+  if(!user){location.href="index.html?login=1&returnTo="+encodeURIComponent(location.pathname+location.search);return;}
+  b.disabled=true;
+  try{const v=await supabase.rpc("mzad_cast_contest_support",{p_contest_id:c.id,p_entry_id:b.dataset.entry});if(v.error)throw v.error;$("msg").textContent="تم تسجيل دعمك.";await load();}
+  catch(e){$("msg").textContent=e.message||"تعذر الدعم";b.disabled=false;}
+ });
 }
 load().catch(e=>$("msg").textContent=e.message||String(e));setInterval(()=>{if(!document.hidden)load()},20000);
 </script></body></html>
