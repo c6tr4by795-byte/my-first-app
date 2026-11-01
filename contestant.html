@@ -6,11 +6,10 @@ main{max-width:520px;margin:auto}header{display:flex;align-items:center;gap:12px
 import {supabase} from "./js/supabase.js";
 const $=id=>document.getElementById(id),entry=new URLSearchParams(location.search).get("id");let detail;
 async function boot(){
- const s=await supabase.auth.getSession();if(!s.data.session){location.href="index.html?login=1";return;}
  if(!entry)throw Error("رابط المتسابق غير مكتمل");
  const r=await supabase.rpc("mzad_get_contestant_detail",{p_entry_id:entry});if(r.error)throw r.error;detail=r.data;if(!detail)throw Error("المتسابق غير موجود");
  $("name").textContent=detail.name;$("device").textContent=[detail.device,detail.storage,detail.color].filter(Boolean).join(" · ");$("score").textContent=Number(detail.round_support||0).toLocaleString("en-US");
 }
-$("support").onclick=async()=>{if(!detail)return;$("support").disabled=true;try{const r=await supabase.rpc("mzad_cast_contest_support",{p_contest_id:detail.contest_id,p_entry_id:entry});if(r.error)throw r.error;$("msg").textContent="تم تسجيل دعمك.";await boot();}catch(e){$("msg").textContent=e.message||"تعذر الدعم";}finally{$("support").disabled=false;}};
+$("support").onclick=async()=>{if(!detail)return;const s=await supabase.auth.getSession();if(!s.data.session){location.href="index.html?login=1&returnTo="+encodeURIComponent(location.pathname+location.search);return;} $("support").disabled=true;try{const r=await supabase.rpc("mzad_cast_contest_support",{p_contest_id:detail.contest_id,p_entry_id:entry});if(r.error)throw r.error;$("msg").textContent="تم تسجيل دعمك.";await boot();}catch(e){$("msg").textContent=e.message||"تعذر الدعم";}finally{$("support").disabled=false;}};
 boot().catch(e=>$("msg").textContent=e.message||String(e));
 </script></body></html>
