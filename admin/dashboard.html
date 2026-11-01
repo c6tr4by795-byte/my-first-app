@@ -80,7 +80,7 @@ h1{margin:14px 2px 8px;font-size:23px;font-weight:950;letter-spacing:-.03em}
 .order-swipe-actions{position:absolute;inset-block:0;inset-inline-end:0;width:88px;display:flex;align-items:stretch;justify-content:center;padding:5px;background:#fff}
 .order-delete{width:100%;border:0;border-radius:15px;background:#fff0f1;color:#c52d45;font-size:12px;font-weight:950;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
 .order-delete svg{width:19px;height:19px}
-.order-swipe-card{position:relative;z-index:1;transition:transform .22s ease;will-change:transform;touch-action:pan-y}
+.order-swipe-card{position:relative;z-index:1;display:block;width:100%;transition:transform .22s ease;will-change:transform;touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
 .order-swipe-row.is-open .order-swipe-card{transform:translateX(-88px)}
 .order-swipe-row .q{border-radius:20px}
 .order-swipe-row.is-open{box-shadow:0 7px 20px rgba(45,30,80,.09)}
@@ -1465,34 +1465,60 @@ async function deleteDirectOrder(id){
 $("orderFilters").addEventListener("click",e=>{const b=e.target.closest("[data-of]");if(!b)return;S.of=b.dataset.of;renderOrderFilters();renderDirectOrders();});
 $("orderSearch").addEventListener("input",e=>{S.os=e.target.value.trim().toLowerCase();renderDirectOrders();});
 let orderSwipeStart=null,orderSwipeMoved=false;
+function openOrderSwipe(row){
+  if(!row)return;
+  document.querySelectorAll("#orderList .order-swipe-row.is-open").forEach(x=>{if(x!==row)x.classList.remove("is-open");});
+  row.classList.add("is-open");
+}
+function closeOrderSwipe(row){if(row)row.classList.remove("is-open");}
+function finishOrderSwipe(dx,dy,row){
+  if(!row)return false;
+  if(Math.abs(dx)>38&&Math.abs(dx)>Math.abs(dy)*1.15){
+    orderSwipeMoved=true;
+    if(dx<0)openOrderSwipe(row);else closeOrderSwipe(row);
+    return true;
+  }
+  return false;
+}
 $("orderList").addEventListener("pointerdown",e=>{
+  if(e.pointerType==="touch")return;
   const row=e.target.closest("[data-swipe-row]");
-  if(!row||e.target.closest("button[data-delete-order]"))return;
-  orderSwipeStart={id:row.dataset.swipeRow,x:e.clientX,y:e.clientY};
-  orderSwipeMoved=false;
+  if(!row||e.target.closest("[data-delete-order]"))return;
+  orderSwipeStart={row,x:e.clientX,y:e.clientY};
 });
 $("orderList").addEventListener("pointerup",e=>{
   if(!orderSwipeStart)return;
-  const row=$("orderList").querySelector('[data-swipe-row="'+CSS.escape(orderSwipeStart.id)+'"]');
-  const dx=e.clientX-orderSwipeStart.x,dy=e.clientY-orderSwipeStart.y;
-  if(row&&Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.25){
-    orderSwipeMoved=true;
-    if(dx<0){
-      $("orderList").querySelectorAll(".order-swipe-row.is-open").forEach(x=>x.classList.remove("is-open"));
-      row.classList.add("is-open");
-    }else row.classList.remove("is-open");
-  }
+  finishOrderSwipe(e.clientX-orderSwipeStart.x,e.clientY-orderSwipeStart.y,orderSwipeStart.row);
   orderSwipeStart=null;
 });
 $("orderList").addEventListener("pointercancel",()=>{orderSwipeStart=null;});
+let orderTouchStart=null;
+$("orderList").addEventListener("touchstart",e=>{
+  const t=e.changedTouches&&e.changedTouches[0],row=e.target.closest("[data-swipe-row]");
+  if(!t||!row||e.target.closest("[data-delete-order]"))return;
+  orderTouchStart={row,x:t.clientX,y:t.clientY};
+},{passive:true});
+$("orderList").addEventListener("touchmove",e=>{
+  if(!orderTouchStart)return;
+  const t=e.changedTouches&&e.changedTouches[0];if(!t)return;
+  const dx=t.clientX-orderTouchStart.x,dy=t.clientY-orderTouchStart.y;
+  if(Math.abs(dx)>12&&Math.abs(dx)>Math.abs(dy)*1.15)e.preventDefault();
+},{passive:false});
+$("orderList").addEventListener("touchend",e=>{
+  if(!orderTouchStart)return;
+  const t=e.changedTouches&&e.changedTouches[0];
+  if(t)finishOrderSwipe(t.clientX-orderTouchStart.x,t.clientY-orderTouchStart.y,orderTouchStart.row);
+  orderTouchStart=null;
+},{passive:true});
+$("orderList").addEventListener("touchcancel",()=>{orderTouchStart=null;},{passive:true});
 $("orderList").addEventListener("click",e=>{
   const del=e.target.closest("[data-delete-order]");
   if(del){e.preventDefault();e.stopPropagation();deleteDirectOrder(del.dataset.deleteOrder);return;}
   const card=e.target.closest("[data-order]");
   if(card){
     const row=card.closest("[data-swipe-row]");
-    if(orderSwipeMoved){orderSwipeMoved=false;return;}
-    if(row?.classList.contains("is-open")){row.classList.remove("is-open");return;}
+    if(orderSwipeMoved){orderSwipeMoved=false;e.preventDefault();e.stopPropagation();return;}
+    if(row?.classList.contains("is-open")){closeOrderSwipe(row);return;}
     openDirectOrder(S.orders.find(o=>o.id===card.dataset.order));
   }
 });
