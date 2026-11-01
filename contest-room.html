@@ -21,10 +21,10 @@ async function load(){
   b.addEventListener("pointerdown",async e=>{
    if(!e.isPrimary||e.button!==0||pressed||starting)return;e.preventDefault();pointer=e.pointerId;try{b.setPointerCapture(e.pointerId);}catch(_){}
    if(!user){location.href="index.html?login=1&returnTo="+encodeURIComponent(location.pathname+location.search);return;}
-   starting=true;b.textContent="جارٍ بدء الدعم…";
+   starting=true;activeSupport=true;b.textContent="جارٍ بدء الدعم…";
    try{const v=await supabase.rpc("mzad_contest_support_start",{p_contest_id:c.id,p_entry_id:b.dataset.entry});if(v.error)throw v.error;if(!starting){await supabase.rpc("mzad_contest_support_stop",{p_contest_id:c.id});return;}starting=false;pressed=true;activeSupport=true;b.textContent="استمر بالضغط…";b.style.background="#16865b";
     timer=setInterval(async()=>{const h=await supabase.rpc("mzad_contest_support_heartbeat",{p_contest_id:c.id});if(h.error||h.data!==true){await stop();$("msg").textContent=h.error?.message||"انتهت الجولة."; }},2500);
-   }catch(err){starting=false;b.textContent="اضغط باستمرار";$("msg").textContent=err.message||"تعذر بدء الدعم";}
+   }catch(err){starting=false;activeSupport=false;b.textContent="اضغط باستمرار";$("msg").textContent=err.message||"تعذر بدء الدعم";}
   });
   const release=e=>{if(e?.pointerId!==undefined&&pointer!==null&&e.pointerId!==pointer)return;pointer=null;stop();};
   b.addEventListener("pointerup",release);b.addEventListener("pointercancel",release);b.addEventListener("lostpointercapture",release);
