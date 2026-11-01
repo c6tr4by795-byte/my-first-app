@@ -230,13 +230,7 @@ a{color:inherit;text-decoration:none}
 </div></nav>
 
 <script>
-/* ===== UI فقط — اربط الداتا من هنا =====
-   Contests.setContest({ id, title, prize, status:'open'|'live'|'none', round, startsAt, roundEndsAt, seatsTaken, seatsMax, qualifiers:[5,3,1] })
-   Contests.setMe({ hasDevice, hasSeat })
-   Contests.setBoard([{ id, name, device, support, image, delta }])
-   Contests.setWinners([{ name, prize, title }])
-   جرّب الشكل بدون ربط: ?demo=1
-*/
+/* Live competition state is loaded from Supabase. */
 const $ = id => document.getElementById(id);
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const nf = n => Number(n || 0).toLocaleString("en-US");
@@ -390,5 +384,36 @@ if(new URLSearchParams(location.search).has("demo")){
   Contests.setWinners([{ name:"كرار الساعدي", prize:"iPhone 15" },{ name:"نور الهدى", prize:"Galaxy S23" }]);
 }
 </script>
+
+<script type="module">
+import { supabase } from "./js/supabase.js";
+const $=id=>document.getElementById(id);
+const must=r=>{if(r.error)throw r.error;return r.data};
+async function loadCompetition(){
+  try{
+    const session=must(await supabase.auth.getSession());
+    if(!session.session){Contests.setContest({status:"none"});Contests.setBoard([]);Contests.setWinners([]);return;}
+    const data=must(await supabase.rpc("mzad_get_contest_home"));
+    if(!data?.contest){Contests.setContest({status:"none"});Contests.setBoard([]);Contests.setWinners([]);return;}
+    const c=data.contest;
+    Contests.setContest({...c,seatsTaken:Number(data.seatsTaken||0),qualifiers:(data.rounds||[]).map(x=>Number(x.qualifiers)||1)});
+    Contests.setMe({hasSeat:!!data.myEntry,hasDevice:null});
+    Contests.setBoard((data.board||[]).map(x=>({id:x.id,name:x.name,device:x.device,support:Number(x.support||0),image:x.image||null})));
+    Contests.setWinners(data.winners||[]);
+    if(data.myEntry){$("qMine").href="contestant.html?id="+encodeURIComponent(data.myEntry.id);$("bMain").href="contest-room.html?id="+encodeURIComponent(c.id);}
+    else if(c.status==="open") $("bMain").href="contest-join.html?id="+encodeURIComponent(c.id);
+  }catch(e){
+    console.error("MZAD CONTEST LOAD",e);
+    $("hTitle").textContent="تعذر تحميل المسابقة";
+    $("bHint").hidden=false;
+    $("bHint").textContent="تعذر جلب بيانات المسابقة. حدّث الصفحة.";
+  }
+}
+await loadCompetition();
+const refreshTimer=setInterval(()=>{if(!document.hidden)loadCompetition()},20000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)loadCompetition()});
+addEventListener("pagehide",()=>clearInterval(refreshTimer));
+</script>
+
 </body>
 </html>
