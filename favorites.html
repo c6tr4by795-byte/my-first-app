@@ -110,94 +110,38 @@ header{
 .tab.active{background:var(--p-soft);border-color:#8977e9;color:var(--p-dark)}
 .tab.active small{background:var(--p);color:#fff}
 
-/* ============ شبكة الكروت (نفس كرت الرئيسية) ============ */
-
-.grid{
-  margin-top:14px;
-  display:grid;grid-template-columns:minmax(0,1fr);gap:18px
-}
-
-.fcard,.sk{
-  position:relative;aspect-ratio:3/4;border-radius:22px;overflow:hidden
-}
-
-.fcard{
-  display:block;cursor:pointer;background:#1d2430;
-  box-shadow:0 12px 24px -12px rgba(74,52,184,.45),inset 0 0 0 1px rgba(255,255,255,.08);
-  animation:up .4s ease backwards;
-  transition:transform .2s ease,opacity .22s ease
-}
-.fcard:active{transform:scale(.97)}
-.fcard.leaving{opacity:0;transform:scale(.9)}
-
-.fmedia{
-  position:absolute;inset:0;overflow:hidden;isolation:isolate;
-  background:#20242c
-}
-/* تعبئة مساحة الصورة بصورة طبيعية من دون شريط ضبابي منفصل */
-.fmedia::before{
-  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
-  background:var(--img,none) center/cover no-repeat;
-  filter:blur(10px);opacity:.42;transform:scale(1.06)
-}
-.fmedia img{
-  position:absolute;inset:0;z-index:1;display:block;
-  width:100%;height:100%;object-fit:contain;object-position:center;background:transparent
-}
-.no-img{position:absolute;inset:0;z-index:1;display:grid;place-items:center}
-.no-img svg{width:38px;height:38px;opacity:.5}
-
-.shade{
-  position:absolute;inset:0;z-index:2;pointer-events:none;
-  background:linear-gradient(to top,rgba(20,14,48,.94) 0%,rgba(20,14,48,.62) 28%,rgba(20,14,48,0) 58%)
-}
-
-.fav-btn{
-  position:absolute;top:12px;inset-inline-start:12px;z-index:10;
-  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;padding:0;
-  background:rgba(255,255,255,.96);color:#e5365f;
-  box-shadow:0 5px 13px rgba(23,32,42,.15);transition:transform .18s
-}
-.fav-btn:active{transform:scale(.85)}
-.fav-btn svg{width:19px;height:19px;fill:currentColor;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-
-.fbody{
-  position:absolute;inset-inline:0;bottom:0;z-index:3;padding:16px 16px 17px;color:#fff;
-  display:flex;flex-direction:column;gap:9px
-}
-
-.cd{
-  align-self:flex-start;display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:999px;
-  background:rgba(255,255,255,.18);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-  color:#fff;font-size:12px;font-weight:950;font-variant-numeric:tabular-nums;direction:ltr
-}
-.cd:before{content:"";width:5px;height:5px;border-radius:50%;background:#7CFFB2;animation:pulse2 1.6s infinite}
-.cd.urgent{background:rgba(232,89,12,.94)}
-.cd.urgent:before{background:#fff}
-.cd.over{background:rgba(255,255,255,.14);color:rgba(255,255,255,.8)}
-.cd.over:before{background:#c8c3e6;animation:none}
-
-.ftitle{
-  margin:0;font-size:16px;font-weight:950;line-height:1.35;letter-spacing:-.015em;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden
-}
-
-.specs{display:flex;flex-wrap:wrap;gap:4px}
-.spec{
-  padding:5px 9px;border-radius:7px;background:rgba(255,255,255,.16);
-  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);font-size:11px;font-weight:800;color:#fff
-}
-
-.frow{display:flex;align-items:flex-end;justify-content:space-between;gap:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,.18)}
+/* ============ تصميم المفضلة الجديد: بطاقات أفقية ============ */
+.grid{margin-top:13px;display:grid;grid-template-columns:minmax(0,1fr);gap:11px}
+.fcard,.sk{position:relative;min-width:0;min-height:142px;border-radius:19px;overflow:hidden}
+.fcard{display:flex;align-items:stretch;cursor:pointer;background:#fff;border:1px solid #eae7f2;box-shadow:0 5px 17px rgba(40,30,80,.055);animation:up .32s ease backwards;transition:transform .18s ease,opacity .22s ease}
+.fcard:active{transform:scale(.985)}
+.fcard.leaving{opacity:0;transform:translateX(12px) scale(.98)}
+.fmedia{position:relative;inset:auto;isolation:isolate;flex:0 0 116px;width:116px;min-height:142px;overflow:hidden;background:linear-gradient(145deg,#f1eff8,#faf9fd);border-inline-start:1px solid #f0edf6}
+.fmedia:before{content:none}
+.fmedia img{position:absolute;inset:0;z-index:1;width:100%;height:100%;padding:9px;object-fit:contain;object-position:center;background:transparent}
+.no-img{position:absolute;inset:0;z-index:1;display:grid;place-items:center;color:#a69bc9}
+.no-img svg{width:35px;height:35px;opacity:.65}
+.shade{display:none}
+.fav-btn{position:absolute;top:9px;inset-inline-start:9px;z-index:10;width:31px;height:31px;border-radius:11px;display:grid;place-items:center;padding:0;background:rgba(255,255,255,.97);color:#e5365f;border:1px solid #eee9f2;box-shadow:0 3px 9px rgba(23,32,42,.1);transition:transform .18s}
+.fav-btn:active{transform:scale(.86)}
+.fav-btn svg{width:16px;height:16px;fill:currentColor;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fbody{position:relative;inset:auto;bottom:auto;z-index:3;min-width:0;flex:1;padding:11px 12px;color:#26213c;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:7px}
+.cd{align-self:flex-start;display:inline-flex;align-items:center;gap:5px;padding:4px 8px;border-radius:8px;background:#f0edfb;color:#5d48bd;font-size:10px;font-weight:950;font-variant-numeric:tabular-nums;direction:ltr}
+.cd:before{content:"";width:5px;height:5px;border-radius:50%;background:#25a66d;animation:pulse2 1.6s infinite}
+.cd.urgent{background:#fff0e8;color:#c44b12}.cd.urgent:before{background:#e8590c}
+.cd.over{background:#f0eef4;color:#777181}.cd.over:before{background:#aaa4b5;animation:none}
+.ftitle{margin:0;font-size:14px;font-weight:950;line-height:1.4;letter-spacing:-.015em;color:#26213c;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.specs{display:flex;flex-wrap:wrap;gap:5px}
+.spec{padding:4px 7px;border-radius:7px;background:#f3f1f8;color:#6d6680;font-size:9px;font-weight:850;white-space:nowrap}
+.frow{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:auto;padding-top:7px;border-top:1px solid #f0edf5}
 .frow-main{min-width:0;flex:1}
-.frow small{display:block;font-size:8.5px;font-weight:800;color:#ffffffb3}
-.frow b{display:block;margin-top:2px;font-size:19px;font-weight:950;white-space:nowrap}
-
-.type{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;font-size:8.5px;font-weight:900;white-space:nowrap}
-.type.auc{background:var(--p);color:#fff}
-.type.dir{background:rgba(255,255,255,.95);color:var(--ok);font-size:9px;padding:4px 7px;line-height:1.2}
-.type.end{background:rgba(255,255,255,.2);color:#fff}
-
+.frow small{display:block;font-size:9px;font-weight:800;color:#8a8498}
+.frow b{display:block;margin-top:2px;font-size:15px;font-weight:950;color:#30245f;white-space:nowrap}
+.type{display:inline-flex;align-items:center;padding:5px 8px;border-radius:8px;font-size:9px;font-weight:950;white-space:nowrap}
+.type.auc{background:#eeeaff;color:#5d45c6}
+.type.dir{background:#eaf7f0;color:#188253;font-size:9px;padding:5px 8px;line-height:1.2}
+.type.end{background:#f0eef4;color:#777181}
+@media(max-width:360px){.fmedia{flex-basis:100px;width:100px}.fbody{padding:9px;gap:6px}.ftitle{font-size:13px}.frow b{font-size:13px}.spec{font-size:8px;padding:4px 6px}}
 /* ============ التحميل والحالة الفارغة ============ */
 
 .sk{
