@@ -3,150 +3,382 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<meta name="theme-color" content="#f7f6fb">
+<meta name="theme-color" content="#f4f6fa">
 <title>MZAD PHONE — المسابقات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f7f6fb;--card:#fff;--ink:#16181d;--muted:#737a86;--muted2:#a0a6b1;--line:#eeecf6;--p:#6246d9;--p2:#8b6cf0;--p-dark:#3f2a9c;--p-soft:#f1eeff;--ok:#1e8a5a;--bad:#c62f4d;--sb:env(safe-area-inset-bottom,0px);--st:env(safe-area-inset-top,0px)}
+:root{
+  --navy:#0e1533;--navy2:#18214a;--bg:#f4f6fa;--card:#fff;--line:#e4e8f0;--muted:#667085;--faint:#98a2b3;
+  --gold:#e9b44c;--gold2:#f7d27a;--gold-soft:#fdf5df;--gold-line:#f0dba6;--gold-ink:#7a4f00;--ok:#16a34a;--bad:#e5484d;
+  --r-s:12px;--r-m:16px;--r-l:22px;
+  --sb:env(safe-area-inset-bottom,0px);--st:env(safe-area-inset-top,0px)
+}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Tahoma,Arial,sans-serif;-webkit-font-smoothing:antialiased}
-button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--navy);font-family:"IBM Plex Sans Arabic",-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;font-size:14px;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;text-align:inherit}
 a{color:inherit;text-decoration:none}
-.page{width:min(100%,520px);margin:0 auto;padding:0 16px calc(96px + var(--sb))}
+svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+.num{font-variant-numeric:tabular-nums}
+[hidden]{display:none!important}
 
-/* top bar */
-.top{position:sticky;top:0;z-index:30;margin-inline:-16px;padding:calc(10px + var(--st)) 16px 10px;display:flex;align-items:center;justify-content:space-between;background:rgba(247,246,251,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-.ib{width:40px;height:40px;display:grid;place-items:center;border-radius:50%;background:#fff;border:1px solid var(--line);color:var(--ink);transition:transform .15s}
-.ib:active{transform:scale(.93)}
-.ib svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.top h2{margin:0;font-size:16px;font-weight:900}
-.sp{width:40px}
+/* header */
+.top{position:sticky;top:0;z-index:30;background:rgba(244,246,250,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(228,232,240,.8);padding-top:var(--st)}
+.top-in{width:min(100%,520px);margin:0 auto;height:54px;padding:0 16px;display:grid;grid-template-columns:40px 1fr 40px;align-items:center}
+.top h1{margin:0;text-align:center;font-size:16px;font-weight:600;letter-spacing:-.01em}
+.ib{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:#fff;border:1px solid var(--line);transition:transform .15s}
+.ib:active{transform:scale(.94)}
+.ib svg{width:18px;height:18px}
 
-/* identity */
-.who{padding:6px 2px 14px}
-.wm{min-width:0;flex:1}
-.wm h1{margin:0;font-size:22px;line-height:1.25;font-weight:900;letter-spacing:-.02em;overflow-wrap:anywhere}
-.live{display:inline-flex;align-items:center;gap:6px;margin-top:5px;font-size:11.5px;font-weight:800;color:var(--ok)}
-.live i{width:7px;height:7px;border-radius:50%;background:#2fb67e}
+.page{width:min(100%,520px);margin:0 auto;padding:12px 16px calc(104px + var(--sb))}
+.sec{margin-top:22px}
+.sh{display:flex;align-items:center;justify-content:space-between;margin:0 2px 10px}
+.sh h2{margin:0;font-size:17px;font-weight:700;letter-spacing:-.015em}
+.sh a,.sh button{font-size:12.5px;font-weight:600;color:var(--muted)}
 
-/* ID card - the one bold element */
-.idcard{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-radius:20px;color:#fff;background:linear-gradient(135deg,#4a34b8,#6246d9 60%,#7c5ee8)}
-.idcard small{display:block;font-size:11.5px;font-weight:800;opacity:.8}
-.code{margin:4px 0 0;font-size:22px;font-weight:900;letter-spacing:2px;direction:ltr;text-align:right;overflow-wrap:anywhere}
-.code.sm{font-size:14px;letter-spacing:0;font-weight:800}
-.copy{flex:0 0 auto;padding:8px 16px;border-radius:99px;background:#fff;color:var(--p-dark);font-size:12px;font-weight:900;transition:transform .15s}
-.copy:active{transform:scale(.95)}
-.copy:disabled{opacity:.55;cursor:wait}
+/* hero */
+.hero{position:relative;overflow:hidden;isolation:isolate;border-radius:24px;padding:18px 18px 16px;color:#fff;background:linear-gradient(160deg,#18214a 0%,#0e1533 62%);box-shadow:0 18px 36px -20px rgba(14,21,51,.55)}
+.hero:before{content:"";position:absolute;z-index:-1;width:300px;height:300px;border-radius:50%;inset-inline-end:-80px;top:-70px;background:radial-gradient(circle,rgba(233,180,76,.32) 0%,rgba(233,180,76,0) 66%)}
+.rings{position:absolute;z-index:-1;inset-inline-end:-60px;top:-50px;width:260px;height:260px;opacity:.9;pointer-events:none}
+.cup{position:absolute;inset-inline-end:10px;top:26px;width:104px;height:122px;filter:drop-shadow(0 12px 18px rgba(0,0,0,.35))}
+.st{display:inline-flex;align-items:center;gap:7px;height:26px;padding:0 11px;border-radius:99px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);font-size:12px;font-weight:600}
+.st i{width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 3px rgba(74,222,128,.2)}
+.st.idle i{background:var(--faint);box-shadow:none}
+.hero h2{margin:14px 0 0;max-width:64%;font-size:20px;line-height:1.45;font-weight:700;letter-spacing:-.02em;overflow-wrap:anywhere}
+.pz{margin-top:8px;max-width:64%}
+.pz small{display:block;font-size:11.5px;font-weight:500;color:rgba(255,255,255,.62)}
+.pz b{display:block;margin-top:1px;font-size:15px;font-weight:700;color:var(--gold2)}
+.clk{display:flex;align-items:flex-end;gap:6px;margin-top:18px;direction:ltr}
+.clk .c{min-width:56px;padding:8px 8px 7px;border-radius:var(--r-s);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);text-align:center}
+.clk b{display:block;font-size:22px;line-height:1.1;font-weight:700;font-variant-numeric:tabular-nums}
+.clk small{display:block;margin-top:2px;font-size:10.5px;font-weight:500;color:rgba(255,255,255,.55);direction:rtl}
+.clk .sep{padding-bottom:20px;color:rgba(255,255,255,.35);font-weight:700}
+.clk-l{margin:16px 0 -10px;font-size:12px;font-weight:500;color:rgba(255,255,255,.62)}
+.seats{margin-top:16px}
+.seats .t{display:flex;justify-content:space-between;font-size:12px;font-weight:500;color:rgba(255,255,255,.7)}
+.seats .t b{color:#fff;font-weight:600}
+.bar{height:5px;margin-top:7px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .6s}
+.btns{display:grid;grid-template-columns:1.4fr 1fr;gap:10px;margin-top:16px}
+.btn{display:grid;place-items:center;height:46px;border-radius:14px;font-size:14px;font-weight:700;transition:transform .15s}
+.btn:active{transform:scale(.97)}
+.btn.gold{background:linear-gradient(180deg,var(--gold2),var(--gold));color:var(--navy);box-shadow:0 8px 16px -8px rgba(233,180,76,.7)}
+.btn.ghost{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);color:#fff}
+.btn.off{background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);box-shadow:none;pointer-events:none}
+.hint{margin:10px 0 0;font-size:12px;line-height:1.7;font-weight:500;color:rgba(255,255,255,.62);text-align:center}
 
-/* quick tiles */
-.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
-.tile{position:relative;display:flex;flex-direction:column;align-items:center;gap:9px;padding:16px 4px 13px;border-radius:20px;background:var(--card);border:1px solid var(--line);transition:transform .15s}
-.tile:active{transform:scale(.95)}
-.tile .ic{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:var(--p-soft);color:var(--p)}
-.tile svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.tile span.l{font-size:11px;font-weight:800;line-height:1.3;text-align:center}
-.badge{position:absolute;top:7px;inset-inline-start:7px;min-width:19px;height:19px;padding:0 5px;border-radius:99px;background:var(--p);color:#fff;font-size:10.5px;font-weight:900;display:grid;place-items:center}
+/* quick actions */
+.qa{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.q{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 4px 10px;border-radius:var(--r-m);background:var(--card);border:1px solid var(--line);transition:transform .15s}
+.q:active{transform:scale(.96)}
+.q .ic{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:var(--bg);color:var(--navy)}
+.q:first-child .ic{background:var(--gold-soft);color:var(--gold-ink)}
+.q span{font-size:11.5px;font-weight:600;text-align:center;line-height:1.35}
 
-/* sections */
-.sec{margin-top:28px}
-.sec>h3{margin:0 2px 6px;font-size:18px;font-weight:900;letter-spacing:-.01em}
-.box{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:2px 14px}
-.row{width:100%;display:flex;align-items:center;gap:13px;padding:14px 0;text-align:right;border-bottom:1px solid var(--line);transition:opacity .15s}
-.row:last-child{border-bottom:0}
-.row:active{opacity:.6}
-.row .ic{width:24px;height:24px;flex:0 0 24px;color:#7b8394}
-.row .ic svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.rt{min-width:0;flex:1}
-.rt b{display:block;font-size:14px;font-weight:800}
-.rt small{display:block;margin-top:2px;font-size:11.5px;font-weight:600;color:var(--muted);direction:rtl}
-.rt small.ltr{direction:ltr;text-align:right}
-.ar{width:17px;height:17px;flex:0 0 17px;fill:none;stroke:#bfc4ce;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+/* rounds */
+.rds{position:relative;display:grid;grid-template-columns:repeat(3,1fr);padding:16px 8px 14px;border-radius:var(--r-l);background:var(--card);border:1px solid var(--line)}
+.rds:before{content:"";position:absolute;top:29px;inset-inline:calc(100%/6);height:2px;background:var(--line)}
+.rd{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.rd .d{position:relative;z-index:1;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#fff;border:2px solid var(--line);font-size:12.5px;font-weight:700;color:var(--faint)}
+.rd .d svg{width:14px;height:14px;stroke-width:2.6}
+.rd.done .d{background:var(--navy);border-color:var(--navy);color:#fff}
+.rd.now .d{border-color:var(--gold);color:var(--navy);box-shadow:0 0 0 4px var(--gold-soft)}
+.rd b{display:block;font-size:13px;font-weight:600}
+.rd small{display:block;margin-top:-5px;font-size:11.5px;font-weight:500;color:var(--muted)}
 
-/* wins */
+/* podium + list */
+.board{border-radius:var(--r-l);background:var(--card);border:1px solid var(--line);overflow:hidden}
+.pod{display:grid;grid-template-columns:1fr 1.15fr 1fr;align-items:end;gap:8px;padding:20px 12px 0;background:linear-gradient(180deg,#fbfaf5 0%,#fff 100%);direction:ltr}
+.pc{display:flex;flex-direction:column;align-items:center;direction:rtl;min-width:0;color:inherit}
+.crown{width:22px;height:22px;color:var(--gold);margin-bottom:2px}
+.av{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-size:19px;font-weight:700;background:#e9edf5 center/cover no-repeat;border:3px solid #fff;box-shadow:0 4px 12px -4px rgba(14,21,51,.3)}
+.pc.p1 .av{width:66px;height:66px;font-size:24px;background-color:var(--gold2);box-shadow:0 0 0 3px var(--gold),0 8px 16px -6px rgba(233,180,76,.7)}
+.pc.p3 .av{background-color:#f3dcc6}
+.pc b{display:block;max-width:100%;margin-top:8px;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc small{display:block;margin-top:1px;font-size:12px;font-weight:600;color:var(--muted)}
+.base{display:grid;place-items:center;width:100%;margin-top:10px;border-radius:12px 12px 0 0;background:#eef1f7;font-size:20px;font-weight:700;color:#aab2c3}
+.p1 .base{height:70px;background:linear-gradient(180deg,var(--gold-soft),#fbebc0);color:var(--gold)}
+.p2 .base{height:52px}
+.p3 .base{height:40px}
+.lr{display:flex;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--line);transition:background .15s}
+.lr:active{background:var(--bg)}
+.lr .n{width:22px;font-size:13px;font-weight:700;color:var(--faint);text-align:center}
+.lr .av{width:38px;height:38px;font-size:15px;border:0;box-shadow:none}
+.lr .tx{min-width:0;flex:1}
+.lr .tx b{display:block;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lr .tx span{display:block;margin-top:1px;font-size:12px;font-weight:500;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lr strong{font-size:14px;font-weight:700}
+.dl{display:inline-flex;align-items:center;gap:2px;min-width:34px;font-size:11.5px;font-weight:600;color:var(--faint);justify-content:flex-end}
+.dl.up{color:var(--ok)}
+.dl.dn{color:var(--bad)}
+.dl svg{width:10px;height:10px;fill:currentColor;stroke:none}
+.more{display:block;width:100%;padding:13px;border-top:1px solid var(--line);text-align:center;font-size:13px;font-weight:600;color:var(--navy)}
+.empty{padding:26px 18px;text-align:center;font-size:13.5px;line-height:1.8;font-weight:500;color:var(--muted)}
+.empty b{display:block;margin-bottom:2px;font-size:15px;color:var(--navy);font-weight:600}
 
-.out{width:100%;height:52px;margin-top:24px;border-radius:18px;background:#fff;border:1px solid #f1c4cd;color:var(--bad);font-size:14px;font-weight:900;transition:transform .15s}
-.out:active{transform:scale(.98)}
-.out:disabled{opacity:.6}
-.ver{margin:14px 0 0;text-align:center;font-size:11px;font-weight:700;color:var(--muted2)}
+/* draw banner */
+.draw{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;padding:16px;border-radius:var(--r-l);background:var(--gold-soft);border:1px solid var(--gold-line)}
+.draw .ic{width:46px;height:46px;flex:0 0 46px;border-radius:15px;display:grid;place-items:center;background:#fff;color:var(--gold-ink);border:1px solid var(--gold-line)}
+.draw .ic svg{width:24px;height:24px}
+.draw b{display:block;font-size:15px;font-weight:700;color:var(--gold-ink)}
+.draw span{display:block;margin-top:2px;font-size:12.5px;line-height:1.65;font-weight:500;color:#8a6a2a}
+
+/* how */
+.how{margin:0;padding:6px 16px;list-style:none;counter-reset:s;border-radius:var(--r-l);background:var(--card);border:1px solid var(--line)}
+.how li{position:relative;padding:12px 36px 12px 0;font-size:13.5px;line-height:1.75;font-weight:500;color:var(--muted);counter-increment:s;border-bottom:1px solid var(--line)}
+.how li:last-child{border-bottom:0}
+.how li:before{content:counter(s);position:absolute;inset-inline-start:0;top:12px;width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:var(--bg);color:var(--navy);font-size:12px;font-weight:700}
+.how b{color:var(--navy);font-weight:600}
+
+/* winners */
+.wr{display:flex;gap:10px;margin:0 -16px;padding:2px 16px 4px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity}
+.wr::-webkit-scrollbar{display:none}
+.wc{flex:0 0 168px;scroll-snap-align:start;padding:14px;border-radius:var(--r-m);background:var(--card);border:1px solid var(--line)}
+.wc .ic{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:var(--gold-soft);color:var(--gold-ink)}
+.wc .ic svg{width:19px;height:19px}
+.wc b{display:block;margin-top:10px;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wc span{display:block;margin-top:2px;font-size:12px;font-weight:500;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wr .empty{flex:1 0 100%;border-radius:var(--r-m);background:var(--card);border:1px solid var(--line)}
 
 /* bottom nav */
-.bw{position:fixed;left:0;right:0;bottom:0;z-index:50}
-.bn{width:100%;max-width:520px;margin:0 auto;padding:8px 10px calc(8px + var(--sb));background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px}
-.ni{min-width:0;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:14px;color:#7e8992;transition:color .16s,background .16s}
-.ni:active{background:var(--p-soft)}
-.ni.on{color:var(--p)}
-.ni svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.ni span{font-size:10px;line-height:1;font-weight:800;white-space:nowrap}
-.add{width:44px;height:26px;border-radius:13px;display:grid;place-items:center;background:var(--p);color:#fff}
-.add svg{width:18px;height:18px;stroke-width:2.4}
-
-.toast{position:fixed;left:50%;bottom:calc(84px + var(--sb));transform:translate(-50%,14px);max-width:calc(100% - 40px);padding:10px 15px;border-radius:13px;background:#16181d;color:#fff;font-size:12px;font-weight:800;text-align:center;opacity:0;pointer-events:none;transition:.28s;z-index:80}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-.loading{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;transition:.28s}
-.loading.hidden{opacity:0;visibility:hidden;pointer-events:none}
-.loader{width:30px;height:30px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--p);animation:rot .8s linear infinite}
-@keyframes rot{to{transform:rotate(360deg)}}
-:focus-visible{outline:2px solid var(--p);outline-offset:2px}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-@media(max-width:340px){.tiles{grid-template-columns:repeat(2,1fr)}.code{font-size:25px}.ct{grid-template-columns:1fr}}
-.empty{margin:0;padding:18px 0;font-size:12.5px;line-height:1.9;font-weight:700;color:var(--muted)}
-.win{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
-.win:last-child{border-bottom:0}
-.wi{width:40px;height:40px;flex:0 0 40px;border-radius:13px;display:grid;place-items:center;background:#fff6dc;color:#b7860b}
-.wi svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.wn{min-width:0;flex:1}
-.wn b{display:block;font-size:13.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wn small{display:block;margin-top:3px;font-size:11px;font-weight:600;color:var(--muted)}
-.an{direction:ltr;text-align:right;font-size:10px!important;color:var(--muted2)!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ct{padding:15px 0;border-bottom:1px solid var(--line)}
-.ct:last-child{border-bottom:0}
-.ct h4{margin:0;font-size:14.5px;font-weight:900}
-.ct p{margin:5px 0 0;font-size:12px;line-height:1.8;font-weight:600;color:var(--muted)}
-.ct .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
-.ct .meta span{padding:3px 10px;border-radius:99px;background:var(--p-soft);color:var(--p-dark);font-size:11px;font-weight:800}
-.wp{text-align:left;white-space:nowrap}
-.wp b{display:block;font-size:13px;font-weight:900;color:var(--p-dark)}
-.wp small{display:inline-block;margin-top:3px;padding:2px 8px;border-radius:99px;background:#e8f6ef;color:var(--ok);font-size:10px;font-weight:800}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(255,255,255,.96);border-top:1px solid var(--line);padding-bottom:var(--sb)}
+.nav-in{width:min(100%,520px);margin:0 auto;height:62px;padding:0 8px;display:grid;grid-template-columns:repeat(5,1fr);align-items:center}
+.ni{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--faint);font-size:10.5px;font-weight:600}
+.ni svg{width:23px;height:23px}
+.ni.add .p{width:42px;height:30px;border-radius:11px;display:grid;place-items:center;background:var(--navy);color:#fff}
+.ni.add .p svg{width:18px;height:18px;stroke-width:2.2}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+@media(max-width:360px){.hero h2,.pz{max-width:58%}.clk .c{min-width:50px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
-<script type="module" src="./js/auth-guard.js"></script>
 </head>
 <body>
+
+<header class="top"><div class="top-in">
+  <button class="ib" id="back" type="button" aria-label="رجوع"><svg class="i" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+  <h1>المسابقات</h1>
+  <button class="ib" id="rulesBtn" type="button" aria-label="كيف تشتغل"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.8v.1"/></svg></button>
+</div></header>
+
 <main class="page">
-  <div class="top">
-    <button class="ib" id="backBtn" type="button" aria-label="رجوع"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-    <h2>المسابقات</h2>
-    <span class="sp"></span>
-  </div>
-  <section class="sec" style="margin-top:8px">
-    <div class="box" id="winsList"><p class="empty">جاري تحميل نتائج مزاداتك...</p></div>
+
+  <!-- hero -->
+  <section class="hero" id="hero">
+    <svg class="rings" viewBox="0 0 260 260" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1" aria-hidden="true"><circle cx="130" cy="130" r="40"/><circle cx="130" cy="130" r="75"/><circle cx="130" cy="130" r="110"/><circle cx="130" cy="130" r="128"/></svg>
+    <svg class="cup" viewBox="0 0 120 140" aria-hidden="true">
+      <defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbe39b"/><stop offset="1" stop-color="#dd9f2c"/></linearGradient></defs>
+      <path d="M30 26H15c0 20 7 31 19 35M90 26h15c0 20-7 31-19 35" fill="none" stroke="#d7952a" stroke-width="6" stroke-linecap="round"/>
+      <path d="M30 14h60v34c0 21-13 35-30 35S30 69 30 48V14z" fill="url(#g1)"/>
+      <path d="M39 22v26c0 11 4 19 11 25" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="4" stroke-linecap="round"/>
+      <polygon points="60,30 63.4,37.4 71.5,38.3 65.5,43.8 67.2,51.8 60,47.7 52.8,51.8 54.5,43.8 48.5,38.3 56.6,37.4" fill="#fff7de"/>
+      <rect x="54" y="83" width="12" height="18" fill="#d2902a"/>
+      <rect x="40" y="101" width="40" height="9" rx="3" fill="url(#g1)"/>
+      <rect x="31" y="110" width="58" height="13" rx="4" fill="#c8861f"/>
+    </svg>
+
+    <span class="st idle" id="hSt"><i></i><span id="hStT">غير متاحة</span></span>
+    <h2 id="hTitle">ماكو مسابقة حالياً</h2>
+    <div class="pz"><small>الجائزة الكبرى</small><b id="hPrize">—</b></div>
+
+    <div id="clockBox" hidden>
+      <p class="clk-l" id="clkL">ينتهي دور الجولة بعد</p>
+      <div class="clk num" id="clk">
+        <div class="c"><b id="cH">00</b><small>ساعة</small></div><span class="sep">:</span>
+        <div class="c"><b id="cM">00</b><small>دقيقة</small></div><span class="sep">:</span>
+        <div class="c"><b id="cS">00</b><small>ثانية</small></div>
+      </div>
+    </div>
+
+    <div class="seats" id="seatsBox" hidden>
+      <div class="t"><span>المقاعد</span><span><b class="num" id="sT">0</b> من <span class="num" id="sM">0</span></span></div>
+      <div class="bar"><i id="sBar"></i></div>
+    </div>
+
+    <div class="btns">
+      <a class="btn gold off" id="bMain" href="#">—</a>
+      <a class="btn ghost" id="bSec" href="#board">الترتيب</a>
+    </div>
+    <p class="hint" id="bHint" hidden></p>
   </section>
+
+  <!-- quick actions -->
+  <section class="sec">
+    <div class="qa">
+      <a class="q" id="qBook" href="contest-join.html"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4V8zM14 6v12"/></svg></span><span>احجز مقعد</span></a>
+      <button class="q" id="qSup" type="button"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7z"/></svg></span><span>ادعم متسابق</span></button>
+      <a class="q" id="qMine" href="contestant.html"><span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 20c.8-3.6 3.2-5.2 6.5-5.2s5.7 1.6 6.5 5.2"/></svg></span><span>مقعدي</span></a>
+      <button class="q" id="qWin" type="button"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0V4zM8 6H5.5v1A2.5 2.5 0 0 0 8 9.5M16 6h2.5v1A2.5 2.5 0 0 1 16 9.5M12 13v4M8.5 20h7M10 17h4"/></svg></span><span>الفائزون</span></button>
+    </div>
+  </section>
+
+  <!-- rounds -->
+  <section class="sec">
+    <div class="sh"><h2>الجولات</h2></div>
+    <div class="rds" id="rds"></div>
+  </section>
+
+  <!-- board -->
+  <section class="sec" id="board">
+    <div class="sh"><h2>المتصدرون</h2><a id="allLink" href="contest-room.html">عرض الكل</a></div>
+    <div class="board" id="boardBox"><div class="empty"><b>ماكو متسابقين لحد الآن</b>أول واحد يحجز مقعد راح يظهر هنا.</div></div>
+  </section>
+
+  <!-- draw -->
+  <section class="sec">
+    <div class="draw">
+      <span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M4 11h16v9H4zM3 7h18v4H3zM12 7v13M12 7C10 3 7 4.5 8.5 6.5M12 7c2-4 5-2.5 3.5-.5"/></svg></span>
+      <div><b>3 جوائز للداعمين</b><span>بعد انتهاء المسابقة يسحب النظام 3 داعمين عشوائياً من داعمي الفائز.</span></div>
+    </div>
+  </section>
+
+  <!-- how -->
+  <section class="sec" id="how">
+    <div class="sh"><h2>شلون تشتغل</h2></div>
+    <ol class="how">
+      <li><b>انشر جهاز</b> بالسوق حتى تكدر تحجز مقعد.</li>
+      <li><b>احجز مقعدك</b> قبل ما تمتلي المقاعد.</li>
+      <li>الداعمين يدخلون بروفايلك و<b>يضلون ضاغطين</b> على زر الدعم طول الجولة.</li>
+      <li>3 جولات، وبكل جولة يتأهل الأعلى دعماً.</li>
+      <li>الفائز يأخذ الجائزة الكبرى، ويسحب النظام 3 داعمين من داعميه.</li>
+    </ol>
+  </section>
+
+  <!-- winners -->
+  <section class="sec" id="winners">
+    <div class="sh"><h2>الفائزون السابقون</h2></div>
+    <div class="wr" id="wr"><div class="empty"><b>ماكو فائزين لحد الآن</b>أول فائز راح يظهر هنا.</div></div>
+  </section>
+
 </main>
-<div class="bw"><nav class="bn">
-  <a class="ni" href="home.html"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></svg><span>الرئيسية</span></a>
-  <a class="ni" href="market.html"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/></svg><span>الأجهزة</span></a>
-  <a class="ni" href="sell.html"><span class="add"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span>إضافة</span></a>
-  <a class="ni" href="favorites.html"><svg viewBox="0 0 24 24"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7z"/></svg><span>المفضلة</span></a>
-  <a class="ni" href="profile.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5"/></svg><span>حسابي</span></a>
-</nav></div>
 
+<nav class="nav"><div class="nav-in">
+  <a class="ni" href="home.html"><svg class="i" viewBox="0 0 24 24"><path d="m3 10.5 9-7 9 7"/><path d="M5 9.5V20h14V9.5"/><path d="M9.5 20v-6h5v6"/></svg>الرئيسية</a>
+  <a class="ni" href="market.html"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>الأجهزة</a>
+  <a class="ni add" href="sell.html"><span class="p"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>إضافة</a>
+  <a class="ni" href="favorites.html"><svg class="i" viewBox="0 0 24 24"><path d="M20.8 8.4c0 5-8.8 10.3-8.8 10.3S3.2 13.4 3.2 8.4A4.8 4.8 0 0 1 12 5.7a4.8 4.8 0 0 1 8.8 2.7z"/></svg>المفضلة</a>
+  <a class="ni" href="profile.html"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 20c.8-3.6 3.2-5.2 6.5-5.2s5.7 1.6 6.5 5.2"/></svg>حسابي</a>
+</div></nav>
 
-<script type="module">
+<script>
+/* ===== UI فقط — اربط الداتا من هنا =====
+   Contests.setContest({ id, title, prize, status:'open'|'live'|'none', round, startsAt, roundEndsAt, seatsTaken, seatsMax, qualifiers:[5,3,1] })
+   Contests.setMe({ hasDevice, hasSeat })
+   Contests.setBoard([{ id, name, device, support, image, delta }])   // مرتبين من الأعلى، delta اختياري (+2 / -1)
+   Contests.setWinners([{ name, prize, title }])
+   جرّب الشكل بدون ربط: ?demo=1
+*/
+const $ = id => document.getElementById(id);
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const list = document.getElementById("winsList");
+const nf = n => Number(n || 0).toLocaleString("en-US");
+const S = { c:{ status:"none" }, me:{}, board:[] };
+let timer = 0;
 
-/* أضف المسابقات هنا. مثال:
-   { title: "مسابقة أفضل مزاد", desc: "شارك بمزاد واربح جائزة", prize: "هاتف", ends: "2026-11-30" } */
-const CONTESTS = [];
-
-document.getElementById("backBtn").onclick = () => {
+$("back").onclick = () => {
   if (document.referrer && document.referrer.includes(location.host)) history.back();
-  else location.href = "profile.html";
+  else location.href = "home.html";
 };
+$("rulesBtn").onclick = () => $("how").scrollIntoView({ behavior:"smooth", block:"start" });
+$("qSup").onclick = () => $("board").scrollIntoView({ behavior:"smooth", block:"start" });
+$("qWin").onclick = () => $("winners").scrollIntoView({ behavior:"smooth", block:"start" });
 
-list.innerHTML = CONTESTS.length ? CONTESTS.map(c => `<div class="ct">
-  <h4>${esc(c.title)}</h4>
-  ${c.desc ? `<p>${esc(c.desc)}</p>` : ""}
-  <div class="meta">${c.prize ? `<span>الجائزة: ${esc(c.prize)}</span>` : ""}${c.ends ? `<span>تنتهي: ${esc(new Date(c.ends).toLocaleDateString("ar-IQ"))}</span>` : ""}</div>
-</div>`).join("") : '<p class="empty">ماكو مسابقات حالياً. راح يظهر هنا أي إعلان عن مسابقة جديدة.</p>';
+const CROWN = '<svg class="crown" viewBox="0 0 24 24" fill="currentColor"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></svg>';
+const CHECK = '<svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+/* ---------- hero ---------- */
+function renderHero(){
+  const c = S.c, none = !c || c.status === "none", live = c.status === "live";
+  const st = $("hSt"); st.className = "st" + (none ? " idle" : "");
+  $("hStT").textContent = none ? "غير متاحة" : live ? `جارية · الجولة ${c.round || 1} من 3` : "الحجز مفتوح";
+  $("hTitle").textContent = none ? "ماكو مسابقة حالياً" : (c.title || "—");
+  $("hPrize").textContent = none ? "—" : (c.prize || "—");
+
+  const max = Number(c.seatsMax || 0), taken = Number(c.seatsTaken || 0);
+  $("seatsBox").hidden = none || !max;
+  if(max){ $("sT").textContent = taken; $("sM").textContent = max; $("sBar").style.width = Math.min(100, taken / max * 100) + "%"; }
+
+  clearInterval(timer);
+  $("clockBox").hidden = none;
+  if(!none){ $("clkL").textContent = live ? "ينتهي دور الجولة بعد" : "تبدي المسابقة بعد"; tick(); timer = setInterval(tick, 1000); }
+  cta(); renderRounds();
+}
+function tick(){
+  const c = S.c, t = new Date(c.status === "live" ? c.roundEndsAt : c.startsAt).getTime();
+  if(!t){ $("clockBox").hidden = true; return; }
+  let s = Math.max(0, Math.floor((t - Date.now()) / 1000));
+  const h = Math.floor(s / 3600); s %= 3600;
+  const p = n => String(n).padStart(2, "0");
+  $("cH").textContent = p(h); $("cM").textContent = p(Math.floor(s / 60)); $("cS").textContent = p(s % 60);
+}
+function cta(){
+  const c = S.c, me = S.me, b = $("bMain"), hint = $("bHint");
+  const set = (t, href, off) => { b.textContent = t; b.href = href; b.classList.toggle("off", !!off); };
+  hint.hidden = true;
+  const q = c.id ? "?id=" + encodeURIComponent(c.id) : "";
+  $("qBook").href = "contest-join.html" + q;
+  $("allLink").href = "contest-room.html" + q;
+  if(!c || c.status === "none") return set("ماكو مسابقة", "#", true);
+  if(me.hasSeat) return set("ادخل غرفتك", "contest-room.html" + q);
+  if(c.status === "live") return set("شاهد وادعم", "#board");
+  if(c.seatsMax && c.seatsTaken >= c.seatsMax) return set("المقاعد مكتملة", "#", true);
+  if(me.hasDevice === false){ hint.textContent = "لازم يكون عندك جهاز منشور بالسوق حتى تكدر تحجز."; hint.hidden = false; return set("انشر جهاز حتى تحجز", "sell.html"); }
+  set("احجز مقعدك", "contest-join.html" + q);
+}
+
+/* ---------- rounds ---------- */
+function renderRounds(){
+  const c = S.c, r = c.status === "live" ? Number(c.round || 1) : 0, q = c.qualifiers || [5, 3, 1];
+  $("rds").innerHTML = [1, 2, 3].map(n => {
+    const cls = r && n < r ? "done" : r === n ? "now" : "";
+    const sub = n === 3 ? "الفائز" : `يتأهل ${q[n - 1]}`;
+    return `<div class="rd ${cls}"><span class="d">${cls === "done" ? CHECK : n}</span><div><b>الجولة ${n}</b><small>${sub}</small></div></div>`;
+  }).join("");
+}
+
+/* ---------- board ---------- */
+const avatar = (m, cls = "") => `<span class="av${cls}" ${m.image ? `style="background-image:url('${esc(m.image)}')"` : ""}>${m.image ? "" : esc((m.name || "؟").trim().charAt(0))}</span>`;
+const href = m => `contestant.html?id=${encodeURIComponent(m.id)}`;
+function delta(d){
+  d = Number(d || 0);
+  if(!d) return '<span class="dl">—</span>';
+  return d > 0 ? `<span class="dl up num"><svg viewBox="0 0 10 10"><path d="M5 1l4 7H1z"/></svg>${d}</span>` : `<span class="dl dn num"><svg viewBox="0 0 10 10"><path d="M5 9L1 2h8z"/></svg>${-d}</span>`;
+}
+function renderBoard(){
+  const list = S.board, box = $("boardBox");
+  if(!list.length){ box.innerHTML = '<div class="empty"><b>ماكو متسابقين لحد الآن</b>أول واحد يحجز مقعد راح يظهر هنا.</div>'; return; }
+  const order = [[list[1], "p2", 2], [list[0], "p1", 1], [list[2], "p3", 3]];
+  const pod = order.map(([m, cls, n]) => m
+    ? `<a class="pc ${cls}" href="${href(m)}">${n === 1 ? CROWN : ""}${avatar(m)}<b>${esc(m.name || "متسابق")}</b><small class="num">${nf(m.support)}</small><span class="base">${n}</span></a>`
+    : `<div class="pc ${cls}"><span class="av">—</span><b>—</b><small>&nbsp;</small><span class="base">${n}</span></div>`).join("");
+  const rest = list.slice(3, 8).map((m, i) => `<a class="lr" href="${href(m)}"><span class="n num">${i + 4}</span>${avatar(m)}<span class="tx"><b>${esc(m.name || "متسابق")}</b>${m.device ? `<span>${esc(m.device)}</span>` : ""}</span><strong class="num">${nf(m.support)}</strong>${delta(m.delta)}</a>`).join("");
+  const more = list.length > 8 ? `<a class="more" href="${$("allLink").href}">عرض الكل (${list.length})</a>` : "";
+  box.innerHTML = `<div class="pod">${pod}</div>${rest}${more}`;
+}
+
+window.Contests = {
+  setContest(c){ S.c = c || { status:"none" }; renderHero(); },
+  setMe(m){ S.me = m || {}; cta(); },
+  setBoard(l){ S.board = l || []; renderBoard(); },
+  setWinners(w){
+    $("wr").innerHTML = w && w.length ? w.map(x => `<div class="wc"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0V4zM8 6H5.5v1A2.5 2.5 0 0 0 8 9.5M16 6h2.5v1A2.5 2.5 0 0 1 16 9.5M12 13v4M8.5 20h7M10 17h4"/></svg></span><b>${esc(x.name)}</b><span>${esc(x.prize || x.title || "")}</span></div>`).join("")
+      : '<div class="empty"><b>ماكو فائزين لحد الآن</b>أول فائز راح يظهر هنا.</div>';
+  }
+};
+Contests.setContest({ status:"none" });
+
+/* معاينة الشكل فقط — احذف قبل الإنتاج */
+if(new URLSearchParams(location.search).has("demo")){
+  Contests.setContest({ id:1, title:"مسابقة أفضل جهاز بالنجف", prize:"iPhone 16 Pro Max", status:"live", round:2, roundEndsAt:Date.now() + 1000*60*47, seatsTaken:14, seatsMax:20 });
+  Contests.setMe({ hasDevice:true, hasSeat:false });
+  Contests.setBoard([
+    { id:1, name:"علي النجفي", device:"iPhone 15 Pro", support:4210, delta:2 },
+    { id:2, name:"حسين كاظم", device:"Galaxy S24 Ultra", support:3655, delta:-1 },
+    { id:3, name:"زينب الموسوي", device:"iPhone 14", support:2980 },
+    { id:4, name:"مرتضى الحسيني", device:"Pixel 8", support:1995, delta:1 },
+    { id:5, name:"سجاد العبادي", device:"Xiaomi 14", support:1410 }
+  ]);
+}
 </script>
 </body>
 </html>
