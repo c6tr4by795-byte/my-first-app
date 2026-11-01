@@ -380,7 +380,7 @@ const LOGIN_PAGE   = "../admin-login.html";
 const BUCKET       = "mzad-payment-proofs";
 /* دوال القبول والرفض: ضع اسم الدالة الموجودة عندك لتظهر أزرار القبول والرفض داخل اللوحة.
    تُستدعى بـ { [idParam]: requestId, p_note: ملاحظة }. إذا تُركت null يظهر رابط لصفحة المراجعة الحالية. */
-const REVIEW = { approve: null, reject: null, idParam: "p_request_id", page: "auctions.html?tab=sale" };
+const REVIEW = { approve: "mzad_approve_deposit", reject: "mzad_approve_deposit", idParam: "p_deposit_id", page: "deposits.html" };
 const POLL_MS = 15000;
 
 const $ = id => document.getElementById(id);
@@ -798,15 +798,26 @@ async function openRequest(r){
   } else if($("pimg")) $("pimg").innerHTML = '<div class="noimg">لا توجد صورة، المشتري كتب رقم العملية فقط</div>';
 }
 async function reviewAct(r, approve){
-  const note = ($("rnote")?.value||"").trim(), fn = approve ? REVIEW.approve : REVIEW.reject;
-  if(!approve){ const ok = await confirmSheet({ title:"رفض التأمين", text:"سيُرفض الإثبات ويُطلب من المشتري إرسال إثبات جديد.", ok:"رفض", danger:true }); if(!ok) return; }
-  else closeSheet(false);
+  const note = ($("rnote")?.value||"").trim();
+  if(!approve){
+    const ok = await confirmSheet({ title:"رفض التأمين", text:"سيُرفض إثبات الدفع ويُطلب من المستخدم إرسال إثبات جديد.", ok:"رفض", danger:true });
+    if(!ok) return;
+  }
   try{
-    const res = await supabase.rpc(fn, { [REVIEW.idParam]: r.request.id, p_note: note || null });
+    const depositId = r.deposit?.id || r.request?.deposit_id;
+    if(!depositId) throw new Error("رقم التأمين غير موجود في الطلب");
+    const res = await supabase.rpc("mzad_approve_deposit", {
+      p_deposit_id: depositId,
+      p_approve: approve,
+      p_note: note || null
+    });
     if(res.error) throw res.error;
-    try{ await supabase.rpc("mzad_admin_log", { p_action: approve?"deposit_approve":"deposit_reject", p_target:r.request.id, p_details:{ note } }); }catch{}
-    closeSheet(false); toast(approve?"تم قبول التأمين":"تم رفض الإثبات", approve?"ok":""); await Promise.allSettled([loadQueue(), loadDash()]);
-  }catch(e){ toast("فشلت العملية: "+rpcErr(e),"bad"); }
+    closeSheet(false);
+    toast(approve?"تم قبول التأمين وتحديث حالته":"تم رفض التأمين", approve?"ok":"");
+    await Promise.allSettled([loadQueue(), loadDash()]);
+  }catch(e){
+    toast("فشلت العملية: "+rpcErr(e),"bad");
+  }
 }
 
 /* ===== المزادات ===== */
