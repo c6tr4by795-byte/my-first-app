@@ -413,6 +413,7 @@ document.addEventListener("pointerdown",async event=>{
   const btn=event.target.closest(".support-btn");
   if(!btn||activePress||!event.isPrimary||event.button!==0)return;
   event.preventDefault();
+  try{btn.setPointerCapture(event.pointerId);}catch(_){}
   const contest=window.__mzadCurrentContest;
   if(!contest?.id)return;
   const session=must(await supabase.auth.getSession());
