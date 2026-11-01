@@ -108,6 +108,28 @@ header{
   border-radius:999px;background:rgba(255,255,255,.17);border:1px solid rgba(255,255,255,.32)}
 .location-name{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:850;line-height:1.2;white-space:nowrap;color:#fff}
 
+/* نافذة المحافظات — النجف متاحة حالياً فقط */
+.gov-picker-overlay{position:fixed;inset:0;z-index:5000;display:none;align-items:flex-end;justify-content:center;background:rgba(20,14,48,.55);padding-top:24px}
+.gov-picker-overlay.is-open{display:flex;animation:govPickerFade .18s ease}
+.gov-picker-sheet{width:min(100%,520px);max-height:82dvh;overflow:auto;overscroll-behavior:contain;background:#fff;border-radius:26px 26px 0 0;padding:12px 16px calc(22px + var(--safe-bottom));transform:translateY(12px);animation:govPickerUp .22s ease forwards}
+@keyframes govPickerFade{from{opacity:0}to{opacity:1}}
+@keyframes govPickerUp{to{transform:translateY(0)}}
+.gov-picker-handle{width:40px;height:4px;border-radius:4px;background:#ddd8f8;margin:1px auto 13px}
+.gov-picker-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}
+.gov-picker-head h3{margin:0;font-size:17px;font-weight:950}
+.gov-picker-head p{margin:4px 0 0;font-size:11px;font-weight:700;color:var(--muted)}
+.gov-picker-close{width:36px;height:36px;border-radius:12px;background:var(--p-soft);color:var(--p-dark);font-size:21px;display:grid;place-items:center}
+.gov-picker-current{display:flex;align-items:center;gap:12px;width:100%;padding:14px;border-radius:18px;text-align:start;background:linear-gradient(145deg,#e8f6ef,#f4fbf7);border:1.5px solid #bfe5d2}
+.gov-picker-current .gov-pin{width:42px;height:42px;border-radius:14px;background:var(--ok);color:#fff;display:grid;place-items:center;flex:0 0 42px}
+.gov-picker-current strong{display:block;font-size:15px;font-weight:950}
+.gov-picker-current small{display:block;margin-top:3px;font-size:11px;font-weight:800;color:var(--ok)}
+.gov-picker-label{margin:16px 2px 8px;font-size:12px;font-weight:900;color:var(--muted)}
+.gov-picker-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.gov-picker-item{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:13px 11px;border-radius:14px;background:#fafafa;border:1.5px solid #eeeaf8;color:#8a8a91;font-size:13px;font-weight:850;cursor:not-allowed}
+.gov-picker-item em{font-style:normal;font-size:9px;font-weight:900;padding:3px 8px;border-radius:999px;background:#f0eef5;color:#85808f}
+body.gov-picker-open{overflow:hidden}
+
+
 .icon-btn{
   width:40px;height:36px;display:grid;place-items:center;
   border:1px solid rgba(255,255,255,.6);border-radius:12px;background:rgba(255,255,255,.9);color:var(--p);
@@ -2805,10 +2827,71 @@ function bindCardClicks(track){
    LOCATION + NOTIFICATIONS
 ================================ */
 
-$("locationBtn").addEventListener(
-  "click",
-  () => showToast("المنصة تعمل حالياً داخل النجف")
-);
+/* اختيار المحافظة: النجف وحدها متاحة، وباقي المحافظات للعرض فقط */
+(function initGovernoratePicker(){
+  const locationButton = $("locationBtn");
+  if(!locationButton) return;
+
+  const otherGovernorates = [
+    "بغداد","البصرة","نينوى","أربيل","السليمانية","دهوك","كركوك",
+    "الأنبار","صلاح الدين","ديالى","واسط","ميسان","ذي قار","المثنى",
+    "القادسية","بابل","كربلاء"
+  ];
+
+  let overlay = null;
+
+  function closePicker(){
+    if(!overlay) return;
+    overlay.classList.remove("is-open");
+    document.body.classList.remove("gov-picker-open");
+    setTimeout(()=>{ if(overlay && !overlay.classList.contains("is-open")) overlay.remove(); overlay=null; },200);
+  }
+
+  function openPicker(){
+    if(overlay) return;
+    overlay=document.createElement("div");
+    overlay.className="gov-picker-overlay";
+    overlay.innerHTML=`
+      <section class="gov-picker-sheet" role="dialog" aria-modal="true" aria-label="اختيار المحافظة">
+        <div class="gov-picker-handle"></div>
+        <div class="gov-picker-head">
+          <div><h3>اختر محافظتك</h3><p>الخدمة متاحة حالياً في محافظة النجف فقط</p></div>
+          <button class="gov-picker-close" type="button" aria-label="إغلاق">×</button>
+        </div>
+        <button class="gov-picker-current" type="button" data-current-governorate="najaf">
+          <span class="gov-pin" aria-hidden="true">⌖</span>
+          <span><strong>النجف</strong><small>متاحة الآن ✓</small></span>
+        </button>
+        <div class="gov-picker-label">باقي المحافظات</div>
+        <div class="gov-picker-grid">
+          ${otherGovernorates.map(name=>`<button class="gov-picker-item" type="button" disabled aria-disabled="true"><span>${name}</span><em>قريباً</em></button>`).join("")}
+        </div>
+      </section>`;
+
+    document.body.appendChild(overlay);
+    document.body.classList.add("gov-picker-open");
+    requestAnimationFrame(()=>overlay && overlay.classList.add("is-open"));
+
+    overlay.addEventListener("click",event=>{
+      if(event.target===overlay || event.target.closest(".gov-picker-close")){
+        closePicker();
+        return;
+      }
+      if(event.target.closest("[data-current-governorate]")){
+        closePicker();
+        showToast("أنت بمحافظة النجف");
+      }
+    });
+  }
+
+  locationButton.addEventListener("click",event=>{
+    event.preventDefault();
+    openPicker();
+  });
+  document.addEventListener("keydown",event=>{
+    if(event.key==="Escape" && overlay) closePicker();
+  });
+})();
 
 /* مركز إشعارات المستخدم — يعتمد على جدول mzad_notifications */
 const notificationButton = $("notificationBtn");
