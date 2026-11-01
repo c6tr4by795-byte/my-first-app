@@ -75,6 +75,16 @@ h1{margin:14px 2px 8px;font-size:23px;font-weight:950;letter-spacing:-.03em}
 .list{display:grid;gap:10px}
 .q{width:100%;text-align:start;padding:13px 14px;border-radius:20px;background:#fff;border:1px solid var(--edge);box-shadow:0 10px 24px -16px rgba(98,70,217,.3);display:block;transition:.2s}
 .q:active{transform:scale(.99)}
+/* طلبات الشراء: حذف بالسحب الأفقي فقط */
+.order-swipe-row{position:relative;overflow:hidden;border-radius:20px;isolation:isolate;background:#fff}
+.order-swipe-actions{position:absolute;inset-block:0;inset-inline-end:0;width:88px;display:flex;align-items:stretch;justify-content:center;padding:5px;background:#fff}
+.order-delete{width:100%;border:0;border-radius:15px;background:#fff0f1;color:#c52d45;font-size:12px;font-weight:950;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.order-delete svg{width:19px;height:19px}
+.order-swipe-card{position:relative;z-index:1;transition:transform .22s ease;will-change:transform;touch-action:pan-y}
+.order-swipe-row.is-open .order-swipe-card{transform:translateX(-88px)}
+.order-swipe-row .q{border-radius:20px}
+.order-swipe-row.is-open{box-shadow:0 7px 20px rgba(45,30,80,.09)}
+@media(prefers-reduced-motion:reduce){.order-swipe-card{transition:none}}
 .q-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .code{direction:ltr;font-size:12px;font-weight:950;letter-spacing:.05em;color:var(--pd);background:var(--ps);padding:4px 10px;border-radius:9px}
 .age{font-size:10.5px;font-weight:900;color:var(--muted)}.age.late{color:var(--bad)}
@@ -1379,9 +1389,11 @@ function renderDirectOrders(){
   if(!rows.length){$("orderList").innerHTML='<div class="empty">لا توجد طلبات بهذا الاختيار.</div>';return;}
   $("orderList").innerHTML=rows.map(o=>{
     const d=o.device_snapshot||{},name=[d.brand,d.model,d.storage,d.color].filter(Boolean).join(" ")||"جهاز";
-    return '<button class="q" type="button" data-order="'+esc(o.id)+'"><div class="q-top"><span class="code">'+esc(o.order_number)+'</span><span class="badge warn">'+esc(ORDER_LABELS[o.status]||o.status)+'</span></div>'+
+    return '<div class="order-swipe-row" data-swipe-row="'+esc(o.id)+'">'+
+      '<div class="order-swipe-actions"><button class="order-delete" type="button" data-delete-order="'+esc(o.id)+'" aria-label="حذف الطلب"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m4 4v6m6-6v6"/></svg><span>حذف</span></button></div>'+
+      '<button class="q order-swipe-card" type="button" data-order="'+esc(o.id)+'"><div class="q-top"><span class="code">'+esc(o.order_number)+'</span><span class="badge warn">'+esc(ORDER_LABELS[o.status]||o.status)+'</span></div>'+
       '<div class="q-name">'+esc(name)+'</div><div class="q-sub">المشتري: '+esc(o.buyer_name)+' · '+esc(o.buyer_phone)+'</div>'+
-      '<div class="q-bot"><strong>'+iqd(o.price_iqd)+'</strong><span class="q-sub">'+esc(fmtT(o.created_at))+'</span></div></button>';
+      '<div class="q-bot"><strong>'+iqd(o.price_iqd)+'</strong><span class="q-sub">'+esc(fmtT(o.created_at))+'</span></div></button></div>';
   }).join("");
 }
 async function loadDirectOrders(){
@@ -1412,17 +1424,78 @@ async function openDirectOrder(o){
   $("directOrderTimeline").innerHTML='<b>سجل الطلب</b>'+timeline;
 }
 async function saveDirectOrder(o){
-  const status=$("directOrderStatus").value,note=$("directOrderNote").value.trim()||null;
+  const status=$("directOrderStatus")?.value;
+  const note=$("directOrderNote")?.value.trim()||null;
+  if(!status){toast("حدد حالة الطلب أولاً","bad");return;}
   try{
-    const {data,error}=await supabase.from("mzad_orders").update({status,admin_note:note,handled_by:(await supabase.auth.getUser()).data.user.id}).eq("id",o.id).select("*").single();
+    const {data,error}=await supabase.rpc("mzad_admin_update_direct_order",{
+      p_order_id:o.id,p_status:status,p_note:note
+    });
     if(error)throw error;
-    try{await supabase.rpc("mzad_admin_log",{p_action:"direct_order_status",p_target:o.id,p_details:{order_number:o.order_number,status}});}catch{}
-    closeSheet(false);toast("تم تحديث الطلب","ok");await Promise.allSettled([loadDirectOrders(),loadDash()]);
-  }catch(e){toast("تعذر تحديث الطلب: "+rpcErr(e),"bad");}
+    closeSheet(false);
+    toast("تم تحديث الطلب وإشعار الطرفين","ok");
+    await Promise.allSettled([loadDirectOrders(),loadDash()]);
+  }catch(e){
+    console.error("DIRECT ORDER UPDATE:",e);
+    toast("تعذر تحديث الطلب: "+rpcErr(e),"bad");
+  }
+}
+async function deleteDirectOrder(id){
+  const o=S.orders.find(x=>x.id===id);
+  if(!o)return;
+  const ok=await confirmSheet({
+    title:"حذف طلب الشراء",
+    text:"سيُحذف الطلب وسجل تغييراته من لوحة الإدارة، وسيُعاد الإعلان إلى متاح فقط إذا لم تبقَ عليه طلبات نشطة أخرى. لا يمكن التراجع عن الحذف.",
+    ok:"حذف الطلب",danger:true
+  });
+  if(!ok)return;
+  try{
+    const {data,error}=await supabase.rpc("mzad_admin_delete_direct_order",{p_order_id:id});
+    if(error)throw error;
+    S.orders=S.orders.filter(x=>x.id!==id);
+    renderDirectOrders();
+    closeSheet(false);
+    toast("تم حذف طلب الشراء","ok");
+    await loadDash();
+  }catch(e){
+    console.error("DIRECT ORDER DELETE:",e);
+    toast("تعذر حذف الطلب: "+rpcErr(e),"bad");
+  }
 }
 $("orderFilters").addEventListener("click",e=>{const b=e.target.closest("[data-of]");if(!b)return;S.of=b.dataset.of;renderOrderFilters();renderDirectOrders();});
 $("orderSearch").addEventListener("input",e=>{S.os=e.target.value.trim().toLowerCase();renderDirectOrders();});
-$("orderList").addEventListener("click",e=>{const b=e.target.closest("[data-order]");if(b)openDirectOrder(S.orders.find(o=>o.id===b.dataset.order));});
+let orderSwipeStart=null,orderSwipeMoved=false;
+$("orderList").addEventListener("pointerdown",e=>{
+  const row=e.target.closest("[data-swipe-row]");
+  if(!row||e.target.closest("button[data-delete-order]"))return;
+  orderSwipeStart={id:row.dataset.swipeRow,x:e.clientX,y:e.clientY};
+  orderSwipeMoved=false;
+});
+$("orderList").addEventListener("pointerup",e=>{
+  if(!orderSwipeStart)return;
+  const row=$("orderList").querySelector('[data-swipe-row="'+CSS.escape(orderSwipeStart.id)+'"]');
+  const dx=e.clientX-orderSwipeStart.x,dy=e.clientY-orderSwipeStart.y;
+  if(row&&Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.25){
+    orderSwipeMoved=true;
+    if(dx<0){
+      $("orderList").querySelectorAll(".order-swipe-row.is-open").forEach(x=>x.classList.remove("is-open"));
+      row.classList.add("is-open");
+    }else row.classList.remove("is-open");
+  }
+  orderSwipeStart=null;
+});
+$("orderList").addEventListener("pointercancel",()=>{orderSwipeStart=null;});
+$("orderList").addEventListener("click",e=>{
+  const del=e.target.closest("[data-delete-order]");
+  if(del){e.preventDefault();e.stopPropagation();deleteDirectOrder(del.dataset.deleteOrder);return;}
+  const card=e.target.closest("[data-order]");
+  if(card){
+    const row=card.closest("[data-swipe-row]");
+    if(orderSwipeMoved){orderSwipeMoved=false;return;}
+    if(row?.classList.contains("is-open")){row.classList.remove("is-open");return;}
+    openDirectOrder(S.orders.find(o=>o.id===card.dataset.order));
+  }
+});
 
 /* ===== التبويبات ===== */
 function setTab(t){
