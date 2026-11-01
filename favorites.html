@@ -583,7 +583,7 @@ async function loadAuctionItem(id){
     storage:d.storage, color:d.color, battery_health:d.battery_health,
     price:Number(auction.current_price_iqd || auction.starting_price_iqd) || 0,
     ends_at:auction.ends_at, status:auction.status,
-    reserved:["reserved","pending_handover"].includes(String(auction.status||"").toLowerCase()), images:imgs
+    reserved:["reserved","pending_handover","pending","new","contacted","confirmed","inspection"].includes(String(auction.status||"").toLowerCase()), images:imgs
   };
 }
 
@@ -630,7 +630,7 @@ async function loadOne(id){
         return {id:String(a.id),kind:"auction",brand:modernDevice.data.brand,model:modernDevice.data.model,
           storage:modernDevice.data.storage,color:modernDevice.data.color,battery_health:modernDevice.data.battery_health,
           price:Number(a.current_price_iqd||a.starting_price_iqd)||0,ends_at:a.ends_at,status:a.status,
-          reserved:["reserved","pending_handover"].includes(String(a.status||"").toLowerCase()),images:imgs};
+          reserved:["reserved","pending_handover","pending","new","contacted","confirmed","inspection"].includes(String(a.status||"").toLowerCase()),images:imgs};
       }
 
       // الأجهزة الحديثة للبيع المباشر موجودة في mzad_devices وترتبط بإعلان في mzad_direct_sales.
@@ -653,7 +653,7 @@ async function loadOne(id){
         return {id:String(modernDevice.data.id),kind:"direct",brand:modernDevice.data.brand,model:modernDevice.data.model,
           storage:modernDevice.data.storage,color:modernDevice.data.color,battery_health:modernDevice.data.battery_health,
           price:Number(sale.display_price_iqd ?? sale.asking_price_iqd)||0,
-          status:sale.status,reserved:["reserved","pending_handover"].includes(String(sale.status||"").toLowerCase()),images:imgs};
+          status:sale.status,reserved:["reserved","pending_handover","pending","new","contacted","confirmed","inspection"].includes(String(sale.status||"").toLowerCase()),images:imgs};
       }
       return null;
     }
