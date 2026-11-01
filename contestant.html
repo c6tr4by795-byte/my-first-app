@@ -2,7 +2,7 @@
 :root{--p:#6246d9;--bg:#f8f7fc;--ink:#211d32;--muted:#777187;--line:#eae7f2;--ok:#16865b;--bad:#c64b5c}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Arabic",Tahoma,Arial,sans-serif;padding:env(safe-area-inset-top) 15px calc(24px + env(safe-area-inset-bottom));}
 main{max-width:520px;margin:auto}header{display:flex;align-items:center;gap:12px;padding:15px 0}header a{font-size:24px;color:var(--p)}h1{font-size:21px;margin:0}p{color:var(--muted);line-height:1.8}.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0}.field{display:block;margin:13px 0;font-weight:700;font-size:13px}input,select,textarea{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;background:white;font:inherit;margin-top:7px}.btn{display:block;width:100%;padding:14px;border:0;border-radius:14px;background:var(--p);color:#fff;font:inherit;font-weight:700;margin-top:12px}.btn:disabled{opacity:.5}.muted{color:var(--muted);font-size:12px}.error{color:var(--bad);white-space:pre-wrap}.item{padding:13px 0;border-bottom:1px solid var(--line)}.item:last-child{border:0}.row{display:flex;justify-content:space-between;gap:10px;align-items:center}.pill{padding:5px 10px;border-radius:20px;background:#f0edfc;color:var(--p);font-size:12px}
-</style></head><body><main><header><a href="contests.html">‹</a><h1>ملف المتسابق</h1></header><section class="card"><h2 id="name">جاري التحميل…</h2><p id="device"></p><div class="row"><span>الدعم في الجولة الحالية</span><b id="score">—</b></div><p class="muted">الدعم الحالي يُسجّل مرة واحدة لكل حساب في كل جولة، وتكدر تختار متسابقاً واحداً تدعمه.</p><button class="btn" id="support">ادعم هذا المتسابق</button><p id="msg" role="status"></p></section></main><script type="module">
+</style></head><body><main><header><a href="contests.html">‹</a><h1>ملف المتسابق</h1></header><section class="card"><h2 id="name">جاري التحميل…</h2><p id="device"></p><div class="row"><span>الدعم في الجولة الحالية</span><b id="score">—</b></div><p class="muted">اضغط باستمرار حتى يبقى دعمك محسوباً. من ترفع إصبعك ينتهي الدعم فوراً.</p><button class="btn" id="support" style="touch-action:none;user-select:none;-webkit-user-select:none">اضغط باستمرار للدعم</button><p id="msg" role="status"></p></section></main><script type="module">
 import {supabase} from "./js/supabase.js";
 const $=id=>document.getElementById(id),entry=new URLSearchParams(location.search).get("id");let detail;
 async function boot(){
@@ -10,6 +10,32 @@ async function boot(){
  const r=await supabase.rpc("mzad_get_contestant_detail",{p_entry_id:entry});if(r.error)throw r.error;detail=r.data;if(!detail)throw Error("المتسابق غير موجود");
  $("name").textContent=detail.name;$("device").textContent=[detail.device,detail.storage,detail.color].filter(Boolean).join(" · ");$("score").textContent=Number(detail.round_support||0).toLocaleString("en-US");
 }
-$("support").onclick=async()=>{if(!detail)return;const s=await supabase.auth.getSession();if(!s.data.session){location.href="index.html?login=1&returnTo="+encodeURIComponent(location.pathname+location.search);return;} $("support").disabled=true;try{const r=await supabase.rpc("mzad_cast_contest_support",{p_contest_id:detail.contest_id,p_entry_id:entry});if(r.error)throw r.error;$("msg").textContent="تم تسجيل دعمك.";await boot();}catch(e){$("msg").textContent=e.message||"تعذر الدعم";}finally{$("support").disabled=false;}};
+let holding=false,heartbeat=0,pressPointer=null,starting=false;
+const button=$("support");
+async function stopSupport(){
+ if(!holding&&!starting)return;
+ const wasHolding=holding;holding=false;starting=false;clearInterval(heartbeat);heartbeat=0;
+ if(wasHolding&&detail?.contest_id)await supabase.rpc("mzad_contest_support_stop",{p_contest_id:detail.contest_id});
+ button.textContent="اضغط باستمرار للدعم";button.style.background="";
+ if(!document.hidden)boot().catch(e=>$("msg").textContent=e.message||String(e));
+}
+button.addEventListener("pointerdown",async e=>{
+ if(!e.isPrimary||e.button!==0||holding||starting||!detail)return;
+ e.preventDefault();const s=await supabase.auth.getSession();
+ if(!s.data.session){location.href="index.html?login=1&returnTo="+encodeURIComponent(location.pathname+location.search);return;}
+ starting=true;pressPointer=e.pointerId;button.textContent="جارٍ بدء الدعم…";
+ try{
+  const r=await supabase.rpc("mzad_contest_support_start",{p_contest_id:detail.contest_id,p_entry_id:entry});
+  if(r.error)throw r.error;
+  if(!starting){await supabase.rpc("mzad_contest_support_stop",{p_contest_id:detail.contest_id});return;}
+  starting=false;holding=true;button.textContent="استمر بالضغط…";button.style.background="#16865b";
+  heartbeat=setInterval(async()=>{const h=await supabase.rpc("mzad_contest_support_heartbeat",{p_contest_id:detail.contest_id});if(h.error||h.data!==true){await stopSupport();$("msg").textContent=h.error?.message||"انتهت الجولة."; }},2500);
+ }catch(err){starting=false;button.textContent="اضغط باستمرار للدعم";$("msg").textContent=err.message||"تعذر بدء الدعم";}
+});
+async function release(e){if(e?.pointerId!==undefined&&pressPointer!==null&&e.pointerId!==pressPointer)return;pressPointer=null;await stopSupport();}
+button.addEventListener("pointerup",release);button.addEventListener("pointercancel",release);button.addEventListener("lostpointercapture",release);
+addEventListener("blur",()=>{if(holding||starting)release();});
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&(holding||starting))release();});
+
 boot().catch(e=>$("msg").textContent=e.message||String(e));
 </script></body></html>
