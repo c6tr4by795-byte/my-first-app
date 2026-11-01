@@ -1,32 +1,61 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>حجز مقعد | MZAD</title><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet"><style>
-:root{--p:#6246d9;--bg:#f8f7fc;--ink:#211d32;--muted:#777187;--line:#eae7f2;--ok:#16865b;--bad:#c64b5c}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Arabic",Tahoma,Arial,sans-serif;padding:env(safe-area-inset-top) 15px calc(24px + env(safe-area-inset-bottom));}
-main{max-width:520px;margin:auto}header{display:flex;align-items:center;gap:12px;padding:15px 0}header a{font-size:24px;color:var(--p)}h1{font-size:21px;margin:0}p{color:var(--muted);line-height:1.8}.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0}.field{display:block;margin:13px 0;font-weight:700;font-size:13px}input,select,textarea{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;background:white;font:inherit;margin-top:7px}.btn{display:block;width:100%;padding:14px;border:0;border-radius:14px;background:var(--p);color:#fff;font:inherit;font-weight:700;margin-top:12px}.btn:disabled{opacity:.5}.muted{color:var(--muted);font-size:12px}.error{color:var(--bad);white-space:pre-wrap}.item{padding:13px 0;border-bottom:1px solid var(--line)}.item:last-child{border:0}.row{display:flex;justify-content:space-between;gap:10px;align-items:center}.pill{padding:5px 10px;border-radius:20px;background:#f0edfc;color:var(--p);font-size:12px}
-</style></head><body><main><header><a href="contests.html">‹</a><h1>حجز مقعد بالمسابقة</h1></header><section class="card"><h2 id="title">جاري تحميل المسابقة…</h2><p id="desc"></p><label class="field">اختار جهازك المنشور للبيع المباشر<select id="device"><option value="">جاري تحميل أجهزتك…</option></select></label><p class="muted">لازم يكون الجهاز ملكك وإعلانه للبيع المباشر نشط. المزادات لا تدخل ضمن المسابقة.</p><button class="btn" id="join">تأكيد حجز المقعد</button><p id="msg"></p></section></main><script type="module">
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f8f7fc"><title>حجز مقعد | MZAD PHONE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--p:#6246d9;--ink:#211d32;--muted:#777187;--bg:#f8f7fc;--line:#eae7f2;--ok:#16865b;--bad:#c64b5c;--sb:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Arabic",Tahoma,Arial,sans-serif;padding:env(safe-area-inset-top) 16px calc(24px + var(--sb))}
+main{width:min(100%,520px);margin:auto}header{height:64px;display:flex;align-items:center;gap:12px}header a{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--line);color:var(--p);font-size:24px;text-decoration:none}h1{font-size:18px;margin:0;font-weight:700}
+.hero{margin-top:8px;padding:22px;border-radius:26px;background:linear-gradient(145deg,#6246d9,#4932b4);color:white}.eyebrow{font-size:12px;color:#ded7ff}.hero h2{font-size:23px;line-height:1.5;margin:8px 0}.hero p{margin:0;color:#eeeaff;font-size:13px;line-height:1.9}
+.card{margin-top:14px;padding:18px;border:1px solid var(--line);border-radius:22px;background:#fff}.card h3{font-size:16px;margin:0 0 8px}.desc{font-size:13px;line-height:1.9;color:var(--muted);margin:0}
+.steps{display:grid;gap:10px;margin-top:16px}.step{display:grid;grid-template-columns:32px 1fr;gap:10px;align-items:start}.num{width:30px;height:30px;border-radius:10px;background:#f0edfc;color:var(--p);display:grid;place-items:center;font-weight:700}.step b{display:block;font-size:13px}.step small{display:block;color:var(--muted);font-size:12px;line-height:1.7;margin-top:2px}
+.rounds{display:grid;gap:9px;margin-top:12px}.round{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border-radius:14px;background:#faf9fd;border:1px solid var(--line)}.round b{font-size:13px}.round span{font-size:12px;color:var(--muted)}
+.btn{width:100%;height:52px;margin-top:18px;border:0;border-radius:15px;background:var(--p);color:white;font:inherit;font-weight:700;font-size:15px}.btn:disabled{opacity:.55}.msg{min-height:24px;margin:12px 0 0;font-size:13px;line-height:1.8;color:var(--bad)}.msg.ok{color:var(--ok)}.note{margin-top:12px;padding:12px;border-radius:13px;background:#f3f0ff;color:#5140a0;font-size:12px;line-height:1.8}
+</style></head>
+<body><main>
+<header><a href="contests.html" aria-label="رجوع">‹</a><h1>حجز مقعد بالمسابقة</h1></header>
+<section class="hero"><div class="eyebrow">MZAD PHONE · COMPETITIONS</div><h2 id="title">جاري تحميل المسابقة…</h2><p id="short">نجهز تفاصيل المشاركة.</p></section>
+<section class="card"><h3>قبل ما تشارك</h3><p class="desc">المشاركة بسيطة: احجز مقعدك، وبعدها تگدر تتابع ترتيبك وتستقبل دعم الآخرين.</p>
+<div class="steps"><div class="step"><span class="num">1</span><div><b>احجز مقعدك</b><small>حجز واحد لكل حساب في المسابقة.</small></div></div><div class="step"><span class="num">2</span><div><b>تابع الجولات</b><small>التصفية، ثم نصف النهائي، ثم النهائي.</small></div></div><div class="step"><span class="num">3</span><div><b>نافس على الجائزة</b><small>المتأهلون يتحددون حسب ترتيب الدعم بكل جولة.</small></div></div></div>
+<div class="note">ما تحتاج تنشر جهاز، ولا تختار جهاز من السوق حتى تحجز مقعدك.</div></section>
+<section class="card"><h3>نظام الجولات</h3><div class="rounds" id="rounds"><div class="round"><b>جاري تحميل الجولات</b><span>—</span></div></div>
+<button class="btn" id="join">تأكيد حجز المقعد</button><p class="msg" id="msg" role="status"></p></section>
+</main>
+<script type="module">
 import {supabase} from "./js/supabase.js";
-const $=id=>document.getElementById(id),id=new URLSearchParams(location.search).get("id");let contest;
-const show=t=>{$("msg").textContent=t};
+const $=id=>document.getElementById(id),id=new URLSearchParams(location.search).get("id");
+let contest=null,joined=false;
+const roundNames=["التصفية","نصف النهائي","النهائي"];
+const say=(t,ok=false)=>{$("msg").textContent=t;$("msg").className="msg"+(ok?" ok":"");};
 async function boot(){
- const s=await supabase.auth.getSession();if(!s.data.session){location.href="index.html?login=1&returnTo="+encodeURIComponent(location.pathname+location.search);return;}
+ const session=await supabase.auth.getSession();
+ if(!session.data.session){location.href="index.html?login=1&returnTo="+encodeURIComponent(location.pathname+location.search);return;}
  if(!id)throw Error("رابط المسابقة غير مكتمل");
- const c=await supabase.from("mzad_contests").select("id,title_ar,short_description,status,starts_at,ends_at,max_entries").eq("id",id).maybeSingle();if(c.error)throw c.error;if(!c.data)throw Error("المسابقة غير موجودة");contest=c.data;
- $("title").textContent=contest.title_ar;$("desc").textContent=contest.short_description||"";
+ const c=await supabase.from("mzad_contests").select("id,title_ar,short_description,status,starts_at,ends_at,max_entries").eq("id",id).maybeSingle();
+ if(c.error)throw c.error;if(!c.data)throw Error("المسابقة غير موجودة");contest=c.data;
+ $("title").textContent=contest.title_ar;$("short").textContent=contest.short_description||"احجز مقعدك وشارك بالمنافسة.";
  if(!["active","scheduled"].includes(contest.status)||new Date(contest.ends_at)<=new Date())throw Error("الحجز غير متاح حالياً");
- const d=await supabase.from("mzad_devices").select("id,brand,model,storage").eq("owner_user_id",s.data.session.user.id).order("created_at",{ascending:false});
- if(d.error)throw d.error;
- const sales=await supabase.from("mzad_direct_sales").select("device_id").eq("seller_user_id",s.data.session.user.id).eq("status","active").is("deleted_at",null);
- if(sales.error)throw sales.error;
- const allowed=new Set((sales.data||[]).map(x=>x.device_id));
- const devices=(d.data||[]).filter(x=>allowed.has(x.id));
- $("device").innerHTML='<option value="">اختر الجهاز</option>'+devices.map(x=>'<option value="'+x.id+'">'+[x.brand,x.model,x.storage].filter(Boolean).join(" ")+'</option>').join("");
- if(!devices.length)show("ما عندك جهاز معتمد ومنشور للبيع المباشر حالياً.");
+ const [rounds,entry]=await Promise.all([
+  supabase.from("mzad_contest_rounds").select("round_no,starts_at,ends_at,qualifiers_count").eq("contest_id",id).order("round_no"),
+  supabase.from("mzad_contest_entries").select("id").eq("contest_id",id).eq("user_id",session.data.session.user.id).maybeSingle()
+ ]);
+ if(rounds.error)throw rounds.error;if(entry.error)throw entry.error;
+ joined=!!entry.data;
+ $("rounds").innerHTML=(rounds.data||[]).map(r=>'<div class="round"><b>'+roundNames[Number(r.round_no)-1]+'</b><span>'+(Number(r.round_no)===3?'فائز واحد':'يتأهل '+Number(r.qualifiers_count))+'</span></div>').join("")||'<div class="round"><b>الجولات</b><span>سيتم إعلانها</span></div>';
+ if(joined){$("join").textContent="أنت حاجز مقعدك بالفعل";$("join").disabled=true;say("مشاركتك مسجلة. تگدر تفتح ملفك من صفحة المسابقات.",true);}
 }
 $("join").onclick=async()=>{
- const device=$("device").value;if(!device){show("اختار جهازك أولاً.");return;}
- $("join").disabled=true;
- try{const r=await supabase.rpc("mzad_join_contest_with_device",{p_contest_id:id,p_device_id:device});if(r.error)throw r.error;show("تم حجز مقعدك بنجاح.");setTimeout(()=>location.href="contestant.html?id="+encodeURIComponent(r.data.entry_id),700);}
- catch(e){show(e.message||"تعذر الحجز.");}
- finally{$("join").disabled=false;}
+ if(!contest||joined)return;
+ $("join").disabled=true;$("join").textContent="جارٍ تثبيت المقعد…";
+ try{
+  const r=await supabase.rpc("mzad_join_contest",{p_contest_id:id,p_answer_text:null});
+  if(r.error)throw r.error;
+  say("تم حجز مقعدك بنجاح. نفتح ملف مشاركتك هسه.",true);
+  setTimeout(()=>location.href="contestant.html?id="+encodeURIComponent(r.data.entry_id),650);
+ }catch(e){say(e.message||"تعذر حجز المقعد.");$("join").disabled=false;$("join").textContent="تأكيد حجز المقعد";}
 };
-boot().catch(e=>show(e.message||String(e)));
+boot().catch(e=>say(e.message||String(e)));
 </script></body></html>
