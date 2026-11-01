@@ -11,7 +11,7 @@ async function boot(){
  if(!id)throw Error("رابط المسابقة غير مكتمل");
  const c=await supabase.from("mzad_contests").select("id,title_ar,short_description,status,starts_at,ends_at,max_entries").eq("id",id).maybeSingle();if(c.error)throw c.error;if(!c.data)throw Error("المسابقة غير موجودة");contest=c.data;
  $("title").textContent=contest.title_ar;$("desc").textContent=contest.short_description||"";
- if(!["active","scheduled"].includes(contest.status)||new Date(contest.starts_at)>new Date()||new Date(contest.ends_at)<=new Date())throw Error("الحجز غير متاح حالياً");
+ if(!["active","scheduled"].includes(contest.status)||new Date(contest.ends_at)<=new Date())throw Error("الحجز غير متاح حالياً");
  const d=await supabase.from("mzad_devices").select("id,brand,model,storage").eq("owner_user_id",s.data.session.user.id).order("created_at",{ascending:false});
  if(d.error)throw d.error;
  const sales=await supabase.from("mzad_direct_sales").select("device_id").eq("seller_user_id",s.data.session.user.id).eq("status","active").is("deleted_at",null);
