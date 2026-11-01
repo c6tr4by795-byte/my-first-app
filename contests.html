@@ -314,7 +314,7 @@ function countTo(el, to){
   const from = el._v || 0, t0 = performance.now(); el._v = to;
   (function f(t){ const k = Math.min(1, (t - t0) / 900), e = 1 - Math.pow(1 - k, 3); el.textContent = nf(Math.round(from + (to - from) * e)); if(k < 1) requestAnimationFrame(f); })(t0);
 }
-const emptyBoard = () => { const c = S.c, open = c && c.status === "open" && !(c.seatsMax && c.seatsTaken >= c.seatsMax); return '<div class="empty"><b>ماكو متسابقين لحد الآن</b>أول واحد يحجز مقعد راح يظهر هنا.' + (open ? `<a class="sp ej" href="contest-join.html${c.id ? "?id=" + encodeURIComponent(c.id) : ""}" style="display:inline-grid;margin-top:14px;height:44px;padding:0 28px;font-size:14.5px">احجز مقعدك</a>` : "") + '</div>'; };
+const emptyBoard = () => { const c = S.c, open = c && ["open","live"].includes(c.status) && !(c.seatsMax && c.seatsTaken >= c.seatsMax); return '<div class="empty"><b>ماكو متسابقين لحد الآن</b>كن أول شخص يحجز مقعده ويبدأ المنافسة.' + (open ? `<a class="sp ej" href="contest-join.html${c.id ? "?id=" + encodeURIComponent(c.id) : ""}" style="display:inline-grid;margin-top:14px;height:44px;padding:0 28px;font-size:14.5px">شارك بالمسابقة</a>` : "") + '</div>'; };
 const MAXROWS = 10;
 function renderBoard(){
   const list = S.board, box = $("boardBox");
