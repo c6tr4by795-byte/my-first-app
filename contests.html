@@ -449,7 +449,7 @@ addEventListener("blur",()=>{if(activePress)releasePointer();});
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&activePress)releasePointer();else if(!document.hidden)loadCompetition();});
 await loadCompetition();
 const refreshTimer=setInterval(()=>{if(!document.hidden&&!activePress)loadCompetition()},4000);
-addEventListener("pagehide",()=>{clearInterval(refreshTimer);if(activePress){const id=activePress.contestId;navigator.sendBeacon?.(supabase?.supabaseUrl||"", "");}});
+addEventListener("pagehide",()=>{clearInterval(refreshTimer);if(activePress){const id=activePress.contestId;supabase.rpc("mzad_contest_support_stop",{p_contest_id:id});}});
 
 </script>
 
