@@ -135,7 +135,7 @@ const money = n => new Intl.NumberFormat("en-US").format(n) + " د.ع";
 const params = new URLSearchParams(location.search);
 const id = params.get("id");
 const saleId = params.get("sale");
-const S = { dev:null, user:null, pay:"cash" };
+const S = { dev:null, user:null, profile:null, pay:"cash" };
 
 function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove("show"),2400)}
 const imgUrl = p => { const v=String(p||"").trim(); if(!v) return ""; if(/^https?:/i.test(v)&&!/device-images\//i.test(v)) return v;
@@ -172,11 +172,18 @@ function view(){
     <div><small>${esc(d.brand||"")}</small><h3>${esc(title)}</h3><div class="pills">${pills}</div></div>
   </div></section>
 
-  <section class="card"><h2><span></span>بياناتك</h2>
-    <label class="f">الاسم الكامل<input class="in" id="name" autocomplete="name" placeholder="مثال: أحمد علي"></label>
-    <label class="f">رقم الموبايل<input class="in" id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="07XXXXXXXXX" dir="ltr" style="text-align:right"></label>
-    <label class="f">العنوان<input class="in" id="addr" autocomplete="street-address" placeholder="المحافظة - المنطقة - أقرب نقطة دالة"></label>
-    <label class="f" style="margin:0">ملاحظات (اختياري)<textarea class="in" id="notes" placeholder="مثلاً: أفضل وقت للتواصل"></textarea></label>
+  <section class="card"><h2><span></span>بيانات حسابك</h2>
+    <div class="row"><span>الاسم</span><strong id="buyerName" style="color:var(--ink)">—</strong></div>
+    <div class="row"><span>رقم هاتفك</span><strong id="buyerPhone" dir="ltr" style="color:var(--ink)">—</strong></div>
+    <p style="margin:8px 0 0;color:var(--muted);font-size:11px;line-height:1.8;font-weight:700">راح نستخدم الاسم ورقم الهاتف المسجلين بملفك الشخصي لإرسال طلب الشراء، بدون ما تحتاج تكتبهن من جديد.</p>
+    <label class="f" style="margin:12px 0 0">ملاحظة (اختياري)<textarea class="in" id="notes" maxlength="500" placeholder="أي تفاصيل تحب توصلها لفريق المنصة"></textarea></label>
+  </section>
+  <section class="card"><h2><span></span>تواصل ويا المنصة</h2>
+    <p style="margin:0 0 10px;color:var(--muted);font-size:12px;line-height:1.8;font-weight:700">للاستفسار عن طلبك تواصل ويانه مباشرة:</p>
+    <a href="tel:07838003991" dir="ltr" style="display:flex;align-items:center;justify-content:space-between;padding:13px;border-radius:14px;background:var(--soft);border:1px solid var(--edge);color:var(--pd);text-decoration:none">
+      <strong style="font-size:17px;letter-spacing:.04em">07838003991</strong><span dir="rtl" style="font-size:11px;font-weight:900">اتصال بالمنصة</span>
+    </a>
+    <a href="https://wa.me/9647838003991" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:9px;padding:10px;border-radius:12px;border:1px solid var(--edge);color:var(--pd);font-size:12px;font-weight:900;text-decoration:none">مراسلة المنصة عبر واتساب</a>
   </section>
 
   <section class="card"><h2><span></span>طريقة الدفع</h2>
@@ -210,14 +217,15 @@ function view(){
   $("barTotal").textContent=money(d.price);
   $("bar").hidden=false;
   $("pay").addEventListener("click",e=>{const b=e.target.closest("[data-p]");if(!b)return;S.pay=b.dataset.p;$("pay").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b))});
+  $("buyerName").textContent=S.profile.name;
+  $("buyerPhone").textContent=S.profile.phone;
   document.querySelectorAll(".in").forEach(i=>i.addEventListener("input",()=>i.classList.remove("bad")));
 }
 
 async function submit(){
-  const name=$("name").value.trim(), phone=$("phone").value.replace(/\s/g,""), addr=$("addr").value.trim();
-  let bad=null;
-  if(name.length<3) bad="name"; else if(!/^(07\d{9}|\+?9647\d{9})$/.test(phone)) bad="phone"; else if(addr.length<5) bad="addr";
-  if(bad){ $(bad).classList.add("bad"); $(bad).focus(); toast(bad==="phone"?"اكتب رقم موبايل صحيح مثل 07XXXXXXXXX":"عبّي هذا الحقل"); return; }
+  const name=S.profile?.name||"", phone=String(S.profile?.phone||"").replace(/\s/g,"");
+  if(name.length<3){toast("أضف اسمك الكامل إلى ملفك الشخصي أولاً");return;}
+  if(!/^(07\d{9}|\+?9647\d{9})$/.test(phone)){toast("أضف رقم هاتف صحيح إلى ملفك الشخصي أولاً");return;}
   if(!$("agree").checked){ toast("لازم توافق على الشروط حتى تكمل"); return; }
 
   const btn=$("go"); btn.disabled=true; btn.textContent="جاري الإرسال…";
@@ -235,7 +243,7 @@ async function submit(){
     }
     const { data:order, error } = await supabase.from("mzad_orders").insert({
       direct_sale_id:S.dev.saleId, device_id:S.dev.id, buyer_user_id:S.user, seller_user_id:S.dev.sellerUserId,
-      buyer_name:name, buyer_phone:phone, address:addr, notes:$("notes").value.trim()||null,
+      buyer_name:name, buyer_phone:phone, address:(S.profile.address||S.profile.city||"يتم تحديده مع المنصة"), notes:$("notes").value.trim()||null,
       payment_method:S.pay, price_iqd:S.dev.price,
       device_snapshot:{brand:S.dev.brand,model:S.dev.model,storage:S.dev.storage,color:S.dev.color,battery_health:S.dev.battery},
       status:"pending"
@@ -269,7 +277,17 @@ $("go").addEventListener("click",submit);
 
 (async()=>{
   if(!id || !saleId){ $("main").innerHTML='<section class="card done"><h2>رابط الشراء غير صحيح</h2><p>ارجع إلى تفاصيل الجهاز واضغط شراء من جديد.</p><a class="btn2" href="market.html">رجوع للسوق</a></section>'; return; }
-  try{ const { data } = await supabase.auth.getUser(); S.user=data?.user?.id||null; }catch{}
+  try{
+    const { data } = await supabase.auth.getUser();
+    const user=data?.user||null, meta=user?.user_metadata||{};
+    S.user=user?.id||null;
+    S.profile={
+      name:String(meta.full_name||meta.name||"").trim(),
+      phone:String(meta.phone||"").trim(),
+      address:String(meta.address||meta.full_address||"").trim(),
+      city:String(meta.city||meta.governorate||"").trim()
+    };
+  }catch{}
   try{ if(!S.user) throw new Error("يجب تسجيل الدخول"); S.dev=await loadDevice(); if(!(S.dev.price>0) || !S.dev.sellerUserId || S.dev.sellerUserId===S.user) throw new Error("غير متاح"); view(); }
   catch(e){ console.error("CHECKOUT LOAD:",e); $("main").innerHTML='<section class="card done"><h2>الجهاز غير متاح للشراء</h2><p>قد يكون محجوزاً أو انتهى عرضه أو أن رابط الشراء غير صحيح.</p><a class="btn2" href="market.html">رجوع للسوق</a></section>'; }
 })();
