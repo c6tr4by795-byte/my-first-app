@@ -252,9 +252,9 @@ if("IntersectionObserver" in window){
 }
 
 function renderHero(){
-  const c = S.c, none = !c || c.status === "none", live = !none && c.status === "live";
+  const c = S.c, none = !c || c.status === "none", live = !none && c.status === "live", ended = !none && c.status === "ended";
   $("hSt").className = "st" + (none ? " idle" : "");
-  $("hStT").textContent = none ? "غير متاحة" : live ? `جارية · الجولة ${c.round || 1} من 3` : "الحجز مفتوح";
+  $("hStT").textContent = none ? "غير متاحة" : ended ? "انتهت المسابقة" : live ? `جارية · الجولة ${c.round || 1} من 3` : "الحجز مفتوح";
   $("hTitle").textContent = none ? "ماكو مسابقة حالياً" : (c.title || "—");
   $("hPrize").textContent = $("dPrize").textContent = none ? "—" : (c.prize || "—");
 
@@ -284,7 +284,7 @@ function cta(){
     $("qMine").hidden = !me.hasSeat;
   const q = c && c.id ? "?id=" + encodeURIComponent(c.id) : "";
   $("allLink").href = "contest-room.html" + q; $("qMine").href = "contestant.html";
-  if(!c || c.status === "none") return set("لا توجد مسابقة حالياً", "#", true, "المسابقات الجديدة راح تظهر هنا عند نشرها من الإدارة.");
+  if(!c || c.status === "none") return set("لا توجد مسابقة حالياً", "#", true, "المسابقات الجديدة راح تظهر هنا عند نشرها من الإدارة.");\n  if(c.status === "ended") return set("انتهت المسابقة — شاهد النتائج", "contest-room.html" + q, false, "انتهى وقت المسابقة. تگدر تراجع الترتيب والنتائج.");
   if(me.hasSeat) return set("ادخل غرفتك", "contest-room.html" + q, false, "تابع ترتيبك، وشاهد بقية المتسابقين وادعم واحداً منهم.");
   if(c.seatsMax && c.seatsTaken >= c.seatsMax) return set("المقاعد مكتملة — شاهد المتسابقين", "#board", false, "اكتملت المقاعد، لكن تگدر تشاهد المتسابقين وتدعم واحداً منهم.");
   
@@ -294,7 +294,7 @@ function cta(){
 /* الجولات: مسار عمودي، كل جولة وياها كم يتأهل */
 const CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 function renderRounds(){
-  const c = S.c, r = c.status === "live" ? Number(c.round || 1) : 0, q = c.qualifiers || [5, 3, 1];
+  const c = S.c, r = c.status === "ended" ? 4 : c.status === "live" ? Number(c.round || 1) : 0, q = c.qualifiers || [5, 3, 1];
   $("rds").innerHTML = [1, 2, 3].map(n => {
     const cls = r && n < r ? "done" : r === n ? "now" : "";
     const names = ["التصفية","نصف النهائي","النهائي"];
