@@ -135,7 +135,7 @@ a{color:inherit;text-decoration:none}
 .br.out{opacity:.6}
 .br.out .tr i{background:#b9aef0}
 .dl{font-size:12px;font-weight:700;color:var(--faint)}
-.sp{flex:0 0 auto;display:grid;place-items:center;height:34px;padding:0 16px;border-radius:99px;background:var(--p);color:#fff;font-size:13px;font-weight:700}.support-btn{font-family:inherit;cursor:pointer}.support-btn:disabled{opacity:.5}.profile-link{display:inline-block;margin-top:6px;color:var(--p-ink);font-size:12px;font-weight:700}
+.sp{flex:0 0 auto;display:grid;place-items:center;height:34px;padding:0 16px;border-radius:99px;background:var(--p);color:#fff;font-size:13px;font-weight:700}.support-btn{font-family:inherit;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none}.support-btn.holding{background:#16865b!important;color:#fff!important;transform:scale(.97)}.support-btn:disabled{opacity:.5}.profile-link{display:inline-block;margin-top:6px;color:var(--p-ink);font-size:12px;font-weight:700}
 .br.first .sp{background:var(--yel);color:var(--navy)}
 .dl.up{color:var(--ok)}.dl.dn{color:var(--bad)}
 .cut{display:flex;align-items:center;gap:10px;margin:2px 16px;font-size:11.5px;font-weight:700;color:var(--p-ink)}
@@ -371,19 +371,6 @@ window.Contests = {
 Contests.setContest({ status:"none" });
 renderBoard();
 
-/* معاينة الشكل فقط — احذف قبل الإنتاج */
-if(new URLSearchParams(location.search).has("demo")){
-  Contests.setContest({ id:1, title:"مسابقة أفضل جهاز بالنجف", prize:"iPhone 16 Pro Max", status:"live", round:2, roundEndsAt:Date.now() + 1000*60*47, seatsTaken:14, seatsMax:20 });
-  Contests.setMe({ hasDevice:true, hasSeat:false });
-  Contests.setBoard([
-    { id:1, name:"علي النجفي", device:"iPhone 15 Pro", support:4210, delta:2 },
-    { id:2, name:"حسين كاظم", device:"Galaxy S24 Ultra", support:3655, delta:-1 },
-    { id:3, name:"زينب الموسوي", device:"iPhone 14", support:2980 },
-    { id:4, name:"مرتضى الحسيني", device:"Pixel 8", support:1995, delta:1 },
-    { id:5, name:"سجاد العبادي", device:"Xiaomi 14", support:1410 }
-  ]);
-  Contests.setWinners([{ name:"كرار الساعدي", prize:"iPhone 15" },{ name:"نور الهدى", prize:"Galaxy S23" }]);
-}
 </script>
 
 <script type="module">
@@ -410,29 +397,60 @@ async function loadCompetition(){
     $("bHint").textContent="تعذر جلب بيانات المسابقة. حدّث الصفحة.";
   }
 }
-document.addEventListener("click",async event=>{
+let activePress=null;
+let heartbeatTimer=0;
+let pressStarting=false;
+async function stopPress(reason="release"){
+  const current=activePress;
+  if(!current)return;
+  activePress=null;
+  clearInterval(heartbeatTimer);heartbeatTimer=0;
+  try{await supabase.rpc("mzad_contest_support_stop",{p_contest_id:current.contestId});}catch(e){console.warn("support stop",e);}
+  if(current.button?.isConnected){current.button.classList.remove("holding");current.button.textContent="ادعم";current.button.setAttribute("aria-pressed","false");}
+  if(reason!=="pagehide"&&!document.hidden) await loadCompetition();
+}
+document.addEventListener("pointerdown",async event=>{
   const btn=event.target.closest(".support-btn");
-  if(!btn)return;
-  const session=must(await supabase.auth.getSession());
-  if(!session.session){
-    location.href="index.html?login=1&returnTo="+encodeURIComponent("contests.html#board");
-    return;
-  }
+  if(!btn||activePress||!event.isPrimary||event.button!==0)return;
+  event.preventDefault();
   const contest=window.__mzadCurrentContest;
-  if(!contest?.id){alert("المسابقة غير متاحة حالياً");return;}
-  const label=btn.textContent;btn.disabled=true;btn.textContent="جارٍ الدعم";
+  if(!contest?.id)return;
+  const session=must(await supabase.auth.getSession());
+  if(!session.session){location.href="index.html?login=1&returnTo="+encodeURIComponent("contests.html#board");return;}
+  activePress={button:btn,contestId:contest.id,pointerId:event.pointerId,started:false,released:false};
+  const current=activePress;
+  btn.classList.add("holding");btn.textContent="استمر بالضغط…";btn.setAttribute("aria-pressed","true");
   try{
-    const result=await supabase.rpc("mzad_cast_contest_support",{p_contest_id:contest.id,p_entry_id:btn.dataset.entry});
+    const result=await supabase.rpc("mzad_contest_support_start",{p_contest_id:contest.id,p_entry_id:btn.dataset.entry});
     if(result.error)throw result.error;
-    btn.textContent="تم الدعم";
-    await loadCompetition();
-  }catch(error){alert(error.message||"تعذر تسجيل الدعم");btn.textContent=label;btn.disabled=false;}
+    if(activePress!==current||current.released){await supabase.rpc("mzad_contest_support_stop",{p_contest_id:contest.id});return;}
+    current.started=true;btn.textContent="إصبعك يضيف دعماً…";
+    heartbeatTimer=setInterval(async()=>{
+      if(activePress!==current)return;
+      const h=await supabase.rpc("mzad_contest_support_heartbeat",{p_contest_id:contest.id});
+      if(h.error||h.data!==true){await stopPress("expired");alert(h.error?.message||"انتهى وقت الجولة.");}
+    },2500);
+  }catch(error){
+    if(activePress===current){activePress=null;btn.classList.remove("holding");btn.textContent="ادعم";btn.setAttribute("aria-pressed","false");}
+    alert(error.message||"تعذر بدء الدعم");
+  }
 });
-
+async function releasePointer(event){
+  if(!activePress)return;
+  if(event?.pointerId!==undefined&&event.pointerId!==activePress.pointerId)return;
+  const current=activePress;current.released=true;
+  if(current.started)await stopPress("release");
+  else {activePress=null;current.button?.classList.remove("holding");current.button&&(current.button.textContent="ادعم");}
+}
+document.addEventListener("pointerup",releasePointer);
+document.addEventListener("pointercancel",releasePointer);
+document.addEventListener("lostpointercapture",releasePointer,true);
+addEventListener("blur",()=>{if(activePress)releasePointer();});
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&activePress)releasePointer();else if(!document.hidden)loadCompetition();});
 await loadCompetition();
-const refreshTimer=setInterval(()=>{if(!document.hidden)loadCompetition()},20000);
-document.addEventListener("visibilitychange",()=>{if(!document.hidden)loadCompetition()});
-addEventListener("pagehide",()=>clearInterval(refreshTimer));
+const refreshTimer=setInterval(()=>{if(!document.hidden&&!activePress)loadCompetition()},4000);
+addEventListener("pagehide",()=>{clearInterval(refreshTimer);if(activePress){const id=activePress.contestId;navigator.sendBeacon?.(supabase?.supabaseUrl||"", "");}});
+
 </script>
 
 </body>
