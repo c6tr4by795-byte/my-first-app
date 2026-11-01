@@ -287,8 +287,8 @@ function cta(){
   if(!c || c.status === "none") return set("لا توجد مسابقة حالياً", "#", true, "المسابقات الجديدة راح تظهر هنا عند نشرها من الإدارة.");
   if(me.hasSeat) return set("ادخل غرفتك", "contest-room.html" + q, false, "تابع ترتيبك، وشاهد بقية المتسابقين وادعم واحداً منهم.");
   if(c.seatsMax && c.seatsTaken >= c.seatsMax) return set("المقاعد مكتملة — شاهد المتسابقين", "#board", false, "اكتملت المقاعد، لكن تگدر تشاهد المتسابقين وتدعم واحداً منهم.");
-  if(me.hasDevice === false) return set("انشر جهاز حتى تحجز", "sell.html", false, "حتى تشارك لازم يكون عندك جهاز منشور للبيع المباشر.");
-  return set("شارك بالمسابقة — احجز مقعدك", "contest-join.html" + q, false, "اختار جهازك المنشور للبيع المباشر وثبّت مشاركتك. وتكدر تشاهد المتسابقين من القائمة أدناه.");
+  
+  return set("شارك بالمسابقة — احجز مقعدك", "contest-join.html" + q, false, "احجز مقعدك مباشرة، ما تحتاج تنشر جهاز حتى تشارك.");
 }
 
 /* الجولات: مسار عمودي، كل جولة وياها كم يتأهل */
@@ -297,9 +297,11 @@ function renderRounds(){
   const c = S.c, r = c.status === "live" ? Number(c.round || 1) : 0, q = c.qualifiers || [5, 3, 1];
   $("rds").innerHTML = [1, 2, 3].map(n => {
     const cls = r && n < r ? "done" : r === n ? "now" : "";
-    const sub = n === 3 ? "الأعلى دعماً يفوز بالجائزة" : "الأعلى دعماً يكمل";
-    const cnt = n === 3 ? 1 : q[n - 1];
-    return `<div class="rd ${cls}"><span class="d">${cls === "done" ? CHECK : n}</span><div><b>الجولة ${n}<span class="tag">الآن</span></b><small>${sub}</small></div><div class="k"><strong class="num">${cnt}</strong><span>${n === 3 ? "فائز" : "يتأهلون"}</span></div></div>`;
+    const names = ["التصفية","نصف النهائي","النهائي"];
+    const subs = ["كل المشاركين يتنافسون على المقاعد الخمسة الأولى","أفضل 5 يتنافسون، وأعلى 3 ينتقلون للنهائي","الثلاثة المتأهلون يتنافسون على الجائزة الكبرى"];
+    const cnt = n === 3 ? 1 : Number(q[n - 1] || (n === 1 ? 5 : 3));
+    const state = cls === "done" ? "انتهت" : cls === "now" ? "جارية الآن" : (r === 0 && n === 1 ? "تبدأ أولاً" : "قادمة");
+    return `<div class="rd ${cls}"><span class="d">${cls === "done" ? CHECK : n}</span><div><b>${names[n-1]}<span class="tag">الآن</span></b><small>${subs[n-1]} · ${state}</small></div><div class="k"><strong class="num">${cnt}</strong><span>${n === 3 ? "فائز" : "يتأهلون"}</span></div></div>`;
   }).join("");
 }
 
