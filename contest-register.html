@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>حجز مقعد | MZAD PHONE</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--b:#8E3B46;--i:#F5E9DA;--line:rgba(142,59,70,.16);--soft:rgba(142,59,70,.08);--mute:rgba(142,59,70,.65);--ob:rgba(245,233,218,.7);--obl:rgba(245,233,218,.22)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--i);color:var(--b);font-family:'Tajawal',system-ui,sans-serif}
+body{display:flex;justify-content:center}
+.app{width:100%;max-width:480px;min-height:100vh;padding-bottom:calc(110px + env(safe-area-inset-bottom,0px))}
+svg.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.hero{background-color:var(--b);color:var(--i);border-radius:0 0 32px 32px;padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 28px;
+  }
+.bar{display:flex;align-items:center;justify-content:space-between}
+.bar h1{font-size:18px;font-weight:800}
+.ib{width:42px;height:42px;border-radius:14px;border:1px solid var(--obl);background:var(--b);color:var(--i);display:grid;place-items:center;text-decoration:none}
+.hero h2{font-size:30px;font-weight:800;margin-top:22px;line-height:1.25}
+.hero p{font-size:14.5px;color:var(--ob);margin-top:8px}
+
+.legend{display:flex;gap:16px;padding:22px 22px 6px;font-size:13px;color:var(--mute)}
+.legend span{display:flex;align-items:center;gap:6px}
+.dot{width:14px;height:14px;border-radius:5px;border:1.5px solid var(--b)}
+.dot.sel{background:var(--b)}
+.dot.tk{background:var(--soft);border-color:var(--line)}
+
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:10px 20px}
+.seat{aspect-ratio:1;border-radius:18px;border:1.5px solid var(--b);background:transparent;color:var(--b);
+  font-family:inherit;font-size:18px;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;
+  transition:transform .15s,background .15s,color .15s}
+.seat svg.ic{width:18px;height:18px;stroke-width:1.5}
+.seat:active{transform:scale(.94)}
+.seat.sel{background:var(--b);color:var(--i)}
+.seat:disabled{background:var(--soft);border-color:var(--line);color:var(--mute);cursor:not-allowed;font-weight:500}
+.seat:focus-visible{outline:2px solid var(--b);outline-offset:3px}
+
+.sum{margin:12px 20px 0;border:1px solid var(--line);border-radius:20px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.sum span{font-size:13.5px;color:var(--mute)}
+.sum b{font-size:18px}
+
+.cta{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:center;padding:14px 20px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--i) 70%,rgba(245,233,218,0))}
+.cta button,.ok a{width:100%;max-width:440px;height:56px;border-radius:18px;background:var(--b);color:var(--i);border:0;font-family:inherit;font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;text-decoration:none;transition:transform .15s,opacity .15s}
+.cta button:active,.ok a:active{transform:scale(.97)}
+.cta button:disabled{opacity:.35;cursor:not-allowed}
+
+.ok{display:none;position:fixed;inset:0;background:var(--i);flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center}
+.ok.show{display:flex}
+.badge{width:96px;height:96px;border-radius:50%;background:var(--b);color:var(--i);display:grid;place-items:center;position:relative}
+.badge svg{width:44px;height:44px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:40;stroke-dashoffset:40}
+.ok.show .badge svg{animation:draw .6s .15s ease forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.ok h2{font-size:26px;font-weight:800;margin-top:10px}
+.ok p{color:var(--mute);font-size:15px;line-height:1.7}
+.ok a{margin-top:18px}
+@media (prefers-reduced-motion:reduce){.ok.show .badge svg{animation:none;stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hero">
+    <div class="bar">
+      <a class="ib" href="contests.html" aria-label="رجوع"><svg class="ic" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></a>
+      <h1>حجز مقعد</h1>
+      <span style="width:42px"></span>
+    </div>
+    <h2>اختار مقعدك</h2>
+    <p>مقعد واحد لكل متسابق، وما يتغير بعد التأكيد.</p>
+  </header>
+
+  <div class="legend">
+    <span><i class="dot"></i>متاح</span>
+    <span><i class="dot sel"></i>مختار</span>
+    <span><i class="dot tk"></i>محجوز</span>
+  </div>
+
+  <main class="grid" id="grid"></main>
+
+  <div class="sum"><span>مقعدك</span><b id="pick">لم تختار بعد</b></div>
+
+  <div class="cta"><button id="go" disabled>تأكيد الحجز</button></div>
+</div>
+
+<section class="ok" id="ok" role="status">
+  <div class="badge"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+  <h2>تم حجز مقعدك</h2>
+  <p id="okTxt"></p>
+  <a href="contests.html">رجوع للمسابقة</a>
+</section>
+
+<script>
+/* بيانات تجريبية: المقاعد المحجوزة. استبدلها لاحقاً ببيانات Supabase */
+const TOTAL = 16, taken = [1,2,3,4,5,6,7,9,12];
+let chosen = null;
+const grid = document.getElementById('grid'), go = document.getElementById('go'), pick = document.getElementById('pick');
+
+for(let n=1;n<=TOTAL;n++){
+  const b = document.createElement('button');
+  b.className = 'seat';
+  b.textContent = n;
+  b.setAttribute('aria-label','مقعد '+n);
+  if(taken.includes(n)) b.disabled = true;
+  b.onclick = () => {
+    chosen = n;
+    grid.querySelectorAll('.seat').forEach(s => s.classList.remove('sel'));
+    b.classList.add('sel');
+    pick.textContent = 'مقعد رقم ' + n;
+    go.disabled = false;
+  };
+  grid.appendChild(b);
+}
+
+go.onclick = () => {
+  /* هنا تحفظ الحجز بقاعدة البيانات لاحقاً */
+  document.getElementById('okTxt').textContent = 'مقعدك رقم ' + chosen + '. تقدر تشوف بروفايلك بسجل المتسابقين.';
+  document.getElementById('ok').classList.add('show');
+};
+</script>
+</body>
+</html>
