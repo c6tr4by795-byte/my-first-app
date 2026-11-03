@@ -6,108 +6,332 @@
 <title>المسابقات | MZAD PHONE</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--b:#8E3B46;--i:#F5E9DA;--line:rgba(142,59,70,.16);--soft:rgba(142,59,70,.08);--mute:rgba(142,59,70,.65);--ob:rgba(245,233,218,.7);--obl:rgba(245,233,218,.22)}
+:root{--b:#8E3B46;--i:#F5E9DA;--line:rgba(142,59,70,.18);--soft:rgba(142,59,70,.08);--mute:rgba(142,59,70,.66);--ob:rgba(245,233,218,.74);--chip:rgba(245,233,218,.13)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
 html,body{background:var(--i);color:var(--b);font-family:'Tajawal',system-ui,sans-serif}
 body{display:flex;justify-content:center}
-.app{width:100%;max-width:480px;min-height:100vh;padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
-svg.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--b);outline-offset:3px}
+svg.ic{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.app{width:100%;max-width:480px;min-height:100vh;padding:0 18px calc(32px + env(safe-area-inset-bottom,0px))}
 
-.hero{background-color:var(--b);color:var(--i);border-radius:0 0 32px 32px;padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 24px;
-  }
-.bar{display:flex;align-items:center;justify-content:space-between}
-.bar h1{font-size:20px;font-weight:800}
-.ib{width:42px;height:42px;border-radius:14px;border:1px solid var(--obl);background:var(--b);color:var(--i);display:grid;place-items:center;text-decoration:none;cursor:pointer}
+/* هيدر صغير */
+.top{height:56px;margin-top:env(safe-area-inset-top,0px);display:flex;align-items:center;justify-content:space-between}
+.top h1{font-size:19px;font-weight:800}
+.plain{width:44px;height:44px;display:grid;place-items:center;color:var(--b);text-decoration:none;margin-inline:-10px}
 
-.now{margin-top:22px;border:1px solid var(--obl);border-radius:24px;padding:18px;background:var(--b)}
-.now .tag{font-size:13px;color:var(--ob)}
-.now h2{font-size:24px;font-weight:800;margin-top:4px}
-.meta{display:grid;grid-template-columns:repeat(3,1fr);margin-top:16px;border-top:1px solid var(--obl);padding-top:14px}
-.meta div{text-align:center}
-.meta div+div{border-inline-start:1px solid var(--obl)}
-.meta b{display:block;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
-.meta span{font-size:12px;color:var(--ob)}
-.btns{display:grid;grid-template-columns:1.4fr 1fr;gap:10px;margin-top:16px}
-.btn{height:52px;border-radius:16px;font-family:inherit;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;cursor:pointer;transition:transform .15s}
+/* بطاقة المسابقة */
+.stage{background:var(--b);color:var(--i);border-radius:28px;padding:18px}
+.r1{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--ob)}
+.pill{display:flex;align-items:center;gap:9px}
+.dot{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--i);position:relative}
+.live .dot{background:var(--i)}
+.live .dot::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1.5px solid var(--i);animation:ping 1.7s ease-out infinite}
+@keyframes ping{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.5);opacity:0}}
+.stage h2{font-size:19px;font-weight:800;margin-top:12px;line-height:1.35}
+.tm{display:flex;align-items:baseline;gap:10px;margin-top:8px}
+.tm b{font-size:44px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.tm span{font-size:13px;color:var(--ob)}
+.facts{display:flex;gap:8px;margin-top:14px}
+.facts div{flex:1;min-width:0;background:var(--chip);border-radius:16px;padding:10px 14px}
+.facts small{display:block;font-size:11.5px;color:var(--ob)}
+.facts b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* الأزرار خارج البطاقة */
+.acts{display:grid;grid-template-columns:1.5fr 1fr;gap:10px;margin-top:12px}
+.acts.one{grid-template-columns:1fr}
+.btn{height:54px;border-radius:20px;border:0;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:16px;font-weight:800;transition:transform .15s}
 .btn:active{transform:scale(.97)}
-.btn.fill{background:var(--i);color:var(--b);border:1.5px solid var(--i)}
-.btn.line{background:transparent;color:var(--i);border:1.5px solid var(--i)}
-.btn:focus-visible{outline:2px solid var(--i);outline-offset:3px}
+.btn.fill{background:var(--b);color:var(--i)}
+.btn.soft{background:var(--soft);color:var(--b)}
 
-.prize{margin:20px 20px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.pz{border:1px solid var(--line);border-radius:20px;padding:14px;display:flex;align-items:center;gap:12px}
-.pz .ico{width:42px;height:42px;border-radius:14px;background:var(--soft);display:grid;place-items:center;flex:none}
-.pz b{display:block;font-size:15px}
-.pz span{font-size:12.5px;color:var(--mute)}
+/* سلسلة الجولات */
+.chain{display:grid;align-items:center;margin-top:22px;padding:0 6px}
+.node{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);background:var(--i);color:var(--mute);display:grid;place-items:center;font-size:13px;font-weight:800;padding:0;transition:box-shadow .2s}
+.node.done{background:var(--b);border-color:var(--b);color:var(--i)}
+.node.cur{border-color:var(--b);color:var(--b)}
+.node[aria-pressed=true]{box-shadow:0 0 0 5px var(--soft)}
+.link{height:6px;border-radius:6px;background:var(--soft);margin-inline:6px;overflow:hidden}
+.link i{display:block;height:100%;width:0;background:var(--b);border-radius:6px;transition:width .6s}
+.lb{justify-self:center;margin-top:8px;font-size:12px;color:var(--mute);white-space:nowrap}
+.lb.on{color:var(--b);font-weight:800}
 
-.sec{display:flex;align-items:center;justify-content:space-between;padding:26px 22px 10px}
+/* السباق */
+.sec{display:flex;align-items:baseline;justify-content:space-between;margin:26px 2px 10px}
 .sec h3{font-size:18px;font-weight:800}
 .sec span{font-size:13px;color:var(--mute)}
-.list{padding:0 20px;display:flex;flex-direction:column;gap:10px}
-.row{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:12px;border:1px solid var(--line);border-radius:20px;padding:12px 14px;text-decoration:none;color:var(--b);transition:background .15s}
-.row:active{background:var(--soft)}
-.row:focus-visible{outline:2px solid var(--b);outline-offset:2px}
-.rk{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-weight:800}
-.row.top .rk{background:var(--b);color:var(--i);border-color:var(--b)}
-.nm{font-weight:700;font-size:16px}
-.tr{height:4px;border-radius:4px;background:var(--soft);margin-top:8px;overflow:hidden}
-.tr i{display:block;height:100%;background:var(--b);border-radius:4px}
-.tm{text-align:left;font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums}
-.tm b{display:block;font-size:16px;color:var(--b)}
+.lane{width:100%;border:0;background:var(--soft);color:var(--b);border-radius:22px;padding:13px 14px 14px;display:grid;grid-template-columns:26px 1fr auto;align-items:center;gap:0 10px;text-align:start;transition:transform .15s}
+.lane+.lane{margin-top:8px}
+.lane:active{transform:scale(.98)}
+.rk{font-size:15px;font-weight:800;text-align:center;color:var(--mute)}
+.mid b{display:block;font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mid small{font-size:12px;color:var(--mute)}
+.vl{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
+.track{grid-column:1/-1;position:relative;height:12px;border-radius:12px;background:rgba(142,59,70,.1);margin-top:10px}
+.track .fl{position:absolute;inset-block:0;inset-inline-start:0;border-radius:12px;background:var(--b)}
+.track .mk{position:absolute;top:-6px;width:24px;height:24px;border-radius:50%;background:var(--i);border:2.5px solid var(--b);color:var(--b);display:grid;place-items:center;font-size:11px;font-weight:800;font-style:normal}
+.lane.lead{background:var(--b);color:var(--i)}
+.lane.lead .rk,.lane.lead .mid small{color:var(--ob)}
+.lane.lead .track{background:rgba(245,233,218,.22)}
+.lane.lead .track .fl{background:var(--i)}
+.lane.lead .track .mk{background:var(--b);border-color:var(--i);color:var(--i)}
+.state{background:var(--soft);border-radius:22px;padding:26px 18px;text-align:center;color:var(--mute);font-size:15px;line-height:1.7}
+
+/* تحميل وحالة فارغة */
+.sk{background:var(--soft);border-radius:22px;animation:sh 1.4s ease-in-out infinite}
+@keyframes sh{50%{opacity:.45}}
+.empty{min-height:calc(100vh - 140px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 10px}
+.orb{width:132px;height:132px}
+.orb .t{fill:none;stroke:var(--line);stroke-width:7}
+.orb .a{fill:none;stroke:var(--b);stroke-width:7;stroke-linecap:round;stroke-dasharray:90 237;transform-origin:60px 60px;animation:spin 9s linear infinite}
+.orb .c{fill:var(--b)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty h2{font-size:24px;font-weight:800;margin-top:24px}
+.empty p{font-size:15px;color:var(--mute);line-height:1.8;margin-top:8px;max-width:300px}
+.empty .acts{width:100%;margin-top:26px}
+
+/* ورقة المتسابق */
+.sheet{position:fixed;inset:0;z-index:30;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
+.scrim{position:absolute;inset:0;background:rgba(142,59,70,.5);opacity:0;transition:opacity .25s}
+.panel{position:relative;width:100%;max-width:480px;background:var(--i);border-radius:32px 32px 0 0;padding:10px 22px calc(22px + env(safe-area-inset-bottom,0px));transform:translateY(100%);transition:transform .32s cubic-bezier(.2,.8,.2,1);text-align:center}
+.sheet.show{pointer-events:auto}
+.sheet.show .scrim{opacity:1}
+.sheet.show .panel{transform:none}
+.grab{height:28px;display:grid;place-items:center;touch-action:none;cursor:grab}
+.grab i{width:44px;height:5px;border-radius:5px;background:var(--line)}
+.shr{font-size:14px;color:var(--mute);margin-top:4px}
+.shn{font-size:26px;font-weight:800;margin-top:2px}
+.shc{font-size:14px;color:var(--mute)}
+.pad{position:relative;width:190px;height:190px;margin:16px auto 0;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.pad svg.rg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.trk{fill:none;stroke:var(--line);stroke-width:5}
+.prg{fill:none;stroke:var(--b);stroke-width:5;stroke-linecap:round}
+.wave{position:absolute;inset:20px;border-radius:50%;border:1.5px solid var(--b);opacity:0;pointer-events:none}
+.hb{position:absolute;inset:20px;border-radius:50%;border:0;background:var(--b);color:var(--i);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;touch-action:none;outline:none;box-shadow:0 0 0 6px var(--i),0 0 0 7px var(--line);transition:transform .18s cubic-bezier(.2,.8,.2,1)}
+.hb:focus-visible{box-shadow:0 0 0 6px var(--i),0 0 0 8px var(--b)}
+.hb:disabled{opacity:.4;cursor:not-allowed}
+.hb .t{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.hb .s{font-size:12px;color:var(--ob)}
+.pad.on .hb{transform:scale(.93)}
+.pad.on .wave{animation:wave 1.4s ease-out infinite}
+.pad.on .wave.w2{animation-delay:.7s}
+@keyframes wave{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.42);opacity:0}}
+.hm{margin-top:14px;font-size:15px;font-weight:700;min-height:24px}
+.shs{margin-top:2px;font-size:13.5px;color:var(--mute)}
+.shs b{color:var(--b)}
+.full{display:inline-block;margin-top:12px;font-size:15px;font-weight:700;color:var(--b);text-decoration:none;padding:8px 4px}
+@media (prefers-reduced-motion:reduce){.pad.on .wave,.live .dot::after,.orb .a,.sk{animation:none}.panel{transition:none}}
 </style>
 </head>
 <body>
 <div class="app">
-  <header class="hero">
-    <div class="bar">
-      <a class="ib" href="home.html" aria-label="رجوع"><svg class="ic" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></a>
-      <h1>المسابقات</h1>
-      <a class="ib" href="contest-intro.html" aria-label="كيف تشتغل"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/></svg></a>
-    </div>
-
-    <section class="now">
-      <div class="tag">المسابقة الحالية</div>
-      <h2 id="contestTitle">جاري تحميل المسابقة</h2>
-      <div class="meta">
-        <div><b id="round">—</b><span>الجولة</span></div>
-        <div><b id="entries">—</b><span>مشارك</span></div>
-        <div><b id="cd">—</b><span id="cdLabel">الوقت</span></div>
-      </div>
-      <div class="btns">
-        <a class="btn fill" id="joinLink" href="contest-register.html">
-          <svg class="ic" viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="9" rx="3"/><path d="M7 9V7a3 3 0 013-3h4a3 3 0 013 3v2"/></svg>
-          احجز مقعد
-        </a>
-        <a class="btn line" href="contest-results.html">النتائج</a>
-      </div>
-    </section>
+  <header class="top">
+    <a class="plain" href="home.html" aria-label="رجوع"><svg class="ic" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></a>
+    <h1>المسابقات</h1>
+    <a class="plain" href="contest-intro.html" aria-label="كيف تشتغل المسابقة"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/></svg></a>
   </header>
 
-  <section class="prize">
-    <div class="pz"><div class="ico"><svg class="ic" viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 01-10 0V4zM7 6H4v1a3 3 0 003 3M17 6h3v1a3 3 0 01-3 3M12 14v4M8 20h8"/></svg></div><div><b>الجائزة</b><span id="prize">—</span></div></div>
-    <div class="pz"><div class="ico"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></svg></div><div><b>المقاعد</b><span id="seats">—</span></div></div>
-  </section>
+  <!-- تحميل -->
+  <div id="skel" aria-hidden="true">
+    <div class="sk" style="height:206px;border-radius:28px"></div>
+    <div class="sk" style="height:54px;margin-top:12px;border-radius:20px"></div>
+    <div class="sk" style="height:46px;margin-top:22px"></div>
+    <div class="sk" style="height:74px;margin-top:26px"></div>
+    <div class="sk" style="height:74px;margin-top:8px"></div>
+  </div>
 
-  <div class="sec"><h3>المتسابقون</h3><span id="count"></span></div>
-  <main class="list" id="list"></main>
+  <!-- المحتوى -->
+  <div id="main" hidden>
+    <section class="stage" id="stage">
+      <div class="r1"><span class="pill"><span class="dot"></span><span id="stateLabel"></span></span><span id="rLabel"></span></div>
+      <h2 id="contestTitle"></h2>
+      <div class="tm"><b id="cd"></b><span id="cdLabel"></span></div>
+      <div class="facts">
+        <div><small>الجائزة</small><b id="prize"></b></div>
+        <div><small>المقاعد</small><b id="seats"></b></div>
+      </div>
+    </section>
+
+    <div class="acts" id="acts">
+      <a class="btn fill" id="btnMain" href="contest-register.html">احجز مقعد</a>
+      <a class="btn soft" href="contest-results.html">النتائج</a>
+    </div>
+
+    <section class="chain" id="chain" aria-label="الجولات"></section>
+
+    <div class="sec"><h3>السباق</h3><span id="unit"></span></div>
+    <div id="board"></div>
+  </div>
+
+  <!-- لا توجد مسابقة / خطأ -->
+  <section class="empty" id="empty" hidden>
+    <svg class="orb" viewBox="0 0 120 120" aria-hidden="true"><circle class="t" cx="60" cy="60" r="52"/><circle class="a" cx="60" cy="60" r="52"/><circle class="c" cx="60" cy="60" r="22"/></svg>
+    <h2 id="emT"></h2>
+    <p id="emP"></p>
+    <div class="acts one">
+      <a class="btn fill" id="emA" href="contest-intro.html">كيف تشتغل المسابقة</a>
+      <button class="btn fill" id="emR" hidden>إعادة المحاولة</button>
+    </div>
+  </section>
+</div>
+
+<div class="sheet" id="sheet" aria-hidden="true">
+  <div class="scrim" id="scrim"></div>
+  <div class="panel" id="panel" role="dialog" aria-modal="true" aria-label="المتسابق">
+    <div class="grab" id="grab"><i></i></div>
+    <div class="shr" id="shRank"></div>
+    <div class="shn" id="shName"></div>
+    <div class="shc" id="shCity"></div>
+    <div class="pad" id="pad">
+      <svg class="rg" viewBox="0 0 120 120" aria-hidden="true"><circle class="trk" cx="60" cy="60" r="54"/><circle class="prg" id="ring" cx="60" cy="60" r="54"/></svg>
+      <div class="wave"></div><div class="wave w2"></div>
+      <button class="hb" id="hb" aria-label="اضغط وثبّت لدعم المتسابق"><span class="t" id="ht">00:00</span><span class="s">ثبّت للدعم</span></button>
+    </div>
+    <div class="hm" id="hm"></div>
+    <div class="shs"><b id="shSup">0</b> داعم الآن</div>
+    <a class="full" id="shOpen" href="contest-profile.html">افتح البروفايل الكامل</a>
+  </div>
 </div>
 
 <script type="module">
 import {supabase} from './js/supabase.js';
 const $=id=>document.getElementById(id);
-const fmt=s=>{s=Math.max(0,Math.floor(s));const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return h?String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(x).padStart(2,'0'):String(m).padStart(2,'0')+':'+String(x).padStart(2,'0')};
+const fmt=s=>{s=Math.max(0,Math.floor(s));const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60,p=n=>String(n).padStart(2,'0');return h?p(h)+':'+p(m)+':'+p(x):p(m)+':'+p(x)};
 const el=(tag,cls,txt)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n};
-let contest=null,home=null,timer=null;
-function renderBoard(rows){const root=$('list');root.replaceChildren();if(!rows||!rows.length){root.append(el('div','state','لا توجد مشاركات مسجلة حتى الآن.'));return}
-rows.forEach((p,i)=>{const a=el('a','row'+(i<3?' top':''));a.href='contest-profile.html?id='+encodeURIComponent(p.id);a.append(el('div','rk',String(i+1)));const mid=el('div');mid.append(el('div','nm',p.name||'مشارك'),el('div','sub',p.city||''));const right=el('div','tm');right.append(el('b','',String(p.support||0)),document.createTextNode('داعم الآن'));a.append(mid,right);root.append(a)})}
-function startClock(){clearInterval(timer);const tick=()=>{if(!contest)return;const n=Date.now(),s=new Date(contest.startsAt).getTime(),r=(home?.rounds||[]).find(x=>x.roundNo===contest.currentRound),e=new Date(r?.endsAt||contest.endsAt).getTime();$('cd').textContent=contest.status==='open'&&s>n?fmt((s-n)/1000):contest.status==='live'&&e>n?fmt((e-n)/1000):'00:00';$('cdLabel').textContent=contest.status==='open'?'حتى البداية':contest.status==='live'?'متبقي':'انتهت'};tick();timer=setInterval(tick,1000)}
-async function load(){const {data,error}=await supabase.rpc('mzad_get_contest_home');if(error)throw error;home=data||null;contest=home&&home.contest;
-if(!contest){$('stateLabel').textContent='لا توجد مسابقة منشورة';$('contestTitle').textContent='ترقب المسابقة القادمة';$('entries').textContent='0';$('round').textContent='—';$('cd').textContent='—';$('prize').textContent='—';$('seats').textContent='—';$('joinLink').hidden=true;$('list').replaceChildren(el('div','state','لا توجد مسابقة متاحة حالياً.'));return}
-$('contestTitle').textContent=contest.title||'المسابقة';$('entries').textContent=String(data.seatsTaken||0);$('round').textContent=contest.currentRound?'الجولة '+contest.currentRound:'—';$('prize').textContent=contest.prize||'—';$('seats').textContent=contest.seatsMax?String(data.seatsTaken||0)+' من '+contest.seatsMax:String(data.seatsTaken||0)+' مشارك';$('joinLink').hidden=contest.status==='ended';
-if(data.myEntry){$('joinLink').textContent='افتح بنر مشاركتك';$('joinLink').href='contest-profile.html?id='+encodeURIComponent(data.myEntry.id)}
-renderBoard(data.board||[]);startClock()}
-load().catch(e=>$('list').replaceChildren(el('div','state',e.message||'تعذر تحميل بيانات المسابقة.')));
-setInterval(()=>load().catch(()=>{}),15000);
+let contest=null,home=null,timer=null,sel=1,board=[],loaded=false;
+
+/* ===== العرض حسب الحالة ===== */
+function show(which){$('skel').hidden=which!=='skel';$('main').hidden=which!=='main';$('empty').hidden=which!=='empty'}
+function showEmpty(title,text,retry){
+  clearInterval(timer);$('emT').textContent=title;$('emP').textContent=text;
+  $('emA').hidden=!!retry;$('emR').hidden=!retry;show('empty');
+}
+$('emR').onclick=()=>{show('skel');load().catch(fail)};
+function fail(e){console.error(e);if(!loaded)showEmpty('تعذر تحميل المسابقة','تأكد من اتصالك بالإنترنت وحاول مرة ثانية.',true)}
+
+/* ===== سلسلة الجولات ===== */
+function roundState(k){const c=contest.currentRound;
+  if(contest.status==='ended'||(c&&k<c))return 'done';
+  if(contest.status==='live'&&k===c)return 'cur';
+  return 'next'}
+function renderChain(){
+  const rs=(home.rounds||[]).slice().sort((a,b)=>a.roundNo-b.roundNo);
+  const n=Math.max(rs.length,contest.roundsCount||3),root=$('chain');root.replaceChildren();
+  root.style.gridTemplateColumns=Array.from({length:n*2-1},(_,i)=>i%2?'1fr':'auto').join(' ');
+  for(let k=1;k<=n;k++){
+    const st=roundState(k),col=k*2-1;
+    const nd=el('button','node '+st,String(k));nd.type='button';nd.dataset.k=k;nd.setAttribute('aria-pressed',String(k===sel));
+    nd.setAttribute('aria-label','الجولة '+k);nd.style.gridColumn=col;nd.style.gridRow=1;
+    const lb=el('span','lb'+(k===sel?' on':''),k===n&&n>1?'النهائي':'الجولة '+k);lb.dataset.k=k;lb.style.gridColumn=col;lb.style.gridRow=2;
+    root.append(nd,lb);
+    if(k<n){const l=el('div','link'),f=el('i');f.dataset.k=k;f.style.width=st==='done'?'100%':'0%';l.style.gridColumn=col+1;l.style.gridRow=1;l.append(f);root.append(l)}
+  }
+}
+$('chain').addEventListener('click',e=>{const b=e.target.closest('.node');if(!b||!home)return;sel=+b.dataset.k;
+  document.querySelectorAll('.node').forEach(x=>x.setAttribute('aria-pressed',String(+x.dataset.k===sel)));
+  document.querySelectorAll('.lb').forEach(x=>x.classList.toggle('on',+x.dataset.k===sel));renderBoard()});
+
+/* ===== خط السباق ===== */
+function lane(p,i,v,max,useMin){
+  const b=el('button','lane'+(i===0?' lead':''));b.type='button';b.dataset.i=i;
+  const mid=el('span','mid');mid.append(el('b','',p.name||'مشارك'),el('small','',i===0?'المتصدر':(p.city||'')));
+  const tr=el('span','track'),fl=el('i','fl'),mk=el('i','mk',(p.name||'م').trim().charAt(0));
+  const pct=Math.max(7,Math.round(v/max*100));
+  fl.style.width=pct+'%';mk.style.insetInlineStart='clamp(0px,calc('+pct+'% - 12px),calc(100% - 24px))';
+  tr.append(fl,mk);
+  b.append(el('span','rk',String(i+1)),mid,el('span','vl',useMin?Math.floor(v/60)+' د':v+' داعم'),tr);
+  return b;
+}
+function renderBoard(){
+  const rr=(home.rounds||[]).find(x=>x.roundNo===sel);
+  const rows=((rr&&rr.board)||home.board||[]).slice();
+  const secs=p=>p.supportSeconds!=null?p.supportSeconds:p.seconds!=null?p.seconds:p.minutes!=null?p.minutes*60:null;
+  const useMin=rows.some(p=>secs(p)!=null);
+  const num=p=>useMin?(secs(p)||0):(p.support||0);
+  rows.sort((a,b)=>num(b)-num(a));board=rows;
+  $('unit').textContent=rows.length?(useMin?'بالدقائق':'بعدد الداعمين'):'';
+  const root=$('board');root.replaceChildren();
+  if(!rows.length){root.append(el('div','state','ما كو متسابقين بعد. احجز مقعدك وكن أول من يدخل السباق.'));return}
+  const max=Math.max(1,num(rows[0]));
+  rows.forEach((p,i)=>root.append(lane(p,i,num(p),max,useMin)));
+}
+$('board').addEventListener('click',e=>{const b=e.target.closest('.lane');if(b)openSheet(board[+b.dataset.i],+b.dataset.i)});
+
+/* ===== العد وتقدم الجولة ===== */
+function startClock(){
+  clearInterval(timer);
+  const tick=()=>{if(!contest)return;
+    const n=Date.now(),s=new Date(contest.startsAt).getTime(),rs=home.rounds||[];
+    const r=rs.find(x=>x.roundNo===contest.currentRound),e=new Date((r&&r.endsAt)||contest.endsAt).getTime();
+    $('cd').textContent=contest.status==='open'&&s>n?fmt((s-n)/1000):contest.status==='live'&&e>n?fmt((e-n)/1000):'00:00';
+    $('cdLabel').textContent=contest.status==='open'?'حتى البداية':contest.status==='live'?'متبقي بالجولة':'انتهت';
+    if(contest.status==='live'&&r){
+      const prev=rs.find(x=>x.roundNo===contest.currentRound-1);
+      const st=new Date(r.startsAt||(prev&&prev.endsAt)||contest.startsAt).getTime();
+      const f=document.querySelector('.link i[data-k="'+contest.currentRound+'"]');
+      if(f&&e>st)f.style.width=Math.min(100,Math.max(0,(n-st)/(e-st)*100))+'%';
+    }
+  };
+  tick();timer=setInterval(tick,1000);
+}
+
+/* ===== التحميل ===== */
+async function load(){
+  const {data,error}=await supabase.rpc('mzad_get_contest_home');if(error)throw error;
+  home=data||{};contest=home.contest;loaded=true;
+  if(!contest){showEmpty('لا توجد مسابقة حالياً','أول ما تنزل مسابقة جديدة تظهر هنا وتقدر تحجز مقعدك.',false);return}
+  const stage=$('stage'),ended=contest.status==='ended',taken=home.seatsTaken||0,n=Math.max((home.rounds||[]).length,contest.roundsCount||3);
+  stage.classList.toggle('live',contest.status==='live');
+  $('stateLabel').textContent=contest.status==='live'?'مباشر الآن':contest.status==='open'?'قريباً':'انتهت';
+  $('rLabel').textContent=contest.status==='live'&&contest.currentRound?'الجولة '+contest.currentRound+' من '+n:'';
+  $('contestTitle').textContent=contest.title||'المسابقة';
+  $('prize').textContent=contest.prize||'قريباً';
+  $('seats').textContent=contest.seatsMax?taken+' من '+contest.seatsMax:taken+' مشارك';
+  if(!document.querySelector('.node')||sel>n)sel=contest.currentRound||1;
+  const btn=$('btnMain');btn.hidden=ended;$('acts').classList.toggle('one',ended);
+  if(home.myEntry){btn.href='contest-profile.html?id='+encodeURIComponent(home.myEntry.id);btn.textContent='مشاركتي'}
+  else{btn.href='contest-register.html';btn.textContent='احجز مقعد'}
+  renderChain();renderBoard();startClock();show('main');
+}
+load().catch(fail);
+setInterval(()=>{if(loaded&&!$('main').hidden||!$('empty').hidden)load().catch(()=>{})},15000);
+
+/* ===== ورقة المتسابق + زر الدعم بالتثبيت ===== */
+const DASH=2*Math.PI*54,pad=$('pad'),hb=$('hb'),ring=$('ring'),sheet=$('sheet'),panel=$('panel');
+ring.style.strokeDasharray=DASH;
+let cur=null,held=0,sent=0,last=0,raf=0,holding=false;
+function renderHold(){ring.style.strokeDashoffset=DASH*(1-(held%60)/60);$('ht').textContent=fmt(held)}
+function openSheet(p,i){
+  cur=p;held=0;sent=0;renderHold();
+  $('shRank').textContent='المركز '+(i+1);$('shName').textContent=p.name||'مشارك';$('shCity').textContent=p.city||'';
+  $('shSup').textContent=String(p.support||0);$('shOpen').href='contest-profile.html?id='+encodeURIComponent(p.id);
+  const live=contest&&contest.status==='live';hb.disabled=!live;
+  $('hm').textContent=live?'اضغط وثبّت إصبعك':'الدعم يفتح أثناء الجولة';
+  sheet.classList.add('show');sheet.setAttribute('aria-hidden','false');
+}
+function closeSheet(){stopHold();sheet.classList.remove('show');sheet.setAttribute('aria-hidden','true');panel.style.transform=''}
+function tickHold(n){if(!holding)return;held+=(n-last)/1000;last=n;renderHold();raf=requestAnimationFrame(tickHold)}
+function startHold(e){if(holding||hb.disabled)return;e.preventDefault();try{hb.setPointerCapture(e.pointerId)}catch(_){}
+  holding=true;last=performance.now();pad.classList.add('on');$('hm').textContent='ثبّت... لا ترفع إصبعك';
+  if(navigator.vibrate)navigator.vibrate(12);raf=requestAnimationFrame(tickHold)}
+function stopHold(){if(!holding)return;holding=false;cancelAnimationFrame(raf);pad.classList.remove('on');
+  $('hm').textContent='توقف العد. اضغط لتكمل';
+  const s=Math.floor(held-sent);if(s>0){sent+=s;sendSupport(cur&&cur.id,s)}}
+/* هنا تربط تسجيل الدعم بـ Supabase. الحساب الحقيقي والتحقق لازم يصيرون بالسيرفر */
+function sendSupport(entryId,seconds){}
+hb.addEventListener('pointerdown',startHold);
+['pointerup','pointercancel','lostpointercapture'].forEach(ev=>hb.addEventListener(ev,stopHold));
+window.addEventListener('blur',stopHold);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopHold()});
+hb.addEventListener('contextmenu',e=>e.preventDefault());
+$('scrim').addEventListener('click',closeSheet);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
+const grab=$('grab');let y0=null;
+grab.addEventListener('pointerdown',e=>{y0=e.clientY;panel.style.transition='none';grab.setPointerCapture(e.pointerId)});
+grab.addEventListener('pointermove',e=>{if(y0===null)return;panel.style.transform='translateY('+Math.max(0,e.clientY-y0)+'px)'});
+const endDrag=e=>{if(y0===null)return;const dy=e.clientY-y0;y0=null;panel.style.transition='';dy>90?closeSheet():panel.style.transform=''};
+grab.addEventListener('pointerup',endDrag);grab.addEventListener('pointercancel',endDrag);
 </script>
 </body>
 </html>
