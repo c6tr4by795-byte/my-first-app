@@ -146,6 +146,7 @@ textarea{resize:none;height:84px;line-height:1.6}
       <p class="note">إذا غيّرت المدة والمسابقة جارية، التغيير يطبق على الجولات القادمة فقط.</p>
     </div>
     <button class="save" id="save"><i data-i="save"></i>حفظ التعديلات</button>
+    <button class="save" id="newContest" type="button" style="margin-top:10px;background:transparent;color:var(--b);border:1px solid var(--b)">إنشاء مسابقة جديدة</button>
   </section>
 
   <!-- المتسابقون -->
@@ -188,6 +189,7 @@ function render(){
  $('bStart').innerHTML=ic('play')+(contest.status==='paused'?'استئناف':'بدء المسابقة');
  $('bPause').disabled=!contest.id||contest.status!=='active';$('bNext').disabled=!contest.id||!['active','paused'].includes(contest.status)||contest.current_round_no>=rounds.length;
  $('bEnd').disabled=!contest.id||!['active','paused','scheduled','draft'].includes(contest.status);
+ $('newContest').disabled=!contest.id||!['ended','completed','cancelled'].includes(contest.status);
 }
 const P={play:'<path d="M7 5l11 7-11 7z"/>',pause:'<path d="M8 5v14M16 5v14"/>',next:'<path d="M5 5l9 7-9 7zM19 5v14"/>',stop:'<rect x="6" y="6" width="12" height="12" rx="2"/>'};
 const ic=n=>'<svg class="ic" viewBox="0 0 24 24">'+(P[n]||'')+'</svg>';
@@ -234,6 +236,21 @@ $('bNext').onclick=()=>ask('الانتقال للجولة التالية','سي�
 $('bEnd').onclick=()=>ask('إنهاء المسابقة','سيتم إغلاق جلسات الدعم وإنهاء المسابقة. هذا لا يعلن فائزاً تلقائياً.',()=>control('end'));
 function calcEnd(){const start=new Date($('fStart').value);const total=[0,1,2].reduce((a,i)=>a+(+$('d'+i).value||0),0);$('endAt').textContent=isNaN(start)?'—':new Intl.DateTimeFormat('ar-IQ',{dateStyle:'medium',timeStyle:'short'}).format(new Date(start.getTime()+total*60000))}
 ['fStart','d0','d1','d2'].forEach(id=>$(id).addEventListener('input',calcEnd));
+$('newContest').onclick=()=>{
+ if(!contest?.id||!['ended','completed','cancelled'].includes(contest.status)){toast('أنهِ المسابقة الحالية أولاً قبل إنشاء مسابقة جديدة.');return}
+ const start=new Date(Date.now()+60*60*1000);
+ contest={id:null,title_ar:'',short_description:'',description_ar:'',prize_title:'',prize_description:'',
+  starts_at:start.toISOString(),ends_at:new Date(start.getTime()+45*60000).toISOString(),max_entries:null,
+  contest_type:'challenge',status:'draft',current_round_no:1,paused_at:null};
+ rounds=[10,15,20].map((minutes,index)=>({round_no:index+1,
+  starts_at:new Date(start.getTime()+[0,10,25][index]*60000).toISOString(),
+  ends_at:new Date(start.getTime()+[10,25,45][index]*60000).toISOString(),qualifiers_count:index===2?1:5-index*2}));
+ entries=[];$('fName').value='';$('fDesc').value='';$('fPrize').value='';$('fSeats').value='';
+ $('fLucky').value=3;$('fLucky').disabled=true;$('fStart').value=localInput(start);
+ [10,15,20].forEach((v,i)=>$('d'+i).value=v);
+ calcEnd();render();$('save').textContent='إنشاء المسابقة';$('newContest').disabled=true;
+ document.querySelector('[data-p="p2"]').click();toast('اكتب تفاصيل المسابقة الجديدة ثم احفظها.');
+};
 $('save').onclick=async()=>{
  if(busy||!contest)return;
  const durations=[0,1,2].map(i=>+$('d'+i).value).filter(v=>v>0);
