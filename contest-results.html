@@ -67,14 +67,14 @@ svg.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;str
   </header>
 
   <div class="tabs" role="tablist" id="tabs">
-    <button class="tab" role="tab" data-r="0" aria-selected="false">الجولة 1</button>
-    <button class="tab" role="tab" data-r="1" aria-selected="false">الجولة 2</button>
-    <button class="tab" role="tab" data-r="2" aria-selected="true">النهائي</button>
+    <button class="tab" role="tab" data-r="0" aria-selected="true">الترتيب</button>
+    <button class="tab" role="tab" data-r="1" aria-selected="false">الفائزون</button>
+    <button class="tab" role="tab" data-r="2" aria-selected="false">المسابقة</button>
   </div>
   <main class="list" id="list"></main>
 
   <section class="draw">
-    <h3>سحب الداعمين</h3>
+    <h3>نتيجة المسابقة</h3>
     <p id="dtxt"></p>
     <div class="slots" id="slots">
       <div class="slot"><span>?</span></div><div class="slot"><span>?</span></div><div class="slot"><span>?</span></div>
@@ -82,53 +82,36 @@ svg.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;str
   </section>
 </div>
 
-<script>
-/* بيانات تجريبية: استبدلها لاحقاً ببيانات Supabase */
-const rounds = [
-  [['علي حسين',1820],['محمد صابر',1640],['زينب كريم',1410],['حسن جاسم',1200],['سارة نبيل',980]],
-  [['علي حسين',2410],['محمد صابر',2300],['زينب كريم',1950],['حسن جاسم',1500]],
-  [['علي حسين',3120],['محمد صابر',2890]]
-];
-const status = ['انتهت','انتهت','النهائي'];
-const supporters = ['كرار علي','دعاء حسن','يوسف مهدي','هبة سالم','مرتضى كاظم','رقية فاضل','ليث عدنان','آية جبار','سجاد ناصر','تبارك هادي'];
-const fmt = s => String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
-
-function show(r){
-  document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.r == r));
-  document.getElementById('list').innerHTML = rounds[r].map((p,i)=>`
-    <div class="row ${i===0?'top':''}">
-      <div class="rk">${i+1}</div>
-      <div><div class="nm">${p[0]}</div><div class="st">${i===0?'الأول':'متأهل'}</div></div>
-      <div class="tm">${fmt(p[1])}</div>
-    </div>`).join('');
+<script type="module">
+import {supabase} from './js/supabase.js';
+const $=id=>document.getElementById(id);
+const fmt=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+let payload=null,mode=0;
+const node=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e};
+function render(){
+ const list=$('list');list.replaceChildren();
+ if(mode===0){
+  const rows=payload?.board||[];
+  if(!rows.length){list.append(node('div','row','لا توجد نتائج مسجلة بعد.'));return}
+  rows.forEach((p,i)=>{const row=node('div','row'+(i===0?' top':''));row.append(node('div','rk',String(i+1)));const mid=node('div');mid.append(node('div','nm',p.name||'مشارك'),node('div','st',p.city||''));row.append(mid,node('div','tm',String(p.support||0)+' داعم نشط'));list.append(row)});
+  const first=rows[0];$('lname').textContent=first?.name||'لا يوجد متصدر';$('ltime').textContent=first?'عدد الداعمين النشطين حالياً: '+(first.support||0):'';
+ }else if(mode===1){
+  const winners=payload?.winners||[];
+  if(!winners.length){list.append(node('div','row','لم يتم إعلان الفائزين بعد.'));return}
+  winners.forEach((w,i)=>{const row=node('div','row top');row.append(node('div','rk',String(i+1)));const mid=node('div');mid.append(node('div','nm',w.name||'فائز'),node('div','st',w.prize||'الفائز بالجائزة'));row.append(mid);list.append(row)});
+  $('lname').textContent=winners[0]?.name||'—';$('ltime').textContent='الفائز المسجل في قاعدة البيانات';
+ }else{
+  const c=payload?.contest;
+  list.append(node('div','row',c?('الحالة: '+(c.status==='live'?'جارية':c.status==='open'?'التسجيل مفتوح':'منتهية')):'لا توجد مسابقة'));
+  list.append(node('div','row',c?('المسابقة: '+(c.title||'')):''));
+  $('lname').textContent=c?.title||'لا توجد مسابقة';$('ltime').textContent=c?.prize||'';
+ }
+ document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',Number(t.dataset.r)===mode));
 }
-document.getElementById('tabs').onclick = e => { const t = e.target.closest('.tab'); if(t) show(+t.dataset.r); };
-show(2);
-const w = rounds[2][0];
-document.getElementById('lname').textContent = w[0];
-document.getElementById('ltime').textContent = 'وقت الدعم ' + fmt(w[1]);
-
-/* السحب تلقائي عند انتهاء المسابقة بدون أي زر.
-   ENDED: خليها true إذا المسابقة انتهت (من قاعدة البيانات لاحقاً).
-   ملاحظة: الاختيار الحقيقي للفائزين لازم يصير بالسيرفر مو بالمتصفح. هذا عرض تصميم فقط. */
-const ENDED = true;
-const slots = [...document.querySelectorAll('.slot')];
-const dtxt = document.getElementById('dtxt');
-if(!ENDED){
-  dtxt.textContent = 'السحب يصير تلقائياً بمجرد انتهاء المسابقة.';
-}else{
-  dtxt.textContent = 'اختار النظام 3 داعمين عشوائياً عند انتهاء المسابقة.';
-  const winners = [...supporters].sort(() => Math.random() - .5).slice(0,3);
-  slots.forEach(s => { s.className = 'slot spin'; });
-  const timer = setInterval(() => {
-    slots.forEach(s => { if(s.classList.contains('spin')) s.innerHTML = '<span>' + supporters[Math.floor(Math.random()*supporters.length)] + '</span>'; });
-  }, 80);
-  slots.forEach((s,i) => setTimeout(() => {
-    s.className = 'slot done';
-    s.innerHTML = '<span>' + winners[i] + '</span><small>داعم فائز</small>';
-    if(i === 2) clearInterval(timer);
-  }, 1000 + i*700));
-}
+async function load(){const {data,error}=await supabase.rpc('mzad_get_contest_home');if(error)throw error;payload=data||{};render();$('dtxt').textContent=payload?.winners?.length?'النتائج المعلنة محفوظة من قاعدة البيانات.':'يظهر الفائز هنا بعد اعتماد النتيجة من الإدارة.';$('slots').replaceChildren(node('div','slot','—'),node('div','slot','—'),node('div','slot','—'))}
+document.getElementById('tabs').onclick=e=>{const t=e.target.closest('.tab');if(t){mode=Number(t.dataset.r);render()}};
+load().catch(e=>{$('lname').textContent='تعذر تحميل النتائج';$('ltime').textContent=e.message||'';$('list').replaceChildren(node('div','row','حدث خطأ أثناء جلب النتائج.'))});
+setInterval(()=>load().catch(()=>{}),15000);
 </script>
 </body>
 </html>
