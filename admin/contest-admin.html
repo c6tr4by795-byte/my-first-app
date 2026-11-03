@@ -184,35 +184,49 @@ function render(){
  $('cnt').textContent=entries.length+' متسابق'+(contest.max_entries?' من '+contest.max_entries+' مقعد':'');
  $('plist').replaceChildren();
  entries.forEach((p,n)=>{const row=document.createElement('div');row.className='pr';const seat=document.createElement('div');seat.className='seat';seat.textContent=String(n+1);const info=document.createElement('div');const name=document.createElement('b');name.textContent=p.name||'مشارك';const small=document.createElement('small');small.textContent=p.status==='winner'?'الفائز':p.status==='disqualified'?'غير متأهل':'مشاركة مسجلة';info.append(name,small);row.append(seat,info);$('plist').append(row)});
- $('bStart').disabled=!['draft','scheduled'].includes(contest.status);
+ $('bStart').disabled=!contest.id||!['draft','scheduled'].includes(contest.status);
  $('bStart').innerHTML=ic('play')+'بدء المسابقة';
- $('bPause').disabled=contest.status!=='active';$('bNext').disabled=!['active','paused'].includes(contest.status)||contest.current_round_no>=rounds.length;
- $('bEnd').disabled=!['active','paused','scheduled','draft'].includes(contest.status);
+ $('bPause').disabled=!contest.id||contest.status!=='active';$('bNext').disabled=!contest.id||!['active','paused'].includes(contest.status)||contest.current_round_no>=rounds.length;
+ $('bEnd').disabled=!contest.id||!['active','paused','scheduled','draft'].includes(contest.status);
 }
 const P={play:'<path d="M7 5l11 7-11 7z"/>',pause:'<path d="M8 5v14M16 5v14"/>',next:'<path d="M5 5l9 7-9 7zM19 5v14"/>',stop:'<rect x="6" y="6" width="12" height="12" rx="2"/>'};
 const ic=n=>'<svg class="ic" viewBox="0 0 24 24">'+(P[n]||'')+'</svg>';
 async function load(){
  const {data:cs,error}=await supabase.from('mzad_contests').select('*').order('created_at',{ascending:false}).limit(1);
  if(error)throw error;contest=cs?.[0]||null;
- if(!contest){render();toast('لا توجد مسابقة حالياً.');return}
+ if(!contest){
+  const start=new Date(Date.now()+60*60*1000);
+  contest={id:null,title_ar:'',short_description:'',description_ar:'',prize_title:'',prize_description:'',
+   starts_at:start.toISOString(),ends_at:new Date(start.getTime()+45*60000).toISOString(),
+   max_entries:null,contest_type:'challenge',status:'draft',current_round_no:1,paused_at:null};
+  rounds=[10,15,20].map((minutes,index)=>({round_no:index+1,starts_at:new Date(start.getTime()+[0,10,25][index]*60000).toISOString(),
+   ends_at:new Date(start.getTime()+[10,25,45][index]*60000).toISOString(),qualifiers_count:index===2?1:5-index*2}));
+  entries=[];
+  $('fName').value='';$('fDesc').value='';$('fPrize').value='';$('fSeats').value='';
+  $('fLucky').value=3;$('fLucky').disabled=true;$('fStart').value=localInput(start);
+  [10,15,20].forEach((v,i)=>$('d'+i).value=v);
+  calcEnd();render();$('save').textContent='إنشاء المسابقة';$('bStart').disabled=true;
+  $('rlabel').textContent='اضبط التفاصيل ثم أنشئ المسابقة';return;
+ }
  const [{data:rs,error:re},{data:es,error:ee}]=await Promise.all([
   supabase.from('mzad_contest_rounds').select('*').eq('contest_id',contest.id).order('round_no'),
   supabase.from('mzad_contest_entries').select('id,user_id,status,joined_at,answer_text').eq('contest_id',contest.id).order('joined_at')
  ]);
  if(re)throw re;if(ee)throw ee;rounds=rs||[];
- const {data:home}=await supabase.rpc('mzad_get_contest_home');
- const board=home?.board||[];
- entries=(es||[]).map(e=>({...e,name:board.find(x=>x.id===e.id)?.name||'مشارك'}));
+ const board=[];
+ const userIds=[...new Set((es||[]).map(e=>e.user_id))];
+ if(userIds.length){const {data:profiles}=await supabase.from('mzad_profiles').select('user_id,full_name').in('user_id',userIds);board.push(...(profiles||[]))}
+ entries=(es||[]).map(e=>({...e,name:board.find(x=>x.user_id===e.user_id)?.full_name||'مشارك'}));
  $('fName').value=contest.title_ar||'';$('fDesc').value=contest.short_description||contest.description_ar||'';
  $('fPrize').value=contest.prize_title||contest.prize_description||'';
  $('fSeats').value=contest.max_entries||'';
  $('fLucky').value=3;$('fLucky').disabled=true;$('fStart').value=localInput(contest.starts_at);
  [0,1,2].forEach(i=>{const r=rounds[i];$('d'+i).value=r?Math.max(1,Math.round((new Date(r.ends_at)-new Date(r.starts_at))/60000)):10});
- calcEnd();render();clock();
+ calcEnd();render();$('save').textContent='حفظ التعديلات';clock();
 }
 function clock(){clearInterval(clockTimer);const tick=()=>{const r=rounds.find(x=>x.round_no===contest?.current_round_no);if(!r){$('clock').textContent='—';return}const end=new Date(r.ends_at).getTime();$('clock').textContent=contest.status==='paused'?'متوقف':fmt((end-Date.now())/1000)};tick();clockTimer=setInterval(tick,1000)}
 async function control(action){
- if(busy)return;busy=true;try{const {data,error}=await supabase.rpc('mzad_admin_contest_control',{p_contest_id:contest.id,p_action:action});if(error)throw error;await load();toast('تم تنفيذ الأمر وحفظه في قاعدة البيانات.')}catch(e){toast(e.message||'تعذر تنفيذ الأمر.')}finally{busy=false}
+ if(busy||!contest?.id)return;busy=true;try{const {data,error}=await supabase.rpc('mzad_admin_contest_control',{p_contest_id:contest.id,p_action:action});if(error)throw error;await load();toast('تم تنفيذ الأمر وحفظه في قاعدة البيانات.')}catch(e){toast(e.message||'تعذر تنفيذ الأمر.')}finally{busy=false}
 }
 $('bStart').onclick=()=>ask('بدء المسابقة','سيبدأ توقيت الجولة الأولى من وقت التنفيذ.',()=>control('start'));
 $('bPause').onclick=()=>ask('إيقاف مؤقت','سيتم إيقاف الدعم وتجميد توقيت الجولات.',()=>control('pause'));
