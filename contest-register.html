@@ -65,8 +65,8 @@ svg.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;str
       <h1>حجز مقعد</h1>
       <span style="width:42px"></span>
     </div>
-    <h2>اختار مقعدك</h2>
-    <p>مقعد واحد لكل متسابق، وما يتغير بعد التأكيد.</p>
+    <h2 id="regTitle">شارك بالمسابقة</h2>
+    <p>مشاركة واحدة لكل حساب. لا تحتاج نشر جهاز أو إضافة صورة.</p>
   </header>
 
   <div class="legend">
@@ -75,47 +75,34 @@ svg.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;str
     <span><i class="dot tk"></i>محجوز</span>
   </div>
 
-  <main class="grid" id="grid"></main>
+  <main class="grid" id="grid" hidden></main>
 
-  <div class="sum"><span>مقعدك</span><b id="pick">لم تختار بعد</b></div>
+  <div class="sum"><span>المشاركون والمقاعد</span><b id="pick">جاري التحميل</b></div>
 
   <div class="cta"><button id="go" disabled>تأكيد الحجز</button></div>
 </div>
 
 <section class="ok" id="ok" role="status">
   <div class="badge"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
-  <h2>تم حجز مقعدك</h2>
+  <h2>تم تسجيل مشاركتك</h2>
   <p id="okTxt"></p>
   <a href="contests.html">رجوع للمسابقة</a>
 </section>
 
-<script>
-/* بيانات تجريبية: المقاعد المحجوزة. استبدلها لاحقاً ببيانات Supabase */
-const TOTAL = 16, taken = [1,2,3,4,5,6,7,9,12];
-let chosen = null;
-const grid = document.getElementById('grid'), go = document.getElementById('go'), pick = document.getElementById('pick');
-
-for(let n=1;n<=TOTAL;n++){
-  const b = document.createElement('button');
-  b.className = 'seat';
-  b.textContent = n;
-  b.setAttribute('aria-label','مقعد '+n);
-  if(taken.includes(n)) b.disabled = true;
-  b.onclick = () => {
-    chosen = n;
-    grid.querySelectorAll('.seat').forEach(s => s.classList.remove('sel'));
-    b.classList.add('sel');
-    pick.textContent = 'مقعد رقم ' + n;
-    go.disabled = false;
-  };
-  grid.appendChild(b);
-}
-
-go.onclick = () => {
-  /* هنا تحفظ الحجز بقاعدة البيانات لاحقاً */
-  document.getElementById('okTxt').textContent = 'مقعدك رقم ' + chosen + '. تقدر تشوف بروفايلك بسجل المتسابقين.';
-  document.getElementById('ok').classList.add('show');
-};
+<script type="module">
+import {supabase} from './js/supabase.js';
+const $=id=>document.getElementById(id);let contest=null,busy=false;
+function fail(t){$('pick').textContent=t;$('go').disabled=true}
+function success(id){const u=new URL('contest-profile.html',location.href);u.searchParams.set('id',id);$('okTxt').textContent='رابط بنر مشاركتك: '+u.href;$('ok').classList.add('show');$('go').hidden=true}
+async function init(){const auth=await supabase.auth.getUser();if(!auth.data||!auth.data.user){fail('سجّل الدخول أولاً حتى تشارك.');return}
+const {data,error}=await supabase.rpc('mzad_get_contest_home');if(error)throw error;contest=data&&data.contest;if(!contest){fail('ماكو مسابقة متاحة حالياً.');return}
+$('regTitle').textContent=contest.title||'المسابقة';$('pick').textContent=(data.seatsTaken||0)+' مشارك'+(contest.seatsMax?' من '+contest.seatsMax:'');
+if(data.myEntry){success(data.myEntry.id);fail('أنت مسجل مسبقاً.');return}
+if(contest.status==='ended'){fail('انتهت المسابقة.');return}
+if(contest.seatsMax&&data.seatsTaken>=contest.seatsMax){fail('اكتملت المقاعد.');return}
+$('go').disabled=false;$('go').textContent='تأكيد المشاركة'}
+$('go').onclick=async()=>{if(busy||!contest)return;busy=true;$('go').disabled=true;$('go').textContent='جارٍ التسجيل…';try{const {data,error}=await supabase.rpc('mzad_join_contest',{p_contest_id:contest.id,p_answer_text:null});if(error)throw error;const id=data&&(data.entry_id||data.entryId);if(!id)throw new Error('لم يرجع النظام رقم المشاركة.');success(id);$('pick').textContent='تم تسجيل مشاركتك'}catch(e){$('pick').textContent=e.message||'تعذر التسجيل';$('go').disabled=false;$('go').textContent='إعادة المحاولة'}finally{busy=false}};
+init().catch(e=>fail(e.message||'تعذر تحميل المسابقة.'));
 </script>
 </body>
 </html>
