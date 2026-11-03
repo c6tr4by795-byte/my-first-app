@@ -163,97 +163,82 @@ textarea{resize:none;height:84px;line-height:1.6}
 </div>
 <div class="toast" id="toast" role="status"></div>
 
-<script>
-/* ===== بيانات تجريبية: استبدلها لاحقاً ببيانات Supabase ===== */
-const S = {
-  name:'مسابقة الموسم الأول', desc:'مسابقة دعم المتسابقين على ثلاث جولات.', prize:'آيفون 17 برو ماكس',
-  seats:16, lucky:3, start:'2026-11-05T20:00', dur:[15,25,30],
-  status:'running', round:1, left:1124
-};
-let people = [
-  {name:'علي حسين',seat:8,sup:212,time:5120},{name:'محمد صابر',seat:10,sup:148,time:4380},
-  {name:'زينب كريم',seat:11,sup:131,time:3905},{name:'حسن جاسم',seat:13,sup:117,time:3310},
-  {name:'سارة نبيل',seat:14,sup:96,time:2740}
-];
-const supporters = ['كرار علي','دعاء حسن','يوسف مهدي','هبة سالم','مرتضى كاظم','رقية فاضل','ليث عدنان','آية جبار','سجاد ناصر','تبارك هادي'];
-
-/* ===== أدوات ===== */
-const P = {back:'<path d="M9 5l7 7-7 7"/>',play:'<path d="M7 5l11 7-11 7z"/>',pause:'<path d="M8 5v14M16 5v14"/>',
-  next:'<path d="M5 5l9 7-9 7zM19 5v14"/>',stop:'<rect x="6" y="6" width="12" height="12" rx="2"/>',
-  trash:'<path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12"/>',save:'<path d="M5 4h11l3 3v13H5zM8 4v5h7V4M8 20v-6h8v6"/>'};
-const ic = n => `<svg class="ic" viewBox="0 0 24 24">${P[n]}</svg>`;
-document.querySelectorAll('[data-i]').forEach(e => e.outerHTML = ic(e.dataset.i));
-const $ = id => document.getElementById(id);
-const fmt = s => String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
-function toast(t){ const e=$('toast'); e.textContent=t; e.classList.add('show'); clearTimeout(toast.t); toast.t=setTimeout(()=>e.classList.remove('show'),2200); }
-function ask(title,text,yes){ $('mT').textContent=title; $('mP').textContent=text; $('modal').classList.add('show'); $('mYes').onclick=()=>{ $('modal').classList.remove('show'); yes(); }; }
-$('mNo').onclick = () => $('modal').classList.remove('show');
-
-/* ===== العرض ===== */
-const label = {draft:'لم تبدأ',running:'جارية',paused:'متوقفة مؤقتاً',ended:'انتهت'};
+<script type="module">
+import {supabase} from '../js/supabase.js';
+const $=id=>document.getElementById(id);
+const fmt=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+const localInput=v=>{const d=new Date(v);return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16)};
+const toIso=v=>new Date(v).toISOString();
+let contest=null,rounds=[],entries=[],busy=false,clockTimer=null;
+const labels={draft:'مسودة',scheduled:'مجدولة',active:'جارية',paused:'متوقفة مؤقتاً',ended:'انتهت',completed:'مكتملة',cancelled:'ملغاة'};
+function toast(t){$('toast').textContent=t;$('toast').classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>$('toast').classList.remove('show'),2600)}
+function ask(title,text,yes){$('mT').textContent=title;$('mP').textContent=text;$('modal').classList.add('show');$('mYes').onclick=()=>{$('modal').classList.remove('show');yes()}}
+$('mNo').onclick=()=>$('modal').classList.remove('show');
 function render(){
-  const st = S.status;
-  $('cname').textContent = S.name;
-  $('pill').textContent = label[st]; $('pill').className = 'pill' + (st==='running'?' on':'');
-  $('clock').textContent = st==='ended' ? '00:00' : fmt(st==='draft' ? S.dur[0]*60 : S.left);
-  $('rlabel').textContent = st==='ended' ? 'انتهت المسابقة' : (st==='draft' ? 'الجولة 1 من 3' : 'الجولة '+(S.round+1)+' من 3');
-  $('bStart').innerHTML = ic('play') + (st==='paused' ? 'استئناف' : 'بدء المسابقة');
-  $('bStart').disabled = !(st==='draft' || st==='paused');
-  $('bPause').disabled = st!=='running';
-  $('bNext').disabled = !((st==='running'||st==='paused') && S.round<2);
-  $('bEnd').disabled = !(st==='running'||st==='paused');
-  $('rounds').innerHTML = S.dur.map((d,i)=>{
-    const s = st==='ended'||(st!=='draft'&&i<S.round) ? 'انتهت' : (st!=='draft'&&i===S.round ? 'جارية' : 'لاحقاً');
-    return `<div class="rd ${s==='جارية'?'cur':''}"><div><b>${i===2?'الجولة النهائية':'الجولة '+(i+1)}</b><small>${d} دقيقة</small></div><span class="s">${s}</span></div>`;
-  }).join('');
-  $('cnt').textContent = people.length + ' متسابق من ' + S.seats + ' مقعد';
-  $('plist').innerHTML = people.map((p,i)=>`
-    <div class="pr"><div class="seat">${p.seat}</div>
-    <div><b>${p.name}</b><small>${p.sup} داعم، ${fmt(p.time)}</small></div>
-    <button class="rm" aria-label="إزالة ${p.name}" data-i="${i}">${ic('trash')}</button></div>`).join('');
+ if(!contest){$('cname').textContent='لا توجد مسابقة';$('pill').textContent='—';$('clock').textContent='—';return}
+ $('cname').textContent=contest.title_ar||'المسابقة';$('pill').textContent=labels[contest.status]||contest.status;$('pill').className='pill'+(contest.status==='active'?' on':'');
+ const r=rounds.find(x=>x.round_no===contest.current_round_no)||rounds[0];
+ $('rlabel').textContent=r?'الجولة '+r.round_no+' من '+rounds.length:'لا توجد جولات';
+ $('rounds').replaceChildren();
+ rounds.forEach((x)=>{const d=document.createElement('div');d.className='rd'+(x.round_no===contest.current_round_no?' cur':'');const left=document.createElement('div');const b=document.createElement('b');b.textContent='الجولة '+x.round_no;const sm=document.createElement('small');sm.textContent=Math.max(1,Math.round((new Date(x.ends_at)-new Date(x.starts_at))/60000))+' دقيقة · يتأهل '+x.qualifiers_count;left.append(b,sm);const st=document.createElement('span');st.className='s';st.textContent=x.round_no<contest.current_round_no?'انتهت':x.round_no===contest.current_round_no?(contest.status==='paused'?'متوقفة':contest.status==='active'?'جارية':'قادمة'):'لاحقاً';d.append(left,st);$('rounds').append(d)});
+ $('cnt').textContent=entries.length+' متسابق'+(contest.max_entries?' من '+contest.max_entries+' مقعد':'');
+ $('plist').replaceChildren();
+ entries.forEach((p,n)=>{const row=document.createElement('div');row.className='pr';const seat=document.createElement('div');seat.className='seat';seat.textContent=String(n+1);const info=document.createElement('div');const name=document.createElement('b');name.textContent=p.name||'مشارك';const small=document.createElement('small');small.textContent=p.status==='winner'?'الفائز':p.status==='disqualified'?'غير متأهل':'مشاركة مسجلة';info.append(name,small);row.append(seat,info);$('plist').append(row)});
+ $('bStart').disabled=!['draft','scheduled'].includes(contest.status);
+ $('bStart').innerHTML=ic('play')+'بدء المسابقة';
+ $('bPause').disabled=contest.status!=='active';$('bNext').disabled=!['active','paused'].includes(contest.status)||contest.current_round_no>=rounds.length;
+ $('bEnd').disabled=!['active','paused','scheduled','draft'].includes(contest.status);
 }
-$('plist').onclick = e => { const b=e.target.closest('.rm'); if(!b) return; const p=people[b.dataset.i];
-  ask('إزالة المتسابق','سيتم إزالة '+p.name+' من المسابقة وتحرير مقعده.',()=>{ people.splice(b.dataset.i,1); render(); toast('تمت الإزالة'); }); };
-
-/* ===== التحكم ===== */
-$('bStart').onclick = () => { if(S.status==='draft'){ S.round=0; S.left=S.dur[0]*60; } S.status='running'; render(); toast('المسابقة جارية'); };
-$('bPause').onclick = () => { S.status='paused'; render(); toast('تم الإيقاف المؤقت'); };
-$('bNext').onclick = () => ask('الانتقال للجولة التالية','سيتم إنهاء الجولة الحالية فوراً وبدء الجولة التالية.',()=>{ S.round++; S.left=S.dur[S.round]*60; render(); });
-$('bEnd').onclick = () => ask('إنهاء المسابقة','سيتم إنهاء المسابقة فوراً، وسيجري السحب على الداعمين تلقائياً. لا يمكن التراجع.',endContest);
-function endContest(){
-  S.status='ended';
-  /* السحب الحقيقي لازم يصير بالسيرفر. هذا عرض تصميم فقط */
-  const top = [...people].sort((a,b)=>b.time-a.time)[0];
-  $('winner').textContent = top ? top.name : '-';
-  $('lucky').innerHTML = [...supporters].sort(()=>Math.random()-.5).slice(0,S.lucky).map(n=>`<li>${n}</li>`).join('');
-  $('res').classList.add('show'); render(); toast('انتهت المسابقة');
+const P={play:'<path d="M7 5l11 7-11 7z"/>',pause:'<path d="M8 5v14M16 5v14"/>',next:'<path d="M5 5l9 7-9 7zM19 5v14"/>',stop:'<rect x="6" y="6" width="12" height="12" rx="2"/>'};
+const ic=n=>'<svg class="ic" viewBox="0 0 24 24">'+(P[n]||'')+'</svg>';
+async function load(){
+ const {data:cs,error}=await supabase.from('mzad_contests').select('*').order('created_at',{ascending:false}).limit(1);
+ if(error)throw error;contest=cs?.[0]||null;
+ if(!contest){render();toast('لا توجد مسابقة حالياً.');return}
+ const [{data:rs,error:re},{data:es,error:ee}]=await Promise.all([
+  supabase.from('mzad_contest_rounds').select('*').eq('contest_id',contest.id).order('round_no'),
+  supabase.from('mzad_contest_entries').select('id,user_id,status,joined_at,answer_text').eq('contest_id',contest.id).order('joined_at')
+ ]);
+ if(re)throw re;if(ee)throw ee;rounds=rs||[];
+ const {data:home}=await supabase.rpc('mzad_get_contest_home');
+ const board=home?.board||[];
+ entries=(es||[]).map(e=>({...e,name:board.find(x=>x.id===e.id)?.name||'مشارك'}));
+ $('fName').value=contest.title_ar||'';$('fDesc').value=contest.short_description||contest.description_ar||'';
+ $('fPrize').value=contest.prize_title||contest.prize_description||'';
+ $('fSeats').value=contest.max_entries||'';
+ $('fLucky').value=3;$('fStart').value=localInput(contest.starts_at);
+ [0,1,2].forEach(i=>{const r=rounds[i];$('d'+i).value=r?Math.max(1,Math.round((new Date(r.ends_at)-new Date(r.starts_at))/60000)):10});
+ calcEnd();render();clock();
 }
-setInterval(()=>{ if(S.status!=='running') return; S.left--;
-  if(S.left<=0){ if(S.round<2){ S.round++; S.left=S.dur[S.round]*60; } else return endContest(); }
-  render(); },1000);
-
-/* ===== التفاصيل والوقت ===== */
-function fill(){ $('fName').value=S.name; $('fDesc').value=S.desc; $('fPrize').value=S.prize; $('fSeats').value=S.seats; $('fLucky').value=S.lucky;
-  $('fStart').value=S.start; S.dur.forEach((d,i)=>$('d'+i).value=d); calcEnd(); }
-function calcEnd(){
-  const t=new Date($('fStart').value); const m=[0,1,2].reduce((a,i)=>a+(+$('d'+i).value||0),0);
-  $('endAt').textContent = isNaN(t) ? '-' : new Intl.DateTimeFormat('ar-IQ-u-nu-latn',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}).format(new Date(t.getTime()+m*60000));
+function clock(){clearInterval(clockTimer);const tick=()=>{const r=rounds.find(x=>x.round_no===contest?.current_round_no);if(!r){$('clock').textContent='—';return}const end=new Date(r.ends_at).getTime();$('clock').textContent=contest.status==='paused'?'متوقف':fmt((end-Date.now())/1000)};tick();clockTimer=setInterval(tick,1000)}
+async function control(action){
+ if(busy)return;busy=true;try{const {data,error}=await supabase.rpc('mzad_admin_contest_control',{p_contest_id:contest.id,p_action:action});if(error)throw error;await load();toast('تم تنفيذ الأمر وحفظه في قاعدة البيانات.')}catch(e){toast(e.message||'تعذر تنفيذ الأمر.')}finally{busy=false}
 }
+$('bStart').onclick=()=>ask('بدء المسابقة','سيبدأ توقيت الجولة الأولى من وقت التنفيذ.',()=>control('start'));
+$('bPause').onclick=()=>ask('إيقاف مؤقت','سيتم إيقاف الدعم وتجميد توقيت الجولات.',()=>control('pause'));
+$('bNext').onclick=()=>ask('الانتقال للجولة التالية','سيتم اعتماد ترتيب الجولة الحالية وفق مدة الدعم المسجلة ثم فتح الجولة التالية.',()=>control('next'));
+$('bEnd').onclick=()=>ask('إنهاء المسابقة','سيتم إغلاق جلسات الدعم وإنهاء المسابقة. هذا لا يعلن فائزاً تلقائياً.',()=>control('end'));
+function calcEnd(){const start=new Date($('fStart').value);const total=[0,1,2].reduce((a,i)=>a+(+$('d'+i).value||0),0);$('endAt').textContent=isNaN(start)?'—':new Intl.DateTimeFormat('ar-IQ',{dateStyle:'medium',timeStyle:'short'}).format(new Date(start.getTime()+total*60000))}
 ['fStart','d0','d1','d2'].forEach(id=>$(id).addEventListener('input',calcEnd));
-$('save').onclick = () => {
-  const d=[0,1,2].map(i=>+$('d'+i).value);
-  if(!$('fName').value.trim()) return toast('اكتب اسم المسابقة');
-  if(d.some(x=>!(x>=1))) return toast('مدة كل جولة دقيقة على الأقل');
-  Object.assign(S,{name:$('fName').value.trim(),desc:$('fDesc').value,prize:$('fPrize').value,seats:+$('fSeats').value,lucky:+$('fLucky').value,start:$('fStart').value,dur:d});
-  render(); toast('تم حفظ التعديلات'); /* هنا تحفظ بقاعدة البيانات لاحقاً */
+$('save').onclick=async()=>{
+ if(busy||!contest)return;
+ const durations=[0,1,2].map(i=>+$('d'+i).value).filter(v=>v>0);
+ if(!$('fName').value.trim()||!durations.length||durations.some(v=>v<1)){toast('تحقق من العنوان ومدد الجولات.');return}
+ if(entries.length&&contest.status!=='draft'){toast('هذه المسابقة تحتوي مشاركين؛ لا يمكن تغيير أوقاتها أو تقسيم جولاتها بعد التسجيل.');return}
+ busy=true;$('save').disabled=true;
+ try{
+  const {error}=await supabase.rpc('mzad_admin_save_contest_v2',{
+   p_contest_id:contest.id,p_title_ar:$('fName').value.trim(),p_short_description:$('fDesc').value.trim(),
+   p_description_ar:$('fDesc').value.trim(),p_prize_title:$('fPrize').value.trim(),p_prize_description:null,
+   p_starts_at:toIso($('fStart').value),p_max_entries:$('fSeats').value?Number($('fSeats').value):null,
+   p_contest_type:contest.contest_type||'challenge',p_status:contest.status==='draft'?'draft':'scheduled',
+   p_round_minutes:durations,p_round_qualifiers:durations.map((_,i)=>i===durations.length-1?1:Math.max(1,Math.ceil((Number($('fSeats').value)||10)/(i+2))))
+  });
+  if(error)throw error;await load();toast('تم حفظ إعدادات المسابقة والجولات.');
+ }catch(e){toast(e.message||'تعذر حفظ الإعدادات.')}finally{busy=false;$('save').disabled=false}
 };
-
-/* ===== التبويبات ===== */
-$('tabs').onclick = e => { const t=e.target.closest('.tab'); if(!t) return;
-  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',x===t));
-  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('show',p.id===t.dataset.p)); };
-
-fill(); render();
+$('tabs').onclick=e=>{const t=e.target.closest('.tab');if(!t)return;document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',x===t));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('show',p.id===t.dataset.p))};
+load().catch(e=>toast(e.message||'تعذر تحميل لوحة الإدارة.'));
 </script>
 </body>
 </html>
