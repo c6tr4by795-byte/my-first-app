@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>إدارة المسابقة | MZAD PHONE</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--b:#8E3B46;--i:#F5E9DA;--line:rgba(142,59,70,.18);--soft:rgba(142,59,70,.08);--mute:rgba(142,59,70,.65);--ob:rgba(245,233,218,.72);--obl:rgba(245,233,218,.24)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--i);color:var(--b);font-family:'Tajawal',system-ui,sans-serif}
+body{display:flex;justify-content:center}
+.app{width:100%;max-width:560px;min-height:100vh;padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
+svg.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--b);outline-offset:3px}
+
+.hero{background:var(--b);color:var(--i);border-radius:0 0 32px 32px;padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 24px}
+.bar{display:flex;align-items:center;justify-content:space-between}
+.bar h1{font-size:18px;font-weight:800}
+.ib{width:42px;height:42px;border-radius:14px;border:1px solid var(--obl);background:var(--b);color:var(--i);display:grid;place-items:center;text-decoration:none}
+.live{margin-top:20px;border:1px solid var(--obl);border-radius:24px;padding:18px}
+.live .top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.live h2{font-size:20px;font-weight:800}
+.pill{font-size:13px;font-weight:700;padding:5px 12px;border-radius:20px;border:1px solid var(--i);white-space:nowrap}
+.pill.on{background:var(--i);color:var(--b)}
+.clock{margin-top:16px;display:flex;align-items:flex-end;justify-content:space-between}
+.clock b{font-size:46px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.clock span{font-size:14px;color:var(--ob)}
+
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:20px 20px 0}
+.tab{height:46px;border-radius:14px;border:1.5px solid var(--b);background:transparent;color:var(--b);font-size:15px;font-weight:700;transition:background .15s,color .15s}
+.tab[aria-selected=true]{background:var(--b);color:var(--i)}
+.panel{display:none;padding:18px 20px 0}
+.panel.show{display:block}
+
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cb{height:56px;border-radius:18px;border:1.5px solid var(--b);display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-weight:700;transition:transform .15s,opacity .15s}
+.cb:active:not(:disabled){transform:scale(.97)}
+.cb.fill{background:var(--b);color:var(--i)}
+.cb.line{background:transparent;color:var(--b)}
+.cb:disabled{opacity:.3;cursor:not-allowed}
+
+.card{border:1px solid var(--line);border-radius:22px;padding:16px;margin-top:14px}
+.card h3{font-size:17px;font-weight:800;margin-bottom:12px}
+.rd{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;padding:12px 14px;border-radius:16px;background:var(--soft)}
+.rd+.rd{margin-top:8px}
+.rd b{font-size:15px}.rd small{display:block;font-size:12.5px;color:var(--mute);margin-top:2px}
+.rd .s{font-size:13px;font-weight:700}
+.rd.cur{background:var(--b);color:var(--i)}.rd.cur small{color:var(--ob)}
+.res{background:var(--b);color:var(--i);border-radius:22px;padding:18px;margin-top:14px;display:none}
+.res.show{display:block}
+.res small{color:var(--ob);font-size:13px}.res h3{font-size:22px;margin:2px 0 12px}
+.res ul{list-style:none;display:grid;gap:8px}
+.res li{padding:10px 14px;border-radius:14px;border:1px solid var(--obl);font-weight:700;font-size:15px}
+
+label{display:block;font-size:14px;font-weight:700;margin:14px 0 6px}
+label:first-of-type{margin-top:0}
+input,textarea{width:100%;border:1.5px solid var(--line);border-radius:14px;background:var(--i);color:var(--b);font-family:inherit;font-size:16px;padding:12px 14px}
+input:focus,textarea:focus{outline:none;border-color:var(--b)}
+textarea{resize:none;height:84px;line-height:1.6}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.three label{font-size:13px;font-weight:500;color:var(--mute);margin-top:0}
+.note{font-size:13px;color:var(--mute);line-height:1.7;margin-top:12px}
+.end{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding:14px 16px;border-radius:16px;background:var(--soft);font-size:14px}
+.end b{font-size:15px}
+.save{margin-top:16px;width:100%;height:56px;border-radius:18px;border:0;background:var(--b);color:var(--i);font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .15s}
+.save:active{transform:scale(.97)}
+
+.pr{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:12px;border:1px solid var(--line);border-radius:20px;padding:12px 14px}
+.pr+.pr{margin-top:10px}
+.seat{width:40px;height:40px;border-radius:50%;background:var(--b);color:var(--i);display:grid;place-items:center;font-weight:800}
+.pr b{font-size:16px}.pr small{display:block;font-size:12.5px;color:var(--mute);margin-top:2px}
+.rm{width:42px;height:42px;border-radius:14px;border:1.5px solid var(--b);background:transparent;color:var(--b);display:grid;place-items:center}
+.cnt{font-size:14px;color:var(--mute);margin-bottom:12px}
+
+.modal{position:fixed;inset:0;background:rgba(142,59,70,.55);display:none;align-items:flex-end;justify-content:center;z-index:10}
+.modal.show{display:flex}
+.sheet{width:100%;max-width:560px;background:var(--i);border-radius:28px 28px 0 0;padding:24px 20px calc(20px + env(safe-area-inset-bottom,0px))}
+.sheet h3{font-size:20px;font-weight:800}
+.sheet p{font-size:15px;color:var(--mute);line-height:1.7;margin-top:8px}
+.sheet .two{margin-top:20px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:var(--b);color:var(--i);padding:12px 20px;border-radius:16px;font-size:15px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:20}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hero">
+    <div class="bar">
+      <a class="ib" href="contests.html" aria-label="رجوع"><i data-i="back"></i></a>
+      <h1>إدارة المسابقة</h1>
+      <span style="width:42px"></span>
+    </div>
+    <section class="live">
+      <div class="top"><h2 id="cname"></h2><span class="pill" id="pill"></span></div>
+      <div class="clock"><b id="clock">00:00</b><span id="rlabel"></span></div>
+    </section>
+  </header>
+
+  <div class="tabs" role="tablist" id="tabs">
+    <button class="tab" role="tab" data-p="p1" aria-selected="true">التحكم</button>
+    <button class="tab" role="tab" data-p="p2" aria-selected="false">التفاصيل والوقت</button>
+    <button class="tab" role="tab" data-p="p3" aria-selected="false">المتسابقون</button>
+  </div>
+
+  <!-- التحكم -->
+  <section class="panel show" id="p1">
+    <div class="ctrl">
+      <button class="cb fill" id="bStart"></button>
+      <button class="cb line" id="bPause"><i data-i="pause"></i>إيقاف مؤقت</button>
+      <button class="cb line" id="bNext"><i data-i="next"></i>الجولة التالية</button>
+      <button class="cb fill" id="bEnd"><i data-i="stop"></i>إنهاء المسابقة</button>
+    </div>
+    <div class="card"><h3>الجولات</h3><div id="rounds"></div></div>
+    <div class="res" id="res">
+      <small>الفائز بالجائزة الكبرى</small><h3 id="winner"></h3>
+      <small>الداعمون الفائزون (سحب تلقائي)</small>
+      <ul id="lucky" style="margin-top:8px"></ul>
+    </div>
+  </section>
+
+  <!-- التفاصيل والوقت -->
+  <section class="panel" id="p2">
+    <div class="card" style="margin-top:0">
+      <h3>تفاصيل المسابقة</h3>
+      <label for="fName">اسم المسابقة</label><input id="fName">
+      <label for="fDesc">الوصف</label><textarea id="fDesc"></textarea>
+      <label for="fPrize">الجائزة الكبرى</label><input id="fPrize">
+      <div class="two">
+        <div><label for="fSeats">عدد المقاعد</label><input id="fSeats" type="number" min="2" inputmode="numeric"></div>
+        <div><label for="fLucky">عدد الداعمين الفائزين</label><input id="fLucky" type="number" min="1" inputmode="numeric"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>الوقت</h3>
+      <label for="fStart">موعد البدء</label><input id="fStart" type="datetime-local">
+      <label style="margin-top:14px">مدة كل جولة بالدقائق</label>
+      <div class="three">
+        <div><label for="d0">الجولة 1</label><input id="d0" type="number" min="1" inputmode="numeric"></div>
+        <div><label for="d1">الجولة 2</label><input id="d1" type="number" min="1" inputmode="numeric"></div>
+        <div><label for="d2">النهائي</label><input id="d2" type="number" min="1" inputmode="numeric"></div>
+      </div>
+      <div class="end"><span>الانتهاء المتوقع</span><b id="endAt"></b></div>
+      <p class="note">إذا غيّرت المدة والمسابقة جارية، التغيير يطبق على الجولات القادمة فقط.</p>
+    </div>
+    <button class="save" id="save"><i data-i="save"></i>حفظ التعديلات</button>
+  </section>
+
+  <!-- المتسابقون -->
+  <section class="panel" id="p3">
+    <div class="cnt" id="cnt"></div>
+    <div id="plist"></div>
+  </section>
+</div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="sheet">
+    <h3 id="mT"></h3><p id="mP"></p>
+    <div class="two"><button class="cb line" id="mNo">تراجع</button><button class="cb fill" id="mYes">تأكيد</button></div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ===== بيانات تجريبية: استبدلها لاحقاً ببيانات Supabase ===== */
+const S = {
+  name:'مسابقة الموسم الأول', desc:'مسابقة دعم المتسابقين على ثلاث جولات.', prize:'آيفون 17 برو ماكس',
+  seats:16, lucky:3, start:'2026-11-05T20:00', dur:[15,25,30],
+  status:'running', round:1, left:1124
+};
+let people = [
+  {name:'علي حسين',seat:8,sup:212,time:5120},{name:'محمد صابر',seat:10,sup:148,time:4380},
+  {name:'زينب كريم',seat:11,sup:131,time:3905},{name:'حسن جاسم',seat:13,sup:117,time:3310},
+  {name:'سارة نبيل',seat:14,sup:96,time:2740}
+];
+const supporters = ['كرار علي','دعاء حسن','يوسف مهدي','هبة سالم','مرتضى كاظم','رقية فاضل','ليث عدنان','آية جبار','سجاد ناصر','تبارك هادي'];
+
+/* ===== أدوات ===== */
+const P = {back:'<path d="M9 5l7 7-7 7"/>',play:'<path d="M7 5l11 7-11 7z"/>',pause:'<path d="M8 5v14M16 5v14"/>',
+  next:'<path d="M5 5l9 7-9 7zM19 5v14"/>',stop:'<rect x="6" y="6" width="12" height="12" rx="2"/>',
+  trash:'<path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12"/>',save:'<path d="M5 4h11l3 3v13H5zM8 4v5h7V4M8 20v-6h8v6"/>'};
+const ic = n => `<svg class="ic" viewBox="0 0 24 24">${P[n]}</svg>`;
+document.querySelectorAll('[data-i]').forEach(e => e.outerHTML = ic(e.dataset.i));
+const $ = id => document.getElementById(id);
+const fmt = s => String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+function toast(t){ const e=$('toast'); e.textContent=t; e.classList.add('show'); clearTimeout(toast.t); toast.t=setTimeout(()=>e.classList.remove('show'),2200); }
+function ask(title,text,yes){ $('mT').textContent=title; $('mP').textContent=text; $('modal').classList.add('show'); $('mYes').onclick=()=>{ $('modal').classList.remove('show'); yes(); }; }
+$('mNo').onclick = () => $('modal').classList.remove('show');
+
+/* ===== العرض ===== */
+const label = {draft:'لم تبدأ',running:'جارية',paused:'متوقفة مؤقتاً',ended:'انتهت'};
+function render(){
+  const st = S.status;
+  $('cname').textContent = S.name;
+  $('pill').textContent = label[st]; $('pill').className = 'pill' + (st==='running'?' on':'');
+  $('clock').textContent = st==='ended' ? '00:00' : fmt(st==='draft' ? S.dur[0]*60 : S.left);
+  $('rlabel').textContent = st==='ended' ? 'انتهت المسابقة' : (st==='draft' ? 'الجولة 1 من 3' : 'الجولة '+(S.round+1)+' من 3');
+  $('bStart').innerHTML = ic('play') + (st==='paused' ? 'استئناف' : 'بدء المسابقة');
+  $('bStart').disabled = !(st==='draft' || st==='paused');
+  $('bPause').disabled = st!=='running';
+  $('bNext').disabled = !((st==='running'||st==='paused') && S.round<2);
+  $('bEnd').disabled = !(st==='running'||st==='paused');
+  $('rounds').innerHTML = S.dur.map((d,i)=>{
+    const s = st==='ended'||(st!=='draft'&&i<S.round) ? 'انتهت' : (st!=='draft'&&i===S.round ? 'جارية' : 'لاحقاً');
+    return `<div class="rd ${s==='جارية'?'cur':''}"><div><b>${i===2?'الجولة النهائية':'الجولة '+(i+1)}</b><small>${d} دقيقة</small></div><span class="s">${s}</span></div>`;
+  }).join('');
+  $('cnt').textContent = people.length + ' متسابق من ' + S.seats + ' مقعد';
+  $('plist').innerHTML = people.map((p,i)=>`
+    <div class="pr"><div class="seat">${p.seat}</div>
+    <div><b>${p.name}</b><small>${p.sup} داعم، ${fmt(p.time)}</small></div>
+    <button class="rm" aria-label="إزالة ${p.name}" data-i="${i}">${ic('trash')}</button></div>`).join('');
+}
+$('plist').onclick = e => { const b=e.target.closest('.rm'); if(!b) return; const p=people[b.dataset.i];
+  ask('إزالة المتسابق','سيتم إزالة '+p.name+' من المسابقة وتحرير مقعده.',()=>{ people.splice(b.dataset.i,1); render(); toast('تمت الإزالة'); }); };
+
+/* ===== التحكم ===== */
+$('bStart').onclick = () => { if(S.status==='draft'){ S.round=0; S.left=S.dur[0]*60; } S.status='running'; render(); toast('المسابقة جارية'); };
+$('bPause').onclick = () => { S.status='paused'; render(); toast('تم الإيقاف المؤقت'); };
+$('bNext').onclick = () => ask('الانتقال للجولة التالية','سيتم إنهاء الجولة الحالية فوراً وبدء الجولة التالية.',()=>{ S.round++; S.left=S.dur[S.round]*60; render(); });
+$('bEnd').onclick = () => ask('إنهاء المسابقة','سيتم إنهاء المسابقة فوراً، وسيجري السحب على الداعمين تلقائياً. لا يمكن التراجع.',endContest);
+function endContest(){
+  S.status='ended';
+  /* السحب الحقيقي لازم يصير بالسيرفر. هذا عرض تصميم فقط */
+  const top = [...people].sort((a,b)=>b.time-a.time)[0];
+  $('winner').textContent = top ? top.name : '-';
+  $('lucky').innerHTML = [...supporters].sort(()=>Math.random()-.5).slice(0,S.lucky).map(n=>`<li>${n}</li>`).join('');
+  $('res').classList.add('show'); render(); toast('انتهت المسابقة');
+}
+setInterval(()=>{ if(S.status!=='running') return; S.left--;
+  if(S.left<=0){ if(S.round<2){ S.round++; S.left=S.dur[S.round]*60; } else return endContest(); }
+  render(); },1000);
+
+/* ===== التفاصيل والوقت ===== */
+function fill(){ $('fName').value=S.name; $('fDesc').value=S.desc; $('fPrize').value=S.prize; $('fSeats').value=S.seats; $('fLucky').value=S.lucky;
+  $('fStart').value=S.start; S.dur.forEach((d,i)=>$('d'+i).value=d); calcEnd(); }
+function calcEnd(){
+  const t=new Date($('fStart').value); const m=[0,1,2].reduce((a,i)=>a+(+$('d'+i).value||0),0);
+  $('endAt').textContent = isNaN(t) ? '-' : new Intl.DateTimeFormat('ar-IQ-u-nu-latn',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}).format(new Date(t.getTime()+m*60000));
+}
+['fStart','d0','d1','d2'].forEach(id=>$(id).addEventListener('input',calcEnd));
+$('save').onclick = () => {
+  const d=[0,1,2].map(i=>+$('d'+i).value);
+  if(!$('fName').value.trim()) return toast('اكتب اسم المسابقة');
+  if(d.some(x=>!(x>=1))) return toast('مدة كل جولة دقيقة على الأقل');
+  Object.assign(S,{name:$('fName').value.trim(),desc:$('fDesc').value,prize:$('fPrize').value,seats:+$('fSeats').value,lucky:+$('fLucky').value,start:$('fStart').value,dur:d});
+  render(); toast('تم حفظ التعديلات'); /* هنا تحفظ بقاعدة البيانات لاحقاً */
+};
+
+/* ===== التبويبات ===== */
+$('tabs').onclick = e => { const t=e.target.closest('.tab'); if(!t) return;
+  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',x===t));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('show',p.id===t.dataset.p)); };
+
+fill(); render();
+</script>
+</body>
+</html>
