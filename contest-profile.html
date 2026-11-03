@@ -114,14 +114,14 @@ svg.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;str
       <div class="who">
         <div class="avatar" id="av">م</div>
         <div>
-          <h2 id="name">محمد صابر</h2>
-          <p id="seat">مقعد رقم 07</p>
+          <h2 id="name">جاري التحميل</h2>
+          <p id="seat">مشاركة المسابقة</p>
         </div>
       </div>
       <div class="stats">
-        <div class="stat"><b id="rank">2</b><span>الترتيب</span></div>
-        <div class="stat"><b id="sup">148</b><span>داعم</span></div>
-        <div class="stat"><b id="mine">00:00</b><span>وقت الدعم</span></div>
+        <div class="stat"><b id="rank">—</b><span>الترتيب</span></div>
+        <div class="stat"><b id="sup">—</b><span>داعم</span></div>
+        <div class="stat"><b id="mine">—</b><span>وقت الدعم</span></div>
       </div>
     </div>
   </header>
@@ -184,6 +184,8 @@ async function init(){
  if(!detail){throw new Error('المتسابق غير موجود أو لم تعد مشاركته متاحة.')}
  contestId=detail.contest_id||detail.contestId;
  const sameContest=home?.contest?.id===contestId;const board=sameContest?(home?.board||[]):[],rank=board.findIndex(x=>x.id===entryId)+1,me=board.find(x=>x.id===entryId);
+ const roundsRoot=$('rounds');roundsRoot.replaceChildren();
+ (sameContest?(home?.rounds||[]):[]).forEach(r=>{const box=document.createElement('div');box.className='rd'+(r.roundNo===home.contest.currentRound?' on':'');const b=document.createElement('b');b.textContent='الجولة '+r.roundNo;const now=Date.now(),st=new Date(r.startsAt).getTime(),en=new Date(r.endsAt).getTime();const status=home.contest.status==='paused'&&r.roundNo===home.contest.currentRound?'متوقفة':now<st?'لاحقاً':now<en?'جارية':'انتهت';box.append(b,document.createTextNode(status));roundsRoot.append(box)});
  $('name').textContent=detail.name||'مشارك';$('av').textContent=(detail.name||'م')[0];
  $('seat').textContent='مشاركة مسجلة';$('rank').textContent=rank?String(rank):'—';
  $('sup').textContent=String(me?.support||detail.support||0);
