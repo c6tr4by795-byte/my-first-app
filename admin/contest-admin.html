@@ -184,8 +184,8 @@ function render(){
  $('cnt').textContent=entries.length+' متسابق'+(contest.max_entries?' من '+contest.max_entries+' مقعد':'');
  $('plist').replaceChildren();
  entries.forEach((p,n)=>{const row=document.createElement('div');row.className='pr';const seat=document.createElement('div');seat.className='seat';seat.textContent=String(n+1);const info=document.createElement('div');const name=document.createElement('b');name.textContent=p.name||'مشارك';const small=document.createElement('small');small.textContent=p.status==='winner'?'الفائز':p.status==='disqualified'?'غير متأهل':'مشاركة مسجلة';info.append(name,small);row.append(seat,info);$('plist').append(row)});
- $('bStart').disabled=!contest.id||!['draft','scheduled'].includes(contest.status);
- $('bStart').innerHTML=ic('play')+'بدء المسابقة';
+ $('bStart').disabled=!contest.id||!['draft','scheduled','paused'].includes(contest.status);
+ $('bStart').innerHTML=ic('play')+(contest.status==='paused'?'استئناف':'بدء المسابقة');
  $('bPause').disabled=!contest.id||contest.status!=='active';$('bNext').disabled=!contest.id||!['active','paused'].includes(contest.status)||contest.current_round_no>=rounds.length;
  $('bEnd').disabled=!contest.id||!['active','paused','scheduled','draft'].includes(contest.status);
 }
@@ -224,11 +224,11 @@ async function load(){
  [0,1,2].forEach(i=>{const r=rounds[i];$('d'+i).value=r?Math.max(1,Math.round((new Date(r.ends_at)-new Date(r.starts_at))/60000)):10});
  calcEnd();render();$('save').textContent='حفظ التعديلات';clock();
 }
-function clock(){clearInterval(clockTimer);const tick=()=>{const r=rounds.find(x=>x.round_no===contest?.current_round_no);if(!r){$('clock').textContent='—';return}const end=new Date(r.ends_at).getTime();$('clock').textContent=contest.status==='paused'?'متوقف':fmt((end-Date.now())/1000)};tick();clockTimer=setInterval(tick,1000)}
+function clock(){clearInterval(clockTimer);const tick=()=>{const r=rounds.find(x=>x.round_no===contest?.current_round_no);if(!r){$('clock').textContent='—';return}const now=Date.now(),start=new Date(contest.starts_at).getTime(),end=new Date(r.ends_at).getTime();if(contest.status==='paused'){$('clock').textContent='متوقف';$('rlabel').textContent='المسابقة متوقفة مؤقتاً'}else if(['draft','scheduled'].includes(contest.status)&&start>now){$('clock').textContent=fmt((start-now)/1000);$('rlabel').textContent='حتى موعد البداية'}else{$('clock').textContent=fmt((end-now)/1000)}};tick();clockTimer=setInterval(tick,1000)}
 async function control(action){
  if(busy||!contest?.id)return;busy=true;try{const {data,error}=await supabase.rpc('mzad_admin_contest_control',{p_contest_id:contest.id,p_action:action});if(error)throw error;await load();toast('تم تنفيذ الأمر وحفظه في قاعدة البيانات.')}catch(e){toast(e.message||'تعذر تنفيذ الأمر.')}finally{busy=false}
 }
-$('bStart').onclick=()=>ask('بدء المسابقة','سيبدأ توقيت الجولة الأولى من وقت التنفيذ.',()=>control('start'));
+$('bStart').onclick=()=>{const resume=contest?.status==='paused';ask(resume?'استئناف المسابقة':'بدء المسابقة',resume?'سيُستأنف الوقت من مكان التوقف.':'سيبدأ توقيت الجولة الأولى من وقت التنفيذ.',()=>control(resume?'resume':'start'))};
 $('bPause').onclick=()=>ask('إيقاف مؤقت','سيتم إيقاف الدعم وتجميد توقيت الجولات.',()=>control('pause'));
 $('bNext').onclick=()=>ask('الانتقال للجولة التالية','سيتم اعتماد ترتيب الجولة الحالية وفق مدة الدعم المسجلة ثم فتح الجولة التالية.',()=>control('next'));
 $('bEnd').onclick=()=>ask('إنهاء المسابقة','سيتم إغلاق جلسات الدعم وإنهاء المسابقة. هذا لا يعلن فائزاً تلقائياً.',()=>control('end'));
