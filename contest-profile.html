@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>بروفايل المتسابق | MZAD PHONE</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --b:#8E3B46;
+  --i:#F5E9DA;
+  --line:rgba(142,59,70,.16);
+  --soft:rgba(142,59,70,.08);
+  --mute:rgba(142,59,70,.62);
+  --on-b-mute:rgba(245,233,218,.68);
+  --on-b-line:rgba(245,233,218,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--i);color:var(--b);font-family:'Tajawal',system-ui,sans-serif}
+body{min-height:100vh;display:flex;justify-content:center}
+.app{width:100%;max-width:480px;min-height:100vh;display:flex;flex-direction:column;
+  padding-bottom:env(safe-area-inset-bottom,0px)}
+svg.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* top bar */
+.top{display:flex;align-items:center;justify-content:space-between;
+  padding:calc(env(safe-area-inset-top,0px) + 14px) 18px 10px;color:var(--i)}
+.top h1{font-size:16px;font-weight:700}
+.icon-btn{width:42px;height:42px;border-radius:14px;border:1px solid var(--on-b-line);
+  background:transparent;color:var(--i);display:grid;place-items:center;cursor:pointer}
+
+/* hero */
+.hero{background:var(--b);color:var(--i);border-radius:0 0 32px 32px;padding-bottom:26px;
+  ;
+  background-color:var(--b)}
+.hero-in{background:var(--b);margin:0 0 0;padding:8px 22px 0}
+.who{display:flex;align-items:center;gap:16px;margin-top:6px}
+.avatar{width:72px;height:72px;border-radius:50%;border:1.5px solid var(--i);
+  display:grid;place-items:center;font-size:30px;font-weight:800;position:relative;background:var(--b)}
+.who h2{font-size:24px;font-weight:800;line-height:1.2}
+.who p{font-size:13px;color:var(--on-b-mute);margin-top:4px}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:24px;
+  border:1px solid var(--on-b-line);border-radius:20px;background:var(--b)}
+.stat{padding:14px 8px;text-align:center}
+.stat+.stat{border-inline-start:1px solid var(--on-b-line)}
+.stat b{display:block;font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--on-b-mute)}
+
+/* rounds */
+.rounds{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:22px 22px 0}
+.rd{border:1px solid var(--line);border-radius:14px;padding:10px 8px;text-align:center;font-size:13px;color:var(--mute)}
+.rd b{display:block;font-size:15px;color:var(--b)}
+.rd.on{background:var(--b);border-color:var(--b);color:var(--on-b-mute)}
+.rd.on b{color:var(--i)}
+
+/* hold */
+.hold{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px 22px 8px}
+.pad{position:relative;width:228px;height:228px;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.pad svg.ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.track{fill:none;stroke:var(--line);stroke-width:6}
+.prog{fill:none;stroke:var(--b);stroke-width:6;stroke-linecap:round;stroke-dasharray:597;stroke-dashoffset:597}
+.wave{position:absolute;inset:26px;border-radius:50%;border:1.5px solid var(--b);opacity:0;pointer-events:none}
+.btn{position:absolute;inset:26px;border-radius:50%;border:0;background:var(--b);color:var(--i);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;
+  font-family:inherit;touch-action:none;outline:none;
+  box-shadow:0 0 0 7px var(--i),0 0 0 8px var(--line);
+  transition:transform .18s cubic-bezier(.2,.8,.2,1),box-shadow .18s}
+.btn svg.ic{width:38px;height:38px;stroke-width:1.4}
+.btn .t{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.btn .s{font-size:12px;color:var(--on-b-mute)}
+.btn:focus-visible{box-shadow:0 0 0 7px var(--i),0 0 0 9px var(--b)}
+
+.pad.on .btn{transform:scale(.93);box-shadow:0 0 0 7px var(--i),0 0 0 8px var(--b)}
+.pad.on .wave{animation:wave 1.4s ease-out infinite}
+.pad.on .wave.w2{animation-delay:.7s}
+.pad.on .btn svg.ic{animation:beat 1.4s ease-in-out infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes wave{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.42);opacity:0}}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+
+.msg{margin-top:22px;font-size:15px;font-weight:700;text-align:center;min-height:24px}
+.hint{font-size:13px;color:var(--mute);text-align:center;margin-top:4px}
+
+/* actions */
+.actions{display:grid;grid-template-columns:1fr 1.4fr;gap:10px;padding:10px 22px 22px}
+.act{height:54px;border-radius:18px;font-family:inherit;font-size:15px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;
+  border:1.5px solid var(--b);transition:transform .15s}
+.act:active{transform:scale(.97)}
+.act.fill{background:var(--b);color:var(--i)}
+.act.line{background:transparent;color:var(--b)}
+.act:focus-visible{outline:2px solid var(--b);outline-offset:3px}
+
+@media (prefers-reduced-motion:reduce){
+  .pad.on .orbit,.pad.on .wave,.pad.on .btn svg.ic{animation:none}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="hero">
+    <div class="top">
+      <button class="icon-btn" aria-label="رجوع" onclick="history.back()">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+      <h1>بروفايل المتسابق</h1>
+      <button class="icon-btn" aria-label="مشاركة" id="shareTop">
+        <svg class="ic" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="18" cy="18" r="2.4"/><path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6"/></svg>
+      </button>
+    </div>
+    <div class="hero-in">
+      <div class="who">
+        <div class="avatar" id="av">م</div>
+        <div>
+          <h2 id="name">محمد صابر</h2>
+          <p id="seat">مقعد رقم 07</p>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><b id="rank">2</b><span>الترتيب</span></div>
+        <div class="stat"><b id="sup">148</b><span>داعم</span></div>
+        <div class="stat"><b id="mine">00:00</b><span>وقت دعمك</span></div>
+      </div>
+    </div>
+  </header>
+
+  <section class="rounds" aria-label="الجولات">
+    <div class="rd"><b>الجولة 1</b>انتهت</div>
+    <div class="rd on"><b>الجولة 2</b>جارية</div>
+    <div class="rd"><b>الجولة 3</b>لاحقاً</div>
+  </section>
+
+  <section class="hold">
+    <div class="pad" id="pad">
+      <svg class="ring" viewBox="0 0 200 200" aria-hidden="true">
+        <circle class="track" cx="100" cy="100" r="95"/>
+        <circle class="prog" id="prog" cx="100" cy="100" r="95"/>
+      </svg>
+      <div class="wave"></div><div class="wave w2"></div>
+      <button class="btn" id="btn" aria-label="اضغط وثبّت لدعم المتسابق">
+        <svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3"/></svg>
+        <span class="t" id="t">00:00</span>
+        <span class="s">ثبّت للدعم</span>
+      </button>
+    </div>
+    <div class="msg" id="msg">اضغط وثبّت إصبعك</div>
+    <div class="hint">الدعم يُحسب فقط وإصبعك على الزر</div>
+  </section>
+
+  <nav class="actions">
+    <button class="act line" id="share">
+      <svg class="ic" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="18" cy="18" r="2.4"/><path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6"/></svg>
+      شارك الرابط
+    </button>
+    <button class="act fill" onclick="location.href='contest-results.html'">
+      <svg class="ic" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+      سجل المسابقة
+    </button>
+  </nav>
+</div>
+
+<script>
+/* إعدادات سهلة التعديل */
+const ROUND_SECONDS = 600;     // مدة الجولة بالثواني (غيّرها حسب مسابقتك)
+const CIRC = 2 * Math.PI * 95; // محيط الحلقة
+
+const pad = document.getElementById('pad');
+const btn = document.getElementById('btn');
+const prog = document.getElementById('prog');
+const tEl = document.getElementById('t');
+const mineEl = document.getElementById('mine');
+const msg = document.getElementById('msg');
+
+let held = 0, last = 0, raf = 0, holding = false;
+prog.style.strokeDasharray = CIRC;
+prog.style.strokeDashoffset = CIRC;
+
+const fmt = s => {
+  s = Math.floor(s);
+  return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+};
+
+function render(){
+  const p = Math.min(held / ROUND_SECONDS, 1);
+  prog.style.strokeDashoffset = CIRC * (1 - p);
+  tEl.textContent = fmt(held);
+  mineEl.textContent = fmt(held);
+}
+
+function tick(now){
+  if(!holding) return;
+  held += (now - last) / 1000;
+  last = now;
+  render();
+  raf = requestAnimationFrame(tick);
+}
+
+function start(e){
+  if(holding) return;
+  e.preventDefault();
+  try{ btn.setPointerCapture(e.pointerId); }catch(_){}
+  holding = true;
+  last = performance.now();
+  pad.classList.add('on');
+  msg.textContent = 'ثبّت... لا ترفع إصبعك';
+  if(navigator.vibrate) navigator.vibrate(12);
+  raf = requestAnimationFrame(tick);
+}
+
+function stop(){
+  if(!holding) return;
+  holding = false;
+  cancelAnimationFrame(raf);
+  pad.classList.remove('on');
+  msg.textContent = 'توقف العد. اضغط لتكمل';
+}
+
+btn.addEventListener('pointerdown', start);
+['pointerup','pointercancel','lostpointercapture'].forEach(ev => btn.addEventListener(ev, stop));
+window.addEventListener('blur', stop);
+document.addEventListener('visibilitychange', () => { if(document.hidden) stop(); });
+btn.addEventListener('contextmenu', e => e.preventDefault());
+
+/* دعم الكيبورد: Space أو Enter للتثبيت */
+btn.addEventListener('keydown', e => {
+  if((e.key === ' ' || e.key === 'Enter') && !e.repeat){ start({preventDefault(){}, pointerId:0}); }
+});
+btn.addEventListener('keyup', e => { if(e.key === ' ' || e.key === 'Enter') stop(); });
+
+/* مشاركة */
+async function share(){
+  const data = { title: document.getElementById('name').textContent, url: location.href };
+  try{
+    if(navigator.share) await navigator.share(data);
+    else { await navigator.clipboard.writeText(location.href); msg.textContent = 'تم نسخ الرابط'; }
+  }catch(_){}
+}
+document.getElementById('share').onclick = share;
+document.getElementById('shareTop').onclick = share;
+</script>
+</body>
+</html>
