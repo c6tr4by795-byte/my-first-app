@@ -130,7 +130,7 @@ textarea{resize:none;height:84px;line-height:1.6}
       <label for="fPrize">الجائزة الكبرى</label><input id="fPrize">
       <div class="two">
         <div><label for="fSeats">عدد المقاعد</label><input id="fSeats" type="number" min="2" inputmode="numeric"></div>
-        <div><label for="fLucky">عدد الداعمين الفائزين</label><input id="fLucky" type="number" min="1" inputmode="numeric"></div>
+        <div><label for="fLucky">عدد الداعمين الفائزين</label><input id="fLucky" type="number" value="3" disabled><small class="note">ثلاثة داعمين يتم اختيارهم عشوائياً من جلسات الدعم الحقيقية عند اعتماد النهائي.</small></div>
       </div>
     </div>
     <div class="card">
@@ -206,7 +206,7 @@ async function load(){
  $('fName').value=contest.title_ar||'';$('fDesc').value=contest.short_description||contest.description_ar||'';
  $('fPrize').value=contest.prize_title||contest.prize_description||'';
  $('fSeats').value=contest.max_entries||'';
- $('fLucky').value=3;$('fStart').value=localInput(contest.starts_at);
+ $('fLucky').value=3;$('fLucky').disabled=true;$('fStart').value=localInput(contest.starts_at);
  [0,1,2].forEach(i=>{const r=rounds[i];$('d'+i).value=r?Math.max(1,Math.round((new Date(r.ends_at)-new Date(r.starts_at))/60000)):10});
  calcEnd();render();clock();
 }
