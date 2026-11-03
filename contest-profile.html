@@ -161,84 +161,63 @@ svg.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;str
   </nav>
 </div>
 
-<script>
-/* إعدادات سهلة التعديل */
-const ROUND_SECONDS = 600;     // مدة الجولة بالثواني (غيّرها حسب مسابقتك)
-const CIRC = 2 * Math.PI * 95; // محيط الحلقة
-
-const pad = document.getElementById('pad');
-const btn = document.getElementById('btn');
-const prog = document.getElementById('prog');
-const tEl = document.getElementById('t');
-const mineEl = document.getElementById('mine');
-const msg = document.getElementById('msg');
-
-let held = 0, last = 0, raf = 0, holding = false;
-prog.style.strokeDasharray = CIRC;
-prog.style.strokeDashoffset = CIRC;
-
-const fmt = s => {
-  s = Math.floor(s);
-  return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
-};
-
-function render(){
-  const p = Math.min(held / ROUND_SECONDS, 1);
-  prog.style.strokeDashoffset = CIRC * (1 - p);
-  tEl.textContent = fmt(held);
-  mineEl.textContent = fmt(held);
+<script type="module">
+import {supabase} from './js/supabase.js';
+const $=id=>document.getElementById(id);
+const entryId=new URLSearchParams(location.search).get('id');
+const pad=$('pad'),btn=$('btn'),prog=$('prog'),timeEl=$('t'),msg=$('msg');
+const CIRC=2*Math.PI*95;prog.style.strokeDasharray=CIRC;prog.style.strokeDashoffset=CIRC;
+let contestId=null,sessionActive=false,busy=false,held=0,last=0,raf=0,heartbeat=null,holding=false;
+const fmt=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+function render(){timeEl.textContent=fmt(held);prog.style.strokeDashoffset=CIRC*(1-Math.min(held/3600,1))}
+function setMsg(t){msg.textContent=t}
+async function stopSession(){
+ if(heartbeat){clearInterval(heartbeat);heartbeat=null}
+ if(sessionActive&&contestId){sessionActive=false;await supabase.rpc('mzad_contest_support_stop',{p_contest_id:contestId})}
 }
-
-function tick(now){
-  if(!holding) return;
-  held += (now - last) / 1000;
-  last = now;
-  render();
-  raf = requestAnimationFrame(tick);
+async function init(){
+ if(!entryId){setMsg('رابط المشاركة غير صحيح.');btn.disabled=true;return}
+ const [{data:home,error:homeError},{data:detail,error:detailError}]=await Promise.all([
+  supabase.rpc('mzad_get_contest_home'),supabase.rpc('mzad_get_contestant_detail',{p_entry_id:entryId})
+ ]);
+ if(homeError)throw homeError;if(detailError)throw detailError;
+ if(!detail){throw new Error('المتسابق غير موجود أو لم تعد مشاركته متاحة.')}
+ contestId=detail.contest_id||detail.contestId;
+ const board=home?.board||[],rank=board.findIndex(x=>x.id===entryId)+1,me=board.find(x=>x.id===entryId);
+ $('name').textContent=detail.name||'مشارك';$('av').textContent=(detail.name||'م')[0];
+ $('seat').textContent='مشاركة مسجلة';$('rank').textContent=rank?String(rank):'—';
+ $('sup').textContent=String(me?.support||detail.support||0);
+ held=Number(detail.support_seconds||detail.supportSeconds||0);render();
+ if(home?.contest){contestId=home.contest.id;const status=home.contest.status;
+  if(status!=='live'){btn.disabled=true;setMsg(status==='ended'?'انتهت المسابقة.':'الدعم غير متاح حالياً.')}
+ }else{btn.disabled=true;setMsg('لا توجد مسابقة جارية.')}
+ const supporters=detail.supporters||[];
+ const hint=document.querySelector('.hint');if(hint)hint.textContent=supporters.length?('الداعمون الآن: '+supporters.map(x=>x.name).join('، ')):'الدعم يُحسب فقط أثناء التثبيت';
 }
-
-function start(e){
-  if(holding) return;
-  e.preventDefault();
-  try{ btn.setPointerCapture(e.pointerId); }catch(_){}
-  holding = true;
-  last = performance.now();
-  pad.classList.add('on');
-  msg.textContent = 'ثبّت... لا ترفع إصبعك';
-  if(navigator.vibrate) navigator.vibrate(12);
-  raf = requestAnimationFrame(tick);
+function tick(now){if(!holding)return;held+=(now-last)/1000;last=now;render();raf=requestAnimationFrame(tick)}
+async function begin(e){
+ if(holding||busy||!contestId||btn.disabled)return;e.preventDefault();busy=true;
+ try{
+  const {error}=await supabase.rpc('mzad_contest_support_start',{p_contest_id:contestId,p_entry_id:entryId});
+  if(error)throw error;
+  sessionActive=true;holding=true;last=performance.now();pad.classList.add('on');setMsg('الدعم شغال… لا ترفع إصبعك');
+  heartbeat=setInterval(async()=>{if(!sessionActive)return;const {data,error}=await supabase.rpc('mzad_contest_support_heartbeat',{p_contest_id:contestId});if(error||data===false){await stopSession();holding=false;pad.classList.remove('on');setMsg('انتهى وقت الدعم.');}},4000);
+  raf=requestAnimationFrame(tick);
+ }catch(err){setMsg(err.message||'تعذر بدء الدعم.')}
+ finally{busy=false}
 }
-
-function stop(){
-  if(!holding) return;
-  holding = false;
-  cancelAnimationFrame(raf);
-  pad.classList.remove('on');
-  msg.textContent = 'توقف العد. اضغط لتكمل';
+async function release(){
+ if(!holding)return;holding=false;cancelAnimationFrame(raf);pad.classList.remove('on');
+ await stopSession();setMsg('توقف الدعم. تقدر ترجع تثبّت إذا الجولة مفتوحة.');
 }
-
-btn.addEventListener('pointerdown', start);
-['pointerup','pointercancel','lostpointercapture'].forEach(ev => btn.addEventListener(ev, stop));
-window.addEventListener('blur', stop);
-document.addEventListener('visibilitychange', () => { if(document.hidden) stop(); });
-btn.addEventListener('contextmenu', e => e.preventDefault());
-
-/* دعم الكيبورد: Space أو Enter للتثبيت */
-btn.addEventListener('keydown', e => {
-  if((e.key === ' ' || e.key === 'Enter') && !e.repeat){ start({preventDefault(){}, pointerId:0}); }
-});
-btn.addEventListener('keyup', e => { if(e.key === ' ' || e.key === 'Enter') stop(); });
-
-/* مشاركة */
-async function share(){
-  const data = { title: document.getElementById('name').textContent, url: location.href };
-  try{
-    if(navigator.share) await navigator.share(data);
-    else { await navigator.clipboard.writeText(location.href); msg.textContent = 'تم نسخ الرابط'; }
-  }catch(_){}
-}
-document.getElementById('share').onclick = share;
-document.getElementById('shareTop').onclick = share;
+btn.addEventListener('pointerdown',begin);
+['pointerup','pointercancel','lostpointercapture'].forEach(ev=>btn.addEventListener(ev,release));
+window.addEventListener('blur',release);document.addEventListener('visibilitychange',()=>{if(document.hidden)release()});
+btn.addEventListener('contextmenu',e=>e.preventDefault());
+async function share(){const data={title:$('name').textContent,url:location.href};try{if(navigator.share)await navigator.share(data);else{await navigator.clipboard.writeText(location.href);setMsg('تم نسخ رابط المشاركة')}}catch(_){}}
+$('share').onclick=share;$('shareTop').onclick=share;
+window.addEventListener('pagehide',()=>{if(sessionActive&&contestId){supabase.rpc('mzad_contest_support_stop',{p_contest_id:contestId})}});
+init().catch(e=>{setMsg(e.message||'تعذر تحميل بيانات المتسابق.');btn.disabled=true});
 </script>
 </body>
 </html>
