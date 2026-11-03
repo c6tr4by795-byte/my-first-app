@@ -67,9 +67,9 @@ svg.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;str
   </header>
 
   <div class="tabs" role="tablist" id="tabs">
-    <button class="tab" role="tab" data-r="0" aria-selected="true">الترتيب</button>
-    <button class="tab" role="tab" data-r="1" aria-selected="false">الفائزون</button>
-    <button class="tab" role="tab" data-r="2" aria-selected="false">المسابقة</button>
+    <button class="tab" role="tab" data-r="0" aria-selected="true">الجولة 1</button>
+    <button class="tab" role="tab" data-r="1" aria-selected="false">الجولة 2</button>
+    <button class="tab" role="tab" data-r="2" aria-selected="false">النهائي</button>
   </div>
   <main class="list" id="list"></main>
 
@@ -88,25 +88,14 @@ const $=id=>document.getElementById(id);let home=null,history=null,mode=0;
 const node=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e};
 const fmt=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
 function render(){
- const list=$('list');list.replaceChildren();
- if(mode===0){
-  const rounds=history?.rounds||[],r=rounds[0];
-  const rows=r?.entries||[];
-  if(!rows.length){list.append(node('div','row','لا توجد نتائج جولات محفوظة بعد.'))}
-  rows.forEach((p,i)=>{const row=node('div','row'+(i===0?' top':''));row.append(node('div','rk',String(i+1)));const mid=node('div');mid.append(node('div','nm',p.name||'مشارك'),node('div','st',p.status==='disqualified'?'لم يتأهل':p.status==='winner'?'الفائز':'مشارك'));row.append(mid,node('div','tm',fmt(p.seconds||0)));list.append(row)});
-  $('lname').textContent=home?.contest?.title||'ترتيب المسابقة';$('ltime').textContent=r?'نتائج الجولة الأولى · مدة الدعم':'لا توجد جولات';
- }else if(mode===1){
-  const winners=history?.winners||[];
-  if(!winners.length)list.append(node('div','row','لم يتم إعلان الفائزين بعد.'));
-  winners.forEach((w,i)=>{const row=node('div','row top');row.append(node('div','rk',String(w.rank||i+1)));const mid=node('div');mid.append(node('div','nm',w.name||'فائز'),node('div','st',w.prize||'جائزة'));row.append(mid);list.append(row)});
-  $('lname').textContent=winners.length?'الفائزون المعتمدون':'لم تعلن النتائج';$('ltime').textContent='أسماء محفوظة في قاعدة البيانات';
- }else{
-  const c=home?.contest;if(!c){list.append(node('div','row','لا توجد مسابقة'));return}
-  list.append(node('div','row','المسابقة: '+(c.title||'')));
-  list.append(node('div','row','الحالة: '+(c.status==='live'?'جارية':c.status==='paused'?'متوقفة مؤقتاً':c.status==='open'?'التسجيل مفتوح':'منتهية')));
-  (history?.rounds||[]).forEach(r=>list.append(node('div','row','الجولة '+r.roundNo+' · '+r.entries.length+' مشارك · '+r.qualifiersCount+' يتأهلون')));
-  $('lname').textContent=c.title||'المسابقة';$('ltime').textContent=c.prize||'';
- }
+ const list=$('list');list.replaceChildren();const round=history?.rounds?.[mode];
+ const rows=round?.entries||[];
+ if(!rows.length)list.append(node('div','row','لا توجد نتائج محفوظة لهذه الجولة.'));
+ rows.forEach((p,i)=>{const row=node('div','row'+(i===0?' top':''));row.append(node('div','rk',String(i+1)));const mid=node('div');mid.append(node('div','nm',p.name||'مشارك'),node('div','st',p.status==='disqualified'?'لم يتأهل':p.status==='winner'?'الفائز':'مشارك'));row.append(mid,node('div','tm',fmt(p.seconds||0)));list.append(row)});
+ const champion=(history?.winners||[]).find(w=>Number(w.rank)===1);
+ const leader=rows[0];
+ $('lname').textContent=champion?.name||leader?.name||home?.contest?.title||'لا يوجد متصدر';
+ $('ltime').textContent=champion?'الفائز بالجائزة الكبرى':leader?'متصدر الجولة '+(mode+1)+' · '+fmt(leader.seconds||0):'لم تُسجل نتائج بعد';
  document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',Number(t.dataset.r)===mode));
 }
 async function load(){
@@ -114,10 +103,9 @@ async function load(){
  if(home.contest){const x=await supabase.rpc('mzad_get_contest_results',{p_contest_id:home.contest.id});if(x.error)throw x.error;history=x.data||{}}
  else history=null;
  render();
- const winners=history?.winners||[];
- $('dtxt').textContent=winners.length?'تم حفظ نتائج الفائزين في قاعدة البيانات.':'يظهر الفائزون بعد اعتماد الجولة النهائية.';
+ const winners=history?.winners||[];$('dtxt').textContent=winners.length?'النتائج المعتمدة محفوظة من قاعدة البيانات.':'يتم إعلان الفائزين بعد اعتماد الجولة النهائية.';
  const slots=$('slots');slots.replaceChildren();
- winners.filter(w=>(w.rank||0)>1).slice(0,3).forEach(w=>{const box=node('div','slot done');box.append(node('span','',w.name||'داعم'),node('small','',w.prize||'جائزة الداعم'));slots.append(box)});
+ winners.filter(w=>Number(w.rank)>1).slice(0,3).forEach(w=>{const box=node('div','slot done');box.append(node('span','',w.name||'داعم'),node('small','',w.prize||'جائزة الداعم'));slots.append(box)});
  while(slots.children.length<3)slots.append(node('div','slot','—'));
 }
 $('tabs').onclick=e=>{const t=e.target.closest('.tab');if(t){mode=Number(t.dataset.r);render()}};
