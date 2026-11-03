@@ -167,6 +167,21 @@ textarea{resize:none;height:84px;line-height:1.6}
 <script type="module">
 import {supabase} from '../js/supabase.js';
 const $=id=>document.getElementById(id);
+async function requireAdminSession(){
+ const {data,error}=await supabase.auth.getSession();
+ if(error)throw error;
+ if(!data?.session?.user){
+  location.replace('../admin-login.html?next='+encodeURIComponent('admin/contest-admin.html'));
+  throw new Error('يجب تسجيل الدخول بحساب الإدارة أولاً.');
+ }
+ const {data:allowed,error:checkError}=await supabase.rpc('mzad_is_admin');
+ if(checkError)throw checkError;
+ if(allowed!==true){
+  await supabase.auth.signOut();
+  location.replace('../admin-login.html');
+  throw new Error('هذا الحساب لا يملك صلاحية إدارة المسابقات.');
+ }
+}
 const fmt=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
 const localInput=v=>{const d=new Date(v);return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16)};
 const toIso=v=>new Date(v).toISOString();
@@ -269,7 +284,7 @@ $('save').onclick=async()=>{
  }catch(e){toast(e.message||'تعذر حفظ الإعدادات.')}finally{busy=false;$('save').disabled=false}
 };
 $('tabs').onclick=e=>{const t=e.target.closest('.tab');if(!t)return;document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',x===t));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('show',p.id===t.dataset.p))};
-load().catch(e=>toast(e.message||'تعذر تحميل لوحة الإدارة.'));
+requireAdminSession().then(load).catch(e=>{console.error(e);toast(e.message||'تعذر التحقق من صلاحية الإدارة.')});
 </script>
 </body>
 </html>
