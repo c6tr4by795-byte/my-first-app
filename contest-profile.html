@@ -183,14 +183,13 @@ async function init(){
  if(homeError)throw homeError;if(detailError)throw detailError;
  if(!detail){throw new Error('المتسابق غير موجود أو لم تعد مشاركته متاحة.')}
  contestId=detail.contest_id||detail.contestId;
- const board=home?.board||[],rank=board.findIndex(x=>x.id===entryId)+1,me=board.find(x=>x.id===entryId);
+ const sameContest=home?.contest?.id===contestId;const board=sameContest?(home?.board||[]):[],rank=board.findIndex(x=>x.id===entryId)+1,me=board.find(x=>x.id===entryId);
  $('name').textContent=detail.name||'مشارك';$('av').textContent=(detail.name||'م')[0];
  $('seat').textContent='مشاركة مسجلة';$('rank').textContent=rank?String(rank):'—';
  $('sup').textContent=String(me?.support||detail.support||0);
  held=Number(detail.support_seconds||detail.supportSeconds||0);render();
- if(home?.contest){contestId=home.contest.id;const status=home.contest.status;
-  if(status!=='live'){btn.disabled=true;setMsg(status==='ended'?'انتهت المسابقة.':'الدعم غير متاح حالياً.')}
- }else{btn.disabled=true;setMsg('لا توجد مسابقة جارية.')}
+ if(detail.contest_status!=='live'){btn.disabled=true;setMsg(detail.contest_status==='ended'?'انتهت المسابقة.':detail.contest_status==='paused'?'المسابقة متوقفة مؤقتاً.':'الدعم غير متاح حالياً.')}
+ else if(!sameContest){btn.disabled=true;setMsg('الدعم متاح فقط ضمن المسابقة الحالية.')}
  const supporters=detail.supporters||[];
  const hint=document.querySelector('.hint');if(hint)hint.textContent=supporters.length?('الداعمون الآن: '+supporters.map(x=>x.name).join('، ')):'الدعم يُحسب فقط أثناء التثبيت';
 }
