@@ -37,7 +37,7 @@ button{width:100%;height:50px;border:0;border-radius:14px;background:var(--p);co
 <script type="module">
 import {supabase} from "./js/supabase.js";
 const form=document.getElementById("form"),email=document.getElementById("email"),password=document.getElementById("password"),btn=document.getElementById("submit"),msg=document.getElementById("msg");
-function show(t){msg.textContent=t;msg.classList.add("show")}
+function show(t){msg.textContent=t;msg.classList.add("show")}\nfunction destination(){const p=new URLSearchParams(location.search).get('next')||'';return p.startsWith('admin/')&&!p.includes('..')?p:'admin/dashboard.html'}
 function clear(){msg.textContent="";msg.classList.remove("show")}
 function errorText(e){
  const s=String(e?.message||e||"");
@@ -56,7 +56,7 @@ async function boot(){
  try{
   const s=await supabase.auth.getSession();
   if(!s.data.session)return;
-  if(await isAdmin()){location.href="admin/dashboard.html";return}
+  if(await isAdmin()){location.replace(destination());return}
   await supabase.auth.signOut();
   show("هذا الحساب ليس لديه صلاحية إدارة.");
  }catch(e){console.error(e)}
@@ -73,7 +73,7 @@ form.addEventListener("submit",async e=>{
     await supabase.auth.signOut();
     throw new Error("هذا الحساب ليس لديه صلاحية إدارة.");
   }
-  location.href="admin/dashboard.html";
+  location.replace(destination());
  }catch(err){console.error(err);show(errorText(err))}
  finally{btn.disabled=false;btn.textContent="دخول لوحة الإدارة"}
 });
